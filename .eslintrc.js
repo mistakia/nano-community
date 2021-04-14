@@ -19,6 +19,13 @@ module.exports = {
   },
   plugins: ['react'],
   rules: {
-    'space-before-function-paren': ['error', 'never']
+    'space-before-function-paren': [
+      'error',
+      {
+        anonymous: 'never',
+        named: 'never',
+        asyncArrow: 'always'
+      }
+    ]
   }
 }
