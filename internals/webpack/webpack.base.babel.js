@@ -4,6 +4,7 @@
 
 const path = require('path')
 const webpack = require('webpack')
+const nib = require('nib')
 
 module.exports = (options) => ({
   mode: options.mode,
@@ -34,6 +35,33 @@ module.exports = (options) => ({
         test: /\.css$/,
         exclude: /node_modules/,
         use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.styl$/,
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1
+            }
+          },
+          {
+            loader: 'stylus-loader',
+            options: {
+              stylusOptions: {
+                use: [nib()],
+                import: [
+                  'nib',
+                  path.resolve(__dirname, '../../src/styles/variables.styl')
+                ],
+                includeCSS: true
+              }
+            }
+          }
+        ]
       },
       {
         // Preprocess 3rd party .css files located in node_modules
