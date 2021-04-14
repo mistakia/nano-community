@@ -35,7 +35,7 @@ CREATE TABLE `posts` (
   `text` TEXT DEFAULT NULL,
   `html` TEXT DEFAULT NULL,
   `summary` int(11) DEFAULT NULL,
-  `score` int(11) NOT NULL DEFAULT 1,
+  `score` decimal(7,1) NOT NULL DEFAULT 1,
   `social_score` int(11) NOT NULL DEFAULT 0,
   `created_at` datetime NOT NULL,
   `updated_at` datetime DEFAULT NULL,
