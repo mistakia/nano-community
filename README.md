@@ -1,6 +1,6 @@
-# Nano Wiki
+# Nano.Community
 
-## Vision / Purpose
+**Vision & Purpose**
 
 Nano Wiki aims to be the a portal to Nano's growing community, maintaining docs, guides, and conventions to improve community communication & onboarding.
 
