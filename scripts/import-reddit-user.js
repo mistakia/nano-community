@@ -1,42 +1,127 @@
-const { request } = require('../common')
+const debug = require('debug')
 
-const subreddits = ['nanocurrency', 'nanotrade']
+const { request, wait } = require('../common')
+const db = require('../db')
 
-const main = async (user) => {
-  const url = `https://www.reddit.com/u/${user}.json`
-  let res
-  try {
-    res = await request({ url })
-  } catch (err) {
-    console.log(err)
+const logger = debug('script')
+debug.enable('script')
+
+const subreddits = ['nanocurrency', 'nanotrade', 'raiblocks']
+
+const formatComment = (p) => ({
+  pid: `reddit:comment:${p.data.id}`,
+  title: null,
+  url: p.data.permalink,
+  author: p.data.author,
+  authorid: p.data.author,
+  created_at: p.data.created,
+  updated_at: p.data.edited,
+  html: p.data.body_html,
+  text: p.data.body,
+  score: p.data.score // p.data.upvote_ratio + p.data.ups + p.data.total_awards_received + p.data.score + p.num_comments - p.data.downs
+})
+
+const formatPost = (p) => ({
+  pid: `reddit:post:${p.data.id}`,
+  title: p.data.title,
+  url: p.data.permalink,
+  author: p.data.author,
+  authorid: p.data.author,
+  created_at: p.data.created,
+  updated_at: p.data.edited,
+  html: p.data.selftext_html,
+  text: p.data.selftext,
+  score: p.data.score // p.data.upvote_ratio + p.data.ups + p.data.total_awards_received + p.data.score + p.num_comments - p.data.downs
+})
+
+const format = (p) => {
+  switch (p.kind) {
+    case 't1':
+      return formatComment(p)
+    case 't3':
+      return formatPost(p)
+    default:
+      logger(`Unsupported format: ${p.kind}`)
+      return undefined
   }
+}
 
-  if (!res) {
-    return
-  }
+const main = async (user, { getFullHistory = false, filter = true } = {}) => {
+  logger(
+    `importing reddit posts from: ${user} (full history: ${getFullHistory}, filter: ${filter})`
+  )
 
-  console.log(res.data.children[3])
-  const posts = res.data.children
-    .filter((p) => subreddits.includes(p.data.subreddit))
-    .map((p) => ({
-      pid: `reddit:comment:${p.data.id}`,
-      title: null,
-      url: p.data.permalink,
-      author: p.data.author,
-      created_at: p.data.created,
-      updated_at: p.data.edited,
-      html: p.data.body_html,
-      text: p.data.body,
-      score: p.data.score // p.data.upvote_ratio + p.data.ups + p.data.total_awards_received + p.data.score + p.num_comments - p.data.downs
-    }))
-  console.log(posts)
+  const rows = await db('posts')
+    .where('pid', 'like', 'reddit:%')
+    .where('authorid', user)
+    .orderBy('created_at', 'desc')
+    .limit(1)
+
+  const messageId = rows.length
+    ? rows[0].pid.split(/reddit:(?:post|comment):/)[1]
+    : undefined
+  let afterId, messageIds, res
+
+  do {
+    const url =
+      `https://www.reddit.com/u/${user}.json?limit=100` +
+      (afterId ? `&after=${afterId}` : '')
+
+    logger(`fetching content from ${user}, after: ${afterId || 'n/a'}`)
+
+    try {
+      res = await request({ url })
+    } catch (err) {
+      // console.log(err)
+    }
+
+    if (!res) {
+      break
+    }
+
+    let posts = res.data.children
+
+    if (filter) {
+      posts = posts.filter((p) => subreddits.includes(p.data.subreddit))
+    }
+
+    const inserts = []
+    for (const post of posts) {
+      const content = format(post)
+      if (content) {
+        inserts.push(content)
+      }
+    }
+    if (inserts.length) {
+      logger(`saving ${inserts.length} posts from ${user}`)
+      await db('posts').insert(inserts).onConflict().merge()
+    }
+
+    messageIds = res.data.children.map((p) => p.data.id)
+    afterId = res.data.after
+    if (!getFullHistory && messageIds.includes(messageId)) {
+      break
+    }
+
+    await wait(2000)
+  } while (res && res.data.children.length && afterId)
 }
 
 module.exports = main
 
 if (!module.parent) {
+  const yargs = require('yargs/yargs')
+  const { hideBin } = require('yargs/helpers')
+  const argv = yargs(hideBin(process.argv)).argv
+
+  if (!argv.user) {
+    logger('missing user')
+    process.exit()
+  }
+
+  const getFullHistory = argv.full
   const init = async () => {
-    await main('meor')
+    await main(argv.user, { getFullHistory, filter: !argv.noFilter })
     process.exit()
   }
 
