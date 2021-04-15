@@ -1,6 +1,11 @@
 const debug = require('debug')
 
-const { request, wait } = require('../common')
+const {
+  request,
+  wait,
+  formatRedditPost,
+  formatRedditComment
+} = require('../common')
 const db = require('../db')
 
 const logger = debug('script')
@@ -8,38 +13,12 @@ debug.enable('script')
 
 const subreddits = ['nanocurrency', 'nanotrade', 'raiblocks']
 
-const formatComment = (p) => ({
-  pid: `reddit:comment:${p.data.id}`,
-  title: null,
-  url: p.data.permalink,
-  author: p.data.author,
-  authorid: p.data.author,
-  created_at: p.data.created,
-  updated_at: p.data.edited,
-  html: p.data.body_html,
-  text: p.data.body,
-  score: p.data.score // p.data.upvote_ratio + p.data.ups + p.data.total_awards_received + p.data.score + p.num_comments - p.data.downs
-})
-
-const formatPost = (p) => ({
-  pid: `reddit:post:${p.data.id}`,
-  title: p.data.title,
-  url: p.data.permalink,
-  author: p.data.author,
-  authorid: p.data.author,
-  created_at: p.data.created,
-  updated_at: p.data.edited,
-  html: p.data.selftext_html,
-  text: p.data.selftext,
-  score: p.data.score // p.data.upvote_ratio + p.data.ups + p.data.total_awards_received + p.data.score + p.num_comments - p.data.downs
-})
-
 const format = (p) => {
   switch (p.kind) {
     case 't1':
-      return formatComment(p)
+      return formatRedditComment(p)
     case 't3':
-      return formatPost(p)
+      return formatRedditPost(p)
     default:
       logger(`Unsupported format: ${p.kind}`)
       return undefined
@@ -60,6 +39,7 @@ const main = async (user, { getFullHistory = false, filter = true } = {}) => {
   const messageId = rows.length
     ? rows[0].pid.split(/reddit:(?:post|comment):/)[1]
     : undefined
+
   let afterId, messageIds, res
 
   do {
@@ -92,6 +72,7 @@ const main = async (user, { getFullHistory = false, filter = true } = {}) => {
         inserts.push(content)
       }
     }
+
     if (inserts.length) {
       logger(`saving ${inserts.length} posts from ${user}`)
       await db('posts').insert(inserts).onConflict().merge()

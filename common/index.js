@@ -23,8 +23,36 @@ const POST = (data) => ({
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
+const formatRedditComment = (p) => ({
+  pid: `reddit:${p.data.subreddit}:comment:${p.data.id}`,
+  title: null,
+  url: p.data.permalink,
+  author: p.data.author,
+  authorid: p.data.author,
+  created_at: p.data.created,
+  updated_at: p.data.edited,
+  html: p.data.body_html,
+  text: p.data.body,
+  score: p.data.score // p.data.upvote_ratio + p.data.ups + p.data.total_awards_received + p.data.score + p.num_comments - p.data.downs
+})
+
+const formatRedditPost = (p) => ({
+  pid: `reddit:${p.data.subreddit}:post:${p.data.id}`,
+  title: p.data.title,
+  url: p.data.permalink,
+  author: p.data.author,
+  authorid: p.data.author,
+  created_at: p.data.created,
+  updated_at: p.data.edited,
+  html: p.data.selftext_html,
+  text: p.data.selftext,
+  score: p.data.score // p.data.upvote_ratio + p.data.ups + p.data.total_awards_received + p.data.score + p.num_comments - p.data.downs
+})
+
 module.exports = {
   request,
   POST,
-  wait
+  wait,
+  formatRedditPost,
+  formatRedditComment
 }
