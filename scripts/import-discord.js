@@ -68,6 +68,7 @@ const main = async (guildId, { getFullHistory = false } = {}) => {
         title: null,
         url: `https://discord.com/channels/${guildId}/${p.channel_id}/${p.id}`,
         author: p.author.username,
+        authorid: p.author.id,
         created_at: moment(p.timestamp).unix(),
         updated_at: p.edited_timestamp
           ? moment(p.edited_timestamp).unix()

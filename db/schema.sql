@@ -33,6 +33,7 @@ CREATE TABLE `posts` (
   `title` varchar(255) DEFAULT NULL,
   `url` varchar(255) NOT NULL,
   `author` varchar(32) NOT NULL,
+  `authorid` varchar(32) DEFAULT NULL,
   `text` text CHARACTER SET utf8mb4,
   `html` text CHARACTER SET utf8mb4,
   `summary` int(11) DEFAULT NULL,
@@ -41,8 +42,7 @@ CREATE TABLE `posts` (
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `url` (`url`),
-  KEY `author` (`author`)
+  UNIQUE KEY `url` (`url`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
