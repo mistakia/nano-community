@@ -1,9 +1,9 @@
-const { request } = require('../common')
+// const { request } = require('../common')
 
 const reBitcointalkComment = /bitcointalk.org\/index.php\?topic=[0-9]+.[0-9]+/
 
 const main = async (link) => {
-  const m = link.match(reBitcointalkComment)
+  // const m = link.match(reBitcointalkComment)
 }
 
 module.exports = main

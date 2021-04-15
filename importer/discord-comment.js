@@ -5,7 +5,8 @@ const reDiscordComment = /discord.com\/channels\/(?<guildId>370266023905198083|4
 
 const main = async (link) => {
   const m = link.match(reDiscordComment)
-  const { guildId, channelId, messageId } = m.groups
+  const { channelId, messageId } = m.groups
+  // TODO - get messages and use around query
   const url = `https://discord.com/api/v8/channels/${channelId}/messages/${messageId}`
   const headers = {
     authorization: config.discordAuthorization

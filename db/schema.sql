@@ -29,6 +29,7 @@ DROP TABLE IF EXISTS `posts`;
 
 CREATE TABLE `posts` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `pid` varchar(255) NOT NULL,
   `title` varchar(255) DEFAULT NULL,
   `url` varchar(255) NOT NULL,
   `author` varchar(32) NOT NULL,
@@ -37,8 +38,8 @@ CREATE TABLE `posts` (
   `summary` int(11) DEFAULT NULL,
   `score` decimal(7,1) NOT NULL DEFAULT 1,
   `social_score` int(11) NOT NULL DEFAULT 0,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime DEFAULT NULL,
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `url` (`url`),
   KEY `title` (`title`),

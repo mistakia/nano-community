@@ -5,7 +5,7 @@ const ForumPost = require('./forum-post')
 const ForumComment = require('./forum-comment')
 const TwitterTweet = require('./twitter-tweet')
 const DiscordComment = require('./discord-comment')
-const BitcointalkComment = require('./bitcointalk-comment')
+// const BitcointalkComment = require('./bitcointalk-comment')
 
 const isURL = (text) => {
   const pattern =
