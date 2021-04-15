@@ -31,7 +31,7 @@ CREATE TABLE `posts` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `pid` varchar(255) NOT NULL,
   `title` varchar(255) DEFAULT NULL,
-  `url` varchar(255) NOT NULL,
+  `url` varchar(255) CHARACTER SET utf8 NOT NULL,
   `author` varchar(32) NOT NULL,
   `authorid` varchar(32) DEFAULT NULL,
   `text` text CHARACTER SET utf8mb4,
