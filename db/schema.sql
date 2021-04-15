@@ -16,7 +16,7 @@ CREATE TABLE `accounts` (
   `verified` tinyint(1) DEFAULT 0,
   `last_visit` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 
 -- --------------------------------------------------------
@@ -33,18 +33,17 @@ CREATE TABLE `posts` (
   `title` varchar(255) DEFAULT NULL,
   `url` varchar(255) NOT NULL,
   `author` varchar(32) NOT NULL,
-  `text` TEXT DEFAULT NULL,
-  `html` TEXT DEFAULT NULL,
+  `text` text CHARACTER SET utf8mb4,
+  `html` text CHARACTER SET utf8mb4,
   `summary` int(11) DEFAULT NULL,
-  `score` decimal(7,1) NOT NULL DEFAULT 1,
-  `social_score` int(11) NOT NULL DEFAULT 0,
+  `score` decimal(7,1) NOT NULL DEFAULT '1.0',
+  `social_score` int(11) NOT NULL DEFAULT '0',
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `url` (`url`),
-  KEY `title` (`title`),
   KEY `author` (`author`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -60,4 +59,4 @@ CREATE TABLE `post_tags` (
   `account_id` int(11) NOT NULL,
   KEY `post_id` (`post_id`),
   KEY `tag` (`tag`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;

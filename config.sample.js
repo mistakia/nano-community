@@ -8,7 +8,8 @@ module.exports = {
       host: 'localhost',
       user: 'root',
       password: '',
-      database: 'nano_development'
+      database: 'nano_development',
+      charset: 'utf8mb4'
     },
     pool: {
       min: 2,
