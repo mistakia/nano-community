@@ -25,6 +25,7 @@ const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 const formatRedditComment = (p) => ({
   pid: `reddit:${p.data.subreddit}:comment:${p.data.id}`,
+  sid: `reddit:${p.data.subreddit}`,
   title: null,
   url: p.data.permalink,
   author: p.data.author,
@@ -38,6 +39,7 @@ const formatRedditComment = (p) => ({
 
 const formatRedditPost = (p) => ({
   pid: `reddit:${p.data.subreddit}:post:${p.data.id}`,
+  sid: `reddit:${p.data.subreddit}`,
   title: p.data.title,
   url: p.data.permalink,
   author: p.data.author,

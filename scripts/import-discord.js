@@ -93,6 +93,7 @@ const main = async (guildId, { getFullHistory = false } = {}) => {
 
       const posts = res.map((p) => ({
         pid: `discord:${p.channel_id}:${p.id}`,
+        sid: `discord:${guildId}`,
         title: null,
         url: `https://discord.com/channels/${guildId}/${p.channel_id}/${p.id}`,
         author: p.author.username,
