@@ -2,6 +2,20 @@ module.exports = {
   discordAuthorization: '', // user authorization header bearer token
   twitterAuthorization: '', // twitter auth bearer token
 
+  port: 8089, // api port
+
+  // jwt token config
+  jwt: {
+    secret: 'xxxxx',
+    algorithms: ['HS256'],
+    credentialsRequired: false
+  },
+
+  ssl: false, // enable ssl, make sure key & cert exist
+  key: '', // ssl key
+  cert: '', // ssl cert
+  url: '', // url
+
   mysql: {
     client: 'mysql',
     connection: {
