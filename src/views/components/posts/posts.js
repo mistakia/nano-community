@@ -1,4 +1,6 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+
 import Skeleton from '@material-ui/lab/Skeleton'
 
 import './posts.styl'
@@ -19,4 +21,8 @@ export default class Posts extends React.Component {
       </>
     )
   }
+}
+
+Posts.propTypes = {
+  title: PropTypes.string
 }

@@ -68,6 +68,10 @@ module.exports = require('./webpack.base.babel')({
       minRatio: 0.8
     }),
 
+    new webpack.DefinePlugin({
+      IS_DEV: false
+    }),
+
     new webpack.ids.HashedModuleIdsPlugin({
       hashFunction: 'sha256',
       hashDigest: 'hex',

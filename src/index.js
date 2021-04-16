@@ -6,6 +6,6 @@ import ReactDOM from 'react-dom'
 
 import Root from '@views/root'
 
-document.addEventListener('DOMContentLoaded', () =>
+document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(<Root />, document.getElementById('app'))
-)
+})
