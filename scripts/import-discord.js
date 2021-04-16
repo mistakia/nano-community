@@ -12,6 +12,27 @@ const headers = {
   authorization: config.discordAuthorization
 }
 
+const excludeChannels = [
+  '403628195548495885', // nt - i hear voices
+  '403628195548495886', // nt - hangouts hd
+  '403642500973330462', // nt - offtopic
+  '403642625527119872', // nt - the circus
+  '406318878298210314', // nt - hangouts sd
+  '456813985367326720', // nt - worldcup
+  '474959416895078402', // nt - giveaways
+  '476409915888631809', // nt - treasure hunt
+  '486569081785286666', // nt - price check
+  '604731087369011230', // nt - whale alerts
+  '677401078886563840', // nt - hangouts text
+  '725781775716188181', // nt - politics
+  '729829214794154004', // nt - nangry
+  '759284898182856725', // nt - music
+  '792291386237255721', // nt - charts
+  '818725624050614302', // nt - hangouts lofi
+  '415933844038877194', // nt - wallets
+  '419885145210880010' // nt - puzzle solvers
+]
+
 const getChannelsForGuildId = async (guildId) => {
   const channels = []
   const url = `https://discord.com/api/v8/guilds/${guildId}/channels`
@@ -30,7 +51,8 @@ const getChannelsForGuildId = async (guildId) => {
 const main = async (guildId, { getFullHistory = false } = {}) => {
   logger(`importing discord server: ${guildId}`)
 
-  const channels = await getChannelsForGuildId(guildId)
+  let channels = await getChannelsForGuildId(guildId)
+  channels = channels.filter((c) => !excludeChannels.includes(c.id))
   logger(`found ${channels.length} channels`)
 
   for (const channel of channels) {
