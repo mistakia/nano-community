@@ -30,7 +30,13 @@ const excludeChannels = [
   '792291386237255721', // nt - charts
   '818725624050614302', // nt - hangouts lofi
   '415933844038877194', // nt - wallets
-  '419885145210880010' // nt - puzzle solvers
+  '419885145210880010', // nt - puzzle solvers
+
+  '370266023905198086', // voice channels
+  '370336821466628096', // charla general
+  '370336888206131202', // tagalog
+  '581832306915016735', // ledger
+  '695323919095300138' // gaming
 ]
 
 const getChannelsForGuildId = async (guildId) => {
