@@ -23,6 +23,7 @@
     "morgan": "^1.10.0",
     "morgan-debug": "^2.0.0",
     "mysql": "^2.18.1",
+    "node-cache": "^5.1.2",
     "node-fetch": "^2.6.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

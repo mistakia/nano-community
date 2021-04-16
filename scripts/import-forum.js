@@ -38,6 +38,7 @@ const main = async ({ getFullHistory = false } = {}) => {
 
     const posts = res.latest_posts.map((p) => ({
       pid: `forum:topic:${p.topic_id}:post:${p.id}`,
+      sid: 'forum',
       title: p.topic_title,
       url: `https://forum.nano.org/t/${p.topic_slug}/${p.topic_id}/${p.post_number}`,
       author: p.username,

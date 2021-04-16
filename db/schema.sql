@@ -29,9 +29,11 @@ DROP TABLE IF EXISTS `posts`;
 
 CREATE TABLE `posts` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `pid` varchar(255) NOT NULL,
+  `pid` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `sid` varchar(11) CHARACTER SET utf8 NOT NULL,
   `title` varchar(255) DEFAULT NULL,
   `url` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `content_url` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '',
   `author` varchar(32) NOT NULL,
   `authorid` varchar(32) DEFAULT NULL,
   `text` text CHARACTER SET utf8mb4,
@@ -60,3 +62,22 @@ CREATE TABLE `post_tags` (
   KEY `post_id` (`post_id`),
   KEY `tag` (`tag`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sources`
+--
+
+DROP TABLE IF EXISTS `sources`;
+
+CREATE TABLE `sources` (
+  `id` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `title` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `logo_url` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `score_avg` int(11) NOT NULL DEFAULT 1,
+  `social_score_avg` int(11) NOT NULL DEFAULT 1,
+  `created_at` int(11) DEFAULT NULL,
+  `updated_at` int(11) DEFAULT NULL,
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

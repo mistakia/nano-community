@@ -13,12 +13,13 @@ const jwt = require('jsonwebtoken')
 const expressJwt = require('express-jwt')
 const compression = require('compression')
 const debug = require('debug')
+const NodeCache = require('node-cache')
 
 const logger = debug('api')
 
 const config = require('../config')
-// const routes = require('./routes')
-// const db = require('../db')
+const routes = require('./routes')
+const db = require('../db')
 // const sockets = require('./sockets')
 
 const defaults = {}
@@ -33,6 +34,10 @@ if (IS_DEV) {
 }
 
 const api = express()
+
+api.locals.db = db
+api.locals.logger = logger
+api.locals.cache = new NodeCache()
 
 api.enable('etag')
 api.disable('x-powered-by')
@@ -62,6 +67,7 @@ api.use('/api/*', expressJwt(config.jwt), (err, req, res, next) => {
 })
 
 // unprotected api routes
+api.use('/api/posts', routes.posts)
 
 api.use('/api/*', (err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
@@ -72,8 +78,13 @@ api.use('/api/*', (err, req, res, next) => {
 
 // protected api routes
 
-api.use('/*', (req, res) => {
+api.get('/?', (req, res) => {
   // redirect to ipfs page
+  res.redirect(307, config.url)
+})
+
+api.use('*', (req, res) => {
+  res.status(404).send({ error: 'path not found' })
 })
 
 const createServer = () => {
