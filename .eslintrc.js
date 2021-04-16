@@ -19,6 +19,13 @@ module.exports = {
   },
   plugins: ['react'],
   rules: {
+    'generator-star-spacing': [
+      'error',
+      {
+        before: false,
+        after: true
+      }
+    ],
     'space-before-function-paren': [
       'error',
       {
