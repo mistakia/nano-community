@@ -79,8 +79,12 @@ api.use('/api/*', (err, req, res, next) => {
 // protected api routes
 
 api.get('/?', (req, res) => {
-  // redirect to ipfs page
-  res.redirect(307, config.url)
+  if (IS_DEV) {
+    res.redirect(307, 'http://localhost:8081/')
+  } else {
+    // redirect to ipfs page
+    res.redirect(307, config.url)
+  }
 })
 
 api.use('*', (req, res) => {
