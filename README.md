@@ -2,7 +2,7 @@
 
 **Vision & Purpose**
 
-Nano Wiki aims to be the a portal to Nano's growing community, maintaining docs, guides, and conventions to improve community communication & onboarding.
+Nano.Community aims to be a portal to Nano's growing community by maintaining docs, guides, and conventions to improve community communication & onboarding.
 
 **Primary Goals**
 
@@ -16,34 +16,125 @@ Nano Wiki aims to be the a portal to Nano's growing community, maintaining docs,
 - Keep the community at large informed — serve as a centralized place to easily and quickly track an open and distributed project
 - Measure community support for or against ideas by nano account based voting
 
-**Principles**
+## Components
 
-- Open
-- Distributed — operate indefinetly without reliance on centralized elements (servers, people, etc)
+At its core, this project is designed to be a overlay of the greater Nano community & ecosystem.
 
-**Project Components**
+**Structure**
 
-- Markdown Wiki Documents
-- Onboarding / Contribution Guides
-- Community Conventions
-- Nano Improvement Proposals (i.e. RFC)
-- Nano Based Accounts & Voting
-- Content Aggregator / Crawler (automatic content importing and chronicling)
+JavaScript & Markdown are used to make the project as accessible as possible. Overtime, all elements of the project will be hosted and structured on IPFS to achieve immutability and permanence. The project aims to be open and distributed, allowing for it to operate indefinetly without reliance on centralized elements (servers, people, etc).
 
-## Contribution Guides
+```
+.
+|-- api         node.js api server for posts, network stats
+|-- db          schema for mysql
+|-- docs        community wiki docs
+|-- src         single page react app (deployed to IPFS)
+`-- topics      docs for each topic
+```
 
-- Nano Docs
-- Nano Code
-- Nano Wiki
+### Markdown Documents
 
-## Community Conventions
+A set of community maintained documents made up of guides and wiki-style documents helping to onboard new community members & developers.
+
+```
+|-- getting-started-devs
+|   |-- software
+|   |   |-- clients.md
+|   |   |-- libraries.md
+|   |   |-- payments.md
+|   |   |-- wallets.md
+|   |   `-- webservices-apis.md
+|   |-- tutorials
+|   |-- protocol.md
+|   |-- running-a-node.md
+|   `-- setup-local-environment.md
+|-- getting-started-users
+|   |-- storing
+|   |   |-- basics.md
+|   |   |-- recovery.md
+|   |   `-- setup.md
+|   |-- acquiring.md
+|   |-- basics.md
+|   |-- best-practices.md
+|   `-- using.md
+|-- history
+|   |-- community
+|   |   `-- nano-trade
+|   |       `-- copy-pastas.md
+|   |-- bitcoin.md
+|   |-- bitgrail.md
+|   |-- distribution.md
+|   |-- early-development.md
+|   |-- prelude.md
+|   `-- timeline.md
+|-- introduction
+|   |-- advantages.md
+|   |-- how-it-works.md
+|   |-- investment-thesis.md
+|   |-- misconceptions.md
+|   |-- nano-fixes-this.md
+|   `-- why-it-matters.md
+|-- community.md
+|-- faqs.md
+`-- network.md
+```
+
+### Onboarding / Contribution Guides
+
+- Documentation
+- Code
+- Nano.Community Docs
+
+### Content Aggregation & Categorization
+
+Automatic content aggregation, indexing, categorization and chronicling.
+
+- Reddit Subreddit
+- Reddit User
+- Forum
+- Discord
+- Github
+
+**Topics**
+
+Content can be tagged to a topic, to allow for members to easily explore past discussions around a certain topic. Each topic will have a neutral,concise, and high-level summary along with supporting & opposition arguements, and links to all past comments. Topics exist to easily point new members to past conversations as new members will naturally think of things already discussed by past members.
+
+```
+|-- spam
+|   |-- ledger-spam.md
+|   |   `-- minimum-account-balances.md
+|   `-- congestion-spam.md
+|-- tx-prioritization
+|   |-- dpow.md
+|   |-- fee.md
+|   `-- taac-pos4qos.md
+|-- attack-vectors.md
+|-- consensus.md
+|-- economics.md
+|-- finality.md
+|-- governance.md
+|-- micropayments.md
+|-- privacy.md
+|-- scalability.md
+`-- security.md
+```
+
+### Nano Based Accounts & Voting
+
+Nano.Community accounts are a generated key-pair where the public key is signed by the private key pertaining to a nano account. This will allow associating a user's activity to an account on the nano network. The signing process will take place within your wallet (or on the commandline) and will not increase the risk/attack surface for your nano private key. This feature can be used to automate moderation of contributions as well as measuring support for or against certain proposals.
+
+### Community Conventions
+
+Community conventions will set forth best practices on how to format/structure your posts across various platforms in the nano community.
 
 - Reddit
 - Forum
 - Discord
 - Github
 
-## Templates
+### Nano Improvement Proposals (i.e. RFC)
 
-- Wiki Document
-- Forum Post
+[needs more research]
+
+See Zach's comments [here](https://www.reddit.com/r/nanocurrency/comments/m8l9j8/building_oss_infrastructure_to_help_improve/gru1unt)

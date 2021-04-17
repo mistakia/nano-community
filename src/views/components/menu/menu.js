@@ -9,18 +9,20 @@ export default class Menu extends React.Component {
         <div className='menu__section'>
           <div className='menu__heading'>Introduction</div>
           <div className='menu__links'>
+            <a>How It Works</a>
+            <a>Why it matters</a>
+            <a>Misconceptions</a>
             <a>History</a>
-            <a>Why Nano?</a>
-            <a>Myths</a>
             <a>FAQs</a>
           </div>
         </div>
         <div className='menu__section'>
           <div className='menu__heading'>Get Started</div>
           <div className='menu__links'>
+            <a>Basics</a>
             <a>Storing</a>
-            <a>Purchasing</a>
-            <a>Transacting</a>
+            <a>Acquiring</a>
+            <a>Using</a>
             <a>Best Practices</a>
           </div>
         </div>
@@ -30,6 +32,7 @@ export default class Menu extends React.Component {
             <a>Design</a>
             <a>Advantages</a>
             <a>Attack Vectors</a>
+            <a>Challeneges</a>
             <a>Roadmap</a>
             <a>Support</a>
           </div>
@@ -37,8 +40,11 @@ export default class Menu extends React.Component {
         <div className='menu__section'>
           <div className='menu__heading'>Developers</div>
           <div className='menu__links'>
-            <a>Github</a>
+            <a>Getting Started</a>
+            <a>Running a node</a>
+            <a>Tutorials</a>
             <a>Documentation</a>
+            <a>Software</a>
             <a>Integration</a>
             <a>Whitepaper</a>
           </div>
@@ -47,7 +53,7 @@ export default class Menu extends React.Component {
           <div className='menu__heading'>Get Involved</div>
           <div className='menu__links'>
             <a>Contributing</a>
-            <a>Community</a>
+            <a>Discussions</a>
           </div>
         </div>
       </div>
