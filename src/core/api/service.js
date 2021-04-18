@@ -6,8 +6,8 @@ import merge from 'deepmerge'
 import { BASE_URL } from '@core/constants'
 
 export const api = {
-  getPosts(params) {
-    const url = `${BASE_URL}/posts?${queryString.stringify(params)}`
+  getPosts({ id, ...params }) {
+    const url = `${BASE_URL}/posts/${id}?${queryString.stringify(params)}`
     return { url }
   }
 }

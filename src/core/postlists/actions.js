@@ -1,4 +1,6 @@
 export const postlistActions = {
+  GET_POSTS: 'GET_POSTS',
+
   GET_POSTS_FAILED: 'GET_POSTS_FAILED',
   GET_POSTS_PENDING: 'GET_POSTS_PENDING',
   GET_POSTS_FULFILLED: 'GET_POSTS_FULFILLED',
@@ -23,6 +25,13 @@ export const postlistActions = {
     payload: {
       params,
       data
+    }
+  }),
+
+  getPosts: (id) => ({
+    type: postlistActions.GET_POSTS,
+    payload: {
+      id
     }
   })
 }
