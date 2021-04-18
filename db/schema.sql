@@ -30,7 +30,7 @@ DROP TABLE IF EXISTS `posts`;
 CREATE TABLE `posts` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `pid` varchar(255) CHARACTER SET utf8 NOT NULL,
-  `sid` varchar(11) CHARACTER SET utf8 NOT NULL,
+  `sid` varchar(255) CHARACTER SET utf8 NOT NULL,
   `title` varchar(255) DEFAULT NULL,
   `url` varchar(255) CHARACTER SET utf8 NOT NULL,
   `content_url` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '',
