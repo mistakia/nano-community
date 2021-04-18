@@ -12,15 +12,13 @@ Nano.Community aims to be a portal to Nano's growing community by maintaining do
 
 **Secondary Goals**
 
-- Serve as a chronicle of events, discussions, comments, ideas, etc. Documentating Nano culture & history
+- Serve as a chronicle of events, discussions, comments, ideas, etc. Documenting Nano culture & history
 - Keep the community at large informed — serve as a centralized place to easily and quickly track an open and distributed project
 - Measure community support for or against ideas by nano account based voting
 
 ## Components
 
 At its core, this project is designed to be a overlay of the greater Nano community & ecosystem.
-
-**Structure**
 
 JavaScript & Markdown are used to make the project as accessible as possible. Overtime, all elements of the project will be hosted and structured on IPFS to achieve immutability and permanence. The project aims to be open and distributed, allowing for it to operate indefinetly without reliance on centralized elements (servers, people, etc).
 
@@ -98,7 +96,7 @@ Automatic content aggregation, indexing, categorization and chronicling.
 
 **Topics**
 
-Content can be tagged to a topic, to allow for members to easily explore past discussions around a certain topic. Each topic will have a neutral,concise, and high-level summary along with supporting & opposition arguements, and links to all past comments. Topics exist to easily point new members to past conversations as new members will naturally think of things already discussed by past members.
+Content can be tagged to a topic to allow for members to easily explore past discussions around a certain topic. Each topic will have a neutral, concise, and high-level summary along with supporting & opposing arguments, and links to all past comments. Topics exist to easily point new members to past conversations as new members will naturally think of things already discussed by past members.
 
 ```
 |-- spam
