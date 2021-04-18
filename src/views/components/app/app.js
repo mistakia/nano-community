@@ -5,6 +5,7 @@ import { localStorageAdapter } from '@core/utils'
 import Posts from '@components/posts'
 import Menu from '@components/menu'
 
+import '@styles/normalize.css'
 import '@styles/typography.styl'
 import './app.styl'
 
@@ -18,8 +19,8 @@ export default class App extends React.Component {
   render() {
     return (
       <main>
-        <Posts title='This Month' />
-        <Posts title='Recent' />
+        <Posts title='This Month' id='top' />
+        <Posts title='Recent' id='trending' />
         <Menu />
       </main>
     )

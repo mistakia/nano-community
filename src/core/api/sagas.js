@@ -1,9 +1,9 @@
-import { race, call, put, take, cancelled, select } from 'redux-saga/effects'
-import { LOCATION_CHANGE } from 'connected-react-router'
+import { call, put, cancelled, select } from 'redux-saga/effects'
+// import { LOCATION_CHANGE } from 'connected-react-router'
 
 import { api, apiRequest } from '@core/api/service'
 import { getApp } from '@core/app'
-import { postlistsRequestActions } from '@core/postlists'
+import { postlistRequestActions } from '@core/postlists'
 
 function* fetchAPI(apiFunction, actions, opts = {}) {
   const { token } = yield select(getApp)
@@ -28,7 +28,8 @@ function* fetchAPI(apiFunction, actions, opts = {}) {
 }
 
 function* fetch(...args) {
-  yield race([call(fetchAPI.bind(null, ...args)), take(LOCATION_CHANGE)])
+  yield call(fetchAPI.bind(null, ...args))
+  // yield race([call(fetchAPI.bind(null, ...args)), take(LOCATION_CHANGE)])
 }
 
-export const getPosts = fetch.bind(null, api.getPosts, postlistsRequestActions)
+export const getPosts = fetch.bind(null, api.getPosts, postlistRequestActions)
