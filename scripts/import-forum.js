@@ -15,7 +15,12 @@ const main = async ({ getFullHistory = false } = {}) => {
     .orderBy('created_at', 'desc')
     .limit(1)
 
-  const messageId = rows.length ? rows[0].pid.split(/forum:/)[1] : undefined
+  const re = /forum:topic:[0-9]+:post:(?<postId>[0-9]+)/
+  const messageId = rows.length
+    ? parseInt(rows[0].pid.match(re).groups.postId, 10)
+    : undefined
+
+  logger(`last fetched messageId: ${messageId}`)
 
   let beforeId, messageIds, res
 
@@ -42,7 +47,7 @@ const main = async ({ getFullHistory = false } = {}) => {
       title: p.topic_title,
       url: `https://forum.nano.org/t/${p.topic_slug}/${p.topic_id}/${p.post_number}`,
       author: p.username,
-      authroid: p.username,
+      authorid: p.username,
       created_at: moment(p.created_at).unix(),
       updated_at: moment(p.updated_at).unix(),
       html: p.cooked,
@@ -50,11 +55,9 @@ const main = async ({ getFullHistory = false } = {}) => {
       score: p.score
     }))
 
-    console.log(posts)
-
     if (posts.length) {
       logger(`saving ${posts.length} posts from forum`)
-      // await db('posts').insert(posts).onConflict().merge()
+      await db('posts').insert(posts).onConflict().merge()
     }
 
     messageIds = res.latest_posts.map((p) => p.id)
