@@ -3,7 +3,7 @@ const router = express.Router()
 
 // trending posts over a span of time (with decay), freshness is given a value
 router.get('/trending', async (req, res) => {
-  const { db, logger } = req.app.locals
+  const { db, logger, cache } = req.app.locals
   try {
     const limit = Math.min(parseInt(req.query.limit || 100, 10), 100)
     const excludedIds = (req.query.excludedIds || '').split(',')
@@ -13,6 +13,11 @@ router.get('/trending', async (req, res) => {
 
     // rate at which a post score decays
     const decay = parseInt(req.query.decay || 90000, 10)
+
+    const cachePosts = cache.get('trending')
+    if (cachePosts) {
+      return res.status(200).send(cachePosts)
+    }
 
     const query = db('sources')
     query.select('posts.*', 'sources.score_avg')
@@ -41,6 +46,7 @@ router.get('/trending', async (req, res) => {
     console.log(query.toString())
 
     const posts = await query
+    cache.set('trending', posts)
     res.status(200).send(posts)
   } catch (error) {
     logger(error)
@@ -50,13 +56,18 @@ router.get('/trending', async (req, res) => {
 
 // top posts over a span of time (no decay)
 router.get('/top', async (req, res) => {
-  const { db, logger } = req.app.locals
+  const { db, logger, cache } = req.app.locals
   try {
     const offset = parseInt(req.query.offset || 0, 10)
     const limit = parseInt(req.query.limit || 5, 10)
 
     // maximum age of a post (in hours)
     const age = parseInt(req.query.age || 168, 10)
+
+    const cachePosts = cache.get('top')
+    if (cachePosts) {
+      return res.status(200).send(cachePosts)
+    }
 
     const query = db('sources').offset(offset)
     query.select('posts.*', 'sources.score_avg')
@@ -70,6 +81,7 @@ router.get('/top', async (req, res) => {
     query.limit(limit)
 
     const posts = await query
+    cache.set('top', posts)
     res.status(200).send(posts)
   } catch (error) {
     logger(error)
