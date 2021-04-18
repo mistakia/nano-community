@@ -56,7 +56,7 @@ router.get('/top', async (req, res) => {
     const limit = parseInt(req.query.limit || 5, 10)
 
     // maximum age of a post (in hours)
-    const age = parseInt(req.query.age || 24, 10)
+    const age = parseInt(req.query.age || 168, 10)
 
     const query = db('sources').offset(offset)
     query.select('posts.*', 'sources.score_avg')
