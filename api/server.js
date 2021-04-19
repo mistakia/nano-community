@@ -71,6 +71,9 @@ api.use('/api/*', expressJwt(config.jwt), (err, req, res, next) => {
 api.use('/api/posts', routes.posts)
 const docsPath = path.join(__dirname, '..', 'docs')
 api.use('/api/docs', serveStatic(docsPath))
+api.get('/api/docs/*', (req, res) => {
+  res.status(404).send('Not found')
+})
 
 api.use('/api/*', (err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {

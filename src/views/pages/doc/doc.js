@@ -23,23 +23,21 @@ export default class DocPage extends React.Component {
           <Skeleton height={80} width={200} />
           <Skeleton height={20} />
           <Skeleton height={20} animation={false} />
-          <Skeleton height={20} animation="wave" />
+          <Skeleton height={20} animation='wave' />
           <Skeleton height={20} />
           <Skeleton height={30} width={300} style={{ marginTop: '32px' }} />
           <Skeleton height={20} animation={false} />
-          <Skeleton height={20} animation="wave" />
+          <Skeleton height={20} animation='wave' />
           <Skeleton height={20} />
           <Skeleton height={20} animation={false} />
-          <Skeleton height={20} animation="wave" />
+          <Skeleton height={20} animation='wave' />
         </div>
       )
     } else if (doc.isLoaded && !doc.content) {
       body = (
         <div className='doc__content'>
           <h1>404</h1>
-          <p>
-            Document not found
-          </p>
+          <p>Document not found</p>
         </div>
       )
     } else {
