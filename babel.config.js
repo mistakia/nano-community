@@ -16,6 +16,7 @@ module.exports = {
         root: ['./'],
         alias: {
           '@views': './src/views',
+          '@pages': './src/views/pages',
           '@core': './src/core',
           '@components': './src/views/components',
           '@styles': './src/styles'

@@ -2,8 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { localStorageAdapter } from '@core/utils'
-import Posts from '@components/posts'
-import Menu from '@components/menu'
+import Routes from '@views/routes'
 
 import '@styles/normalize.css'
 import '@styles/typography.styl'
@@ -19,9 +18,7 @@ export default class App extends React.Component {
   render() {
     return (
       <main>
-        <Posts title='This Week' id='top' />
-        <Posts title='Recent' id='trending' />
-        <Menu />
+        <Routes />
       </main>
     )
   }

@@ -9,6 +9,10 @@ export const api = {
   getPosts({ id, ...params }) {
     const url = `${BASE_URL}/posts/${id}?${queryString.stringify(params)}`
     return { url }
+  },
+  getDoc({ id }) {
+    const url = `${BASE_URL}/docs${id}.md`
+    return { url }
   }
 }
 
@@ -27,7 +31,11 @@ export const apiRequest = (apiFunction, opts, token) => {
 export const dispatchFetch = async (options) => {
   const response = await fetch(options.url, options)
   if (response.status >= 200 && response.status < 300) {
-    return response.json()
+    if (options.url.includes('docs')) {
+      return response.text()
+    } else {
+      return response.json()
+    }
   } else {
     const res = await response.json()
     const error = new Error(res.error || response.statusText)

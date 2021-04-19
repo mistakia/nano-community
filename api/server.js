@@ -2,7 +2,7 @@ const https = require('https')
 const http = require('http')
 const fs = require('fs')
 const url = require('url')
-// const path = require('path')
+const path = require('path')
 
 const WebSocket = require('ws')
 const express = require('express')
@@ -14,6 +14,8 @@ const expressJwt = require('express-jwt')
 const compression = require('compression')
 const debug = require('debug')
 const NodeCache = require('node-cache')
+const serveStatic = require('serve-static')
+const cors = require('cors')
 
 const logger = debug('api')
 
@@ -44,16 +46,15 @@ api.disable('x-powered-by')
 api.use(compression())
 api.use(morgan('api', 'combined'))
 api.use(bodyParser.json())
+api.use(
+  cors({
+    origin: true,
+    credentials: true
+  })
+)
 
 // api.use(favicon(path.join(__dirname, '../', 'dist', 'favicon.ico'), { maxAge: '604800' }))
 api.use((req, res, next) => {
-  res.set('Access-Control-Allow-Origin', req.headers.origin || config.url)
-  res.set('Access-Control-Allow-Credentials', 'true')
-  res.set('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS, PUT')
-  res.set(
-    'Access-Control-Allow-Headers',
-    'Authorization, Origin, X-Requested-With, Content-Type, Accept'
-  )
   res.set('Cache-Control', 'no-cache, must-revalidate, proxy-revalidate')
   next()
 })
@@ -68,6 +69,8 @@ api.use('/api/*', expressJwt(config.jwt), (err, req, res, next) => {
 
 // unprotected api routes
 api.use('/api/posts', routes.posts)
+const docsPath = path.join(__dirname, '..', 'docs')
+api.use('/api/docs', serveStatic(docsPath))
 
 api.use('/api/*', (err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
