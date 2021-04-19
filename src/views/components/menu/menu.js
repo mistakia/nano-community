@@ -32,7 +32,7 @@ export default class Menu extends React.Component {
             <a>Design</a>
             <a>Advantages</a>
             <a>Attack Vectors</a>
-            <a>Challeneges</a>
+            <a>Challenges</a>
             <a>Roadmap</a>
             <a>Support</a>
           </div>
