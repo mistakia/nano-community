@@ -115,7 +115,8 @@ Content can be tagged to a topic to allow for members to easily explore past dis
 |-- micropayments.md
 |-- privacy.md
 |-- scalability.md
-`-- security.md
+|-- security.md
+`-- wallets.md
 ```
 
 ### Nano Based Accounts & Voting
