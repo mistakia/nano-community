@@ -81,17 +81,15 @@ api.use('/api/*', (err, req, res, next) => {
 
 // protected api routes
 
-api.get('/?', (req, res) => {
+api.get('*', (req, res) => {
   if (IS_DEV) {
-    res.redirect(307, 'http://localhost:8081/')
+    res.redirect(307, `http://localhost:8081${req.path}`)
   } else {
+    const indexPath = path.join(__dirname, '../', 'build', 'index.html')
+    res.sendFile(indexPath, { cacheControl: false })
     // redirect to ipfs page
-    res.redirect(307, config.url)
+    // res.redirect(307, `${config.url}${req.path}`)
   }
-})
-
-api.use('*', (req, res) => {
-  res.status(404).send({ error: 'path not found' })
 })
 
 const createServer = () => {

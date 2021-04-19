@@ -16,7 +16,7 @@ export function docsReducer(state = new Map(), { payload, type }) {
 
     case docActions.GET_DOC_FULFILLED:
       return state.mergeIn([payload.params.id], {
-        isPending: true,
+        isPending: false,
         isLoaded: true,
         content: payload.data
       })

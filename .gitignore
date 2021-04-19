@@ -10,5 +10,6 @@ yarn-error.log
 
 # App specific
 #
-build/
+build/*
+!build/index.html
 config.js
