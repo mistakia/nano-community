@@ -22,6 +22,7 @@ const logger = debug('api')
 const config = require('../config')
 const routes = require('./routes')
 const db = require('../db')
+require('./cron')
 // const sockets = require('./sockets')
 
 const defaults = {}
