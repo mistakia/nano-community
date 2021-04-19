@@ -4,6 +4,7 @@ import { call, put, cancelled, select } from 'redux-saga/effects'
 import { api, apiRequest } from '@core/api/service'
 import { getApp } from '@core/app'
 import { postlistRequestActions } from '@core/postlists'
+import { docRequestActions } from '@core/docs'
 
 function* fetchAPI(apiFunction, actions, opts = {}) {
   const { token } = yield select(getApp)
@@ -33,3 +34,4 @@ function* fetch(...args) {
 }
 
 export const getPosts = fetch.bind(null, api.getPosts, postlistRequestActions)
+export const getDoc = fetch.bind(null, api.getDoc, docRequestActions)

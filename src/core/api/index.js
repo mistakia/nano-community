@@ -1,1 +1,1 @@
-export { getPosts } from './sagas'
+export { getPosts, getDoc } from './sagas'
