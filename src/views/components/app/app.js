@@ -19,7 +19,7 @@ export default class App extends React.Component {
   render() {
     return (
       <main>
-        <Posts title='This Month' id='top' />
+        <Posts title='This Week' id='top' />
         <Posts title='Recent' id='trending' />
         <Menu />
       </main>
