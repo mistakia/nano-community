@@ -1,11 +1,38 @@
 .doc__content
+  flex 0 1 600px
   padding 32px 8px 0
   font-size 14px
   font-family 'Roboto Mono', monospace
   line-height 1.6
+  margin-bottom 32px
 
   p
     font-family 'Inter', sans-serif
     font-size 16px
     margin-bottom 16px
     line-height 1.7
+
+  li
+    font-family 'IBM Plex Mono', monospace
+
+.doc__content-side
+  flex 1
+  margin-top 32px
+
+.doc__content-author
+  margin 8px
+  font-size 12px
+  margin-bottom 48px
+
+.doc__content-edit
+  margin 8px !important
+
+.doc__content
+.doc__content-author
+  a
+    text-decoration underline
+    text-decoration-color $nanoSoftBlue
+    text-decoration-thickness .2em
+    text-underline-offset 1.5px
+    &:hover
+      color $nanoSoftBlue

@@ -2,6 +2,7 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import { withRouter } from 'react-router'
 import { ConnectedRouter } from 'connected-react-router/immutable'
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 
 import createStore from '@core/store'
 import history from '@core/history'
@@ -29,9 +30,19 @@ import App from '@components/app'
  * });
  *  */
 
-// Create redux store with history
-// const initialState = {};
-// const store = configureStore(initialState, history);
+const theme = createMuiTheme({
+  overrides: {
+    MuiButton: {
+      root: {
+        fontFamily: '\'IBM Plex Mono\', monospace',
+        '&:hover': {
+          color: '#4A90E2',
+          boxShadow: '#F0F0F0 4px 4px 0px 0px'
+        }
+      }
+    },
+  },
+})
 
 const initialState = window.__INITIAL_STATE__
 const store = createStore(history, initialState)
@@ -39,9 +50,11 @@ const ConnectedApp = withRouter(App)
 
 const Root = () => (
   <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <ConnectedApp />
-    </ConnectedRouter>
+    <ThemeProvider theme={theme}>
+      <ConnectedRouter history={history}>
+        <ConnectedApp />
+      </ConnectedRouter>
+    </ThemeProvider>
   </Provider>
 )
 
