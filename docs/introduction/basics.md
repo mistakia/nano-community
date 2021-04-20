@@ -4,15 +4,15 @@ Nano was launched in October 2015 by Colin LeMahieu to address the limitations i
 
 ### Get Started
 
-- Dive into how it works, why it matters, and advantages over existing technologies
-- Learn how to store nano, acquire nano and use nano.
-- Understand why it could be a good investment
-- Join the discussion or ask a question
-- Contribute to the core implementation or the ecosystem
-- Browse the FAQ
+- Dive into it's [advantages over existing technologies](/introduction/advantages), [how it works](/introduction/how-it-works), and [why it matters](/introduction/why-it-matters).
+- Learn how to [store nano](/getting-started-users/storing/basics), [acquire nano](/getting-started-users/acquiring) and [use nano](/getting-started-users/using).
+- Understand why it could be a [good investment](/introduction/investment-thesis)
+- Join the [discussion](/community) or get [support](/support)
+- [Contribute](/contributing) to the core implementation or the ecosystem
+- Browse the [FAQ](/faqs)
 
 ### History
 
 Development began in 2014 by Colin LeMahieu, under its original name of RaiBlocks. On 31 January 2018, RaiBlocks rebranded to Nano. Nano was distributed for free through a Captcha-based faucet which started in 2015. The faucet was shut down in 2017 after 126,248,289 NANO were distributed. Along with a 7,000,000 NANO developer fund, this fixed the total supply to 133,248,297 NANO.
 
-Read more about the history.
+Read more about [the history](/history/overview).

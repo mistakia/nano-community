@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 import './menu.styl'
 
@@ -9,51 +10,50 @@ export default class Menu extends React.Component {
         <div className='menu__section'>
           <div className='menu__heading'>Introduction</div>
           <div className='menu__links'>
-            <a>Basics</a>
-            <a>How It Works</a>
-            <a>Why it matters</a>
-            <a>Misconceptions</a>
-            <a>History</a>
-            <a>FAQs</a>
+            <Link to='/introduction/basics'>Basics</Link>
+            <Link to='/introduction/advantages'>Advantages</Link>
+            <Link to='/introduction/how-it-works'>How it works</Link>
+            <Link to='/introduction/why-it-matters'>Why it matters</Link>
+            <Link to='/introduction/misconceptions'>Misconceptions</Link>
+            <Link to='/history/overview'>History</Link>
+            <Link to='/faqs'>FAQs</Link>
           </div>
         </div>
         <div className='menu__section'>
           <div className='menu__heading'>Get Started</div>
           <div className='menu__links'>
-            <a>Basics</a>
-            <a>Storing</a>
-            <a>Acquiring</a>
-            <a>Using</a>
-            <a>Best Practices</a>
+            <Link to='/getting-started-users/basics'>Basics</Link>
+            <Link to='/getting-started-users/storing/basics'>Storing</Link>
+            <Link to='/getting-started-users/acquiring'>Acquiring</Link>
+            <Link to='/getting-started-users/using'>Using</Link>
+            <Link to='/getting-started-users/best-practices'>Best Practices</Link>
           </div>
         </div>
         <div className='menu__section'>
-          <div className='menu__heading'>Learn & Get Help</div>
+          <div className='menu__heading'>Learn</div>
           <div className='menu__links'>
-            <a>Design</a>
-            <a>Advantages</a>
-            <a>Attack Vectors</a>
-            <a>Challenges</a>
-            <a>Roadmap</a>
-            <a>Support</a>
+            <Link to='/design/basics'>Design</Link>
+            <Link to='/design/attack-vectors'>Attack Vectors</Link>
+            <Link to='/design/challenges'>Challenges</Link>
+            <Link to='/design/roadmap'>Roadmap</Link>
           </div>
         </div>
         <div className='menu__section'>
           <div className='menu__heading'>Developers</div>
           <div className='menu__links'>
-            <a>Getting Started</a>
-            <a>Running a node</a>
-            <a>Tutorials</a>
-            <a>Documentation</a>
-            <a>Integration</a>
-            <a>Whitepaper</a>
+            <Link to='/getting-started-devs/overview'>Getting Started</Link>
+            <Link to='/getting-started-devs/running-a-node'>Running a node</Link>
+            <Link to='/getting-started-devs/tutorials/overview'>Tutorials</Link>
+            <Link to='/getting-started-devs/documentation'>Documentation</Link>
+            <Link to='/getting-started-devs/integrations'>Integrations</Link>
           </div>
         </div>
         <div className='menu__section'>
           <div className='menu__heading'>Get Involved</div>
           <div className='menu__links'>
-            <a>Contributing</a>
-            <a>Discussions</a>
+            <Link to='/contributing'>Contributing</Link>
+            <Link to='/community'>Discussions</Link>
+            <Link to='/support'>Support</Link>
           </div>
         </div>
       </div>
