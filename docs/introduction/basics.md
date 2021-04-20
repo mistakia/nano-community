@@ -11,7 +11,7 @@ Nano was launched in October 2015 by Colin LeMahieu to address the limitations i
 - Contribute to the core implementation or the ecosystem
 - Browse the FAQ
 
-## History
+### History
 
 Development began in 2014 by Colin LeMahieu, under its original name of RaiBlocks. On 31 January 2018, RaiBlocks rebranded to Nano. Nano was distributed for free through a Captcha-based faucet which started in 2015. The faucet was shut down in 2017 after 126,248,289 NANO were distributed. Along with a 7,000,000 NANO developer fund, this fixed the total supply to 133,248,297 NANO.
 

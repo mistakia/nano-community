@@ -21,6 +21,11 @@ export function docsReducer(state = new Map(), { payload, type }) {
         content: payload.data
       })
 
+    case docActions.GET_DOC_COMMIT_FULFILLED: {
+      const commit = payload.data[0]
+      return state.mergeIn([payload.params.id], { commit })
+    }
+
     default:
       return state
   }

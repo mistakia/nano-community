@@ -1,7 +1,8 @@
-import { Record } from 'immutable'
+import { Record, Map } from 'immutable'
 
 export const Doc = new Record({
   isPending: true,
   isLoaded: false,
-  content: null
+  content: null,
+  commit: new Map()
 })
