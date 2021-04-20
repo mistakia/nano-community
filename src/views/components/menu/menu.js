@@ -45,7 +45,6 @@ export default class Menu extends React.Component {
             <a>Running a node</a>
             <a>Tutorials</a>
             <a>Documentation</a>
-            <a>Software</a>
             <a>Integration</a>
             <a>Whitepaper</a>
           </div>
