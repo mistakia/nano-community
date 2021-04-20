@@ -68,6 +68,7 @@ A set of community maintained documents made up of guides and wiki-style documen
 |   `-- timeline.md
 |-- introduction
 |   |-- advantages.md
+|   |-- basics.md
 |   |-- how-it-works.md
 |   |-- investment-thesis.md
 |   |-- misconceptions.md

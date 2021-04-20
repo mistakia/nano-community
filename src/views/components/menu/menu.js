@@ -9,6 +9,7 @@ export default class Menu extends React.Component {
         <div className='menu__section'>
           <div className='menu__heading'>Introduction</div>
           <div className='menu__links'>
+            <a>Basics</a>
             <a>How It Works</a>
             <a>Why it matters</a>
             <a>Misconceptions</a>
