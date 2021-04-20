@@ -76,7 +76,8 @@ A set of community maintained documents made up of guides and wiki-style documen
 |   `-- why-it-matters.md
 |-- community.md
 |-- faqs.md
-`-- network.md
+|-- network.md
+`-- support.md
 ```
 
 ### Onboarding / Contribution Guides
