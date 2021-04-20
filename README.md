@@ -37,13 +37,8 @@ A set of community maintained documents made up of guides and wiki-style documen
 
 ```
 |-- getting-started-devs
-|   |-- software
-|   |   |-- clients.md
-|   |   |-- libraries.md
-|   |   |-- payments.md
-|   |   |-- wallets.md
-|   |   `-- webservices-apis.md
 |   |-- tutorials
+|   |-- getting-started.md
 |   |-- protocol.md
 |   |-- running-a-node.md
 |   `-- setup-local-environment.md

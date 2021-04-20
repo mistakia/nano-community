@@ -1,0 +1,3 @@
+- Explore the [official documenatation](https://docs.nano.org/)
+- Learn the [basics for integrating with the nano network](https://docs.nano.org/integration-guides/the-basics/)
+- Visit [nano.org/tools](https://nano.org/tools) for a list of developer tools & libraries
