@@ -67,6 +67,7 @@
     "nib": "^1.1.2",
     "prettier": "^2.2.1",
     "react-immutable-proptypes": "^2.2.0",
+    "react-router-dom": "^5.2.0",
     "redux-immutable": "^4.0.0",
     "style-loader": "^2.0.0",
     "stylus": "^0.54.8",

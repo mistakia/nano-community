@@ -17,6 +17,14 @@ export default class DocPage extends React.Component {
     this.props.getDoc(this.props.location.pathname)
   }
 
+  componentDidUpdate(prevProps) {
+    const location = JSON.stringify(this.props.location)
+    const prevLocation = JSON.stringify(prevProps.location)
+    if (location !== prevLocation) {
+      this.props.getDoc(this.props.location.pathname)
+    }
+  }
+
   render() {
     const { doc } = this.props
 

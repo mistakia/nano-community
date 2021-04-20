@@ -36,16 +36,22 @@ JavaScript & Markdown are used to make the project as accessible as possible. Ov
 A set of community maintained documents made up of guides and wiki-style documents helping to onboard new community members & developers.
 
 ```
+|-- design
+|   |-- attack-vectors.md
+|   |-- basics.md
+|   |-- challenges.md
+|   `-- roadmap.md
 |-- getting-started-devs
 |   |-- tutorials
+|   |   `-- overview.md
+|   |-- documentation.md
 |   |-- getting-started.md
-|   |-- protocol.md
-|   |-- running-a-node.md
-|   `-- setup-local-environment.md
+|   |-- integrations.md
+|   |-- overview.md
+|   `-- running-a-node.md
 |-- getting-started-users
 |   |-- storing
 |   |   |-- basics.md
-|   |   |-- recovery.md
 |   |   `-- setup.md
 |   |-- acquiring.md
 |   |-- basics.md
@@ -59,6 +65,7 @@ A set of community maintained documents made up of guides and wiki-style documen
 |   |-- bitgrail.md
 |   |-- distribution.md
 |   |-- early-development.md
+|   |-- overview.md
 |   |-- prelude.md
 |   `-- timeline.md
 |-- introduction
@@ -70,6 +77,7 @@ A set of community maintained documents made up of guides and wiki-style documen
 |   |-- nano-fixes-this.md
 |   `-- why-it-matters.md
 |-- community.md
+|-- contributing.md
 |-- faqs.md
 |-- network.md
 `-- support.md

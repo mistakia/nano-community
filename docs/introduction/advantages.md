@@ -1,8 +1,8 @@
 Nano, like Bitcoin, is a new form of money that's completely digital. Nano is not controlled by any person, company, or government. It’s development is open-source and it's network is run by the community of its users around the world. Nano can be used without having to trust any other user, developer, or operator on the network.
 
-Unlike Bitcoin, Nano is fast, uses minimal energy, and operates without any fees.
+Nano, unlike Bitcoin, is scalable, fast, uses minimal energy, and operates without any fees. [expand on security, lack of miners, deterministic finality]
 
-# Benefits over traditional currencies & stores of value
+#### Benefits over traditional currencies & stores of value
 
 - decentralized
 - no counterfeit money
@@ -13,7 +13,7 @@ Unlike Bitcoin, Nano is fast, uses minimal energy, and operates without any fees
 - low cost of carry
 - teleportable
 
-# Benefits over other digital currencies
+#### Benefits over other digital currencies
 
 - feeless
 - asynchronous
