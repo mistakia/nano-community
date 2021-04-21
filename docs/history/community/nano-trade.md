@@ -7,7 +7,7 @@ The NanoTrade discord community was created on 18 January 2018 with `mav` making
 ```
 That's it, I'm out. This coin will be dumped upon by private dev and non-dev wallets for years to come and NF has done enough weird things with investors money for my taste. I'm sodling today, see you dudes. Gonna check every once in a while how womenInTech and Appia are doing.
 
-By: unknown
+By: Macsby
 Date: unknown
 Context:
 ```
@@ -15,7 +15,7 @@ Context:
 ```
 what if price falls to 2k?
 
-By: unknown
+By: User#35007
 Date: unknown
 Context:
 
@@ -32,7 +32,7 @@ The contract of my hosting provider ends March-April next year, so I will run re
 
 I hope that I'm wrong about Nano's future, but I will be standing on the sidelines until the sentiment significantly change. I wish you all the best and that you succeed with your investments. Cheers!
 
-By: unknown
+By: Sev
 Date: unknown
 Context:
 ```
@@ -134,9 +134,17 @@ Context:
 ```
 my wife still doesn't believe in me
 
-By: unknown
-Date: unknown
-Context:
+By: Carlos Matos
+Date: October 28, 2017
+Context: Bitconnect Annual Ceremony
+```
+
+```
+THE WORLD IS NOT ANYMORE THE WAY IT USED TO BE
+
+By: Carlos Matos
+Date: October 28, 2017
+Context: Bitconnect Annual Ceremony
 ```
 
 ```
@@ -221,17 +229,17 @@ Context:
 ```
 Activate quantum immortality
 
-By: unknown
-Date: unknown
-Context:
+By: Bizonacci
+Date: February 27, 2018
+Context: https://www.youtube.com/watch?v=KV5QlSgq7lg&t=72s
 ```
 
 ```
 Serious discussion involving the cryptocurrency market.
 
-By: unknown
+By: Troy
 Date: unknown
-Context:
+Context: The header description for the #markets channel, the most active channel
 ```
 
 ```
@@ -243,17 +251,9 @@ Context:
 ```
 
 ```
-THE WORLD IS NOT ANYMORE THE WAY IT USED TO BE
-
-By: unknown
-Date: unknown
-Context:
-```
-
-```
 Nano is never going to moon, and that's a good thing
 
-By: unknown
+By: Seneca Effect
 Date: unknown
 Context:
 ```
