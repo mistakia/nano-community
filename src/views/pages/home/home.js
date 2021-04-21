@@ -10,8 +10,8 @@ export default class HomePage extends React.Component {
     return (
       <>
         <div className='posts'>
-          <Posts title='This Week' id='top' />
-          <Posts title='Recent' id='trending' />
+          <Posts title='Top' id='top' />
+          <Posts title='Trending' id='trending' />
         </div>
         <Menu />
       </>

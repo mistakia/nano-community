@@ -7,6 +7,9 @@ export default class Menu extends React.Component {
   render() {
     return (
       <div className='menu__container'>
+        <Link to='/' className='menu__logo'>
+          <img src='/resources/nano+full.svg' />
+        </Link>
         <div className='menu__section'>
           <div className='menu__heading'>Introduction</div>
           <div className='menu__links'>

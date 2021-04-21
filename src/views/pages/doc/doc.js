@@ -32,7 +32,6 @@ export default class DocPage extends React.Component {
     const lastUpdated = doc.getIn(['commit', 'commit', 'author', 'date'])
     const commitHref = doc.getIn(['commit', 'html_url'])
 
-    let body
     if (doc.isPending) {
       return (
         <>
