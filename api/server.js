@@ -60,6 +60,9 @@ api.use((req, res, next) => {
   next()
 })
 
+const resourcesPath = path.join(__dirname, '..', 'resources')
+api.use('/resources', serveStatic(resourcesPath))
+
 api.use('/api/*', expressJwt(config.jwt), (err, req, res, next) => {
   res.set('Expires', '0')
   res.set('Pragma', 'no-cache')
