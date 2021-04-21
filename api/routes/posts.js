@@ -71,12 +71,18 @@ router.get('/top', async (req, res) => {
 
     const query = db('sources').offset(offset)
     query.select('posts.*', 'sources.score_avg')
+    query.select(
+      db.raw(
+        '(CASE WHEN `posts`.`content_url` = "" THEN `posts`.`url` ELSE `posts`.`content_url` END) as main_url'
+      )
+    )
     query.select(db.raw('sources.title as source_title'))
     query.select(db.raw('sources.logo_url as source_logo_url'))
     query.select(db.raw('(posts.score / sources.score_avg) as strength'))
     query.join('posts', 'posts.sid', 'sources.id')
     query.whereRaw('posts.created_at > (UNIX_TIMESTAMP() - ?)', age * 60 * 60)
     query.orderBy('strength', 'desc')
+    query.groupBy('main_url')
 
     query.limit(limit)
 
