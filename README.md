@@ -59,8 +59,7 @@ A set of community maintained documents made up of guides and wiki-style documen
 |   `-- using.md
 |-- history
 |   |-- community
-|   |   `-- nano-trade
-|   |       `-- copy-pastas.md
+|   |   `-- nano-trade.md
 |   |-- bitcoin.md
 |   |-- bitgrail.md
 |   |-- distribution.md

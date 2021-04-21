@@ -12,4 +12,6 @@
 
 ## Community
 
+### [NanoTrade](/history/community/nano-trade)
+
 ## Timeline

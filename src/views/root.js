@@ -34,14 +34,14 @@ const theme = createMuiTheme({
   overrides: {
     MuiButton: {
       root: {
-        fontFamily: '\'IBM Plex Mono\', monospace',
+        fontFamily: "'IBM Plex Mono', monospace",
         '&:hover': {
           color: '#4A90E2',
           boxShadow: '#F0F0F0 4px 4px 0px 0px'
         }
       }
-    },
-  },
+    }
+  }
 })
 
 const initialState = window.__INITIAL_STATE__

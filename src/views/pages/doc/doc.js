@@ -28,8 +28,8 @@ export default class DocPage extends React.Component {
   render() {
     const { doc } = this.props
 
-    const author = doc.getIn(['commit','commit','author','name'])
-    const lastUpdated = doc.getIn(['commit','commit','author','date'])
+    const author = doc.getIn(['commit', 'commit', 'author', 'name'])
+    const lastUpdated = doc.getIn(['commit', 'commit', 'author', 'date'])
     const commitHref = doc.getIn(['commit', 'html_url'])
 
     let body
@@ -69,8 +69,7 @@ export default class DocPage extends React.Component {
           <div
             className='doc__content'
             dangerouslySetInnerHTML={{ __html: html }}></div>
-          <div
-            className='doc__content-side'>
+          <div className='doc__content-side'>
             <Button
               variant='outlined'
               href={`https://github.com/${REPO}/tree/main/docs/${this.props.location.pathname}.md`}
@@ -78,9 +77,14 @@ export default class DocPage extends React.Component {
               className='doc__content-edit'>
               Edit Page
             </Button>
-            {Boolean(author) && <div className='doc__content-author'>
-              updated by <a href={commitHref} target='_blank'>{author} {timeago.format(lastUpdated)}</a>
-            </div>}
+            {Boolean(author) && (
+              <div className='doc__content-author'>
+                updated by{' '}
+                <a href={commitHref} target='_blank'>
+                  {author} {timeago.format(lastUpdated)}
+                </a>
+              </div>
+            )}
             <Menu />
           </div>
         </>

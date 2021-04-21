@@ -35,4 +35,8 @@ function* fetch(...args) {
 
 export const getPosts = fetch.bind(null, api.getPosts, postlistRequestActions)
 export const getDoc = fetch.bind(null, api.getDoc, docRequestActions)
-export const getDocCommit = fetch.bind(null, api.getDocCommit, docCommitRequestActions)
+export const getDocCommit = fetch.bind(
+  null,
+  api.getDocCommit,
+  docCommitRequestActions
+)
