@@ -1,8 +1,10 @@
 .post
-  margin-bottom 16px
+  margin-bottom 12px
 
 .post__title
+  font-family 'IBM Plex Mono', monospace
   font-weight 400
+  font-size 10pt
   line-height 1.45
   letter-spacing .005rem
   display block
@@ -10,10 +12,14 @@
   word-wrap break-word
   &:hover
     text-decoration underline
+    text-decoration-color $nanoSoftBlue
+    text-decoration-thickness .1em
+    text-underline-offset 1px
 
 .post__meta
-  color rgba(0,0,0,0.3)
-  font-size 11px
+  font-family 'Roboto Mono', monospace
+  color $nanoSoftBlue
+  font-size 7pt
   margin-top 4px
   display flex
   flex-direction row
