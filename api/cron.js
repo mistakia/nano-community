@@ -16,8 +16,9 @@ const updateSourceScore = async (sid) => {
   query.where('sid', sid)
   query.whereRaw('created_at >= (UNIX_TIMESTAMP() - (86400 * 14))')
   const result = await query
+  // eslint-disable-next-line camelcase
   const { score_avg } = result[0]
-  console.log(score_avg)
+  // eslint-disable-next-line camelcase
   if (score_avg) {
     await db('sources').update({ score_avg }).where('id', sid)
   }

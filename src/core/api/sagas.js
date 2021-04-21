@@ -5,6 +5,7 @@ import { api, apiRequest } from '@core/api/service'
 import { getApp } from '@core/app'
 import { postlistRequestActions } from '@core/postlists'
 import { docRequestActions, docCommitRequestActions } from '@core/docs'
+import { networkStatsRequestActions } from '@core/network'
 
 function* fetchAPI(apiFunction, actions, opts = {}) {
   const { token } = yield select(getApp)
@@ -39,4 +40,9 @@ export const getDocCommit = fetch.bind(
   null,
   api.getDocCommit,
   docCommitRequestActions
+)
+export const getNetworkStats = fetch.bind(
+  null,
+  api.getNetworkStats,
+  networkStatsRequestActions
 )
