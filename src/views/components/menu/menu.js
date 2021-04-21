@@ -26,7 +26,9 @@ export default class Menu extends React.Component {
             <Link to='/getting-started-users/storing/basics'>Storing</Link>
             <Link to='/getting-started-users/acquiring'>Acquiring</Link>
             <Link to='/getting-started-users/using'>Using</Link>
-            <Link to='/getting-started-users/best-practices'>Best Practices</Link>
+            <Link to='/getting-started-users/best-practices'>
+              Best Practices
+            </Link>
           </div>
         </div>
         <div className='menu__section'>
@@ -42,7 +44,9 @@ export default class Menu extends React.Component {
           <div className='menu__heading'>Developers</div>
           <div className='menu__links'>
             <Link to='/getting-started-devs/overview'>Getting Started</Link>
-            <Link to='/getting-started-devs/running-a-node'>Running a node</Link>
+            <Link to='/getting-started-devs/running-a-node'>
+              Running a node
+            </Link>
             <Link to='/getting-started-devs/tutorials/overview'>Tutorials</Link>
             <Link to='/getting-started-devs/documentation'>Documentation</Link>
             <Link to='/getting-started-devs/integrations'>Integrations</Link>

@@ -5,6 +5,7 @@
   font-family 'Roboto Mono', monospace
   line-height 1.6
   margin-bottom 32px
+  max-width 600px
 
   p
     font-family 'Inter', sans-serif
@@ -12,8 +13,21 @@
     margin-bottom 16px
     line-height 1.7
 
+    > code
+      padding 2px 3px
+      background-color rgba(27,31,35,.05)
+      border-radius 3px
+
   li
     font-family 'IBM Plex Mono', monospace
+
+  pre
+    padding 10px
+    background-color rgba(27,31,35,.05)
+    overflow hidden
+    overflow-x scroll
+    white-space break-spaces
+    margin-bottom 32px
 
 .doc__content-side
   flex 1

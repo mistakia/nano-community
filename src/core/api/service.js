@@ -16,7 +16,9 @@ export const api = {
   },
   getDocCommit({ id }) {
     const params = { path: `docs${id}.md`, page: 1, per_page: 1 }
-    const url = `https://api.github.com/repos/${REPO}/commits?${queryString.stringify(params)}`
+    const url = `https://api.github.com/repos/${REPO}/commits?${queryString.stringify(
+      params
+    )}`
     return { url }
   }
 }
@@ -24,7 +26,10 @@ export const api = {
 export const apiRequest = (apiFunction, opts, token) => {
   const controller = new AbortController()
   const abort = controller.abort.bind(controller)
-  const headers = apiFunction !== api.getDocCommit ? { Authorization: `Bearer ${token}`, credentials: 'include' } : {}
+  const headers =
+    apiFunction !== api.getDocCommit
+      ? { Authorization: `Bearer ${token}`, credentials: 'include' }
+      : {}
   const defaultOptions = { headers }
   const options = merge(defaultOptions, apiFunction(opts), {
     signal: controller.signal
