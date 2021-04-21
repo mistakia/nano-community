@@ -6,7 +6,7 @@ const { request } = require('../../common')
 router.get('/', async (req, res) => {
   const { logger, cache } = req.app.locals
   try {
-    const cachedStats = cache.get('network')
+    const cachedStats = cache.get('stats')
     if (cachedStats) {
       return res.status(200).send(cachedStats)
     }
