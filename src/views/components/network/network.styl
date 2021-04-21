@@ -1,0 +1,31 @@
+.network__container
+  max-width 600px
+  margin 0 8px
+
+.network__title
+  font-family 'IBM Plex Mono', monospace
+  letter-spacing 0.2em
+  text-transform uppercase
+  font-size 8pt
+  padding 32px 0 16px
+
+.network__stat
+  display flex
+  justify-content space-between
+  align-items center
+  border-bottom 1px solid $borderColor
+  padding 8px 4px
+  div:first-child
+    color rgba(0,0,0,0.5)
+
+.network__stat-link
+  display block
+  text-align right
+  padding 16px 8px
+  font-size 8pt
+  text-decoration underline
+  text-decoration-color $nanoSoftBlue
+  text-decoration-thickness .2em
+  text-underline-offset 1.5px
+  &:hover
+    color $nanoSoftBlue

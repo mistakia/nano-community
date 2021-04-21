@@ -73,6 +73,7 @@ api.use('/api/*', expressJwt(config.jwt), (err, req, res, next) => {
 
 // unprotected api routes
 api.use('/api/posts', routes.posts)
+api.use('/api/network', routes.network)
 const docsPath = path.join(__dirname, '..', 'docs')
 api.use('/api/docs', serveStatic(docsPath))
 api.get('/api/docs/*', (req, res) => {
