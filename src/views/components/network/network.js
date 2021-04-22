@@ -86,7 +86,12 @@ export default class Network extends React.Component {
           <div>Peers</div>
           <div>{network.getIn(['stats', 'peersMax'])}</div>
         </div>
-        <a href='https://nanoticker.info/' className='network__stat-link' target='_blank'>full network stats</a>
+        <a
+          href='https://nanoticker.info/'
+          className='network__stat-link'
+          target='_blank'>
+          full network stats
+        </a>
       </div>
     )
   }
