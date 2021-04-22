@@ -1,4 +1,4 @@
-Nano, like Bitcoin, is a new form of money that's completely digital. Nano is not controlled by any person, company, or government. It’s development is open-source and it's network is run by the community of its users around the world. Nano can be used without having to trust any other user, developer, or operator on the network.
+Nano, like Bitcoin, is a new form of money that's completely digital. Nano is not controlled by any person, company, or government. It’s development is open-source and it's network is run by a global community of users. Nano can be used without having to trust or rely on any other user, developer, or operator on the network.
 
 Nano, unlike Bitcoin, is scalable, fast, uses minimal energy, and operates without any fees. [expand on security, lack of miners, deterministic finality]
 
