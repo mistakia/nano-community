@@ -5,13 +5,12 @@ Nano, unlike Bitcoin, is scalable, fast, uses minimal energy, and operates witho
 #### Benefits over traditional currencies & stores of value
 
 - decentralized
-- no counterfeit money
+- instantly verifiable
 - limited supply
 - divisible
-- security
-- open 24/7
-- low cost of carry
-- teleportable
+- securable / low-cost of carry
+- accessible at all times
+- available globally
 
 #### Benefits over other digital currencies
 
