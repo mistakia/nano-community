@@ -17,6 +17,8 @@ export default class Network extends React.Component {
 
     const confirmationsText =
       'Total number of transactions confirmed by the network over the last 24 hours'
+    const settlementText =
+      'Total amount of value settled by the network over the last 24 hours'
     const throughputText = `Median number of transactions confirmed per second in the last minute ${prText}`
     const speedText =
       'Time in milliseconds for a test transaction to get confirmed'
@@ -37,6 +39,19 @@ export default class Network extends React.Component {
           <div>
             {formatNumber(
               network.getIn(['stats', 'TOTAL_CONFIRMATIONS_24H'], 0)
+            )}
+          </div>
+        </div>
+        <div className='network__stat'>
+          <div>
+            Settlement (24h)
+            <Tooltip title={settlementText}>
+              <HelpOutlineIcon fontSize='inherit' />
+            </Tooltip>
+          </div>
+          <div>
+            ${formatNumber(
+              (network.getIn(['stats', 'TOTAL_NANO_VOLUME_24H'], 0) * network.getIn(['stats', 'currentPrice'], 0)).toFixed(0)
             )}
           </div>
         </div>
