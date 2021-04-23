@@ -1,6 +1,8 @@
+## Nano is experimental & under development
+
 ## Securing your account
 
-## Nano is experimental & under development
+## Securing the network
 
 ## Unconfirmed transactions
 

@@ -2,6 +2,6 @@
 
 ### Misconceptions
 
-#### Your Represenative handles transactions for your account
+##### Your Represenative handles transactions for your account
 
-#### Pending/Ready to Receive vs Unconfirmed
+##### Pending/Ready to Receive vs Unconfirmed
