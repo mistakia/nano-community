@@ -110,5 +110,6 @@ if (!module.parent) {
     init()
   } catch (err) {
     console.log(err)
+    process.exit()
   }
 }
