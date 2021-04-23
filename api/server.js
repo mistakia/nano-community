@@ -16,6 +16,7 @@ const debug = require('debug')
 const NodeCache = require('node-cache')
 const serveStatic = require('serve-static')
 const cors = require('cors')
+const favicon = require('express-favicon')
 
 const logger = debug('api')
 
@@ -54,7 +55,7 @@ api.use(
   })
 )
 
-// api.use(favicon(path.join(__dirname, '../', 'dist', 'favicon.ico'), { maxAge: '604800' }))
+api.use(favicon(path.join(__dirname, '..', 'resources', 'favicon.ico')))
 api.use((req, res, next) => {
   res.set('Cache-Control', 'no-cache, must-revalidate, proxy-revalidate')
   next()

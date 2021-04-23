@@ -18,6 +18,7 @@
     "deep-extend": "^0.6.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",
+    "express-favicon": "^2.0.1",
     "express-jwt": "^6.0.0",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.95.4",
