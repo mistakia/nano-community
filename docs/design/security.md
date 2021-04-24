@@ -1,6 +1,7 @@
 # Security
 
 **Full Node Assurances**
+
 - Nobody has inflated the nano supply.
   - Nobody ever spent nano they didn't have.
   - Nobody ever spent the same nano twice.

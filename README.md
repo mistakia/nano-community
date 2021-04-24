@@ -16,31 +16,48 @@ Nano.Community aims to be a portal to Nano's growing community by maintaining do
 - Keep the community at large informed — serve as a centralized place to easily and quickly track an open and distributed project
 - Measure community support for or against ideas by nano account based voting
 
-## Components
+## Design
 
-At its core, this project is designed to be a overlay of the greater Nano community & ecosystem.
+At its core, this project will serve as both a knowledge hub and an overlay / gateway to the greater Nano community & ecosystem.
 
-JavaScript & Markdown are used to make the project as accessible as possible. Overtime, all elements of the project will be hosted and structured on IPFS to achieve immutability and permanence. The project aims to be open and distributed, allowing for it to operate indefinetly without reliance on centralized elements (servers, people, etc).
+**Components**
+
+- [Markdown documents (knowledge hub, wiki, etc)](#markdown-documents)
+- [Community content aggregation & categorization](#content-aggregation--categorization)
+- [Nano-based accounts & voting](#nano-based-accounts--voting)
+- [Onboarding / contribution guides](#onboarding--contribution-guides)
+- [Community conventions](#community-conventions)
+- [Nano improvement proposals (i.e. RFC)](#nano-improvement-proposals-ie-rfc)
+
+JavaScript & markdown are used to make the project as accessible as possible. Overtime, all elements of the project will be hosted and structured on IPFS to achieve immutability and permanence. The project aims to be open and distributed, allowing for it to operate indefinetly without reliance on centralized elements (servers, people, etc).
+
+<details>
+  <summary>Directory Structure</summary>
 
 ```
-.
 |-- api         node.js api server for posts, network stats
 |-- db          schema for mysql
-|-- docs        community wiki docs
+|-- docs        wiki & knowledge hub
 |-- src         single page react app (deployed to IPFS)
 `-- topics      docs for each topic
 ```
 
+</details>
+
 ### Markdown Documents
 
 A set of community maintained documents made up of guides and wiki-style documents helping to onboard new community members & developers.
+
+<details>
+  <summary>Documents Structure</summary>
 
 ```
 |-- design
 |   |-- attack-vectors.md
 |   |-- basics.md
 |   |-- challenges.md
-|   `-- roadmap.md
+|   |-- roadmap.md
+|   `-- security.md
 |-- getting-started-devs
 |   |-- tutorials
 |   |   `-- overview.md
@@ -82,11 +99,7 @@ A set of community maintained documents made up of guides and wiki-style documen
 `-- support.md
 ```
 
-### Onboarding / Contribution Guides
-
-- Documentation
-- Code
-- Nano.Community Docs
+</details>
 
 ### Content Aggregation & Categorization
 
@@ -101,6 +114,9 @@ Automatic content aggregation, indexing, categorization and chronicling.
 **Topics**
 
 Content can be tagged to a topic to allow for members to easily explore past discussions around a certain topic. Each topic will have a neutral, concise, and high-level summary along with supporting & opposing arguments, and links to all past comments. Topics exist to easily point new members to past conversations as new members will naturally think of things already discussed by past members.
+
+<details>
+  <summary>Topics Structure</summary>
 
 ```
 |-- spam
@@ -123,13 +139,21 @@ Content can be tagged to a topic to allow for members to easily explore past dis
 `-- wallets.md
 ```
 
+</details>
+
 ### Nano Based Accounts & Voting
 
-Nano.Community accounts are a generated key-pair where the public key is signed by the private key pertaining to a nano account. This will allow associating a user's activity to an account on the nano network. The signing process will take place within your wallet (or on the commandline) and will not increase the risk/attack surface for your nano private key. This feature can be used to automate moderation of contributions as well as measuring support for or against certain proposals.
+Nano.Community accounts are a generated key-pair where the public key is signed by the private key pertaining to a nano account. This will allow associating a user's activity to an account on the nano network. The signing process will take place within a wallet (or on the commandline) and will not increase the risk/attack surface for a nano private key. This feature can be used to automate moderation of contributions as well as measuring support for or against certain proposals.
+
+### Onboarding / Contribution Guides
+
+- Nano Documentation
+- Nano Reference Implementation
+- Nano.Community
 
 ### Community Conventions
 
-Community conventions will set forth best practices on how to format/structure your posts across various platforms in the nano community.
+Community conventions will set forth best practices on how to format/structure posts across various platforms in the nano community.
 
 - Reddit
 - Forum

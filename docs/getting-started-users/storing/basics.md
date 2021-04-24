@@ -9,12 +9,14 @@ Absolute security does not exist. There are only degrees of security, and those 
 Before you start, understand these <a href="/getting-started-users/basics">basic</a> facts about Nano.
 
 **considerations**
+
 - amount of value
 - frequency of access
 
 ### Self-custody vs Custodial
 
 **Wallet Types**
+
 - Software
   - online
   - mobile
