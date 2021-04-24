@@ -23,6 +23,7 @@ Nano, unlike Bitcoin, is scalable, fast, uses minimal energy, and operates witho
 - low latency / ultrafast settlement
 - deterministic finality
 - fair distribution
+- user controlled consensus
 
 ### Nano is decentralized
 
@@ -48,4 +49,6 @@ Nano, unlike Bitcoin, is scalable, fast, uses minimal energy, and operates witho
 
 ### Nano is deterministic
 
-### Nano was fairly distributed
+### Nano was fairly & ethically distributed
+
+### Nano is controlled by users
