@@ -50,8 +50,12 @@ export default class Network extends React.Component {
             </Tooltip>
           </div>
           <div>
-            ${formatNumber(
-              (network.getIn(['stats', 'TOTAL_NANO_VOLUME_24H'], 0) * network.getIn(['stats', 'currentPrice'], 0)).toFixed(0)
+            $
+            {formatNumber(
+              (
+                network.getIn(['stats', 'TOTAL_NANO_VOLUME_24H'], 0) *
+                network.getIn(['stats', 'currentPrice'], 0)
+              ).toFixed(0)
             )}
           </div>
         </div>
