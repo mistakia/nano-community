@@ -8,9 +8,10 @@ Nano, unlike Bitcoin, is scalable, fast, uses minimal energy, and operates witho
 - instantly verifiable
 - limited supply
 - divisible
-- securable / low-cost of carry
+- durable / securable / low-cost of carry
 - accessible at all times
 - available globally
+- self-sovereign
 
 #### Benefits over other digital currencies
 
