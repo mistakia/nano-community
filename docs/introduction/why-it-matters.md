@@ -23,11 +23,11 @@ Modern society is built on top of <a href="https://en.wikipedia.org/wiki/Fiat_mo
 
 ### The importance of scarcity
 
-Another core function of money is being a <a href="https://en.wikipedia.org/wiki/Store_of_value" target="_blank">store of value</a>. It's important for money to be able to maintain its value and purchasing power over time. Scarcity is at the core of maintaining value over time. The problem is that all modern money is inflationary, which reduces its value over time, and diminishes its ability to function as a store of value.
+Another core function of money is being a <a href="https://en.wikipedia.org/wiki/Store_of_value" target="_blank">store of value</a>. It's important for money to be able to maintain its value and purchasing power over time. Scarcity is at the core of maintaining value over time. The problem is that all modern money has an inflationary supply, which reduces its value over time, and diminishes its ability to function as a store of value.
 
-<small>*Note: modern fiat money is inflationary as it's argued that it drives economic growth and an adjustable monetary supply is an essential tool for governments.*</small>
+<small>*Note: modern fiat money is inflationary as it drives economic growth and an adjustable monetary supply is an essential tool for governments.*</small>
 
-Nano is not a replacement for fiat money, it is an alternate form of money. Money that protects against inflation and corrupt monetary policy.
+Nano is not a replacement for fiat money, it is an alternate. Money that protects against inflation and corrupt monetary policy.
 
 There will never be any more Nano created and entering the market, making its Stock-To-Flow `undefined` as you can not divide by zero.
 
