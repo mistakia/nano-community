@@ -106,9 +106,9 @@ sue me
 
 (but only if it's payable in NANO)
 
-By: unknown
-Date: unknown
-Context:
+By: GameKyuubi (on Bitcointalk.org)
+Date: Originally December 18 2013
+Context: Adapted from a post about bitcoin on bitcointalk.org, the origin of "hodl"
 ```
 
 ```
