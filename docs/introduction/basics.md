@@ -4,7 +4,7 @@ Nano was launched in October 2015 by Colin LeMahieu to address the limitations i
 
 ### Get Started
 
-- Dive into it's [advantages over existing technologies](/introduction/advantages), [how it works](/introduction/how-it-works), and [why it matters](/introduction/why-it-matters).
+- Dive into its [advantages over existing technologies](/introduction/advantages), [how it works](/introduction/how-it-works), and [why it matters](/introduction/why-it-matters).
 - Learn how to [store nano](/getting-started-users/storing/basics), [acquire nano](/getting-started-users/acquiring) and [use nano](/getting-started-users/using).
 - Understand why it could be a [good investment](/introduction/investment-thesis)
 - Join the [discussion](/community) or get [support](/support)
