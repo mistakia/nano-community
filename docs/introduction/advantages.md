@@ -1,19 +1,19 @@
-Nano, like Bitcoin, is a new form of money that's completely digital. Nano is not controlled by any person, company, or government. It’s development is open-source and it's network is run by a global community of users. Nano can be used without having to trust or rely on any other user, developer, or operator on the network.
+Nano, like Bitcoin, is a new form of money that's completely digital. Nano is not controlled by any person, company, or government. The development is open-source and the network is run by a global community of users. Nano can be used without having to trust or rely on any other user, developer, or operator on the network.
 
-Nano, unlike Bitcoin, is scalable, fast, uses minimal energy, and operates without any fees. [expand on security, lack of miners, deterministic finality]
+Nano, unlike Bitcoin, is scalable, fast, asynchronous, uses minimal energy, operates without any fees, has deterministic finality, and is secured and controlled only by its holders.
 
-#### Benefits over traditional currencies & stores of value
+#### Benefits over traditional money
 
 - decentralized
 - instantly verifiable
 - limited supply
 - divisible
-- durable / securable / low-cost of carry
+- durable / securable / low-cost of maintenance
 - accessible at all times
 - available globally
 - self-sovereign
 
-#### Benefits over other digital currencies
+#### Benefits over other digital money
 
 - feeless
 - asynchronous
@@ -28,28 +28,102 @@ Nano, unlike Bitcoin, is scalable, fast, uses minimal energy, and operates witho
 
 ### Nano is decentralized
 
+Nano does not have a central authority, coordinator, or server. The network is peer-to-peer and permissionless. Any Nano holder is able to run a node and engage in voting to secure the network. <a href="https://nanocharts.info/p/01/vote-weight-distribution" target="_blank">Voting weight distribution</a> is fluid and controlled by Nano holders. Over time, the network has trended toward greater decentralization.
+
+Because Nano does not need to pay to secure the network, it is resistent to <a href="https://medium.com/@clemahieu/emergent-centralization-due-to-economies-of-scale-83cc85a7cbef" target="_blank">emergent centralization due to economies of scale effects</a>.
+
 ### Nano is instantly verifiable
+
+The legder, and thus the balance of all accounts, are public.
+
+Unlike fiat money and gold, ownership and authenticity are instantly verifiable making it resistent to counterfeiting at no cost.
 
 ### Nano is scarce
 
+The supply is fixed and fully distributed. No new Nano will ever enter the market.
+
+There will only ever be a maximum of <a href="https://docs.nano.org/protocol-design/distribution-and-units/#distribution" target="_blank">~133,248,297 Nano</a>.
+
 ### Nano is highly divisble
 
-### Nano is secure and irreversible
+The smallest <a href="https://docs.nano.org/protocol-design/distribution-and-units/#unit-dividers" target="_blank">unit of Nano</a> is a Raw:
+
+`0.000000000000000000000000000001 or 1e-30 Nano`
+
+Nano is one of the most divisible forms of money in existence.
+
+### Nano is durable, securable and self-sovereign
+
+Nano does not degrade over time, has strong security guarantees and a low cost of maintenance, regardless of the amount of value being stored.
+
+Nano is self-sovereign, controlled only by its secret key, making it resistant to confiscation, sanctions, and censorship.
 
 ### Nano is feeless
 
+All network transactions are feeless. Nano does not rely on transaction fees to secure the network or prioritize transactions.
+
+Initially, Nano used <a href="https://en.wikipedia.org/wiki/Proof_of_work" target="_blank">Proof-of-Work</a> for prioritization and spam mitigation.
+
+Starting with v22, Nano will use the account balance and the time since last transaction to prioritize transactions.
+
 ### Nano is scalable
+
+Unlike almost all digital currencies, the Nano protocol itself has no scalability limits.
+
+Nano can scale by increasing whatever the limiting factor is among: bandwidth, CPU cycles, and disk operations.
 
 ### Nano is energy-efficient
 
+The network currently runs on about 200-300 nodes made up of average hardware. The average node likely uses around 25-140W.
+
+For each transaction, it is estimated that Nano uses only 0.000112 kWh, compared to 651.08 kWh for Bitcoin.
+
+Nano uses very little energy because it does not use Proof-of-Work to secure the network.
+
 ### Nano is fully distributed
 
-### Nano is lightweight
-
-### Nano is ultrafast
-
-### Nano is deterministic
+There is no inflation and has a Stock-To-Flow ratio of `undefined` since no new Nano will ever be created.
 
 ### Nano was fairly & ethically distributed
 
-### Nano is controlled by users
+Nano was given away for free to anyone willing to manually complete a captcha. Distribution began in 2015 and ended in October 2017, at which point the faucet had distributed 126,248,289 NANO.
+
+7,000,000 NANO (~5%) was set aside as a <a href="https://www.nanolooker.com/developer-fund" target="_blank">developer fund</a>, of which about ~300,000 Nano remain as of April 2021.
+
+Because the distribution process was conducted on-chain, it is publicly available to be reviewed and audited by looking at the <a href="https://nanex.cc/accountstats?account=nano_13ezf4od79h1tgj9aiu4djzcmmguendtjfuhwfukhuucboua8cpoihmh8byo" target="_blank">Landing Account</a>.
+
+A few notable statistics compiled by <a href="https://www.reddit.com/r/nanocurrency/comments/h7fmge/the_nano_faucet_distribution_visualized_and/" target="_blank">u/hanzyfranzy</a>:
+
+- The median faucet user got 192.76 Nano from the faucet.
+- There were a total of 130,814 faucet receive addresses.
+- The biggest faucet recipient received 1,724,105 Nano, likely from abusing the Captchas at the very beginning. These types of accounts appear to be very rare and they seem to have sold much of their Nano long before the initial runup in 2017.
+
+Nano's distribution is notable as 95% of the supply was given away for free. Unlike Bitcoin, Nano has been fully distributed since 2017 and has been undergoing the process of redistribution for over 4 years. Bitcoin is still being distributed and is increasingly ending up in the hands of fewer miners due to emergent centralization.
+
+### Nano is deterministic
+
+Transactions acheive irreversible finality. Once a transaction achieves a quorum of support, it is final and can not be reversed.
+
+Whereas, Bitcoin transactions have probabistic finality, as the chance of a transaction being reversed decreases every 10 minutes with the release of a new block.
+
+### Nano is ultrafast
+
+Typically, Nano transactions fully settle in under one second, often times around 150ms.
+
+It takes Bitcoin transactions about one hour to reach a <a href="https://bitcoil.co.il/Doublespend.pdf" target="_blank">0.1% chance</a> of potentially being reversed.
+
+Traditional bank transfers using ACH and Swift can take anywhere from 1-3 days to settle. Real Time Gross Settlement (RTGS) systems are available only for banks and can only be used domestically as they are operated by central banks.
+
+### Nano is controlled by its holders
+
+Nano is secured and controlled by Nano holders, as they have exclusive control over the delegation of their voting weight. Node operators, nor developers, nor any other entities have any ability to overrule the will of Nano holders.
+
+For example, control of Nano's scalability is decentralized and in the hands of Nano holders collectively. They alone determine how voting weight is distributed and what hardware the network operates on by delegating to node operators as they see fit.
+
+### Nano is lightweight
+
+Nano blocks are small (~200 bytes), yet stateful. Each block contains all the information about an account at that point in time: account number, balance, representative.
+
+A minimal block size allows for lightweight communication resulting in ultrafast transaction confirmation times.
+
+Nano's block lattice structure allows for trustless operation using <a href="https://docs.nano.org/protocol-design/ledger/?h=prune#ledger-pruning" target="_blank">pruned ledgers</a>. This enables Nano to be embedded, enabling greater trustless and distributed applications.
