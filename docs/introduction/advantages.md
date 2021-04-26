@@ -30,13 +30,13 @@ Nano, unlike Bitcoin, is scalable, fast, asynchronous, uses minimal energy, oper
 
 Nano does not have a central authority, coordinator, or server. The network is peer-to-peer and permissionless. Any Nano holder is able to run a node and engage in voting to secure the network. <a href="https://nanocharts.info/p/01/vote-weight-distribution" target="_blank">Voting weight distribution</a> is fluid and controlled by Nano holders. Over time, the network has trended toward greater decentralization.
 
-Because Nano does not need to pay to secure the network, it is resistent to <a href="https://medium.com/@clemahieu/emergent-centralization-due-to-economies-of-scale-83cc85a7cbef" target="_blank">emergent centralization due to economies of scale effects</a>.
+Because Nano does not need to pay to secure the network, it is resistant to <a href="https://medium.com/@clemahieu/emergent-centralization-due-to-economies-of-scale-83cc85a7cbef" target="_blank">emergent centralization due to economies of scale effects</a>.
 
 ### Nano is instantly verifiable
 
-The legder, and thus the balance of all accounts, are public.
+The ledger, and thus the balances of all accounts, is public.
 
-Unlike fiat money and gold, ownership and authenticity are instantly verifiable making it resistent to counterfeiting at no cost.
+Unlike fiat money and gold, ownership and authenticity are instantly verifiable making it resistant to counterfeiting at no cost.
 
 ### Nano is scarce
 
