@@ -33,6 +33,8 @@ There will never be any more Nano created and entering the market, making its St
 
 ### The importance of self-sovereignty
 
+Nano is self-sovereign money. It's only ruler is the secret key that is associated with it. It only answers to whoever has the secret key and no other authority, government, or entity. This makes it resistant to confiscation, sanctions, and censorship.
+
 ### The importance of zero-fees
 
 ### The importance of instant settlement
@@ -56,6 +58,10 @@ Nano is unlike gold
 Nano is like a bank
 
 Nano is unlike a bank
+
+Nano is like Bitcoin
+
+Nano is unlike Bitcoin
 
 Nano is peaceful
 
