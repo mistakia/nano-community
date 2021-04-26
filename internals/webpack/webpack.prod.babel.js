@@ -46,6 +46,7 @@ module.exports = require('./webpack.base.babel')({
     // Minify and optimize the index.html
     new HtmlWebpackPlugin({
       template: 'src/index.html',
+      favicon: 'resources/favicon.ico',
       minify: {
         removeComments: true,
         collapseWhitespace: true,
