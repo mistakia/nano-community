@@ -5,6 +5,7 @@ Nano is a scarce digital asset with an unchangeable monetary policy: its supply 
 It is capable of being a strong <a href="https://en.wikipedia.org/wiki/Store_of_value" target="_blank">store of value</a> (SoV) and a frictionless <a href="https://en.wikipedia.org/wiki/Medium_of_exchange" target="_blank">medium of exchange</a> (MoE), making it one of the most advanced forms of money to ever exist.
 
 ### The importance of money
+
 The term <a href="https://en.wikipedia.org/wiki/Money" target="_blank">money</a> can be conflated with many things, including wealth. To understand its importance, one must understand its core function and why it matters for society.
 
 The core function of money is being a <a href="https://en.wikipedia.org/wiki/Medium_of_exchange" target="_blank">medium of exchange</a> that enables society to collaborate, cooperate, organize, specialize, and much more. Thus money, like communication, is foundational to society as it is a prerequisite for all complex cooperation. The concept of money was one of the first, and among the most important, collaborative innovations of mankind.
@@ -12,6 +13,7 @@ The core function of money is being a <a href="https://en.wikipedia.org/wiki/Med
 The concept of money is believed to have originated in the form of "promises" (i.e. debt), sometimes kept on a publicly accesible ledger (sound familiar?). Over time it evolved to <a href="https://en.wikipedia.org/wiki/Commodity_money" target="_blank">comodity money</a>, gold, coins, and eventually fiat money.
 
 ##### Properties of Money
+
 - Durability
 - Divisibility
 - Portability
@@ -27,7 +29,7 @@ Modern society is built on top of <a href="https://en.wikipedia.org/wiki/Fiat_mo
 
 Another core function of money is being a <a href="https://en.wikipedia.org/wiki/Store_of_value" target="_blank">store of value</a>. It's important for money to be able to maintain its value and purchasing power over time. Scarcity is at the core of maintaining value over time. The problem is that all modern money has an inflationary supply, which reduces its value over time, and diminishes its ability to function as a store of value.
 
-<small>*Note: modern fiat money is inflationary as it drives economic growth and an adjustable monetary supply is an essential tool for governments.*</small>
+<small>_Note: modern fiat money is inflationary as it drives economic growth and an adjustable monetary supply is an essential tool for governments._</small>
 
 Nano is not a replacement for fiat money, it is an alternate. Money that protects against inflation and corrupt monetary policy.
 
