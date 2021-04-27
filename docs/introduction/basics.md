@@ -9,7 +9,7 @@ Nano was launched in October 2015 by Colin LeMahieu to address the limitations i
 - Understand why it could be a [good investment](/introduction/investment-thesis)
 - Join the [discussion](/community) or get [support](/support)
 - Start [contributing](/contributing) to the core implementation or the ecosystem
-- Browse the [FAQ](/faqs)
+- Browse the [FAQ](/faqs) and common [misconceptions](/introduction/misconceptions)
 
 ### History
 
