@@ -8,7 +8,7 @@ Before getting into the potential value of this technology it may be helpful to 
 
 ### An asymmetric investment now, digital money later
 
-The practical implications of the technical problems being solved is that Nano provides a way for one internet user to transfer a unique piece of digital property to another user, such that the transfer is guaranteed to be safe and secure, instant, and feeless. The consequences of this breakthrough are profound.
+The practical implications of the technical problems being solved is that Nano provides a way for one internet user to transfer a unique piece of digital property to another user, such that the transfer is guaranteed to be safe, secure, instant, and feeless. The consequences of this breakthrough are profound.
 
 This is digital money, in its most advanced form.
 
