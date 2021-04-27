@@ -34,7 +34,7 @@ Because Nano does not need to pay to secure the network, it is resistant to <a h
 
 ### Nano is instantly verifiable
 
-The ledger, and thus the balances of all accounts, is public.
+The ledger, and therefore the balances of all accounts, is public.
 
 Unlike fiat money and gold, ownership and authenticity are instantly verifiable making it resistant to counterfeiting at no cost.
 
@@ -52,9 +52,9 @@ The smallest <a href="https://docs.nano.org/protocol-design/distribution-and-uni
 
 Nano is one of the most divisible forms of money in existence.
 
-### Nano is durable, securable and self-sovereign
+### Nano is durable, securable, and self-sovereign
 
-Nano does not degrade over time, has strong security guarantees and a low cost of maintenance, regardless of the amount of value being stored.
+Nano does not degrade over time. It has strong security guarantees and a low cost of maintenance, regardless of the amount of value being stored.
 
 Nano is self-sovereign, controlled only by its secret key, making it resistant to confiscation, sanctions, and censorship.
 
@@ -62,7 +62,7 @@ Nano is self-sovereign, controlled only by its secret key, making it resistant t
 
 All network transactions are feeless. Nano does not rely on transaction fees to secure the network or prioritize transactions.
 
-Initially, Nano used <a href="https://en.wikipedia.org/wiki/Proof_of_work" target="_blank">Proof-of-Work</a> for prioritization and spam mitigation.
+Initially, Nano has relied upon <a href="https://en.wikipedia.org/wiki/Proof_of_work" target="_blank">Proof-of-Work</a> for prioritization and spam mitigation.
 
 Starting with v22, Nano will use the account balance and the time since last transaction to prioritize transactions.
 
@@ -70,7 +70,7 @@ Starting with v22, Nano will use the account balance and the time since last tra
 
 Unlike almost all digital currencies, the Nano protocol itself has no scalability limits.
 
-Nano can scale by increasing whatever the limiting factor is among: bandwidth, CPU cycles, and disk operations.
+Nano can scale by increasing whatever the limiting factor is among bandwidth, CPU cycles, and disk operations.
 
 ### Nano is energy-efficient
 
@@ -104,7 +104,7 @@ Nano's distribution is notable as 95% of the supply was given away for free. Unl
 
 Transactions acheive irreversible finality. Once a transaction achieves a quorum of support, it is final and can not be reversed.
 
-Whereas, Bitcoin transactions have probabistic finality, as the chance of a transaction being reversed decreases every 10 minutes with the release of a new block.
+In contrast, Bitcoin transactions have probabilistic finality; the chance of a transaction being reversed decreases every 10 minutes with the release of a new block.
 
 ### Nano is ultrafast
 
@@ -112,7 +112,7 @@ Typically, Nano transactions fully settle in under one second, often times aroun
 
 It takes Bitcoin transactions about one hour to reach a <a href="https://bitcoil.co.il/Doublespend.pdf" target="_blank">0.1% chance</a> of potentially being reversed.
 
-Traditional bank transfers using ACH and Swift can take anywhere from 1-3 days to settle. Real Time Gross Settlement (RTGS) systems are available only for banks and can only be used domestically as they are operated by central banks.
+Traditional bank transfers, using ACH and Swift, can take anywhere from 1-3 days to settle. Real Time Gross Settlement (RTGS) systems are available only for banks and can only be used domestically as they are operated by central banks.
 
 ### Nano is controlled by its holders
 
@@ -122,8 +122,6 @@ For example, control of Nano's scalability is decentralized and in the hands of 
 
 ### Nano is lightweight
 
-Nano blocks are small (~200 bytes), yet stateful. Each block contains all the information about an account at that point in time: account number, balance, representative.
+Nano blocks are small (~200 bytes), yet stateful, meaning it contains all the information about an account at that point in time: account number, balance, representative.
 
-A minimal block size allows for lightweight communication resulting in ultrafast transaction confirmation times.
-
-Nano's block lattice structure allows for trustless operation using <a href="https://docs.nano.org/protocol-design/ledger/?h=prune#ledger-pruning" target="_blank">pruned ledgers</a>. This enables Nano to be embedded, enabling greater trustless and distributed applications.
+A minimal block size allows for lightweight communication resulting in ultrafast transaction confirmation times. Stateful blocks combined with a block-lattice structure allow for operation using <a href="https://docs.nano.org/protocol-design/ledger/?h=prune#ledger-pruning" target="_blank">pruned ledgers</a>, enabling Nano to operate with far less storage space and be more easily embedded in applications.
