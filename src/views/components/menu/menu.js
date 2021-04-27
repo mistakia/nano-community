@@ -20,6 +20,9 @@ export default class Menu extends React.Component {
               <Link to='/introduction/how-it-works'>How it works</Link>
               <Link to='/introduction/why-it-matters'>Why it matters</Link>
               <Link to='/introduction/misconceptions'>Misconceptions</Link>
+              <Link to='/introduction/investment-thesis'>
+                Investment thesis
+              </Link>
               <Link to='/history/overview'>History</Link>
               <Link to='/faqs'>FAQs</Link>
             </div>

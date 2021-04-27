@@ -29,46 +29,38 @@ Modern society is built on top of <a href="https://en.wikipedia.org/wiki/Fiat_mo
 
 Another core function of money is being a <a href="https://en.wikipedia.org/wiki/Store_of_value" target="_blank">store of value</a>. It's important for money to be able to maintain its value and purchasing power over time. Scarcity is at the core of maintaining value over time. The problem is that all modern money has an inflationary supply, which reduces its value over time, and diminishes its ability to function as a store of value.
 
-<small>_Note: modern fiat money is inflationary as it drives economic growth and an adjustable monetary supply is an essential tool for governments._</small>
+<small>_Note: modern fiat money is inflationary as it is argued that small amounts of inflation drive economic growth and an adjustable monetary supply is an essential tool for governments to respond to economic events._</small>
 
-Nano is not a replacement for fiat money, it is an alternate. Money that protects against inflation and corrupt monetary policy.
+Nano is not a replacement for "fiat money", but rather an alternate. It is a form of money that protects against inflation, corrupt monetary policy, and miners.
 
-There will never be any more Nano created, making its Stock-To-Flow `undefined` as you can not divide by zero.
+There will never be any more Nano created and dumped into the market, making its Stock-To-Flow `undefined` as you can not divide by zero.
+
+Nano has no inflation, maintaining it's purchasing power over time.
 
 ### The importance of self-sovereignty
 
 Nano is self-sovereign money. It's only ruler is the secret key that is associated with it. It only answers to whoever has the secret key and no other authority, government, or entity. This makes it resistant to confiscation, sanctions, and censorship.
 
+<small>_Note: without decentralization, Nano would not maintain this quality_</small>
+
 ### The importance of zero-fees
+
+The lower the fee, the more accessible and useful it will be. High fees disproportionately impact the less fortunate.
+
+Nano has no fees making it inclusive to all and useful in ways that were not previously possible.
 
 ### The importance of instant settlement
 
-### The importance of fair distribution
+Slow settlement leads to inefficiencies and a poor experience.
+
+Nano works just like cash, it's instant, even if the person you are handing the cash to is on the other side of the world and you are on a red-eye flight.
 
 ### The importance of decentralization
 
+Decentralizion ensures many of Nano's other qualities like self-sovereignty, security, scarcity without the need for trust.
+
+Without it, you lose qualities like "permissionless" and "censorship-resistant". It's this hard promise that gives someone the confidence to use it and build on top of it.
+
 ### The importance of energy-efficient security
 
----
-
-Nano is like physical cash
-
-Nano is unlike physical cash
-
-Nano is like gold
-
-Nano is unlike gold
-
-Nano is like a bank
-
-Nano is unlike a bank
-
-Nano is like Bitcoin
-
-Nano is unlike Bitcoin
-
-Nano is peaceful
-
-Nano is inclusive
-
-Nano is scalable
+Not relying on an increasing amount of energy makes Nano sustainable. It is also resilient against power shortages and the <a href="https://ieeexplore.ieee.org/document/7176229" target="_blank">emergent centralization forces</a> that plague digital money that is secured by high energy usage (i.e. Bitcoin).

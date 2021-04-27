@@ -58,13 +58,7 @@ A set of community maintained documents made up of guides and wiki-style documen
 |-- history
 |   |-- community
 |   |   `-- nano-trade.md
-|   |-- bitcoin.md
-|   |-- bitgrail.md
-|   |-- distribution.md
-|   |-- early-development.md
-|   |-- overview.md
-|   |-- prelude.md
-|   `-- timeline.md
+|   `-- overview.md
 |-- introduction
 |   |-- advantages.md
 |   |-- basics.md
