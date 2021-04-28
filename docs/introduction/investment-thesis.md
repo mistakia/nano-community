@@ -1,10 +1,10 @@
 # Investment Thesis
 
-Adoption is often slow at first, then all at once. This was the case with personal computers in 1975, the internet in 1993, and – I believe ~~Bitcoin~~ Nano in 2014. It's only after being heavily commercialized by mainstream companies that it's inevitability becomes obvious.
+Adoption is often slow at first, then all at once. This was the case with personal computers, the internet, and — I believe Nano. It's only after being heavily commercialized by mainstream companies that it's inevitability becomes obvious.
 
 In the meantime, transformational technologies spend most of their time on the fringes, developed by relatively anonymous researchers.
 
-Before getting into the potential value of this technology it may be helpful to understand its <a href="/introduction/advantages">advantages</a>, <a href="/introduction/why-it-matters">why it matters</a>, and <a href="/introduction/how-it-works">how it works</a>.
+Before getting into the potential value of this technology it may be helpful to understand the <a href="/introduction/advantages">advantages</a>, <a href="/introduction/why-it-matters">why it matters</a>, and <a href="/introduction/how-it-works">how it works</a>.
 
 ### An asymmetric investment now, digital money later
 
