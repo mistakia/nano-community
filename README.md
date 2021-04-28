@@ -170,4 +170,6 @@ See Zach's comments [here](https://www.reddit.com/r/nanocurrency/comments/m8l9j8
 
 ## Start Contributing
 
-Nano.Community aims to be a community run project and welcomes anyone to contribute. Start by reading the [contribution guidelines](https://github.com/mistakia/nano-community/blob/main/CONTRIBUTING.md).
+Nano.Community aims to be a community run project and welcomes anyone to contribute.
+
+Start by reading the [contribution guidelines](https://github.com/mistakia/nano-community/blob/main/CONTRIBUTING.md).
