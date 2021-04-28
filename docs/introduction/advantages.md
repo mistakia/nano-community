@@ -139,7 +139,7 @@ A minimal block size allows for lightweight communication resulting in ultrafast
 
 **Nano is unlike physical cash:** it takes no space, regardless of how much you hold. It is with you at all times and you can hand it to anyone regardless of distance in between. it can not be counterfeited.
 
-**Nano is like gold:** it cannot be produced at will and is scarce. 
+**Nano is like gold:** it cannot be produced at will and is scarce.
 
 **Nano is unlike gold:** the supply is fixed and there will be no more of it found/created. It can be verified in an instant at no cost. It takes up no space and costs very little to store, regardless of how much you have.
 
