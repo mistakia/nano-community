@@ -15,19 +15,19 @@ The concept of a distributed ledger is the starting point to understanding crypt
 
 Cryptocurrencies use the magic of <a href="https://en.wikipedia.org/wiki/Public-key_cryptography" target="_blank">public-key cryptography</a> to establish & secure accounts. To create a Nano account, users generate a random secret key, a computation done in a split second. The corresponding public key is used for the nano address. Computing the secret key of a given nano address is practically unfeasible. This allows users to share their nano address without compromising their secret key.
 
-**secret key**
+#### secret key
 
 ```
 3BFA2A120BC1190DA0DE79022C56AFBC334767B12E7AB84724A45D52BE390995
 ```
 
-**public key**
+#### public key
 
 ```
 B6DFC31DA8A600B0D5C497CAEABC9BEAEA75DE47636DB4A9E52E526727069B47
 ```
 
-**nano address**
+#### nano address
 
 ```
 nano_3fpzregtjbi1p5cwb7ycxcybqtqcgqh6grufpknycdkkewmif8t985zb3yta

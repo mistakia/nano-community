@@ -35,7 +35,7 @@ Nano is a bad form of **fiat money** but a superior form of **money**.
 
 It's a bad form of <a href="https://en.wikipedia.org/wiki/Fiat_money" target="_blank">fiat money</a> because it can not be used to respond to economic events, since governments can not control its supply. However, it's a better form of <a href="https://en.wikipedia.org/wiki/Money" target="_blank">money</a> as it has superior properties of money, mainly its store of value properties because governments can not control its supply.
 
-**properties of money**
+#### Properties of Money
 
 - Fungibility: its individual units must be capable of mutual substitution
 - Durability: able to withstand repeated use.

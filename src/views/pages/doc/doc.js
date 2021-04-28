@@ -36,7 +36,7 @@ export default class DocPage extends React.Component {
     const commitHref = doc.getIn(['commit', 'html_url'])
 
     const authors = []
-    doc.get('authors').map((author, index) => {
+    doc.get('authors').forEach((author, index) => {
       authors.push(
         <Tooltip key={index} title={author.login}>
           <Avatar alt={author.login} src={author.avatar_url} />
