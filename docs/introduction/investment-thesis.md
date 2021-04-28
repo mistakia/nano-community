@@ -38,7 +38,7 @@ This will become increasingly noticeable as actual payment volume on the network
 
 ## Potential
 
-In early 2014, Marc Andreessen made one of strongest cases for Nano without even knowing it. Nano of course did not even exist yet. In his article, <a href="https://dealbook.nytimes.com/2014/01/21/why-bitcoin-matters/" target="_blank">"Why Bitcoin Matters"</a>, he laid out Bitcoin's advantages and potential use cases, relying heavily on its ability to have "low or no fees". Fast forward, Bitcoin is no longer viable for any of the potential use cases he laid out. What he lacked in his ability to predict Bitcoin having high fees, he made up for in his vision for digital money and its potential.
+In early 2014, Marc Andreessen made one of the strongest cases for Nano without even knowing it. Nano of course did not even exist yet. In his article <a href="https://dealbook.nytimes.com/2014/01/21/why-bitcoin-matters/" target="_blank">"Why Bitcoin Matters"</a>, he laid out Bitcoin's advantages and potential use cases, relying heavily on its ability to have "low or no fees". Fast forward, Bitcoin is no longer viable for any of the potential use cases he laid out. Though he couldn't predict Bitcoin's high fees, he made up for it with his vision for digital money and its potential.
 
 Nano is still viable for all of them.
 

@@ -7,6 +7,9 @@ import * as timeago from 'timeago.js'
 import Skeleton from '@material-ui/lab/Skeleton'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import Button from '@material-ui/core/Button'
+import Avatar from '@material-ui/core/Avatar'
+import AvatarGroup from '@material-ui/lab/AvatarGroup'
+import Tooltip from '@material-ui/core/Tooltip'
 
 import Menu from '@components/menu'
 
@@ -31,6 +34,15 @@ export default class DocPage extends React.Component {
     const author = doc.getIn(['commit', 'commit', 'author', 'name'])
     const lastUpdated = doc.getIn(['commit', 'commit', 'author', 'date'])
     const commitHref = doc.getIn(['commit', 'html_url'])
+
+    const authors = []
+    doc.get('authors').map((author, index) => {
+      authors.push(
+        <Tooltip key={index} title={author.login}>
+          <Avatar alt={author.login} src={author.avatar_url} />
+        </Tooltip>
+      )
+    })
 
     if (doc.isPending) {
       return (
@@ -81,6 +93,19 @@ export default class DocPage extends React.Component {
                 updated by{' '}
                 <a href={commitHref} target='_blank'>
                   {author} {timeago.format(lastUpdated)}
+                </a>
+              </div>
+            )}
+            {Boolean(authors.length) && (
+              <AvatarGroup max={6}>{authors}</AvatarGroup>
+            )}
+            {Boolean(authors.length) && (
+              <div className='doc__content-contributors'>
+                {authors.length} Contibutor{authors.length !== 1 ? 's' : ''}.{' '}
+                <a
+                  href='https://github.com/mistakia/nano-community/blob/main/CONTRIBUTING.md'
+                  target='_blank'>
+                  Help out
                 </a>
               </div>
             )}

@@ -19,7 +19,7 @@ export const api = {
     return { url }
   },
   getDocCommit({ id }) {
-    const params = { path: `docs${id}.md`, page: 1, per_page: 1 }
+    const params = { path: `docs${id}.md`, page: 1, per_page: 100 }
     const url = `https://api.github.com/repos/${REPO}/commits?${queryString.stringify(
       params
     )}`
