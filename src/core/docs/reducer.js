@@ -22,8 +22,15 @@ export function docsReducer(state = new Map(), { payload, type }) {
       })
 
     case docActions.GET_DOC_COMMIT_FULFILLED: {
+      const authors = {}
+      for (const item of payload.data) {
+        authors[item.author.id] = item.author
+      }
       const commit = payload.data[0]
-      return state.mergeIn([payload.params.id], { commit })
+      return state.mergeIn([payload.params.id], {
+        commit: new Map(commit),
+        authors: new Map(authors)
+      })
     }
 
     default:
