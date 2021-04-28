@@ -135,7 +135,7 @@ A minimal block size allows for lightweight communication resulting in ultrafast
 
 # Nano is like
 
-**Nano is like physical cash:** it is not reversible. You are responsible for handling it. If you lose your wallet, you lose your money. Your wallet can be given to others to hold for you but you need to trust they won't lose it or take it. It has no fees when used and transferred instantly.
+**Nano is like physical cash:** it is not reversible. You are responsible for handling it. If you lose your wallet, you lose your money. Your nano can be given to others to hold for you but you need to trust they won't lose it or take it. It has no fees when used and transferred instantly.
 
 **Nano is unlike physical cash:** it takes no space, regardless of how much you hold. It is with you at all times and you can hand it to anyone regardless of distance in between. it can not be counterfeited.
 
