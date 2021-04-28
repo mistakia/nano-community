@@ -3,7 +3,7 @@ Nano.Community aims to be a community run project and is grateful to all that st
 - Commenting on an [issue or PR in GitHub](https://github.com/mistakia/nano-community/issues)
 - Messaging on the [Nano Discord server](https://chat.nano.org/) (cc: trashman#2397)
 
-Before contributing, make sure you're familiar with the [vision](https://github.com/mistakia/nano-community#nanocommunity) of Nano.Community
+Before contributing, make sure you're familiar with the [vision](https://github.com/mistakia/nano-community#nanocommunity) of Nano.Community and <a href="https://guides.github.com/introduction/flow/index.html" tagret="_blank">GitHub Flow</a>.
 
 ### Contributing content
 
