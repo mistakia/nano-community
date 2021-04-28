@@ -10,6 +10,7 @@ export default class HomePage extends React.Component {
     return (
       <>
         <div className='posts'>
+          <div className='posts__title'>Posts from the community</div>
           <Posts title='Top' id='top' />
           <Posts title='Trending' id='trending' />
         </div>
