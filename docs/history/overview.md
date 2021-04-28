@@ -75,7 +75,6 @@ Nano's distribution is notable as 95% of the supply was given away for free. Nan
 
 On 9 February 2018, the Italian cryptocurrency exchange BitGrail announced its shutdown after being hacked. There were unaccounted losses of 17 million Nano from its wallets, preventing users from accessing assets stored on the platform. The victims sought recoupment through the Italian court system, and supported by the Nano Foundation, launched a class-action suit against BitGrail owner Francesco Firano. In January 2019, the Court of Florence found Firano liable for the losses after discovering that the exchange had failed to implement any meaningful safeguards to ensure the safety of their customers' funds and failed to report losses from as early as July 2017.
 
-
 ## Nano
 
 On 31 January 2018, RaiBlocks rebranded to Nano.
