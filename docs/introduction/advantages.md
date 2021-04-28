@@ -135,13 +135,13 @@ A minimal block size allows for lightweight communication resulting in ultrafast
 
 # Nano is like
 
-**Nano is like physical cash:** it is not reversible and you are responsible for handling it. If you lose your wallet, you lose your money. It can be given to others to hold for you but you need to trust they won't lose it or take it. It has no fees when used and transferred instantly.
+**Nano is like physical cash:** it is not reversible. You are responsible for handling it. If you lose your wallet, you lose your money. Your nano can be given to others to hold for you but you need to trust they won't lose it or take it. It has no fees when used and transferred instantly.
 
-**Nano is unlike physical cash:** it takes no space, regardless of how much you hold. It is with you at all times and you can hand it to anyone regardless of distance in between. It can not be counterfeited.
+**Nano is unlike physical cash:** it takes no space, regardless of how much you hold. It is with you at all times and you can hand it to anyone regardless of distance in between. it can not be counterfeited.
 
-**Nano is like gold:** it cannot be produced at will and is scarce.
+**Nano is like gold:** it cannot be produced at will and is scarce. 
 
-**Nano is unlike gold:** the supply is fixed and there will be no more of it found. It can be verified in an instant at no cost. It takes up no space and costs very little to store, regardless of how much you have.
+**Nano is unlike gold:** the supply is fixed and there will be no more of it found/created. It can be verified in an instant at no cost. It takes up no space and costs very little to store, regardless of how much you have.
 
 **Nano is like a bank:** it is secured at all times of the day, even while you are sleeping.
 
@@ -149,6 +149,6 @@ A minimal block size allows for lightweight communication resulting in ultrafast
 
 **Nano is like Bitcoin:** it is decentralized, making it permissionless, self-sovereign, and censorship resistant. The development is open-source and the network is run by a global community of users. It can be used without having to trust or rely on any other user, developer, or operator on the network.
 
-**Nano is unlike Bitcoin:** is feeless, instant, irreversible, scalable, and energy-efficient. Making it inclusive to all people and sustainable for the planet. Nano's security and network is controlled only by its holders, as it doesn't rely on and empower miners.
+**Nano is unlike Bitcoin:** is feeless, instant, irreversible, scalable, and energy-efficient. Making it inclusive to all people and sustainable for the planet. Nano's security and network is controlled only by its holders, as it doesn't rely on miners.
 
 <a href="https://blog.oleganza.com/post/85111558553/bitcoin-is-like" target="_blank">Inspired by "Bitcoin is like..." by Oleg Andreev</a>
