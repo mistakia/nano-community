@@ -4,23 +4,35 @@ Absolute security does not exist. There are only degrees of security, and those 
 
 Thus, no single approach to storing Nano will be ideal for all scenarios. First it is important to understand a few concepts
 
-#### What is an account?
+### What is an account?
 
 An account is simply a randomly generated secret key. The account address is derived from this key and can be safely shared with others without compromising the secret key
 
-**secret key**
+#### secret key
 
 ```
 3BFA2A120BC1190DA0DE79022C56AFBC334767B12E7AB84724A45D52BE390995
 ```
 
-**nano address**
+#### nano address
 
 ```
 nano_3fpzregtjbi1p5cwb7ycxcybqtqcgqh6grufpknycdkkewmif8t985zb3yta
 ```
 
-#### What is a wallet?
+### What is a seed?
+
+A seed is a randomly generated secret that can then be used to predicatably generate up to 4,294,967,295 secret keys. Secret keys are derived deterministically from the seed, which means that as long as you put the same seed and index into the derivation function, you will get the same resulting secret key every time.
+
+This enables you to back up a one seed instead of many secret keys.
+
+#### nano seed
+
+```
+6D2247D1CE17C116CD0C5E0C6AC08B9DD57889026E18320EAFA2F0D699D6BD04
+```
+
+### What is a wallet?
 
 A wallet is an application that handles your secret key to help send signed messages to the network to manage your account. It helps you send/receive transactions and change your representative.
 
@@ -36,7 +48,7 @@ You can store and control Nano directly (self-custody) or you can give it to ano
 
 The decision is mostly one of responsibility and control. With self-custody, you have full control and with it comes full responsibility. Whereas with custodial services, you have limited control and limited responsibility.
 
-**custodial implications**
+#### Custodial Implications
 
 - **trust:** that your funds are secured, insured, available, not given away
 - **privacy / kyc:** in some cases, you may relinquish control over your identity, transaction history, etc
@@ -50,12 +62,12 @@ The decision is mostly one of responsibility and control. With self-custody, you
 
 Determining the right self-custody approach depends on how you intend to use it.
 
-**Considerations**
+#### Considerations
 
 - amount of value
 - frequency of access
 
-**Types**
+#### Types
 
 - Software Wallets
   - online

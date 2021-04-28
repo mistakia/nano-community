@@ -31,7 +31,7 @@ Another core function of money is being a <a href="https://en.wikipedia.org/wiki
 
 <small>_Note: modern fiat money is inflationary as it is argued that small amounts of inflation drive economic growth and an adjustable monetary supply is an essential tool for governments to respond to economic events._</small>
 
-Nano is not a replacement for "fiat money", but rather an alternate. It is a form of money that protects against inflation, corrupt monetary policy, and miners.
+Nano is not a replacement for "fiat money", but rather an alternate and better form of money. One that protects against inflation, corrupt monetary policy, and miners.
 
 There will never be any more Nano created and dumped into the market, making its Stock-To-Flow `undefined` as you can not divide by zero.
 

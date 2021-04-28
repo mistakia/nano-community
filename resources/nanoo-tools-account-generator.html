@@ -1,0 +1,3849 @@
+<!DOCTYPE html>
+<head>
+  <title> </title>
+  <style>
+    body {
+      display: grid;
+      grid-template-areas:
+        'nav header header'
+        'nav article aside'
+        'nav footer footer';
+      grid-template-rows: auto 1fr auto;
+      grid-template-columns: 20% 1fr 22%;
+      height: 100vh;
+    }
+    /* Stack the layout on small devices/viewports. */
+    /* @media all and (max-width: 575px) { */
+    @media all and (max-width: 1100px) {
+      body {
+        grid-template-areas:
+          'header'
+          'article'
+          'aside'
+          'nav'
+          'footer';
+        grid-template-rows: auto 1fr 70px 1fr 70px;
+        grid-template-rows: auto auto auto auto auto;
+        grid-template-columns: 1fr;
+      }
+    }
+    /* https://www.bhalash.com/archives/13544803259 */
+    @media only screen and (min-device-width: 320px) and (max-device-width: 736px) and (orientation: portrait),
+      only screen and (min-device-width: 320px) and (max-device-width: 736px) and (orientation: landscape) {
+      body {
+        grid-template-areas:
+          'header'
+          'article'
+          'aside'
+          'nav'
+          'footer';
+        grid-template-rows: auto 1fr 70px 1fr 70px;
+        grid-template-rows: auto auto auto auto auto;
+        grid-template-columns: 1fr;
+      }
+    }
+    #pageHeader {
+      grid-area: header;
+    }
+    #pageFooter {
+      grid-area: footer;
+    }
+    #mainArticle {
+      grid-area: article;
+    }
+    #mainNav {
+      grid-area: nav;
+    }
+    #sideBar {
+      grid-area: aside;
+    }
+  </style>
+  <style>
+    body {
+      background: #181818;
+      color: #b9bec1;
+      font-family: trebuchet, verdana;
+      font-size: 1.1em;
+      margin: 0;
+    }
+
+    header,
+    footer,
+    nav {
+      padding: 0.4em;
+    }
+
+    div {
+      padding: 0.8em 1.4em;
+    }
+    article {
+      padding: 0.95em 1.35em; /* padding:.8em 1.4em; */
+      line-height: 1.25em; /* temp. standard 1.2 */
+    }
+    aside {
+      padding: 0.88em 0.9em;
+      border-left: 2px dashed #111;
+      border-left: 1px solid #111;
+    }
+
+    #pageFooter {
+      background: #181818;
+      color: #595f63;
+    }
+
+    #mainArticle {
+      background: #34383d;
+      color: #d0d4d6;
+    }
+
+    #mainNav {
+      background: #181818;
+      margin-top: -0.6em;
+    }
+
+    .mainnavsection {
+      color: #3d739d;
+      font-weight: 700;
+    }
+
+    #mainNav ul {
+      list-style-type: none;
+      margin: 0 0 0.6em;
+      padding: 0;
+    }
+
+    #mainNav a {
+      background: #262728;
+      color: #b9bec1;
+      display: block;
+      font-size: 0.9em;
+      margin: 0.2em 0;
+      padding: 0.18em 0.5em;
+      text-decoration: none;
+    }
+
+    #mainNav a:active {
+      background: #414d57;
+    }
+
+    #mainNav a:hover {
+      background: #2b506d;
+      color: #fff;
+    }
+
+    #mainNav p {
+      margin: 0.5em 0 0.1em 0.2em;
+    }
+
+    #sideBar {
+      background: #34383d;
+      font-size: 0.95em;
+    }
+
+    a,
+    a:visited {
+      color: #3d739d;
+      color: #387cb0; /* temp test slightly brighter */
+    }
+
+    a:hover {
+      color: #2f93df; /* #2f93df really bright. much more toned down: #3d739d */
+      color: #3090d9; /* slightly toned down */
+    }
+
+    h1 {
+      background: #181818;
+      color: #3d739d;
+      font-size: 1.5em;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    h1 a,
+    h1 a:visited {
+      color: #3d739d;
+      text-decoration: none;
+    }
+
+    h2 {
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+    }
+    h3 {
+      margin-top: 1em;
+      margin-bottom: 0em;
+      color: #fbfcfd; /* almost white */
+    }
+    /*
+h2:first-child, h3:first-child, h4:first-child {
+    margin-top:0;
+} */
+    .notopmargin {
+      margin-top: 0;
+    }
+    h2 > a,
+    h3 > a,
+    h4 > a,
+    h2 > a:visited,
+    h3 > a:visited,
+    h4 > a:visited {
+      text-decoration: none;
+      color: #d0d4d6;
+    }
+    h2 > a:hover,
+    h3 > a:hover,
+    h4 > a:hover {
+      /* text-decoration: underline; */
+      color: #3090d9;
+    }
+    input[type='text'],
+    input[type='number'],
+    textarea,
+    select {
+      background: #262728;
+      border: 2px solid #436983;
+      border-radius: 4px;
+      color: #eef0f2;
+      font-family: courier;
+      font-size: 1.38em;
+      font-weight: 700;
+      height: 1.6em;
+      margin: 0.11em 0;
+      max-width: 100%;
+      padding: 0 0.4em;
+      text-align: left;
+    }
+
+    select {
+      font-size: 1.1em;
+      font-weight: 500;
+      font-family: trebuchet, verdana;
+    }
+
+    input[type='text']:focus,
+    input[type='number']:focus {
+      background: #2d2e2f;
+      border: 2px solid #227ec4;
+      color: #fcfdfe;
+    }
+    .inputerrorborder {
+      color: #834343 !important;
+    }
+    .textarea3 {
+      height: 4.1em;
+    }
+
+    .form22 {
+      width: 15em;
+    }
+    .form27 {
+      width: 20em;
+    }
+    .form32 {
+      width: 20.8em;
+    }
+
+    .form39 {
+      width: 24.9em;
+    }
+
+    .form52 {
+      width: 32.3em;
+    }
+
+    .form64 {
+      width: 40em;
+    }
+
+    .form8 {
+      width: 10em;
+    }
+
+    .form2 {
+      width: 3em;
+    }
+
+    .buttona {
+      background: #436983;
+      border: 2px solid #262728;
+      border-radius: 4px;
+      color: #f6f6f6;
+      display: inline-block;
+      font-family: courier;
+      font-size: 1.4em;
+      font-weight: 700;
+      margin: 0.7em 0;
+      padding: 0.25em 0.4em;
+      padding: 0.33em 0.4em 0.25em 0.4em; /* shift down */
+      text-decoration: none;
+      vertical-align: center;
+    }
+    .buttona:visited {
+      color: #f6f6f6;
+    }
+    .buttona:hover {
+      background: #227ec4;
+      color: #f6f6f6;
+    }
+    .buttongreen {
+      background-color: #438343;
+    }
+
+    .buttongreen:hover {
+      background-color: #22c22a;
+    }
+    .buttonred {
+      background-color: #834343;
+    }
+
+    .buttonred:hover {
+      background-color: #c22222;
+    }
+    .buttonblue {
+      background-color: #436983;
+    }
+
+    fieldset {
+      border: none;
+    }
+
+    #errorboxred, .warningred /* are the classes in use? */ {
+      background-color: #ffaca1;
+      color: #671907;
+    }
+    #errorboxyellow,
+    .warningyellow {
+      background-color: #fff7a1;
+      color: #676107;
+    }
+    #messageboxgreen,
+    .messagegreen {
+      background-color: #b8fac1;
+      color: #076707;
+    }
+    #errorboxred,
+    #errorboxyellow,
+    #messageboxgreen {
+      display: none;
+    }
+    /* orphaned warning box
+{
+	background-color:#ffaca1;
+	color:#671907;
+	display:none;
+}
+*/
+    .code,
+    code,
+    pre {
+      background-color: #181818; /* nav background */
+      background-color: #212121; /* semi */
+      font-family: 'Courier New';
+      display: inline-block;
+      max-width: 95%; /* experimental */
+      word-wrap: break-all; /* experimental */
+    }
+    .code,
+    code {
+      padding: 0.07em 0.5em 0.03em 0.5em;
+      margin-bottom: -0.16em; /* prevent line height diff for single-lines */
+      margin-bottom: -0.14em; /* correct overlaps */
+    }
+    .code {
+      background-color: #2d2e2f; /* a little brighter. mainly for non-copyable inline purposes. legacy? */
+    }
+    pre {
+      padding: 0.3em 0.5em;
+      margin: 0;
+      white-space: pre-wrap; /* investigate this for other fields */
+    }
+    .break {
+      word-break: break-all;
+    }
+
+    /* prevent superscript from affecting line height */
+    sup,
+    sub {
+      vertical-align: baseline;
+      position: relative;
+      top: -0.55em;
+    }
+    sub {
+      top: 0.55em;
+    }
+
+    td,
+    th {
+      border: 1px solid black;
+      padding: 5px;
+    }
+    table {
+      border-spacing: 0px;
+      border-collapse: collapse;
+    }
+
+    .copybutton {
+      display: inline-block;
+      width: 1.1em;
+      color: white;
+      color: #9aff5d;
+      background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABYAQMAAABYjOKDAAAAB3RJTUUH4gMbFjcJppB9NQAAAAlwSFlzAAAewQAAHsEBw2lUUwAAAARnQU1BAACxjwv8YQUAAAAGUExURQAAAK2zuH6VsTkAAAABdFJOUwBA5thmAAAAM0lEQVQoz2NgoAJg/g8GlDA/gEh7qjMhAJUJs5YCJtSCUeagYdr/p5RJy2RImElCXsEKAC1DvDUkYY0NAAAAAElFTkSuQmCC');
+      opacity: 0.95;
+
+      background-repeat: no-repeat;
+      background-size: 1.1em;
+      -webkit-user-select: none; /* Safari 3.1+ */
+      -moz-user-select: none; /* Firefox 2+ */
+      -ms-user-select: none; /* IE 10+ */
+      user-select: none; /* Standard syntax */
+      cursor: pointer;
+    }
+    .copybutton:hover {
+      opacity: 1;
+    }
+
+    .copybutton:hover {
+      background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABYCAQAAADIS7hLAAAAcElEQVRo3u3auQ0AIAwEQfffNKRkSAibR7PXwEQmIULSR7XZCgIEBCwDxsYBAgICvgLM2j/AkrcMEBCwCJh0RgABAQEBAQEBAQEBAQEBAQEBAQEBAQGPApc/VQACAl56ZoYBAgICAgICHviWAgio9Trx8OmSNPNTgwAAAABJRU5ErkJggg==');
+    }
+
+    #quicklinks {
+      padding: 0;
+    }
+    #quicklinks a,
+    #quicklinks a:hover {
+      color: #3491e0;
+      text-decoration: none;
+    }
+    #quicklinks a:hover {
+      color: #48a6f6;
+    }
+
+    /* replace with rel external trigger
+a[href^="http://"]:not([href*="nanoo.tools"]):after, a[href^="https://"]:not([href*="nanoo.tools"]):after{
+    content: " (EXTERNAL)"
+}
+a[href^="https://nanoo.tools"]:not([href*="]):after{
+    content: "<sup>(internal)</sup>"
+}
+*/
+  </style>
+  <link rel="canonical" href="https://nanoo.tools/light-paperwallets" />
+  <script type="text/javascript">
+    !(function (r) {
+      'use strict'
+      for (
+        var t = 'length',
+          e = [
+            null,
+            [[10, 7, 17, 13], [1, 1, 1, 1], []],
+            [
+              [16, 10, 28, 22],
+              [1, 1, 1, 1],
+              [4, 16]
+            ],
+            [
+              [26, 15, 22, 18],
+              [1, 1, 2, 2],
+              [4, 20]
+            ],
+            [
+              [18, 20, 16, 26],
+              [2, 1, 4, 2],
+              [4, 24]
+            ],
+            [
+              [24, 26, 22, 18],
+              [2, 1, 4, 4],
+              [4, 28]
+            ],
+            [
+              [16, 18, 28, 24],
+              [4, 2, 4, 4],
+              [4, 32]
+            ],
+            [
+              [18, 20, 26, 18],
+              [4, 2, 5, 6],
+              [4, 20, 36]
+            ],
+            [
+              [22, 24, 26, 22],
+              [4, 2, 6, 6],
+              [4, 22, 40]
+            ],
+            [
+              [22, 30, 24, 20],
+              [5, 2, 8, 8],
+              [4, 24, 44]
+            ],
+            [
+              [26, 18, 28, 24],
+              [5, 4, 8, 8],
+              [4, 26, 48]
+            ],
+            [
+              [30, 20, 24, 28],
+              [5, 4, 11, 8],
+              [4, 28, 52]
+            ],
+            [
+              [22, 24, 28, 26],
+              [8, 4, 11, 10],
+              [4, 30, 56]
+            ],
+            [
+              [22, 26, 22, 24],
+              [9, 4, 16, 12],
+              [4, 32, 60]
+            ],
+            [
+              [24, 30, 24, 20],
+              [9, 4, 16, 16],
+              [4, 24, 44, 64]
+            ],
+            [
+              [24, 22, 24, 30],
+              [10, 6, 18, 12],
+              [4, 24, 46, 68]
+            ],
+            [
+              [28, 24, 30, 24],
+              [10, 6, 16, 17],
+              [4, 24, 48, 72]
+            ],
+            [
+              [28, 28, 28, 28],
+              [11, 6, 19, 16],
+              [4, 28, 52, 76]
+            ],
+            [
+              [26, 30, 28, 28],
+              [13, 6, 21, 18],
+              [4, 28, 54, 80]
+            ],
+            [
+              [26, 28, 26, 26],
+              [14, 7, 25, 21],
+              [4, 28, 56, 84]
+            ],
+            [
+              [26, 28, 28, 30],
+              [16, 8, 25, 20],
+              [4, 32, 60, 88]
+            ],
+            [
+              [26, 28, 30, 28],
+              [17, 8, 25, 23],
+              [4, 26, 48, 70, 92]
+            ],
+            [
+              [28, 28, 24, 30],
+              [17, 9, 34, 23],
+              [4, 24, 48, 72, 96]
+            ],
+            [
+              [28, 30, 30, 30],
+              [18, 9, 30, 25],
+              [4, 28, 52, 76, 100]
+            ],
+            [
+              [28, 30, 30, 30],
+              [20, 10, 32, 27],
+              [4, 26, 52, 78, 104]
+            ],
+            [
+              [28, 26, 30, 30],
+              [21, 12, 35, 29],
+              [4, 30, 56, 82, 108]
+            ],
+            [
+              [28, 28, 30, 28],
+              [23, 12, 37, 34],
+              [4, 28, 56, 84, 112]
+            ],
+            [
+              [28, 30, 30, 30],
+              [25, 12, 40, 34],
+              [4, 32, 60, 88, 116]
+            ],
+            [
+              [28, 30, 30, 30],
+              [26, 13, 42, 35],
+              [4, 24, 48, 72, 96, 120]
+            ],
+            [
+              [28, 30, 30, 30],
+              [28, 14, 45, 38],
+              [4, 28, 52, 76, 100, 124]
+            ],
+            [
+              [28, 30, 30, 30],
+              [29, 15, 48, 40],
+              [4, 24, 50, 76, 102, 128]
+            ],
+            [
+              [28, 30, 30, 30],
+              [31, 16, 51, 43],
+              [4, 28, 54, 80, 106, 132]
+            ],
+            [
+              [28, 30, 30, 30],
+              [33, 17, 54, 45],
+              [4, 32, 58, 84, 110, 136]
+            ],
+            [
+              [28, 30, 30, 30],
+              [35, 18, 57, 48],
+              [4, 28, 56, 84, 112, 140]
+            ],
+            [
+              [28, 30, 30, 30],
+              [37, 19, 60, 51],
+              [4, 32, 60, 88, 116, 144]
+            ],
+            [
+              [28, 30, 30, 30],
+              [38, 19, 63, 53],
+              [4, 28, 52, 76, 100, 124, 148]
+            ],
+            [
+              [28, 30, 30, 30],
+              [40, 20, 66, 56],
+              [4, 22, 48, 74, 100, 126, 152]
+            ],
+            [
+              [28, 30, 30, 30],
+              [43, 21, 70, 59],
+              [4, 26, 52, 78, 104, 130, 156]
+            ],
+            [
+              [28, 30, 30, 30],
+              [45, 22, 74, 62],
+              [4, 30, 56, 82, 108, 134, 160]
+            ],
+            [
+              [28, 30, 30, 30],
+              [47, 24, 77, 65],
+              [4, 24, 52, 80, 108, 136, 164]
+            ],
+            [
+              [28, 30, 30, 30],
+              [49, 25, 81, 68],
+              [4, 28, 56, 84, 112, 140, 168]
+            ]
+          ],
+          n = 0,
+          a = 1,
+          o = 2,
+          u = 4,
+          f = 8,
+          i = /^\d*$/,
+          c = /^[A-Za-z0-9 $%*+\-./:] * $ /,
+          l = /^[A-Z0-9 $%*+\-./:] * $ /,
+          s = 1,
+          v = 0,
+          h = 3,
+          d = 2,
+          p = [],
+          m = [-1],
+          g = 0,
+          w = 1;
+        255 > g;
+        ++g
+      )
+        p.push(w), (m[w] = g), (w = (2 * w) ^ (128 > w ? 0 : 285))
+      for (var x = [[]], F = 0; 30 > F; ++F) {
+        for (var b = x[F], C = [], y = 0; F >= y; ++y) {
+          var M = F > y ? p[b[y]] : 0,
+            A = p[(F + (b[y - 1] || 0)) % 255]
+          C.push(m[M ^ A])
+        }
+        x.push(C)
+      }
+      for (var N = {}, k = 0; 45 > k; ++k)
+        N['0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:'.charAt(k)] = k
+      var L = [
+          function (r, t) {
+            return (r + t) % 2 === 0
+          },
+          function (r) {
+            return r % 2 === 0
+          },
+          function (r, t) {
+            return t % 3 === 0
+          },
+          function (r, t) {
+            return (r + t) % 3 === 0
+          },
+          function (r, t) {
+            return (((r / 2) | 0) + ((t / 3) | 0)) % 2 === 0
+          },
+          function (r, t) {
+            return ((r * t) % 2) + ((r * t) % 3) === 0
+          },
+          function (r, t) {
+            return (((r * t) % 2) + ((r * t) % 3)) % 2 === 0
+          },
+          function (r, t) {
+            return (((r + t) % 2) + ((r * t) % 3)) % 2 === 0
+          }
+        ],
+        R = function (r) {
+          return r > 6
+        },
+        S = function (r) {
+          return 4 * r + 17
+        },
+        $ = function (r) {
+          var n = e[r],
+            a = 16 * r * r + 128 * r + 64
+          return (
+            R(r) && (a -= 36),
+            n[2][t] && (a -= 25 * n[2][t] * n[2][t] - 10 * n[2][t] - 55),
+            a
+          )
+        },
+        E = function (r, t) {
+          var n = -8 & $(r),
+            a = e[r]
+          return (n -= 8 * a[0][t] * a[1][t])
+        },
+        z = function (r, t) {
+          switch (t) {
+            case a:
+              return 10 > r ? 10 : 27 > r ? 12 : 14
+            case o:
+              return 10 > r ? 9 : 27 > r ? 11 : 13
+            case u:
+              return 10 > r ? 8 : 16
+            case f:
+              return 10 > r ? 8 : 27 > r ? 10 : 12
+          }
+        },
+        D = function (r, t, e) {
+          var n = E(r, e) - 4 - z(r, t)
+          switch (t) {
+            case a:
+              return 3 * ((n / 10) | 0) + (4 > n % 10 ? 0 : 7 > n % 10 ? 1 : 2)
+            case o:
+              return 2 * ((n / 11) | 0) + (6 > n % 11 ? 0 : 1)
+            case u:
+              return (n / 8) | 0
+            case f:
+              return (n / 13) | 0
+          }
+        },
+        G = function (r, e) {
+          switch (r) {
+            case a:
+              return e.match(i) ? e : null
+            case o:
+              return e.match(c) ? e.toUpperCase() : null
+            case u:
+              if ('string' == typeof e) {
+                for (var n = [], f = 0; f < e[t]; ++f) {
+                  var l = e.charCodeAt(f)
+                  128 > l
+                    ? n.push(l)
+                    : 2048 > l
+                    ? n.push(192 | (l >> 6), 128 | (63 & l))
+                    : 65536 > l
+                    ? n.push(
+                        224 | (l >> 12),
+                        128 | ((l >> 6) & 63),
+                        128 | (63 & l)
+                      )
+                    : n.push(
+                        240 | (l >> 18),
+                        128 | ((l >> 12) & 63),
+                        128 | ((l >> 6) & 63),
+                        128 | (63 & l)
+                      )
+                }
+                return n
+              }
+              return e
+          }
+        },
+        U = function (r, e, f, i) {
+          var c = [],
+            l = 0,
+            s = 8,
+            v = f[t],
+            h = function (r, t) {
+              if (t >= s) {
+                for (c.push(l | (r >> (t -= s))); t >= 8; )
+                  c.push((r >> (t -= 8)) & 255)
+                ;(l = 0), (s = 8)
+              }
+              t > 0 && (l |= (r & ((1 << t) - 1)) << (s -= t))
+            },
+            d = z(r, e)
+          switch ((h(e, 4), h(v, d), e)) {
+            case a:
+              for (var p = 2; v > p; p += 3)
+                h(parseInt(f.substring(p - 2, p + 1), 10), 10)
+              h(parseInt(f.substring(p - 2), 10), [0, 4, 7][v % 3])
+              break
+            case o:
+              for (var m = 1; v > m; m += 2)
+                h(45 * N[f.charAt(m - 1)] + N[f.charAt(m)], 11)
+              v % 2 === 1 && h(N[f.charAt(m - 1)], 6)
+              break
+            case u:
+              for (var g = 0; v > g; ++g) h(f[g], 8)
+          }
+          for (h(n, 4), 8 > s && c.push(l); c[t] + 1 < i; ) c.push(236, 17)
+          return c[t] < i && c.push(236), c
+        },
+        H = function (r, e) {
+          for (var n = r.slice(0), a = r[t], o = e[t], u = 0; o > u; ++u)
+            n.push(0)
+          for (var f = 0; a > f; ) {
+            var i = m[n[f++]]
+            if (i >= 0)
+              for (var c = 0; o > c; ++c) n[f + c] ^= p[(i + e[c]) % 255]
+          }
+          return n.slice(a)
+        },
+        I = function (r, e, n) {
+          for (
+            var a = [], o = (r[t] / e) | 0, u = 0, f = e - (r[t] % e), i = 0;
+            f > i;
+            ++i
+          )
+            a.push(u), (u += o)
+          for (var c = f; e > c; ++c) a.push(u), (u += o + 1)
+          a.push(u)
+          for (var l = [], s = 0; e > s; ++s)
+            l.push(H(r.slice(a[s], a[s + 1]), n))
+          for (var v = [], h = (r[t] / e) | 0, d = 0; h > d; ++d)
+            for (var p = 0; e > p; ++p) v.push(r[a[p] + d])
+          for (var m = f; e > m; ++m) v.push(r[a[m + 1] - 1])
+          for (var g = 0; g < n[t]; ++g)
+            for (var w = 0; e > w; ++w) v.push(l[w][g])
+          return v
+        },
+        P = function (r, t, e, n) {
+          for (var a = r << n, o = t - 1; o >= 0; --o)
+            (a >> (n + o)) & 1 && (a ^= e << o)
+          return (r << n) | a
+        },
+        Q = function (r) {
+          for (var n = e[r], a = S(r), o = [], u = [], f = 0; a > f; ++f)
+            o.push([]), u.push([])
+          var i = function (r, t, e, n, a) {
+            for (var f = 0; e > f; ++f)
+              for (var i = 0; n > i; ++i)
+                (o[r + f][t + i] = (a[f] >> i) & 1), (u[r + f][t + i] = 1)
+          }
+          i(0, 0, 9, 9, [127, 65, 93, 93, 93, 65, 383, 0, 64]),
+            i(a - 8, 0, 8, 9, [256, 127, 65, 93, 93, 93, 65, 127]),
+            i(0, a - 8, 9, 8, [254, 130, 186, 186, 186, 130, 254, 0, 0])
+          for (var c = 9; a - 8 > c; ++c)
+            (o[6][c] = o[c][6] = 1 & ~c), (u[6][c] = u[c][6] = 1)
+          for (var l = n[2], s = l[t], v = 0; s > v; ++v)
+            for (
+              var h = 0 === v || v === s - 1 ? 1 : 0,
+                d = 0 === v ? s - 1 : s,
+                p = h;
+              d > p;
+              ++p
+            )
+              i(l[v], l[p], 5, 5, [31, 17, 21, 17, 31])
+          if (R(r))
+            for (var m = P(r, 6, 7973, 12), g = 0, w = 0; 6 > w; ++w)
+              for (var x = 0; 3 > x; ++x)
+                (o[w][a - 11 + x] = o[a - 11 + x][w] = (m >> g++) & 1),
+                  (u[w][a - 11 + x] = u[a - 11 + x][w] = 1)
+          return { matrix: o, reserved: u }
+        },
+        T = function (r, e, n) {
+          for (var a = r[t], o = 0, u = -1, f = a - 1; f >= 0; f -= 2) {
+            6 === f && --f
+            for (var i = 0 > u ? a - 1 : 0, c = 0; a > c; ++c) {
+              for (var l = f; l > f - 2; --l)
+                e[i][l] || ((r[i][l] = (n[o >> 3] >> (7 & ~o)) & 1), ++o)
+              i += u
+            }
+            u = -u
+          }
+          return r
+        },
+        Z = function (r, e, n) {
+          for (var a = L[n], o = r[t], u = 0; o > u; ++u)
+            for (var f = 0; o > f; ++f) e[u][f] || (r[u][f] ^= a(u, f))
+          return r
+        },
+        q = function (r, e, n, a) {
+          for (
+            var o = r[t], u = 21522 ^ P((n << 3) | a, 5, 1335, 10), f = 0;
+            15 > f;
+            ++f
+          ) {
+            var i = [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                7,
+                8,
+                o - 7,
+                o - 6,
+                o - 5,
+                o - 4,
+                o - 3,
+                o - 2,
+                o - 1
+              ][f],
+              c = [
+                o - 1,
+                o - 2,
+                o - 3,
+                o - 4,
+                o - 5,
+                o - 6,
+                o - 7,
+                o - 8,
+                7,
+                5,
+                4,
+                3,
+                2,
+                1,
+                0
+              ][f]
+            r[i][8] = r[8][c] = (u >> f) & 1
+          }
+          return r
+        },
+        B = function (r) {
+          for (
+            var e = 3,
+              n = 3,
+              a = 40,
+              o = 10,
+              u = function (r) {
+                for (var n = 0, o = 0; o < r[t]; ++o)
+                  r[o] < 5 || (n += e + (r[o] - 5))
+                for (var u = 5; u < r[t]; u += 2) {
+                  var f = r[u]
+                  r[u - 1] !== f ||
+                    r[u - 2] !== 3 * f ||
+                    r[u - 3] !== f ||
+                    r[u - 4] !== f ||
+                    (r[u - 5] < 4 * f && r[u + 1] < 4 * f) ||
+                    (n += a)
+                }
+                return n
+              },
+              f = r[t],
+              i = 0,
+              c = 0,
+              l = 0;
+            f > l;
+            ++l
+          ) {
+            var s,
+              v = r[l]
+            s = [0]
+            for (var h = 0; f > h; ) {
+              var d
+              for (d = 0; f > h && v[h]; ++d) ++h
+              for (s.push(d), d = 0; f > h && !v[h]; ++d) ++h
+              s.push(d)
+            }
+            ;(i += u(s)), (s = [0])
+            for (var p = 0; f > p; ) {
+              var m
+              for (m = 0; f > p && r[p][l]; ++m) ++p
+              for (s.push(m), m = 0; f > p && !r[p][l]; ++m) ++p
+              s.push(m)
+            }
+            i += u(s)
+            var g = r[l + 1] || []
+            c += v[0]
+            for (var w = 1; f > w; ++w) {
+              var x = v[w]
+              ;(c += x),
+                v[w - 1] === x && g[w] === x && g[w - 1] === x && (i += n)
+            }
+          }
+          return (i += o * ((Math.abs(c / f / f - 0.5) / 0.05) | 0))
+        },
+        V = function (r, t, n, a, o) {
+          var u = e[t],
+            f = U(t, n, r, E(t, a) >> 3)
+          f = I(f, u[1][a], x[u[0][a]])
+          var i = Q(t),
+            c = i.matrix,
+            l = i.reserved
+          if ((T(c, l, f), 0 > o)) {
+            Z(c, l, 0), q(c, l, a, 0)
+            var s = 0,
+              v = B(c)
+            for (Z(c, l, 0), o = 1; 8 > o; ++o) {
+              Z(c, l, o), q(c, l, a, o)
+              var h = B(c)
+              v > h && ((v = h), (s = o)), Z(c, l, o)
+            }
+            o = s
+          }
+          return Z(c, l, o), q(c, l, a, o), c
+        },
+        j = 'appendChild',
+        J = 'createElement',
+        K = 'createElementNS',
+        O = 'setAttributeNS',
+        W = 'createRange',
+        X = 'selectNodeContents',
+        Y = 'createContextualFragment',
+        _ = 'createDocumentFragment',
+        rt = 'createTextNode',
+        tt = {
+          generate: function (r, e) {
+            var n = e || {},
+              f = { numeric: a, alphanumeric: o, octet: u },
+              c = { L: s, M: v, Q: h, H: d },
+              p = n.version || -1,
+              m = c[(n.ecclevel || 'L').toUpperCase()],
+              g = n.mode ? f[n.mode.toLowerCase()] : -1,
+              w = 'mask' in n ? n.mask : -1
+            if (0 > g)
+              g =
+                'string' == typeof r ? (r.match(i) ? a : r.match(l) ? o : u) : u
+            else if (g !== a && g !== o && g !== u)
+              throw 'invalid or unsupported mode'
+            if (((r = G(g, r)), null === r)) throw 'invalid data format'
+            if (0 > m || m > 3) throw 'invalid ECC level'
+            if (0 > p) {
+              for (p = 1; 40 >= p && r[t] > D(p, g, m); ++p);
+              if (p > 40) throw 'too large data'
+            } else if (1 > p || p > 40) throw 'invalid version'
+            if (-1 !== w && (0 > w || w > 8)) throw 'invalid mask'
+            return V(r, p, g, m, w)
+          },
+          generateHTML: function (r, e) {
+            for (
+              var n = e || {},
+                a = n.fillcolor ? n.fillcolor : '#FFFFFF',
+                o = n.textcolor ? n.textcolor : '#000000',
+                u = tt.generate(r, n),
+                f = Math.max(n.modulesize || 5, 0.5),
+                i = Math.max(null !== n.margin ? n.margin : 4, 0),
+                c = document[J]('div'),
+                l = u[t],
+                s = [
+                  '<table border="0" cellspacing="0" cellpadding="0" style="border:' +
+                    f * i +
+                    'px solid ' +
+                    a +
+                    ';background:' +
+                    a +
+                    '">'
+                ],
+                v = 0;
+              l > v;
+              ++v
+            ) {
+              s.push('<tr>')
+              for (var h = 0; l > h; ++h)
+                s.push(
+                  '<td style="width:' +
+                    f +
+                    'px;height:' +
+                    f +
+                    'px' +
+                    (u[v][h] ? ';background:' + o : '') +
+                    '"></td>'
+                )
+              s.push('</tr>')
+            }
+            c.className = 'qrcode'
+            var d = document[W]()
+            d[X](c)
+            var p = d[Y](s.join('') + '</table>')
+            return c[j](p), c
+          },
+          generateSVG: function (r, e) {
+            var n = e || {},
+              a = n.fillcolor ? n.fillcolor : '#FFFFFF',
+              o = n.textcolor ? n.textcolor : '#000000',
+              u = tt.generate(r, n),
+              f = u[t],
+              i = Math.max(n.modulesize || 5, 0.5),
+              c = Math.max(n.margin ? n.margin : 4, 0),
+              l = i * (f + 2 * c),
+              s = document[K]('http://www.w3.org/2000/svg', 'svg')
+            s[O](null, 'viewBox', '0 0 ' + l + ' ' + l),
+              s[O](null, 'style', 'shape-rendering:crispEdges')
+            var v = 'qrcode' + Date.now()
+            s[O](null, 'id', v)
+            var h = document[_](),
+              d = document[K]('http://www.w3.org/2000/svg', 'style')
+            d[j](
+              document[rt](
+                '#' + v + ' .bg{fill:' + a + '}#' + v + ' .fg{fill:' + o + '}'
+              )
+            ),
+              h[j](d)
+            var p = function (r, t, e, n, a) {
+              var o = document[K]('http://www.w3.org/2000/svg', 'rect') || ''
+              return (
+                o[O](null, 'class', r),
+                o[O](null, 'fill', t),
+                o[O](null, 'x', e),
+                o[O](null, 'y', n),
+                o[O](null, 'width', a),
+                o[O](null, 'height', a),
+                o
+              )
+            }
+            h[j](p('bg', 'none', 0, 0, l))
+            for (var m = c * i, g = 0; f > g; ++g) {
+              for (var w = c * i, x = 0; f > x; ++x)
+                u[g][x] && h[j](p('fg', 'none', w, m, i)), (w += i)
+              m += i
+            }
+            return s[j](h), s
+          },
+          generatePNG: function (r, e) {
+            var n,
+              a = e || {},
+              o = a.fillcolor || '#FFFFFF',
+              u = a.textcolor || '#000000',
+              f = tt.generate(r, a),
+              i = Math.max(a.modulesize || 5, 0.5),
+              c = Math.max(
+                null !== a.margin && void 0 !== a.margin ? a.margin : 4,
+                0
+              ),
+              l = f[t],
+              s = i * (l + 2 * c),
+              v = document[J]('canvas')
+            if (((v.width = v.height = s), (n = v.getContext('2d')), !n))
+              throw 'canvas support is needed for PNG output'
+            ;(n.fillStyle = o), n.fillRect(0, 0, s, s), (n.fillStyle = u)
+            for (var h = 0; l > h; ++h)
+              for (var d = 0; l > d; ++d)
+                f[h][d] && n.fillRect(i * (c + d), i * (c + h), i, i)
+            return v.toDataURL()
+          }
+        }
+      r.QRCode = tt
+    })('undefined' != typeof window ? window : this)
+  </script>
+  <script type="text/javascript">
+    // forked from https://cdn.rawgit.com/termhn/nano-base32/master/index.js on 2018-03-06
+
+    const alphabet = '13456789abcdefghijkmnopqrstuwxyz'
+
+    /**
+     * Encode provided Uint8Array using the Nano-specific Base-32 implementeation.
+     * @param {Uint8Array} view Input buffer formatted as a Uint8Array
+     * @returns {string}
+     */
+    function encode(view) {
+      if (view.constructor !== Uint8Array) {
+        throw new Error('View must be a Uint8Array!')
+      }
+      const length = view.length
+      const leftover = (length * 8) % 5
+      const offset = leftover === 0 ? 0 : 5 - leftover
+
+      let value = 0
+      let output = ''
+      let bits = 0
+
+      for (var i = 0; i < length; i++) {
+        value = (value << 8) | view[i]
+        bits += 8
+
+        while (bits >= 5) {
+          output += alphabet[(value >>> (bits + offset - 5)) & 31]
+          bits -= 5
+        }
+      }
+
+      if (bits > 0) {
+        output += alphabet[(value << (5 - (bits + offset))) & 31]
+      }
+
+      return output
+    }
+
+    function readChar(char) {
+      var idx = alphabet.indexOf(char)
+
+      if (idx === -1) {
+        throw new Error('Invalid character found: ' + char)
+      }
+
+      return idx
+    }
+
+    /**
+     * Decodes a Nano-implementation Base32 encoded string into a Uint8Array
+     * @param {string} input A Nano-Base32 encoded string
+     * @returns {Uint8Array}
+     */
+    function decode(input) {
+      if (typeof input !== 'string') {
+        throw new Error('Input must be a string!')
+      }
+      var length = input.length
+      const leftover = (length * 5) % 8
+      const offset = leftover === 0 ? 0 : 8 - leftover
+
+      var bits = 0
+      var value = 0
+
+      var index = 0
+      var output = new Uint8Array(Math.ceil((length * 5) / 8))
+
+      for (var i = 0; i < length; i++) {
+        value = (value << 5) | readChar(input[i])
+        bits += 5
+
+        if (bits >= 8) {
+          output[index++] = (value >>> (bits + offset - 8)) & 255
+          bits -= 8
+        }
+      }
+      if (bits > 0) {
+        output[index++] = (value << (bits + offset - 8)) & 255
+      }
+
+      if (leftover !== 0) {
+        output = output.slice(1)
+      }
+      return output
+    }
+  </script>
+  <script type="text/javascript">
+    // BLAKE.js v1.0.1
+    // Adaptation of https://github.com/dcposch/blakejs
+    //
+    // Blake2B in pure Javascript
+    // Adapted from the reference implementation in RFC7693
+    // Ported to Javascript by DC - https://github.com/dcposch
+
+    var ERROR_MSG_INPUT = 'Input must be an string, Buffer or Uint8Array'
+
+    // For convenience, let people hash a string, not just a Uint8Array
+    function normalizeInput(input) {
+      var ret
+      if (input instanceof Uint8Array) {
+        ret = input
+        /*} else if (input instanceof Buffer) {
+    ret = new Uint8Array(input)
+  } else if (typeof (input) === 'string') {
+    ret = new Uint8Array(new Buffer(input, 'utf8'))*/
+      } else {
+        throw new Error(ERROR_MSG_INPUT)
+      }
+      return ret
+    }
+
+    // Converts a Uint8Array to a hexadecimal string
+    // For example, toHex([255, 0, 255]) returns "ff00ff"
+    function toHex(bytes) {
+      return Array.prototype.map
+        .call(bytes, function (n) {
+          return (n < 16 ? '0' : '') + n.toString(16)
+        })
+        .join('')
+    }
+
+    // Converts any value in [0...2^32-1] to an 8-character hex string
+    function uint32ToHex(val) {
+      return (0x100000000 + val).toString(16).substring(1)
+    }
+
+    // 64-bit unsigned addition
+    // Sets v[a,a+1] += v[b,b+1]
+    // v should be a Uint32Array
+    function ADD64AA(v, a, b) {
+      var o0 = v[a] + v[b]
+      var o1 = v[a + 1] + v[b + 1]
+      if (o0 >= 0x100000000) {
+        o1++
+      }
+      v[a] = o0
+      v[a + 1] = o1
+    }
+
+    // 64-bit unsigned addition
+    // Sets v[a,a+1] += b
+    // b0 is the low 32 bits of b, b1 represents the high 32 bits
+    function ADD64AC(v, a, b0, b1) {
+      var o0 = v[a] + b0
+      if (b0 < 0) {
+        o0 += 0x100000000
+      }
+      var o1 = v[a + 1] + b1
+      if (o0 >= 0x100000000) {
+        o1++
+      }
+      v[a] = o0
+      v[a + 1] = o1
+    }
+
+    // Little-endian byte access
+    function B2B_GET32(arr, i) {
+      return (
+        arr[i] ^ (arr[i + 1] << 8) ^ (arr[i + 2] << 16) ^ (arr[i + 3] << 24)
+      )
+    }
+
+    // G Mixing function
+    // The ROTRs are inlined for speed
+    function B2B_G(a, b, c, d, ix, iy) {
+      var x0 = m[ix]
+      var x1 = m[ix + 1]
+      var y0 = m[iy]
+      var y1 = m[iy + 1]
+
+      ADD64AA(v, a, b) // v[a,a+1] += v[b,b+1] ... in JS we must store a uint64 as two uint32s
+      ADD64AC(v, a, x0, x1) // v[a, a+1] += x ... x0 is the low 32 bits of x, x1 is the high 32 bits
+
+      // v[d,d+1] = (v[d,d+1] xor v[a,a+1]) rotated to the right by 32 bits
+      var xor0 = v[d] ^ v[a]
+      var xor1 = v[d + 1] ^ v[a + 1]
+      v[d] = xor1
+      v[d + 1] = xor0
+
+      ADD64AA(v, c, d)
+
+      // v[b,b+1] = (v[b,b+1] xor v[c,c+1]) rotated right by 24 bits
+      xor0 = v[b] ^ v[c]
+      xor1 = v[b + 1] ^ v[c + 1]
+      v[b] = (xor0 >>> 24) ^ (xor1 << 8)
+      v[b + 1] = (xor1 >>> 24) ^ (xor0 << 8)
+
+      ADD64AA(v, a, b)
+      ADD64AC(v, a, y0, y1)
+
+      // v[d,d+1] = (v[d,d+1] xor v[a,a+1]) rotated right by 16 bits
+      xor0 = v[d] ^ v[a]
+      xor1 = v[d + 1] ^ v[a + 1]
+      v[d] = (xor0 >>> 16) ^ (xor1 << 16)
+      v[d + 1] = (xor1 >>> 16) ^ (xor0 << 16)
+
+      ADD64AA(v, c, d)
+
+      // v[b,b+1] = (v[b,b+1] xor v[c,c+1]) rotated right by 63 bits
+      xor0 = v[b] ^ v[c]
+      xor1 = v[b + 1] ^ v[c + 1]
+      v[b] = (xor1 >>> 31) ^ (xor0 << 1)
+      v[b + 1] = (xor0 >>> 31) ^ (xor1 << 1)
+    }
+
+    // Initialization Vector
+    var BLAKE2B_IV32 = new Uint32Array([
+      0xf3bcc908,
+      0x6a09e667,
+      0x84caa73b,
+      0xbb67ae85,
+      0xfe94f82b,
+      0x3c6ef372,
+      0x5f1d36f1,
+      0xa54ff53a,
+      0xade682d1,
+      0x510e527f,
+      0x2b3e6c1f,
+      0x9b05688c,
+      0xfb41bd6b,
+      0x1f83d9ab,
+      0x137e2179,
+      0x5be0cd19
+    ])
+
+    var SIGMA8 = [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      14,
+      10,
+      4,
+      8,
+      9,
+      15,
+      13,
+      6,
+      1,
+      12,
+      0,
+      2,
+      11,
+      7,
+      5,
+      3,
+      11,
+      8,
+      12,
+      0,
+      5,
+      2,
+      15,
+      13,
+      10,
+      14,
+      3,
+      6,
+      7,
+      1,
+      9,
+      4,
+      7,
+      9,
+      3,
+      1,
+      13,
+      12,
+      11,
+      14,
+      2,
+      6,
+      5,
+      10,
+      4,
+      0,
+      15,
+      8,
+      9,
+      0,
+      5,
+      7,
+      2,
+      4,
+      10,
+      15,
+      14,
+      1,
+      11,
+      12,
+      6,
+      8,
+      3,
+      13,
+      2,
+      12,
+      6,
+      10,
+      0,
+      11,
+      8,
+      3,
+      4,
+      13,
+      7,
+      5,
+      15,
+      14,
+      1,
+      9,
+      12,
+      5,
+      1,
+      15,
+      14,
+      13,
+      4,
+      10,
+      0,
+      7,
+      6,
+      3,
+      9,
+      2,
+      8,
+      11,
+      13,
+      11,
+      7,
+      14,
+      12,
+      1,
+      3,
+      9,
+      5,
+      0,
+      15,
+      4,
+      8,
+      6,
+      2,
+      10,
+      6,
+      15,
+      14,
+      9,
+      11,
+      3,
+      0,
+      8,
+      12,
+      2,
+      13,
+      7,
+      1,
+      4,
+      10,
+      5,
+      10,
+      2,
+      8,
+      4,
+      7,
+      6,
+      1,
+      5,
+      15,
+      11,
+      9,
+      14,
+      3,
+      12,
+      13,
+      0,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      14,
+      10,
+      4,
+      8,
+      9,
+      15,
+      13,
+      6,
+      1,
+      12,
+      0,
+      2,
+      11,
+      7,
+      5,
+      3
+    ]
+
+    // These are offsets into a uint64 buffer.
+    // Multiply them all by 2 to make them offsets into a uint32 buffer,
+    // because this is Javascript and we don't have uint64s
+    var SIGMA82 = new Uint8Array(
+      SIGMA8.map(function (x) {
+        return x * 2
+      })
+    )
+
+    // Compression function. 'last' flag indicates last block.
+    // Note we're representing 16 uint64s as 32 uint32s
+    var v = new Uint32Array(32)
+    var m = new Uint32Array(32)
+    function blake2bCompress(ctx, last) {
+      var i = 0
+
+      // init work variables
+      for (i = 0; i < 16; i++) {
+        v[i] = ctx.h[i]
+        v[i + 16] = BLAKE2B_IV32[i]
+      }
+
+      // low 64 bits of offset
+      v[24] = v[24] ^ ctx.t
+      v[25] = v[25] ^ (ctx.t / 0x100000000)
+      // high 64 bits not supported, offset may not be higher than 2**53-1
+
+      // last block flag set ?
+      if (last) {
+        v[28] = ~v[28]
+        v[29] = ~v[29]
+      }
+
+      // get little-endian words
+      for (i = 0; i < 32; i++) {
+        m[i] = B2B_GET32(ctx.b, 4 * i)
+      }
+
+      // twelve rounds of mixing
+      // uncomment the DebugPrint calls to log the computation
+      // and match the RFC sample documentation
+      // util.debugPrint('          m[16]', m, 64)
+      for (i = 0; i < 12; i++) {
+        // util.debugPrint('   (i=' + (i < 10 ? ' ' : '') + i + ') v[16]', v, 64)
+        B2B_G(0, 8, 16, 24, SIGMA82[i * 16 + 0], SIGMA82[i * 16 + 1])
+        B2B_G(2, 10, 18, 26, SIGMA82[i * 16 + 2], SIGMA82[i * 16 + 3])
+        B2B_G(4, 12, 20, 28, SIGMA82[i * 16 + 4], SIGMA82[i * 16 + 5])
+        B2B_G(6, 14, 22, 30, SIGMA82[i * 16 + 6], SIGMA82[i * 16 + 7])
+        B2B_G(0, 10, 20, 30, SIGMA82[i * 16 + 8], SIGMA82[i * 16 + 9])
+        B2B_G(2, 12, 22, 24, SIGMA82[i * 16 + 10], SIGMA82[i * 16 + 11])
+        B2B_G(4, 14, 16, 26, SIGMA82[i * 16 + 12], SIGMA82[i * 16 + 13])
+        B2B_G(6, 8, 18, 28, SIGMA82[i * 16 + 14], SIGMA82[i * 16 + 15])
+      }
+      // util.debugPrint('   (i=12) v[16]', v, 64)
+
+      for (i = 0; i < 16; i++) {
+        ctx.h[i] = ctx.h[i] ^ v[i] ^ v[i + 16]
+      }
+      // util.debugPrint('h[8]', ctx.h, 64)
+    }
+
+    // Creates a BLAKE2b hashing context
+    // Requires an output length between 1 and 64 bytes
+    // Takes an optional Uint8Array key
+    function blake2bInit(outlen, key) {
+      if (outlen === 0 || outlen > 64) {
+        throw new Error('Illegal output length, expected 0 < length <= 64')
+      }
+      if (key && key.length > 64) {
+        throw new Error(
+          'Illegal key, expected Uint8Array with 0 < length <= 64'
+        )
+      }
+
+      // state, 'param block'
+      var ctx = {
+        b: new Uint8Array(128),
+        h: new Uint32Array(16),
+        t: 0, // input count
+        c: 0, // pointer within buffer
+        outlen: outlen // output length in bytes
+      }
+
+      // initialize hash state
+      for (var i = 0; i < 16; i++) {
+        ctx.h[i] = BLAKE2B_IV32[i]
+      }
+      var keylen = key ? key.length : 0
+      ctx.h[0] ^= 0x01010000 ^ (keylen << 8) ^ outlen
+
+      // key the hash, if applicable
+      if (key) {
+        blake2bUpdate(ctx, key)
+        // at the end
+        ctx.c = 128
+      }
+
+      return ctx
+    }
+
+    // Updates a BLAKE2b streaming hash
+    // Requires hash context and Uint8Array (byte array)
+    function blake2bUpdate(ctx, input) {
+      for (var i = 0; i < input.length; i++) {
+        if (ctx.c === 128) {
+          // buffer full ?
+          ctx.t += ctx.c // add counters
+          blake2bCompress(ctx, false) // compress (not last)
+          ctx.c = 0 // counter to zero
+        }
+        ctx.b[ctx.c++] = input[i]
+      }
+    }
+
+    // Completes a BLAKE2b streaming hash
+    // Returns a Uint8Array containing the message digest
+    function blake2bFinal(ctx) {
+      ctx.t += ctx.c // mark last block offset
+
+      while (ctx.c < 128) {
+        // fill up with zeros
+        ctx.b[ctx.c++] = 0
+      }
+      blake2bCompress(ctx, true) // final block flag = 1
+
+      // little endian convert and store
+      var out = new Uint8Array(ctx.outlen)
+      for (var i = 0; i < ctx.outlen; i++) {
+        out[i] = ctx.h[i >> 2] >> (8 * (i & 3))
+      }
+      return out
+    }
+
+    // Computes the BLAKE2B hash of a string or byte array, and returns a Uint8Array
+    //
+    // Returns a n-byte Uint8Array
+    //
+    // Parameters:
+    // - input - the input bytes, as a string, Buffer or Uint8Array
+    // - key - optional key Uint8Array, up to 64 bytes
+    // - outlen - optional output length in bytes, default 64
+    function blake2b(input, key, outlen) {
+      // preprocess inputs
+      outlen = outlen || 64
+      input = normalizeInput(input)
+
+      // do the math
+      var ctx = blake2bInit(outlen, key)
+      blake2bUpdate(ctx, input)
+      return blake2bFinal(ctx)
+    }
+
+    // Computes the BLAKE2B hash of a string or byte array
+    //
+    // Returns an n-byte hash in hex, all lowercase
+    //
+    // Parameters:
+    // - input - the input bytes, as a string, Buffer, or Uint8Array
+    // - key - optional key Uint8Array, up to 64 bytes
+    // - outlen - optional output length in bytes, default 64
+    function blake2bHex(input, key, outlen) {
+      var output = blake2b(input, key, outlen)
+      return toHex(output)
+    }
+  </script>
+  <script type="text/javascript">
+    // forked from https://github.com/jaimehgb/tweetnacl-js/blob/master/nacl.js  on 2018-03-06
+
+    ;(function (nacl) {
+      'use strict'
+
+      // Ported in 2014 by Dmitry Chestnykh and Devi Mandiri.
+      // Public domain.
+      //
+      // Implementation derived from TweetNaCl version 20140427.
+      // See for details: http://tweetnacl.cr.yp.to/
+
+      var u64 = function (h, l) {
+        this.hi = h | (0 >>> 0)
+        this.lo = l | (0 >>> 0)
+      }
+      var gf = function (init) {
+        var i,
+          r = new Float64Array(16)
+        if (init) for (i = 0; i < init.length; i++) r[i] = init[i]
+        return r
+      }
+
+      //  Pluggable, initialized in high-level API below.
+      var randombytes = function (/* x, n */) {
+        throw new Error('no PRNG')
+      }
+
+      var _0 = new Uint8Array(16)
+      var _9 = new Uint8Array(32)
+      _9[0] = 9
+
+      var gf0 = gf(),
+        gf1 = gf([1]),
+        _121665 = gf([0xdb41, 1]),
+        D = gf([
+          0x78a3,
+          0x1359,
+          0x4dca,
+          0x75eb,
+          0xd8ab,
+          0x4141,
+          0x0a4d,
+          0x0070,
+          0xe898,
+          0x7779,
+          0x4079,
+          0x8cc7,
+          0xfe73,
+          0x2b6f,
+          0x6cee,
+          0x5203
+        ]),
+        D2 = gf([
+          0xf159,
+          0x26b2,
+          0x9b94,
+          0xebd6,
+          0xb156,
+          0x8283,
+          0x149a,
+          0x00e0,
+          0xd130,
+          0xeef3,
+          0x80f2,
+          0x198e,
+          0xfce7,
+          0x56df,
+          0xd9dc,
+          0x2406
+        ]),
+        X = gf([
+          0xd51a,
+          0x8f25,
+          0x2d60,
+          0xc956,
+          0xa7b2,
+          0x9525,
+          0xc760,
+          0x692c,
+          0xdc5c,
+          0xfdd6,
+          0xe231,
+          0xc0a4,
+          0x53fe,
+          0xcd6e,
+          0x36d3,
+          0x2169
+        ]),
+        Y = gf([
+          0x6658,
+          0x6666,
+          0x6666,
+          0x6666,
+          0x6666,
+          0x6666,
+          0x6666,
+          0x6666,
+          0x6666,
+          0x6666,
+          0x6666,
+          0x6666,
+          0x6666,
+          0x6666,
+          0x6666,
+          0x6666
+        ]),
+        I = gf([
+          0xa0b0,
+          0x4a0e,
+          0x1b27,
+          0xc4ee,
+          0xe478,
+          0xad2f,
+          0x1806,
+          0x2f43,
+          0xd7a7,
+          0x3dfb,
+          0x0099,
+          0x2b4d,
+          0xdf0b,
+          0x4fc1,
+          0x2480,
+          0x2b83
+        ])
+
+      function L32(x, c) {
+        return (x << c) | (x >>> (32 - c))
+      }
+
+      function ld32(x, i) {
+        var u = x[i + 3] & 0xff
+        u = (u << 8) | (x[i + 2] & 0xff)
+        u = (u << 8) | (x[i + 1] & 0xff)
+        return (u << 8) | (x[i + 0] & 0xff)
+      }
+
+      function dl64(x, i) {
+        var h = (x[i] << 24) | (x[i + 1] << 16) | (x[i + 2] << 8) | x[i + 3]
+        var l = (x[i + 4] << 24) | (x[i + 5] << 16) | (x[i + 6] << 8) | x[i + 7]
+        return new u64(h, l)
+      }
+
+      function st32(x, j, u) {
+        var i
+        for (i = 0; i < 4; i++) {
+          x[j + i] = u & 255
+          u >>>= 8
+        }
+      }
+
+      function ts64(x, i, u) {
+        x[i] = (u.hi >> 24) & 0xff
+        x[i + 1] = (u.hi >> 16) & 0xff
+        x[i + 2] = (u.hi >> 8) & 0xff
+        x[i + 3] = u.hi & 0xff
+        x[i + 4] = (u.lo >> 24) & 0xff
+        x[i + 5] = (u.lo >> 16) & 0xff
+        x[i + 6] = (u.lo >> 8) & 0xff
+        x[i + 7] = u.lo & 0xff
+      }
+
+      function vn(x, xi, y, yi, n) {
+        var i,
+          d = 0
+        for (i = 0; i < n; i++) d |= x[xi + i] ^ y[yi + i]
+        return (1 & ((d - 1) >>> 8)) - 1
+      }
+
+      function crypto_verify_16(x, xi, y, yi) {
+        return vn(x, xi, y, yi, 16)
+      }
+
+      function crypto_verify_32(x, xi, y, yi) {
+        return vn(x, xi, y, yi, 32)
+      }
+
+      function core(out, inp, k, c, h) {
+        var w = new Uint32Array(16),
+          x = new Uint32Array(16),
+          y = new Uint32Array(16),
+          t = new Uint32Array(4)
+        var i, j, m
+
+        for (i = 0; i < 4; i++) {
+          x[5 * i] = ld32(c, 4 * i)
+          x[1 + i] = ld32(k, 4 * i)
+          x[6 + i] = ld32(inp, 4 * i)
+          x[11 + i] = ld32(k, 16 + 4 * i)
+        }
+
+        for (i = 0; i < 16; i++) y[i] = x[i]
+
+        for (i = 0; i < 20; i++) {
+          for (j = 0; j < 4; j++) {
+            for (m = 0; m < 4; m++) t[m] = x[(5 * j + 4 * m) % 16]
+            t[1] ^= L32((t[0] + t[3]) | 0, 7)
+            t[2] ^= L32((t[1] + t[0]) | 0, 9)
+            t[3] ^= L32((t[2] + t[1]) | 0, 13)
+            t[0] ^= L32((t[3] + t[2]) | 0, 18)
+            for (m = 0; m < 4; m++) w[4 * j + ((j + m) % 4)] = t[m]
+          }
+          for (m = 0; m < 16; m++) x[m] = w[m]
+        }
+
+        if (h) {
+          for (i = 0; i < 16; i++) x[i] = (x[i] + y[i]) | 0
+          for (i = 0; i < 4; i++) {
+            x[5 * i] = (x[5 * i] - ld32(c, 4 * i)) | 0
+            x[6 + i] = (x[6 + i] - ld32(inp, 4 * i)) | 0
+          }
+          for (i = 0; i < 4; i++) {
+            st32(out, 4 * i, x[5 * i])
+            st32(out, 16 + 4 * i, x[6 + i])
+          }
+        } else {
+          for (i = 0; i < 16; i++) st32(out, 4 * i, (x[i] + y[i]) | 0)
+        }
+      }
+
+      function crypto_core_salsa20(out, inp, k, c) {
+        core(out, inp, k, c, false)
+        return 0
+      }
+
+      function crypto_core_hsalsa20(out, inp, k, c) {
+        core(out, inp, k, c, true)
+        return 0
+      }
+
+      var sigma = new Uint8Array([
+        101,
+        120,
+        112,
+        97,
+        110,
+        100,
+        32,
+        51,
+        50,
+        45,
+        98,
+        121,
+        116,
+        101,
+        32,
+        107
+      ])
+      // "expand 32-byte k"
+
+      function crypto_stream_salsa20_xor(c, cpos, m, mpos, b, n, k) {
+        var z = new Uint8Array(16),
+          x = new Uint8Array(64)
+        var u, i
+        if (!b) return 0
+        for (i = 0; i < 16; i++) z[i] = 0
+        for (i = 0; i < 8; i++) z[i] = n[i]
+        while (b >= 64) {
+          crypto_core_salsa20(x, z, k, sigma)
+          for (i = 0; i < 64; i++) c[cpos + i] = (m ? m[mpos + i] : 0) ^ x[i]
+          u = 1
+          for (i = 8; i < 16; i++) {
+            u = (u + (z[i] & 0xff)) | 0
+            z[i] = u & 0xff
+            u >>>= 8
+          }
+          b -= 64
+          cpos += 64
+          if (m) mpos += 64
+        }
+        if (b > 0) {
+          crypto_core_salsa20(x, z, k, sigma)
+          for (i = 0; i < b; i++) c[cpos + i] = (m ? m[mpos + i] : 0) ^ x[i]
+        }
+        return 0
+      }
+
+      function crypto_stream_salsa20(c, cpos, d, n, k) {
+        return crypto_stream_salsa20_xor(c, cpos, null, 0, d, n, k)
+      }
+
+      function crypto_stream(c, cpos, d, n, k) {
+        var s = new Uint8Array(32)
+        crypto_core_hsalsa20(s, n, k, sigma)
+        return crypto_stream_salsa20(c, cpos, d, n.subarray(16), s)
+      }
+
+      function crypto_stream_xor(c, cpos, m, mpos, d, n, k) {
+        var s = new Uint8Array(32)
+        crypto_core_hsalsa20(s, n, k, sigma)
+        return crypto_stream_salsa20_xor(c, cpos, m, mpos, d, n.subarray(16), s)
+      }
+
+      function add1305(h, c) {
+        var j,
+          u = 0
+        for (j = 0; j < 17; j++) {
+          u = (u + ((h[j] + c[j]) | 0)) | 0
+          h[j] = u & 255
+          u >>>= 8
+        }
+      }
+
+      var minusp = new Uint32Array([
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        252
+      ])
+
+      function crypto_onetimeauth(out, outpos, m, mpos, n, k) {
+        var s, i, j, u
+        var x = new Uint32Array(17),
+          r = new Uint32Array(17),
+          h = new Uint32Array(17),
+          c = new Uint32Array(17),
+          g = new Uint32Array(17)
+        for (j = 0; j < 17; j++) r[j] = h[j] = 0
+        for (j = 0; j < 16; j++) r[j] = k[j]
+        r[3] &= 15
+        r[4] &= 252
+        r[7] &= 15
+        r[8] &= 252
+        r[11] &= 15
+        r[12] &= 252
+        r[15] &= 15
+
+        while (n > 0) {
+          for (j = 0; j < 17; j++) c[j] = 0
+          for (j = 0; j < 16 && j < n; ++j) c[j] = m[mpos + j]
+          c[j] = 1
+          mpos += j
+          n -= j
+          add1305(h, c)
+          for (i = 0; i < 17; i++) {
+            x[i] = 0
+            for (j = 0; j < 17; j++)
+              x[i] =
+                (x[i] +
+                  h[j] * (j <= i ? r[i - j] : (320 * r[i + 17 - j]) | 0)) |
+                0 |
+                0
+          }
+          for (i = 0; i < 17; i++) h[i] = x[i]
+          u = 0
+          for (j = 0; j < 16; j++) {
+            u = (u + h[j]) | 0
+            h[j] = u & 255
+            u >>>= 8
+          }
+          u = (u + h[16]) | 0
+          h[16] = u & 3
+          u = (5 * (u >>> 2)) | 0
+          for (j = 0; j < 16; j++) {
+            u = (u + h[j]) | 0
+            h[j] = u & 255
+            u >>>= 8
+          }
+          u = (u + h[16]) | 0
+          h[16] = u
+        }
+
+        for (j = 0; j < 17; j++) g[j] = h[j]
+        add1305(h, minusp)
+        s = -(h[16] >>> 7) | 0
+        for (j = 0; j < 17; j++) h[j] ^= s & (g[j] ^ h[j])
+
+        for (j = 0; j < 16; j++) c[j] = k[j + 16]
+        c[16] = 0
+        add1305(h, c)
+        for (j = 0; j < 16; j++) out[outpos + j] = h[j]
+        return 0
+      }
+
+      function crypto_onetimeauth_verify(h, hpos, m, mpos, n, k) {
+        var x = new Uint8Array(16)
+        crypto_onetimeauth(x, 0, m, mpos, n, k)
+        return crypto_verify_16(h, hpos, x, 0)
+      }
+
+      function crypto_secretbox(c, m, d, n, k) {
+        var i
+        if (d < 32) return -1
+        crypto_stream_xor(c, 0, m, 0, d, n, k)
+        crypto_onetimeauth(c, 16, c, 32, d - 32, c)
+        for (i = 0; i < 16; i++) c[i] = 0
+        return 0
+      }
+
+      function crypto_secretbox_open(m, c, d, n, k) {
+        var i
+        var x = new Uint8Array(32)
+        if (d < 32) return -1
+        crypto_stream(x, 0, 32, n, k)
+        if (crypto_onetimeauth_verify(c, 16, c, 32, d - 32, x) !== 0) return -1
+        crypto_stream_xor(m, 0, c, 0, d, n, k)
+        for (i = 0; i < 32; i++) m[i] = 0
+        return 0
+      }
+
+      function set25519(r, a) {
+        var i
+        for (i = 0; i < 16; i++) r[i] = a[i] | 0
+      }
+
+      function car25519(o) {
+        var c
+        var i
+        for (i = 0; i < 16; i++) {
+          o[i] += 65536
+          c = Math.floor(o[i] / 65536)
+          o[(i + 1) * (i < 15 ? 1 : 0)] +=
+            c - 1 + 37 * (c - 1) * (i === 15 ? 1 : 0)
+          o[i] -= c * 65536
+        }
+      }
+
+      function sel25519(p, q, b) {
+        var t,
+          c = ~(b - 1)
+        for (var i = 0; i < 16; i++) {
+          t = c & (p[i] ^ q[i])
+          p[i] ^= t
+          q[i] ^= t
+        }
+      }
+
+      function pack25519(o, n) {
+        var i, j, b
+        var m = gf(),
+          t = gf()
+        for (i = 0; i < 16; i++) t[i] = n[i]
+        car25519(t)
+        car25519(t)
+        car25519(t)
+        for (j = 0; j < 2; j++) {
+          m[0] = t[0] - 0xffed
+          for (i = 1; i < 15; i++) {
+            m[i] = t[i] - 0xffff - ((m[i - 1] >> 16) & 1)
+            m[i - 1] &= 0xffff
+          }
+          m[15] = t[15] - 0x7fff - ((m[14] >> 16) & 1)
+          b = (m[15] >> 16) & 1
+          m[14] &= 0xffff
+          sel25519(t, m, 1 - b)
+        }
+        for (i = 0; i < 16; i++) {
+          o[2 * i] = t[i] & 0xff
+          o[2 * i + 1] = t[i] >> 8
+        }
+      }
+
+      function neq25519(a, b) {
+        var c = new Uint8Array(32),
+          d = new Uint8Array(32)
+        pack25519(c, a)
+        pack25519(d, b)
+        return crypto_verify_32(c, 0, d, 0)
+      }
+
+      function par25519(a) {
+        var d = new Uint8Array(32)
+        pack25519(d, a)
+        return d[0] & 1
+      }
+
+      function unpack25519(o, n) {
+        var i
+        for (i = 0; i < 16; i++) o[i] = n[2 * i] + (n[2 * i + 1] << 8)
+        o[15] &= 0x7fff
+      }
+
+      function A(o, a, b) {
+        var i
+        for (i = 0; i < 16; i++) o[i] = (a[i] + b[i]) | 0
+      }
+
+      function Z(o, a, b) {
+        var i
+        for (i = 0; i < 16; i++) o[i] = (a[i] - b[i]) | 0
+      }
+
+      function M(o, a, b) {
+        var i,
+          j,
+          t = new Float64Array(31)
+        for (i = 0; i < 31; i++) t[i] = 0
+        for (i = 0; i < 16; i++) {
+          for (j = 0; j < 16; j++) {
+            t[i + j] += a[i] * b[j]
+          }
+        }
+        for (i = 0; i < 15; i++) {
+          t[i] += 38 * t[i + 16]
+        }
+        for (i = 0; i < 16; i++) o[i] = t[i]
+        car25519(o)
+        car25519(o)
+      }
+
+      function S(o, a) {
+        M(o, a, a)
+      }
+
+      function inv25519(o, i) {
+        var c = gf()
+        var a
+        for (a = 0; a < 16; a++) c[a] = i[a]
+        for (a = 253; a >= 0; a--) {
+          S(c, c)
+          if (a !== 2 && a !== 4) M(c, c, i)
+        }
+        for (a = 0; a < 16; a++) o[a] = c[a]
+      }
+
+      function pow2523(o, i) {
+        var c = gf()
+        var a
+        for (a = 0; a < 16; a++) c[a] = i[a]
+        for (a = 250; a >= 0; a--) {
+          S(c, c)
+          if (a !== 1) M(c, c, i)
+        }
+        for (a = 0; a < 16; a++) o[a] = c[a]
+      }
+
+      function crypto_scalarmult(q, n, p) {
+        var z = new Uint8Array(32)
+        var x = new Float64Array(80),
+          r,
+          i
+        var a = gf(),
+          b = gf(),
+          c = gf(),
+          d = gf(),
+          e = gf(),
+          f = gf()
+        for (i = 0; i < 31; i++) z[i] = n[i]
+        z[31] = (n[31] & 127) | 64
+        z[0] &= 248
+        unpack25519(x, p)
+        for (i = 0; i < 16; i++) {
+          b[i] = x[i]
+          d[i] = a[i] = c[i] = 0
+        }
+        a[0] = d[0] = 1
+        for (i = 254; i >= 0; --i) {
+          r = (z[i >>> 3] >>> (i & 7)) & 1
+          sel25519(a, b, r)
+          sel25519(c, d, r)
+          A(e, a, c)
+          Z(a, a, c)
+          A(c, b, d)
+          Z(b, b, d)
+          S(d, e)
+          S(f, a)
+          M(a, c, a)
+          M(c, b, e)
+          A(e, a, c)
+          Z(a, a, c)
+          S(b, a)
+          Z(c, d, f)
+          M(a, c, _121665)
+          A(a, a, d)
+          M(c, c, a)
+          M(a, d, f)
+          M(d, b, x)
+          S(b, e)
+          sel25519(a, b, r)
+          sel25519(c, d, r)
+        }
+        for (i = 0; i < 16; i++) {
+          x[i + 16] = a[i]
+          x[i + 32] = c[i]
+          x[i + 48] = b[i]
+          x[i + 64] = d[i]
+        }
+        var x32 = x.subarray(32)
+        var x16 = x.subarray(16)
+        inv25519(x32, x32)
+        M(x16, x16, x32)
+        pack25519(q, x16)
+        return 0
+      }
+
+      function crypto_scalarmult_base(q, n) {
+        return crypto_scalarmult(q, n, _9)
+      }
+
+      function crypto_box_keypair(y, x) {
+        randombytes(x, 32)
+        return crypto_scalarmult_base(y, x)
+      }
+
+      function crypto_box_beforenm(k, y, x) {
+        var s = new Uint8Array(32)
+        crypto_scalarmult(s, x, y)
+        return crypto_core_hsalsa20(k, _0, s, sigma)
+      }
+
+      var crypto_box_afternm = crypto_secretbox
+      var crypto_box_open_afternm = crypto_secretbox_open
+
+      function crypto_box(c, m, d, n, y, x) {
+        var k = new Uint8Array(32)
+        crypto_box_beforenm(k, y, x)
+        return crypto_box_afternm(c, m, d, n, k)
+      }
+
+      function crypto_box_open(m, c, d, n, y, x) {
+        var k = new Uint8Array(32)
+        crypto_box_beforenm(k, y, x)
+        return crypto_box_open_afternm(m, c, d, n, k)
+      }
+
+      function add64() {
+        var a = 0,
+          b = 0,
+          c = 0,
+          d = 0,
+          m16 = 65535,
+          l,
+          h,
+          i
+        for (i = 0; i < arguments.length; i++) {
+          l = arguments[i].lo
+          h = arguments[i].hi
+          a += l & m16
+          b += l >>> 16
+          c += h & m16
+          d += h >>> 16
+        }
+
+        b += a >>> 16
+        c += b >>> 16
+        d += c >>> 16
+
+        return new u64((c & m16) | (d << 16), (a & m16) | (b << 16))
+      }
+
+      function shr64(x, c) {
+        return new u64(x.hi >>> c, (x.lo >>> c) | (x.hi << (32 - c)))
+      }
+
+      function xor64() {
+        var l = 0,
+          h = 0,
+          i
+        for (i = 0; i < arguments.length; i++) {
+          l ^= arguments[i].lo
+          h ^= arguments[i].hi
+        }
+        return new u64(h, l)
+      }
+
+      function R(x, c) {
+        var h,
+          l,
+          c1 = 32 - c
+        if (c < 32) {
+          h = (x.hi >>> c) | (x.lo << c1)
+          l = (x.lo >>> c) | (x.hi << c1)
+        } else if (c < 64) {
+          h = (x.lo >>> c) | (x.hi << c1)
+          l = (x.hi >>> c) | (x.lo << c1)
+        }
+        return new u64(h, l)
+      }
+
+      function Ch(x, y, z) {
+        var h = (x.hi & y.hi) ^ (~x.hi & z.hi),
+          l = (x.lo & y.lo) ^ (~x.lo & z.lo)
+        return new u64(h, l)
+      }
+
+      function Maj(x, y, z) {
+        var h = (x.hi & y.hi) ^ (x.hi & z.hi) ^ (y.hi & z.hi),
+          l = (x.lo & y.lo) ^ (x.lo & z.lo) ^ (y.lo & z.lo)
+        return new u64(h, l)
+      }
+
+      function Sigma0(x) {
+        return xor64(R(x, 28), R(x, 34), R(x, 39))
+      }
+      function Sigma1(x) {
+        return xor64(R(x, 14), R(x, 18), R(x, 41))
+      }
+      function sigma0(x) {
+        return xor64(R(x, 1), R(x, 8), shr64(x, 7))
+      }
+      function sigma1(x) {
+        return xor64(R(x, 19), R(x, 61), shr64(x, 6))
+      }
+
+      var K = [
+        new u64(0x428a2f98, 0xd728ae22),
+        new u64(0x71374491, 0x23ef65cd),
+        new u64(0xb5c0fbcf, 0xec4d3b2f),
+        new u64(0xe9b5dba5, 0x8189dbbc),
+        new u64(0x3956c25b, 0xf348b538),
+        new u64(0x59f111f1, 0xb605d019),
+        new u64(0x923f82a4, 0xaf194f9b),
+        new u64(0xab1c5ed5, 0xda6d8118),
+        new u64(0xd807aa98, 0xa3030242),
+        new u64(0x12835b01, 0x45706fbe),
+        new u64(0x243185be, 0x4ee4b28c),
+        new u64(0x550c7dc3, 0xd5ffb4e2),
+        new u64(0x72be5d74, 0xf27b896f),
+        new u64(0x80deb1fe, 0x3b1696b1),
+        new u64(0x9bdc06a7, 0x25c71235),
+        new u64(0xc19bf174, 0xcf692694),
+        new u64(0xe49b69c1, 0x9ef14ad2),
+        new u64(0xefbe4786, 0x384f25e3),
+        new u64(0x0fc19dc6, 0x8b8cd5b5),
+        new u64(0x240ca1cc, 0x77ac9c65),
+        new u64(0x2de92c6f, 0x592b0275),
+        new u64(0x4a7484aa, 0x6ea6e483),
+        new u64(0x5cb0a9dc, 0xbd41fbd4),
+        new u64(0x76f988da, 0x831153b5),
+        new u64(0x983e5152, 0xee66dfab),
+        new u64(0xa831c66d, 0x2db43210),
+        new u64(0xb00327c8, 0x98fb213f),
+        new u64(0xbf597fc7, 0xbeef0ee4),
+        new u64(0xc6e00bf3, 0x3da88fc2),
+        new u64(0xd5a79147, 0x930aa725),
+        new u64(0x06ca6351, 0xe003826f),
+        new u64(0x14292967, 0x0a0e6e70),
+        new u64(0x27b70a85, 0x46d22ffc),
+        new u64(0x2e1b2138, 0x5c26c926),
+        new u64(0x4d2c6dfc, 0x5ac42aed),
+        new u64(0x53380d13, 0x9d95b3df),
+        new u64(0x650a7354, 0x8baf63de),
+        new u64(0x766a0abb, 0x3c77b2a8),
+        new u64(0x81c2c92e, 0x47edaee6),
+        new u64(0x92722c85, 0x1482353b),
+        new u64(0xa2bfe8a1, 0x4cf10364),
+        new u64(0xa81a664b, 0xbc423001),
+        new u64(0xc24b8b70, 0xd0f89791),
+        new u64(0xc76c51a3, 0x0654be30),
+        new u64(0xd192e819, 0xd6ef5218),
+        new u64(0xd6990624, 0x5565a910),
+        new u64(0xf40e3585, 0x5771202a),
+        new u64(0x106aa070, 0x32bbd1b8),
+        new u64(0x19a4c116, 0xb8d2d0c8),
+        new u64(0x1e376c08, 0x5141ab53),
+        new u64(0x2748774c, 0xdf8eeb99),
+        new u64(0x34b0bcb5, 0xe19b48a8),
+        new u64(0x391c0cb3, 0xc5c95a63),
+        new u64(0x4ed8aa4a, 0xe3418acb),
+        new u64(0x5b9cca4f, 0x7763e373),
+        new u64(0x682e6ff3, 0xd6b2b8a3),
+        new u64(0x748f82ee, 0x5defb2fc),
+        new u64(0x78a5636f, 0x43172f60),
+        new u64(0x84c87814, 0xa1f0ab72),
+        new u64(0x8cc70208, 0x1a6439ec),
+        new u64(0x90befffa, 0x23631e28),
+        new u64(0xa4506ceb, 0xde82bde9),
+        new u64(0xbef9a3f7, 0xb2c67915),
+        new u64(0xc67178f2, 0xe372532b),
+        new u64(0xca273ece, 0xea26619c),
+        new u64(0xd186b8c7, 0x21c0c207),
+        new u64(0xeada7dd6, 0xcde0eb1e),
+        new u64(0xf57d4f7f, 0xee6ed178),
+        new u64(0x06f067aa, 0x72176fba),
+        new u64(0x0a637dc5, 0xa2c898a6),
+        new u64(0x113f9804, 0xbef90dae),
+        new u64(0x1b710b35, 0x131c471b),
+        new u64(0x28db77f5, 0x23047d84),
+        new u64(0x32caab7b, 0x40c72493),
+        new u64(0x3c9ebe0a, 0x15c9bebc),
+        new u64(0x431d67c4, 0x9c100d4c),
+        new u64(0x4cc5d4be, 0xcb3e42b6),
+        new u64(0x597f299c, 0xfc657e2a),
+        new u64(0x5fcb6fab, 0x3ad6faec),
+        new u64(0x6c44198c, 0x4a475817)
+      ]
+
+      function crypto_hashblocks(x, m, n) {
+        var z = [],
+          b = [],
+          a = [],
+          w = [],
+          t,
+          i,
+          j
+
+        for (i = 0; i < 8; i++) z[i] = a[i] = dl64(x, 8 * i)
+
+        var pos = 0
+        while (n >= 128) {
+          for (i = 0; i < 16; i++) w[i] = dl64(m, 8 * i + pos)
+          for (i = 0; i < 80; i++) {
+            for (j = 0; j < 8; j++) b[j] = a[j]
+            t = add64(a[7], Sigma1(a[4]), Ch(a[4], a[5], a[6]), K[i], w[i % 16])
+            b[7] = add64(t, Sigma0(a[0]), Maj(a[0], a[1], a[2]))
+            b[3] = add64(b[3], t)
+            for (j = 0; j < 8; j++) a[(j + 1) % 8] = b[j]
+            if (i % 16 === 15) {
+              for (j = 0; j < 16; j++) {
+                w[j] = add64(
+                  w[j],
+                  w[(j + 9) % 16],
+                  sigma0(w[(j + 1) % 16]),
+                  sigma1(w[(j + 14) % 16])
+                )
+              }
+            }
+          }
+
+          for (i = 0; i < 8; i++) {
+            a[i] = add64(a[i], z[i])
+            z[i] = a[i]
+          }
+
+          pos += 128
+          n -= 128
+        }
+
+        for (i = 0; i < 8; i++) ts64(x, 8 * i, z[i])
+        return n
+      }
+
+      var iv = new Uint8Array([
+        0x6a,
+        0x09,
+        0xe6,
+        0x67,
+        0xf3,
+        0xbc,
+        0xc9,
+        0x08,
+        0xbb,
+        0x67,
+        0xae,
+        0x85,
+        0x84,
+        0xca,
+        0xa7,
+        0x3b,
+        0x3c,
+        0x6e,
+        0xf3,
+        0x72,
+        0xfe,
+        0x94,
+        0xf8,
+        0x2b,
+        0xa5,
+        0x4f,
+        0xf5,
+        0x3a,
+        0x5f,
+        0x1d,
+        0x36,
+        0xf1,
+        0x51,
+        0x0e,
+        0x52,
+        0x7f,
+        0xad,
+        0xe6,
+        0x82,
+        0xd1,
+        0x9b,
+        0x05,
+        0x68,
+        0x8c,
+        0x2b,
+        0x3e,
+        0x6c,
+        0x1f,
+        0x1f,
+        0x83,
+        0xd9,
+        0xab,
+        0xfb,
+        0x41,
+        0xbd,
+        0x6b,
+        0x5b,
+        0xe0,
+        0xcd,
+        0x19,
+        0x13,
+        0x7e,
+        0x21,
+        0x79
+      ])
+
+      function crypto_hash(out, m, n) {
+        var h = new Uint8Array(64),
+          x = new Uint8Array(256)
+        var i,
+          b = n
+
+        for (i = 0; i < 64; i++) h[i] = iv[i]
+
+        crypto_hashblocks(h, m, n)
+        n %= 128
+
+        for (i = 0; i < 256; i++) x[i] = 0
+        for (i = 0; i < n; i++) x[i] = m[b - n + i]
+        x[n] = 128
+
+        n = 256 - 128 * (n < 112 ? 1 : 0)
+        x[n - 9] = 0
+        ts64(x, n - 8, new u64((b / 0x20000000) | 0, b << 3))
+        crypto_hashblocks(h, x, n)
+
+        for (i = 0; i < 64; i++) out[i] = h[i]
+
+        return 0
+      }
+
+      function add(p, q) {
+        var a = gf(),
+          b = gf(),
+          c = gf(),
+          d = gf(),
+          e = gf(),
+          f = gf(),
+          g = gf(),
+          h = gf(),
+          t = gf()
+
+        Z(a, p[1], p[0])
+        Z(t, q[1], q[0])
+        M(a, a, t)
+        A(b, p[0], p[1])
+        A(t, q[0], q[1])
+        M(b, b, t)
+        M(c, p[3], q[3])
+        M(c, c, D2)
+        M(d, p[2], q[2])
+        A(d, d, d)
+        Z(e, b, a)
+        Z(f, d, c)
+        A(g, d, c)
+        A(h, b, a)
+
+        M(p[0], e, f)
+        M(p[1], h, g)
+        M(p[2], g, f)
+        M(p[3], e, h)
+      }
+
+      function cswap(p, q, b) {
+        var i
+        for (i = 0; i < 4; i++) {
+          sel25519(p[i], q[i], b)
+        }
+      }
+
+      function pack(r, p) {
+        var tx = gf(),
+          ty = gf(),
+          zi = gf()
+        inv25519(zi, p[2])
+        M(tx, p[0], zi)
+        M(ty, p[1], zi)
+        pack25519(r, ty)
+        r[31] ^= par25519(tx) << 7
+      }
+
+      function scalarmult(p, q, s) {
+        var b, i
+        set25519(p[0], gf0)
+        set25519(p[1], gf1)
+        set25519(p[2], gf1)
+        set25519(p[3], gf0)
+        for (i = 255; i >= 0; --i) {
+          b = (s[(i / 8) | 0] >> (i & 7)) & 1
+          cswap(p, q, b)
+          add(q, p)
+          add(p, p)
+          cswap(p, q, b)
+        }
+      }
+
+      function scalarbase(p, s) {
+        var q = [gf(), gf(), gf(), gf()]
+        set25519(q[0], X)
+        set25519(q[1], Y)
+        set25519(q[2], gf1)
+        M(q[3], X, Y)
+        scalarmult(p, q, s)
+      }
+
+      function crypto_sign_keypair(pk, sk, seeded) {
+        var d = new Uint8Array(64)
+        var p = [gf(), gf(), gf(), gf()]
+        var i
+
+        if (!seeded) randombytes(sk, 32)
+
+        var context = blake2bInit(64)
+        blake2bUpdate(context, sk)
+        d = blake2bFinal(context)
+
+        d[0] &= 248
+        d[31] &= 127
+        d[31] |= 64
+
+        scalarbase(p, d)
+        pack(pk, p)
+
+        return 0
+      }
+
+      function derivePublicFromSecret(sk) {
+        var d = new Uint8Array(64)
+        var p = [gf(), gf(), gf(), gf()]
+        var i
+        var pk = new Uint8Array(32)
+        var context = blake2bInit(64)
+        blake2bUpdate(context, sk)
+        d = blake2bFinal(context)
+
+        d[0] &= 248
+        d[31] &= 127
+        d[31] |= 64
+
+        scalarbase(p, d)
+        pack(pk, p)
+        return pk
+      }
+
+      var L = new Float64Array([
+        0xed,
+        0xd3,
+        0xf5,
+        0x5c,
+        0x1a,
+        0x63,
+        0x12,
+        0x58,
+        0xd6,
+        0x9c,
+        0xf7,
+        0xa2,
+        0xde,
+        0xf9,
+        0xde,
+        0x14,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0x10
+      ])
+
+      function modL(r, x) {
+        var carry, i, j, k
+        for (i = 63; i >= 32; --i) {
+          carry = 0
+          for (j = i - 32, k = i - 12; j < k; ++j) {
+            x[j] += carry - 16 * x[i] * L[j - (i - 32)]
+            carry = (x[j] + 128) >> 8
+            x[j] -= carry * 256
+          }
+          x[j] += carry
+          x[i] = 0
+        }
+        carry = 0
+        for (j = 0; j < 32; j++) {
+          x[j] += carry - (x[31] >> 4) * L[j]
+          carry = x[j] >> 8
+          x[j] &= 255
+        }
+        for (j = 0; j < 32; j++) x[j] -= carry * L[j]
+        for (i = 0; i < 32; i++) {
+          x[i + 1] += x[i] >> 8
+          r[i] = x[i] & 255
+        }
+      }
+
+      function reduce(r) {
+        var x = new Float64Array(64),
+          i
+        for (i = 0; i < 64; i++) x[i] = r[i]
+        for (i = 0; i < 64; i++) r[i] = 0
+        modL(r, x)
+      }
+
+      // Note: difference from C - smlen returned, not passed as argument.
+      function crypto_sign(sm, m, n, sk) {
+        var d = new Uint8Array(64),
+          h = new Uint8Array(64),
+          r = new Uint8Array(64)
+        var i,
+          j,
+          x = new Float64Array(64)
+        var p = [gf(), gf(), gf(), gf()]
+
+        var pk = derivePublicFromSecret(sk)
+
+        var context = blake2bInit(64, null)
+        blake2bUpdate(context, sk)
+        d = blake2bFinal(context)
+        d[0] &= 248
+        d[31] &= 127
+        d[31] |= 64
+
+        var smlen = n + 64
+        for (i = 0; i < n; i++) sm[64 + i] = m[i]
+        for (i = 0; i < 32; i++) sm[32 + i] = d[32 + i]
+
+        context = blake2bInit(64, null)
+        blake2bUpdate(context, sm.subarray(32))
+        r = blake2bFinal(context)
+
+        reduce(r)
+        scalarbase(p, r)
+        pack(sm, p)
+
+        for (i = 32; i < 64; i++) sm[i] = pk[i - 32]
+
+        context = blake2bInit(64, null)
+        blake2bUpdate(context, sm)
+        h = blake2bFinal(context)
+
+        reduce(h)
+
+        for (i = 0; i < 64; i++) x[i] = 0
+        for (i = 0; i < 32; i++) x[i] = r[i]
+        for (i = 0; i < 32; i++) {
+          for (j = 0; j < 32; j++) {
+            x[i + j] += h[i] * d[j]
+          }
+        }
+
+        modL(sm.subarray(32), x)
+        return smlen
+      }
+
+      function unpackneg(r, p) {
+        var t = gf(),
+          chk = gf(),
+          num = gf(),
+          den = gf(),
+          den2 = gf(),
+          den4 = gf(),
+          den6 = gf()
+
+        set25519(r[2], gf1)
+        unpack25519(r[1], p)
+        S(num, r[1])
+        M(den, num, D)
+        Z(num, num, r[2])
+        A(den, r[2], den)
+
+        S(den2, den)
+        S(den4, den2)
+        M(den6, den4, den2)
+        M(t, den6, num)
+        M(t, t, den)
+
+        pow2523(t, t)
+        M(t, t, num)
+        M(t, t, den)
+        M(t, t, den)
+        M(r[0], t, den)
+
+        S(chk, r[0])
+        M(chk, chk, den)
+        if (neq25519(chk, num)) M(r[0], r[0], I)
+
+        S(chk, r[0])
+        M(chk, chk, den)
+        if (neq25519(chk, num)) return -1
+
+        if (par25519(r[0]) === p[31] >> 7) Z(r[0], gf0, r[0])
+
+        M(r[3], r[0], r[1])
+        return 0
+      }
+
+      function crypto_sign_open(m, sm, n, pk) {
+        var i, mlen
+        var t = new Uint8Array(32),
+          h = new Uint8Array(64)
+        var p = [gf(), gf(), gf(), gf()],
+          q = [gf(), gf(), gf(), gf()]
+
+        mlen = -1
+        if (n < 64) return -1
+
+        if (unpackneg(q, pk)) return -1
+
+        for (i = 0; i < n; i++) m[i] = sm[i]
+        for (i = 0; i < 32; i++) m[i + 32] = pk[i]
+        //crypto_hash(h, m, n);
+
+        var context = blake2bInit(64, null)
+        blake2bUpdate(context, m)
+        h = blake2bFinal(context)
+
+        reduce(h)
+        scalarmult(p, q, h)
+
+        scalarbase(q, sm.subarray(32))
+        add(p, q)
+        pack(t, p)
+
+        n -= 64
+        if (crypto_verify_32(sm, 0, t, 0)) {
+          for (i = 0; i < n; i++) m[i] = 0
+          return -1
+        }
+
+        for (i = 0; i < n; i++) m[i] = sm[i + 64]
+        mlen = n
+        return mlen
+      }
+
+      var crypto_secretbox_KEYBYTES = 32,
+        crypto_secretbox_NONCEBYTES = 24,
+        crypto_secretbox_ZEROBYTES = 32,
+        crypto_secretbox_BOXZEROBYTES = 16,
+        crypto_scalarmult_BYTES = 32,
+        crypto_scalarmult_SCALARBYTES = 32,
+        crypto_box_PUBLICKEYBYTES = 32,
+        crypto_box_SECRETKEYBYTES = 32,
+        crypto_box_BEFORENMBYTES = 32,
+        crypto_box_NONCEBYTES = crypto_secretbox_NONCEBYTES,
+        crypto_box_ZEROBYTES = crypto_secretbox_ZEROBYTES,
+        crypto_box_BOXZEROBYTES = crypto_secretbox_BOXZEROBYTES,
+        crypto_sign_BYTES = 64,
+        crypto_sign_PUBLICKEYBYTES = 32,
+        crypto_sign_SECRETKEYBYTES = 32,
+        crypto_sign_SEEDBYTES = 32,
+        crypto_hash_BYTES = 64
+
+      nacl.lowlevel = {
+        crypto_core_hsalsa20: crypto_core_hsalsa20,
+        crypto_stream_xor: crypto_stream_xor,
+        crypto_stream: crypto_stream,
+        crypto_stream_salsa20_xor: crypto_stream_salsa20_xor,
+        crypto_stream_salsa20: crypto_stream_salsa20,
+        crypto_onetimeauth: crypto_onetimeauth,
+        crypto_onetimeauth_verify: crypto_onetimeauth_verify,
+        crypto_verify_16: crypto_verify_16,
+        crypto_verify_32: crypto_verify_32,
+        crypto_secretbox: crypto_secretbox,
+        crypto_secretbox_open: crypto_secretbox_open,
+        crypto_scalarmult: crypto_scalarmult,
+        crypto_scalarmult_base: crypto_scalarmult_base,
+        crypto_box_beforenm: crypto_box_beforenm,
+        crypto_box_afternm: crypto_box_afternm,
+        crypto_box: crypto_box,
+        crypto_box_open: crypto_box_open,
+        crypto_box_keypair: crypto_box_keypair,
+        crypto_hash: crypto_hash,
+        crypto_sign: crypto_sign,
+        crypto_sign_keypair: crypto_sign_keypair,
+        crypto_sign_open: crypto_sign_open,
+
+        crypto_secretbox_KEYBYTES: crypto_secretbox_KEYBYTES,
+        crypto_secretbox_NONCEBYTES: crypto_secretbox_NONCEBYTES,
+        crypto_secretbox_ZEROBYTES: crypto_secretbox_ZEROBYTES,
+        crypto_secretbox_BOXZEROBYTES: crypto_secretbox_BOXZEROBYTES,
+        crypto_scalarmult_BYTES: crypto_scalarmult_BYTES,
+        crypto_scalarmult_SCALARBYTES: crypto_scalarmult_SCALARBYTES,
+        crypto_box_PUBLICKEYBYTES: crypto_box_PUBLICKEYBYTES,
+        crypto_box_SECRETKEYBYTES: crypto_box_SECRETKEYBYTES,
+        crypto_box_BEFORENMBYTES: crypto_box_BEFORENMBYTES,
+        crypto_box_NONCEBYTES: crypto_box_NONCEBYTES,
+        crypto_box_ZEROBYTES: crypto_box_ZEROBYTES,
+        crypto_box_BOXZEROBYTES: crypto_box_BOXZEROBYTES,
+        crypto_sign_BYTES: crypto_sign_BYTES,
+        crypto_sign_PUBLICKEYBYTES: crypto_sign_PUBLICKEYBYTES,
+        crypto_sign_SECRETKEYBYTES: crypto_sign_SECRETKEYBYTES,
+        crypto_sign_SEEDBYTES: crypto_sign_SEEDBYTES,
+        crypto_hash_BYTES: crypto_hash_BYTES
+      }
+
+      /* High-level API */
+
+      function checkLengths(k, n) {
+        if (k.length !== crypto_secretbox_KEYBYTES)
+          throw new Error('bad key size')
+        if (n.length !== crypto_secretbox_NONCEBYTES)
+          throw new Error('bad nonce size')
+      }
+
+      function checkBoxLengths(pk, sk) {
+        if (pk.length !== crypto_box_PUBLICKEYBYTES)
+          throw new Error('bad public key size')
+        if (sk.length !== crypto_box_SECRETKEYBYTES)
+          throw new Error('bad secret key size')
+      }
+
+      function checkArrayTypes() {
+        for (var i = 0; i < arguments.length; i++) {
+          if (!(arguments[i] instanceof Uint8Array))
+            throw new TypeError('unexpected type, use Uint8Array')
+        }
+      }
+
+      function cleanup(arr) {
+        for (var i = 0; i < arr.length; i++) arr[i] = 0
+      }
+
+      nacl.randomBytes = function (n) {
+        var b = new Uint8Array(n)
+        randombytes(b, n)
+        return b
+      }
+
+      nacl.secretbox = function (msg, nonce, key) {
+        checkArrayTypes(msg, nonce, key)
+        checkLengths(key, nonce)
+        var m = new Uint8Array(crypto_secretbox_ZEROBYTES + msg.length)
+        var c = new Uint8Array(m.length)
+        for (var i = 0; i < msg.length; i++)
+          m[i + crypto_secretbox_ZEROBYTES] = msg[i]
+        crypto_secretbox(c, m, m.length, nonce, key)
+        return c.subarray(crypto_secretbox_BOXZEROBYTES)
+      }
+
+      nacl.secretbox.open = function (box, nonce, key) {
+        checkArrayTypes(box, nonce, key)
+        checkLengths(key, nonce)
+        var c = new Uint8Array(crypto_secretbox_BOXZEROBYTES + box.length)
+        var m = new Uint8Array(c.length)
+        for (var i = 0; i < box.length; i++)
+          c[i + crypto_secretbox_BOXZEROBYTES] = box[i]
+        if (c.length < 32) return null
+        if (crypto_secretbox_open(m, c, c.length, nonce, key) !== 0) return null
+        return m.subarray(crypto_secretbox_ZEROBYTES)
+      }
+
+      nacl.secretbox.keyLength = crypto_secretbox_KEYBYTES
+      nacl.secretbox.nonceLength = crypto_secretbox_NONCEBYTES
+      nacl.secretbox.overheadLength = crypto_secretbox_BOXZEROBYTES
+
+      nacl.scalarMult = function (n, p) {
+        checkArrayTypes(n, p)
+        if (n.length !== crypto_scalarmult_SCALARBYTES)
+          throw new Error('bad n size')
+        if (p.length !== crypto_scalarmult_BYTES) throw new Error('bad p size')
+        var q = new Uint8Array(crypto_scalarmult_BYTES)
+        crypto_scalarmult(q, n, p)
+        return q
+      }
+
+      nacl.scalarMult.base = function (n) {
+        checkArrayTypes(n)
+        if (n.length !== crypto_scalarmult_SCALARBYTES)
+          throw new Error('bad n size')
+        var q = new Uint8Array(crypto_scalarmult_BYTES)
+        crypto_scalarmult_base(q, n)
+        return q
+      }
+
+      nacl.scalarMult.scalarLength = crypto_scalarmult_SCALARBYTES
+      nacl.scalarMult.groupElementLength = crypto_scalarmult_BYTES
+
+      nacl.box = function (msg, nonce, publicKey, secretKey) {
+        var k = nacl.box.before(publicKey, secretKey)
+        return nacl.secretbox(msg, nonce, k)
+      }
+
+      nacl.box.before = function (publicKey, secretKey) {
+        checkArrayTypes(publicKey, secretKey)
+        checkBoxLengths(publicKey, secretKey)
+        var k = new Uint8Array(crypto_box_BEFORENMBYTES)
+        crypto_box_beforenm(k, publicKey, secretKey)
+        return k
+      }
+
+      nacl.box.after = nacl.secretbox
+
+      nacl.box.open = function (msg, nonce, publicKey, secretKey) {
+        var k = nacl.box.before(publicKey, secretKey)
+        return nacl.secretbox.open(msg, nonce, k)
+      }
+
+      nacl.box.open.after = nacl.secretbox.open
+
+      nacl.box.keyPair = function () {
+        var pk = new Uint8Array(crypto_box_PUBLICKEYBYTES)
+        var sk = new Uint8Array(crypto_box_SECRETKEYBYTES)
+        crypto_box_keypair(pk, sk)
+        return { publicKey: pk, secretKey: sk }
+      }
+
+      nacl.box.keyPair.fromSecretKey = function (secretKey) {
+        checkArrayTypes(secretKey)
+        if (secretKey.length !== crypto_box_SECRETKEYBYTES)
+          throw new Error('bad secret key size')
+        var pk = new Uint8Array(crypto_box_PUBLICKEYBYTES)
+        crypto_scalarmult_base(pk, secretKey)
+        return { publicKey: pk, secretKey: new Uint8Array(secretKey) }
+      }
+
+      nacl.box.publicKeyLength = crypto_box_PUBLICKEYBYTES
+      nacl.box.secretKeyLength = crypto_box_SECRETKEYBYTES
+      nacl.box.sharedKeyLength = crypto_box_BEFORENMBYTES
+      nacl.box.nonceLength = crypto_box_NONCEBYTES
+      nacl.box.overheadLength = nacl.secretbox.overheadLength
+
+      nacl.sign = function (msg, secretKey) {
+        checkArrayTypes(msg, secretKey)
+        if (secretKey.length !== crypto_sign_SECRETKEYBYTES)
+          throw new Error('bad secret key size')
+        var signedMsg = new Uint8Array(crypto_sign_BYTES + msg.length)
+        crypto_sign(signedMsg, msg, msg.length, secretKey)
+        return signedMsg
+      }
+
+      nacl.sign.open = function (signedMsg, publicKey) {
+        checkArrayTypes(signedMsg, publicKey)
+        if (publicKey.length !== crypto_sign_PUBLICKEYBYTES)
+          throw new Error('bad public key size')
+        var tmp = new Uint8Array(signedMsg.length)
+        var mlen = crypto_sign_open(tmp, signedMsg, signedMsg.length, publicKey)
+        if (mlen < 0) return null
+        var m = new Uint8Array(mlen)
+        for (var i = 0; i < m.length; i++) m[i] = tmp[i]
+        return m
+      }
+
+      nacl.sign.detached = function (msg, secretKey) {
+        var signedMsg = nacl.sign(msg, secretKey)
+        var sig = new Uint8Array(crypto_sign_BYTES)
+        for (var i = 0; i < sig.length; i++) sig[i] = signedMsg[i]
+        return sig
+      }
+
+      nacl.sign.detached.verify = function (msg, sig, publicKey) {
+        checkArrayTypes(msg, sig, publicKey)
+        if (sig.length !== crypto_sign_BYTES)
+          throw new Error('bad signature size')
+        if (publicKey.length !== crypto_sign_PUBLICKEYBYTES)
+          throw new Error('bad public key size')
+        var sm = new Uint8Array(crypto_sign_BYTES + msg.length)
+        var m = new Uint8Array(crypto_sign_BYTES + msg.length)
+        var i
+        for (i = 0; i < crypto_sign_BYTES; i++) sm[i] = sig[i]
+        for (i = 0; i < msg.length; i++) sm[i + crypto_sign_BYTES] = msg[i]
+        return crypto_sign_open(m, sm, sm.length, publicKey) >= 0
+      }
+
+      nacl.sign.keyPair = function () {
+        var pk = new Uint8Array(crypto_sign_PUBLICKEYBYTES)
+        var sk = new Uint8Array(crypto_sign_SECRETKEYBYTES)
+        crypto_sign_keypair(pk, sk)
+        return { publicKey: pk, secretKey: sk }
+      }
+
+      nacl.sign.keyPair.fromSecretKey = function (secretKey) {
+        checkArrayTypes(secretKey)
+        if (secretKey.length !== crypto_sign_SECRETKEYBYTES)
+          throw new Error('bad secret key size')
+        var pk = new Uint8Array(crypto_sign_PUBLICKEYBYTES)
+        pk = derivePublicFromSecret(secretKey)
+        return { publicKey: pk, secretKey: new Uint8Array(secretKey) }
+      }
+
+      nacl.sign.keyPair.fromSeed = function (seed) {
+        checkArrayTypes(seed)
+        if (seed.length !== crypto_sign_SEEDBYTES)
+          throw new Error('bad seed size')
+        var pk = new Uint8Array(crypto_sign_PUBLICKEYBYTES)
+        var sk = new Uint8Array(crypto_sign_SECRETKEYBYTES)
+        for (var i = 0; i < 32; i++) sk[i] = seed[i]
+        crypto_sign_keypair(pk, sk, true)
+        return { publicKey: pk, secretKey: sk }
+      }
+
+      nacl.sign.publicKeyLength = crypto_sign_PUBLICKEYBYTES
+      nacl.sign.secretKeyLength = crypto_sign_SECRETKEYBYTES
+      nacl.sign.seedLength = crypto_sign_SEEDBYTES
+      nacl.sign.signatureLength = crypto_sign_BYTES
+
+      nacl.hash = function (msg) {
+        checkArrayTypes(msg)
+        var h = new Uint8Array(crypto_hash_BYTES)
+        crypto_hash(h, msg, msg.length)
+        return h
+      }
+
+      nacl.hash.hashLength = crypto_hash_BYTES
+
+      nacl.verify = function (x, y) {
+        checkArrayTypes(x, y)
+        // Zero length arguments are considered not equal.
+        if (x.length === 0 || y.length === 0) return false
+        if (x.length !== y.length) return false
+        return vn(x, 0, y, 0, x.length) === 0 ? true : false
+      }
+
+      nacl.setPRNG = function (fn) {
+        randombytes = fn
+      }
+      ;(function () {
+        // Initialize PRNG if environment provides CSPRNG.
+        // If not, methods calling randombytes will throw.
+        var crypto =
+          typeof self !== 'undefined' ? self.crypto || self.msCrypto : null
+        if (crypto && crypto.getRandomValues) {
+          // Browsers.
+          var QUOTA = 65536
+          nacl.setPRNG(function (x, n) {
+            var i,
+              v = new Uint8Array(n)
+            for (i = 0; i < n; i += QUOTA) {
+              crypto.getRandomValues(v.subarray(i, i + Math.min(n - i, QUOTA)))
+            }
+            for (i = 0; i < n; i++) x[i] = v[i]
+            cleanup(v)
+          })
+        } else if (typeof require !== 'undefined') {
+          // Node.js.
+          crypto = require('crypto')
+          if (crypto && crypto.randomBytes) {
+            nacl.setPRNG(function (x, n) {
+              var i,
+                v = crypto.randomBytes(n)
+              for (i = 0; i < n; i++) x[i] = v[i]
+              cleanup(v)
+            })
+          }
+        }
+      })()
+    })(
+      typeof module !== 'undefined' && module.exports
+        ? module.exports
+        : (self.nacl = self.nacl || {})
+    )
+  </script>
+  <script type="text/javascript">
+    //forked including z-base-32 PR https://github.com/termhn/rai-wallet/blob/8343d22b2709561c9d4d098af1ed0a0c95c6bbca/src/functions.js on 2018-03-06
+    // general functions
+
+    /*
+var blake = require('blakejs');
+var nanoBase32 = require('nano-base32')
+*/
+
+    stringFromHex = function (hex) {
+      var hex = hex.toString() //force conversion
+      var str = ''
+      for (var i = 0; i < hex.length; i += 2)
+        str += String.fromCharCode(parseInt(hex.substr(i, 2), 16))
+      return str
+    }
+
+    stringToHex = function (str) {
+      var hex = ''
+      for (var i = 0; i < str.length; i++) {
+        hex += '' + str.charCodeAt(i).toString(16)
+      }
+      return hex
+    }
+
+    accountFromHexKey = function (hex) {
+      var key_bytes = hex_uint8(hex)
+      var checksum_bytes = blake2b(key_bytes, null, 5).reverse()
+      var checksum = encode(checksum_bytes)
+      var c_account = encode(key_bytes)
+      return 'xrb_' + c_account + checksum
+    }
+
+    parseXRBAccount = function (str) {
+      var i = str.indexOf('xrb_')
+      if (i != -1) {
+        var acc = str.slice(i, i + 64)
+        try {
+          keyFromAccount(acc)
+          return acc
+        } catch (e) {
+          return false
+        }
+      }
+      return false
+    }
+
+    dec2hex = function (str, bytes = null) {
+      var dec = str.toString().split(''),
+        sum = [],
+        hex = [],
+        i,
+        s
+      while (dec.length) {
+        s = 1 * dec.shift()
+        for (i = 0; s || i < sum.length; i++) {
+          s += (sum[i] || 0) * 10
+          sum[i] = s % 16
+          s = (s - sum[i]) / 16
+        }
+      }
+      while (sum.length) {
+        hex.push(sum.pop().toString(16))
+      }
+
+      hex = hex.join('')
+
+      if (hex.length % 2 != 0) hex = '0' + hex
+
+      if (bytes > hex.length / 2) {
+        var diff = bytes - hex.length / 2
+        for (var i = 0; i < diff; i++) hex = '00' + hex
+      }
+
+      return hex
+    }
+
+    hex2dec = function (s) {
+      function add(x, y) {
+        var c = 0,
+          r = []
+        var x = x.split('').map(Number)
+        var y = y.split('').map(Number)
+        while (x.length || y.length) {
+          var s = (x.pop() || 0) + (y.pop() || 0) + c
+          r.unshift(s < 10 ? s : s - 10)
+          c = s < 10 ? 0 : 1
+        }
+        if (c) r.unshift(c)
+        return r.join('')
+      }
+
+      var dec = '0'
+      s.split('').forEach(function (chr) {
+        var n = parseInt(chr, 16)
+        for (var t = 8; t; t >>= 1) {
+          dec = add(dec, dec)
+          if (n & t) dec = add(dec, '1')
+        }
+      })
+      return dec
+    }
+
+    hex_uint8 = function (hex) {
+      var length = (hex.length / 2) | 0
+      var uint8 = new Uint8Array(length)
+      for (let i = 0; i < length; i++)
+        uint8[i] = parseInt(hex.substr(i * 2, 2), 16)
+      return uint8
+    }
+
+    uint8_hex = function (uint8) {
+      var hex = ''
+      let aux
+      for (let i = 0; i < uint8.length; i++) {
+        aux = uint8[i].toString(16).toUpperCase()
+        if (aux.length == 1) aux = '0' + aux
+        hex += aux
+        aux = ''
+      }
+      return hex
+    }
+
+    uint4_hex = function (uint4) {
+      var hex = ''
+      for (let i = 0; i < uint4.length; i++)
+        hex += uint4[i].toString(16).toUpperCase()
+      return hex
+    }
+
+    function equal_arrays(array1, array2) {
+      for (let i = 0; i < array1.length; i++) {
+        if (array1[i] != array2[i]) return false
+      }
+      return true
+    }
+
+    keyFromAccount = function (account) {
+      if (
+        ((account.startsWith('nano_1') || account.startsWith('nano_3')) &&
+          account.length == 65) ||
+        ((account.startsWith('ban_1') || account.startsWith('ban_3')) &&
+          account.length == 64) ||
+        ((account.startsWith('xrb_1') || account.startsWith('xrb_3')) &&
+          account.length == 64)
+      ) {
+        var account_crop = account.slice(-60)
+        var isValid = /^[13456789abcdefghijkmnopqrstuwxyz]+$/.test(account_crop)
+        if (isValid) {
+          var key_bytes = decode(account_crop.substring(0, 52))
+          var hash_bytes = decode(account_crop.substring(52, 60))
+          var blake_hash = blake2b(key_bytes, null, 5).reverse()
+          if (equal_arrays(hash_bytes, blake_hash)) {
+            var key = uint8_hex(key_bytes).toUpperCase()
+            return key
+          } else throw 'Checksum incorrect. Typo?'
+        } else throw 'Illegal characters found.'
+      }
+      throw 'Invalid account.'
+    }
+  </script>
+  <meta name="robots" content="noarchive" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="64x64" />
+
+  <nano-donate
+    data-address="nano_3too1sgot4c9h3zqsgk7tknh3cazcj5q7x7mn4kmh3ng76q6pqzth55ibhnh"
+    data-address-owner="Renesq @ Nanoo.Tools"
+  ></nano-donate>
+  <meta property="og:title" content=" " />
+  <meta property="og:description" content=" " />
+  <meta
+    property="og:image"
+    content="http://static.nanoo.tools/og-logo-tools.png"
+  />
+
+  <style>
+    @media print {
+      @page {
+        size: auto; /* auto is the current printer page size */
+        margin: 0mm; /* this affects the margin in the printer settings. will also remove the title and date from print. */
+      }
+      form,
+      h1,
+      h2,
+      h3,
+      h4,
+      hr,
+      #introduction,
+      .meta,
+      aside,
+      header,
+      footer,
+      nav,
+      #print {
+        display: none;
+      }
+      .no-break {
+        page-break-inside: avoid;
+      }
+      * {
+        font-family: Trebuchet, Verdana;
+      }
+    }
+  </style>
+
+  <script type="text/javascript">
+    // initializing counter
+    var walletsonpage = 0
+
+    // iterator for one-click multi-wallet-generation
+    function generateall() {
+      var amountelement = document.getElementById('amount')
+      var amount = amountelement.options[amountelement.selectedIndex].value
+      for (i = 0; i < amount; i++) {
+        addwallet()
+      }
+    }
+
+    // This is where the magic happens
+    function addwallet() {
+      // fetching address prefix
+      var prefixelement = document.getElementById('network')
+      var prefix = prefixelement.options[prefixelement.selectedIndex].value
+      var prefixwithunderscore = prefix + '_'
+
+      // setting URI style
+      var qrcontentselement = document.getElementById('uristyle')
+      var qrcontents =
+        qrcontentselement.options[qrcontentselement.selectedIndex].value
+      if (qrcontents == 'noprefix') {
+        var seeduriprefix = ''
+        var accounturiprefix = ''
+      } else {
+        var seeduriprefix = prefix + 'seed' + ':'
+        var accounturiprefix = prefix + ':'
+      }
+
+      // Randomized account generation
+      var seedbytes = nacl.randomBytes(32)
+      var index = 0
+      var indexbytes = hex_uint8(dec2hex(index, 4)) // converts the starting index int to a hex string first, then make it a byte sequence
+      var context = blake2bInit(32) // initialize hashing
+      blake2bUpdate(context, seedbytes) // add first part of the concatenation
+      blake2bUpdate(context, indexbytes) // add second part of the concatenation
+      var privkey = blake2bFinal(context) // resulting hash is the private key of each address
+      var account = accountFromHexKey(
+        uint8_hex(nacl.sign.keyPair.fromSecretKey(privkey).publicKey)
+      ) // use NACL to get the public key byte sequence and convert it to a HEX string
+      var adjustedaccount = account.replace('xrb_', prefixwithunderscore) // prefix adjustments as specified in the form
+      var seedhex = uint8_hex(seedbytes)
+
+      // csv output
+      var listselectorelement = document.getElementById('list')
+      var listselector =
+        listselectorelement.options[listselectorelement.selectedIndex].value
+      if (listselector == 'seedandaccount') {
+        document.getElementById('generatedkeys').innerHTML += seedhex + ','
+      }
+      document.getElementById('generatedkeys').innerHTML +=
+        adjustedaccount + '\n'
+
+      // updating counter
+      walletsonpage += 1
+      document.getElementById('generatedwallets').innerHTML = walletsonpage
+
+      // enable print button
+      document.getElementById('print').style.visibility = 'visible'
+
+      // generating a new wallet wrapper div
+      var frameelement = document.getElementById('allwallets')
+      var newwalletelement = document.createElement('div')
+      newwalletelement.id = 'wallet' + walletsonpage
+      newwalletelement.setAttribute('class', 'no-break')
+      if (walletsonpage % 2) {
+        newwalletelement.setAttribute(
+          'style',
+          'float:left; width: 98mm; overflow: hidden; border-bottom: 1px dashed #E6E6E6; padding:2mm; '
+        )
+      } else {
+        newwalletelement.setAttribute(
+          'style',
+          'float:left; width: 98mm; overflow: hidden; border: 1px dashed #E6E6E6; border-top: none; border-right:none; padding:2mm; '
+        )
+      }
+
+      // adding the message wrapper div
+      if (document.getElementById('textfield').value != '') {
+        var newmessageelement = document.createElement('div')
+        newmessageelement.id = 'message' + walletsonpage
+        newwalletelement.appendChild(newmessageelement)
+        newmessageelement.setAttribute(
+          'style',
+          'word-break: break-word; max-width: 98mm; overflow:hidden; padding: 0.35em 2em .9em 2em'
+        )
+        newmessageelement.innerHTML = document.getElementById('textfield').value
+      }
+
+      // adding the seed wrapper div
+      var newseedelement = document.createElement('div')
+      newseedelement.id = 'seed' + walletsonpage
+      newwalletelement.appendChild(newseedelement)
+
+      // adding the account wrapper div
+      var newaccountelement = document.createElement('div')
+      newaccountelement.id = 'account' + walletsonpage
+      newwalletelement.appendChild(newaccountelement)
+
+      // place wallet wrapper div in DOM
+      frameelement.appendChild(newwalletelement)
+
+      // adjust output for selected coin
+      var network
+      switch (prefix) {
+        case 'nano':
+          network = 'NANO'
+          break
+        case 'ban':
+          network = 'BANANO'
+          break
+        case 'usd':
+          network = 'NOLLAR'
+          break
+      }
+
+      // apply text and style to seed wrapper
+      newseedelement.innerHTML = network + ' Seed<br />'
+      newseedelement.setAttribute(
+        'style',
+        'display: inline-block; padding: 0; width: 46mm; text-align: center;  '
+      )
+
+      // apply text and style to account wrapper
+      newaccountelement.innerHTML = network + ' Account<br />'
+      newaccountelement.setAttribute(
+        'style',
+        'display: inline-block;  padding: 0;  width: 46mm; text-align: center;  '
+      )
+
+      //seed QR generation
+      var seeddataUriSvgImage = document.createElement('img'),
+        u = seeduriprefix + seedhex,
+        s = QRCode.generateSVG(u, {
+          ecclevel: 'H',
+          fillcolor: '#FFFFFF',
+          textcolor: '#373737',
+          margin: 1,
+          modulesize: 8
+        })
+      var XMLS = new XMLSerializer()
+      s = XMLS.serializeToString(s)
+      s =
+        'data:image/svg+xml;base64,' +
+        window.btoa(unescape(encodeURIComponent(s)))
+      seeddataUriSvgImage.src = s
+      seeddataUriSvgImage.setAttribute('style', 'width:35mm')
+      document
+        .getElementById('seed' + walletsonpage)
+        .appendChild(seeddataUriSvgImage)
+
+      //account QR generation
+      var accountdataUriSvgImage = document.createElement('img'),
+        u = accounturiprefix + adjustedaccount,
+        s = QRCode.generateSVG(u, {
+          ecclevel: 'M',
+          fillcolor: '#FFFFFF',
+          textcolor: '#373737',
+          margin: 1,
+          modulesize: 8
+        })
+      var XMLS = new XMLSerializer()
+      s = XMLS.serializeToString(s)
+      s =
+        'data:image/svg+xml;base64,' +
+        window.btoa(unescape(encodeURIComponent(s)))
+      accountdataUriSvgImage.src = s
+      accountdataUriSvgImage.setAttribute('style', 'width:35mm')
+      document
+        .getElementById('account' + walletsonpage)
+        .appendChild(accountdataUriSvgImage)
+    }
+
+    // helper function for seed index generation
+    hex_uint8 = function (hex) {
+      var length = (hex.length / 2) | 0
+      var uint8 = new Uint8Array(length)
+      for (let i = 0; i < length; i++)
+        uint8[i] = parseInt(hex.substr(i * 2, 2), 16)
+      return uint8
+    }
+  </script>
+</head>
+<body>
+  <header id="pageHeader">
+    <h1>
+      <a href="https://nanoo.tools"
+        >nanoo.tools - Unofficial Nano Currency Developer Wiki + Toolbox</a
+      >
+    </h1>
+  </header>
+  <article id="mainArticle">
+    <section class="meta">
+      <h2>Fluff-free, lighweight paper wallet generator V1.0</h2>
+      <p>
+        With this tool, you can mass-generate printer-friendly QR codes either
+        for yourself, or gift them to friends, family and strangers. Just choose
+        a coin, click "generate", print the page, and load the account with
+        funds. Every generated code is unique and random. I will soon release a
+        tool for mass-sending of funds to paperwallets.
+      </p>
+
+      <hr style="clear: both" />
+      <form id="generator-meta">
+        Network:
+        <select id="network">
+          <option value="nano" selected="selected">NANO</option>
+          <option value="ban">BANANO</option>
+          <option value="usd">NOLLAR</option>
+        </select>
+
+        <br />QR contents:
+        <select id="uristyle">
+          <option value="noprefix" selected="selected">
+            QR contains the plain string
+          </option>
+          <option value="prefix">Add URI prefix to QR</option>
+        </select>
+
+        <br />Design:
+        <select id="design">
+          <!-- <option value="8" >8 wallets per A4/Letter, show QR + plain text, single-sided sheet</option>   -->
+          <option value="12" selected="selected">
+            default (up to 12 wallets per A4/Letter)
+          </option>
+        </select>
+        <br />
+        Add an individual message (optional):
+        <input
+          type="text"
+          id="textfield"
+          onkeyup=""
+          autocomplete="on"
+          class="form64"
+          value=""
+        />
+
+        <br />CSV output:
+        <select id="list">
+          <option value="seedandaccount">
+            List generated seeds and accounts
+          </option>
+          <option value="account" selected="selected">
+            List all generated accounts
+          </option>
+        </select>
+
+        <br />Add
+        <select id="amount">
+          <option value="1" selected="selected">1</option>
+          <option value="10">10</option>
+        </select>
+        more paper wallets
+        <a
+          class="buttona buttongreen"
+          href="#"
+          role="button"
+          id="generate"
+          onclick="generateall(); return false;"
+          >generate paperwallets</a
+        >
+
+        <hr />
+        <p>
+          CSV list of generated wallets:
+          <br />
+          <textarea
+            id="generatedkeys"
+            style="
+              min-width: 90%;
+              max-width: 100%;
+              font-size: 9.5px;
+              height: 11em;
+            "
+          ></textarea>
+        </p>
+        <p>
+          Number of generated paper wallets:
+          <span id="generatedwallets">0</span>
+        </p>
+      </form>
+
+      <hr style="clear: both" />
+    </section>
+    <h4>Preview</h4>
+
+    <div
+      id="allwallets"
+      style="
+        width: 210mm;
+        min-height: 250mm;
+        overflow: auto;
+        color: black;
+        text-align: center;
+        background-color: white;
+      "
+    ></div>
+    <br />
+
+    <a
+      class="buttona meta"
+      href="#"
+      role="button"
+      id="print"
+      onclick="window.print(); return false;"
+      style="visibility: hidden"
+      >Print the paperwallets</a
+    >
+
+    <hr />
+    <br />
+
+    <p></p>
+
+    <span class="meta">
+      <a href="https://nanoo.tools/light-paperwallets"
+        >Link to the original online file path of this document</a
+      >
+    </span>
+  </article>
+  <aside id="sideBar">
+    <h3>Hint:</h3>
+    <p>
+      Most browsers will show an accurate print preview. You can adjust scaling
+      percentage in the print dialogue. Microsoft Edge may not print correctly.
+    </p>
+
+    <h3>Caution:</h3>
+    <p>
+      These paper wallets are not encrypted with a passphrase, so everyone who
+      had access to the seed may gain access to the funds. QR scanners and
+      cloud-enabled mobile keyboards may steal your data.
+    </p>
+    <p>
+      Generating your seed on websites is potentially unsafe. Even if the owner
+      of this site has good intentions, this site or your computer could get
+      hacked. For maximum security,
+      <a href="https://nanoo.tools/light-paperwallets?download=singlefile"
+        >download and use the offline version of this tool</a
+      >
+      and run it on a always-offline ("airgapped") computer, especially when
+      handling big sums.
+    </p>
+    <p>
+      Do not re-use seeds you got from elsewhere. Some wallets offer a
+      "sweeping" feature (In Natrium/Kalium: Settings &#x2794; "Load from paper
+      wallet").
+    </p>
+    <p>Use premium quality paper for best durability.</p>
+    <h3>Future plans:</h3>
+    <p>Adding seeds and accounts as text</p>
+  </aside>
+
+  <footer id="pageFooter">
+    This page was last modified on 2019-12-24. For bugs, suggestions and
+    discussion, you can join the
+    <a href="https://discord.gg/fNywyKx" style="color: #2a5678"
+      >Discord channel</a
+    >
+  </footer>
+</body>

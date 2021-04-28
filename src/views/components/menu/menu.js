@@ -34,6 +34,9 @@ export default class Menu extends React.Component {
               <Link to='/getting-started-users/storing/basics'>Storing</Link>
               <Link to='/getting-started-users/acquiring'>Acquiring</Link>
               <Link to='/getting-started-users/using'>Using</Link>
+              <Link to='/getting-started-users/storing/setup'>
+                Setup account
+              </Link>
               <Link to='/getting-started-users/best-practices'>
                 Best Practices
               </Link>
