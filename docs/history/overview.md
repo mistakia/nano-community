@@ -57,7 +57,28 @@ Similar to Satoshi's initial announcement, Colin's project garnered little atten
 
 ## Distribution
 
+Nano was given away for free to anyone willing to manually complete a captcha. Distribution began in 2015 and ended in October 2017, at which point the faucet had distributed 126,248,289 NANO.
+
+7,000,000 NANO (~5%) was set aside as a <a href="https://www.nanolooker.com/developer-fund" target="_blank">developer fund</a>, of which about ~300,000 Nano remain as of April 2021.
+
+Because the distribution process was conducted on-chain, it is publicly available to be reviewed and audited by looking at the <a href="https://nanex.cc/accountstats?account=nano_13ezf4od79h1tgj9aiu4djzcmmguendtjfuhwfukhuucboua8cpoihmh8byo" target="_blank">Landing Account</a>.
+
+A few notable statistics compiled by <a href="https://www.reddit.com/r/nanocurrency/comments/h7fmge/the_nano_faucet_distribution_visualized_and/" target="_blank">u/hanzyfranzy</a>:
+
+- The median faucet user got 192.76 Nano from the faucet.
+- There were a total of 130,814 faucet receive addresses.
+- The biggest faucet recipient received 1,724,105 Nano, likely from abusing the Captchas at the very beginning. These types of accounts appear to be very rare and they seem to have sold much of their Nano long before the initial runup in 2017.
+
+Nano's distribution is notable as 95% of the supply was given away for free. Nano has been fully distributed since 2017 and is now undergoing the process of redistribution through open markets.
+
 ## Bitgrail
+
+On 9 February 2018, the Italian cryptocurrency exchange BitGrail announced its shutdown after being hacked. There were unaccounted losses of 17 million Nano from its wallets, preventing users from accessing assets stored on the platform. The victims sought recoupment through the Italian court system, and supported by the Nano Foundation, launched a class-action suit against BitGrail owner Francesco Firano. In January 2019, the Court of Florence found Firano liable for the losses after discovering that the exchange had failed to implement any meaningful safeguards to ensure the safety of their customers' funds and failed to report losses from as early as July 2017.
+
+
+## Nano
+
+On 31 January 2018, RaiBlocks rebranded to Nano.
 
 ## Community
 
