@@ -151,6 +151,4 @@ A minimal block size allows for lightweight communication resulting in ultrafast
 
 **Nano is unlike Bitcoin:** is feeless, instant, irreversible, scalable, and energy-efficient. Making it inclusive to all people and sustainable for the planet. Nano's security and network is controlled only by its holders, as it doesn't rely on and empower miners.
 
-**Nano is an inclusive, peaceful revolution in money:** Not just an innovation in distributed network design, it is an innovation in money and freedom. It can be a powerful tool for free global commerce, one that protects the privacy of its users, and limits the power of abusive governments, and therefore, the violence that they can commit.
-
 <a href="https://blog.oleganza.com/post/85111558553/bitcoin-is-like" target="_blank">Inspired by "Bitcoin is like..." by Oleg Andreev</a>
