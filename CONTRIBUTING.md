@@ -1,18 +1,35 @@
 Nano.Community aims to be a community run project and is grateful to all that step up to contribute. You don't need permission to work on anything, but it's always best to let others know what you're planning to do. You can do this by:
 
 - Commenting on an [issue or PR in GitHub](https://github.com/mistakia/nano-community/issues)
-- Messaging on the [Nano Discord server](https://chat.nano.org/)
+- Messaging on the [Nano Discord server](https://chat.nano.org/) (cc: trashman#2397)
 
 Before contributing, make sure you're familiar with the [vision](https://github.com/mistakia/nano-community#nanocommunity) of Nano.Community
 
 ### Contributing content
 
+All you need is a GitHub account to contribute. Every page is a MarkDown file, which is an <a href="https://guides.github.com/features/mastering-markdown/" target="_blank">easy to learn syntax</a>.
+
+#### Submitting Edits
+
+- Use the "edit page" button on the site to navigate to the document on the github repository
+- Make sure to sign in or create a GitHub account
+- Once logged in, start editing by clicking the "edit file" icon in the top right
+- Make changes, then click "propose changes". On the next page click "Create Pull Request" to submit.
+
+#### Responding to Change Requests
+
+Occasionally, changes will be requested for proposed changes. Navigate to your pull request to respond with any questions or comments. To make changes, navigate to the branch you used on your fork, make changes and commit them. The pull request will then be automatically updated with those changes.
+
+#### Rules
+
 - [Write simply](http://www.paulgraham.com/simply.html)
 - Keep content for users concise
-- Direct users to existing content on the [official Nano documentation](https://docs.nano.org/)
+- When possible, Direct users to existing content on the [official Nano documentation](https://docs.nano.org/)
 - Use an impartial tone and neutral point of view. Content should be as objective as possible.
-- Pull requests are preferred to issues, especially for small changes such as typos. Issues should be used for generic or broad-based changes or missing content.
-- Smaller pull requests are preffered over a single large one.
+- Pull requests are preferred to issues, especially for small changes such as typos.
+- Issues should be used for generic or broad-based changes or missing content (i.e. suggesting a faq, or content section)
+- Smaller pull requests are preferred over a single large one.
+- Limit mentioning or using content that changes over time, to prevent content from going stale and needing updates
 
 ### Contributing code
 
@@ -75,7 +92,7 @@ git checkout -b new_feature_name
 yarn dev
 ```
 
-3. Before commiting your changes, make sure to run prettier, lint, and build.
+3. Before committing your changes, make sure to run prettier, lint, and build.
 
 ```
 yarn prettier
