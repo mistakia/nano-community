@@ -45,7 +45,6 @@ A set of community maintained documents made up of guides and wiki-style documen
 |   |-- documentation.md
 |   |-- getting-started.md
 |   |-- integrations.md
-|   |-- overview.md
 |   `-- running-a-node.md
 |-- getting-started-users
 |   |-- storing
@@ -54,6 +53,7 @@ A set of community maintained documents made up of guides and wiki-style documen
 |   |-- acquiring.md
 |   |-- basics.md
 |   |-- best-practices.md
+|   |-- privacy.md
 |   `-- using.md
 |-- history
 |   |-- community

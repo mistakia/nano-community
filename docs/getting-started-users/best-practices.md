@@ -6,7 +6,9 @@
 - Avoid closed source wallets
 - Never enter your secret key into a website
 - Never message or email your secret key or seed
-- Avoid re-using addresses
+- Avoid re-using addresses, use a new address for each receive
+- never type out an address, always copy, or scan a qr code, or use any other automated approach
+- double check addresses, you can check the first 5 and last 5 characters.
 
 #### Suggestions
 

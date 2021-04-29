@@ -51,9 +51,9 @@ To generate one on your own, you can download one of the following static websit
 
 To receive/send transactions and change your representative you will have to import your seed or secret key into a wallet.
 
-A recommended starter desktop wallet is <a href="https://github.com/Nault/Nault" target="_blank">Nault<a/>.
-
-<a href="https://natrium.io/" target="_blank">Natrium</a> is one of the more popular mobile wallets.
+- A recommended starter desktop wallet is <a href="https://github.com/Nault/Nault" target="_blank">Nault<a/>.
+- <a href="https://natrium.io/" target="_blank">Natrium</a> is one of the more popular mobile wallets.
+- <a href="https://github.com/codesoap/atto" target="_blank">Atto</a> is a simple, clean command line wallet
 
 For a comprehensive wallet guide visit <a href="https://nanowallets.guide/" target="_blank">nanowallets.guide</a>.
 
