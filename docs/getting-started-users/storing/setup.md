@@ -10,7 +10,7 @@ Before you get started make sure to understand some basic facts about [Nano](/ge
 
 ## Setup a password manager
 
-Regardless of what wallet you use, it is good practice to have it backed up. Using a password manager provides the best mix of convenience, security, and durability.
+Regardless of what wallet you use, it is good practice to have it backed up. Using a password manager to backup your seeds and secret keys provides the best mix of convenience, security, and durability.
 
 You should be using a password manager for other reasons anyways.
 

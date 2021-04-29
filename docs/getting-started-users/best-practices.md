@@ -6,6 +6,7 @@
 - Avoid closed source wallets
 - Never enter your secret key into a website
 - Never message or email your secret key or seed
+- Avoid re-using addresses
 
 #### Suggestions
 
