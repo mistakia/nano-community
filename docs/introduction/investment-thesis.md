@@ -24,7 +24,8 @@ Like with any new technology, it is not worth very much until it is worth a lot.
 
 In the meantime, critics will continually reference its lack of use by ordinary consumers and merchants, while overlooking its potential use. Over time, more and more consumers and merchants will adopt it as developers rapidly improve it's useability to make it more accessible. The Internet was at first hard to use and now everyone is using it.
 
-In 1999, the legendary economist Milton Friedman said: “One thing that’s missing but will soon be developed is a reliable e-cash, a method whereby on the Internet you can transfer funds from A to B without A knowing B or B knowing A – the way I can take a $20 bill and hand it over to you, and you may get that without knowing who I am.”
+> One thing that’s missing but will soon be developed is a reliable e-cash, a method whereby on the Internet you can transfer funds from A to B without A knowing B or B knowing A – the way I can take a $20 bill and hand it over to you, and you may get that without knowing who I am.
+> <cite>— Milton Friedman in 1999</cite> > <small>one of the most influential economists of the 1900s</small>
 
 ### Nano's properties create a strong positive feedback loop
 
