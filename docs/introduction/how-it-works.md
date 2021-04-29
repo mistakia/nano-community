@@ -1,3 +1,5 @@
+# How it works
+
 Nano is a <a href="https://en.wikipedia.org/wiki/Decentralized_computing#Peer-to-peer" target="_blank">decentralized protocol</a> run by node operators, services, and users. A decentralized protocol is a set of rules and standards that allows for a network of computers to communicate and collectively manage a distributed ledger without having to trust one another.
 
 ### What is a distributed ledger?
