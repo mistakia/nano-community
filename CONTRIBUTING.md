@@ -22,14 +22,14 @@ Occasionally, changes will be requested for proposed changes. Navigate to your p
 
 #### Rules
 
-- [Write simply](http://www.paulgraham.com/simply.html)
-- Keep content for users concise, while detailed for developers
-- When possible, direct users to existing content on the [official Nano documentation](https://docs.nano.org/)
-- Use an impartial tone and neutral point of view. Content should be as objective as possible.
-- Pull requests are preferred to issues, especially for small changes such as typos.
-- Issues should be used for generic or broad-based changes or missing content (i.e. suggesting a faq, or content section)
-- Smaller pull requests are preferred over a single large one.
-- Limit mentioning or using content that changes over time, to prevent content from going stale and needing updates
+1. [Write simply](http://www.paulgraham.com/simply.html)
+1. Keep content for users concise, while detailed for developers
+1. When possible, direct users to existing content on the [official Nano documentation](https://docs.nano.org/)
+1. Use an impartial tone and neutral point of view. Content should be as objective as possible.
+1. Pull requests are preferred to issues, especially for small changes such as typos.
+1. Issues should be used for generic or broad-based changes or missing content (i.e. suggesting a faq, or content section)
+1. Smaller pull requests are preferred over a single large one.
+1. Limit mentioning or using content that changes over time, to prevent content from going stale and needing updates
 
 ### Contributing code
 
