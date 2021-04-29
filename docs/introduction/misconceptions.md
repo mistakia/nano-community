@@ -13,6 +13,22 @@ Nano does not use a synchronous blockchain and therefore does not need to incent
 
 Many people also conflate a "node" and a "miner". The former is not incentivized, it is only the later that is incentivized. The incentives and reasons to run a node in Bitcoin and Nano are the same. In both cases, the low cost of running a node allows people to run them to use the network without having to trust or rely on anybody else. The advantage in Nano's case is that it doesn't cost much more to run a node that also secures the network, whereas the cost to run miners to secure the bitcoin network is prohibitive and left to those who can profit from doing so.
 
+### The best technology does not always win
+
+This is a common retort and while it has some truth to it, it is something that mostly applies to start-ups, products and companies.
+
+Nano is none of those.
+
+But what about the format wars, like <a href="https://en.wikipedia.org/wiki/Videotape_format_war" target="_blank">VHS vs Betamax</a> and <a href="https://en.wikipedia.org/wiki/High-definition_optical_disc_format_war" target="_blank">Blu-ray vs HD DVD</a>?
+
+> Betamax is, in theory, a superior recording format over VHS due to resolution (250 lines vs. 240 lines), slightly superior sound, and a more stable image; Betamax recorders were also of higher-quality construction. However, these differences were negligible to consumers, and thus did not justify either the extra cost of a Betamax VCR (which was often significantly more expensive than a VHS equivalent) or Betamax's shorter recording time.
+
+In short, Betamax lost because it wasn't perceivably better. It's advantages were not noticeable to consumers and it was more expensive, making it perceivably worse.
+
+**You can't just have better stats, you need to have the right stats that are better.** Making improvements in areas that won't have an impact on consumers will go unnoticed.
+
+Nano is cheaper, faster, and more energy-efficient. These are not just better stats, these are the right stats. And even if this is not perceivable by consumers, it will not go unnoticed by profit driven market forces looking to save time and money.
+
 ### Nano is too volatile to be a store of value or currency
 
 All currencies (i.e. fiat money) are <a href="https://en.wikipedia.org/wiki/Foreign_exchange_market" target="_blank">volatile</a>. It is not noticeable when it is widely adopted and denominated.
