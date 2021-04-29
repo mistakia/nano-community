@@ -1,3 +1,5 @@
+# Introduction
+
 Nano (NANO), formerly RaiBlocks (XRB), is a peer-to-peer digital currency that enables free, instant, and sustainable value transfer to anyone, anywhere in the world. It operates without intermediaries, using a distributed ledger with a unique block-lattice data structure collectively managed by a peer-to-peer network.
 
 Nano was launched in October 2015 by Colin LeMahieu to address the limitations in existing digital currencies that prevented large scale adoption and would result in restrictive fees and increased transaction confirmation times during congestion. Nano's scalability is not limited by its protocol and aims to have feeless transactions that typically achieve full confirmation in under one second.
