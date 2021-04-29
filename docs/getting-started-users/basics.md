@@ -32,13 +32,13 @@ You should know the maintainer and why they are running a node/representative. A
 - Below 1 % of total voting weight
 - Not been newly created
 
-If you don’t know any node maintainers, <a href="https://mynano.ninja/" target="_blank">My Nano Ninja</a> can help you find one.
+If you don’t know any node maintainers, <a href="https://mynano.ninja/" target="_blank">My Nano Ninja</a> or <a href="https://nanocharts.info/need-a-representative" target="_blank">nanocharts.info</a> can help you find one.
 
 ## Privacy
 
 Nano puts you in control of your privacy. It then becomes your responsibility and choice when you reveal it. All transactions are stored publicly and permanently on the network, which means anyone can see the balance and transactions of any account. However, the identity of the user behind an account remains unknown until information is revealed during a purchase or in other circumstances. This is one reason why an account should only be used once. It is your responsibility to adopt good practices and use services that protect your privacy.
 
-Read more about protecting your [privacy](/getting-started-users/using).
+Read more about protecting your [privacy](/getting-started-users/privacy).
 
 ## Nano payments are irreversible
 

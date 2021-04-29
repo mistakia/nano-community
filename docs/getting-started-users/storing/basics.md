@@ -73,6 +73,7 @@ Determining the right self-custody approach depends on how you intend to use it.
   - online
   - mobile
   - desktop
+  - command line
 - Paper
   - metal
   - password manager
