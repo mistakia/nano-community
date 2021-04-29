@@ -55,11 +55,18 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 | <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>                                      | 0.1%      | 0.1%      | 0.01 Nano      |
 | <a href="https://account.bitvavo.com/markets/NANO-EUR" target="_blank">Bitvavo.com</a>                       | 0.15%     | 0.25%     | 0.00025 Nano   |
 
+#### India
+
+| Exchange                                                                   | Maker Fee | Taker Fee | Withdrawal Fee |
+| -------------------------------------------------------------------------- | --------- | --------- | -------------- |
+| <a href="https://wazirx.com/exchange/NANO-USDT" target="_blank">WazirX</a> | 0.2%      | 0.2%      | 3.1 NANO       |
+
 #### South Korea
 
-| Exchange                                                                                | Maker Fee | Taker Fee | Withdrawal Fee |
-| --------------------------------------------------------------------------------------- | --------- | --------- | -------------- |
-| <a href="https://www.probit.com/app/exchange/NANO-USDT" target="_blank">Binance.com</a> | 0.2%      | 0.2%      | Unknown        |
+| Exchange                                                                                    | Maker Fee | Taker Fee | Withdrawal Fee |
+| ------------------------------------------------------------------------------------------- | --------- | --------- | -------------- |
+| <a href="https://www.probit.kr/app/exchange/NANO-KRW" target="_blank">Probit.kr</a>         | 0.2%      | 0.2%      | Unknown        |
+| <a href="https://www.huobi.co.kr/en-us/exchange/nano_usdt/" target="_blank">Huobi.co.kr</a> | 0.1%      | 0.1%      | Unknown        |
 
 #### United Kingdom
 
