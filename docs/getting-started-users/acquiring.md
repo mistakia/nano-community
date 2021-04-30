@@ -19,7 +19,7 @@ In the meantime, there are two main ways to purchase Nano:
 - **exchange**: a marketplace for the buying and selling
 - **service**: a company that allows you to buy from them directly, more user-friendly but comes at a premium.
 
-<small>_Any exchanges or platforms listed below are in no way endorsed by myself or the Nano Foundation. Please do your own research before using any exchange or platform._</small>
+<small>_None of the exchanges or platforms listed below are endorsed by nano.community or the Nano Foundation. Please do your own research before using any exchange or platform._</small>
 
 At the moment, buying Nano with fiat money involves using a bank card, credit card or a bank transfer. There will generally be a premium for using a bank or credit card.
 
