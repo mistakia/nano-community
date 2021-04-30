@@ -91,7 +91,7 @@ Nano uses very little energy because it does not use Proof-of-Work to secure the
 
 ### Nano is fully distributed
 
-There is no inflation and has a Stock-To-Flow ratio of `undefined` since no new Nano will ever be created.
+There is no inflation and has an infinite Stock-To-Flow ratio since no new Nano will ever be created.
 
 ### Nano was fairly & ethically distributed
 
