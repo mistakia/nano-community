@@ -19,12 +19,12 @@ Shortly after, the Cypherpunks <a href="https://mailing-list-archive.cryptoanarc
 #### Cypherpunk manifest
 
 - privacy is necessary for an open society and requires anonymous transaction systems
-- the essence of privacy is not secrecy but rather control over ones secrets
-- believe in the free flow of information
+- the essence of privacy is not secrecy but rather control over ones personal information
+- belief in the free flow of information
 - privacy must be defended and fought for, it will not be granted
 - write code and publish it for free for others to use, learn from, attack, and improve
 
-Over the next decade, cypherpunks like Wei Dai, Hal Finney, Zooko Wilcox, Nick Szabo and Adam Back answered the call for action working on projects such as "bit gold", Rpow, Hashcash, and b-money.
+Over the next decade, cypherpunks like Wei Dai, Hal Finney, Zooko Wilcox, Nick Szabo and Adam Back pushed the movement forward by working on projects such as <a href="https://nakamotoinstitute.org/bit-gold/" target="_blank">bit gold</a>, <a href="https://nakamotoinstitute.org/finney/rpow/" target="_blank">Rpow</a>, <a href="http://www.hashcash.org/" target="_blank">Hashcash</a>, and <a href="http://www.weidai.com/bmoney.txt" target="_blank">b-money</a>.
 
 ## Bitcoin
 
@@ -47,7 +47,7 @@ As Bitcoin matured, several issues were identified that needed improvement in or
 
 2. High latency: Average confirmation times fluctuate between 10 and 300 minutes. In addition, most Bitcoin services require more than one confirmation before considering a transaction fully-settled,often requiring six confirmations which adds another 60 minutes.
 
-3. Power inefficient: The Bitcoin network consumes an estimated 67.26TWh per year (comparable to the power consumption of the Czech Republic), using an average of 570kWh per transaction
+3. Power inefficient: The Bitcoin network's power consumption grows with adoption. As of April 2021, it has reached an <a href="https://digiconomist.net/bitcoin-energy-consumption/" target="_blank">estimated 107.97TWh per year, using an average of 1111 kWh per transaction</a>. On a yearly basis, the bitcoin network consumes more energy than all but 38 countries, falling in line with countries like Finland, Chile and Austria.
 
 ## Raiblocks
 
