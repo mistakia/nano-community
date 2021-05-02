@@ -6,7 +6,7 @@ It is capable of being a strong <a href="https://en.wikipedia.org/wiki/Store_of_
 
 ### The importance of money
 
-The term <a href="https://en.wikipedia.org/wiki/Money" target="_blank">money</a> can be conflated with many things, including wealth, and it's most popular form <a href="https://en.wikipedia.org/wiki/Fiat_money" target="_blank">fiat money</a>. To understand its importance, one must understand its core function and why it matters for society.
+The term <a href="https://en.wikipedia.org/wiki/Money" target="_blank">money</a> can be conflated with many things like wealth and <a href="https://en.wikipedia.org/wiki/Fiat_money" target="_blank">fiat money</a>, it's most popular form. To understand its importance, one must understand its core function and why it matters for society.
 
 The core function of money is being a <a href="https://en.wikipedia.org/wiki/Medium_of_exchange" target="_blank">medium of exchange</a> that enables society to collaborate, cooperate, organize, specialize, and much more. Thus money, like communication, is foundational to society as it is a prerequisite for all complex cooperation. The concept of money was one of the first, and among the most important, collaborative innovations of mankind.
 
