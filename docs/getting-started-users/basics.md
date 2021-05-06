@@ -1,6 +1,6 @@
 ## Nano is experimental & under development
 
-Nano is an experimental new currency that is in active development. Each improvement makes Nano more appealing but can also reveals new challenges as it operates in uncharted waters. You might encounter slow or stalled confirmations, downtime, or even more severe issues.
+Nano is an experimental new currency that is in active development. Each improvement makes Nano more appealing but can also reveal new challenges as it operates in uncharted waters. You might encounter slow or stalled confirmations, downtime, or even more severe issues.
 
 Be prepared for problems.
 
