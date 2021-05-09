@@ -47,7 +47,7 @@ As Bitcoin matured, several issues were identified that needed improvement in or
 
 2. High latency: Average confirmation times fluctuate between 10 and 300 minutes. In addition, most Bitcoin services require more than one confirmation before considering a transaction fully-settled,often requiring six confirmations which adds another 60 minutes.
 
-3. Power inefficient: The Bitcoin network's power consumption grows with adoption. As of April 2021, it has reached an <a href="https://digiconomist.net/bitcoin-energy-consumption/" target="_blank">estimated 107.97TWh per year, using an average of 1111 kWh per transaction</a>. On a yearly basis, the bitcoin network consumes more energy than all but 38 countries, falling in line with countries like Finland, Chile and Austria.
+3. Power inefficient: The Bitcoin network's power consumption grows with its value. An increase in value will be followed by an increase in power consumption. As of April 2021, it has reached an <a href="https://digiconomist.net/bitcoin-energy-consumption/" target="_blank">estimated 107.97TWh per year, using an average of 1111 kWh per transaction</a>. On a yearly basis, the bitcoin network consumes more energy than all but 38 countries, falling in line with countries like Finland, Chile and Austria.
 
 ## Raiblocks
 
