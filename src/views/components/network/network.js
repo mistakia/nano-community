@@ -53,7 +53,7 @@ export default class Network extends React.Component {
             $
             {formatNumber(
               (
-                network.getIn(['stats', 'TOTAL_NANO_VOLUME_24H'], 0) *
+                network.getIn(['stats', 'TOTAL_VOLUME_24H'], 0) *
                 network.getIn(['stats', 'currentPrice'], 0)
               ).toFixed(0)
             )}
