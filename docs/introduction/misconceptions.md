@@ -61,6 +61,12 @@ It's a bad form of <a href="https://en.wikipedia.org/wiki/Fiat_money" target="_b
 - Scarcity: its supply in circulation must be limited.
 - Acceptability: widely accepted
 
+#### Functions of Money
+
+- Medium of Exchange — to transfer value
+- Store of Value — to hold value
+- Measure of Value — to measure value
+
 For a more detailed explanation read about its <a href="/introduction/advantages">advantages</a> and <a href="/introduction/why-it-matters">why it matters.</a>
 
 ### Nano is energy-efficient because nobody uses the network
