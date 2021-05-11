@@ -5,6 +5,8 @@ import { postlistReducer } from './postlist-reducer'
 
 export function postlistsReducer(state = new Map(), action) {
   switch (action.type) {
+    case postlistActions.GET_POSTS_PENDING:
+    case postlistActions.GET_POSTS_FAILED:
     case postlistActions.GET_POSTS_FULFILLED:
       return state.set(
         action.payload.params.id,
