@@ -17,15 +17,20 @@ import Menu from '@components/menu'
 import './doc.styl'
 
 export default class DocPage extends React.Component {
+  get path () {
+    const path = this.props.location.pathname
+    return path.endsWith('/') ? path.slice(0, -1) : path
+  }
+
   componentDidMount() {
-    this.props.getDoc(this.props.location.pathname)
+    this.props.getDoc(this.path)
   }
 
   componentDidUpdate(prevProps) {
     const location = JSON.stringify(this.props.location)
     const prevLocation = JSON.stringify(prevProps.location)
     if (location !== prevLocation) {
-      this.props.getDoc(this.props.location.pathname)
+      this.props.getDoc(this.path)
     }
   }
 
@@ -49,7 +54,7 @@ export default class DocPage extends React.Component {
      *   <Seo
      *     title="Docs"
      *     description="Docs"
-     *     path={this.props.location.pathname}
+     *     path={this.path}
      *   />
      * )
      */
@@ -88,12 +93,13 @@ export default class DocPage extends React.Component {
       return (
         <>
           <div
-            className='doc__content'
-            dangerouslySetInnerHTML={{ __html: html }}></div>
+            className='doc__content'>
+            <div dangerouslySetInnerHTML={{ __html: html }} />
+          </div>
           <div className='doc__content-side'>
             <Button
               variant='outlined'
-              href={`https://github.com/${REPO}/tree/main/docs/${this.props.location.pathname}.md`}
+              href={`https://github.com/${REPO}/tree/main/docs${this.path}.md`}
               target='_blank'
               className='doc__content-edit'>
               Edit Page
