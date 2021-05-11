@@ -5,14 +5,14 @@ const router = express.Router()
 router.get('/trending', async (req, res) => {
   const { db, logger, cache } = req.app.locals
   try {
-    const limit = Math.min(parseInt(req.query.limit || 100, 10), 100)
-    const excludedIds = (req.query.excludedIds || '').split(',')
+    const limit = 100 // Math.min(parseInt(req.query.limit || 100, 10), 100)
+    // const excludedIds = (req.query.excludedIds || '').split(',')
 
     // maximum age of a post (in hours)
-    const age = Math.min(parseInt(req.query.age || 72, 10), 168)
+    const age = 72 // Math.min(parseInt(req.query.age || 72, 10), 168)
 
     // rate at which a post score decays
-    const decay = parseInt(req.query.decay || 90000, 10)
+    const decay = 90000 // parseInt(req.query.decay || 90000, 10)
 
     const cachePosts = cache.get('trending')
     if (cachePosts) {
@@ -38,7 +38,7 @@ router.get('/trending', async (req, res) => {
     query.orderBy('strength', 'desc')
     // query.whereIn('sources.id', sourceIds)
     query.whereRaw('posts.created_at > (UNIX_TIMESTAMP() - ?)', age * 60 * 60)
-    if (excludedIds.length) query.whereNotIn('posts.id', excludedIds)
+    // if (excludedIds.length) query.whereNotIn('posts.id', excludedIds)
     query.groupBy('main_url')
 
     query.limit(limit)
@@ -58,13 +58,14 @@ router.get('/trending', async (req, res) => {
 router.get('/top', async (req, res) => {
   const { db, logger, cache } = req.app.locals
   try {
-    const offset = parseInt(req.query.offset || 0, 10)
-    const limit = parseInt(req.query.limit || 5, 10)
+    const offset = 0 // parseInt(req.query.offset || 0, 10)
+    const limit = 5 // parseInt(req.query.limit || 5, 10)
 
     // maximum age of a post (in hours)
     const age = parseInt(req.query.age || 168, 10)
 
-    const cachePosts = cache.get('top')
+    const cacheId = `top${age}`
+    const cachePosts = cache.get(cacheId)
     if (cachePosts) {
       return res.status(200).send(cachePosts)
     }
@@ -87,7 +88,7 @@ router.get('/top', async (req, res) => {
     query.limit(limit)
 
     const posts = await query
-    cache.set('top', posts)
+    cache.set(cacheId, posts)
     res.status(200).send(posts)
   } catch (error) {
     logger(error)
