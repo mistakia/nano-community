@@ -4,24 +4,26 @@ Nano, like Bitcoin, is a new form of money that's completely digital. Nano is no
 
 Nano, unlike Bitcoin, is scalable, fast, asynchronous, uses minimal energy, operates without any fees, has deterministic finality, and is secured and controlled only by its holders.
 
-#### Benefits over traditional money
+#### Benefits over traditional money (i.e. fiat, gold, etc)
 
 - decentralized
+- denationalized
 - instantly verifiable
-- limited supply
+- fixed supply / incorruptible monetary policy
 - divisible
 - durable / securable / low-cost of maintenance
 - accessible at all times
-- available globally
+- transportable / accessible globally
 - self-sovereign
 - privacy
+- natively digital
 
 #### Benefits over other digital money
 
 - feeless
 - asynchronous
 - scalable
-- energy-efficient
+- energy-efficient / sustainable
 - fully distributed supply
 - lightweight
 - low latency / ultrafast settlement
@@ -49,9 +51,11 @@ Unlike fiat money and gold, ownership and authenticity are instantly verifiable 
 
 ### Nano is scarce
 
-The supply is fixed and fully distributed. No new Nano will ever enter the market.
+The supply is fixed and fully distributed. The monetary policy is incorruptible, making it a reliable store of value. No new Nano will ever enter the market.
 
 There will only ever be a maximum of <a href="https://docs.nano.org/protocol-design/distribution-and-units/#distribution" target="_blank">~133,248,297 Nano</a>.
+
+Learn [why this matters](/introduction/why-it-matters) and is an essential function of money.
 
 ### Nano is highly divisible
 
