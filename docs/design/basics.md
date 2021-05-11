@@ -15,19 +15,20 @@ Consensus is reached through an algorithm similar to proof of stake named Open R
 
 This architecture allows Nano to function without direct monetary incentives to users or validators. Because certain entities benefit from the network indirectly (cryptocurrency exchanges through trading fees, merchants avoiding the fees associated with credit card companies, etc.), there is an interest to keep it healthy and decentralized by running a node. Since there is no direct incentive to accumulate voting weight, this also helps avoid the centralizing tendencies inherent to economies of scale such as traditional proof of work and proof of stake architectures.
 
-| Feature            | Nano                          |
-| ------------------ | ----------------------------- |
-| Ledger Structure   | Block-lattice                 |
-| Consensus          | Open Representative Voting    |
-| Hash Function      | Blake2                        |
-| Signing Algo       | ED25519                       |
-| Key Derivation     | Argon2                        |
-| Block Size         | 216 bytes                     |
-| Monetary Policy    | Fixed                         |
-| Inflation          | 0%                            |
-| Circulating supply | 133,248,297                   |
-| Total Supply       | 133,248,297                   |
-| Throughput Limit   | Unknown                       |
-| Fees               | No Fees                       |
-| Tx Prioritization  | Balance, Time since Use, PoW  |
-| Distribution       | Given away via Captcha Faucet |
+| Feature            | Nano                           |
+| ------------------ | ------------------------------ |
+| Ledger Structure   | Block-lattice                  |
+| Consensus          | Open Representative Voting     |
+| Hash Function      | Blake2                         |
+| Signing Algo       | ED25519                        |
+| Key Derivation     | Argon2                         |
+| Block Size         | 216 bytes                      |
+| Monetary Policy    | Fixed                          |
+| Inflation          | 0%                             |
+| Circulating supply | 133,248,297                    |
+| Total Supply       | 133,248,297                    |
+| Scalability        | Dynamic (hardware & bandwidth) |
+| Scalability Limit  | Unknown                        |
+| Fees               | No Fees                        |
+| Tx Prioritization  | Balance, Time since Use, PoW   |
+| Distribution       | Given away via Captcha Faucet  |
