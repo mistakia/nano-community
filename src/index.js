@@ -2,10 +2,15 @@
 import '@babel/polyfill'
 
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { hydrate, render } from 'react-dom'
 
 import Root from '@views/root'
 
 document.addEventListener('DOMContentLoaded', () => {
-  ReactDOM.render(<Root />, document.getElementById('app'))
+  const rootElement = document.getElementById('app')
+  if (rootElement.hasChildNodes()) {
+    hydrate(<Root />, rootElement)
+  } else {
+    render(<Root />, rootElement)
+  }
 })

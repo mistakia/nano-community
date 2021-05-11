@@ -3,19 +3,19 @@
 import queryString from 'query-string'
 import merge from 'deepmerge'
 
-import { BASE_URL } from '@core/constants'
+import { API_URL } from '@core/constants'
 
 export const api = {
   getPosts({ id, ...params }) {
-    const url = `${BASE_URL}/posts/${id}?${queryString.stringify(params)}`
+    const url = `${API_URL}/posts/${id}?${queryString.stringify(params)}`
     return { url }
   },
   getDoc({ id }) {
-    const url = `${BASE_URL}/docs${id}.md`
+    const url = `${API_URL}/docs${id}.md`
     return { url }
   },
   getNetworkStats() {
-    const url = `${BASE_URL}/network`
+    const url = `${API_URL}/network`
     return { url }
   },
   getDocCommit({ id }) {

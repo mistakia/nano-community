@@ -12,6 +12,7 @@ import AvatarGroup from '@material-ui/lab/AvatarGroup'
 import Tooltip from '@material-ui/core/Tooltip'
 
 import Menu from '@components/menu'
+// import Seo from '@components/seo'
 
 import './doc.styl'
 
@@ -43,6 +44,15 @@ export default class DocPage extends React.Component {
         </Tooltip>
       )
     })
+
+    /* const seo = (
+     *   <Seo
+     *     title="Docs"
+     *     description="Docs"
+     *     path={this.props.location.pathname}
+     *   />
+     * )
+     */
 
     if (doc.isPending) {
       return (
