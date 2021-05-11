@@ -11,7 +11,8 @@ export const api = {
     return { url }
   },
   getDoc({ id }) {
-    const url = `${API_URL}/docs${id}.md`
+    const path = id.endsWith('/') ? id.slice(0, -1) : id
+    const url = `${API_URL}/docs${path}.md`
     return { url }
   },
   getNetworkStats() {
