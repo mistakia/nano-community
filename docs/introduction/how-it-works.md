@@ -52,3 +52,5 @@ Due to the lightweight nature of blocks and votes, the network is able to reach 
 <a href="https://docs.nano.org/protocol-design/orv-consensus/" target="_blank">Learn more about Open Representative Voting</a>
 
 <a href="https://docs.nano.org/protocol-design/introduction/" target="_blank">Learn more about the Protocol Design</a>
+
+[Overview of the design](/design/basics)
