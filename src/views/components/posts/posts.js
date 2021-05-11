@@ -18,6 +18,7 @@ export default class Posts extends React.Component {
 
   handleChange = (e, value) => {
     this.setState({ age: value })
+    this.props.getPosts(this.props.id, { age: value })
   }
 
   componentDidMount() {
