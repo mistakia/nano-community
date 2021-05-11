@@ -1,22 +1,41 @@
+.posts__header
+  display flex
+  align-items center
+
 .posts__heading
-    font-family 'IBM Plex Mono', monospace
-    letter-spacing 0.5em
-    text-transform uppercase
-    color $nanoBlueGrey
+  flex 1
+  font-family 'IBM Plex Mono', monospace
+  letter-spacing 0.5em
+  text-transform uppercase
+  color $nanoBlueGrey
+  position relative
+  font-size 8pt
+  line-height 1rem
+  margin 15px 0
+  &::before
+    content ""
+    display block
+    position absolute
+    top 10px
+    width 100%
+    border-top 3px solid #ebebeb
+  span
+  a
+    display inline-block
     position relative
-    font-size 8pt
-    line-height 1rem
-    margin 15px 0
-    &::before
-        content ""
-        display block
-        position absolute
-        top 10px
-        width 100%
-        border-top 3px solid #ebebeb
-    span
-    a
-        display inline-block
-        position relative
-        background #fff
-        padding 3px 8px 2px 12px
+    background #fff
+    padding 3px 8px 2px 12px
+
+.posts__age
+  flex 0 0 auto
+  border-radius 4px
+  border 1px solid $borderColor
+
+  .MuiToggleButton-root
+    border none
+    margin 4px
+    font-size 10px
+    padding 3px 8px
+    &:not(:first-child)
+    &:first-child
+      border-radius 4px
