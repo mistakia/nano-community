@@ -28,10 +28,11 @@ export const postlistActions = {
     }
   }),
 
-  getPosts: (id) => ({
+  getPosts: (id, { age }) => ({
     type: postlistActions.GET_POSTS,
     payload: {
-      id
+      id,
+      age
     }
   })
 }

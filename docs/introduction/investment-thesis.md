@@ -29,21 +29,17 @@ In the meantime, critics will continually reference its lack of use by ordinary 
 An advanced form of money thats digital and denationalized was predicted by two of the most influential economists of the 1900s.
 
 > One thing that’s missing but will soon be developed is a reliable e-cash, a method whereby on the Internet you can transfer funds from A to B without A knowing B or B knowing A – the way I can take a $20 bill and hand it over to you, and you may get that without knowing who I am.
-> <cite>— Milton Friedman in 1999</cite>
-> <small>one of the most influential economists of the 1900s</small>
+> <cite>— Milton Friedman in 1999</cite> > <small>one of the most influential economists of the 1900s</small>
 
 The decentralization of money has its theoretical roots in <a href="https://mises.org/library/denationalisation-money-argument-refined" target="_blank">Denationalisation of Money: The Argument Refined</a> by Friedrich A. Hayek
 
 > I don’t believe we shall ever have a good money again before we take the thing out of the hands of the government, that is, we can’t take it violently… all we can do is by some sly roundabout way introduce something that they can’t stop.
-> <cite>- Friedrich Hayek in 1984</cite>
-> <small>nobel prize winning economist and one of the most influential economists of the 1900s</small>
+> <cite>- Friedrich Hayek in 1984</cite> > <small>nobel prize winning economist and one of the most influential economists of the 1900s</small>
 
 > The thing we call money is just an information system for labor allocation.
 > What actually matters is making goods & providing services.
 > We should look at currencies from an information theory standpoint.
-> **Whichever has least error & latency will win.**
-> <cite>- Elon Musk in 2021</cite>
-> <small>self-proclaimed meme-lord</small>
+> **Whichever has least error & latency will win.** > <cite>- Elon Musk in 2021</cite> > <small>self-proclaimed meme-lord</small>
 
 ### Nano's properties create a strong positive feedback loop
 

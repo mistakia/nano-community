@@ -22,6 +22,7 @@ module.exports = {
           '@styles': './src/styles'
         }
       }
-    ]
+    ],
+    ['@babel/plugin-proposal-class-properties']
   ]
 }
