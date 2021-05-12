@@ -30,8 +30,8 @@ const formatRedditComment = (p) => ({
   url: p.data.permalink,
   author: p.data.author,
   authorid: p.data.author,
-  created_at: p.data.created,
-  updated_at: p.data.edited,
+  created_at: p.data.created_utc,
+  updated_at: undefined,
   html: p.data.body_html,
   text: p.data.body,
   score: p.data.score // p.data.upvote_ratio + p.data.ups + p.data.total_awards_received + p.data.score + p.num_comments - p.data.downs
@@ -44,8 +44,8 @@ const formatRedditPost = (p) => ({
   url: p.data.permalink,
   author: p.data.author,
   authorid: p.data.author,
-  created_at: p.data.created,
-  updated_at: p.data.edited,
+  created_at: p.data.created_utc,
+  updated_at: undefined,
   html: p.data.selftext_html,
   text: p.data.selftext,
   score: p.data.score // p.data.upvote_ratio + p.data.ups + p.data.total_awards_received + p.data.score + p.num_comments - p.data.downs
