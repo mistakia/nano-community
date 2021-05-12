@@ -141,9 +141,9 @@ A minimal block size allows for lightweight communication resulting in ultrafast
 
 # Nano is like
 
-**Nano is like physical cash:** it is not reversible. You are responsible for handling it. If you lose your wallet, you lose your money. Your nano can be given to others to hold for you but you need to trust they won't lose it or take it. It has no fees when used and transferred instantly.
+**Nano is like physical cash:** it can be given to someone without fees and the transfer is instant. It is not reversible. You are responsible for handling it. If you lose your wallet, you lose your money. Your nano can be given to others to hold for you but you need to trust they won't lose it or take it.
 
-**Nano is unlike physical cash:** it takes no space, regardless of how much you hold. You can hand it to anyone regardless of distance in between. it can not be counterfeited.
+**Nano is unlike physical cash:** it takes no space, regardless of how much you hold. You can hand it to anyone regardless of distance in between. It can not be counterfeited.
 
 **Nano is like gold:** it cannot be produced at will and is scarce.
 
@@ -151,7 +151,7 @@ A minimal block size allows for lightweight communication resulting in ultrafast
 
 **Nano is like a bank:** it is secured at all times of the day, even while you are sleeping.
 
-**Nano is unlike a bank:** it doesn't require any trust to hold your money and protect your privacy. It is always open, even on holidays. The account balances and history are verifiable by anyone. Your money can't be loaned out, leading to credit bubbles. It operates without any reliance on a central bank, an administrator, or large overhead costs.
+**Nano is unlike a bank:** it doesn't require any trust to hold your money and protect your privacy. It is always open, even on holidays. The account balances and history are verifiable by anyone. Your money can't be loaned out, leading to credit bubbles. It operates without any reliance on a central bank, an administrator, or large overhead costs. It is accessible anywhere that has access to the internet.
 
 **Nano is like Bitcoin:** it is decentralized, making it permissionless, self-sovereign, and censorship resistant. The development is open-source and the network is run by a global community of users. It can be used without having to trust or rely on any other user, developer, or operator on the network.
 
