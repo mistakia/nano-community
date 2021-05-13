@@ -1,3 +1,9 @@
+---
+title: Storing Nano
+description: How to use and store Nano
+tags: nano, wallet, crypto, custody, cold, seed, address, security
+---
+
 ## Overview
 
 Absolute security does not exist. There are only degrees of security, and those degrees come at a cost (in time, accessibility, convenience, etc).

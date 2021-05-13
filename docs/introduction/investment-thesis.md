@@ -1,3 +1,9 @@
+---
+title: Investment Thesis
+description: Why you should invest in Nano
+tags: nano, buy, crypto, prediction, value, invest, why, investment, potential, future, use, case, long term, dd
+---
+
 # Investment Thesis
 
 Adoption is often slow at first, then all at once. This was the case with personal computers, the internet, and — I believe Nano. It's only after being heavily commercialized by mainstream companies that its inevitability becomes obvious.

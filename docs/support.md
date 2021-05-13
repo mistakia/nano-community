@@ -1,3 +1,9 @@
+---
+title: Support
+description: How to get help & support with Nano
+tags: nano, crypto, help, support, get, how, questions
+---
+
 # Support
 
 There are a number of ways to get support

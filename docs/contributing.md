@@ -1,3 +1,9 @@
+---
+title: Contributing to Nano
+description: how to contribute to nano development and ecosystem
+tags: nano, contribute, github, code, development, team
+---
+
 # Contributing
 
 Nano has a relatively small community of developers and only a handful of developers employed at the <a href="https://nano.org/en/foundation" target="_blank">Nano Foundation</a>. Therefore, contributions from the community can make a big difference. Start by reviewing the following contributions guides:

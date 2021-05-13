@@ -1,3 +1,9 @@
+---
+title: Misconceptions
+description: Misfacts and confusion about Nano
+tags: nano, criticism, fud, crypto, downsides, flaws
+---
+
 # Misconceptions
 
 ### There is no incentive to run a node

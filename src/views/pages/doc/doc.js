@@ -10,14 +10,15 @@ import Button from '@material-ui/core/Button'
 import Avatar from '@material-ui/core/Avatar'
 import AvatarGroup from '@material-ui/lab/AvatarGroup'
 import Tooltip from '@material-ui/core/Tooltip'
+import fm from 'front-matter'
 
 import Menu from '@components/menu'
-// import Seo from '@components/seo'
+import Seo from '@components/seo'
 
 import './doc.styl'
 
 export default class DocPage extends React.Component {
-  get path () {
+  get path() {
     const path = this.props.location.pathname
     return path.endsWith('/') ? path.slice(0, -1) : path
   }
@@ -50,15 +51,6 @@ export default class DocPage extends React.Component {
       )
     })
 
-    /* const seo = (
-     *   <Seo
-     *     title="Docs"
-     *     description="Docs"
-     *     path={this.path}
-     *   />
-     * )
-     */
-
     if (doc.isPending) {
       return (
         <>
@@ -78,7 +70,9 @@ export default class DocPage extends React.Component {
           <Menu />
         </>
       )
-    } else if (doc.isLoaded && !doc.content) {
+    }
+
+    if (doc.isLoaded && !doc.content) {
       return (
         <>
           <div className='doc__content'>
@@ -88,48 +82,55 @@ export default class DocPage extends React.Component {
           <Menu />
         </>
       )
-    } else {
-      const html = marked(doc.content)
-      return (
-        <>
-          <div
-            className='doc__content'>
-            <div dangerouslySetInnerHTML={{ __html: html }} />
-          </div>
-          <div className='doc__content-side'>
-            <Button
-              variant='outlined'
-              href={`https://github.com/${REPO}/tree/main/docs${this.path}.md`}
-              target='_blank'
-              className='doc__content-edit'>
-              Edit Page
-            </Button>
-            {Boolean(author) && (
-              <div className='doc__content-author'>
-                updated by{' '}
-                <a href={commitHref} target='_blank'>
-                  {author} {timeago.format(lastUpdated)}
-                </a>
-              </div>
-            )}
-            {Boolean(authors.length) && (
-              <AvatarGroup max={6}>{authors}</AvatarGroup>
-            )}
-            {Boolean(authors.length) && (
-              <div className='doc__content-contributors'>
-                {authors.length} Contibutor{authors.length !== 1 ? 's' : ''}.{' '}
-                <a
-                  href='https://github.com/mistakia/nano-community/blob/main/CONTRIBUTING.md'
-                  target='_blank'>
-                  Help out
-                </a>
-              </div>
-            )}
-            <Menu />
-          </div>
-        </>
-      )
     }
+
+    const frontmatter = fm(doc.content)
+    const { title, description, tags } = frontmatter.attributes
+    const html = marked(frontmatter.body)
+    return (
+      <>
+        <Seo
+          title={title}
+          description={description}
+          tags={tags.split(',').map((t) => t.trim())}
+          path={this.path}
+        />
+        <div className='doc__content'>
+          <div dangerouslySetInnerHTML={{ __html: html }} />
+        </div>
+        <div className='doc__content-side'>
+          <Button
+            variant='outlined'
+            href={`https://github.com/${REPO}/tree/main/docs${this.path}.md`}
+            target='_blank'
+            className='doc__content-edit'>
+            Edit Page
+          </Button>
+          {Boolean(author) && (
+            <div className='doc__content-author'>
+              updated by{' '}
+              <a href={commitHref} target='_blank'>
+                {author} {timeago.format(lastUpdated)}
+              </a>
+            </div>
+          )}
+          {Boolean(authors.length) && (
+            <AvatarGroup max={6}>{authors}</AvatarGroup>
+          )}
+          {Boolean(authors.length) && (
+            <div className='doc__content-contributors'>
+              {authors.length} Contibutor{authors.length !== 1 ? 's' : ''}.{' '}
+              <a
+                href='https://github.com/mistakia/nano-community/blob/main/CONTRIBUTING.md'
+                target='_blank'>
+                Help out
+              </a>
+            </div>
+          )}
+          <Menu />
+        </div>
+      </>
+    )
   }
 }
 

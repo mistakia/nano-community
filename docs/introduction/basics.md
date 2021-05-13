@@ -1,3 +1,9 @@
+---
+title: What is Nano
+description: Information about Nano, a decentralized form of digital money (cryptocurrency)
+tags: nano, crypto, what, how, feeless, green, energy, sustainable, information
+---
+
 # Introduction
 
 Nano (NANO), formerly RaiBlocks (XRB), is a peer-to-peer digital currency that enables free, instant, and sustainable value transfer to anyone, anywhere in the world. It operates without intermediaries, using a distributed ledger with a unique block-lattice data structure collectively managed by a peer-to-peer network.

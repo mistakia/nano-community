@@ -1,3 +1,9 @@
+---
+title: Setup Wallet & Account
+description: How to create a nano account and wallet
+tags: nano, wallet, account, crypto, setup, create, use, address, seed, secure, instructions
+---
+
 # Setting up an Account
 
 Before you get started make sure to understand some basic facts about [Nano](/getting-started-users/basics) and [storing it](/getting-started-users/storing/basics).

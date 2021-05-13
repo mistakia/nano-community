@@ -1,3 +1,9 @@
+---
+title: Protocol design
+description: Nano protocol design information & whitepapers
+tags: nano, protocol, crypto, whitepaper, design
+---
+
 # Design
 
 For a general overview, start with <a href="https://docs.nano.org/what-is-nano/overview/" target="_blank">what is nano?</a> and read a brief overview of <a href="/introduction/how-it-works">how it works</a>.

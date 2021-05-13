@@ -1,3 +1,9 @@
+---
+title: Development
+description: Building with and developing Nano
+tags: nano, crypto, development, building, dev, guide, getting started
+---
+
 # Getting Started
 
 - build a working understanding of Nano's [design](/design/basics)

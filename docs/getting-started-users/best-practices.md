@@ -1,3 +1,9 @@
+---
+title: Best Practices
+description: Tips on how to use and handle Nano
+tags: nano, crypto, tips, guide
+---
+
 # Best Practices
 
 #### General
