@@ -1,3 +1,9 @@
+---
+title: Attack vectors
+description: Nano attack vectors
+tags: nano, attack, vectors, vulnerability, issues
+---
+
 # Attack Vectors
 
 ### Block gap synchronization

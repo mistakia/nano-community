@@ -1,3 +1,9 @@
+---
+title: Security
+description: Nano security
+tags: nano, security, decentralization, consensus
+---
+
 # Security
 
 **Full Node Assurances**

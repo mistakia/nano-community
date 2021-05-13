@@ -20,6 +20,7 @@
     "express": "^4.17.1",
     "express-favicon": "^2.0.1",
     "express-jwt": "^6.0.0",
+    "front-matter": "^4.0.2",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.95.4",
     "moment": "^2.29.1",

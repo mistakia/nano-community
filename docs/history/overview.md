@@ -1,3 +1,9 @@
+---
+title: History of Nano
+description: History of Nano
+tags: nano, crypto, history, distribution, development, creation, background
+---
+
 # History
 
 To better understand the vision and motivations behind digital money, you must trace its history to see how it was spawned and shaped. The origins date back to at least <a href="https://cacm.acm.org/magazines/2017/12/223058-bitcoins-academic-pedigree/fulltext" target="_blank">the 1990s</a>.

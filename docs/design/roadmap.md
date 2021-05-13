@@ -1,3 +1,9 @@
+---
+title: Roadmap
+description: Nano roadmap
+tags: roadmap, nano, future, release, design
+---
+
 # Roadmap
 
 - Node implemenation <a href="https://github.com/orgs/nanocurrency/projects/5" target="_blank">Roadmap</a>

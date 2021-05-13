@@ -1,3 +1,9 @@
+---
+title: NanoTrade Discord
+description: History of NanoTrade discord server
+tags: nano, trade, discord, nanotrade, copy, pasta, copypasta
+---
+
 # NanoTrade Discord
 
 The NanoTrade discord community was created on 18 January 2018 with `mav` making the first comment: `First`. The community serves as the go to place for serious trade talk as all trade related discussions are discouraged on the Nano discord & subreddit.

@@ -1,3 +1,9 @@
+---
+title: Why Nano is important
+description: How to buy Nano from exchanges & services, earn, or acquire from faucets
+tags: nano, crypto, analysis, adoption, future, inflation, potential, supply, use, analysis, prediction
+---
+
 # Why it matters
 
 Nano is a scarce digital asset with an unchangeable monetary policy: its supply is fixed and fully distributed, thus has no inflation. Only 133 million Nano will ever exist. It operates independently of the fiat money system, yet is a liquid, globally tradeable asset. It is self-sovereign and can be self-stored or custodied with 3rd parties. It can be securely and instantly transfered between parties with no pre-existing trust and with zero fees.

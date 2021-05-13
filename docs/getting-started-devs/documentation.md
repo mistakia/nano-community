@@ -1,3 +1,9 @@
+---
+title: Documentation
+description: Nano documentation
+tags: nano, docs, documentation, crypto, protocol, development
+---
+
 # Documentation
 
 - <a href="https://docs.nano.org/commands/rpc-protocol/" target="_blank">RPC Protocol</a> (<a href="https://github.com/nanobox-cc/openapi-nano-spec" target="_blank">Alternate</a>)

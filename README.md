@@ -65,7 +65,6 @@ A set of community maintained documents made up of guides and wiki-style documen
 |   |-- how-it-works.md
 |   |-- investment-thesis.md
 |   |-- misconceptions.md
-|   |-- nano-fixes-this.md
 |   `-- why-it-matters.md
 |-- community.md
 |-- contributing.md

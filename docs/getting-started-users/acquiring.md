@@ -1,3 +1,9 @@
+---
+title: Buying, acquiring or earning Nano
+description: How to buy Nano from exchanges & services, get, earn, or acquire from faucets
+tags: nano, buy, how, where, get, purchase, crypto, exchange, faucets, earn, games
+---
+
 # Acquiring
 
 ## Faucets

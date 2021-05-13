@@ -1,3 +1,9 @@
+---
+title: Advantages
+description: Benefits / advantages of nano over other technologies
+tags: nano, crypto, advantage, better, benefit, feeless, energy, green, sustainable
+---
+
 # Advantages
 
 Nano, like Bitcoin, is a new form of money that's completely digital. Nano is not controlled by any person, company, or government. The development is open-source and the network is run by a global community of users. Nano can be used without having to trust or rely on any other user, developer, or operator on the network.

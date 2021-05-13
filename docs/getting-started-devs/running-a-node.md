@@ -1,3 +1,9 @@
+---
+title: Running a node
+description: How to setup and run a nano node
+tags: nano, node, setup, guide, wiki, run, how to
+---
+
 # Running a node
 
 #### Resources

@@ -1,3 +1,9 @@
+---
+title: Privacy with Nano
+description: How to protect your privacy while using Nano
+tags: nano, crypto, privacy, kyc, guide, tips, mixing, shielding, anonymity
+---
+
 # Privacy
 
 Nano puts you in control of your privacy. You can protect it and decide when to reveal it.

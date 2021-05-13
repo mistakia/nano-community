@@ -1,3 +1,9 @@
+---
+title: Nano Communities (reddit, discord, forum) & Discussions
+description: Where to discuss and ask questions about nano
+tags: nano, reddit, discord, forum, github
+---
+
 # Communities
 
 - <a href="https://www.reddit.com/r/nanocurrency/" target="_blank">r/nanocurrency</a>: good for general discussions about nano, meeting community members, and following the ecosystem. It is the largest community.

@@ -41,7 +41,10 @@ const getMetaTags = ({
   if (updated)
     metaTags.push({ name: 'article:modified_time', content: updated })
   if (category) metaTags.push({ name: 'article:section', content: category })
-  if (tags) metaTags.push({ name: 'article:tag', content: tags })
+  if (tags) {
+    metaTags.push({ name: 'article:tag', content: tags })
+    metaTags.push({ name: 'keywords', content: tags })
+  }
   if (image) {
     metaTags.push({ itemprop: 'image', content: seoImageURL(image) })
     // metaTags.push({ name: 'twitter:image:src', content: seoImageURL(image) });
@@ -77,7 +80,7 @@ const Seo = ({
   title,
   description,
   path,
-  contentType,
+  contentType = 'website',
   published,
   updated,
   category,

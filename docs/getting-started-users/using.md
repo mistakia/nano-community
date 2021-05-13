@@ -1,3 +1,9 @@
+---
+title: Using Nano
+description: How to use Nano, sending & receiving transactions, changing representatives
+tags: nano, crypto, use, transaction, send, receive, change, representative
+---
+
 # Using
 
 Begin by understanding the [basics](/getting-started-users/basics), [acquiring](/getting-started-users/acquiring) some nano, and [storing](/getting-started-users/storing/basics) it yourself.
