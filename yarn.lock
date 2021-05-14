@@ -8164,7 +8164,7 @@ react-side-effect@^2.1.0:
 
 react-snap@mistakia/react-snap:
   version "1.23.0"
-  resolved "https://codeload.github.com/mistakia/react-snap/tar.gz/a1d3cedb2bfe59f192bd83724bf21a79fe5b21eb"
+  resolved "https://codeload.github.com/mistakia/react-snap/tar.gz/473f74609ec80a4ea6d66a07a9330bda644b0310"
   dependencies:
     clean-css "4.2.1"
     express "4.17.1"
