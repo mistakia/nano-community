@@ -1,6 +1,7 @@
 const https = require('https')
 const http = require('http')
 const fs = require('fs')
+const fsPromise = require('fs').promises
 const url = require('url')
 const path = require('path')
 
@@ -98,6 +99,21 @@ if (IS_DEV) {
   })
 } else {
   const buildPath = path.join(__dirname, '..', 'build')
+  api.use('/', async (req, res, next) => {
+    const filepath = req.url.replace(/\/$/, '')
+    const filename = `${filepath}/index.html`
+    const fullpath = path.join(buildPath, filename)
+    try {
+      const filestat = await fsPromise.stat(fullpath)
+      if (filestat.isFile()) {
+        return res.sendFile(fullpath, { cacheControl: false })
+      }
+      next()
+    } catch (error) {
+      logger(error)
+      next()
+    }
+  })
   api.use('/', serveStatic(buildPath))
   api.get('*', (req, res) => {
     const notFoundPath = path.join(__dirname, '../', 'build', '404.html')
