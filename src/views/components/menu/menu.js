@@ -10,7 +10,7 @@ export default class Menu extends React.Component {
       <div className='menu__container'>
         <div className='menu__sections'>
           <Link to='/' className='menu__logo'>
-            <img src='/resources/nano+full.svg' />
+            <img alt='Nano is feeless, instant, and green / energy efficient digital money (cryptocurrency)' src='/resources/nano+full.svg' />
           </Link>
           <div className='menu__section'>
             <div className='menu__heading'>Introduction</div>
