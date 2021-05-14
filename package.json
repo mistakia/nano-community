@@ -8,6 +8,16 @@
     "lint": "eslint .",
     "prettier": "prettier --write ."
   },
+  "reactSnap": {
+    "inlineCss": true,
+    "excludedThirdPartyRequests": [
+      "https://fonts.googleapis.com",
+      "https://api.github.com"
+    ],
+    "exclude": [
+      "/resources/**"
+    ]
+  },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "body-parser": "^1.19.0",
@@ -20,6 +30,7 @@
     "express": "^4.17.1",
     "express-favicon": "^2.0.1",
     "express-jwt": "^6.0.0",
+    "express-robots-txt": "^0.5.0",
     "front-matter": "^4.0.2",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.95.4",
@@ -72,7 +83,7 @@
     "prettier": "^2.2.1",
     "react-immutable-proptypes": "^2.2.0",
     "react-router-dom": "^5.2.0",
-    "react-snap": "^1.23.0",
+    "react-snap": "mistakia/react-snap",
     "redux-immutable": "^4.0.0",
     "style-loader": "^2.0.0",
     "stylus": "^0.54.8",
