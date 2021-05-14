@@ -27,11 +27,11 @@ const getMetaTags = ({
     // { name: 'twitter:title', content: `${title} | nano.community` },
     // { name: 'twitter:description', content: description },
     // { name: 'twitter:creator', content: twitter || '@username' },
-    { name: 'og:title', content: `${title} | nano.community` },
+    { name: 'og:title', content: `${title} | Nano.Community` },
     { name: 'og:type', content: contentType },
     { name: 'og:url', content: url },
     { name: 'og:description', content: description },
-    { name: 'og:site_name', content: 'nano.community' },
+    { name: 'og:site_name', content: 'Nano.Community' },
     { name: 'og:locale', content: 'en_EN' }
     // { name: 'fb:app_id', content: '<FB App ID>' },
   ]
