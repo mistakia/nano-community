@@ -27,12 +27,12 @@ const getMetaTags = ({
     // { name: 'twitter:title', content: `${title} | nano.community` },
     // { name: 'twitter:description', content: description },
     // { name: 'twitter:creator', content: twitter || '@username' },
-    { name: 'og:title', content: `${title} | Nano.Community` },
-    { name: 'og:type', content: contentType },
-    { name: 'og:url', content: url },
-    { name: 'og:description', content: description },
-    { name: 'og:site_name', content: 'Nano.Community' },
-    { name: 'og:locale', content: 'en_EN' }
+    { property: 'og:title', content: `${title} | Nano.Community` },
+    { property: 'og:type', content: contentType },
+    { property: 'og:url', content: url },
+    { property: 'og:description', content: description },
+    { property: 'og:site_name', content: 'Nano.Community' },
+    { property: 'og:locale', content: 'en_EN' }
     // { name: 'fb:app_id', content: '<FB App ID>' },
   ]
 
@@ -48,7 +48,7 @@ const getMetaTags = ({
   if (image) {
     metaTags.push({ itemprop: 'image', content: seoImageURL(image) })
     // metaTags.push({ name: 'twitter:image:src', content: seoImageURL(image) });
-    metaTags.push({ name: 'og:image', content: seoImageURL(image) })
+    metaTags.push({ property: 'og:image', content: seoImageURL(image) })
     // metaTags.push({ name: 'twitter:card', content: 'summary_large_image' });
   } else {
     metaTags.push({ name: 'twitter:card', content: 'summary' })
