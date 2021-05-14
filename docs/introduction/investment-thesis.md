@@ -1,6 +1,6 @@
 ---
 title: Investment Thesis
-description: Why you should invest in Nano
+description: Why you should invest in and buy Nano
 tags: nano, buy, crypto, prediction, value, invest, why, investment, potential, future, use, case, long term, dd
 ---
 
