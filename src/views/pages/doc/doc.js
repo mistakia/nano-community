@@ -92,7 +92,7 @@ export default class DocPage extends React.Component {
         <Seo
           title={title}
           description={description}
-          tags={tags.split(',').map((t) => t.trim())}
+          tags={tags ? tags.split(',').map((t) => t.trim()) : []}
           path={this.path}
         />
         <div className='doc__content'>

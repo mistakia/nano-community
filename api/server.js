@@ -90,16 +90,21 @@ api.use('/api/*', (err, req, res, next) => {
 
 // protected api routes
 
-api.get('*', (req, res) => {
-  if (IS_DEV) {
+if (IS_DEV) {
+  api.get('*', (req, res) => {
     res.redirect(307, `http://localhost:8081${req.path}`)
-  } else {
-    const indexPath = path.join(__dirname, '../', 'build', 'index.html')
-    res.sendFile(indexPath, { cacheControl: false })
-    // redirect to ipfs page
-    // res.redirect(307, `${config.url}${req.path}`)
-  }
-})
+  })
+} else {
+  const buildPath = path.join(__dirname, '..', 'build')
+  api.use('/', serveStatic(buildPath))
+  api.get('*', (req, res) => {
+    const notFoundPath = path.join(__dirname, '../', 'build', '404.html')
+    res.sendFile(notFoundPath, { cacheControl: false })
+  })
+
+  // redirect to ipfs page
+  // res.redirect(307, `${config.url}${req.path}`)
+}
 
 const createServer = () => {
   if (!options.ssl) {
