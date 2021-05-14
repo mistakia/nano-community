@@ -92,7 +92,7 @@ On 31 January 2018, RaiBlocks rebranded to Nano.
 ## Timeline
 
 <figure>
-<img src="/resources/bitcoin-academic-pedigree.jpg" />
+<img alt='History of notable digital money advances & innovations' src="/resources/bitcoin-academic-pedigree.jpg" />
 </figure>
 
 <a href="https://nakamotoinstitute.org/literature/" target="_blank">Notable Publications</a>

@@ -1,7 +1,7 @@
 ---
 title: What is Nano
-description: Information about Nano, a decentralized form of digital money (cryptocurrency)
-tags: nano, crypto, what, how, feeless, green, energy, sustainable, information
+description: Nano is feeless, instant, green / energy-efficient digital money (cryptocurrency)
+tags: nano, crypto, what, how, feeless, green, energy, sustainable, information, instant, wiki
 ---
 
 # Introduction

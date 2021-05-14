@@ -1,7 +1,7 @@
 ---
 title: How it works
 description: Basics about Nano's ledger and consensus design
-tags: nano, crypto, block, lattice, ORV, consensus, how, design, works
+tags: nano, crypto, block, lattice, ORV, consensus, how, design, works, does
 ---
 
 # How it works
@@ -13,7 +13,7 @@ Nano is a <a href="https://en.wikipedia.org/wiki/Decentralized_computing#Peer-to
 The concept of a distributed ledger is the starting point to understanding cryptocurrencies like Nano. Ledgers in cryptocurrencies are an open, global, and append-only list of operations that describe the state of the system. Operations can only be added but not removed, modified, or reordered. To know the current state of the ledger, you go through the full list of operations (first to last). Most cryptocurrencies use a structure called a <a href="https://en.wikipedia.org/wiki/Blockchain" target="_blank">blockchain</a> for their ledger. In short, new operations are grouped together in "a block" and linked to the previous group of operations. Nano introduces a different structure called a block-lattice. Instead of operations for all accounts being grouped together in a single block, each account has its own "blockchain", where each operation is a block that links to the previous operation for that account.
 
 <figure>
-    <img src='/resources/account-chains.svg' />
+    <img alt='Nano uses a block lattice structure for its distributed ledger' src='/resources/account-chains.svg' />
     <figcaption>In a block-lattice, each account has its own blockchain containing the account’s balance history.</figcaption>
 </figure>
 
