@@ -5,7 +5,6 @@ import Helmet from 'react-helmet'
 import { BASE_URL } from '@core/constants'
 
 const absoluteUrl = (path) => `${BASE_URL}${path}`
-const seoImageURL = (file) => `${BASE_URL}/resources/${file}`
 
 const getMetaTags = ({
   title,
@@ -46,9 +45,9 @@ const getMetaTags = ({
     metaTags.push({ name: 'keywords', content: tags })
   }
   if (image) {
-    metaTags.push({ itemprop: 'image', content: seoImageURL(image) })
-    // metaTags.push({ name: 'twitter:image:src', content: seoImageURL(image) });
-    metaTags.push({ property: 'og:image', content: seoImageURL(image) })
+    metaTags.push({ itemprop: 'image', content: absoluteUrl(image) })
+    // metaTags.push({ name: 'twitter:image:src', content: absoluteUrl(image) });
+    metaTags.push({ property: 'og:image', content: absoluteUrl(image) })
     // metaTags.push({ name: 'twitter:card', content: 'summary_large_image' });
   } else {
     metaTags.push({ name: 'twitter:card', content: 'summary' })
@@ -81,6 +80,7 @@ const Seo = ({
   description,
   path,
   contentType = 'website',
+  image = '/resources/nano-circle.png',
   published,
   updated,
   category,
@@ -97,6 +97,7 @@ const Seo = ({
       title,
       description,
       contentType,
+      image,
       url: absoluteUrl(path),
       published,
       updated,
