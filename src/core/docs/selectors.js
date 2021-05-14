@@ -5,6 +5,7 @@ export function getDocs(state) {
 }
 
 export function getDocById(state, { location }) {
-  const id = location.pathname
+  const path = location.pathname
+  const id = path.endsWith('/') ? path.slice(0, -1) : path
   return getDocs(state).get(id, new Doc())
 }
