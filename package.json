@@ -8,8 +8,11 @@
     "lint": "eslint .",
     "prettier": "prettier --write ."
   },
+  "homepage": "https://nano.community/",
   "reactSnap": {
+    "homepage": "https://nano.community/",
     "inlineCss": true,
+    "sitemap": true,
     "excludedThirdPartyRequests": [
       "https://fonts.googleapis.com",
       "https://api.github.com"
