@@ -12,21 +12,21 @@ Nano, unlike Bitcoin, is scalable, fast, asynchronous, uses minimal energy, oper
 
 #### Benefits over traditional money (i.e. fiat, gold, etc)
 
-- decentralized
 - denationalized
+- self-sovereign
 - instantly verifiable
 - fixed supply / incorruptible monetary policy
 - divisible
 - durable / securable / low-cost of maintenance
 - accessible at all times
 - transportable / accessible globally
-- self-sovereign
 - privacy
 - natively digital
 
 #### Benefits over other digital money
 
 - feeless
+- fully decentralized / permissionless
 - asynchronous
 - scalable
 - energy-efficient / sustainable
@@ -39,13 +39,13 @@ Nano, unlike Bitcoin, is scalable, fast, asynchronous, uses minimal energy, oper
 
 ### Nano is decentralized
 
-Nano does not have a central authority, coordinator, or server. The network is peer-to-peer and permissionless. Any Nano holder is able to run a node and engage in voting to secure the network. <a href="https://nanocharts.info/p/01/vote-weight-distribution" target="_blank">Voting weight distribution</a> is fluid and controlled by Nano holders. Over time, the network has trended toward greater decentralization.
+Nano does not have a central authority, coordinator, or server. The network is peer-to-peer and permissionless. Any Nano holder is able to run a node and engage in voting to secure the network. <a href="https://nanocharts.info/p/01/vote-weight-distribution" target="_blank">Voting weight distribution</a> is fluid and controlled by Nano holders.
 
-Because Nano does not need to pay to secure the network, it is resistant to <a href="https://medium.com/@clemahieu/emergent-centralization-due-to-economies-of-scale-83cc85a7cbef" target="_blank">emergent centralization due to economies of scale effects</a>.
+Because Nano does not need to pay to secure the network, it is resistant to <a href="https://medium.com/@clemahieu/emergent-centralization-due-to-economies-of-scale-83cc85a7cbef" target="_blank">emergent centralization due to economies of scale effects</a>. Over time, the network has trended toward greater decentralization.
 
 ### Nano is private
 
-Nano, like Bitcoin, is pseudonymous. All accounts on the ledger, the balances and entire transaction history, are public. However, the identity of the owner is anonymous.
+Nano's ledger is pseudonymous. All accounts on the ledger, the balances and entire transaction history, are public. However, the identity of the owner is anonymous.
 
 Nano puts users in control of their privacy, allowing them to better preserve it. Users are not reliant on intermediaries like banks to prevent breaches of privacy.
 
@@ -95,7 +95,7 @@ Nano can scale by increasing whatever the limiting factor is among bandwidth, CP
 
 The network currently runs on about 200-300 nodes made up of average hardware. The average node likely uses around 25-140W.
 
-For each transaction, it is estimated that Nano uses only 0.000112 kWh, compared to 651.08 kWh for Bitcoin.
+For each transaction, it is estimated that Nano uses only 0.000112 kWh, compared to <a href="https://digiconomist.net/bitcoin-energy-consumption/" target="_blank">1121.71 kWh</a> for Bitcoin as of May 15th 2021.
 
 Nano uses very little energy because it does not use Proof-of-Work to secure the network.
 
@@ -143,7 +143,7 @@ For example, control of Nano's scalability is decentralized and in the hands of 
 
 Nano blocks are small (~200 bytes), yet stateful, meaning it contains all the information about an account at that point in time: account number, balance, representative.
 
-A minimal block size allows for lightweight communication resulting in ultrafast transaction confirmation times. Stateful blocks combined with a block-lattice structure allow for operation using <a href="https://docs.nano.org/protocol-design/ledger/?h=prune#ledger-pruning" target="_blank">pruned ledgers</a>, enabling Nano to operate with far less storage space and be more easily embedded in applications.
+A minimal block size allows for lightweight communication resulting in ultrafast transaction confirmation times. Stateful blocks combined with a block-lattice structure allow for operation using <a href="https://docs.nano.org/protocol-design/ledger/?h=prune#ledger-pruning" target="_blank">pruned ledgers</a>, enabling Nano to operate with far less storage space and be more easily embedded in applications with the potential of operating on a <a href="https://www.reddit.com/r/nanocurrency/comments/n9dgfh/lightweight_nano_node_with_a_ledger_under_2_mb/" target="_blank">ledger as small as 2mb.</a>
 
 # Nano is like
 
