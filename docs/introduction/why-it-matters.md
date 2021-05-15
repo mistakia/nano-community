@@ -56,7 +56,7 @@ Nano is self-sovereign money. Its only ruler is the secret key that is associate
 
 ### The importance of zero-fees
 
-The lower the fee, the more accessible and useful it will be. High fees disproportionately impact the less fortunate.
+The lower the fee, the more accessible and useful it will be. High fees disproportionately impact the less fortunate and limit use cases.
 
 Nano has no fees making it inclusive to all and useful in ways that were not previously possible.
 
