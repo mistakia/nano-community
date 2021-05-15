@@ -6,7 +6,7 @@ tags: nano, trade, discord, nanotrade, copy, pasta, copypasta
 
 # NanoTrade Discord
 
-The NanoTrade discord community was created on 18 January 2018 with `mav` making the first comment: `First`. The community serves as the go to place for serious trade talk as all trade related discussions are discouraged on the Nano discord & subreddit.
+The NanoTrade discord community was created on 18 January 2018 with `mav` making the first comment: `First`. The community serves as the go to place for "serious trade talk" as all trade related discussions are discouraged on the Nano discord & subreddit.
 
 ## Notable References & Copy Pastas
 
@@ -230,6 +230,10 @@ Context:
 ```
 240K BEFORE BINANCE????
 200K SATS BEFORE BINANCE???
+
+By: unknown
+Date: unknown
+Context: price speculation of nano/btc before binance listing
 ```
 
 ```
@@ -257,11 +261,19 @@ Context:
 ```
 
 ```
-Nano is never going to moon, and that's a good thing
+Nano will NEVER EVER moon again and that's a GOOD THING
+Fucking shitcoin scam
+Fucking deluded bagholders
+and fuck me for being stupid and buying and holding this dead shitcoin
+shypto ponzi scam
+Retarded bagholders holding the biggest pump and dump in human history
+negative IQ
+#FreeRuadath
+Fuck you
 
 By: Seneca Effect
-Date: unknown
-Context:
+Date: July 6th, 2020
+Context: venting in #nangry discord channel
 ```
 
 ```
