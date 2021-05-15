@@ -2,7 +2,7 @@
   margin-bottom 12px
 
 .post__title
-  font-family 'IBM Plex Mono', monospace
+  font-family 'Inter', sans-serif
   font-weight 400
   font-size 10pt
   line-height 1.45
@@ -18,12 +18,26 @@
 
 .post__meta
   font-family 'Roboto Mono', monospace
-  color $nanoSoftBlue
+  color $nanoBlueGrey
   font-size 7pt
   margin-top 4px
   display flex
   flex-direction row
   padding 0 16px
+  align-items center
 
   div + div
     margin-left 5px
+
+.post__source
+  border-radius 3px
+  color white
+
+  &.reddit
+    color #FF5700
+
+  &.forum
+    color $nanoSoftBlue
+
+  &.discord
+    color #5865F2
