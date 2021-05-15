@@ -6,10 +6,13 @@ tags: nano, crypto, development, building, dev, guide, getting started
 
 # Getting Started
 
-- build a working understanding of Nano's [design](/design/basics)
-- Learn the <a href="https://docs.nano.org/integration-guides/the-basics/" target="_blank">basics for integrating</a> with the nano network
-- Visit <a href="https://nano.org/tools" target="_blank">nano.org/tools</a> for a list of developer tools & libraries
-- explore the [documenatation](/getting-started-devs/documentation)
-- reach out to the community to start a [disccusion](/community) or get [support](/support)
+Before you start, it is good to have a working understanding of Nano's [design](/design/basics).
+
+- <a href="https://docs.nano.org/integration-guides/the-basics/" target="_blank">Integration Guide</a>
+- <a href="https://nano.org/tools" target="_blank">Tools & Libraries</a>
+- <a href="https://test.nano.org/" target="_blank">Test network</a>
+- [Documenatation](/getting-started-devs/documentation)
+
+Do not hesitate to reach out to the community to start a [disccusion](/community) or get [support](/support).
 
 If you are interested in directly contributing to nano development or its ecosystem, view the [contribution guides](/contributing).
