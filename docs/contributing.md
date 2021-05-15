@@ -17,4 +17,4 @@ Next, participate in community [discussions](/community), by reading and replyin
 ### Contribute to the ecosystem
 
 - <a href="https://github.com/mistakia/nano-community/blob/main/CONTRIBUTING.md" target="_blank">Nano.Community</a>: community gateway and knowledge hub
-- <a href="https://github.com/Nault/Nault/blob/master/CONTRIBUTING.md" target="_blank">Nault</a>: one of the most popular community maintained wallets
+- <a href="https://github.com/Nault/Nault/blob/master/CONTRIBUTING.md" target="_blank">Nault</a>: a popular community maintained wallet
