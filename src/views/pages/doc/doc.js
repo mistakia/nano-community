@@ -10,6 +10,7 @@ import Button from '@material-ui/core/Button'
 import Avatar from '@material-ui/core/Avatar'
 import AvatarGroup from '@material-ui/lab/AvatarGroup'
 import Tooltip from '@material-ui/core/Tooltip'
+import Network from '@components/network'
 import fm from 'front-matter'
 
 import Menu from '@components/menu'
@@ -115,7 +116,9 @@ export default class DocPage extends React.Component {
             </div>
           )}
           {Boolean(authors.length) && (
-            <AvatarGroup max={6}>{authors}</AvatarGroup>
+            <AvatarGroup max={6} className='doc__content-authors'>
+              {authors}
+            </AvatarGroup>
           )}
           {Boolean(authors.length) && (
             <div className='doc__content-contributors'>
@@ -128,6 +131,7 @@ export default class DocPage extends React.Component {
             </div>
           )}
           <Menu />
+          <Network />
         </div>
       </>
     )

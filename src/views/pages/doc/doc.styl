@@ -1,11 +1,10 @@
 .doc__content
-  flex 0 1 600px
+  flex 1 1 550px
   padding 32px 24px 0
   font-size 14px
   font-family 'Roboto Mono', monospace
   line-height 1.6
   margin-bottom 32px
-  max-width 600px
   width 100%
 
   p
@@ -76,6 +75,7 @@
 .doc__content-side
   flex 1
   margin-top 32px
+  min-width 200px
 
 .doc__content-author
   margin 8px
@@ -90,6 +90,9 @@
 .doc__content-edit
   margin 8px !important
 
+.doc__content-authors
+  margin 0 8px
+
 .doc__content
 .doc__content-author
 .doc__content-contributors
@@ -100,3 +103,14 @@
     text-underline-offset 1.5px
     &:hover
       color $nanoSoftBlue
+
+@media (max-width 750px)
+  .doc__content-author
+  .doc__content-contributors
+  .doc__content-authors
+  .doc__content-edit
+    margin-left 24px !important
+
+@media (min-width 750px)
+  .doc__content
+    max-width 550px

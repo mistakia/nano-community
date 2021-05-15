@@ -1,13 +1,18 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import Network from '@components/network'
 import './menu.styl'
 
 export default class Menu extends React.Component {
   render() {
+    const { mobile, desktop } = this.props
+
+    const classNames = ['menu__container']
+    if (mobile) classNames.push('mobile')
+    if (desktop) classNames.push('desktop')
+
     return (
-      <div className='menu__container'>
+      <div className={classNames.join(' ')}>
         <div className='menu__sections'>
           <Link to='/' className='menu__logo'>
             <img
@@ -83,7 +88,6 @@ export default class Menu extends React.Component {
             </div>
           </div>
         </div>
-        <Network />
       </div>
     )
   }
