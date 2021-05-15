@@ -37,6 +37,13 @@ Nano, unlike Bitcoin, is scalable, fast, asynchronous, uses minimal energy, oper
 - fair distribution
 - user controlled consensus
 
+#### Limitations of other digital money
+The vast majority of other digital money projects, which use Proof-of-Work for consensus and operate on a single chain synchronous DAG (i.e. blockchain), can not reliably operate with BOTH of these properties:
+- fixed supply w/ no inflation (Store of Value)
+- feeless tx prioritization (Medium of Exchange)
+
+These properties impact the core functions of money and other projects can only achieve one of them.
+
 ### Nano is decentralized
 
 Nano does not have a central authority, coordinator, or server. The network is peer-to-peer and permissionless. Any Nano holder is able to run a node and engage in voting to secure the network. <a href="https://nanocharts.info/p/01/vote-weight-distribution" target="_blank">Voting weight distribution</a> is fluid and controlled by Nano holders.
