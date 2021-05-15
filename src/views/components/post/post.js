@@ -18,6 +18,11 @@ const formatUrl = (url, type) => {
   }
 }
 
+const Source = ({ post }) => {
+  const type = post.sid.split(':').shift()
+  return <div className={`post__source ${type}`}>{post.source_title}</div>
+}
+
 export default class Post extends React.Component {
   render() {
     const { post } = this.props
@@ -44,8 +49,8 @@ export default class Post extends React.Component {
           {post.title || post.text}
         </a>
         <div className='post__meta'>
+          <Source post={post} />
           <div>{post.author}</div>
-          <div>on {post.source_title}</div>
           <div>{timeago.format(post.created_at * 1000)}</div>
         </div>
       </div>
