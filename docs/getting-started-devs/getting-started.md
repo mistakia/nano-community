@@ -12,6 +12,7 @@ Before you start, it is good to have a working understanding of Nano's [design](
 - <a href="https://nano.org/tools" target="_blank">Tools & Libraries</a>
 - <a href="https://test.nano.org/" target="_blank">Test network</a>
 - [Documenatation](/getting-started-devs/documentation)
+- <a href="https://medium.com/nanocurrency/getting-started-developing-with-nano-currency-part-1-build-your-foundation-cec2013657e1" target="_blank">Getting Started Guide</a>
 
 Do not hesitate to reach out to the community to start a [disccusion](/community) or get [support](/support).
 
