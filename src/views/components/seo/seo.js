@@ -26,7 +26,7 @@ const getMetaTags = ({
     // { name: 'twitter:title', content: `${title} | nano.community` },
     // { name: 'twitter:description', content: description },
     // { name: 'twitter:creator', content: twitter || '@username' },
-    { property: 'og:title', content: `${title} | Nano.Community` },
+    { property: 'og:title', content: title },
     { property: 'og:type', content: contentType },
     { property: 'og:url', content: url },
     { property: 'og:description', content: description },

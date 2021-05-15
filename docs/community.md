@@ -6,6 +6,8 @@ tags: nano, reddit, discord, forum, github
 
 # Communities
 
+The largest communities are on reddit and discord.
+
 - <a href="https://www.reddit.com/r/nanocurrency/" target="_blank">r/nanocurrency</a>: good for general discussions about nano, meeting community members, and following the ecosystem. It is the largest community.
 - <a href="https://chat.nano.org/" target="_blank">Nano Discord</a>: used for coordination of beta testing, general discussions and support
 - <a href="https://forum.nano.org/" target="_blank">Nano Forum</a>: the home for technical discussions, general discussions and support
