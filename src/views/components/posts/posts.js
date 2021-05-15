@@ -59,7 +59,7 @@ export default class Posts extends React.Component {
             </ToggleButtonGroup>
           )}
         </div>
-        <div>{items}</div>
+        <div className='posts__body'>{items}</div>
       </>
     )
   }
