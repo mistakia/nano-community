@@ -20,14 +20,19 @@ The concept of money is believed to have originated in the form of "promises" (i
 
 ##### Properties of Money
 
-- Durability
-- Divisibility
-- Portability
-- Cognizability
-- Scarcity
-- Fungibility
-- Secure / Verifiable
-- Easily Transactable
+- Fungibility: its individual units must be capable of mutual substitution
+- Durability: able to withstand repeated use.
+- Divisibility: divisible to small units.
+- Portability: easily carried and transported.
+- Cognizability: its value must be easily identified.
+- Scarcity: its supply in circulation must be limited.
+- Acceptability: widely accepted
+
+##### Functions of Money
+
+- Medium of Exchange — to transfer value
+- Store of Value — to hold value
+- Measure of Value — to measure value
 
 Modern society is built on top of <a href="https://en.wikipedia.org/wiki/Fiat_money" target="_blank">fiat money</a>. Nano is an innovation in money that can be used to build a better society. Learn about its <a href="/introduction/advantages">advantages</a> in comparison to fiat money and other digital currencies.
 
@@ -37,7 +42,7 @@ Another core function of money is being a <a href="https://en.wikipedia.org/wiki
 
 <small>_Note: modern fiat money is inflationary as it is argued that small amounts of inflation drive economic growth and an adjustable monetary supply is an essential tool for governments to respond to economic events._</small>
 
-Nano is not a replacement for "fiat money", but rather an alternate and better form of money. One that protects against inflation, corrupt monetary policy, and miners.
+Nano is not a replacement for fiat money, but rather an alternate and better form of money. One that protects against inflation, corrupt monetary policy, and miners.
 
 There will never be any more Nano created and dumped into the market, making its Stock-To-Flow `undefined` as you can not divide by zero.
 
@@ -45,7 +50,7 @@ Nano has no inflation, maintaining it's purchasing power over time.
 
 ### The importance of self-sovereignty
 
-Nano is self-sovereign money. It's only ruler is the secret key that is associated with it. It only answers to whoever has the secret key and no other authority, government, or entity. This makes it resistant to confiscation, sanctions, and censorship.
+Nano is self-sovereign money. Its only ruler is the secret key that is associated with it. It only answers to whoever has the secret key and no other authority, government, or entity. This makes it resistant to confiscation, sanctions, and censorship.
 
 <small>_Note: without decentralization, Nano would not maintain this quality_</small>
 
