@@ -154,7 +154,7 @@ Nano blocks are small (~200 bytes), yet stateful, meaning it contains all the in
 
 A minimal block size allows for lightweight communication resulting in ultrafast transaction confirmation times. Stateful blocks combined with a block-lattice structure allow for operation using <a href="https://docs.nano.org/protocol-design/ledger/?h=prune#ledger-pruning" target="_blank">pruned ledgers</a>, enabling Nano to operate with far less storage space and be more easily embedded in applications with the potential of operating on a <a href="https://www.reddit.com/r/nanocurrency/comments/n9dgfh/lightweight_nano_node_with_a_ledger_under_2_mb/" target="_blank">ledger as small as 2mb.</a>
 
-# Nano is like
+## Nano is like
 
 **Nano is like physical cash:** it can be given to someone without fees and the transfer is instant. It is not reversible. You are responsible for handling it. If you lose your wallet, you lose your money. Your nano can be given to others to hold for you but you need to trust they won't lose it or take it.
 
