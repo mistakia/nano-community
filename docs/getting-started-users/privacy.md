@@ -10,7 +10,7 @@ Nano puts you in control of your privacy. You can protect it and decide when to 
 
 To protect your privacy, you should use a new Nano address each time you receive a new payment. It is good practice to use multiple accounts for different purposes. Doing so allows you to isolate each of your transactions in such a way that it is not possible to associate them all together. This prevents people who send you money from seeing what other addresses you own, how much you have, and what you do with it.
 
-Over time and with more development, there will be services and <a href="https://github.com/mistakia/nanowallet" target="_blank">prviacy focused wallets</a> that help make it effortless to manage and protect your privacy.
+Over time and with more development, there will be services and <a href="https://github.com/mistakia/nanowallet" target="_blank">privacy focused wallets</a> that help make it effortless to manage and protect your privacy.
 
 ## Protecting your Privacy
 
