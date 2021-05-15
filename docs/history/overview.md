@@ -63,7 +63,9 @@ Similar to Satoshi's initial announcement, Colin's project garnered little atten
 
 ## Distribution
 
-Nano was given away for free to anyone willing to manually complete a captcha. Distribution began in 2015 and ended in October 2017, at which point the faucet had distributed 126,248,289 NANO.
+Nano was given away for free to anyone willing to manually complete captcha puzzles (i.e. transcribing challenging to read or hear letters to text). The goal was to distribute Nano as widely and fairly as possible. The <a href="https://medium.com/nanocurrency/the-nano-faucet-c99e18ae1202" target="_blank">captcha faucet</a> allowed anyone with a computer to participate, without the need for specialized computers (Proof-Of-Work) or favoring those with more wealth (Initial Coin Offering).
+
+Distribution began in 2015 and ended in October 2017, at which point the faucet had distributed 126,248,289 NANO.
 
 7,000,000 NANO (~5%) was set aside as a <a href="https://www.nanolooker.com/developer-fund" target="_blank">developer fund</a>, of which about ~300,000 Nano remain as of April 2021.
 
@@ -81,13 +83,25 @@ Nano's distribution is notable as 95% of the supply was given away for free. Nan
 
 On 9 February 2018, the Italian cryptocurrency exchange BitGrail announced its shutdown after being hacked. There were unaccounted losses of 17 million Nano from its wallets, preventing users from accessing assets stored on the platform. The victims sought recoupment through the Italian court system, and supported by the Nano Foundation, launched a class-action suit against BitGrail owner Francesco Firano. In January 2019, the Court of Florence found Firano liable for the losses after discovering that the exchange had failed to implement any meaningful safeguards to ensure the safety of their customers' funds and failed to report losses from as early as July 2017.
 
+On 11 February 2018, the Core Team <a href="https://medium.com/nanocurrency/bitgrail-insolvency-update-2-11-18-9349c9fe1281" target="_blank">released a statement</a> outlining accounts, transactions, and a timeline of the hack by analyzing the on-chain data and connecting it with exchange data provided by BitGrail. The following account was identified as one likely used by the hacker with some of the transactions occuring between October 19–23, 2017.
+
+```
+nano_1fioob7u6ia76rfo1medtrwwdobey1ua8qe7z55qyjimir5b9d95hkdabbjn
+```
+
+<a href="https://nanex.cc/accountstats?account=nano_1fioob7u6ia76rfo1medtrwwdobey1ua8qe7z55qyjimir5b9d95hkdabbjn" target="_blank">Account History</a>
+
+<a href="https://nanex.cc/findaccount?searchstring=Bitgrail+Hacker" target="_blank">Potential Accounts</a>
+
 ## Nano
 
-On 31 January 2018, RaiBlocks rebranded to Nano.
+On 31 January 2018, RaiBlocks rebranded to Nano because it is easier to pronounce and sounds similar in whatever tongue spoken.
 
 ## Community
 
-### [NanoTrade](/history/community/nano-trade)
+Nano has a large and vibrant community on reddit and discord.
+
+[NanoTrade Discord History](/history/community/nano-trade)
 
 ## Timeline
 
