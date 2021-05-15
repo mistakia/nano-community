@@ -20,13 +20,13 @@ The concept of money is believed to have originated in the form of "promises" (i
 
 ##### Properties of Money
 
-- Fungibility: its individual units must be capable of mutual substitution
+- Fungibility: its individual units must be capable of mutual substitution.
 - Durability: able to withstand repeated use.
 - Divisibility: divisible to small units.
 - Portability: easily carried and transported.
 - Cognizability: its value must be easily identified.
 - Scarcity: its supply in circulation must be limited.
-- Acceptability: widely accepted
+- Acceptability: widely accepted.
 
 ##### Functions of Money
 
