@@ -38,7 +38,9 @@ Nano, unlike Bitcoin, is scalable, fast, asynchronous, uses minimal energy, oper
 - user controlled consensus
 
 #### Limitations of other digital money
+
 The vast majority of other digital money projects, which use Proof-of-Work for consensus and operate on a single chain synchronous DAG (i.e. blockchain), can not reliably operate with BOTH of these properties:
+
 - fixed supply w/ no inflation (Store of Value)
 - feeless tx prioritization (Medium of Exchange)
 
