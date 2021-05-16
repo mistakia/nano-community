@@ -14,7 +14,7 @@ export default class HomePage extends React.Component {
         <Seo
           title='Nano Community'
           description='Nano community gateway and wiki knowledge hub. Nano is digital money (cryptocurrency) that is peer-to-peer, feeless, instant, green and energy sustainable.'
-          tags='nano, wiki, crypto, currency, cryptocurrency, digital, money, feeless, guide, docs, energy, green, sustainable'
+          tags={['nano', 'wiki', 'crypto', 'currency', 'cryptocurrency', 'digital', 'money', 'feeless', 'guide', 'docs', 'energy', 'green', 'sustainable']}
         />
         <div className='posts'>
           <div className='posts__title'>Posts from the community</div>

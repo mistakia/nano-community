@@ -1,6 +1,12 @@
 const express = require('express')
 const router = express.Router()
 
+const groupBy = (xs, key) =>
+  xs.reduce((rv, x) => {
+    ;(rv[x[key]] = rv[x[key]] || []).push(x)
+    return rv
+  }, {})
+
 // trending posts over a span of time (with decay), freshness is given a value
 router.get('/trending', async (req, res) => {
   const { db, logger, cache } = req.app.locals
@@ -43,9 +49,15 @@ router.get('/trending', async (req, res) => {
 
     query.limit(limit)
 
-    console.log(query.toString())
-
     const posts = await query
+    const postIds = posts.map((p) => p.id)
+    const tags = await db('post_tags').whereIn('post_id', postIds)
+    const tagsByPostId = groupBy(tags, 'post_id')
+    for (const post of posts) {
+      const postTags = tagsByPostId[post.id] || []
+      post.tags = postTags
+    }
+
     cache.set('trending', posts)
     res.status(200).send(posts)
   } catch (error) {
@@ -88,6 +100,14 @@ router.get('/top', async (req, res) => {
     query.limit(limit)
 
     const posts = await query
+    const postIds = posts.map((p) => p.id)
+    const tags = await db('post_tags').whereIn('post_id', postIds)
+    const tagsByPostId = groupBy(tags, 'post_id')
+    for (const post of posts) {
+      const postTags = tagsByPostId[post.id] || []
+      post.tags = postTags
+    }
+
     cache.set(cacheId, posts)
     res.status(200).send(posts)
   } catch (error) {
