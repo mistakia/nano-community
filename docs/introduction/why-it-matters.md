@@ -32,7 +32,7 @@ The concept of money is believed to have originated in the form of "promises" (i
 
 - Medium of Exchange — to transfer value
 - Store of Value — to hold value
-- Measure of Value — to measure value
+- Unit of Account — to measure value
 
 Modern society is built on top of <a href="https://en.wikipedia.org/wiki/Fiat_money" target="_blank">fiat money</a>. Nano is an innovation in money that can be used to build a better society. Learn about its <a href="/introduction/advantages">advantages</a> in comparison to fiat money and other digital currencies.
 
