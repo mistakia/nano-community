@@ -10,7 +10,7 @@ To better understand the vision and motivations behind digital money, you must t
 
 ## Prelude
 
-In 1976, the publication of <a href="https://ee.stanford.edu/~hellman/publications/24.pdf" target="_blank">“New Directions in Cryptography”</a> by Dr Whitfield Diffie and Dr Martin Hellman effectively terminated government control of cryptography. It marked the dawn of cryptography in the public domain. Dr David Chaum in the 1980s published multiple papers describing <a href="http://www.hit.bme.hu/~buttyan/courses/BMEVIHIM219/2009/Chaum.BlindSigForPayment.1982.PDF" target="_blank">digital money</a> and <a href="https://www.cs.umd.edu/~mmazurek/414-papers/chaum-identification.pdf" target="_blank">pseudonymous identity networks</a>.
+In 1976, the publication of <a href="https://ee.stanford.edu/~hellman/publications/24.pdf" target="_blank">“New Directions in Cryptography”</a> by Dr Whitfield Diffie and Dr Martin Hellman effectively terminated government control of cryptography. It marked the dawn of cryptography in the public domain. In the 1980s, Dr David Chaum published multiple papers describing <a href="http://www.hit.bme.hu/~buttyan/courses/BMEVIHIM219/2009/Chaum.BlindSigForPayment.1982.PDF" target="_blank">digital money</a> and <a href="https://www.cs.umd.edu/~mmazurek/414-papers/chaum-identification.pdf" target="_blank">pseudonymous identity networks</a>.
 
 Inspired by these ideas, Eric Hughes, Timothy C May, and John Gilmore formed a group called "cypherpunks" that met monthly in the Bay Area.
 
@@ -51,7 +51,7 @@ As Bitcoin matured, several issues were identified that needed improvement in or
 
 1. Poor scalability & high fees: Each block in the blockchain can store a limited amount of data, which means the system can only process so many transactions per second, making spots in a block a commodity. Therefore, more use means higher fees and <a href="https://bitcoiner.live/" target="_blank">high fees</a> have made Bitcoin impractical for many use cases.
 
-2. High latency: Average confirmation times fluctuate between 10 and 300 minutes. In addition, most Bitcoin services require more than one confirmation before considering a transaction fully-settled,often requiring six confirmations which adds another 60 minutes.
+2. High latency: Average confirmation times fluctuate between 10 and 300 minutes. In addition, most Bitcoin services require more than one confirmation before considering a transaction fully-settled, often requiring six confirmations which adds another 60 minutes.
 
 3. Power inefficient: The Bitcoin network's power consumption grows with its value. An increase in value will be followed by an increase in power consumption. As of April 2021, it has reached an <a href="https://digiconomist.net/bitcoin-energy-consumption/" target="_blank">estimated 107.97TWh per year, using an average of 1111 kWh per transaction</a>. On a yearly basis, the bitcoin network consumes more energy than all but 38 countries, falling in line with countries like Finland, Chile and Austria.
 
