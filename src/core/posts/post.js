@@ -1,4 +1,4 @@
-import { Record } from 'immutable'
+import { Record, List } from 'immutable'
 
 export const Post = new Record({
   id: null,
@@ -14,6 +14,7 @@ export const Post = new Record({
   score_social: null,
   created_at: null,
   updated_at: null,
+  tags: new List(),
 
   source_title: null,
   source_url: null,

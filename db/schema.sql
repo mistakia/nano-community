@@ -60,7 +60,8 @@ CREATE TABLE `post_tags` (
   `tag` varchar(65) NOT NULL,
   `account_id` int(11) NOT NULL,
   KEY `post_id` (`post_id`),
-  KEY `tag` (`tag`)
+  KEY `tag` (`tag`),
+  UNIQUE KEY `user_tag` (`post_id`,`tag`,`account_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
