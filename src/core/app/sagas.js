@@ -1,3 +1,4 @@
+/* global gtag */
 import { takeLatest, fork, select } from 'redux-saga/effects'
 import { LOCATION_CHANGE } from 'connected-react-router'
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
