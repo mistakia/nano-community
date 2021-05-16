@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 
+import history from '@core/history'
 import { BASE_URL } from '@core/constants'
 
 const absoluteUrl = (path) => `${BASE_URL}${path}`
@@ -78,7 +79,7 @@ const Seo = ({
   schema,
   title,
   description,
-  path,
+  path = history.location.pathname,
   contentType = 'website',
   image = '/resources/nano-circle.png',
   published,

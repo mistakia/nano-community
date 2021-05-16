@@ -3,6 +3,7 @@ import React from 'react'
 import Posts from '@components/posts'
 import Network from '@components/network'
 import Menu from '@components/menu'
+import Seo from '@components/seo'
 
 import './home.styl'
 
