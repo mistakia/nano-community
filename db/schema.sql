@@ -7,15 +7,40 @@
 DROP TABLE IF EXISTS `accounts`;
 
 CREATE TABLE `accounts` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `pub` varchar(255) NOT NULL,
-  `prv` varchar(255) NOT NULL,
-  `address` char(65) NOT NULL,
-  `signature` varchar(255) NOT NULL,
+  `account` char(65) CHARACTER SET utf8 NOT NULL,
   `alias` varchar(255) DEFAULT NULL,
-  `verified` tinyint(1) DEFAULT 0,
-  `last_visit` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  `frontier` char(64) CHARACTER SET utf8 DEFAULT NULL,
+  `watt_hour` int(11) DEFAULT NULL,
+  `open_block` char(64) CHARACTER SET utf8 DEFAULT NULL,
+  `representative` tinyint(1) DEFAULT 0,
+  `principal_representative` tinyint(1) DEFAULT 0,
+  `representative_block` char(64) CHARACTER SET utf8 DEFAULT NULL,
+  `balance` varchar(39) CHARACTER SET utf8 DEFAULT NULL,
+  `modified_timestamp` int(11) DEFAULT NULL,
+  `block_count` int(11) DEFAULT NULL,
+  `confirmation_height` int(11) DEFAULT NULL,
+  `confirmation_height_frontier` char(64) CHARACTER SET utf8 DEFAULT NULL,
+  `key` char(64) CHARACTER SET utf8 DEFAULT NULL,
+  UNIQUE KEY `account` (`account`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accounts_meta`
+--
+
+DROP TABLE IF EXISTS `accounts_meta`;
+
+CREATE TABLE `accounts_meta` (
+  `account` char(65) CHARACTER SET utf8 NOT NULL,
+  `alias` varchar(255) DEFAULT NULL,
+  `balance` varchar(39) CHARACTER SET utf8 DEFAULT NULL,
+  `block_count` int(11) DEFAULT NULL,
+  `weight` varchar(39) CHARACTER SET utf8 DEFAULT NULL,
+  `delegators` int(11) DEFAULT NULL,
+  `timestamp` int(11) NOT NULL,
+  UNIQUE KEY `account` (`account`, `timestamp`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -107,3 +132,38 @@ CREATE TABLE `sources` (
   `updated_at` int(11) DEFAULT NULL,
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+
+CREATE TABLE `users` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `pub` varchar(64) NOT NULL,
+  `prv` varchar(128) NOT NULL,
+  `alias` varchar(255) DEFAULT NULL,
+  `verified` tinyint(1) DEFAULT 0,
+  `last_visit` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `pub` (`pub`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_addresses`
+--
+
+DROP TABLE IF EXISTS `user_addresses`;
+
+CREATE TABLE `addresses` (
+  `account_id` int(11) NOT NULL,
+  `address` char(65) NOT NULL,
+  `signature` varchar(255) NOT NULL,
+  KEY (`account_id`),
+  UNIQUE KEY `address` (`address`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
