@@ -1918,7 +1918,7 @@ bl@^4.0.0:
     inherits "^2.0.4"
     readable-stream "^3.4.0"
 
-blakejs@^1.1.0:
+blakejs@1.1.0, blakejs@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/blakejs/-/blakejs-1.1.0.tgz#69df92ef953aa88ca51a32df6ab1c54a155fc7a5"
   integrity sha1-ad+S75U6qIylGjLfarHFShVfx6U=
@@ -2772,6 +2772,11 @@ cross-spawn@^7.0.0, cross-spawn@^7.0.1, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
     path-key "^3.1.0"
     shebang-command "^2.0.0"
     which "^2.0.1"
+
+crypto-js@3.1.9-1:
+  version "3.1.9-1"
+  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-3.1.9-1.tgz#fda19e761fc077e01ffbfdc6e9fdfc59e8806cd8"
+  integrity sha1-/aGedh/Ad+Af+/3G6f38WeiAbNg=
 
 crypto-random-string@^2.0.0:
   version "2.0.0"
@@ -6981,6 +6986,23 @@ nan@^2.12.1:
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.2.tgz#f5376400695168f4cc694ac9393d0c9585eeea19"
   integrity sha512-M2ufzIiINKCuDfBSAUr1vWQ+vuVcA9kqx8JJUsbQi6yf1uGRyb7HfpdfUr5qLXf3B/t8dPvcjhKMmlfnP47EzQ==
 
+nanocurrency-web@^1.3.2:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/nanocurrency-web/-/nanocurrency-web-1.3.2.tgz#1b0ec4db12fb395cb1fe3cc6a776ebc1b1ae6da7"
+  integrity sha512-G+oZqfMFdcTzAeVxcEhAkiJLkQAAWJQETbGyVd1ig7fULCcABgE9t5vFHDiZRvyBrfLfVC/0Ah7ukR3Pz2haZA==
+  dependencies:
+    bignumber.js "9.0.0"
+    blakejs "1.1.0"
+    crypto-js "3.1.9-1"
+
+nanocurrency@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/nanocurrency/-/nanocurrency-2.5.0.tgz#968659daadfa23150afc44a296fa3b211ffe9380"
+  integrity sha512-zMDlgBCML0vMGvldsZN1Np93vwiMjaBLCkOM2tXv0LNIpty8HghDMZiNRzfBPkP70oRhRU+hOpVCEpTzZK5gDQ==
+  dependencies:
+    bignumber.js "^9.0.0"
+    blakejs "^1.1.0"
+
 nanoid@^3.0.2, nanoid@^3.1.22, nanoid@^3.1.3:
   version "3.1.22"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.1.22.tgz#b35f8fb7d151990a8aebd5aa5015c03cf726f844"
@@ -9700,6 +9722,16 @@ tunnel-agent@^0.6.0:
   integrity sha1-J6XeoGs2sEoKmWZ3SykIaPD8QP0=
   dependencies:
     safe-buffer "^5.0.1"
+
+tweetnacl-util@^0.15.1:
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/tweetnacl-util/-/tweetnacl-util-0.15.1.tgz#b80fcdb5c97bcc508be18c44a4be50f022eea00b"
+  integrity sha512-RKJBIj8lySrShN4w6i/BonWp2Z/uxwC3h4y7xsRrpP59ZboCd0GpEVsOnMDYLMmKBpYhb5TgHzZXy7wTfYFBRw==
+
+tweetnacl@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-1.0.3.tgz#ac0af71680458d8a6378d0d0d050ab1407d35596"
+  integrity sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==
 
 type-check@^0.4.0, type-check@~0.4.0:
   version "0.4.0"
