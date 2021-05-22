@@ -201,6 +201,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 ## Lazy Bootstrapping
 
 ## Peering / Rep Crawler
+
 - connect to previously connected peers stored in the database
   - establish a tcp connection
   - send a keepalive message
@@ -212,6 +213,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - search peers for reps every 3s when below minimum online weight, otherwise every 7s
 
 #### Notable Functions
+
 - <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/repcrawler.cpp#L79-L102" target="_blank">rep_crawler::ongoing_crawl</a>
 - <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/node.cpp#L35-L66" target="_blank">node::keepalive</a>
 - <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/network.cpp#L139-L144" target="_blank">network::send_keepalive</a>

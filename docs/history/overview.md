@@ -6,7 +6,7 @@ tags: nano, crypto, history, distribution, development, creation, background
 
 # History
 
-To better understand the vision and motivations behind digital money, you must trace its history to see how it was spawned and shaped. The origins date back to at least <a href="https://cacm.acm.org/magazines/2017/12/223058-bitcoins-academic-pedigree/fulltext" target="_blank">the 1990s</a>.
+To better understand the vision and motivations behind digital money, you must trace its history to see how it was spawned and shaped. The technical origins date back to at least <a href="https://cacm.acm.org/magazines/2017/12/223058-bitcoins-academic-pedigree/fulltext" target="_blank">the 1990s</a>, while some of its theoretical roots go back as far as 1978 to the <a href="https://en.wikipedia.org/wiki/The_Denationalization_of_Money" target="_blank">"Denationalisation of Money: The Argument Refined"</a> by Friedrich Hayek.
 
 ## Prelude
 
