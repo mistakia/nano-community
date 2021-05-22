@@ -8,8 +8,8 @@ tags: nano, docs, reference, specification, documentation, crypto, protocol, dev
 
 For a high-level overview of the protocol, review its [design](/design/basics). The details on this page are based on the <a href="https://github.com/nanocurrency/nano-node" target="_blank">reference implementation</a>.
 
-- <a href="https://github.com/nanocurrency/protocol/tree/master/reference" target="_blank">Messaging Protocol Spec</a>
-- <a href="https://github.com/nanocurrency/nanodb-specification" target="_blank">Database Format Spec</a>
+- <a href="https://github.com/nanocurrency/protocol/tree/master/reference" target="_blank">Messaging Protocol Specification</a>
+- <a href="https://github.com/nanocurrency/nanodb-specification" target="_blank">Database Format Specification</a>
 
 <small>_Note: The reference implementation is under heavy development and rapidly changing. At times, this spec will be outdated and/or incomplete._</small>
 
@@ -35,14 +35,16 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - [Lazy bootstrapping](#lazy-bootstrapping)
 - [Peering / rep crawler](#peering--rep-crawler)
 - [Online reps](#online-reps)
+- [Handshake](#handshake)
 
 ## Election Scheduler
 
-- has two queues:
+- manages two queues:
   - **priority:** blocks from the network
   - **manual:** local confirmation requests (via rpc)
 - handles adding a block to the priority queue
   - dependents must be confirmed
+- every 5m the scheduler is populated using the backlog
 - when there is a vacancy in the active election container it will check both queues (manual & priority) and add the top block (will be changed in v22.1)
   - a block starts of with a passive election state, unless it is added from the priority queue and previously had an election
 - upon starting an election, a node will generate & broadcast votes for that election (see [broadcasting a vote](#broadcasting-a-vote))
@@ -51,12 +53,13 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 
 - <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/election_scheduler.cpp#L90-L129" target="_blank">election_scheduler::run</a> — main loop waiting for vacancy
 - <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/election_scheduler.cpp#L24-L46" target="_blank">election_scheduler::activate</a> — adding a block to the scheduler
+- <a href="https://github.com/nanocurrency/nano-node/blob/3135095da26738ba1a08cf2fdba02bdce3fe7abe/nano/node/node.cpp#L1738-L1756" target="_blank">node::populate_backlog</a> — populates scheduler from backlog
 
 ## Priority Queue / Tx Prioriziation
 
 - 128 buckets based on balance
   - based on bit in the balance field, determined by number of leading zeros
-- bucket maximum size 250000
+- bucket size 250000
 - bucket sorted by account last modified time (local time of last received block)
 - when adding to a full bucket, the last block in the bucket is dropped
 - when getting a block, the buckets are iterated one at a time and the first block in a bucket is selected.
@@ -69,7 +72,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 
 ## Broadcasting a Vote
 
-- only when an election is first started, can be by the election scheduler or by vote hinting
+- only when an election is first started, which can be by the election scheduler or via vote hinting
 
 #### Notable Functions
 
@@ -110,7 +113,8 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 
 - requests are made inside the active election request loop that runs every 500ms, evaluating the oldest election first
 - vote requests are made if it has been either 10s (optimistic) or 5s (normal) since the last request
-- starting with the highest weight reps, requests are made to a maximum of 50 reps per loop, with a maximum of 14 hashes per rep (split up into two requests of 7)
+- starting with the highest weight reps, requests are made to a maximum of 50 reps per loop, with a maximum of 14 hashes per rep
+  - each `confirm_req` contains a maximum of 7 hashes
 
 #### Notable Functions
 
@@ -206,7 +210,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
   - establish a tcp connection
   - send a keepalive message
   - check to see if peer is a representative by requesting a vote on a random block
-- keepalive messages propagate a list of 8 peers
+- keepalive messages propagate a list of 8 random peers
 - when online weight is below minimum, send keepalive to preconfigured peers
   - default host: peering.nano.org
   - default port: 7075
@@ -219,3 +223,5 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/network.cpp#L139-L144" target="_blank">network::send_keepalive</a>
 
 ## Online Reps
+
+## Handshake
