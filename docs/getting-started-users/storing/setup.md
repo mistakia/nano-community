@@ -51,7 +51,7 @@ To generate one on your own, you can download one of the following static websit
 - Numtel (<a href="/resources/numtel-account-generator.html" download>Download</a> / <a href="https://raw.githubusercontent.com/mistakia/nano-community/main/resources/numtel-account-generator.html" target="_blank">Github</a>) — <a href="https://github.com/numtel/rai-paper-wallet/" target="_blank">Source</a>
 - Nanoo.tools (<a href="/resources/nanoo-tools-account-generator.html" download>Download</a> / <a href="https://raw.githubusercontent.com/mistakia/nano-community/main/resources/nanoo-tools-account-generator.html" target="_blank">GitHub</a>) — <a href="https://nanoo.tools/light-paperwallets" target="_blank">Site</a>
 
-<small>_Note: these generators have not been audited yet_</a>
+<small>_Note: these generators have not been audited yet_</small>
 
 ## Software Wallets
 
