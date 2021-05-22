@@ -76,6 +76,9 @@ export default class Menu extends React.Component {
               <Link to='/getting-started-devs/documentation'>
                 Documentation
               </Link>
+              <Link to='/getting-started-devs/protocol-reference'>
+                Protocol
+              </Link>
               {/* <Link to='/getting-started-devs/integrations'>Integrations</Link> */}
             </div>
           </div>

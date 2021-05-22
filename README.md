@@ -45,6 +45,7 @@ A set of community maintained documents made up of guides and wiki-style documen
 |   |-- documentation.md
 |   |-- getting-started.md
 |   |-- integrations.md
+|   |-- protocol-reference.md
 |   `-- running-a-node.md
 |-- getting-started-users
 |   |-- storing

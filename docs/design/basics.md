@@ -8,10 +8,12 @@ tags: nano, protocol, crypto, whitepaper, design
 
 For a general overview for those new to the topic of digital money, start with a brief overview of <a href="/introduction/how-it-works">how it works</a>.
 
-For more technical details of the protocol and node design, review the <a href="https://docs.nano.org/what-is-nano/living-whitepaper/" target="_blank">Living Whitepaper</a> or the published whitepapers
+For more technical details of the protocol and node design, review details about the [reference implementation](/getting-started-devs/protocol-reference), the <a href="https://docs.nano.org/what-is-nano/living-whitepaper/" target="_blank">Living Whitepaper</a> or the published whitepapers
 
 - <a href="https://github.com/mistakia/nano-community/blob/main/resources/nano-whitepaper.pdf" target="_blank">Nano Whitepaper</a>
 - <a href="https://github.com/mistakia/nano-community/blob/main/resources/raiblocks-whitepaper.pdf" target="_blank">Original RaiBlocks Whitepaper</a>
+
+<small>_Note: the published whitepapers are outdated_</small>
 
 ### Overview
 
