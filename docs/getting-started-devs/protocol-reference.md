@@ -17,6 +17,8 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - [Vote hinting](#vote-hinting)
 - [Requesting votes](#requesting-votes)
 - [Processing vote requests](#processing-vote-requests)
+- [Final Votes](#final-votes)
+- [Vote Spacing](#vote-spacing)
 - [Processing a local block](#processing-a-local-block-via-rpc)
 - [Processing a network block](#processing-a-network-block)
 - [Confirmations](#confirmations)
@@ -46,7 +48,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 
 ## Priority Queue / Tx Prioriziation
 
-- 129 buckets based on balance
+- 128 buckets based on balance
   - based on bit in the balance field, determined by number of leading zeros
 - bucket maximum size 250000
 - bucket sorted by account last modified time (local time of last received block)
@@ -149,6 +151,10 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - <a href="https://github.com/nanocurrency/nano-node/blob/f7f83e79cbf2f6edf30460fcd77a4283bffa2d5e/nano/node/request_aggregator.cpp#L69-L115" target="_blank">request_aggregator::run</a> — request process loop
 - <a href="https://github.com/nanocurrency/nano-node/blob/f7f83e79cbf2f6edf30460fcd77a4283bffa2d5e/nano/node/request_aggregator.cpp#L158-L247" target="_blank">request_aggregator::aggregate</a> — process request
 - <a href="https://github.com/nanocurrency/nano-node/blob/f7f83e79cbf2f6edf30460fcd77a4283bffa2d5e/nano/node/voting.cpp#L208-L231" target="_blank">vote_generator::generate</a> — generate a new vote
+
+## Final Votes
+
+## Vote Spacing
 
 ## Processing A Local Block (via RPC)
 
