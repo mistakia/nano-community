@@ -83,7 +83,7 @@ Nano's distribution is notable as 95% of the supply was given away for free. Nan
 
 On 9 February 2018, the Italian cryptocurrency exchange BitGrail announced its shutdown after being hacked. There were unaccounted losses of 17 million Nano from its wallets, preventing users from accessing assets stored on the platform. The victims sought recoupment through the Italian court system, and supported by the Nano Foundation, launched a class-action suit against BitGrail owner Francesco Firano. In January 2019, the Court of Florence found Firano liable for the losses after discovering that the exchange had failed to implement any meaningful safeguards to ensure the safety of their customers' funds and failed to report losses from as early as July 2017.
 
-On 11 February 2018, the Core Team <a href="https://medium.com/nanocurrency/bitgrail-insolvency-update-2-11-18-9349c9fe1281" target="_blank">released a statement</a> outlining accounts, transactions, and a timeline of the hack by analyzing the on-chain data and connecting it with exchange data provided by BitGrail. The following account was identified as one likely used by the hacker with some of the transactions occuring between October 19–23, 2017.
+On 11 February 2018, the Core Team <a href="https://medium.com/nanocurrency/bitgrail-insolvency-update-2-11-18-9349c9fe1281" target="_blank">released a statement</a> outlining accounts, transactions, and a timeline of the hack by analyzing the on-chain data and connecting it with exchange data provided by BitGrail. The following account was identified as one likely used by the hacker with some of the transactions occurring between October 19–23, 2017.
 
 ```
 nano_1fioob7u6ia76rfo1medtrwwdobey1ua8qe7z55qyjimir5b9d95hkdabbjn
