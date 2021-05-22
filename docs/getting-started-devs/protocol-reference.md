@@ -40,7 +40,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 ## Election Scheduler
 
 - manages two queues:
-  - **priority:** blocks from the network
+  - **priority:** main queue with all blocks
   - **manual:** local confirmation requests (via rpc)
 - handles adding a block to the priority queue
   - dependents must be confirmed
@@ -144,6 +144,22 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - <a href="https://github.com/nanocurrency/nano-node/blob/98af16459a3cf6ac8a4e7523788eb70f5bdbf813/nano/node/blockprocessor.cpp#L335-L358" target="_blank">block_processor::process_live</a> — process block from network
 
 ## Vote Hinting
+
+- votes for inactive elections are stored in a cache
+- only votes from PRs are stored
+- votes for a maximum of 16,384 hashes are stored
+  - configurable via `inactive_votes_cache_size`
+- when the cache is full the oldest hash is evicted
+- on a new vote, the tally is evaluated
+  - it is confirmed if the tally exceeds the quorum delta
+  - if the block is missing, a bootstrap process is started to get the block when the tally is more than ~0.4% of the trended weight
+  - an election is started if it has received 15 or more votes (from PRs) and 10% or more of the online trended weight
+    - weight threshold configurable via `election_hint_weight_percent`
+
+#### Notable Functions
+
+- <a href="https://github.com/nanocurrency/nano-node/blob/aefa4d015284bab44c4f46e9504c40995b4c7fd8/nano/node/active_transactions.cpp#L1154-L1220" target="_blank">active_transactions::add_inactive_votes_cache</a> — adds vote
+- <a href="https://github.com/nanocurrency/nano-node/blob/aefa4d015284bab44c4f46e9504c40995b4c7fd8/nano/node/active_transactions.cpp#L1282-L1323" target="_blank">active_transactions::inactive_votes_bootstrap_check_impl</a> — checks tally
 
 ## Processing Vote Requests
 
