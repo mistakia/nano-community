@@ -33,11 +33,11 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - has two queues:
   - **priority:** blocks from the network
   - **manual:** local confirmation requests (via rpc)
-- adding a block to the priority queue
+- handles adding a block to the priority queue
   - dependents must be confirmed
 - when there is a vacancy in the active election container it will check both queues (manual & priority) and add the top block (will be changed in v22.1)
   - a block starts of with a passive election state, unless it is added from the priority queue and previously had an election
-- upon starting an election, a node will generate & broadcast votes for that election (see generating a vote)
+- upon starting an election, a node will generate & broadcast votes for that election (see [broadcasting a vote](#broadcasting-a-vote))
 
 #### Notable Functions
 
@@ -47,7 +47,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 ## Priority Queue / Tx Prioriziation
 
 - 129 buckets based on balance
-  - bucket min based on number of leading zeros (uint128)
+  - based on bit in the balance field, determined by number of leading zeros
 - bucket maximum size 250000
 - bucket sorted by account last modified time (local time of last received block)
 - when adding to a full bucket, the last block in the bucket is dropped
