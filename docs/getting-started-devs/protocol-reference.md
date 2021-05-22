@@ -58,7 +58,8 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 ## Priority Queue / Tx Prioriziation
 
 - 128 buckets based on balance
-  - based on bit in the balance field, determined by number of leading zeros
+- the balance included in the block is used
+  - based on bit, determined by number of leading zeros
 - bucket size 250000
 - bucket sorted by account last modified time (local time of last received block)
 - when adding to a full bucket, the last block in the bucket is dropped
@@ -152,7 +153,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - when the cache is full the oldest hash is evicted
 - on a new vote, the tally is evaluated
   - it is confirmed if the tally exceeds the quorum delta
-  - if the block is missing, a bootstrap process is started to get the block when the tally is more than ~0.4% of the trended weight
+  - if the block is missing, a lazy bootstrap process is started to get the block when the tally is more than ~0.4% of the trended weight
   - an election is started if it has received 15 or more votes (from PRs) and 10% or more of the online trended weight
     - weight threshold configurable via `election_hint_weight_percent`
 
@@ -184,7 +185,9 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 
 ## Processing A Local Block (via RPC)
 
-- if dependents are confirmed it is added to the election scheduler.
+- a new block with the dependents confirmed is added to the election scheduler.
+- an old block with the dependents confirmed and higher work
+- if it is an old block with the dependents confirmed
 - the block is broadcasted to the network
   - sent directly to all PRs
   - fanout to sqrt(non-PR peers)
@@ -195,7 +198,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 
 ## Processing a Network Block
 
-- recieved via a <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/network.cpp#L401-L417" target="_blank">publish</a> message
+- received via a <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/network.cpp#L401-L417" target="_blank">publish</a> message
 - once the block signature is validated, it is added to the block processing queue
 - only 10 forks tracked (max_blocks) for a given election/root. On a new fork, the one with the lowest weight will be dropped
 
