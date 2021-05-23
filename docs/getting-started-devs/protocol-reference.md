@@ -235,7 +235,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
   - default host: peering.nano.org
   - default port: 7075
 - search peers for reps every 3s when below minimum online weight, otherwise every 7s
-- to check if a peer is a rep a vote is requested on a random block, the peer has 5s to respond
+- to check if a peer is a representative, a vote is requested on a random block, the peer has 5s to respond
 
 #### Notable Functions
 
