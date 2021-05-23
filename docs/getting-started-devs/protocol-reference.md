@@ -25,7 +25,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - [Processing vote requests](#processing-vote-requests)
 - [Final Votes](#final-votes)
 - [Vote Spacing](#vote-spacing)
-- [Processing a local block](#processing-a-local-block-via-rpc)
+- [Block Processor](#block-processor)
 - [Processing a network block](#processing-a-network-block)
 - [Confirmations](#confirmations)
 - [Confirmation height processor](#confirmation-height-processor)
@@ -36,6 +36,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - [Peering / rep crawler](#peering--rep-crawler)
 - [Online reps](#online-reps)
 - [Handshake](#handshake)
+- [Telemetry](#telemetry)
 
 ## Election Scheduler
 
@@ -183,24 +184,25 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 
 ## Vote Spacing
 
-## Processing A Local Block (via RPC)
+## Block Processor
 
-- a new block with the dependents confirmed is added to the election scheduler.
-- an old block with the dependents confirmed and higher work
-- if it is an old block with the dependents confirmed
-- the block is broadcasted to the network
+- validates the block signature, height, representative, balance, and work field
+- excludes burn account blocks
+- if the previous or source block is missing, it is added to unchecked and gap cache
+- only 10 forks are tracked. On a new fork, the one with the lowest weight will be dropped
+- new checked blocks added locally (via RPC) are broadcasted to the network
   - sent directly to all PRs
   - fanout to sqrt(non-PR peers)
+- the block is added to the election scheduler if the dependents are confirmed and it is a new block or an old block with higher work
 
 #### Notable Functions
 
-- <a href="https://github.com/nanocurrency/nano-node/blob/3135095da26738ba1a08cf2fdba02bdce3fe7abe/nano/node/node.cpp#L567-L579" target="_blank">node::process_local</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/98af16459a3cf6ac8a4e7523788eb70f5bdbf813/nano/node/blockprocessor.cpp#L360-L535" target="_blank">block_processor::process_one</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/98af16459a3cf6ac8a4e7523788eb70f5bdbf813/nano/node/blockprocessor.cpp#L335-L358" target="_blank">block_processor::process_live</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/b43c218c4f824191e6062e2a3d10873428dbbc0c/nano/node/election_scheduler.cpp#L24-L46" target="_blank">election_scheduler::activate</a>
+- <a href="https://github.com/nanocurrency/nano-node/blob/98af16459a3cf6ac8a4e7523788eb70f5bdbf813/nano/node/blockprocessor.cpp#L360-L535" target="_blank">block_processor::process_one</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/98af16459a3cf6ac8a4e7523788eb70f5bdbf813/nano/node/blockprocessor.cpp#L335-L358" target="_blank">block_processor::process_live</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/b43c218c4f824191e6062e2a3d10873428dbbc0c/nano/node/election_scheduler.cpp#L24-L46" target="_blank">election_scheduler::activate</a>
 
 ## Processing a Network Block
 
 - received via a <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/network.cpp#L401-L417" target="_blank">publish</a> message
 - once the block signature is validated, it is added to the block processing queue
-- only 10 forks tracked (max_blocks) for a given election/root. On a new fork, the one with the lowest weight will be dropped
 
 #### Notable Functions
 
@@ -213,6 +215,11 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
   - cemented bootstrap count has been reached
   - the block had a previous election
   - there are less than 500 active elections
+- added to the confirmation height processor queue
+
+#### Notable Functions
+
+- <a href="https://github.com/nanocurrency/nano-node/blob/3135095da26738ba1a08cf2fdba02bdce3fe7abe/nano/node/election.cpp#L269-L309" target="_blank">election::confirm_if_quorum</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/3135095da26738ba1a08cf2fdba02bdce3fe7abe/nano/node/election.cpp#L39-L68" target="_blank">election::confirm_once</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/3135095da26738ba1a08cf2fdba02bdce3fe7abe/nano/node/node.cpp#L1350-L1375" target="_blank">node::process_confirmed</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/98af16459a3cf6ac8a4e7523788eb70f5bdbf813/nano/node/confirmation_height_processor.cpp#L155-L162" target="_blank">confirmation_height_processor::add</a>
 
 ## Confirmation Height Processor
 
@@ -246,3 +253,5 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 ## Online Reps
 
 ## Handshake
+
+## Telemetry
