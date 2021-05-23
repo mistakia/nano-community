@@ -57,7 +57,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 
 ## Priority Queue / Tx Prioriziation
 
-- 128 buckets based on balance
+- 129 buckets based on balance
 - the balance included in the block is used
   - based on bit, determined by number of leading zeros
 - bucket size 250000
@@ -209,9 +209,10 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 
 ## Confirmations
 
-- Upon confirmation if cemented bootstrap count has been reached, the block was confirmed via an election, and there are less than 500 active elections
-  - add the next transaction to the election scheduler.
-  - add the next transaction in the destination account to the election scheduler
+- Upon block confirmation, an election for the successor block and destination account block are started if the following conditions are met:
+  - cemented bootstrap count has been reached
+  - the block had a previous election
+  - there are less than 500 active elections
 
 ## Confirmation Height Processor
 
@@ -228,12 +229,13 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - connect to previously connected peers stored in the database
   - establish a tcp connection
   - send a keepalive message
-  - check to see if peer is a representative by requesting a vote on a random block
+  - check to see if peer is a representative
 - keepalive messages propagate a list of 8 random peers
 - when online weight is below minimum, send keepalive to preconfigured peers
   - default host: peering.nano.org
   - default port: 7075
 - search peers for reps every 3s when below minimum online weight, otherwise every 7s
+- to check if a peer is a rep a vote is requested on a random block, the peer has 5s to respond
 
 #### Notable Functions
 
