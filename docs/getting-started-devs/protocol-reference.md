@@ -239,8 +239,8 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
   - check to see if peer is a representative
 - keepalive messages propagate a list of 8 random peers
 - when online weight is below minimum, send keepalive to preconfigured peers
-  - default host: peering.nano.org
-  - default port: 7075
+  - default host: `peering.nano.org`
+  - default port: `7075`
 - search peers for reps every 3s when below minimum online weight, otherwise every 7s
 - to check if a peer is a representative, a vote is requested on a random block, the peer has 5s to respond
 
@@ -251,6 +251,20 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/network.cpp#L139-L144" target="_blank">network::send_keepalive</a>
 
 ## Online Reps
+
+- online weight is based on:
+  - votes from a rep on an active election
+  - vote responses to rep crawler requests
+- online weight is calculated on every new rep or if it has been 5m
+- the online weight is saved every 5m
+- the trending weight is calculated every 5m by selecting the median weight over the last `4032` periods (i.e. 14 days)
+- the delta weight is the highest weight among trending, online, or minimum multipled by `0.67`
+
+### Notable Functions
+
+- <a href="https://github.com/nanocurrency/nano-node/blob/f7f83e79cbf2f6edf30460fcd77a4283bffa2d5e/nano/node/online_reps.cpp#L17-L33" target="_blank">online_reps::observe</a> — add rep to online weight
+- <a href="https://github.com/nanocurrency/nano-node/blob/f7f83e79cbf2f6edf30460fcd77a4283bffa2d5e/nano/node/online_reps.cpp#L35-L55" target="_blank">online_reps::sample</a> — save online weight
+- <a href="https://github.com/nanocurrency/nano-node/blob/f7f83e79cbf2f6edf30460fcd77a4283bffa2d5e/nano/node/online_reps.cpp#L67-L82" target="_blank">online_reps::calculate_trend</a> — calculate trending
 
 ## Handshake
 
