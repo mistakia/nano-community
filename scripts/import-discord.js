@@ -169,6 +169,7 @@ const main = async (guildId, { getFullHistory = false } = {}) => {
       .limit(1)
 
     const messageId = rows.length ? rows[0].pid.split(cid)[1] : undefined
+    logger(`last messageId: ${messageId}`)
     let beforeId, messageIds, res
     do {
       const url =
