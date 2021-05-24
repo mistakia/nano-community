@@ -203,7 +203,7 @@ const main = async (guildId, { getFullHistory = false } = {}) => {
         html: null,
         text: p.content,
         score: p.reactions
-          ? p.reactions.reduce((sum, item) => (sum = sum + item.count), 1)
+          ? Math.max(...p.reactions.map(r => r.count), 1)
           : 1
       }))
 
