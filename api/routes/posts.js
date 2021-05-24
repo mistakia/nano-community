@@ -46,6 +46,7 @@ router.get('/trending', async (req, res) => {
     query.whereRaw('posts.created_at > (UNIX_TIMESTAMP() - ?)', age * 60 * 60)
     query.whereNotNull('posts.text')
     query.whereNot('posts.text', '')
+    query.where('posts.score', '>', 5)
     // if (excludedIds.length) query.whereNotIn('posts.id', excludedIds)
     query.groupBy('main_url')
 
