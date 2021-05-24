@@ -47,12 +47,10 @@ const getMetaTags = ({
   }
   if (image) {
     metaTags.push({ itemprop: 'image', content: absoluteUrl(image) })
-    // metaTags.push({ name: 'twitter:image:src', content: absoluteUrl(image) });
     metaTags.push({ property: 'og:image', content: absoluteUrl(image) })
-    // metaTags.push({ name: 'twitter:card', content: 'summary_large_image' });
-  } else {
-    metaTags.push({ name: 'twitter:card', content: 'summary' })
   }
+
+  metaTags.push({ name: 'twitter:card', content: 'summary' })
 
   return metaTags
 }
