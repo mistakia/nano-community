@@ -32,8 +32,11 @@ const getMetaTags = ({
     { property: 'og:url', content: url },
     { property: 'og:description', content: description },
     { property: 'og:site_name', content: 'Nano.Community' },
-    { property: 'og:locale', content: 'en_EN' }
+    { property: 'og:locale', content: 'en_EN' },
     // { name: 'fb:app_id', content: '<FB App ID>' },
+
+    { name: 'twitter:title', content: title },
+    { name: 'twitter:description', content: description }
   ]
 
   if (published)
@@ -48,6 +51,7 @@ const getMetaTags = ({
   if (image) {
     metaTags.push({ itemprop: 'image', content: absoluteUrl(image) })
     metaTags.push({ property: 'og:image', content: absoluteUrl(image) })
+    metaTags.push({ name: 'twitter:image', content: absoluteUrl(image) })
   }
 
   metaTags.push({ name: 'twitter:card', content: 'summary' })
