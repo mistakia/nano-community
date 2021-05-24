@@ -203,8 +203,8 @@ const main = async (guildId, { getFullHistory = false } = {}) => {
         html: null,
         text: p.content,
         score: p.reactions
-          ? p.reactions.reduce((sum, item) => (sum = sum + item.count), 0)
-          : 0
+          ? p.reactions.reduce((sum, item) => (sum = sum + item.count), 1)
+          : 1
       }))
 
       if (posts.length) {
