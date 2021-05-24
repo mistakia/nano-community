@@ -36,7 +36,9 @@ const getMetaTags = ({
     // { name: 'fb:app_id', content: '<FB App ID>' },
 
     { name: 'twitter:title', content: title },
-    { name: 'twitter:description', content: description }
+    { name: 'twitter:description', content: description },
+    { property: 'twitter:domain', content: 'nano.community' },
+    { property: 'twitter:url', content: url }
   ]
 
   if (published)
