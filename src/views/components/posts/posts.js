@@ -58,6 +58,19 @@ export default class Posts extends React.Component {
               <ToggleButton value={720}>1M</ToggleButton>
             </ToggleButtonGroup>
           )}
+          {this.props.id === 'announcements' && (
+            <ToggleButtonGroup
+              value={this.state.age}
+              exclusive
+              onChange={this.handleChange}
+              aria-label='age'
+              className='posts__age'>
+              <ToggleButton value={24}>2D</ToggleButton>
+              <ToggleButton value={168}>7D</ToggleButton>
+              <ToggleButton value={336}>14D</ToggleButton>
+              <ToggleButton value={720}>1M</ToggleButton>
+            </ToggleButtonGroup>
+          )}
         </div>
         <div className='posts__body'>{items}</div>
       </>

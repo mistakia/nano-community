@@ -1,5 +1,5 @@
 .post
-  margin-bottom 12px
+  margin-bottom 16px
 
 .post__title
   font-family 'Inter', sans-serif
@@ -10,11 +10,21 @@
   display block
   padding 0px 16px
   word-wrap break-word
+  border 1px solid $borderColor
+  border-radius 3px
+  background #fafafa
+  padding 14px
+
   &:hover
     text-decoration underline
     text-decoration-color $nanoSoftBlue
     text-decoration-thickness .1em
     text-underline-offset 1px
+
+  &.discord
+    font-size 10pt
+    white-space pre-line
+    word-break break-word
 
 .post__meta
   font-family 'Roboto Mono', monospace

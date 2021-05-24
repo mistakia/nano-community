@@ -40,10 +40,15 @@ export default class Post extends React.Component {
       )
     }
 
+    const classNames = ['post__title']
+    if (post.sid === 'discord:370266023905198083') {
+      classNames.push('discord')
+    }
+
     return (
       <div className='post'>
         <a
-          className='post__title'
+          className={classNames.join(' ')}
           href={formatUrl(post.main_url, post.sid)}
           target='_blank'>
           {post.title || post.text}
