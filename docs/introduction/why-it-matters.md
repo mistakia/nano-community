@@ -1,6 +1,6 @@
 ---
 title: Why Nano is important
-description: How to buy Nano from exchanges & services, earn, or acquire from faucets
+description: The importance of digital money
 tags: nano, crypto, analysis, adoption, future, inflation, potential, supply, use, analysis, prediction
 ---
 
