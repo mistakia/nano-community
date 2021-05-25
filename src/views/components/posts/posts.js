@@ -65,7 +65,7 @@ export default class Posts extends React.Component {
               onChange={this.handleChange}
               aria-label='age'
               className='posts__age'>
-              <ToggleButton value={24}>2D</ToggleButton>
+              <ToggleButton value={36}>3D</ToggleButton>
               <ToggleButton value={168}>7D</ToggleButton>
               <ToggleButton value={336}>14D</ToggleButton>
               <ToggleButton value={720}>1M</ToggleButton>
