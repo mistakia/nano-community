@@ -38,5 +38,5 @@ This architecture allows Nano to function without direct monetary incentives to 
 | Scalability        | Dynamic (hardware & bandwidth) |
 | Scalability Limit  | Unknown                        |
 | Fees               | No Fees                        |
-| Tx Prioritization  | Balance, Time since Use, PoW   |
+| Tx Prioritization  | Balance, Time since Use        |
 | Distribution       | Given away via Captcha Faucet  |
