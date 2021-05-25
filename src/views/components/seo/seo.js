@@ -24,8 +24,6 @@ const getMetaTags = ({
     { itemprop: 'description', content: description },
     { name: 'description', content: description },
     // { name: 'twitter:site', content: '@username' },
-    // { name: 'twitter:title', content: `${title} | nano.community` },
-    // { name: 'twitter:description', content: description },
     // { name: 'twitter:creator', content: twitter || '@username' },
     { property: 'og:title', content: title },
     { property: 'og:type', content: contentType },
@@ -89,8 +87,7 @@ const Seo = ({
   published,
   updated,
   category,
-  tags,
-  twitter
+  tags
 }) => (
   <Helmet
     htmlAttributes={getHtmlAttributes({
@@ -107,8 +104,7 @@ const Seo = ({
       published,
       updated,
       category,
-      tags,
-      twitter
+      tags
     })}
   />
 )
@@ -123,7 +119,6 @@ Seo.propTypes = {
   updated: PropTypes.string,
   category: PropTypes.string,
   tags: PropTypes.array,
-  twitter: PropTypes.string,
   image: PropTypes.string
 }
 
