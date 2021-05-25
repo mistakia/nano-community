@@ -18,6 +18,32 @@ CREATE TABLE `accounts` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `github_events`
+--
+
+DROP TABLE IF EXISTS `github_events`;
+
+CREATE TABLE `github_events` (
+  `id` varchar(15) NOT NULL,
+  `type` varchar(100) CHARACTER SET utf8 NOT NULL,
+  `actor_id` varchar(15) NOT NULL,
+  `actor_name` varchar(100) CHARACTER SET utf8 NOT NULL,
+  `actor_avatar` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `repo` varchar(255) CHARACTER SET utf8 NOT NULL,
+
+  `action` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `ref` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `body` text CHARACTER SET utf8mb4 DEFAULT NULL,
+  `event_url` varchar(255) DEFAULT NULL,
+
+  `created_at` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 
 -- --------------------------------------------------------
 

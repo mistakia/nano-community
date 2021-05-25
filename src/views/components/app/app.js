@@ -14,6 +14,7 @@ export default class App extends React.Component {
     const key = await localStorageAdapter.getItem('key')
     this.props.init({ token, key })
     this.props.getNetworkStats()
+    this.props.getGithubEvents()
   }
 
   render() {
@@ -27,5 +28,6 @@ export default class App extends React.Component {
 
 App.propTypes = {
   init: PropTypes.func,
-  getNetworkStats: PropTypes.func
+  getNetworkStats: PropTypes.func,
+  getGithubEvents: PropTypes.func
 }

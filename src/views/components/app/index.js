@@ -4,6 +4,7 @@ import { createSelector } from 'reselect'
 
 import { getApp, appActions } from '@core/app'
 import { networkActions } from '@core/network'
+import { githubActions } from '@core/github'
 
 import App from './app'
 
@@ -15,7 +16,8 @@ const mapStateToProps = createSelector(getApp, (app) => ({ app }))
 
 const mapDispatchToProps = {
   init: appActions.init,
-  getNetworkStats: networkActions.getNetworkStats
+  getNetworkStats: networkActions.getNetworkStats,
+  getGithubEvents: githubActions.getGithubEvents
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

@@ -2,6 +2,7 @@ import React from 'react'
 
 import Posts from '@components/posts'
 import Network from '@components/network'
+import Github from '@components/github'
 import Menu from '@components/menu'
 import Seo from '@components/seo'
 
@@ -40,6 +41,7 @@ export default class HomePage extends React.Component {
         <div className='posts__side'>
           <Menu desktop />
           <Network />
+          <Github />
         </div>
       </>
     )

@@ -203,9 +203,7 @@ const main = async (guildId, { getFullHistory = false } = {}) => {
           : null,
         html: null,
         text: p.content,
-        score: p.reactions
-          ? Math.max(...p.reactions.map(r => r.count), 1)
-          : 1
+        score: p.reactions ? Math.max(...p.reactions.map((r) => r.count), 1) : 1
       }))
 
       if (posts.length) {
