@@ -108,21 +108,6 @@ export default class DocPage extends React.Component {
           <div dangerouslySetInnerHTML={{ __html: html }} />
         </div>
         <div className='doc__content-side'>
-          <Button
-            variant='outlined'
-            href={`https://github.com/${REPO}/tree/main/docs${this.path}.md`}
-            target='_blank'
-            className='doc__content-edit'>
-            Edit Page
-          </Button>
-          {Boolean(author) && (
-            <div className='doc__content-author'>
-              updated by{' '}
-              <a href={commitHref} target='_blank'>
-                {author} {timeago.format(lastUpdated)}
-              </a>
-            </div>
-          )}
           {Boolean(authors.length) && (
             <AvatarGroup max={6} className='doc__content-authors'>
               {authors}
@@ -138,6 +123,21 @@ export default class DocPage extends React.Component {
               </a>
             </div>
           )}
+          {Boolean(author) && (
+            <div className='doc__content-author'>
+              updated by{' '}
+              <a href={commitHref} target='_blank'>
+                {author} {timeago.format(lastUpdated)}
+              </a>
+            </div>
+          )}
+          <Button
+            variant='outlined'
+            href={`https://github.com/${REPO}/tree/main/docs${this.path}.md`}
+            target='_blank'
+            className='doc__content-edit'>
+            Edit Page
+          </Button>
           <Menu />
           <Network />
           <Github />
