@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 import './menu.styl'
 
@@ -95,4 +96,9 @@ export default class Menu extends React.Component {
       </div>
     )
   }
+}
+
+Menu.propTypes = {
+  mobile: PropTypes.bool,
+  desktop: PropTypes.bool
 }

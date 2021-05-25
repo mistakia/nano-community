@@ -39,15 +39,23 @@ const getMetaTags = ({
     { property: 'twitter:url', content: url }
   ]
 
-  if (published)
+  if (published) {
     metaTags.push({ name: 'article:published_time', content: published })
-  if (updated)
+  }
+
+  if (updated) {
     metaTags.push({ name: 'article:modified_time', content: updated })
-  if (category) metaTags.push({ name: 'article:section', content: category })
+  }
+
+  if (category) {
+    metaTags.push({ name: 'article:section', content: category })
+  }
+
   if (tags) {
     metaTags.push({ name: 'article:tag', content: tags })
     metaTags.push({ name: 'keywords', content: tags })
   }
+
   if (image) {
     metaTags.push({ itemprop: 'image', content: absoluteUrl(image) })
     metaTags.push({ property: 'og:image', content: absoluteUrl(image) })

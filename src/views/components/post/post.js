@@ -23,6 +23,10 @@ const Source = ({ post }) => {
   return <div className={`post__source ${type}`}>{post.source_title}</div>
 }
 
+Source.propTypes = {
+  post: ImmutablePropTypes.record
+}
+
 export default class Post extends React.Component {
   render() {
     const { post } = this.props
