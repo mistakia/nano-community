@@ -37,6 +37,7 @@ A set of community maintained documents made up of guides and wiki-style documen
 |   |-- attack-vectors.md
 |   |-- basics.md
 |   |-- challenges.md
+|   |-- glossary.md
 |   |-- roadmap.md
 |   `-- security.md
 |-- getting-started-devs
