@@ -14,6 +14,8 @@ tags: nano, attack, vectors, vulnerability, issues
 
 ### Penny-spend attack
 
-### >50% attack
+### Double Spend (>67% attack)
+
+### Stall or Censor Txs (>33% attack)
 
 ### Bootstrap poisoning
