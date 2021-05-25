@@ -59,6 +59,7 @@ export default class Menu extends React.Component {
               <Link to='/design/attack-vectors'>Attack Vectors</Link>
               <Link to='/design/challenges'>Challenges</Link>
               <Link to='/design/roadmap'>Roadmap</Link>
+              <Link to='/design/glossary'>Glossary</Link>
             </div>
           </div>
           <div className='menu__section'>

@@ -1,6 +1,12 @@
+---
+title: Glossary Terms
+description: Common terms used when discussing the nano cryptocurrency protocol and project
+tags: what, does, mean, nano, docs, glossary, terms, documentation, crypto, protocol, cryptocurrency
+---
+
 ### account
 
-Refers to a public address (starts with xrb_ or nano_ which are interchangeable) derived from a private key. An address is a reinterpretation of the 256-bit public key using BASE32 encoding and a checksum. Previously supported xrb- or nano- prefixes are deprecated.
+Refers to a public address (starts with `xrb*` or `nano*` which are interchangeable) derived from a private key. An address is a reinterpretation of the 256-bit public key using BASE32 encoding and a checksum. Previously supported `xrb-` or `nano-` prefixes are deprecated.
 
 ### active transaction
 
@@ -48,6 +54,12 @@ When a 'burn' takes place, funds are sent to a specifc address that no one can a
 
 ### burn address
 
+The address whose public key is all zeros. This address was used to destroy part of the supply created by the genesis account that was not distributed.
+
+```
+nano_1111111111111111111111111111111111111111111111111111hifc8npp
+```
+
 ### circulating supply
 
 133,248,297.920938463463374607431768211455 Nano. This is the supply that resulted after burns were made from the genesis account, landing account and faucet account, following original distribution. Actual circulating supply is lower due to lost keys and sends to burn accounts. The original supply minus any amounts sent to the burn account can be found using the available_supply RPC.
@@ -68,15 +80,23 @@ A number stored in the local node database that represents the highest (most rec
 
 The rate of confirmed blocks (send or receive).
 
+### Deterministic finality
+
+A transaction is irreversibly final and canonical when a given event is observed. When a node observes a quorum of votes for a given block, it will permanently include that block in its ledger.
+
+Unlike probablistic finality, deterministic finality acheives irreversible finality.
+
 ### election
 
-### election scheduler
+The process of broadcasting and requesting votes for a block in order to confirm it.
 
 ### election states
 
 passive, active, broadcasting, inactive, expired-inactive, and expired-confirmed.
 
 ### faucet
+
+A service that gives away and distributes Nano.
 
 ### frontier / head block
 
@@ -108,7 +128,7 @@ Also called online stake, it is a trended value. The node samples online represe
 
 ### open representative voting (ORV)
 
-A consensus mechanism unique to Nano which involves accounts delegating their balance as voting weight to Representatives. The Principal Representatives (PRs) vote on the validity of transactions published to the network.  A vote is worth the sum of vote weight delegated to the PR. These votes are shared with their directly connected peers and they also rebroadcast votes seen from Principal Representatives. Votes are tallied and once quorum is reached on a published block, it is considered confirmed by the network.
+A consensus mechanism unique to Nano which involves accounts delegating their balance as voting weight to Representatives. The Principal Representatives (PRs) vote on the validity of transactions published to the network. A vote is worth the sum of vote weight delegated to the PR. These votes are shared with their directly connected peers and they also rebroadcast votes seen from Principal Representatives. Votes are tallied and once quorum is reached on a published block, it is considered confirmed by the network.
 
 ### peers
 
@@ -124,9 +144,11 @@ A Nano account with >= 0.1% of the online voting weight delegated to it. When co
 
 ### private key
 
-See wallet.
+A randomly generated secret that is used to establish accounts. See <a href="https://en.wikipedia.org/wiki/Public-key_cryptography" target="_blank">public-key cryptography</a>.
 
-### proof-of-work for quality-of-service (PoS4QoS, P4Q)
+### proof-of-stake for quality-of-service (PoS4QoS, P4Q)
+
+The idea that your stake (i.e. your balance) is used to provide a base <a href="https://en.wikipedia.org/wiki/Quality_of_service" target="_blank">quality of service.</a>
 
 ### proof-of-work (PoW)
 
@@ -146,7 +168,7 @@ When the delta between the two successive blocks of a root is > 50% of the onlin
 
 ### representative (rep)
 
-The recipient of a Nano account's delegated vote weight.  Also used to describe a Nano account with > 0 voting weight, but < 0.1% of the online voting weight, delegated to it.  Unlike Principal Representatives, when configured on a voting node, the votes it produces will be ignored by peers and will not be rebroadcast.
+The recipient of a Nano account's delegated vote weight. Also used to describe a Nano account with > 0 voting weight, but < 0.1% of the online voting weight, delegated to it. Unlike Principal Representatives, when configured on a voting node, the votes it produces will be ignored by peers and will not be rebroadcast.
 
 ### root
 
@@ -154,9 +176,11 @@ The account if the block is the first block on the account, otherwise it is the 
 
 ### seed
 
-A 256-bit random value usually represented to the user as a 64 character hexidecimal (0-9 and A-F) value. Private keys are derived from a seed.
+A 256-bit random value usually represented to the user as a 64 character hexidecimal (0-9 and A-F) value. Private keys are deterministically derived from a seed.
 
 ### time-as-a-currency (TaaC)
+
+The idea that time is a resource that can be gained and used. It is applied in transaction prioritization such that you gain priortiy as time passes. Thus, accumulated time can be spent to gain priority over other transactions that have "less time".
 
 ### transactions per second (TPS)
 
@@ -188,7 +212,7 @@ A wallet is an organizational object in a nano_node that holds a single seed fro
 
 ### WALLET_ID
 
-A 256-bit random value name/identifier for a specific wallet in the local nano_node database. The WALLET_ID is not stored anywhere in the network and is only used in the local nano_node. Even though a WALLET_ID looks identical to a seed, do not confuse the WALLET_ID with a seed; funds cannot be restored with a WALLET_ID. Do not backup the WALLET_ID as a means to backup funds.
+A 256-bit random value name/identifier for a specific wallet in the local nano_node database. The `WALLET_ID` is not stored anywhere in the network and is only used in the local nano_node. Even though a `WALLET_ID` looks identical to a seed, do not confuse the `WALLET_ID` with a seed; funds cannot be restored with a `WALLET_ID`. Do not backup the WALLET_ID as a means to backup funds.
 
 ### work peers
 
