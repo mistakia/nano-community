@@ -1,1 +1,7 @@
-export { getPosts, getDoc, getDocCommit, getNetworkStats } from './sagas'
+export {
+  getPosts,
+  getDoc,
+  getDocCommit,
+  getGithubEvents,
+  getNetworkStats
+} from './sagas'

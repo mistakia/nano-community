@@ -37,17 +37,18 @@ const theme = createMuiTheme({
         fontFamily: "'IBM Plex Mono', monospace",
         '&:hover': {
           color: '#4A90E2',
-          boxShadow: '#F0F0F0 4px 4px 0px 0px'
+          backgroundColor: '#ffffff',
+          boxShadow: '#D0D0D0 4px 4px 0px 0px'
         }
       }
     },
     MuiTooltip: {
       tooltip: {
         color: 'black',
-        backgroundColor: '#f4f4f4',
+        backgroundColor: '#ffffff',
         fontSize: 12,
         border: '1px solid rgba(0, 0, 0, 0.23)',
-        boxShadow: '#F0F0F0 4px 4px 0px 0px'
+        boxShadow: '#D0D0D0 4px 4px 0px 0px'
       }
     }
   }

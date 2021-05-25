@@ -11,6 +11,7 @@ import Avatar from '@material-ui/core/Avatar'
 import AvatarGroup from '@material-ui/lab/AvatarGroup'
 import Tooltip from '@material-ui/core/Tooltip'
 import Network from '@components/network'
+import Github from '@components/github'
 import fm from 'front-matter'
 
 import Menu from '@components/menu'
@@ -139,6 +140,7 @@ export default class DocPage extends React.Component {
           )}
           <Menu />
           <Network />
+          <Github />
         </div>
       </>
     )

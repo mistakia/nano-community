@@ -1,3 +1,6 @@
+$hoverBackground = rgba(255, 255, 255, 0.8)
+$hoverBorder = rgba(0, 0, 0, 0.23)
+
 .menu__container
   margin-bottom 32px
   flex 1
@@ -10,14 +13,14 @@
 .menu__section
   padding 16px
   border-radius 4px
-  border 1px solid $borderColor
+  border 1px solid lighten($borderColor, 30%)
   flex 1
   margin 8px
   transition background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms
   &:hover
-    border-color rgba(0, 0, 0, 0.23)
-    background rgba(0, 0, 0, 0.04)
-    box-shadow #F0F0F0 4px 4px 0px 0px
+    border-color $hoverBorder
+    background $hoverBackground
+    box-shadow $hoverShadow 4px 4px 0px 0px
 
 .menu__links
   margin-top 8px
@@ -42,9 +45,9 @@
   align-items center
 
   &:hover
-    background-color rgba(0,0,0,0.04)
-    border-color rgba(0,0,0,0.23)
-    box-shadow #f0f0f0 4px 4px 0px 0px
+    background-color $hoverBackground
+    border-color $hoverBorder
+    box-shadow $hoverShadow 4px 4px 0px 0px
 
   img
     max-width 200px

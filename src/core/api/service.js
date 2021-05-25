@@ -15,6 +15,10 @@ export const api = {
     const url = `${API_URL}/docs${path}.md`
     return { url }
   },
+  getGithubEvents() {
+    const url = `${API_URL}/github`
+    return { url }
+  },
   getNetworkStats() {
     const url = `${API_URL}/network`
     return { url }
