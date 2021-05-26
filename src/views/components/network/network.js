@@ -25,6 +25,8 @@ export default class Network extends React.Component {
     const backlogText = `Median number of transactions waiting to be confirmed ${prText}`
     const stakeText =
       'Percentage of delegated Nano weight actively participating in voting'
+    const nakamotoText =
+      'The minimum number of entities needed to confirm transactions'
 
     return (
       <div className='network__container'>
@@ -87,7 +89,7 @@ export default class Network extends React.Component {
             </Tooltip>
           </div>
           <div>
-            {formatNumber(network.getIn(['stats', 'backlogMedian_pr'], 0))}
+            {formatNumber(network.getIn(['stats', 'backlogMedianPr'], 0))}
           </div>
         </div>
         <div className='network__stat'>
@@ -102,8 +104,21 @@ export default class Network extends React.Component {
           </div>
         </div>
         <div className='network__stat'>
+          <div>Principal Reps</div>
+          <div>{network.getIn(['stats', 'prCount'])}</div>
+        </div>
+        <div className='network__stat'>
           <div>Peers</div>
           <div>{network.getIn(['stats', 'peersMax'])}</div>
+        </div>
+        <div className='network__stat'>
+          <div>
+            Nakamoto Coefficient
+            <Tooltip title={nakamotoText}>
+              <HelpOutlineIcon fontSize='inherit' />
+            </Tooltip>
+          </div>
+          <div>{network.getIn(['stats', 'nakamotoCoefficient'])}</div>
         </div>
         <a
           href='https://nanoticker.info/'

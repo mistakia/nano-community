@@ -13,7 +13,8 @@ router.get('/', async (req, res) => {
 
     const requests = [
       request({ url: 'https://json.nanoticker.info/?file=stats' }),
-      request({ url: 'https://nanolooker.com/api/market-statistics' })
+      request({ url: 'https://nanolooker.com/api/market-statistics' }),
+      request({ url: 'https://json.nanoticker.info/?file=monitors' })
     ]
 
     const responses = await Promise.allSettled(requests)
@@ -23,6 +24,10 @@ router.get('/', async (req, res) => {
     }
 
     const stats = fulfilled.reduce((obj, v) => {
+      if (Array.isArray(v.value)) {
+        return { peers: v.value, ...obj }
+      }
+
       // exclude priceStats
       const { priceStats, ...rest } = v.value
       return { ...rest, ...obj }
