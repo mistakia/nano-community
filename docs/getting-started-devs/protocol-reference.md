@@ -16,7 +16,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 #### Table of Contents
 
 - [Election Scheduler](#election-scheduler)
-- [Priority Queue / Tx Prioriziation](#priority-queue--tx-prioriziation)
+- [Priority Queue / Tx Prioriziation](#priority-queue-tx-prioriziation)
 - [Active elections](#active-elections)
 - [Broadcasting a vote](#broadcasting-a-vote)
 - [Processing incoming votes](#processing-incoming-votes)
@@ -33,7 +33,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - [Frontiers confirmation](#frontiers-confirmation)
 - [Legacy bootstrapping](#legacy-bootstrapping)
 - [Lazy bootstrapping](#lazy-bootstrapping)
-- [Peering / rep crawler](#peering--rep-crawler)
+- [Peering / rep crawler](#peering-rep-crawler)
 - [Online reps](#online-reps)
 - [Handshake](#handshake)
 - [Telemetry](#telemetry)

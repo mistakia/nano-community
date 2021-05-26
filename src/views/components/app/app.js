@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import { localStorageAdapter } from '@core/utils'
 import Routes from '@views/routes'
+import Notification from '@components/notification'
 
 import '@styles/normalize.css'
 import '@styles/typography.styl'
@@ -21,6 +22,7 @@ export default class App extends React.Component {
     return (
       <main>
         <Routes />
+        <Notification />
       </main>
     )
   }

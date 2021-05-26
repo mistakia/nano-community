@@ -26,7 +26,7 @@ export default class Network extends React.Component {
     const stakeText =
       'Percentage of delegated Nano weight actively participating in voting'
     const nakamotoText =
-      'The minimum number of entities needed to confirm transactions'
+      'The minimum number of representatives needed to confirm transactions'
 
     return (
       <div className='network__container'>

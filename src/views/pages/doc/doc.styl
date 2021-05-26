@@ -121,6 +121,25 @@
       text-decoration-thickness 2px
       text-underline-offset 2px
 
+.doc__header-link
+  opacity 0
+  position absolute
+  left -56px
+  top 0
+  cursor pointer
+  padding 12px
+  border-radius 50%
+  display inline-flex
+  align-items center
+  justify-content center
+  border 1px solid $borderColor
+  .MuiSvgIcon-root
+    width 20px
+    height 20px
+
+  &:hover .MuiSvgIcon-root
+    fill $nanoSoftBlue
+
 @media (max-width 750px)
   .doc__content-author
   .doc__content-contributors
@@ -134,3 +153,9 @@
 
   .doc__content-authors
     margin-top 48px
+
+  .doc__header
+    position relative
+    &:hover .doc__header-link
+      opacity 1
+      background #F6F6F6

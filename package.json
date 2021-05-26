@@ -68,6 +68,7 @@
     "circular-dependency-plugin": "^5.2.2",
     "compression-webpack-plugin": "^7.1.2",
     "concurrently": "^6.0.2",
+    "copy-text-to-clipboard": "^3.0.1",
     "cross-env": "^7.0.3",
     "css-loader": "^5.2.1",
     "deepmerge": "4.2.2",

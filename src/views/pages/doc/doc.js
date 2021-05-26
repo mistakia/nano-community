@@ -1,6 +1,8 @@
 /* global REPO */
 
 import React from 'react'
+React.useLayoutEffect = React.useEffect
+import { renderToString } from 'react-dom/server'
 import PropTypes from 'prop-types'
 import marked from 'marked'
 import * as timeago from 'timeago.js'
@@ -13,11 +15,35 @@ import Tooltip from '@material-ui/core/Tooltip'
 import Network from '@components/network'
 import Github from '@components/github'
 import fm from 'front-matter'
+import LinkIcon from '@material-ui/icons/Link'
+import IconButton from '@material-ui/core/IconButton'
+import copy from 'copy-text-to-clipboard'
 
+import { BASE_URL } from '@core/constants'
 import Menu from '@components/menu'
 import Seo from '@components/seo'
 
 import './doc.styl'
+
+const renderer = {
+  heading(text, level) {
+    const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-')
+
+    const link = renderToString(
+      <div className='doc__header-link' data-anchor={escapedText}>
+        <LinkIcon />
+      </div>
+    )
+
+    return `
+            <h${level} class="doc__header" id=${escapedText}>
+              ${text}
+              ${link}
+            </h${level}>`
+  }
+}
+
+marked.use({ renderer })
 
 export default class DocPage extends React.Component {
   get path() {
@@ -29,12 +55,35 @@ export default class DocPage extends React.Component {
     this.props.getDoc(this.path)
   }
 
+  handleClick = (e) => {
+    const elem = e.path.find((p) => p.className === 'doc__header-link')
+    const anchor = elem.dataset.anchor
+    const url = `${BASE_URL}${this.path}#${anchor}`
+    copy(url)
+    this.props.showNotification({
+      message: 'copied',
+      severity: 'success'
+    })
+  }
+
   componentDidUpdate(prevProps) {
+    if (this.props.location.hash) {
+      const elem = document.getElementById(
+        this.props.location.hash.substring(1)
+      )
+      if (elem) elem.scrollIntoView()
+    }
+
     if (
       this.props.location.path === prevProps.location.path &&
       this.props.location.hash !== prevProps.location.hash
     ) {
       return
+    }
+
+    const headers = document.querySelectorAll('.doc__header-link')
+    for (const header of headers) {
+      header.addEventListener('click', this.handleClick)
     }
 
     const location = JSON.stringify(this.props.location)
@@ -96,6 +145,7 @@ export default class DocPage extends React.Component {
     const frontmatter = fm(doc.content)
     const { title, description, tags } = frontmatter.attributes
     const html = marked(frontmatter.body)
+
     return (
       <>
         <Seo
