@@ -27,10 +27,10 @@ export default class Posts extends React.Component {
   }
 
   render() {
-    const { title, posts } = this.props
+    const { title, posts, isPending } = this.props
 
     let skeletons = new List()
-    if (!posts.size) {
+    if (isPending) {
       skeletons = skeletons.push(new PostRecord())
       skeletons = skeletons.push(new PostRecord())
       skeletons = skeletons.push(new PostRecord())
@@ -82,5 +82,6 @@ Posts.propTypes = {
   id: PropTypes.string,
   title: PropTypes.string,
   posts: ImmutablePropTypes.list,
+  isPending: PropTypes.bool,
   getPosts: PropTypes.func
 }

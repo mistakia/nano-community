@@ -6,9 +6,14 @@ export function getPostlists(state) {
   return state.get('postlists')
 }
 
+export function getPostlistForId(state, { id }) {
+  const postlists = getPostlists(state)
+  return postlists.get(id, new Postlist())
+}
+
 export function getPostsForPostlistId(state, { id }) {
   const postlists = getPostlists(state)
-  const postlist = postlists.get(id, new Postlist())
+  const postlist = getPostlistForId(state, { id })
   const posts = getPosts(state)
 
   if (id === 'trending') {
