@@ -85,7 +85,7 @@ Determining the right self-custody approach depends on how you intend to use it.
   - password manager
 - Hardware
 
-Paper wallets are able to provide a higher level of security but may be inefficient and inconvenient for frequent use, therefore making them an ideal choice for long term storage of large amounts of value.
+Paper wallets are able to provide a higher level of security but can not support frequent use, making them an ideal choice for long term storage of large amounts of value.
 
 The ideal choice for frequent use is software wallets: desktop, mobile, online (from most to least secure).
 
