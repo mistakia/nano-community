@@ -16,7 +16,7 @@ Before you get started make sure to understand some basic facts about [Nano](/ge
 
 ## Setup a password manager
 
-Regardless of what wallet you use, it is good practice to have it backed up. Using a password manager to backup your seeds and secret keys provides the best mix of convenience, security, and durability.
+Regardless of what wallet you use (software or hardware), you will need to back it up with a paper wallet. Using a password manager as a paper wallet to backup your seeds and secret keys provides the best mix of convenience, security, and durability.
 
 You should be using a password manager for other reasons anyways.
 
@@ -24,9 +24,10 @@ You should be using a password manager for other reasons anyways.
 
 Feel free to use whatever password manager you would like. KeePassXC is a good starter recommendation for the following reasons:
 
+- offline
+- allows you to manage/backup password file
 - open source
 - free
-- offline
 - strong encryption
 - cross platform
 
@@ -36,9 +37,11 @@ Feel free to use whatever password manager you would like. KeePassXC is a good s
 
 You should generate a random password or use a <a href="https://www.useapassphrase.com/" target="_blank">passphrase</a>.
 
+Make multiple local and offline backups of your master password (i.e. on a piece of paper). If you use your password manager frequently enough, you will be able to memorize this password or passphrase. Otherwise, you may have to take additional steps to ensure it is durably backed up (i.e. engraved on a piece of metal).
+
 #### Backup password manager file
 
-Since it is offline, you have full control over how and where you store the encrypted password file (i.e. usb, cloud storage, etc). It is good practice to make multiple copies and back it up in a variety of ways.
+Since it is offline, you have full control over how and where you store the encrypted password file (i.e. usb, cloud storage, etc). It is good practice to make multiple copies. Since the password file is encrypted, it is fine to store copies on cloud storage providers like google drive and dropbox. A good mix would be to have multiple local copies (usb, external drives, etc) as well as multiple remote copies on various cloud storage providers.
 
 ## Generating an account
 
@@ -57,12 +60,12 @@ To generate one on your own, you can download one of the following static websit
 
 To receive/send transactions and change your representative you will have to import your seed or secret key into a wallet.
 
-- A recommended starter desktop wallet is <a href="https://github.com/Nault/Nault" target="_blank">Nault<a/>.
-- <a href="https://natrium.io/" target="_blank">Natrium</a> is one of the more popular mobile wallets.
-- <a href="https://github.com/codesoap/atto" target="_blank">Atto</a> is a simple, clean command line wallet
+- Desktop: <a href="https://github.com/Nault/Nault" target="_blank">Nault</a>.
+- Mobile: <a href="https://natrium.io/" target="_blank">Natrium</a>.
+- Command Line: <a href="https://github.com/codesoap/atto" target="_blank">Atto</a>.
 
 For a comprehensive wallet guide visit <a href="https://nanowallets.guide/" target="_blank">nanowallets.guide</a>.
 
-It is your responsibility to properly handle and secure your secret seed or key. Make sure you understand what you are doing before you give any application or person your secret seed or key, as you are giving them full control over that account.
+It is your responsibility to properly handle and secure your secret seed or key. Make sure you understand what you are doing before you give any application your secret seed or key, as you are giving them full control over that account.
 
 Follow these [best practices](/getting-started-users/best-practices).
