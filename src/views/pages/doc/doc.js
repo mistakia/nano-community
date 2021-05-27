@@ -75,7 +75,7 @@ export default class DocPage extends React.Component {
     }
 
     if (
-      this.props.location.path === prevProps.location.path &&
+      this.props.location.pathname === prevProps.location.pathname &&
       this.props.location.hash !== prevProps.location.hash
     ) {
       return
