@@ -33,8 +33,8 @@ const getMetaTags = ({
     { property: 'og:locale', content: 'en_EN' },
     // { name: 'fb:app_id', content: '<FB App ID>' },
 
-    { name: 'twitter:title', content: title },
-    { name: 'twitter:description', content: description },
+    { property: 'twitter:title', content: title },
+    { property: 'twitter:description', content: description },
     { property: 'twitter:domain', content: 'nano.community' },
     { property: 'twitter:url', content: url }
   ]
@@ -59,10 +59,10 @@ const getMetaTags = ({
   if (image) {
     metaTags.push({ itemprop: 'image', content: absoluteUrl(image) })
     metaTags.push({ property: 'og:image', content: absoluteUrl(image) })
-    metaTags.push({ name: 'twitter:image', content: absoluteUrl(image) })
+    metaTags.push({ property: 'twitter:image', content: absoluteUrl(image) })
   }
 
-  metaTags.push({ name: 'twitter:card', content: 'summary' })
+  metaTags.push({ property: 'twitter:card', content: 'summary' })
 
   return metaTags
 }
