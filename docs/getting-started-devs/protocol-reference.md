@@ -260,6 +260,10 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
   - send a keepalive message
   - check to see if peer is a representative
 - keepalive messages propagate a list of 8 random peers
+- every 30 seconds two sets of keepalive messages are broadcasted to random peers
+  - 8 random peers fanout to random peers (0.75 \* sqrt(peers))
+  - 8 random peers (including itself) fanout to random peers (0.25 \* sqrt(peers))
+- upon receiving a keepalive message, an attempt is made to establish a connection to the propagated peers
 - when online weight is below minimum, send keepalive to preconfigured peers
   - default host: `peering.nano.org`
   - default port: `7075`
@@ -271,6 +275,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/repcrawler.cpp#L79-L102" target="_blank">rep_crawler::ongoing_crawl</a>
 - <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/node.cpp#L35-L66" target="_blank">node::keepalive</a>
 - <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/network.cpp#L139-L144" target="_blank">network::send_keepalive</a>
+- <a href="https://github.com/nanocurrency/nano-node/blob/develop/nano/node/network.cpp#L756-L767" target="_blank">network::ongoing_keepalive</a>
 
 ---
 
