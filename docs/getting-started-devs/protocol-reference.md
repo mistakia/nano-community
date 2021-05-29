@@ -56,12 +56,14 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/election_scheduler.cpp#L24-L46" target="_blank">election_scheduler::activate</a> — adding a block to the scheduler
 - <a href="https://github.com/nanocurrency/nano-node/blob/3135095da26738ba1a08cf2fdba02bdce3fe7abe/nano/node/node.cpp#L1738-L1756" target="_blank">node::populate_backlog</a> — populates scheduler from backlog
 
+---
+
 ## Priority Queue / Tx Prioriziation
 
 - 129 buckets based on balance
 - the balance included in the block is used
   - based on bit, determined by number of leading zeros
-- bucket size 250000
+- maximum of 250,000 blocks per bucket
 - bucket sorted by account last modified time (local time of last received block)
 - when adding to a full bucket, the last block in the bucket is dropped
 - when getting a block, the buckets are iterated one at a time and the first block in a bucket is selected.
@@ -72,6 +74,8 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - <a href="https://github.com/nanocurrency/nano-node/blob/3135095da26738ba1a08cf2fdba02bdce3fe7abe/nano/node/prioritization.cpp#L60-L77" target="_blank">prioritization::push</a> — adding a block
 - <a href="https://github.com/nanocurrency/nano-node/blob/3135095da26738ba1a08cf2fdba02bdce3fe7abe/nano/node/prioritization.cpp#L87-L94" target="_blank">prioritization::pop</a> — getting a block
 
+---
+
 ## Broadcasting a Vote
 
 - only when an election is first started, which can be by the election scheduler or via vote hinting
@@ -79,6 +83,8 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 #### Notable Functions
 
 - <a href="https://github.com/nanocurrency/nano-node/blob/aefa4d015284bab44c4f46e9504c40995b4c7fd8/nano/node/active_transactions.cpp#L790-L848" target="_blank">active_transactions::insert_impl</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/aefa4d015284bab44c4f46e9504c40995b4c7fd8/nano/node/election.cpp#L509-L526" target="_blank">election::generate_votes</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/aefa4d015284bab44c4f46e9504c40995b4c7fd8/nano/node/voting.cpp#L180-L217" target="_blank">vote_generator::add</a>
+
+---
 
 ## Active Elections
 
@@ -111,6 +117,8 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - <a href="https://github.com/nanocurrency/nano-node/blob/3135095da26738ba1a08cf2fdba02bdce3fe7abe/nano/node/confirmation_solicitor.cpp#L27-L53" target="_blank">confirmation_solicitor::broadcast</a> — block broadcasting
 - <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/election.cpp#L169-L214" target="_blank">election::transition_time</a> — election state transitioning
 
+---
+
 ## Requesting Votes
 
 - requests are made inside the active election request loop that runs every 500ms, evaluating the oldest election first
@@ -122,6 +130,8 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 
 - <a href="https://github.com/nanocurrency/nano-node/blob/98af16459a3cf6ac8a4e7523788eb70f5bdbf813/nano/node/election.cpp#L130-L141" target="_blank">election::send_confirm_req</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/98af16459a3cf6ac8a4e7523788eb70f5bdbf813/nano/node/confirmation_solicitor.cpp#L55-L87" target="_blank">confirmation_solicitor::add</a>
 - <a href="https://github.com/nanocurrency/nano-node/blob/98af16459a3cf6ac8a4e7523788eb70f5bdbf813/nano/node/confirmation_solicitor.cpp#L89-L113" target="_blank">nano::confirmation_solictor::flush</a>
+
+---
 
 ## Processing Incoming Votes
 
@@ -145,6 +155,8 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - <a href="https://github.com/nanocurrency/nano-node/blob/f7f83e79cbf2f6edf30460fcd77a4283bffa2d5e/nano/node/vote_processor.cpp#L94-L134" target="_blank">vote_processor::vote</a> — queue vote for processing
 - <a href="https://github.com/nanocurrency/nano-node/blob/98af16459a3cf6ac8a4e7523788eb70f5bdbf813/nano/node/blockprocessor.cpp#L335-L358" target="_blank">block_processor::process_live</a> — process block from network
 
+---
+
 ## Vote Hinting
 
 - votes for inactive elections are stored in a cache
@@ -163,6 +175,8 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - <a href="https://github.com/nanocurrency/nano-node/blob/aefa4d015284bab44c4f46e9504c40995b4c7fd8/nano/node/active_transactions.cpp#L1154-L1220" target="_blank">active_transactions::add_inactive_votes_cache</a> — adds vote
 - <a href="https://github.com/nanocurrency/nano-node/blob/aefa4d015284bab44c4f46e9504c40995b4c7fd8/nano/node/active_transactions.cpp#L1282-L1323" target="_blank">active_transactions::inactive_votes_bootstrap_check_impl</a> — checks tally
 
+---
+
 ## Processing Vote Requests
 
 - received via <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/network.cpp#L418-L444" target="_blank">confirm_req</a> message
@@ -179,6 +193,8 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - <a href="https://github.com/nanocurrency/nano-node/blob/f7f83e79cbf2f6edf30460fcd77a4283bffa2d5e/nano/node/request_aggregator.cpp#L69-L115" target="_blank">request_aggregator::run</a> — request process loop
 - <a href="https://github.com/nanocurrency/nano-node/blob/f7f83e79cbf2f6edf30460fcd77a4283bffa2d5e/nano/node/request_aggregator.cpp#L158-L247" target="_blank">request_aggregator::aggregate</a> — process request
 - <a href="https://github.com/nanocurrency/nano-node/blob/f7f83e79cbf2f6edf30460fcd77a4283bffa2d5e/nano/node/voting.cpp#L208-L231" target="_blank">vote_generator::generate</a> — generate a new vote
+
+---
 
 ## Final Votes
 
@@ -199,6 +215,8 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 
 - <a href="https://github.com/nanocurrency/nano-node/blob/98af16459a3cf6ac8a4e7523788eb70f5bdbf813/nano/node/blockprocessor.cpp#L360-L535" target="_blank">block_processor::process_one</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/98af16459a3cf6ac8a4e7523788eb70f5bdbf813/nano/node/blockprocessor.cpp#L335-L358" target="_blank">block_processor::process_live</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/b43c218c4f824191e6062e2a3d10873428dbbc0c/nano/node/election_scheduler.cpp#L24-L46" target="_blank">election_scheduler::activate</a>
 
+---
+
 ## Processing a Network Block
 
 - received via a <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/network.cpp#L401-L417" target="_blank">publish</a> message
@@ -208,6 +226,8 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 
 - <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/node.cpp#L554-L558" target="_blank">process_active</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/blockprocessor.cpp#L100-L122" target="_blank">block_processor::add</a>
 - <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/blockprocessor.cpp#L155-L174" target="_blank">block_processor::process_blocks</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/blockprocessor.cpp#L239-L333" target="_blank">block_processor::process_batch</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/blockprocessor.cpp#L360" target="_blank">block_processor::process_one</a>
+
+---
 
 ## Confirmations
 
@@ -220,6 +240,8 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 #### Notable Functions
 
 - <a href="https://github.com/nanocurrency/nano-node/blob/3135095da26738ba1a08cf2fdba02bdce3fe7abe/nano/node/election.cpp#L269-L309" target="_blank">election::confirm_if_quorum</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/3135095da26738ba1a08cf2fdba02bdce3fe7abe/nano/node/election.cpp#L39-L68" target="_blank">election::confirm_once</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/3135095da26738ba1a08cf2fdba02bdce3fe7abe/nano/node/node.cpp#L1350-L1375" target="_blank">node::process_confirmed</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/98af16459a3cf6ac8a4e7523788eb70f5bdbf813/nano/node/confirmation_height_processor.cpp#L155-L162" target="_blank">confirmation_height_processor::add</a>
+
+---
 
 ## Confirmation Height Processor
 
@@ -250,6 +272,8 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/node.cpp#L35-L66" target="_blank">node::keepalive</a>
 - <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/network.cpp#L139-L144" target="_blank">network::send_keepalive</a>
 
+---
+
 ## Online Reps
 
 - online weight is based on:
@@ -265,6 +289,8 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - <a href="https://github.com/nanocurrency/nano-node/blob/f7f83e79cbf2f6edf30460fcd77a4283bffa2d5e/nano/node/online_reps.cpp#L17-L33" target="_blank">online_reps::observe</a> — add rep to online weight
 - <a href="https://github.com/nanocurrency/nano-node/blob/f7f83e79cbf2f6edf30460fcd77a4283bffa2d5e/nano/node/online_reps.cpp#L35-L55" target="_blank">online_reps::sample</a> — save online weight
 - <a href="https://github.com/nanocurrency/nano-node/blob/f7f83e79cbf2f6edf30460fcd77a4283bffa2d5e/nano/node/online_reps.cpp#L67-L82" target="_blank">online_reps::calculate_trend</a> — calculate trending
+
+---
 
 ## Handshake
 

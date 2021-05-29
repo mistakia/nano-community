@@ -27,6 +27,7 @@ export default class Network extends React.Component {
       'Percentage of delegated Nano weight actively participating in voting'
     const nakamotoText =
       'The minimum number of representatives needed to confirm transactions'
+      const feeText = 'The Nano network operates without fees'
 
     return (
       <div className='network__container'>
@@ -59,6 +60,17 @@ export default class Network extends React.Component {
                 network.getIn(['stats', 'currentPrice'], 0)
               ).toFixed(0)
             )}
+          </div>
+        </div>
+        <div className='network__stat'>
+          <div>
+            Tx Fees (24h)
+            <Tooltip title={feeText}>
+              <HelpOutlineIcon fontSize='inherit' />
+            </Tooltip>
+          </div>
+          <div>
+            $0
           </div>
         </div>
         <div className='network__stat'>
