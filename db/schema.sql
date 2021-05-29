@@ -9,11 +9,11 @@ DROP TABLE IF EXISTS `accounts`;
 CREATE TABLE `accounts` (
   `account` char(65) CHARACTER SET utf8 NOT NULL,
   `alias` varchar(255) DEFAULT NULL,
+  `monitor_url` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `frontier` char(64) CHARACTER SET utf8 DEFAULT NULL,
   `watt_hour` int(11) DEFAULT NULL,
   `open_block` char(64) CHARACTER SET utf8 DEFAULT NULL,
   `representative` tinyint(1) DEFAULT 0,
-  `principal_representative` tinyint(1) DEFAULT 0,
   `representative_block` char(64) CHARACTER SET utf8 DEFAULT NULL,
   `balance` varchar(39) CHARACTER SET utf8 DEFAULT NULL,
   `modified_timestamp` int(11) DEFAULT NULL,
@@ -34,7 +34,6 @@ DROP TABLE IF EXISTS `accounts_meta`;
 
 CREATE TABLE `accounts_meta` (
   `account` char(65) CHARACTER SET utf8 NOT NULL,
-  `alias` varchar(255) DEFAULT NULL,
   `balance` varchar(39) CHARACTER SET utf8 DEFAULT NULL,
   `block_count` int(11) DEFAULT NULL,
   `weight` varchar(39) CHARACTER SET utf8 DEFAULT NULL,
@@ -42,6 +41,20 @@ CREATE TABLE `accounts_meta` (
   `timestamp` int(11) NOT NULL,
   UNIQUE KEY `account` (`account`, `timestamp`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accounts_tags`
+--
+
+DROP TABLE IF EXISTS `accounts_tags`;
+
+CREATE TABLE `accounts_tags` (
+  `account` char(65) NOT NULL,
+  `tag` char(65) NOT NULL,
+  UNIQUE KEY `account` (`account`, `tag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
