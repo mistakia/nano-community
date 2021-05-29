@@ -82,7 +82,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 
 ## Active Elections
 
-- constainer size: 500 (soft limit)
+- container size: 5000 (soft limit — set to change in v22.1)
   - can be exceeded by elections started by vote hinting
 - every 500ms active elections are evaluated based on the order they were added
 - any unconfirmed elections beyond the container size limit that are older than 2s are kicked out (this is an issue and will be modified in v22.1)
@@ -166,7 +166,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 ## Processing Vote Requests
 
 - received via <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/network.cpp#L418-L444" target="_blank">confirm_req</a> message
-- reject requests if oldest request has taken longer than 600ms to process
+- reject new requests if oldest request has taken longer than 600ms to process
 - delay start of request procesing by 50ms with each new request (up to 300ms), allowing for vote requests to pool up to a max of 512 hashes
 - loop through queued requests, processing the oldest request first once it has exceeded its delay
   - if the vote request is for a fork, send competing block to node
