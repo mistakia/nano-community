@@ -15,6 +15,8 @@ CREATE TABLE `accounts` (
   `open_block` char(64) CHARACTER SET utf8 DEFAULT NULL,
   `representative` tinyint(1) DEFAULT 0,
   `representative_block` char(64) CHARACTER SET utf8 DEFAULT NULL,
+  `weight` varchar(39) CHARACTER SET utf8 DEFAULT NULL,
+  `delegators` int(11) DEFAULT NULL,
   `balance` varchar(39) CHARACTER SET utf8 DEFAULT NULL,
   `modified_timestamp` int(11) DEFAULT NULL,
   `block_count` int(11) DEFAULT NULL,
