@@ -42,22 +42,6 @@ Nodes that are not full historical nodes can prune accounts below a statistical 
 
 If nodes want to be aggressive, they can calculate a distribution based on access frequency and delegate infrequently used accounts to slower storage.
 
-### Sybil attack to change ledger entries
-
-| Attack         | Sybil attack to change ledger entries |
-| -------------- | ------------------------------------- |
-| Risk           | None                                  |
-| Impacts        | Completely destructive                |
-| Defense Status | Implemented                           |
-
-#### Description
-
-A Sybil attack is a person creating a lot of nodes on the network, possibly thousands on a single machine, in order to get a disproportionate vote on networks where each node gets an equal vote.
-
-#### Defense
-
-The Nano voting system is weighted based on account balance. Adding extra nodes in to the network will not gain an attacker extra votes.
-
 ### Block gap synchronization
 
 | Attack         | Block gap synchronization          |
