@@ -1,4 +1,5 @@
 const debug = require('debug')
+const BigNumber = require('bignumber.js')
 
 const { request } = require('../common')
 const db = require('../db')
@@ -51,6 +52,7 @@ const main = async () => {
   if (responses[2].status === 'fulfilled') {
     const res = responses[2].value
     const items = res.map(p => ({
+      weight: BigNumber(p.votingweight).toFixed(),
       account: p.account,
       alias: p.alias,
       representative: true
