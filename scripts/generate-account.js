@@ -5,7 +5,8 @@ const { hideBin } = require('yargs/helpers')
 const argv = yargs(hideBin(process.argv)).argv
 
 if (!argv.secret) {
-  return console.log('missing --secret')
+  console.log('missing --secret')
+  process.exit()
 }
 
 const main = async () => {

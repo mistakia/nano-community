@@ -28,9 +28,13 @@ const main = async () => {
       continue
     }
 
-    const html_url = `https://mynano.ninja/account/${res.slug || res.account}`
-    const sanitize = (str) => str.replace(/(reddit|github|discord|twitter)/ig, '').replace(/\r?\n|\r/g, '').trim()
-    const $ = await fetchCheerioObject(html_url)
+    const ninjaUrl = `https://mynano.ninja/account/${res.slug || res.account}`
+    const sanitize = (str) =>
+      str
+        .replace(/(reddit|github|discord|twitter)/gi, '')
+        .replace(/\r?\n|\r/g, '')
+        .trim()
+    const $ = await fetchCheerioObject(ninjaUrl)
     const reddit = sanitize($('.fa-reddit').parent().text())
     const twitter = sanitize($('.fa-twitter').parent().text())
     const github = sanitize($('.fa-github').parent().text())
@@ -43,7 +47,7 @@ const main = async () => {
       ram_description: res.server ? res.server.ram : null,
       type: res.server ? res.server.type : null,
       provider: res.network ? res.network.provider : null,
-      mynano_ninja: html_url,
+      mynano_ninja: ninjaUrl,
       created_at: moment(res.created).unix(),
       description: res.description,
 
