@@ -63,9 +63,9 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - 129 buckets based on balance
 - the balance included in the block is used
   - based on bit, determined by number of leading zeros
-- maximum of 250,000 blocks per bucket
+- maximum of 1,937 (`250,000 / 129`) blocks per bucket
 - bucket sorted by account last modified time (local time of last received block)
-- when adding to a full bucket, the last block in the bucket is dropped
+- when adding to a full bucket, the last block (newest account modified timestamp) in the bucket is dropped
 - when getting a block, the buckets are iterated one at a time and the first block in a bucket is selected.
 
 #### Notable Functions
