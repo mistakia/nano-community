@@ -23,6 +23,10 @@ export const api = {
     const url = `${API_URL}/network`
     return { url }
   },
+  getRepresentatives() {
+    const url = `${API_URL}/representatives`
+    return { url }
+  },
   getDocCommit({ id }) {
     const params = { path: `docs${id}.md`, page: 1, per_page: 100 }
     const url = `https://api.github.com/repos/${REPO}/commits?${queryString.stringify(

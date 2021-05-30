@@ -1,6 +1,9 @@
 import { Map } from 'immutable'
 
 import { networkActions } from './actions'
+import { accountsActions } from '@core/accounts'
+
+const average = (arr) => arr.reduce((acc, v) => acc + v) / arr.length
 
 export function networkReducer(state = new Map(), { payload, type }) {
   switch (type) {
@@ -23,6 +26,14 @@ export function networkReducer(state = new Map(), { payload, type }) {
         prCount: prs.length,
         nakamotoCoefficient: i + 1,
         backlogMedianPr
+      })
+    }
+
+    case accountsActions.GET_REPRESENTATIVES_FULFILLED: {
+      const { data } = payload
+      const watts = data.map((d) => d.watt_hour).filter((d) => Boolean(d))
+      return state.merge({
+        averageWattHour: average(watts)
       })
     }
 

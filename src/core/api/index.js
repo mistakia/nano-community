@@ -3,5 +3,6 @@ export {
   getDoc,
   getDocCommit,
   getGithubEvents,
+  getRepresentatives,
   getNetworkStats
 } from './sagas'

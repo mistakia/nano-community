@@ -10,7 +10,7 @@ const formatNumber = (x) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
 export default class Network extends React.Component {
   render() {
-    const { network } = this.props
+    const { network, wattHour } = this.props
 
     const prText =
       'as observed across the networks principal representatives: voting nodes with more than 100k Nano delegated to them'
@@ -28,6 +28,8 @@ export default class Network extends React.Component {
     const nakamotoText =
       'The minimum number of representatives needed to confirm transactions'
     const feeText = 'The Nano network operates without fees'
+    const energyText =
+      'Estimated live network energy usage of Principle Representatives based on collected CPU model info. The estimate is based on CPU TDP, which is the average power, in watts, the processor dissipates when operating at base frequency with all cores active under manufacture-defined, high-complexity workload'
 
     return (
       <div className='network__container'>
@@ -129,6 +131,15 @@ export default class Network extends React.Component {
             </Tooltip>
           </div>
           <div>{network.getIn(['stats', 'nakamotoCoefficient'])}</div>
+        </div>
+        <div className='network__stat'>
+          <div>
+            Energy Usage (TDP)
+            <Tooltip title={energyText}>
+              <HelpOutlineIcon fontSize='inherit' />
+            </Tooltip>
+          </div>
+          <div>{(wattHour / 1000).toFixed(3)} kWh</div>
         </div>
         <a
           href='https://nanoticker.info/'

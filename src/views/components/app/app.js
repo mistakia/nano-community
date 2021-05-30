@@ -14,6 +14,7 @@ export default class App extends React.Component {
     const token = await localStorageAdapter.getItem('token')
     const key = await localStorageAdapter.getItem('key')
     this.props.init({ token, key })
+    this.props.getRepresentatives()
     this.props.getNetworkStats()
     this.props.getGithubEvents()
   }
