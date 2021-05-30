@@ -23,7 +23,7 @@ const main = async () => {
   // aliases
   if (responses[0].status === 'fulfilled') {
     const res = responses[0].value
-    const items = res.map(p => ({
+    const items = res.map((p) => ({
       account: p.account,
       alias: p.alias
     }))
@@ -37,7 +37,7 @@ const main = async () => {
   // monitors
   if (responses[1].status === 'fulfilled') {
     const res = responses[1].value
-    const items = res.map(p => ({
+    const items = res.map((p) => ({
       account: p.account,
       monitor_url: p.monitor.url
     }))
@@ -51,7 +51,7 @@ const main = async () => {
   // principals
   if (responses[2].status === 'fulfilled') {
     const res = responses[2].value
-    const items = res.map(p => ({
+    const items = res.map((p) => ({
       weight: BigNumber(p.votingweight).toFixed(),
       account: p.account,
       alias: p.alias,

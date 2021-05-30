@@ -15,7 +15,6 @@ router.post('/register', async (req, res) => {
 
     const { pub, address, signature } = req.body
 
-
     if (!nano.checkKey(pub)) {
       return res.status(401).send({ error: 'invalid pub param' })
     }

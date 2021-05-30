@@ -27,7 +27,7 @@ export default class Network extends React.Component {
       'Percentage of delegated Nano weight actively participating in voting'
     const nakamotoText =
       'The minimum number of representatives needed to confirm transactions'
-      const feeText = 'The Nano network operates without fees'
+    const feeText = 'The Nano network operates without fees'
 
     return (
       <div className='network__container'>
@@ -69,9 +69,7 @@ export default class Network extends React.Component {
               <HelpOutlineIcon fontSize='inherit' />
             </Tooltip>
           </div>
-          <div>
-            $0
-          </div>
+          <div>$0</div>
         </div>
         <div className='network__stat'>
           <div>
