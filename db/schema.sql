@@ -109,7 +109,8 @@ CREATE TABLE `posts` (
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `url` (`url`)
+  UNIQUE KEY `url` (`url`),
+  KEY `created_at` (`created_at`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
