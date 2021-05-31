@@ -13,7 +13,7 @@ done
 
 DUMP_DIR="/root/backups"
 DB_NAME="nano_production"
-DB_FILE="/root/.mysql/mysqldump.cnf"
+DB_FILE="/root/mysqldump.cnf"
 DB_TABLES="accounts accounts_meta accounts_tags github_events posts posts_tags representatives_meta sources users user_addresses"
 DATE_FORMAT="%Y-%m-%d_%H-%M"
 
