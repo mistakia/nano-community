@@ -13,7 +13,7 @@ export default class Network extends React.Component {
     const { network, wattHour } = this.props
 
     const prText =
-      'as observed across the networks principal representatives: voting nodes with more than 100k Nano delegated to them'
+      'as observed across the networks principal representatives: voting nodes with more than 0.1% of the online voting weight delegated to them'
 
     const confirmationsText =
       'Total number of transactions confirmed by the network over the last 24 hours'
@@ -29,7 +29,7 @@ export default class Network extends React.Component {
       'The minimum number of representatives needed to confirm transactions'
     const feeText = 'The Nano network operates without fees'
     const energyText =
-      'Estimated live network energy usage of Principle Representatives based on collected CPU model info. The estimate is based on CPU TDP, which is the average power, in watts, the processor dissipates when operating at base frequency with all cores active under manufacture-defined, high-complexity workload'
+      'Estimated live network CPU energy usage of Principle Representatives based on collected CPU model info. The estimate is based on CPU TDP, which is the average power, in watts, the processor dissipates when operating at base frequency with all cores active under manufacture-defined, high-complexity workload'
 
     return (
       <div className='network__container'>
