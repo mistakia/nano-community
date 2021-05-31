@@ -43,7 +43,7 @@ const api = express()
 
 api.locals.db = db
 api.locals.logger = logger
-api.locals.cache = new NodeCache({ stdTTL: 300, checkperiod: 120 })
+api.locals.cache = new NodeCache({ stdTTL: 600, checkperiod: 120 })
 
 api.enable('etag')
 api.disable('x-powered-by')
