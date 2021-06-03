@@ -32,5 +32,6 @@ export default class App extends React.Component {
 App.propTypes = {
   init: PropTypes.func,
   getNetworkStats: PropTypes.func,
-  getGithubEvents: PropTypes.func
+  getGithubEvents: PropTypes.func,
+  getRepresentatives: PropTypes.func
 }

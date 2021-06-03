@@ -14,7 +14,7 @@ export function getNetworkWattHour(state) {
   for (const pr of prs) {
     sum += accounts.getIn(
       [pr.nanoNodeAccount, 'watt_hour'],
-      network.averageWattHour
+      network.get('averageWattHour')
     )
   }
 
