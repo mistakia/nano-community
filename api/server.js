@@ -79,6 +79,7 @@ api.use('/api/*', expressJwt(config.jwt), (err, req, res, next) => {
 api.use('/api/posts', routes.posts)
 api.use('/api/network', routes.network)
 api.use('/api/github', routes.github)
+api.use('/api/auth', routes.auth)
 api.use('/api/representatives', routes.representatives)
 const docsPath = path.join(__dirname, '..', 'docs')
 api.use('/api/docs', serveStatic(docsPath))
