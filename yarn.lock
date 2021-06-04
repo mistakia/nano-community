@@ -7071,10 +7071,10 @@ nan@^2.12.1:
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.2.tgz#f5376400695168f4cc694ac9393d0c9585eeea19"
   integrity sha512-M2ufzIiINKCuDfBSAUr1vWQ+vuVcA9kqx8JJUsbQi6yf1uGRyb7HfpdfUr5qLXf3B/t8dPvcjhKMmlfnP47EzQ==
 
-nanocurrency-web@^1.3.2:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/nanocurrency-web/-/nanocurrency-web-1.3.2.tgz#1b0ec4db12fb395cb1fe3cc6a776ebc1b1ae6da7"
-  integrity sha512-G+oZqfMFdcTzAeVxcEhAkiJLkQAAWJQETbGyVd1ig7fULCcABgE9t5vFHDiZRvyBrfLfVC/0Ah7ukR3Pz2haZA==
+nanocurrency-web@^1.3.3:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/nanocurrency-web/-/nanocurrency-web-1.3.3.tgz#f18e7f1b864759d8a02f061a63995319cbf1d5c2"
+  integrity sha512-bHKIAKvbeIhDykNNqMAFb2BiPaX5etVbPXpAOlS+fd0NOuV6VNzSIZPc/dLCsmGm1U8Q/r4ovLXz/vkJTHcj8A==
   dependencies:
     bignumber.js "9.0.0"
     blakejs "1.1.0"

@@ -191,10 +191,8 @@ DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(32) NOT NULL,
   `pub` varchar(64) NOT NULL,
-  `prv` varchar(128) NOT NULL,
-  `alias` varchar(255) DEFAULT NULL,
-  `verified` tinyint(1) DEFAULT 0,
   `last_visit` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `pub` (`pub`)
