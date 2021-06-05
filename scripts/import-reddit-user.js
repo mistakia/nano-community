@@ -102,7 +102,11 @@ if (!module.parent) {
 
   const getFullHistory = argv.full
   const init = async () => {
-    await main(argv.user, { getFullHistory, filter: !argv.noFilter })
+    try {
+      await main(argv.user, { getFullHistory, filter: !argv.noFilter })
+    } catch (err) {
+      console.log(err)
+    }
     process.exit()
   }
 
