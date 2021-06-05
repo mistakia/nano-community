@@ -145,7 +145,11 @@ module.exports = main
 
 if (!module.parent) {
   const init = async () => {
-    await main()
+    try {
+      await main()
+    } catch (err) {
+      console.log(err)
+    }
     process.exit()
   }
 

@@ -237,7 +237,11 @@ if (!module.parent) {
   const guildId = argv.gid
   const getFullHistory = argv.full
   const init = async () => {
-    await main(guildId, { getFullHistory })
+    try {
+      await main(guildId, { getFullHistory })
+    } catch (err) {
+      console.log(err)
+    }
     process.exit()
   }
 

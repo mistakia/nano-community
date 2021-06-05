@@ -79,7 +79,11 @@ if (!module.parent) {
 
   const getFullHistory = argv.full
   const init = async () => {
-    await main({ getFullHistory })
+    try {
+      await main({ getFullHistory })
+    } catch (err) {
+      console.log(err)
+    }
     process.exit()
   }
 
