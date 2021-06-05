@@ -1,5 +1,7 @@
 const { default: fetch, Request } = require('node-fetch')
 
+const config = require('../config')
+
 const request = async (options) => {
   const request = new Request(options.url, options)
   const response = await fetch(request)
@@ -51,10 +53,38 @@ const formatRedditPost = (p) => ({
   score: p.data.score // p.data.upvote_ratio + p.data.ups + p.data.total_awards_received + p.data.score + p.num_comments - p.data.downs
 })
 
+const rpcRequest = (data, { url = config.rpcAddress } = {}) => {
+  return { url, ...POST(data) }
+}
+
+const rpcTelemetry = async ({ url } = {}) => {
+  const data = {
+    action: 'telemetry',
+    raw: true
+  }
+  const options = rpcRequest(data, { url })
+  return request(options)
+}
+
+const rpcConfirmationQuorum = ({ url } = {}) => {
+  const data = {
+    action: 'confirmation_quorum',
+    peer_details: true
+  }
+  const options = rpcRequest(data, { url })
+  return request(options)
+}
+
+const rpc = {
+  telemetry: rpcTelemetry,
+  confirmationQuorum: rpcConfirmationQuorum
+}
+
 module.exports = {
   request,
   POST,
   wait,
+  rpc,
   formatRedditPost,
   formatRedditComment
 }
