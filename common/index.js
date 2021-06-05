@@ -75,9 +75,19 @@ const rpcConfirmationQuorum = ({ url } = {}) => {
   return request(options)
 }
 
+const rpcRepresentativesOnline = ({ url } = {}) => {
+  const data = {
+    action: 'representatives_online',
+    weight: true
+  }
+  const options = rpcRequest(data, { url })
+  return request(options)
+}
+
 const rpc = {
   telemetry: rpcTelemetry,
-  confirmationQuorum: rpcConfirmationQuorum
+  confirmationQuorum: rpcConfirmationQuorum,
+  representativesOnline: rpcRepresentativesOnline
 }
 
 module.exports = {

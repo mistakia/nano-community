@@ -23,6 +23,8 @@ CREATE TABLE `accounts` (
   `confirmation_height` int(11) DEFAULT NULL,
   `confirmation_height_frontier` char(64) CHARACTER SET utf8 DEFAULT NULL,
   `key` char(64) CHARACTER SET utf8 DEFAULT NULL,
+
+  `last_seen` int(11) DEFAULT NULL
   UNIQUE KEY `account` (`account`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -190,6 +192,22 @@ CREATE TABLE `representatives_telemetry` (
   `address` char(65) NOT NULL,
   `port` int(11) NOT NULL,
   `telemetry_timestamp` int(11) NOT NULL,
+
+  `timestamp` int(11) NOT NULL,
+  UNIQUE KEY `account` (`account`, `timestamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `representatives_uptime`
+--
+
+DROP TABLE IF EXISTS `representatives_uptime`;
+
+CREATE TABLE `representatives_uptime` (
+  `account` char(65) NOT NULL,
+  `online` tinyint(1) NOT NULL,
 
   `timestamp` int(11) NOT NULL,
   UNIQUE KEY `account` (`account`, `timestamp`)
