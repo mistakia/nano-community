@@ -1,9 +1,11 @@
 const debug = require('debug')
 
+/* eslint-disable no-unused-vars */
 const { request } = require('../common')
 
 const logger = debug('script')
 debug.enable('script')
+/* eslint-enable no-unused-vars */
 
 const main = async () => {
   // main

@@ -95,7 +95,7 @@ const GithubEvent = (item, index) => {
       <div className='github__event-author'>{item.actor_name}</div>
       <div className='github__event-action'>{action(item)}</div>
       {item.event_url && (
-        <a href={item.event_url} target='_blank'>
+        <a href={item.event_url} target='_blank' rel='noreferrer'>
           {link(item)}
         </a>
       )}

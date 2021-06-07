@@ -1,7 +1,6 @@
 /* global REPO */
 
 import React from 'react'
-React.useLayoutEffect = React.useEffect
 import { renderToString } from 'react-dom/server'
 import PropTypes from 'prop-types'
 import marked from 'marked'
@@ -16,7 +15,6 @@ import Network from '@components/network'
 import Github from '@components/github'
 import fm from 'front-matter'
 import LinkIcon from '@material-ui/icons/Link'
-import IconButton from '@material-ui/core/IconButton'
 import copy from 'copy-text-to-clipboard'
 
 import { BASE_URL } from '@core/constants'
@@ -168,6 +166,7 @@ export default class DocPage extends React.Component {
               {authors.length} Contibutor{authors.length !== 1 ? 's' : ''}.{' '}
               <a
                 href='https://github.com/mistakia/nano-community/blob/main/CONTRIBUTING.md'
+                rel='noreferrer'
                 target='_blank'>
                 Help out
               </a>
@@ -176,7 +175,7 @@ export default class DocPage extends React.Component {
           {Boolean(author) && (
             <div className='doc__content-author'>
               updated by{' '}
-              <a href={commitHref} target='_blank'>
+              <a href={commitHref} target='_blank' rel='noreferrer'>
                 {author} {timeago.format(lastUpdated)}
               </a>
             </div>
@@ -199,6 +198,7 @@ export default class DocPage extends React.Component {
 
 DocPage.propTypes = {
   getDoc: PropTypes.func,
+  showNotification: PropTypes.func,
   location: PropTypes.object,
   doc: ImmutablePropTypes.record
 }

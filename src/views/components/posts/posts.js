@@ -81,6 +81,7 @@ export default class Posts extends React.Component {
 Posts.propTypes = {
   id: PropTypes.string,
   title: PropTypes.string,
+  age: PropTypes.number,
   posts: ImmutablePropTypes.list,
   isPending: PropTypes.bool,
   getPosts: PropTypes.func
