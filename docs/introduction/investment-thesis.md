@@ -18,9 +18,9 @@ The practical implications of the technical problems being solved is that Nano p
 
 This is digital money, in its most advanced form.
 
-The Nano ledger is a new kind of payment system. Anyone in the world can pay anyone else in the world any amount of value, no authorization required and with no fees.
+The Nano ledger is a new kind of payment system. Anyone in the world can pay anyone else in the world any amount of value, with no authorization required and with no fees.
 
-That last part is essential. Nano is the first global digital payment system where transactions happen with no fees. Traditional payment systems charge fees of about 2 to 3 percent – and that’s in the developed world. In lots of other places, there either are no modern payment systems or the rates are significantly higher.
+That last part is essential. Nano is the first global digital payment system where transactions happen with no fees. Traditional payment systems charge fees of about <a href="https://squareup.com/us/en/townsquare/credit-card-processing-fees-and-rates">2 to 3 percent</a> – and that’s in the developed world. In lots of other places, there either are no modern payment systems or the rates are significantly higher.
 
 Nano's value is driven by two things: use of the payment system today and speculation on future use. In other words, Nano has value because of its usefulness as money, something that can be traded with no fraud, no fees, etc.
 
@@ -68,6 +68,12 @@ Nano is still viable for all of them.
 > Let’s say you sell electronics online. Profit margins in those businesses are usually under 5 percent, which means conventional 2.5 percent payment fees consume half the margin. That’s money that could be reinvested in the business, passed back to consumers or taxed by the government. Of all of those choices, handing 2.5 percent to banks to move bits around the Internet is the worst possible choice. Another challenge merchants have with payments is accepting international payments. If you are wondering why your favorite product or service isn’t available in your country, the answer is often payments.
 > <cite>Chris Dixon</cite>
 
+**e-commerce implementations**
+
+<a href="https://gonano.dev/">GoNano.dev</a> for pure Nano payments.
+<a href="https://coinembed.com/">CoinEmbed.com</a> for Nano payments with a dashboard included.
+<a href="https://nowpayments.io/supported-coins/nano-payments/">NowPayments</a> for Nano payments with conversion to fiat.
+
 **advantages**
 
 - eliminates the risk of credit card fraud for merchants
@@ -86,7 +92,7 @@ Nano's anti-fraud properties even extend into the physical world of retail.
 
 ### International remittance
 
-> Every day, hundreds of millions of low-income people go to work in hard jobs in foreign countries to make money to send back to their families in their home countries – over $400 billion in total annually, according to the World Bank. Every day, banks and payment companies extract mind-boggling fees, up to 10 percent and sometimes even higher, to send this money.
+> Every day, hundreds of millions of low-income people go to work in hard jobs in foreign countries to make money to send back to their families in their home countries – <a href="https://migrationdataportal.org/themes/remittances">over $500 billion in total annually</a>, according to the World Bank. Every day, banks and payment companies extract mind-boggling fees, <a href="https://migrationdataportal.org/themes/remittances">at an average rate of 6.8%</a> and sometimes even higher, to send this money.
 > <cite>Marc Andreessen</cite>
 
 Switching to Nano, which charges no fees, will raise the quality of life of many workers and their families who are disproportionately affected by fees as they have less wealth.
