@@ -84,7 +84,7 @@ The rate of confirmed blocks (send or receive).
 
 A transaction is irreversibly final and canonical when a given event is observed. When a node observes a quorum of votes for a given block, it will permanently include that block in its ledger.
 
-Unlike probablistic finality, deterministic finality acheives irreversible finality.
+Unlike probabilistic finality, deterministic finality achieves irreversible finality.
 
 ### election
 

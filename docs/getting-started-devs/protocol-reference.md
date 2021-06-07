@@ -282,7 +282,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - online weight is calculated on every new rep or if it has been 5m
 - the online weight is saved every 5m
 - the trending weight is calculated every 5m by selecting the median weight over the last `4032` periods (i.e. 14 days)
-- the delta weight is the highest weight among trending, online, or minimum multipled by `0.67`
+- the delta weight is the highest weight among trending, online, or minimum multiplied by `0.67`
 
 ### Notable Functions
 

@@ -8,7 +8,7 @@ tags: nano, criticism, fud, crypto, downsides, flaws
 
 ### There is no incentive to run a node
 
-Those familiar with Nakamoto Consensus (i.e. Bitcoin) mistakenly believe that an incentive is a requirement for all distributed ledger designs. It is only a requirement for Nakamoto Consensus, which is based on a synchronous blockchain.
+Those familiar with Nakamoto Consensus (i.e. Bitcoin) mistakenly believe that an incentive is a requirement for all distributed ledger designs. Nakamoto Consensus is based on a synchronous blockchain with block producers and therefore relies on fees and/or a block reward to secure the network.
 
 Nano does not use a synchronous blockchain and therefore does not need to incentivize the network to compete to produce blocks and secure the network. Not having an incentive has major advantages, as it enables the following to coexist:
 
@@ -17,7 +17,7 @@ Nano does not use a synchronous blockchain and therefore does not need to incent
 - network and security controlled entirely by holders
 - a fixed supply
 
-Many people also conflate a "node" and a "miner". The former is not incentivized, it is only the latter that is incentivized. The incentives and reasons to run a node in Bitcoin and Nano are the same. In both cases, the low cost of running a node allows people to run them to use the network without having to trust or rely on anybody else. The advantage in Nano's case is that it doesn't cost much more to run a node that also secures the network, whereas the cost to run miners to secure the Bitcoin network is prohibitive and left to those who can profit from doing so.
+Additionally, many people conflate a "node" and a "miner". The former is not incentivized, it is only the latter that is incentivized. The incentives and reasons to run a Bitcoin node and a Nano node are the same. In both cases, the low cost of running a node allows people to run them to use the network without having to trust or rely on anybody else. The advantage in Nano's case is that it doesn't cost much more to run a node that also secures the network, whereas the cost to run miners to secure the Bitcoin network is prohibitive and left to those who can profit from doing so.
 
 ### The best technology does not always win
 
@@ -43,7 +43,19 @@ In other words, the day to day price of milk, denominated in USD, is stable even
 
 Nano currently has very little usage and adoption as a form of money. It also has to be worth something before it could bear any amount of real-world payment volume. A classic "chicken and egg" problem with new technology: new technology is not worth much until it’s worth a lot. It can not go from zero usage and denomination to widely adopted and denominated without drastic changes in price.
 
-Currently, the price is entirely driven by speculation. In other words, Nano's value is not driven by its use but because people believe it will be used. As it grows to be widely adopted and denominated, the value will no longer be determined purely from speculation and it will stabilize.
+Currently, the price is entirely driven by speculation. In other words, Nano's value is not driven by its use but because people believe it will be used. As it grows to be widely adopted and denominated, the value will no longer be determined purely from speculation. The prive will begin to stabilize when it is predominately driven by utility and the network effects hit an inflection point.
+
+#### Understanding Network Effects of Digital Money
+
+The internet era has been dominated by companies and products based on the concept of <a href="https://en.wikipedia.org/wiki/Metcalfe%27s_law" target="_blank">network effects</a>, where the network becomes more valuable to users as more people use it. This is as true of companies like Amazon and Google as it is for open source projects like Wikipedia and some cryptocurrencies. At its core, the theory behind network effects suggests that platforms and products with network effects get better as they get bigger — not just in value to users, but also in accruing more resources to improve their product or service.
+
+The utility of digital money in aggregate is a function of how many merchants want to accept payment for goods and services in digital money. The more people who accept payment using digital money, the more merchants existing users can do business with.
+
+<img alt='Digital Money, like Nano, has an S-curve Network Effects' src='/resources/s-curve.jpg' />
+
+In practice, network effects resemble an <a href="https://spectrum.ieee.org/computing/networks/metcalfes-law-is-wrong" target="_blank">S-curve</a> more than n^2 or n\*log(n). The first 50% of merchants that accept digital cash for payment make it exponentially more useful than the second 50%.
+
+Therefore, the value of digital money will exponentially increase as its network effects grow until it hits an inflection point, at which point it will start to plateau and behave as a store of value. In other words, all digital money will start off behaving like a speculative investment before evolving into a stable store of value as its network effects and utilization mature.
 
 Learn more about how it can be an <a href="/introduction/investment-thesis">investment now</a> before it stabilizes as digital money.
 
