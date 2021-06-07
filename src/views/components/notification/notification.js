@@ -1,6 +1,7 @@
 import React from 'react'
 import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert from '@material-ui/lab/Alert'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant='filled' {...props} />
@@ -65,4 +66,8 @@ export default class Notification extends React.Component {
       </Snackbar>
     )
   }
+}
+
+Notification.propTypes = {
+  info: ImmutablePropTypes.record
 }

@@ -1,11 +1,13 @@
 const express = require('express')
 const router = express.Router()
 
+/* eslint-disable no-extra-semi */
 const groupBy = (xs, key) =>
   xs.reduce((rv, x) => {
     ;(rv[x[key]] = rv[x[key]] || []).push(x)
     return rv
   }, {})
+/* eslint-enable no-extra-semi */
 
 // trending posts over a span of time (with decay), freshness is given a value
 router.get('/trending', async (req, res) => {

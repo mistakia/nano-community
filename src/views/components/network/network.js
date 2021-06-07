@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
 import Tooltip from '@material-ui/core/Tooltip'
 import ImmutablePropTypes from 'react-immutable-proptypes'
@@ -143,6 +144,7 @@ export default class Network extends React.Component {
         </div>
         <a
           href='https://nanoticker.info/'
+          rel='noreferrer'
           className='network__stat-link'
           target='_blank'>
           full network stats
@@ -153,5 +155,6 @@ export default class Network extends React.Component {
 }
 
 Network.propTypes = {
-  network: ImmutablePropTypes.map
+  network: ImmutablePropTypes.map,
+  wattHour: PropTypes.number
 }

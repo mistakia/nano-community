@@ -1,6 +1,6 @@
 const debug = require('debug')
 
-const { request, rpc } = require('../common')
+const { rpc } = require('../common')
 const config = require('../config')
 const db = require('../db')
 
