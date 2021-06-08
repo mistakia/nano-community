@@ -40,16 +40,23 @@ const main = async () => {
     const github = sanitize($('.fa-github').parent().text())
     const discord = sanitize($('.fa-discord').parent().text())
 
+    const result = await db('representatives_meta')
+      .where({ account: res.account })
+      .orderBy('timestamp', 'desc')
+      .limit(1)
+
     const meta = {
+      ...(result.length ? result[0] : {}),
+
       account: res.account,
 
-      cpu_description: res.server ? res.server.cpu : null,
-      ram_description: res.server ? res.server.ram : null,
-      type: res.server ? res.server.type : null,
-      provider: res.network ? res.network.provider : null,
+      ninja_cpu_description: res.server ? res.server.cpu : null,
+      ninja_ram_description: res.server ? res.server.ram : null,
+      ninja_type: res.server ? res.server.type : null,
+      ninja_provider: res.network ? res.network.provider : null,
       mynano_ninja: ninjaUrl,
-      created_at: moment(res.created).unix(),
-      description: res.description,
+      ninja_created_at: moment(res.created).unix(),
+      ninja_description: res.description,
 
       reddit,
       github,
