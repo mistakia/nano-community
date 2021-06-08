@@ -1,5 +1,4 @@
 const debug = require('debug')
-const BigNumber = require('bignumber.js')
 
 const { request } = require('../common')
 const db = require('../db')

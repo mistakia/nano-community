@@ -10,20 +10,8 @@ CREATE TABLE `accounts` (
   `account` char(65) CHARACTER SET utf8 NOT NULL,
   `alias` varchar(255) DEFAULT NULL,
   `monitor_url` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  `frontier` char(64) CHARACTER SET utf8 DEFAULT NULL,
   `watt_hour` int(11) DEFAULT NULL,
-  `open_block` char(64) CHARACTER SET utf8 DEFAULT NULL,
   `representative` tinyint(1) DEFAULT 0,
-  `representative_block` char(64) CHARACTER SET utf8 DEFAULT NULL,
-  `weight` varchar(39) CHARACTER SET utf8 DEFAULT NULL,
-  `delegators` int(11) DEFAULT NULL,
-  `balance` varchar(39) CHARACTER SET utf8 DEFAULT NULL,
-  `modified_timestamp` int(11) DEFAULT NULL,
-  `block_count` int(11) DEFAULT NULL,
-  `confirmation_height` int(11) DEFAULT NULL,
-  `confirmation_height_frontier` char(64) CHARACTER SET utf8 DEFAULT NULL,
-  `key` char(64) CHARACTER SET utf8 DEFAULT NULL,
-
   `last_seen` int(11) DEFAULT NULL
   UNIQUE KEY `account` (`account`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -148,12 +136,20 @@ CREATE TABLE `representatives_meta` (
   `bandwidth_description` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `ram` int(3) DEFAULT NULL,
   `ram_description` varchar(255) DEFAULT NULL,
+
+  `description` text CHARACTER SET utf8mb4 DEFAULT NULL,
   `dedicated` tinyint(1) DEFAULT NULL,
   `type` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `provider` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  `mynano_ninja` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `created_at` int(11) DEFAULT NULL,
-  `description` text CHARACTER SET utf8mb4 DEFAULT NULL,
+
+  `mynano_ninja` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `ninja_ram_description` varchar(255) DEFAULT NULL,
+  `ninja_cpu_description` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `ninja_description` text CHARACTER SET utf8mb4 DEFAULT NULL,
+  `ninja_type` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `ninja_created_at` int(11) DEFAULT NULL,
+  `ninja_provider` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
 
   `reddit` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `twitter` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
