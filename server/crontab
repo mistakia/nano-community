@@ -1,10 +1,14 @@
-*/5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.16.1/bin/node /root/nano-community/scripts/import-subreddit.js -r nanocurrency > /var/log/import-nanocurrency.log 2>&1
-*/5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.16.1/bin/node /root/nano-community/scripts/import-subreddit.js -r nanotrade > /var/log/import-nanotrade.log 2>&1
-*/1 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.16.1/bin/node /root/nano-community/scripts/import-forum.js > /var/log/import-forum.log 2>&1
-*/5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.16.1/bin/node /root/nano-community/scripts/import-github.js > /var/log/import-github.log 2>&1
-*/5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.16.1/bin/node /root/nano-community/scripts/import-discord.js --gid 370266023905198083 > /var/log/import-nano-discord.log 2>&1
-0 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.16.1/bin/node /root/nano-community/scripts/import-representatives.js > /var/log/import-representatives.log 2>&1
-# */5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.16.1/bin/node /root/nano-community/scripts/import-discord.js --gid 403628195548495882
+*/5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-subreddit.js -r nanocurrency > /var/log/import-nanocurrency.log 2>&1
+*/5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-subreddit.js -r nanotrade > /var/log/import-nanotrade.log 2>&1
+*/1 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-forum.js > /var/log/import-forum.log 2>&1
+*/5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-github.js > /var/log/import-github.log 2>&1
+*/5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-discord.js --gid 370266023905198083 > /var/log/import-nano-discord.log 2>&1
+# */5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-discord.js --gid 403628195548495882
+
+## representatives
+0 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-representatives.js > /var/log/import-representatives.log 2>&1
+*/5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-telemetry.js > /var/log/import-telemetry.log 2>&1
+*/5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-uptime.js > /var/log/import-uptime.log 2>&1
 
 ## backup mysql
 0 0 * * 0 /bin/bash /root/nano-community/scripts/backup-mysql.sh -f > /var/log/backup-mysql-full.log 2>&1
