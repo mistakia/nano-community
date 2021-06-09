@@ -49,13 +49,26 @@ Before Nano could sustain much real world payment volume it needs to be worth so
 
 ##### Exchanges
 
+Why: A currency becomes more useful and valuable when more people own it. The easier it is for people to exchange into Nano, the better. At the same time, the easier it is to sell Nano, the more likely it is that people will use accept Nano payments, knowing they can exchange into fiat easily if they so desire. More exchange listings also leads to a more decentralized network, as the Nano supply becomes more spread out.
+
+Pitch: Nano is interesting both from a direct business and a marketing perspective. In terms of direct business, Nano has a sizeable and growing trading volume. It has clear usecases in being used for payments and remittances. Many of those receiving Nano want to exchange into fiat or other cryptocurrencies. Additionally, many new Nano holders are new to crypto as a whole, and are looking for an exchange to buy Nano on. Nano also has a large and vocal community. Any exchange listing is broadly shared on all sorts of social mediums (Twitter, Reddit) and is one of the best forms of free marketing available.
+
 ##### Entrepeneurs
 
 ##### Payment Processors
 
+Why: A currency becomes more useful and valuable when there are more places to spend it. As Nano is first and foremost a currency, more merchant acceptance is key. Many merchants use payment processors, hence this being a very important avenue for Nano growth.
+
+Pitch: Nano is a cryptocurrency that is literally made for payments. It's instant and feeless, exposing you to minimal costs and minimal volatility risk. Because of its usability as currency, Nano has built up a large community interested in spending Nano. Adding Nano as a payment option would lead to increased volume, and also a lot of free marketing from Nano enthusiasts recommending your payment processor service to merchants looking to integrate crypto payments.
+
 ##### Journalists
 
-##### Bussinesses
+Why: Journalists essentially act as an amplifying force of the message we are trying to send out. Our reach is limited, journalists tend to have a larger reach. Nano has strong fundamentals in being meant to make the world a better place through secure payments for all, in an eco-friendly way.
+
+Pitch: Nano is a cryptocurrency that serves to make money more efficient for a more equal world - offering anyone access to secure money. Nano can be transferred instantly and feelessly, and is eco-friendly. It's a green alternative to Bitcoin, that solves many of its issues. Additionally, it was given away for free, since the founder's vision was to improve the world.
+
+
+##### Businesses
 
 #### Code of Conduct
 
