@@ -89,7 +89,7 @@ For a more detailed explanation read about its <a href="/introduction/advantages
 
 ### Nano is energy-efficient because nobody uses the network
 
-The energy cost of producing and processing a transaction is constant. In fact, the network is most efficient at capacity (energy usage per tx).
+The energy cost of producing a transaction is constant and the energy costs of running the network is essentially fixed. Thus, the network is most efficient when congested (energy usage per tx).
 
 ### Nano is doomed because the developer fund is low
 
