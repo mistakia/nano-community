@@ -43,7 +43,9 @@ Being that Nano is a protocol, to help increase use of the network, it is import
 
 ##### Speculators / Holders
 
-Before Nano could sustain much real world payment volume it needs to be worth something and have enough liquidity. Thus before there is utility, we need speculators and holders. Due to the positive feedback loop of its network effects, the more who are invested, the more attention the project gets, the more resources that are available, which then attracts even more investors, companies, developers and exchanges continuing the feeddback loop.
+Why: For Nano to sustain high real world payment volume it needs to be worth something and have enough liquidity. Thus before there is utility, we need speculators and holders. Due to the positive feedback loop of its network effects, the more who are invested, the more attention the project gets, the more businesses are interested in integrating Nano payments, which then attracts even more investors, companies, developers and exchanges continuing the feedback loop.
+
+Pitch: Nano is a strongly undervalued cryptocurrency. Both as a medium of exchange and store of value, it is fundamentally the best there is in the space. As a medium of exchange, Nano being instant, feeless and scalable means that it is hard to imagine something better. As a store of value, Nano's zero inflation, eco-friendliness and game theory leading to ever more decentralization over time make it potentially the best store of value. However, many cryptocurrencies have higher market caps than Nano. If one analyses any other cryptocurrency that claims to be a store of value or medium of exchange, they'll find that Nano is fundamentally better. Because of this, it stands to reason that as the market gets more mature and rational, Nano's recognition and price will increase.
 
 ##### Open source developers
 
