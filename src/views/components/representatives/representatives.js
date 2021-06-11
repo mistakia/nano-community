@@ -4,6 +4,8 @@ import ImmutablePropTypes from 'react-immutable-proptypes'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import { XGrid, GridOverlay } from '@material-ui/x-grid'
 
+import { timeago } from '@core/utils'
+
 import './representatives.styl'
 
 function LoadingOverlay() {
@@ -35,8 +37,7 @@ export default class Representatives extends React.Component {
         field: 'block_count',
         headerName: 'Blocks',
         hide: true,
-        valueGetter: (p) =>
-          p.row.telemetry ? p.row.telemetry.block_count : null
+        valueGetter: (p) => p.row.telemetry.block_count
       },
       {
         field: 'cemented_count',
@@ -51,8 +52,7 @@ export default class Representatives extends React.Component {
         field: 'weight',
         headerName: 'Weight',
         width: 110,
-        valueGetter: (p) =>
-          p.row.telemetry.weight ? p.row.telemetry.weight : null
+        valueGetter: (p) => p.row.telemetry.weight
       },
       {
         field: 'major_version',
@@ -84,13 +84,13 @@ export default class Representatives extends React.Component {
         field: 'cpu_cores',
         headerName: 'CPU Cores',
         width: 130,
-        valueGetter: (p) => (p.row.meta ? p.row.meta.cpu_cores : null)
+        valueGetter: (p) => p.row.meta.cpu_cores
       },
       {
         field: 'cpu_model',
         hide: true,
         headerName: 'CPU Model',
-        valueGetter: (p) => (p.row.meta ? p.row.meta.cpu_model : null)
+        valueGetter: (p) => p.row.meta.cpu_model
       },
       {
         field: 'watt_hour',
@@ -100,18 +100,28 @@ export default class Representatives extends React.Component {
       {
         field: 'last_seen',
         width: 130,
-        headerName: 'Last Seen'
+        headerName: 'Last Seen',
+        valueFormatter: (p) =>
+          timeago.format(p.row.last_seen * 1000, 'nano_short'),
+        valueGetter: (p) => Math.floor(Date.now() / 1000) - p.row.last_seen
       },
       {
-        field: 'provider',
-        headerName: 'Host',
+        field: 'asname',
+        headerName: 'Host ASN',
         width: 130,
-        valueGetter: (p) => (p.row.meta ? p.row.meta.provider : null)
+        valueGetter: (p) => p.row.network.asname
+      },
+      {
+        field: 'country',
+        headerName: 'Country',
+        width: 130,
+        valueGetter: (p) => p.row.network.country
       },
       {
         field: 'IP',
         headerName: 'IP',
-        valueGetter: (p) => (p.row.telemetry ? p.row.telemetry.address : null)
+        hide: true,
+        valueGetter: (p) => p.row.telemetry.address
       }
     ]
     return (
