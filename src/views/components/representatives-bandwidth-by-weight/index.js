@@ -58,7 +58,7 @@ const mapStateToProps = createSelector(
       // add to unlimited
       if (rep.telemetry.bandwidth_cap === 0) {
         metrics[1].total = BigNumber(rep.telemetry.weight)
-          .plus(metrics[0].total)
+          .plus(metrics[1].total)
           .toFixed()
         continue
       }
