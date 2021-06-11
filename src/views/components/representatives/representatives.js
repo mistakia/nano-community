@@ -5,6 +5,7 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 import { XGrid, GridOverlay } from '@material-ui/x-grid'
 import BigNumber from 'bignumber.js'
 
+import Uptime from '@components/uptime'
 import { timeago } from '@core/utils'
 
 import './representatives.styl'
@@ -13,7 +14,7 @@ function LoadingOverlay() {
   return (
     <GridOverlay>
       <div style={{ position: 'absolute', top: 0, width: '100%' }}>
-        <LinearProgress />
+        <LinearProgress color='secondary' />
       </div>
     </GridOverlay>
   )
@@ -42,8 +43,8 @@ export default class Representatives extends React.Component {
       },
       {
         field: 'cemented_count',
-        headerName: 'Cemented Diff',
-        width: 130,
+        headerName: 'Txs behind',
+        width: 140,
         valueGetter: (p) =>
           p.row.telemetry.cemented_count
             ? cementedMax - p.row.telemetry.cemented_count
@@ -66,6 +67,16 @@ export default class Representatives extends React.Component {
                 .dividedBy(totalWeight)
                 .multipliedBy(100)
             : null
+      },
+      {
+        field: 'uptime',
+        headerName: 'Uptime',
+        width: 150,
+        renderCell: (p) => <Uptime data={p.row.uptime} />,
+        valueGetter: (p) => {
+          // TODO
+          return 0
+        }
       },
       {
         field: 'major_version',
