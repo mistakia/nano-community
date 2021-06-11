@@ -41,11 +41,11 @@ const main = async () => {
   logger(`discovered ${Object.values(results).length} reps`)
 
   // merge data using ip address & port
-  const inserts = []
+  const repInserts = []
   for (const item of Object.values(results)) {
     const node = telemetryByIp[item.ip]
     if (!node) continue
-    inserts.push({
+    repInserts.push({
       // data from confirmation_quorum
       account: item.account,
       weight: item.weight,
@@ -72,13 +72,47 @@ const main = async () => {
     })
   }
 
-  if (inserts.length) {
-    logger(`saving metrics for ${inserts.length} reps`)
-    await db('representatives_telemetry').insert(inserts)
+  if (repInserts.length) {
+    logger(`saving metrics for ${repInserts.length} reps`)
+    await db('representatives_telemetry').insert(repInserts)
+  }
+
+  const nodeInserts = []
+  for (const node of telemetry.metrics) {
+    // check to see if node exists as a representative
+    const rep = repInserts.find((r) => r.node_id === node.node_id)
+    if (!rep) {
+      nodeInserts.push({
+        // data from telemetry
+        block_count: node.block_count,
+        cemented_count: node.cemented_count,
+        unchecked_count: node.unchecked_count,
+        bandwidth_cap: node.bandwidth_cap,
+        peer_count: node.peer_count,
+        protocol_version: node.protocol_version,
+        uptime: node.uptime,
+        major_version: node.major_version,
+        minor_version: node.minor_version,
+        patch_version: node.patch_version,
+        pre_release_version: node.pre_release_version,
+        maker: node.maker,
+        node_id: node.node_id,
+        address: node.address,
+        port: node.port,
+        telemetry_timestamp: moment(node.timestamp, 'x').unix(),
+
+        timestamp
+      })
+    }
+  }
+
+  if (nodeInserts.length) {
+    logger(`saving metrics for ${nodeInserts.length} nodes`)
+    await db('representatives_telemetry').insert(nodeInserts)
   }
 
   const now = moment()
-  for (const item of inserts) {
+  for (const item of repInserts) {
     // get last network stat
     const result = await db('representatives_network')
       .where({

@@ -169,7 +169,7 @@ CREATE TABLE `representatives_meta` (
 DROP TABLE IF EXISTS `representatives_telemetry`;
 
 CREATE TABLE `representatives_telemetry` (
-  `account` char(65) NOT NULL,
+  `account` char(65) DEFAULT NULL,
   `weight` varchar(39) CHARACTER SET utf8 DEFAULT NULL,
 
   `block_count` int(11) NOT NULL,
@@ -190,7 +190,7 @@ CREATE TABLE `representatives_telemetry` (
   `telemetry_timestamp` int(11) NOT NULL,
 
   `timestamp` int(11) NOT NULL,
-  UNIQUE KEY `account` (`account`, `timestamp`)
+  UNIQUE KEY `account` (`account`, `node_id`, `timestamp`),
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
