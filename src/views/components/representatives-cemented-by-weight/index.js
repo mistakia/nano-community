@@ -4,7 +4,8 @@ import BigNumber from 'bignumber.js'
 
 import {
   getRepresentatives,
-  getRepresentativesCementedMax
+  getRepresentativesCementedMax,
+  getRepresentativesTotalWeight
 } from '@core/accounts'
 
 import RepresentativesCementedByWeight from './representatives-cemented-by-weight'
@@ -12,8 +13,8 @@ import RepresentativesCementedByWeight from './representatives-cemented-by-weigh
 const mapStateToProps = createSelector(
   getRepresentatives,
   getRepresentativesCementedMax,
-  (accounts, cementedMax) => {
-    let onlineStake = 0
+  getRepresentativesTotalWeight,
+  (accounts, cementedMax, totalWeight) => {
     const thresholds = [
       {
         label: 'Unknown',
@@ -43,8 +44,6 @@ const mapStateToProps = createSelector(
     const metrics = thresholds.map((p) => ({ ...p, total: 0 }))
     for (const rep of accounts.valueSeq()) {
       if (!rep.telemetry.weight) continue
-
-      onlineStake = BigNumber(rep.telemetry.weight).plus(onlineStake)
 
       const blocksBehind = rep.telemetry.cemented_count
         ? cementedMax - rep.telemetry.cemented_count
@@ -79,7 +78,7 @@ const mapStateToProps = createSelector(
     // convert to percentage of online weight
     for (let i = 0; i < metrics.length; i++) {
       metrics[i].value = BigNumber(metrics[i].total)
-        .dividedBy(onlineStake)
+        .dividedBy(totalWeight)
         .multipliedBy(100)
         .toFixed(2)
     }

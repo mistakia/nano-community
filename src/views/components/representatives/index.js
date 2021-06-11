@@ -3,7 +3,8 @@ import { createSelector } from 'reselect'
 
 import {
   getRepresentatives,
-  getRepresentativesCementedMax
+  getRepresentativesCementedMax,
+  getRepresentativesTotalWeight
 } from '@core/accounts'
 
 import Representatives from './representatives'
@@ -11,7 +12,12 @@ import Representatives from './representatives'
 const mapStateToProps = createSelector(
   getRepresentatives,
   getRepresentativesCementedMax,
-  (accounts, cementedMax) => ({ accounts, cementedMax })
+  getRepresentativesTotalWeight,
+  (accounts, cementedMax, totalWeight) => ({
+    accounts,
+    cementedMax,
+    totalWeight
+  })
 )
 
 export default connect(mapStateToProps)(Representatives)

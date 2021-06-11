@@ -5,5 +5,6 @@ export {
   getAccounts,
   getRepresentatives,
   getRepresentativesCementedMax,
-  getRepresentativesCheckedMax
+  getRepresentativesCheckedMax,
+  getRepresentativesTotalWeight
 } from './selectors'
