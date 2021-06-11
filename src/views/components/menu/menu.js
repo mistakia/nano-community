@@ -92,6 +92,12 @@ export default class Menu extends React.Component {
               <Link to='/support'>Support</Link>
             </div>
           </div>
+          <div className='menu__section'>
+            <div className='menu__heading'>Stats</div>
+            <div className='menu__links'>
+              <Link to='/representatives'>Representatives</Link>
+            </div>
+          </div>
         </div>
       </div>
     )

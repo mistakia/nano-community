@@ -1,28 +1,9 @@
 import React from 'react'
-import * as timeago from 'timeago.js'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 
-import './github.styl'
+import { timeago } from '@core/utils'
 
-const locale = function (number, index, totalSec) {
-  return [
-    ['just now', 'right now'],
-    ['%ss', 'in %ss'],
-    ['1m', 'in 1m'],
-    ['%sm', 'in %sm'],
-    ['1h', 'in 1h'],
-    ['%sh', 'in %sh'],
-    ['1d', 'in 1d'],
-    ['%sd', 'in %sd'],
-    ['1w', 'in 1w'],
-    ['%sw', 'in %sw'],
-    ['1M', 'in 1M'],
-    ['%sM', 'in %sM'],
-    ['1Y', 'in 1Y'],
-    ['%sY', 'in %sY']
-  ][index]
-}
-timeago.register('nano_short', locale)
+import './github.styl'
 
 const action = (item) => {
   switch (item.type) {
