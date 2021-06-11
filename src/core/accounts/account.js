@@ -8,5 +8,6 @@ export const Account = new Record({
   last_seen: null,
   meta: new Map(),
   uptime: new List(),
+  network: new Map(),
   telemetry: new Map()
 })
