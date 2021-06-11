@@ -2,7 +2,7 @@ const debug = require('debug')
 const moment = require('moment')
 
 const config = require('../config')
-const { rpc } = require('../common')
+const { rpc, getNetworkInfo, wait } = require('../common')
 const db = require('../db')
 
 const logger = debug('script')
@@ -75,6 +75,49 @@ const main = async () => {
   if (inserts.length) {
     logger(`saving metrics for ${inserts.length} reps`)
     await db('representatives_telemetry').insert(inserts)
+  }
+
+  const now = moment()
+  for (const item of inserts) {
+    // get last network stat
+    const result = await db('representatives_network').where({
+      account: item.account,
+      address: item.address
+    }).limit(1).orderBy('timestamp', 'desc')
+
+    // ignore any ip / address combos fetched within the last three days
+    if (result.length && moment(result[0].timestamp, 'X').add('3', 'day').isAfter(now)) {
+      continue
+    }
+
+    const network = await getNetworkInfo(item.address)
+    if (network.status === 'success') {
+      logger(`saving network info for account ${item.account} at ${item.address}`)
+      await db('representatives_network').insert({
+        account: item.account,
+        address: item.address,
+
+        continent: network.continent,
+        country: network.country,
+        countryCode: network.countryCode,
+        region: network.region,
+        regionName: network.regionName,
+        city: network.city,
+        zip: network.zip,
+        lat: network.lat,
+        lon: network.lon,
+        timezone: network.timezone,
+        isp: network.isp,
+        org: network.org,
+        as: network.as,
+        asname: network.asname,
+        hosted: network.hosting,
+
+        timestamp
+      })
+    }
+
+    await wait(2000)
   }
 }
 

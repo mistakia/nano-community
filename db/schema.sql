@@ -196,6 +196,38 @@ CREATE TABLE `representatives_telemetry` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `representatives_network`
+--
+
+DROP TABLE IF EXISTS `representatives_network`;
+
+CREATE TABLE `representatives_network` (
+  `account` char(65) NOT NULL,
+  `address` varchar(65) NOT NULL,
+
+  `continent` varchar(65) NOT NULL,
+  `country` varchar(65) NOT NULL,
+  `countryCode` char(2) NOT NULL,
+  `region` varchar(65) NOT NULL,
+  `regionName` varchar(65) NOT NULL,
+  `city` varchar(65) NOT NULL,
+  `zip` varchar(65) NOT NULL,
+  `lat` varchar(65) NOT NULL,
+  `lon` varchar(65) NOT NULL,
+  `timezone` varchar(65) NOT NULL,
+  `isp` varchar(65) NOT NULL,
+  `org` varchar(65) NOT NULL,
+  `as` varchar(65) NOT NULL,
+  `asname` varchar(65) NOT NULL,
+  `hosted` tinyint(1) NOT NULL,
+
+  `timestamp` int(11) NOT NULL,
+  UNIQUE KEY `account` (`account`, `timestamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `representatives_uptime`
 --
 

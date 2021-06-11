@@ -15,6 +15,11 @@ const request = async (options) => {
   }
 }
 
+const getNetworkInfo = (ip) => {
+  const url = `http://ip-api.com/json/${ip}?fields=status,message,continent,country,countryCode,region,regionName,city,zip,lat,lon,timezone,isp,org,as,asname,hosting,query`
+  return request({ url })
+}
+
 const POST = (data) => ({
   method: 'POST',
   body: JSON.stringify(data),
@@ -92,6 +97,7 @@ const rpc = {
 
 module.exports = {
   request,
+  getNetworkInfo,
   POST,
   wait,
   rpc,
