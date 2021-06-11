@@ -57,7 +57,7 @@ const mapStateToProps = createSelector(
 
       // stop before the last one (catch-all)
       const lastIdx = Math.max(metrics.length - 1, 0)
-      let i = 2
+      let i = 1
       for (; i < lastIdx; i++) {
         if (blocksBehind <= metrics[i].threshold) {
           metrics[i].total = BigNumber(rep.telemetry.weight)
