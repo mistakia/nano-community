@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import { XGrid, GridOverlay } from '@material-ui/x-grid'
+import BigNumber from 'bignumber.js'
 
 import { timeago } from '@core/utils'
 
@@ -20,7 +21,7 @@ function LoadingOverlay() {
 
 export default class Representatives extends React.Component {
   render() {
-    const { accounts, cementedMax } = this.props
+    const { accounts, cementedMax, totalWeight } = this.props
 
     const columns = [
       {
@@ -52,7 +53,19 @@ export default class Representatives extends React.Component {
         field: 'weight',
         headerName: 'Weight',
         width: 110,
-        valueGetter: (p) => p.row.telemetry.weight
+        valueFormatter: (p) =>
+          p.row.telemetry.weight
+            ? `${BigNumber(p.row.telemetry.weight)
+                .dividedBy(totalWeight)
+                .multipliedBy(100)
+                .toFixed(2)}%`
+            : null,
+        valueGetter: (p) =>
+          p.row.telemetry.weight
+            ? BigNumber(p.row.telemetry.weight)
+                .dividedBy(totalWeight)
+                .multipliedBy(100)
+            : null
       },
       {
         field: 'major_version',
@@ -75,10 +88,18 @@ export default class Representatives extends React.Component {
         field: 'bandwidth_cap',
         headerName: 'BW Limit',
         width: 120,
-        valueGetter: (p) =>
-          p.row.telemetry.bandwidth_cap
+        valueFormatter: (p) => {
+          if (p.row.telemetry.bandwidth_cap === 0) return 'Unlimited'
+          return p.row.telemetry.weight
             ? (p.row.telemetry.bandwidth_cap / (1024 * 1024)).toFixed(1)
             : null
+        },
+        valueGetter: (p) => {
+          if (p.row.telemetry.bandwidth_cap === 0) return Infinity
+          return p.row.telemetry.bandwidth_cap
+            ? p.row.telemetry.bandwidth_cap / (1024 * 1024)
+            : null
+        }
       },
       {
         field: 'cpu_cores',
@@ -135,6 +156,7 @@ export default class Representatives extends React.Component {
           columnBuffer={columns.length}
           getRowId={(row) => row.account}
           rows={accounts.toJS()}
+          sortModel={[{ field: 'weight', sort: 'desc' }]}
         />
       </div>
     )
@@ -143,5 +165,6 @@ export default class Representatives extends React.Component {
 
 Representatives.propTypes = {
   accounts: ImmutablePropTypes.list,
+  totalWeight: PropTypes.number,
   cementedMax: PropTypes.number
 }
