@@ -6,6 +6,7 @@ import Representatives from '@components/representatives'
 import RepresentativesCementedByWeight from '@components/representatives-cemented-by-weight'
 import RepresentativesCheckedByWeight from '@components/representatives-checked-by-weight'
 import RepresentativesProviderByWeight from '@components/representatives-provider-by-weight'
+import RepresentativesVersionByWeight from '@components/representatives-version-by-weight'
 import RepresentativesBandwidthByWeight from '@components/representatives-bandwidth-by-weight'
 
 import './representatives.styl'
@@ -37,6 +38,7 @@ export default class RepresentativesPage extends React.Component {
           <RepresentativesCheckedByWeight />
           <RepresentativesProviderByWeight />
           <RepresentativesBandwidthByWeight />
+          <RepresentativesVersionByWeight />
         </div>
         <Representatives />
         <div className='representatives__footer'>
