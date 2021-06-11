@@ -10,6 +10,7 @@ export default class RepresentativesBandwidthByWeight extends React.Component {
       <MetricCard
         title='Bandwidth Limit'
         subtitle='By Online Weight'
+        tooltip='Displays the amount of voting weight based on the bandwidth limit set locally by each node'
         unit='%'
         max={100}
         metrics={metrics}

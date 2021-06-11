@@ -37,8 +37,8 @@ export default class RepresentativesPage extends React.Component {
         <div className='representatives__header'>
           <RepresentativesCementedByWeight />
           <RepresentativesCheckedByWeight />
-          <RepresentativesProviderByWeight />
           <RepresentativesBandwidthByWeight />
+          <RepresentativesProviderByWeight />
           <RepresentativesVersionByWeight />
           <RepresentativesCountryByWeight />
         </div>
