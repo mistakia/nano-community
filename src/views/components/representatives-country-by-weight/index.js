@@ -4,12 +4,12 @@ import BigNumber from 'bignumber.js'
 
 import { getRepresentatives } from '@core/accounts'
 
-import RepresentativesProviderByWeight from './representatives-provider-by-weight'
+import RepresentativesCountryByWeight from './representatives-country-by-weight'
 
 const mapStateToProps = createSelector(getRepresentatives, (accounts) => {
   const metrics = []
   let onlineStake = 0
-  const providers = {
+  const countries = {
     unknown: 0
   }
 
@@ -18,22 +18,22 @@ const mapStateToProps = createSelector(getRepresentatives, (accounts) => {
 
     onlineStake = BigNumber(rep.telemetry.weight).plus(onlineStake)
 
-    const provider = rep.network.asname
-    if (!provider) {
-      providers.unknown = BigNumber(rep.telemetry.weight)
-        .plus(providers.unknown)
+    const country = rep.network.country
+    if (!country) {
+      countries.unknown = BigNumber(rep.telemetry.weight)
+        .plus(countries.unknown)
         .toFixed()
       continue
     }
 
-    providers[provider] = BigNumber(rep.telemetry.weight)
-      .plus(providers[provider] || 0)
+    countries[country] = BigNumber(rep.telemetry.weight)
+      .plus(countries[country] || 0)
       .toFixed()
   }
 
-  for (const [provider, weight] of Object.entries(providers)) {
+  for (const [country, weight] of Object.entries(countries)) {
     metrics.push({
-      label: provider,
+      label: country,
       value: BigNumber(weight)
         .dividedBy(onlineStake)
         .multipliedBy(100)
@@ -46,4 +46,4 @@ const mapStateToProps = createSelector(getRepresentatives, (accounts) => {
   return { metrics: filtered }
 })
 
-export default connect(mapStateToProps)(RepresentativesProviderByWeight)
+export default connect(mapStateToProps)(RepresentativesCountryByWeight)

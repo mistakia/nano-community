@@ -80,19 +80,27 @@ const main = async () => {
   const now = moment()
   for (const item of inserts) {
     // get last network stat
-    const result = await db('representatives_network').where({
-      account: item.account,
-      address: item.address
-    }).limit(1).orderBy('timestamp', 'desc')
+    const result = await db('representatives_network')
+      .where({
+        account: item.account,
+        address: item.address
+      })
+      .limit(1)
+      .orderBy('timestamp', 'desc')
 
     // ignore any ip / address combos fetched within the last three days
-    if (result.length && moment(result[0].timestamp, 'X').add('3', 'day').isAfter(now)) {
+    if (
+      result.length &&
+      moment(result[0].timestamp, 'X').add('3', 'day').isAfter(now)
+    ) {
       continue
     }
 
     const network = await getNetworkInfo(item.address)
     if (network.status === 'success') {
-      logger(`saving network info for account ${item.account} at ${item.address}`)
+      logger(
+        `saving network info for account ${item.account} at ${item.address}`
+      )
       await db('representatives_network').insert({
         account: item.account,
         address: item.address,

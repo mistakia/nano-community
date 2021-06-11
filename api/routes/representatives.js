@@ -50,6 +50,20 @@ router.get('/', async (req, res) => {
       })
       .whereIn('account', accounts)
 
+    const networkQuery = db('representatives_network')
+      .select(db.raw('max(timestamp) AS maxtime, account AS aid'))
+      .groupBy('account')
+    const network = await db
+      .select('representatives_network.*')
+      .from(db.raw('(' + networkQuery.toString() + ') AS X'))
+      .innerJoin('representatives_network', function () {
+        this.on(function () {
+          this.on('account', '=', 'aid')
+          this.andOn('timestamp', '=', 'maxtime')
+        })
+      })
+      .whereIn('account', accounts)
+
     for (const rep of representatives) {
       rep.meta = meta.find((a) => a.account === rep.account) || {}
       rep.uptime =
@@ -57,6 +71,7 @@ router.get('/', async (req, res) => {
           .filter((a) => a.account === rep.account)
           .map(({ online, timestamp }) => ({ online, timestamp })) || []
       rep.telemetry = telemetry.find((a) => a.account === rep.account) || {}
+      rep.network = network.find((a) => a.account === rep.account) || {}
     }
 
     cache.set('representatives', representatives, 60)
