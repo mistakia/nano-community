@@ -1,6 +1,7 @@
 const debug = require('debug')
+const moment = require('moment')
 
-const { rpc } = require('../common')
+const { rpc, groupBy } = require('../common')
 const config = require('../config')
 const db = require('../db')
 
@@ -72,6 +73,51 @@ const main = async () => {
   if (uptimeInserts.length) {
     logger(`saving uptime for ${uptimeInserts.length} reps`)
     await db('representatives_uptime').insert(uptimeInserts)
+  }
+
+  // calculate rollup
+  const uptime = await db('representatives_uptime')
+    .where('timestamp', '>', moment().subtract('7', 'days').unix())
+
+  // group by account
+  const grouped = groupBy(uptime, 'account')
+
+  // process each account
+  for (const [account, values] of Object.entries(grouped)) {
+    // rollup into groups of every two hours
+    const rollup = {}
+    const now = moment()
+    for (const d of values) {
+      const diff = moment(d.timestamp, 'X').diff(now, 'hour')
+      const hour = Math.abs(diff)
+      const interval = hour && hour % 2 == 0 ? hour - 1 : hour
+      if (!rollup[interval]) rollup[interval] = [d]
+      else rollup[interval].push(d)
+    }
+
+    const inserts = []
+    // calculate uptime for each group
+    for (const [key, items] of Object.entries(rollup)) {
+      let online = true
+      for (const value of items) {
+        if (value.online === 0) {
+          online = false
+          break
+        }
+      }
+      const sorted = items.sort((a, b) => b.timestamp - a.timestamp)
+      const timestamp = sorted[0].timestamp
+      inserts.push({
+        account,
+        timestamp,
+        online
+      })
+    }
+
+    if (inserts.length) {
+      logger(`saving ${inserts.length} rollups for ${account}`)
+      await db('representatives_uptime_rollup_2hour').insert(uptimeInserts).onConflict().merge()
+    }
   }
 }
 

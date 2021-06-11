@@ -95,6 +95,12 @@ const rpc = {
   representativesOnline: rpcRepresentativesOnline
 }
 
+const groupBy = (xs, key) =>
+  xs.reduce((rv, x) => {
+    ;(rv[x[key]] = rv[x[key]] || []).push(x)
+    return rv
+  }, {})
+
 module.exports = {
   request,
   getNetworkInfo,
@@ -102,5 +108,6 @@ module.exports = {
   wait,
   rpc,
   formatRedditPost,
-  formatRedditComment
+  formatRedditComment,
+  groupBy
 }
