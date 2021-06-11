@@ -34,8 +34,7 @@ router.get('/', async (req, res) => {
 
     const uptime = await db('representatives_uptime_rollup_2hour')
       .whereIn('account', accounts)
-      .where('timestamp', '>', moment().subtract('7', 'days').unix())
-      .orderBy('timestamp', 'asc')
+      .orderBy('interval', 'asc')
 
     const metaQuery = db('representatives_meta')
       .select(db.raw('max(timestamp) AS maxtime, account AS aid'))
@@ -67,10 +66,9 @@ router.get('/', async (req, res) => {
 
     for (const rep of representatives) {
       rep.meta = meta.find((a) => a.account === rep.account) || {}
-      rep.uptime =
-        uptime
-          .filter((a) => a.account === rep.account)
-          .map(({ online, timestamp }) => ({ online, timestamp }))
+      rep.uptime = uptime
+        .filter((a) => a.account === rep.account)
+        .map(({ online, timestamp }) => ({ online, timestamp }))
       rep.telemetry = telemetry.find((a) => a.account === rep.account) || {}
       rep.network = network.find((a) => a.account === rep.account) || {}
     }
