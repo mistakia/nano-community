@@ -253,8 +253,8 @@ CREATE TABLE `representatives_uptime_rollup_2hour` (
   `account` char(65) NOT NULL,
   `online` tinyint(1) NOT NULL,
 
-  `timestamp` int(11) NOT NULL,
-  UNIQUE KEY `account` (`account`, `timestamp`)
+  `interval` int(11) NOT NULL,
+  UNIQUE KEY `account` (`account`, `interval`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
