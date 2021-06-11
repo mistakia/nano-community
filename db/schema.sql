@@ -244,6 +244,22 @@ CREATE TABLE `representatives_uptime` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `representatives_uptime`
+--
+
+DROP TABLE IF EXISTS `representatives_uptime_rollup_2hour`;
+
+CREATE TABLE `representatives_uptime_rollup_2hour` (
+  `account` char(65) NOT NULL,
+  `online` tinyint(1) NOT NULL,
+
+  `timestamp` int(11) NOT NULL,
+  UNIQUE KEY `account` (`account`, `timestamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `sources`
 --
 
