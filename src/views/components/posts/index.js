@@ -7,7 +7,7 @@ import {
   getPostlistForId
 } from '@core/postlists'
 
-import Post from './posts'
+import Posts from './posts'
 
 const mapStateToProps = createSelector(
   getPostsForPostlistId,
@@ -22,4 +22,4 @@ const mapDispatchToProps = {
   getPosts: postlistActions.getPosts
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Post)
+export default connect(mapStateToProps, mapDispatchToProps)(Posts)
