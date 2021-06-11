@@ -10,6 +10,7 @@ export default class RepresentativesCementedByWeight extends React.Component {
       <MetricCard
         title='Confirmation Differential'
         subtitle='By Online Weight'
+        tooltip='Displays the amount of voting weight that is within X number of confirmations from the leading node. Helpful in knowing how well in-sync and aligned nodes are across the network'
         unit='%'
         max={100}
         metrics={metrics}
