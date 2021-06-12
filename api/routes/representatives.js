@@ -68,7 +68,7 @@ router.get('/', async (req, res) => {
       rep.meta = meta.find((a) => a.account === rep.account) || {}
       rep.uptime = uptime
         .filter((a) => a.account === rep.account)
-        .map(({ online, timestamp }) => ({ online, timestamp }))
+        .map(({ online, interval }) => ({ online, interval }))
       rep.telemetry = telemetry.find((a) => a.account === rep.account) || {}
       rep.network = network.find((a) => a.account === rep.account) || {}
     }
