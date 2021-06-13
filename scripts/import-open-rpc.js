@@ -8,33 +8,33 @@ debug.enable('script')
 
 const db = require('../db')
 
-const regex_ip = /\::ffff:([0-9.]+)/
+const ipRe = /::ffff:([0-9.]+)/
 
-const checkPort = async (port, {timeout = 1000, host} = {}) => {
-	const promise = new Promise(((resolve, reject) => {
-		const socket = new net.Socket();
+const checkPort = async (port, { timeout = 1000, host } = {}) => {
+  const promise = new Promise((resolve, reject) => {
+    const socket = new net.Socket()
 
-		const onError = () => {
-			socket.destroy();
-			reject();
-		};
+    const onError = (err) => {
+      socket.destroy()
+      reject(err)
+    }
 
-		socket.setTimeout(timeout);
-		socket.once('error', onError);
-		socket.once('timeout', onError);
+    socket.setTimeout(timeout)
+    socket.once('error', onError)
+    socket.once('timeout', onError)
 
-		socket.connect(port, host, () => {
-			socket.end();
-			resolve();
-		});
-	}));
+    socket.connect(port, host, () => {
+      socket.end()
+      resolve()
+    })
+  })
 
-	try {
-		await promise;
-		return true;
-	} catch (_) {
-		return false;
-	}
+  try {
+    await promise
+    return true
+  } catch (_) {
+    return false
+  }
 }
 
 const main = async () => {
@@ -59,12 +59,11 @@ const main = async () => {
     })
     .whereIn('account', accounts)
 
-  const nodes = telemetry.map(({ address, port }) => ({ address, port }))
   const open = []
   for (const { address, account, node_id, weight } of telemetry) {
-    const match = regex_ip.exec(address)
+    const match = ipRe.exec(address)
     const ip = match ? match[1] : address
-    const isOpen = await checkPort(7076, { host: ip  })
+    const isOpen = await checkPort(7076, { host: ip })
     if (isOpen) {
       logger(`port 7076 is open for ${ip}`)
       open.push({ address, account, node_id, weight })
