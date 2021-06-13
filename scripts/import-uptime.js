@@ -94,7 +94,7 @@ const main = async () => {
     for (const d of values) {
       const diff = moment(d.timestamp, 'X').diff(now, 'hour')
       const hour = Math.abs(diff)
-      const interval = hour && hour % 2 == 0 ? hour - 1 : hour
+      const interval = hour && hour % 2 === 0 ? hour - 1 : hour
       if (!rollup[interval]) rollup[interval] = [d]
       else rollup[interval].push(d)
     }
