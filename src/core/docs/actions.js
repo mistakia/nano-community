@@ -15,6 +15,10 @@ export const docActions = {
   GET_TAG_DOC_PENDING: 'GET_TAG_DOC_PENDING',
   GET_TAG_DOC_FULFILLED: 'GET_TAG_DOC_FULFILLED',
 
+  GET_TAG_DOC_COMMIT_FAILED: 'GET_TAG_DOC_COMMIT_FAILED',
+  GET_TAG_DOC_COMMIT_PENDING: 'GET_TAG_DOC_COMMIT_PENDING',
+  GET_TAG_DOC_COMMIT_FULFILLED: 'GET_TAG_DOC_COMMIT_FULFILLED',
+
   getDoc: (id) => ({
     type: docActions.GET_DOC,
     payload: {
@@ -96,6 +100,29 @@ export const docActions = {
       params,
       data
     }
+  }),
+
+  getTagDocCommitPending: (params) => ({
+    type: docActions.GET_TAG_DOC_COMMIT_PENDING,
+    payload: {
+      params
+    }
+  }),
+
+  getTagDocCommitFailed: (params, error) => ({
+    type: docActions.GET_TAG_DOC_COMMIT_FAILED,
+    payload: {
+      params,
+      error
+    }
+  }),
+
+  getTagDocCommitFulfilled: (params, data) => ({
+    type: docActions.GET_TAG_DOC_COMMIT_FULFILLED,
+    payload: {
+      params,
+      data
+    }
   })
 }
 
@@ -115,4 +142,10 @@ export const docCommitRequestActions = {
   failed: docActions.getDocCommitFailed,
   pending: docActions.getDocCommitPending,
   fulfilled: docActions.getDocCommitFulfilled
+}
+
+export const tagDocCommitRequestActions = {
+  failed: docActions.getTagDocCommitFailed,
+  pending: docActions.getTagDocCommitPending,
+  fulfilled: docActions.getTagDocCommitFulfilled
 }

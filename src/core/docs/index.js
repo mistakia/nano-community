@@ -2,7 +2,8 @@ export {
   docActions,
   docRequestActions,
   tagDocRequestActions,
-  docCommitRequestActions
+  docCommitRequestActions,
+  tagDocCommitRequestActions
 } from './actions'
 export { docsReducer } from './reducer'
 export { docSagas } from './sagas'

@@ -3,6 +3,7 @@ export {
   getDoc,
   getTagDoc,
   getDocCommit,
+  getTagDocCommit,
   getGithubEvents,
   getRepresentatives,
   getNetworkStats

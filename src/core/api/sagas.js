@@ -8,7 +8,8 @@ import { postlistRequestActions } from '@core/postlists'
 import {
   docRequestActions,
   tagDocRequestActions,
-  docCommitRequestActions
+  docCommitRequestActions,
+  tagDocCommitRequestActions
 } from '@core/docs'
 import { networkStatsRequestActions } from '@core/network'
 import { representativesRequestActions } from '@core/accounts'
@@ -48,6 +49,11 @@ export const getDocCommit = fetch.bind(
   null,
   api.getDocCommit,
   docCommitRequestActions
+)
+export const getTagDocCommit = fetch.bind(
+  null,
+  api.getTagDocCommit,
+  tagDocCommitRequestActions
 )
 export const getGithubEvents = fetch.bind(
   null,
