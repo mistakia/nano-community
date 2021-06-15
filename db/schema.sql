@@ -173,7 +173,9 @@ CREATE TABLE `representatives_telemetry` (
   `weight` varchar(39) CHARACTER SET utf8 DEFAULT NULL,
 
   `block_count` int(11) NOT NULL,
+  `block_behind` int(11) NOT NULL,
   `cemented_count` int(11) NOT NULL,
+  `cemented_behind` int(11) NOT NULL,
   `unchecked_count` int(11) NOT NULL,
   `bandwidth_cap` int(11) NOT NULL,
   `peer_count` int(11) NOT NULL,
