@@ -58,8 +58,28 @@ const formatRedditPost = (p) => ({
   score: p.data.score // p.data.upvote_ratio + p.data.ups + p.data.total_awards_received + p.data.score + p.num_comments - p.data.downs
 })
 
-const rpcRequest = (data, { url = config.rpcAddress } = {}) => {
-  return { url, ...POST(data) }
+const rpcRequest = async (data, { url } = {}) => {
+  if (url) {
+    const options = { url, ...POST(data) }
+    return request(options)
+  }
+
+  // iterate through rpc nodes until success
+  for (let i = 0; i < config.rpcAddresses.length; i++) {
+    let res
+
+    try {
+      const url = config.rpcAddresses[i]
+      const options = { url, ...POST(data) }
+      res = await request(options)
+    } catch (err) {
+      res = null
+    }
+
+    if (res && !res.error) {
+      return res
+    }
+  }
 }
 
 const rpcTelemetry = async ({ url } = {}) => {
@@ -67,8 +87,7 @@ const rpcTelemetry = async ({ url } = {}) => {
     action: 'telemetry',
     raw: true
   }
-  const options = rpcRequest(data, { url })
-  return request(options)
+  return rpcRequest(data, { url })
 }
 
 const rpcConfirmationQuorum = ({ url } = {}) => {
@@ -76,8 +95,7 @@ const rpcConfirmationQuorum = ({ url } = {}) => {
     action: 'confirmation_quorum',
     peer_details: true
   }
-  const options = rpcRequest(data, { url })
-  return request(options)
+  return rpcRequest(data, { url })
 }
 
 const rpcRepresentativesOnline = ({ url } = {}) => {
@@ -85,8 +103,7 @@ const rpcRepresentativesOnline = ({ url } = {}) => {
     action: 'representatives_online',
     weight: true
   }
-  const options = rpcRequest(data, { url })
-  return request(options)
+  return rpcRequest(data, { url })
 }
 
 const rpc = {
@@ -95,11 +112,13 @@ const rpc = {
   representativesOnline: rpcRepresentativesOnline
 }
 
+/* eslint-disable no-extra-semi */
 const groupBy = (xs, key) =>
   xs.reduce((rv, x) => {
     ;(rv[x[key]] = rv[x[key]] || []).push(x)
     return rv
   }, {})
+/* eslint-enable no-extra-semi */
 
 module.exports = {
   request,

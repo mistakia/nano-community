@@ -1,13 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-/* eslint-disable no-extra-semi */
-const groupBy = (xs, key) =>
-  xs.reduce((rv, x) => {
-    ;(rv[x[key]] = rv[x[key]] || []).push(x)
-    return rv
-  }, {})
-/* eslint-enable no-extra-semi */
+const { groupBy } = require('../../common')
 
 router.get('/tags', async (req, res) => {
   const { db, logger, cache } = req.app.locals
