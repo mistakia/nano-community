@@ -53,7 +53,7 @@ The utility of digital money in aggregate is a function of how many merchants wa
 
 <img alt='Digital Money, like Nano, has an S-curve Network Effects' src='/resources/s-curve.jpg' />
 
-In practice, network effects resemble an <a href="https://spectrum.ieee.org/computing/networks/metcalfes-law-is-wrong" target="_blank">S-curve</a> more than n^2 or n\*log(n). The first 50% of merchants that accept digital cash for payment make it exponentially more useful than the second 50%.
+In practice, network effects resemble an <a href="https://spectrum.ieee.org/computing/networks/metcalfes-law-is-wrong" target="_blank">S-curve</a> more than an exponential curve. The first 50% of merchants that accept digital cash for payment make it exponentially more useful than the second 50%.
 
 Therefore, the value of digital money will exponentially increase as its network effects grow until it hits an inflection point, at which point it will start to plateau and behave as a store of value. In other words, all digital money will start off behaving like a speculative investment before evolving into a stable store of value as its network effects and utilization mature.
 
