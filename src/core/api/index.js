@@ -1,6 +1,7 @@
 export {
   getPosts,
   getDoc,
+  getTagDoc,
   getDocCommit,
   getGithubEvents,
   getRepresentatives,

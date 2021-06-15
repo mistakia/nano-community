@@ -5,7 +5,11 @@ import { api, apiRequest } from '@core/api/service'
 import { getApp } from '@core/app'
 import { githubEventsRequestActions } from '@core/github'
 import { postlistRequestActions } from '@core/postlists'
-import { docRequestActions, docCommitRequestActions } from '@core/docs'
+import {
+  docRequestActions,
+  tagDocRequestActions,
+  docCommitRequestActions
+} from '@core/docs'
 import { networkStatsRequestActions } from '@core/network'
 import { representativesRequestActions } from '@core/accounts'
 
@@ -17,6 +21,7 @@ function* fetchAPI(apiFunction, actions, opts = {}) {
     const data = yield call(request)
     yield put(actions.fulfilled(opts, data))
   } catch (err) {
+    console.log(err)
     if (!opts.ignoreError) {
       /* yield put(notificationActions.show({ severity: 'error', message: err.message }))
        * Bugsnag.notify(err, (event) => {
@@ -38,6 +43,7 @@ function* fetch(...args) {
 
 export const getPosts = fetch.bind(null, api.getPosts, postlistRequestActions)
 export const getDoc = fetch.bind(null, api.getDoc, docRequestActions)
+export const getTagDoc = fetch.bind(null, api.getTagDoc, tagDocRequestActions)
 export const getDocCommit = fetch.bind(
   null,
   api.getDocCommit,

@@ -14,19 +14,19 @@ router.get('/tags', async (req, res) => {
   try {
     const offset = parseInt(req.query.offset || 0, 10)
     const limit = Math.min(parseInt(req.query.limit || 50, 10), 100)
-    let { tags } = req.query
+    let { tag } = req.query
 
-    if (!tags) {
-      return res.status(401).send({ error: 'missing tags param' })
+    if (!tag) {
+      return res.status(401).send({ error: 'missing tag param' })
     }
 
-    if (!Array.isArray(tags)) {
-      tags = [tags]
+    if (!Array.isArray(tag)) {
+      tag = [tag]
     }
 
-    tags = tags.sort((a, b) => a - b)
+    tag = tag.sort((a, b) => a - b)
 
-    const cacheId = `tags_${tags.join('-')}`
+    const cacheId = `tags_${tag.join('-')}`
     const cachePosts = cache.get(cacheId)
     if (cachePosts) {
       return res.status(200).send(cachePosts)
@@ -46,7 +46,7 @@ router.get('/tags', async (req, res) => {
     query.leftJoin('post_tags', 'posts.id', 'post_tags.post_id')
     query.whereNotNull('posts.text')
 
-    query.whereIn('post_tags.tag', tags)
+    query.whereIn('post_tags.tag', tag)
 
     query.whereNot('posts.text', '')
     query.whereNot('posts.pid', 'like', 'discord:844618231553720330:%') // network status
@@ -61,11 +61,11 @@ router.get('/tags', async (req, res) => {
 
     const posts = await query
     const postIds = posts.map((p) => p.id)
-    const postTags = await db('post_tags').whereIn('post_id', postIds)
-    const tagsByPostId = groupBy(postTags, 'post_id')
+    const tags = await db('post_tags').whereIn('post_id', postIds)
+    const tagsByPostId = groupBy(tags, 'post_id')
     for (const post of posts) {
-      const pTags = tagsByPostId[post.id] || []
-      post.tags = pTags
+      const postTags = tagsByPostId[post.id] || []
+      post.tags = postTags
     }
 
     cache.set(cacheId, posts)

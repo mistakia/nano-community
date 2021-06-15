@@ -5,11 +5,13 @@ import DocPage from '@pages/doc'
 import HomePage from '@pages/home'
 import NetworkPage from '@pages/network'
 import RepresentativesPage from '@pages/representatives'
+import TagsPage from '@pages/tags'
 import NotFoundPage from '@pages/not-found'
 
 const Routes = () => (
   <Switch>
     <Route exact path='/' component={HomePage} />
+    <Route exact path='/tags/:tag' component={TagsPage} />
     <Route exact path='/network' component={NetworkPage} />
     <Route exact path='/representatives' component={RepresentativesPage} />
     <Route exact path='/404.html' component={NotFoundPage} />

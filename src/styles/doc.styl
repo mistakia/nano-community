@@ -1,0 +1,169 @@
+.doc__content
+  flex 1 1 550px
+  padding 32px 24px 0
+  font-size 14px
+  font-family 'Roboto Mono', monospace
+  line-height 1.6
+  margin-bottom 32px
+  width 100%
+
+  ul
+    line-height 1.8
+
+  p
+    font-family 'Inter', sans-serif
+    font-size 16px
+    margin-bottom 16px
+    line-height 1.7
+
+  hr
+    margin-top 48px
+    border none
+    border-top 1px solid $borderColor
+
+  code
+    padding 3px
+    background-color white
+    border 1px solid $borderColor
+    border-radius 3px
+
+  li
+    font-family 'Inter', sans-serif
+
+  pre
+    padding 10px
+    background-color white
+    border 1px solid $borderColor
+    overflow hidden
+    overflow-x scroll
+    white-space break-spaces
+    margin-bottom 32px
+    code
+      background transparent
+      border none
+
+  figure
+    max-width 75%
+    margin 16px auto
+
+  figcaption
+    font-size 8pt
+    font-style italic
+    padding 8px
+
+  h3
+  h2
+  h1
+    margin-top 48px
+
+  img
+    margin-bottom 16px
+
+  blockquote
+    padding 10px
+    font-size 8px
+    font-style italic
+    border-left 5px solid $borderColor
+    background #fafafa
+    margin-bottom 16px
+
+  cite
+    display block
+    margin-top 8px
+
+  table
+    padding 16px 8px
+    width 90%
+    margin 0 auto
+    background white
+    border 1px solid $borderColor
+    border-radius 3px
+
+  th
+    text-align start
+    padding 2px 16px
+    border-bottom 1px solid $borderColor
+
+  td
+    padding 2px 16px
+    border-bottom 1px solid $borderColor
+
+.doc__content-side
+  flex 1
+  margin-top 32px
+  min-width 200px
+
+.doc__content-author
+  margin 8px
+  font-size 10px
+  margin-bottom 8px
+
+.doc__content-contributors
+  margin-bottom 48px
+  margin 8px
+  font-size 12px
+
+.doc__content-edit
+  margin 8px !important
+  margin-bottom 32px !important
+
+.doc__content-authors
+  margin 0 8px
+
+.doc__content
+  a:not(.post__title)
+    text-decoration underline
+    text-decoration-color $nanoSoftBlue
+    text-decoration-thickness 2px
+    text-underline-offset 2px
+    &:hover
+      color $nanoSoftBlue
+
+.doc__content-author
+.doc__content-contributors
+  a
+    color $nanoSoftBlue
+    &:hover
+      text-decoration underline
+      text-decoration-color $nanoSoftBlue
+      text-decoration-thickness 2px
+      text-underline-offset 2px
+
+.doc__header-link
+  opacity 0
+  position absolute
+  left -56px
+  top 0
+  cursor pointer
+  padding 12px
+  border-radius 50%
+  display inline-flex
+  align-items center
+  justify-content center
+  border 1px solid $borderColor
+  .MuiSvgIcon-root
+    width 20px
+    height 20px
+
+  &:hover .MuiSvgIcon-root
+    fill $nanoSoftBlue
+
+@media (max-width 750px)
+  .doc__content-author
+  .doc__content-contributors
+  .doc__content-authors
+  .doc__content-edit
+    margin-left 24px !important
+
+@media (min-width 750px)
+  .doc__content
+    max-width 550px
+
+  .doc__content-authors
+    margin-top 48px
+
+  .doc__header
+    position relative
+    &:hover .doc__header-link
+      opacity 1
+      background #F6F6F6
