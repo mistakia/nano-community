@@ -11,14 +11,22 @@ debug.enable('script')
 const timestamp = Math.round(Date.now() / 1000)
 
 const main = async () => {
+  logger(`saving telemetry for interval: ${timestamp}`)
   // get telemetry from single node
   const telemetry = await rpc.telemetry()
   if (!telemetry || telemetry.error) {
     return
   }
 
+  let maxCementedCount = 0
+  let maxBlockCount = 0
   const telemetryByIp = {}
   for (const item of telemetry.metrics) {
+    const blockCount = parseInt(item.block_count, 10)
+    if (blockCount > maxBlockCount) maxBlockCount = blockCount
+
+    const cementedCount = parseInt(item.cemented_count, 10)
+    if (cementedCount > maxCementedCount) maxCementedCount = cementedCount
     telemetryByIp[`[${item.address}]:${item.port}`] = item
   }
 
@@ -52,7 +60,9 @@ const main = async () => {
 
       // data from telemetry
       block_count: node.block_count,
+      block_behind: maxBlockCount - node.block_count,
       cemented_count: node.cemented_count,
+      cemented_behind: maxCementedCount - node.cemented_count,
       unchecked_count: node.unchecked_count,
       bandwidth_cap: node.bandwidth_cap,
       peer_count: node.peer_count,
@@ -85,7 +95,9 @@ const main = async () => {
       nodeInserts.push({
         // data from telemetry
         block_count: node.block_count,
+        block_behind: maxBlockCount - node.block_count,
         cemented_count: node.cemented_count,
+        cemented_behind: maxCementedCount - node.cemented_count,
         unchecked_count: node.unchecked_count,
         bandwidth_cap: node.bandwidth_cap,
         peer_count: node.peer_count,
