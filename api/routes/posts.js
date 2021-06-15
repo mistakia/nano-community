@@ -9,6 +9,73 @@ const groupBy = (xs, key) =>
   }, {})
 /* eslint-enable no-extra-semi */
 
+router.get('/tags', async (req, res) => {
+  const { db, logger, cache } = req.app.locals
+  try {
+    const offset = parseInt(req.query.offset || 0, 10)
+    const limit = Math.min(parseInt(req.query.limit || 50, 10), 100)
+    let { tags } = req.query
+
+    if (!tags) {
+      return res.status(401).send({ error: 'missing tags param' })
+    }
+
+    if (!Array.isArray(tags)) {
+      tags = [tags]
+    }
+
+    tags = tags.sort((a, b) => a - b)
+
+    const cacheId = `tags_${tags.join('-')}`
+    const cachePosts = cache.get(cacheId)
+    if (cachePosts) {
+      return res.status(200).send(cachePosts)
+    }
+
+    const query = db('sources').offset(offset)
+    query.select('posts.*', 'sources.score_avg')
+    query.select(
+      db.raw(
+        '(CASE WHEN `posts`.`content_url` = "" THEN `posts`.`url` ELSE `posts`.`content_url` END) as main_url'
+      )
+    )
+    query.select(db.raw('sources.title as source_title'))
+    query.select(db.raw('sources.logo_url as source_logo_url'))
+    query.select(db.raw('(posts.score / sources.score_avg) as strength'))
+    query.join('posts', 'posts.sid', 'sources.id')
+    query.leftJoin('post_tags', 'posts.id', 'post_tags.post_id')
+    query.whereNotNull('posts.text')
+
+    query.whereIn('post_tags.tag', tags)
+
+    query.whereNot('posts.text', '')
+    query.whereNot('posts.pid', 'like', 'discord:844618231553720330:%') // network status
+    query.whereNot('posts.pid', 'like', 'discord:370285586894028811:%') // announcements
+    query.whereNot('posts.pid', 'like', 'discord:572793415138410517:%') // beta-announcements
+    query.whereNot('posts.pid', 'like', 'discord:644987172935565335:%') // rep-announcements
+
+    query.orderBy('strength', 'desc')
+    query.groupBy('main_url')
+
+    query.limit(limit)
+
+    const posts = await query
+    const postIds = posts.map((p) => p.id)
+    const postTags = await db('post_tags').whereIn('post_id', postIds)
+    const tagsByPostId = groupBy(postTags, 'post_id')
+    for (const post of posts) {
+      const pTags = tagsByPostId[post.id] || []
+      post.tags = pTags
+    }
+
+    cache.set(cacheId, posts)
+    res.status(200).send(posts)
+  } catch (error) {
+    logger(error)
+    res.status(500).send({ error: error.toString() })
+  }
+})
+
 // trending posts over a span of time (with decay), freshness is given a value
 router.get('/trending', async (req, res) => {
   const { db, logger, cache } = req.app.locals
