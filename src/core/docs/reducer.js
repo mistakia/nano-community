@@ -38,6 +38,7 @@ export function docsReducer(state = new Map(), { payload, type }) {
         content: payload.data
       })
 
+    case docActions.GET_TAG_DOC_COMMIT_FULFILLED:
     case docActions.GET_DOC_COMMIT_FULFILLED: {
       const authors = {}
       for (const item of payload.data) {
