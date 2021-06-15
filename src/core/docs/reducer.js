@@ -2,9 +2,26 @@ import { Map } from 'immutable'
 
 import { docActions } from './actions'
 import { Doc } from './doc'
+import { TagDoc } from './tag-doc'
 
 export function docsReducer(state = new Map(), { payload, type }) {
   switch (type) {
+    case docActions.GET_TAG_DOC_PENDING:
+      return state.set(payload.params.id, new TagDoc())
+
+    case docActions.GET_TAG_DOC_FAILED:
+      return state.mergeIn([payload.params.id], {
+        isPending: false,
+        isLoaded: true
+      })
+
+    case docActions.GET_TAG_DOC_FULFILLED:
+      return state.mergeIn([payload.params.id], {
+        isPending: false,
+        isLoaded: true,
+        content: payload.data
+      })
+
     case docActions.GET_DOC_PENDING:
       return state.set(payload.params.id, new Doc())
 

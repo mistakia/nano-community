@@ -11,17 +11,15 @@ import Button from '@material-ui/core/Button'
 import Avatar from '@material-ui/core/Avatar'
 import AvatarGroup from '@material-ui/lab/AvatarGroup'
 import Tooltip from '@material-ui/core/Tooltip'
-import Network from '@components/network'
-import Github from '@components/github'
 import fm from 'front-matter'
 import LinkIcon from '@material-ui/icons/Link'
 import copy from 'copy-text-to-clipboard'
 
+import Network from '@components/network'
+import Github from '@components/github'
 import { BASE_URL } from '@core/constants'
 import Menu from '@components/menu'
 import Seo from '@components/seo'
-
-import './doc.styl'
 
 const renderer = {
   heading(text, level) {

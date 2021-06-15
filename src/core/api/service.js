@@ -11,8 +11,11 @@ export const api = {
     return { url }
   },
   getDoc({ id }) {
-    const path = id.endsWith('/') ? id.slice(0, -1) : id
-    const url = `${API_URL}/docs${path}.md`
+    const url = `${API_URL}/docs${id}.md`
+    return { url }
+  },
+  getTagDoc({ id }) {
+    const url = `${API_URL}${id}.md`
     return { url }
   },
   getGithubEvents() {
@@ -54,7 +57,7 @@ export const apiRequest = (apiFunction, opts, token) => {
 export const dispatchFetch = async (options) => {
   const response = await fetch(options.url, options)
   if (response.status >= 200 && response.status < 300) {
-    if (options.url.includes('docs') && !options.url.includes('github')) {
+    if (options.url.includes('.md') && !options.url.includes('github')) {
       return response.text()
     } else {
       return response.json()

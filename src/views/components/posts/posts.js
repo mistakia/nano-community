@@ -23,7 +23,8 @@ export default class Posts extends React.Component {
 
   componentDidMount() {
     const { age } = this.state
-    this.props.getPosts(this.props.id, { age })
+    const { tag } = this.props
+    this.props.getPosts(this.props.id, { age, tag })
   }
 
   render() {
@@ -82,6 +83,7 @@ Posts.propTypes = {
   id: PropTypes.string,
   title: PropTypes.string,
   age: PropTypes.number,
+  tag: PropTypes.string,
   posts: ImmutablePropTypes.list,
   isPending: PropTypes.bool,
   getPosts: PropTypes.func
