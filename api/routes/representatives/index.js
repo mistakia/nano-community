@@ -1,6 +1,8 @@
 const express = require('express')
 const moment = require('moment')
 
+const top = require('./top')
+
 const router = express.Router()
 
 router.get('/', async (req, res) => {
@@ -80,5 +82,7 @@ router.get('/', async (req, res) => {
     res.status(500).send({ error: error.toString() })
   }
 })
+
+router.use('/top', top)
 
 module.exports = router
