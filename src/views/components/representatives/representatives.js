@@ -22,7 +22,7 @@ function LoadingOverlay() {
 
 export default class Representatives extends React.Component {
   render() {
-    const { accounts, cementedMax, checkedMax, totalWeight } = this.props
+    const { accounts, checkedMax, totalWeight } = this.props
 
     const columns = [
       {
@@ -39,14 +39,7 @@ export default class Representatives extends React.Component {
         field: 'confs_behind',
         headerName: 'Confs Behind',
         width: 140,
-        valueFormatter: (p) =>
-          p.row.telemetry.cemented_count
-            ? BigNumber(cementedMax - p.row.telemetry.cemented_count).toFormat()
-            : null,
-        valueGetter: (p) =>
-          p.row.telemetry.cemented_count
-            ? cementedMax - p.row.telemetry.cemented_count
-            : null
+        valueGetter: (p) => p.row.telemetry.cemented_behind
       },
       {
         field: 'weight',
@@ -209,6 +202,5 @@ export default class Representatives extends React.Component {
 Representatives.propTypes = {
   accounts: ImmutablePropTypes.list,
   totalWeight: PropTypes.number,
-  cementedMax: PropTypes.number,
   checkedMax: PropTypes.number
 }

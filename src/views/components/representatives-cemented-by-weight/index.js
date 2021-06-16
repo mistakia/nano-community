@@ -4,7 +4,6 @@ import BigNumber from 'bignumber.js'
 
 import {
   getRepresentatives,
-  getRepresentativesCementedMax,
   getRepresentativesTotalWeight
 } from '@core/accounts'
 
@@ -12,9 +11,8 @@ import RepresentativesCementedByWeight from './representatives-cemented-by-weigh
 
 const mapStateToProps = createSelector(
   getRepresentatives,
-  getRepresentativesCementedMax,
   getRepresentativesTotalWeight,
-  (accounts, cementedMax, totalWeight) => {
+  (accounts, totalWeight) => {
     const thresholds = [
       {
         label: 'Unknown',
@@ -45,9 +43,7 @@ const mapStateToProps = createSelector(
     for (const rep of accounts.valueSeq()) {
       if (!rep.telemetry.weight) continue
 
-      const blocksBehind = rep.telemetry.cemented_count
-        ? cementedMax - rep.telemetry.cemented_count
-        : null
+      const blocksBehind = rep.telemetry.cemented_behind
       if (blocksBehind == null) {
         metrics[0].total = BigNumber(rep.telemetry.weight)
           .plus(metrics[0].total)

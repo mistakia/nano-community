@@ -12,15 +12,6 @@ export function getRepresentatives(state) {
     .toList()
 }
 
-export function getRepresentativesCementedMax(state) {
-  const accounts = getRepresentatives(state)
-  const sortedByCemented = accounts.sort(
-    (a, b) =>
-      (b.telemetry.cemented_count || 0) - (a.telemetry.cemented_count || 0)
-  )
-  return sortedByCemented.getIn([0, 'telemetry', 'cemented_count'], 0)
-}
-
 export function getRepresentativesCheckedMax(state) {
   const accounts = getRepresentatives(state)
   const sortedByChecked = accounts.sort(
