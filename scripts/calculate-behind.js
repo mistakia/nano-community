@@ -5,23 +5,27 @@ debug.enable('script')
 const db = require('../db')
 
 const getMaxBlockCount = (arr) => {
-  const blockCounts = arr.map(p => p.block_count)
+  const blockCounts = arr.map((p) => p.block_count)
   return Math.max(...blockCounts)
 }
 
 const getMaxCementedCount = (arr) => {
-  const cementedCounts = arr.map(p => p.cemented_count)
+  const cementedCounts = arr.map((p) => p.cemented_count)
   return Math.max(...cementedCounts)
 }
 
 const main = async () => {
-  const rows = await db('representatives_telemetry').select('timestamp').groupBy('timestamp')
-  const timestamps = rows.map(p => p.timestamp)
+  const rows = await db('representatives_telemetry')
+    .select('timestamp')
+    .groupBy('timestamp')
+  const timestamps = rows.map((p) => p.timestamp)
 
   logger(`timestamps to process: ${timestamps.length}`)
 
   for (const timestamp of timestamps) {
-    const telemetries = await db('representatives_telemetry').where({ timestamp })
+    const telemetries = await db('representatives_telemetry').where({
+      timestamp
+    })
 
     logger(`updating telemetry for ${telemetries.length} nodes`)
     const maxBlockCount = getMaxBlockCount(telemetries)

@@ -4,7 +4,6 @@ export { accountSagas } from './sagas'
 export {
   getAccounts,
   getRepresentatives,
-  getRepresentativesCementedMax,
   getRepresentativesCheckedMax,
   getRepresentativesTotalWeight
 } from './selectors'
