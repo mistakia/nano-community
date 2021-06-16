@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import { XGrid, GridOverlay } from '@material-ui/x-grid'
+import { DataGrid, GridOverlay } from '@material-ui/data-grid'
 import BigNumber from 'bignumber.js'
 
 import Uptime from '@components/uptime'
@@ -189,11 +189,12 @@ export default class Representatives extends React.Component {
     ]
     return (
       <div className='representatives' style={{ height: 500 }}>
-        <XGrid
+        <DataGrid
           components={{ LoadingOverlay }}
           disableColumnMenu={true}
           loading={accounts.size === 0}
           rowHeight={36}
+          pageSize={100}
           columns={columns}
           columnBuffer={columns.length}
           getRowId={(row) => row.account}
