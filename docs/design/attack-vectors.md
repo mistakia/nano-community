@@ -20,7 +20,9 @@ Transaction flooding is simply sending as many valid transactions as possible in
 
 #### Defense
 
-Block confirmations are prioritized based on the balance of the block and the last time the account broadcasted a block. Thus, saturating the active election container requires possession of a large amount of the supply. Additionally, each block has a small amount of work associated with it, around 5 seconds to generate and 1 microsecond to validate. This work difference causes an attacker to dedicate a large amount to sustain an attack while wasting a small amount of resources by everyone else. Nodes that are not full historical nodes are able to prune old transactions from their chain, this clamps the storage usage from this type of attack for almost all users.
+Block confirmations are prioritized based on the balance of the block and the last time the account was used. This makes congesting the network financially prohibitive (i.e. you need 50% of the supply to consume 50% of the throughput).
+
+Additionally, each block has a small amount of work associated with it, around 5 seconds to generate and 1 microsecond to validate. This work difference causes an attacker to dedicate a large amount to sustain an attack while wasting a small amount of resources by everyone else. Nodes that are not full historical nodes can prune old transactions from their chain, this clamps the storage usage from this type of attack for almost all users.
 
 ### Penny-spend attack
 
