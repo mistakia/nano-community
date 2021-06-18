@@ -43,3 +43,7 @@ Data loss and transmission latency can lead to situations where nodes mistakenly
 Nano's ledger provides pseudonymous protection, which by itself is not enough to ensure that privacy is preserved. Currently, users bear most of the burden of preserving their privacy as there are limited tools, services and wallets that support managing and safeguarding privacy.
 
 Feeless transactions and a pseudonymous ledger provide a good foundation but further development is needed to automate privacy preserving transactions, alleviating users of this burden and making it intuitive and effortless.
+
+### Point of Sale (POS) & Payment Processors
+
+Each small business will not be capable of directly integrating with the Nano network. Thus, a pre-requisite for mass adoption is the development of software and companies providing turnkey and commercial-grade payment services that use Nano as the underlying settlement network. Additionally, businesses will want features like subscription management, invoicing, reporting, analytics, etc that they are accustomed to receiving currently with existing payment processors.
