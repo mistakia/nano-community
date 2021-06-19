@@ -35,7 +35,7 @@ Nano, unlike Bitcoin, is scalable, fast, asynchronous, uses minimal energy, oper
 - low latency / ultrafast settlement
 - deterministic finality
 - fair distribution
-- user controlled consensus
+- user-controlled consensus
 
 #### Limitations of other digital money
 
@@ -48,13 +48,13 @@ These properties impact the core functions of money and other projects can only 
 
 ### Nano is decentralized
 
-Nano does not have a central authority, coordinator, or server. The network is peer-to-peer and permissionless. Any Nano holder is able to run a node and engage in voting to secure the network. <a href="https://nanocharts.info/p/01/vote-weight-distribution" target="_blank">Voting weight distribution</a> is fluid and controlled by Nano holders.
+Nano does not have a central authority, coordinator, or server. The network is peer-to-peer and permissionless. Any Nano holder can run a node and engage in voting to secure the network. <a href="https://nanocharts.info/p/01/vote-weight-distribution" target="_blank">Voting weight distribution</a> is fluid and controlled by Nano holders.
 
 Because Nano does not need to pay to secure the network, it is resistant to <a href="https://medium.com/@clemahieu/emergent-centralization-due-to-economies-of-scale-83cc85a7cbef" target="_blank">emergent centralization due to economies of scale effects</a>. Over time, the network has trended toward greater decentralization.
 
 ### Nano is private
 
-Nano's ledger is pseudonymous. All accounts on the ledger, the balances and entire transaction history, are public. However, the identity of the owner is anonymous.
+Nano's ledger is pseudonymous. All accounts on the ledger, the balances, and the entire transaction history, are public. However, the identity of the owner is anonymous.
 
 Nano puts users in control of their privacy, allowing them to better preserve it. Users are not reliant on intermediaries like banks to prevent breaches of privacy.
 
@@ -92,7 +92,7 @@ All network transactions are feeless. Nano does not rely on transaction fees to 
 
 Initially, Nano has relied upon <a href="https://en.wikipedia.org/wiki/Proof_of_work" target="_blank">Proof-of-Work</a> for prioritization and spam mitigation.
 
-Starting with v22, Nano will use the account balance and the time since last transaction to prioritize transactions.
+Starting with v22, Nano will use the account balance and the time since the last transaction to prioritize transactions.
 
 ### Nano is scalable
 
@@ -104,7 +104,7 @@ Nano can scale by increasing whatever the limiting factor is among bandwidth, CP
 
 The network currently runs on about 200-300 nodes made up of average hardware. The average node likely uses around 25-140W.
 
-For each transaction, it is estimated that Nano uses only 0.000112 kWh, compared to <a href="https://digiconomist.net/bitcoin-energy-consumption/" target="_blank">1121.71 kWh</a> for Bitcoin as of May 15th 2021.
+For each transaction, it is estimated that Nano uses only 0.000112 kWh, compared to <a href="https://digiconomist.net/bitcoin-energy-consumption/" target="_blank">1121.71 kWh</a> for Bitcoin as of May 15th, 2021.
 
 Nano uses very little energy because it does not use Proof-of-Work to secure the network.
 
@@ -136,11 +136,11 @@ In contrast, Bitcoin transactions have probabilistic finality; the chance of a t
 
 ### Nano is ultrafast
 
-Typically, Nano transactions fully settle in under one second, often times around 150ms.
+Typically, Nano transactions fully settle in under one second, oftentimes around 300ms. Prior to final votes (v22), it was able to settle in around 100ms.
 
 It takes Bitcoin transactions about one hour to reach a <a href="https://bitcoil.co.il/Doublespend.pdf" target="_blank">0.1% chance</a> of potentially being reversed.
 
-Traditional bank transfers, using ACH and Swift, can take anywhere from 1-3 days to settle. Real Time Gross Settlement (RTGS) systems are available only for banks and can only be used domestically as they are operated by central banks.
+Traditional bank transfers, using ACH and Swift, can take anywhere from 1-3 days to settle. Real-Time Gross Settlement (RTGS) systems are available only for banks and can only be used domestically as they are operated by central banks.
 
 ### Nano is controlled by its holders
 
@@ -148,17 +148,19 @@ Nano is secured and controlled by Nano holders, as they have exclusive control o
 
 For example, control of Nano's scalability is decentralized and in the hands of Nano holders collectively. They alone determine how voting weight is distributed and what hardware the network operates on by delegating to node operators as they see fit.
 
-### Nano is lightweight
+### Nano is lightweight and Prunable
 
 Nano blocks are small (~200 bytes), yet stateful, meaning it contains all the information about an account at that point in time: account number, balance, representative.
 
-A minimal block size allows for lightweight communication resulting in ultrafast transaction confirmation times. Stateful blocks combined with a block-lattice structure allow for operation using <a href="https://docs.nano.org/protocol-design/ledger/?h=prune#ledger-pruning" target="_blank">pruned ledgers</a>, enabling Nano to operate with far less storage space and be more easily embedded in applications with the potential of operating on a <a href="https://www.reddit.com/r/nanocurrency/comments/n9dgfh/lightweight_nano_node_with_a_ledger_under_2_mb/" target="_blank">ledger as small as 2mb.</a>
+A minimal block size allows for lightweight communication resulting in ultrafast transaction confirmation times.
+
+Stateful blocks combined with a block-lattice structure allow for operation using <a href="https://docs.nano.org/protocol-design/ledger/?h=prune#ledger-pruning" target="_blank">pruned ledgers</a>, enabling Nano to operate with far less storage space and be more easily embedded in applications with the potential of operating on a <a href="https://www.reddit.com/r/nanocurrency/comments/n9dgfh/lightweight_nano_node_with_a_ledger_under_2_mb/" target="_blank">ledger as small as 2Mb.</a>
 
 ## Nano is like
 
 **Nano is like physical cash:** it can be given to someone without fees and the transfer is instant. It is not reversible. You are responsible for handling it. If you lose your wallet, you lose your money. Your nano can be given to others to hold for you but you need to trust they won't lose it or take it.
 
-**Nano is unlike physical cash:** it takes no space, regardless of how much you hold. You can hand it to anyone regardless of distance in between. It can not be counterfeited.
+**Nano is unlike physical cash:** it takes no space, regardless of how much you hold. You can hand it to anyone regardless of the distance in between. It can not be counterfeited.
 
 **Nano is like gold:** it cannot be produced at will and is scarce.
 
@@ -168,8 +170,8 @@ A minimal block size allows for lightweight communication resulting in ultrafast
 
 **Nano is unlike a bank:** it doesn't require any trust to hold your money and protect your privacy. It is always open, even on holidays. The account balances and history are verifiable by anyone. Your money can't be loaned out, leading to credit bubbles. It operates without any reliance on a central bank, an administrator, or large overhead costs. It is accessible anywhere that has access to the internet.
 
-**Nano is like Bitcoin:** it is decentralized, making it permissionless, self-sovereign, and censorship resistant. The development is open-source and the network is run by a global community of users. It can be used without having to trust or rely on any other user, developer, or operator on the network.
+**Nano is like Bitcoin:** it is decentralized, making it permissionless, self-sovereign, and censorship-resistant. The development is open-source and the network is run by a global community of users. It can be used without having to trust or rely on any other user, developer, or operator on the network.
 
-**Nano is unlike Bitcoin:** is feeless, instant, irreversible, scalable, and energy-efficient. Making it inclusive to all people and sustainable for the planet. Nano's security and network is controlled only by its holders, as it doesn't rely on miners.
+**Nano is unlike Bitcoin:** is feeless, instant, irreversible, scalable, and energy-efficient. Making it inclusive to all people and sustainable for the planet. Nano's security and network are controlled only by its holders and does not need to contest with miners who profit and extract value from users and holders.
 
 <a href="https://blog.oleganza.com/post/85111558553/bitcoin-is-like" target="_blank">Inspired by "Bitcoin is like..." by Oleg Andreev</a>

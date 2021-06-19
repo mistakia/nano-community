@@ -12,7 +12,7 @@ It is capable of being a strong <a href="https://en.wikipedia.org/wiki/Store_of_
 
 ### The importance of money
 
-The term <a href="https://en.wikipedia.org/wiki/Money" target="_blank">money</a> can be conflated with many things like wealth and <a href="https://en.wikipedia.org/wiki/Fiat_money" target="_blank">fiat money</a>, it's most popular form. To understand its importance, one must understand its core function and why it matters for society.
+The term <a href="https://en.wikipedia.org/wiki/Money" target="_blank">money</a> can be conflated with many things like wealth and <a href="https://en.wikipedia.org/wiki/Fiat_money" target="_blank">fiat money</a>, its most popular form. To understand its importance, one must understand its core function and why it matters for society.
 
 The core function of money is being a <a href="https://en.wikipedia.org/wiki/Medium_of_exchange" target="_blank">medium of exchange</a> that enables society to collaborate, cooperate, organize, specialize, and much more. Thus money, like communication, is foundational to society as it is a prerequisite for all complex cooperation. The concept of money was one of the first, and among the most important, collaborative innovations of mankind.
 
@@ -20,7 +20,7 @@ The concept of money is believed to have originated in the form of "promises" (i
 
 ##### Properties of Money
 
-- Fungibility: its individual units must be capable of mutual substitution.
+- Fungibility: its units must be capable of mutual substitution.
 - Durability: able to withstand repeated use.
 - Divisibility: divisible to small units.
 - Portability: easily carried and transported.
@@ -38,15 +38,15 @@ Modern society is built on top of <a href="https://en.wikipedia.org/wiki/Fiat_mo
 
 ### The importance of scarcity
 
-Another core function of money is being a <a href="https://en.wikipedia.org/wiki/Store_of_value" target="_blank">store of value</a>. It's important for money to be able to maintain its value and purchasing power over time. Scarcity is at the core of maintaining value over time. The problem is that all modern money has an inflationary supply, which reduces its value over time, and diminishes its ability to function as a store of value.
+Another core function of money is being a <a href="https://en.wikipedia.org/wiki/Store_of_value" target="_blank">store of value</a>. Money needs to be able to maintain its value and purchasing power over time. Scarcity is at the core of maintaining value over time. The problem is that all modern money has an inflationary supply, which reduces its value over time, and diminishes its ability to function as a store of value.
 
-<small>_Note: modern fiat money is inflationary as it is argued that small amounts of inflation drive economic growth and an adjustable monetary supply is an essential tool for governments to respond to economic events._</small>
+<small>_Note: modern fiat money is inflationary as it is argued that small amounts of inflation drive economic growth and an adjustable monetary supply is a tool for governments to respond to economic events._</small>
 
 Nano is not a replacement for fiat money, but rather an alternate and better form of money. One that protects against inflation, corrupt monetary policy, and miners.
 
 There will never be any more Nano created and dumped into the market, making its Stock-To-Flow `undefined` as you can not divide by zero.
 
-Nano has no inflation, maintaining it's purchasing power over time.
+Nano has no inflation, maintaining its purchasing power over time.
 
 ### The importance of self-sovereignty
 
@@ -68,7 +68,7 @@ Nano works just like cash, it's instant, even if the person you are handing the 
 
 ### The importance of decentralization
 
-Decentralizion ensures many of Nano's other qualities like self-sovereignty, security, scarcity without the need for trust.
+Decentralization ensures many of Nano's other qualities like self-sovereignty, security, scarcity without the need for trust.
 
 Without it, you lose qualities like "permissionless" and "censorship-resistant". It's this hard promise that gives someone the confidence to use it and build on top of it.
 

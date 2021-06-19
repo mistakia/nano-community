@@ -8,7 +8,7 @@ tags: nano, wallet, crypto, custody, cold, seed, address, security
 
 Absolute security does not exist. There are only degrees of security, and those degrees come at a cost (in time, accessibility, convenience, etc).
 
-Thus, no single approach to storing Nano will be ideal for all scenarios. First it is important to understand a few concepts
+Thus, no single approach to storing Nano will be ideal for all scenarios. First, it is important to understand a few concepts
 
 ### What is an account?
 
@@ -28,9 +28,9 @@ nano_3fpzregtjbi1p5cwb7ycxcybqtqcgqh6grufpknycdkkewmif8t985zb3yta
 
 ### What is a seed?
 
-A seed is a randomly generated secret that can then be used to predicatably generate up to 4,294,967,295 secret keys. Secret keys are derived deterministically from the seed, which means that as long as you put the same seed and index into the derivation function, you will get the same resulting secret key every time.
+A seed is a randomly generated secret that can then be used to predictably generate up to 4,294,967,295 secret keys. Secret keys are derived deterministically from the seed, which means that as long as you put the same seed and index into the derivation function, you will get the same resulting secret key every time.
 
-This enables you to back up a one seed instead of many secret keys.
+This enables you to back up one seed instead of many secret keys.
 
 #### nano seed
 
@@ -59,7 +59,7 @@ The decision is mostly one of responsibility and control. With self-custody, you
 - **trust:** that your funds are secured, insured, available, not given away
 - **privacy / kyc:** in some cases, you may relinquish control over your identity, transaction history, etc
 - **security of funds:** custodians are prime targets for theft
-- **accessibility:** custodial services may experience down time
+- **accessibility:** custodial services may experience downtime
 - **network security / control:** lose control over your nano voting weight and how its delegated
 
 <small>_Note: over time, adoption of approaches like <a href="https://nanojson.medium.com/how-to-use-nano-multisig-33c8865ef8b1" target="_blank">multi-signature</a> can allow for a blend between self-custody and custodial control over a nano account_</small>
@@ -85,10 +85,10 @@ Determining the right self-custody approach depends on how you intend to use it.
   - password manager
 - Hardware
 
-Paper wallets are able to provide a higher level of security but can not support frequent use, making them an ideal choice for long term storage of large amounts of value.
+Paper wallets can provide a higher level of security but can not support frequent use, making them an ideal choice for long-term storage of large amounts of value.
 
 The ideal choice for frequent use is software wallets: desktop, mobile, online (from most to least secure).
 
-Hardware wallets are somewhere in between.
+Hardware wallets are somewhere in between paper wallets and software wallets in terms of security.
 
 Get started by [setting up an account](/getting-started-users/storing/setup)

@@ -14,17 +14,17 @@ Before getting into the potential value of this technology it may be helpful to 
 
 ### An asymmetric investment now, digital money later
 
-The practical implications of the technical problems being solved is that Nano provides a way for one internet user to transfer a unique piece of digital property to another user, such that the transfer is guaranteed to be safe, secure, instant, and feeless. The consequences of this breakthrough are profound.
+The practical implication of the technical problems being solved is that Nano provides a way for one Internet user to transfer a unique piece of digital property to another user, such that the transfer is guaranteed to be safe, secure, instant, and feeless. The consequences of this breakthrough are profound.
 
-This is digital money, in its most advanced form.
+This is digital money, one of its most advanced forms.
 
 The Nano ledger is a new kind of payment system. Anyone in the world can pay anyone else in the world any amount of value, with no authorization required and with no fees.
 
-That last part is essential. Nano is the first global digital payment system where transactions happen with no fees. Traditional payment systems charge fees of about <a href="https://squareup.com/us/en/townsquare/credit-card-processing-fees-and-rates" target="_blank">2 to 3 percent</a> – and that’s in the developed world. In lots of other places, there either are no modern payment systems or the rates are significantly higher.
+That last part is essential. Nano intends for all transactions to have no fees. Traditional payment systems charge fees of about <a href="https://squareup.com/us/en/townsquare/credit-card-processing-fees-and-rates" target="_blank">2 to 3 percent</a> – and that’s in the developed world. In lots of other places, there either are no modern payment systems or the rates are significantly higher.
 
-Nano's value is driven by two things: use of the payment system today and speculation on future use. In other words, Nano has value because of its usefulness as money, something that can be traded with no fraud, no fees, etc.
+Nano's value is driven by two things: the use of the payment system today and speculation on future use. In other words, Nano has value because of its usefulness as money, something that can be traded with no fraud, no fees, etc.
 
-At this moment, the value is based mostly on speculation rather than actual payment volume. Without any value, it can't be practically used as a payment system. Therefore, speculation will always predate any actual usage. In fact, a rise in value driven by speculation makes the reality of its use as a payment system arrive much faster than it would have otherwise.
+At this moment, the value comes mostly from speculation rather than actual payment volume. Without any value, it can't be practically used as a payment system. Therefore, speculation will always predate any actual usage. A rise in value driven by speculation makes the reality of its use as a payment system arrive much faster than it would have otherwise.
 
 Like with any new technology, it is not worth very much until it is worth a lot.
 
@@ -32,15 +32,15 @@ In the meantime, critics will continually reference its lack of use by ordinary 
 
 ### Notable Quotes
 
-An advanced form of money thats digital and denationalized was predicted by two of the most influential economists of the 1900s.
+An advanced form of money that is digital and denationalized was predicted by two of the most influential economists of the 1900s.
 
 > One thing that’s missing but will soon be developed is a reliable e-cash, a method whereby on the Internet you can transfer funds from A to B without A knowing B or B knowing A – the way I can take a $20 bill and hand it over to you, and you may get that without knowing who I am.
-> <cite>— Milton Friedman in 1999</cite> > <small>one of the most influential economists of the 1900s</small>
+> <cite>— Milton Friedman in 1999</cite> > <small>influential economist of the 1900s</small>
 
 The decentralization of money has its theoretical roots in <a href="https://mises.org/library/denationalisation-money-argument-refined" target="_blank">Denationalisation of Money: The Argument Refined</a> by Friedrich A. Hayek
 
 > I don’t believe we shall ever have a good money again before we take the thing out of the hands of the government, that is, we can’t take it violently… all we can do is by some sly roundabout way introduce something that they can’t stop.
-> <cite>- Friedrich Hayek in 1984</cite> > <small>nobel prize winning economist and one of the most influential economists of the 1900s</small>
+> <cite>- Friedrich Hayek in 1984</cite> > <small>influential economist of the 1900s</small>
 
 > The thing we call money is just an information system for labor allocation.
 > What actually matters is making goods & providing services.
@@ -49,13 +49,13 @@ The decentralization of money has its theoretical roots in <a href="https://mise
 
 ### Nano's properties create a strong positive feedback loop
 
-The more people who use Nano, the more valuable Nano is for everyone who uses it, and the higher the incentive for the next user to start using the technology. This is driven by every consumer, merchant, developer and entrepreneur that uses or builds on Nano. This creates a positive feedback loop, strengthening its network effect.
+The more people who use Nano, the more valuable Nano is for everyone who uses it, and the higher the incentive for the next user to start using the technology. This is driven by every consumer, merchant, developer, and entrepreneur that uses or builds on Nano. This creates a positive feedback loop, strengthening its network effect.
 
 Nano shares this network effect property with the telephone system, the web, and popular Internet services like eBay and Facebook.
 
-With Bitcoin, more use means higher fees and slower transactions, greater on-chain usage and adoption can be its enemy. Nano on the other hand is scalable, feeless, and instant. Its ability to actually be used enables it to better capture its network effects from utilization, giving it a stronger feedback loop.
+With Bitcoin, its reached a point where greater on-chain usage means higher fees and slower transactions. Nano on the other hand is scalable. Its ability to be used enables it to better capture its network effects from utilization, giving it a stronger feedback loop.
 
-This will become increasingly noticeable as actual payment volume on the network grows.
+This will become increasingly noticeable as payment volume on the network grows.
 
 ## Potential
 
@@ -74,7 +74,7 @@ Nano is still viable for all of them.
 - protects sender identity information from criminals
 - merchants pay no fees
 
-> Credit card fraud is such a big deal for merchants, credit card processors and banks that online fraud detection systems are hair-trigger wired to stop transactions that look even slightly suspicious, whether or not they are actually fraudulent. As a result, many online merchants are forced to turn away 5 to 10 percent of incoming orders that they could take without fear if the customers were paying with Bitcoin, where such fraud would not be possible. Since these are orders that were coming in already, they are inherently the highest margin orders a merchant can get, and so being able to take them will drastically increase many merchants’ profit margins.
+> Credit card fraud is such a big deal for merchants, credit card processors, and banks that online fraud detection systems are hair-trigger wired to stop transactions that look even slightly suspicious, whether or not they are fraudulent. As a result, many online merchants are forced to turn away 5 to 10 percent of incoming orders that they could take without fear if the customers were paying with Bitcoin, where such fraud would not be possible. Since these are orders that were coming in already, they are inherently the highest margin orders a merchant can get, and so being able to take them will drastically increase many merchants’ profit margins.
 > <cite>Marc Andreessen</cite>
 
 Nano's anti-fraud properties even extend into the physical world of retail.
@@ -102,7 +102,7 @@ Nano, as a global payment system anyone can use from anywhere at any time, can b
 
 ### Micropayments
 
-> Micropayments have never been feasible, despite 20 years of attempts, because it is not cost effective to run small payments (think $1 and below, down to pennies or fractions of a penny) through the existing credit/debit and banking systems. The fee structure of those systems makes that nonviable.
+> Micropayments have never been feasible, despite 20 years of attempts, because it is not cost-effective to run small payments (think $1 and below, down to pennies or fractions of a penny) through the existing credit/debit and banking systems. The fee structure of those systems makes that nonviable.
 > <cite>Marc Andreessen</cite>
 
 With Nano, that's trivially easy. It is divisible down to 30 decimal places and is feeless. It's a revolution in unimaginably small value transfer as you can send its smallest unit to anyone in the world for free and instantly. It enables use cases that could not have existed beforehand and thus is easily one of the areas that will be hardest to predict.

@@ -10,7 +10,7 @@ Nano is a <a href="https://en.wikipedia.org/wiki/Decentralized_computing#Peer-to
 
 ### What is a distributed ledger?
 
-The concept of a distributed ledger is the starting point to understanding cryptocurrencies like Nano. Ledgers in cryptocurrencies are an open, global, and append-only list of operations that describe the state of the system. Operations can only be added but not removed, modified, or reordered. To know the current state of the ledger, you go through the full list of operations (first to last). Most cryptocurrencies use a structure called a <a href="https://en.wikipedia.org/wiki/Blockchain" target="_blank">blockchain</a> for their ledger. In short, new operations are grouped together in "a block" and linked to the previous group of operations. Nano introduces a different structure called a block-lattice. Instead of operations for all accounts being grouped together in a single block, each account has its own "blockchain", where each operation is a block that links to the previous operation for that account.
+The concept of a distributed ledger is the starting point to understanding cryptocurrencies like Nano. Ledgers in cryptocurrencies are an open, global, and append-only list of operations that describe the state of the system. Operations can only be added but not removed, modified, or reordered. To know the current state of the ledger, you go through the full list of operations (first to last). Most cryptocurrencies use a structure called a <a href="https://en.wikipedia.org/wiki/Blockchain" target="_blank">blockchain</a> for their ledger. In short, new operations are grouped in "a block" and linked to the previous group of operations. Nano introduces a different structure called a block-lattice. Instead of operations for all accounts being grouped in a single block, each account has its own "blockchain", where each operation is a block that links to the previous operation for that account.
 
 <figure>
     <img alt='Nano uses a block lattice structure for its distributed ledger' src='/resources/account-chains.svg' />
@@ -45,7 +45,7 @@ To update an account, you must know the corresponding secret key. Users update t
 
 ### Consensus & Confirmations
 
-Distributed ledgers will inevitably have disagreements over the order of operations, referred to as <a href="https://en.wikipedia.org/wiki/Fork_(blockchain)" target="_blank">forks</a>. A decentralized & trustless process is needed to ensure that the network reaches consensus on the order of operations and the path forward. With blockchains, forks could be because of an adversary trying to disrupt the ledger's operation or simply because of network latency when two blocks are generated near-simultaneously by different nodes unaware of each other's blocks. Due to Nano's block-lattice ledger design, forks in Nano can only be created by the owner of an account and only impacts their account. Unlike other cryptocurrencies that group operations from multiple accounts into a single block, Nano can more easily resolve forks without affecting other accounts.
+Distributed ledgers will inevitably have disagreements over the order of operations, referred to as <a href="https://en.wikipedia.org/wiki/Fork_(blockchain)" target="_blank">forks</a>. A decentralized & trustless process is needed to ensure that the network reaches consensus on the order of operations and the path forward. With blockchains, forks could be because of an adversary trying to disrupt the ledger's operation or simply because of network latency when two blocks are generated near-simultaneously by different nodes unaware of each other's blocks. Due to Nano's block-lattice ledger design, forks in Nano can only be created by the owner of an account and only impact their account. Unlike other cryptocurrencies that group operations from multiple accounts into a single block, Nano can more easily resolve forks without affecting other accounts.
 
 Nano capitalizes on the advantages of its ledger design with a consensus mechanism called Open Representative Voting (ORV).
 
@@ -53,7 +53,7 @@ A node configured to broadcast votes is called a Representative. Every account c
 
 Nodes then observe votes for each block, once they see a block get enough votes to reach quorum, that block is confirmed. This means that a balance-weighted majority of Representatives have observed this block, added it to their ledgers, and voted for it.
 
-Due to the lightweight nature of blocks and votes, the network is able to reach confirmation for transaction ultrafast, often in under a couple seconds.
+Due to the lightweight nature of blocks and votes, the network can reach confirmation for transaction ultrafast, often in under a second.
 
 <a href="https://docs.nano.org/protocol-design/orv-consensus/" target="_blank">Learn more about Open Representative Voting</a>
 
