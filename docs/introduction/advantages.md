@@ -92,7 +92,11 @@ All network transactions are feeless. Nano does not rely on transaction fees to 
 
 Initially, Nano has relied upon <a href="https://en.wikipedia.org/wiki/Proof_of_work" target="_blank">Proof-of-Work</a> for prioritization and spam mitigation.
 
-Starting with v22, Nano will use the account balance and the time since the last transaction to prioritize transactions.
+Starting with v22, Nano will use the account balance and the time since the last transaction to prioritize transactions. As a result, transaction flooding attacks (i.e. spam) will be financially prohibitive (i.e. you need 50% of the supply to consume 50% of the throughput).
+
+A good way to view it is that during congestion all accounts are guaranteed a throughput proportional to their stake in the network.
+
+When the network isn't congested, everything is instant. When it's congested, everyone has a guaranteed minimum throughput that's feeless.
 
 ### Nano is scalable
 

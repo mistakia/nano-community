@@ -1,7 +1,7 @@
 ---
 title: Protocol design
 description: Nano protocol design information & whitepapers
-tags: nano, protocol, crypto, whitepaper, design
+tags: nano, protocol, crypto, digital, money, whitepaper, design
 ---
 
 # Design
