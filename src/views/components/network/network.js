@@ -26,8 +26,10 @@ export default class Network extends React.Component {
     const backlogText = `Median number of transactions waiting to be confirmed ${prText}`
     const stakeText =
       'Percentage of delegated Nano weight actively participating in voting'
-    const nakamotoText =
+    const confirmText =
       'The minimum number of representatives needed to confirm transactions'
+    const censorText =
+      'The minimum number of representatives needed to censor transactions'
     const feeText = 'The Nano network operates without fees'
     const energyText =
       'Estimated live network CPU energy usage of Principle Representatives based on collected CPU model info. The estimate is based on CPU TDP, which is the average power, in watts, the processor dissipates when operating at base frequency with all cores active under manufacture-defined, high-complexity workload'
@@ -121,17 +123,30 @@ export default class Network extends React.Component {
           <div>{network.getIn(['stats', 'prCount'])}</div>
         </div>
         <div className='network__stat'>
+          <div>Total Reps (24h)</div>
+          <div>{network.getIn(['totalReps'])}</div>
+        </div>
+        <div className='network__stat'>
           <div>Peers</div>
           <div>{network.getIn(['stats', 'peersMax'])}</div>
         </div>
         <div className='network__stat'>
           <div>
-            Nakamoto Coefficient
-            <Tooltip title={nakamotoText}>
+            Reps to Confirm
+            <Tooltip title={confirmText}>
               <HelpOutlineIcon fontSize='inherit' />
             </Tooltip>
           </div>
-          <div>{network.getIn(['stats', 'nakamotoCoefficient'])}</div>
+          <div>{network.getIn(['stats', 'confirmReps'])}</div>
+        </div>
+        <div className='network__stat'>
+          <div>
+            Reps to Censor
+            <Tooltip title={censorText}>
+              <HelpOutlineIcon fontSize='inherit' />
+            </Tooltip>
+          </div>
+          <div>{network.getIn(['stats', 'censorReps'])}</div>
         </div>
         <div className='network__stat'>
           <div>

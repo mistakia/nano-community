@@ -14,26 +14,37 @@ export function networkReducer(state = new Map(), { payload, type }) {
       const prs = data.peers
         .filter((p) => p.PR)
         .sort((a, b) => b.weight - a.weight)
-      const limit = data.pStakeOnline * 0.67
+      const confirmLimit = data.pStakeOnline * 0.67
+      const censorLimit = data.pStakeOnline * 0.33
       let sum = 0
+      let c = 0
       let i = 0
-      for (; i < prs.length && sum < limit; i++) {
-        sum += prs[i].weight
+      for (; c < prs.length && sum < confirmLimit; c++) {
+        sum += prs[c].weight
+        if (sum < censorLimit) {
+          i = c
+        }
       }
 
       return state.set('stats', {
         ...data,
         prCount: prs.length,
-        nakamotoCoefficient: i + 1,
+        censorReps: i + 1,
+        confirmReps: c + 1,
         backlogMedianPr
       })
     }
 
     case accountsActions.GET_REPRESENTATIVES_FULFILLED: {
       const { data } = payload
+      const dayAgo = Math.round(Date.now() / 1000) - 60 * 60 * 24
       const watts = data.map((d) => d.watt_hour).filter((d) => Boolean(d))
+      const totalReps = data.filter(
+        (d) => d.representative && d.last_seen > dayAgo
+      )
       return state.merge({
-        averageWattHour: average(watts)
+        averageWattHour: average(watts),
+        totalReps: totalReps.length
       })
     }
 
