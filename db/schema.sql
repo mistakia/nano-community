@@ -26,9 +26,9 @@ DROP TABLE IF EXISTS `accounts_meta`;
 
 CREATE TABLE `accounts_meta` (
   `account` char(65) CHARACTER SET utf8 NOT NULL,
-  `balance` varchar(39) CHARACTER SET utf8 DEFAULT NULL,
+  `balance` decimal(39, 0) DEFAULT NULL,
   `block_count` int(11) DEFAULT NULL,
-  `weight` varchar(39) CHARACTER SET utf8 DEFAULT NULL,
+  `weight` decimal(39,0) DEFAULT NULL,
   `delegators` int(11) DEFAULT NULL,
   `timestamp` int(11) NOT NULL,
   UNIQUE KEY `account` (`account`, `timestamp`)
@@ -170,7 +170,7 @@ DROP TABLE IF EXISTS `representatives_telemetry`;
 
 CREATE TABLE `representatives_telemetry` (
   `account` char(65) DEFAULT NULL,
-  `weight` varchar(39) CHARACTER SET utf8 DEFAULT NULL,
+  `weight` decimal(39,0) DEFAULT NULL,
 
   `block_count` int(11) NOT NULL,
   `block_behind` int(11) NOT NULL,

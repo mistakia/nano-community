@@ -106,10 +106,28 @@ const rpcRepresentativesOnline = ({ url } = {}) => {
   return rpcRequest(data, { url })
 }
 
+const rpcAccountInfo = ({ account, url } = {}) => {
+  const data = {
+    action: 'account_info',
+    weight: true,
+    account
+  }
+  return rpcRequest(data, { url })
+}
+
+const rpcRepresentatives = ({ url } = {}) => {
+  const data = {
+    action: 'representatives'
+  }
+  return rpcRequest(data, { url })
+}
+
 const rpc = {
   telemetry: rpcTelemetry,
   confirmationQuorum: rpcConfirmationQuorum,
-  representativesOnline: rpcRepresentativesOnline
+  representativesOnline: rpcRepresentativesOnline,
+  accountInfo: rpcAccountInfo,
+  representatives: rpcRepresentatives
 }
 
 /* eslint-disable no-extra-semi */
