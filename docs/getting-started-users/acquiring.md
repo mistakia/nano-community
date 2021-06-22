@@ -47,7 +47,6 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 | <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>                                                 | 0.1%      | 0.1%      | 0.01 Nano      |
 | <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                                                  | 0.4%      | 0.4%      | 0.008 Nano     |
 
-
 #### Canada
 
 | Exchange                                                                                                                | Maker Fee | Taker Fee | Withdrawal Fee |
@@ -56,7 +55,6 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 | <a href="https://www.kraken.com/en-us/prices/nano-price-chart/usd-us-dollar?interval=1m" target="_blank">Kraken.com</a> | 0.16%     | 0.26%     | 0.05 Nano      |
 | <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>                                                 | 0.1%      | 0.1%      | 0.01 Nano      |
 | <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                                                  | 0.4%      | 0.4%      | 0.008 Nano     |
-
 
 #### Europe
 
@@ -75,7 +73,6 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 | <a href="https://wazirx.com/exchange/NANO-USDT" target="_blank">WazirX</a> | 0.2%      | 0.2%      | 3.1 NANO       |
 | <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>     | 0.4%      | 0.4%      | 0.008 Nano     |
 
-
 #### South Korea
 
 | Exchange                                                                                    | Maker Fee | Taker Fee | Withdrawal Fee |
@@ -83,7 +80,6 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 | <a href="https://www.probit.kr/app/exchange/NANO-KRW" target="_blank">Probit.kr</a>         | 0.2%      | 0.2%      | Unknown        |
 | <a href="https://www.huobi.co.kr/en-us/exchange/nano_usdt/" target="_blank">Huobi.co.kr</a> | 0.1%      | 0.1%      | Unknown        |
 | <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                      | 0.4%      | 0.4%      | 0.008 Nano     |
-
 
 #### United Kingdom
 
@@ -95,7 +91,6 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 | <a href="https://account.bitvavo.com/markets/NANO-EUR" target="_blank">Bitvavo.com</a>                       | 0.15%     | 0.25%     | 0.00025 Nano   |
 | <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                                       | 0.4%      | 0.4%      | 0.008 Nano     |
 
-
 #### United States
 
 | Exchange                                                                                                                | Maker Fee | Taker Fee | Withdrawal Fee |
@@ -104,7 +99,6 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 | <a href="https://www.kraken.com/en-us/prices/nano-price-chart/usd-us-dollar?interval=1m" target="_blank">Kraken.com</a> | 0.16%     | 0.26%     | 0.05 Nano      |
 | <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>                                                 | 0.1%      | 0.1%      | 0.01 Nano      |
 | <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                                                  | 0.4%      | 0.4%      | 0.008 Nano     |
-
 
 ### Services
 
