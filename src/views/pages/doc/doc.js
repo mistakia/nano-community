@@ -41,6 +41,23 @@ const renderer = {
 
 marked.use({ renderer })
 
+function Headings({ headings }) {
+  const items = headings.map((h, index) => {
+    const escapedText = h.text.toLowerCase().replace(/[^\w]+/g, '-')
+    return (
+      <a key={index} href={`#${escapedText}`}>
+        {h.text}
+      </a>
+    )
+  })
+
+  return <>{items}</>
+}
+
+Headings.propTypes = {
+  headings: PropTypes.array
+}
+
 export default class DocPage extends React.Component {
   get path() {
     const path = this.props.location.pathname
@@ -140,7 +157,11 @@ export default class DocPage extends React.Component {
 
     const frontmatter = fm(doc.content)
     const { title, description, tags } = frontmatter.attributes
-    const html = marked(frontmatter.body)
+    const tokens = marked.lexer(frontmatter.body)
+    const headings = tokens
+      .filter((t) => t.type === 'heading')
+      .filter((t) => t.depth < 3)
+    const html = marked.parser(tokens)
 
     return (
       <>
@@ -150,6 +171,9 @@ export default class DocPage extends React.Component {
           tags={tags ? tags.split(',').map((t) => t.trim()) : []}
           path={this.path}
         />
+        <div className='doc__headings'>
+          <Headings headings={headings} />
+        </div>
         <div className='doc__content'>
           <div dangerouslySetInnerHTML={{ __html: html }} />
         </div>
