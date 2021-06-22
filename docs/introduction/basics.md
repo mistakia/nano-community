@@ -6,15 +6,24 @@ tags: nano, crypto, what, how, feeless, green, energy, sustainable, information,
 
 # Introduction
 
-Nano (NANO), formerly RaiBlocks (XRB), is a peer-to-peer digital currency that enables free, instant, and sustainable value transfer between anyone, anywhere in the world. It operates without intermediaries, using a distributed ledger with a unique block-lattice data structure collectively managed by a peer-to-peer network.
+Nano (NANO) is a form of money that enables free, instant, and sustainable value transfer between anyone, anywhere in the world. It operates without intermediaries, using a distributed ledger with a unique block-lattice data structure collectively managed by a peer-to-peer network.
 
-Nano was launched in October 2015 by Colin LeMahieu to address limitations in existing digital currencies. By allowing for scalability within the protocol and offering feeless transactions that typically achieve full confirmation in under one second, Nano is well suited for large scale adoption.
+Nano was launched in October 2015 by Colin LeMahieu to address limitations in existing blockchain-based distributed ledgers. By allowing for scalability within the protocol and offering feeless transactions that typically achieve full confirmation in under one second, Nano is well suited to be a widely used base layer for settling value.
 
-### Get started
+| Resources                                            | Description                                                                                    |
+| ---------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| [Advantages](/introduction/advantages)               | An overview of what advantages Nano has over existing technologies                             |
+| [How it works](/introduction/how-it-works)           | An introduction to the technology behind Nano geared toward beginners                          |
+| [Why it matters](/introduction/why-it-matters)       | The implications and importance of digital money with the properties of Nano                   |
+| [Investment Thesis](/introduction/investment-thesis) | Learn how Nano can be a high-risk asymmetricxs investment before it evolves into digital money |
+| [Questions](/faqs)                                   | Answers to the most common questions                                                           |
+| [Confusions](/introduction/misconceptions)           | An exploration of the most common mistakes and confusions                                      |
+| [Chat](/community)                                   | Join in on the conversation                                                                    |
+| [Support](/support)                                  | Get support from community members                                                             |
 
-- Dive into Nano's [advantages over existing technologies](/introduction/advantages), [how it works](/introduction/how-it-works), and [why it matters](/introduction/why-it-matters).
-- Learn how to [acquire nano](/getting-started-users/acquiring), [store nano](/getting-started-users/storing/basics), and [use nano](/getting-started-users/using).
-- Understand why it could be a [good investment](/introduction/investment-thesis).
-- [Chat about Nano](/community) or get [support](/support).
-- Start [contributing](/contributing) to the core implementation or the ecosystem.
-- Browse the [FAQ](/faqs) and common [misconceptions](/introduction/misconceptions).
+| Guides                                           | Description                                                        |
+| ------------------------------------------------ | ------------------------------------------------------------------ |
+| [Acquiring](/getting-started-users/acquiring)    | Find out how and where you can get Nano                            |
+| [Storing](/getting-started-users/storing/basics) | Learn the ways you can store Nano and their trade-offs             |
+| [Using](/getting-started-users/using)            | A look at how transactions work                                    |
+| [Contributing](/contributing)                    | Join in on the community-led effort of developing and growing Nano |

@@ -27,7 +27,7 @@ This architecture allows Nano to function without direct monetary incentives to 
 | ------------------ | ------------------------------ |
 | Ledger Structure   | Block-lattice                  |
 | Consensus          | Open Representative Voting     |
-| Hash Function      | Blake2                         |
+| Hash Function      | Blake2b                        |
 | Signing Algo       | ED25519                        |
 | Key Derivation     | Argon2                         |
 | Block Size         | 216 bytes                      |

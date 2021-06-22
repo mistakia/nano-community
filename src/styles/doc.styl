@@ -72,9 +72,9 @@
     margin-top 8px
 
   table
-    padding 16px 8px
-    width 90%
-    margin 0 auto
+    padding 8px
+    font-family 'Inter', sans-serif
+    margin 0 auto 16px
     background white
     border 1px solid $borderColor
     border-radius 3px
@@ -121,10 +121,12 @@
 
 .doc__content-author
 .doc__content-contributors
+.doc__content table
   a
     color $nanoSoftBlue
+    text-decoration none !important
     &:hover
-      text-decoration underline
+      text-decoration underline !important
       text-decoration-color $nanoSoftBlue
       text-decoration-thickness 2px
       text-underline-offset 2px
