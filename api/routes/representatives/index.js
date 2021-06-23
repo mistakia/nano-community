@@ -38,12 +38,26 @@ router.get('/', async (req, res) => {
       .whereIn('account', accounts)
       .orderBy('interval', 'asc')
 
-    const metaQuery = db('representatives_meta')
+    const accountMetaQuery = db('accounts_meta')
       .select(db.raw('max(timestamp) AS maxtime, account AS aid'))
       .groupBy('account')
-    const meta = await db
+    const accountMeta = await db
+      .select('accounts_meta.*')
+      .from(db.raw('(' + accountMetaQuery.toString() + ') AS X'))
+      .innerJoin('accounts_meta', function () {
+        this.on(function () {
+          this.on('account', '=', 'aid')
+          this.andOn('timestamp', '=', 'maxtime')
+        })
+      })
+      .whereIn('account', accounts)
+
+    const repMetaQuery = db('representatives_meta')
+      .select(db.raw('max(timestamp) AS maxtime, account AS aid'))
+      .groupBy('account')
+    const repMeta = await db
       .select('representatives_meta.*')
-      .from(db.raw('(' + metaQuery.toString() + ') AS X'))
+      .from(db.raw('(' + repMetaQuery.toString() + ') AS X'))
       .innerJoin('representatives_meta', function () {
         this.on(function () {
           this.on('account', '=', 'aid')
@@ -67,7 +81,8 @@ router.get('/', async (req, res) => {
       .whereIn('account', accounts)
 
     for (const rep of representatives) {
-      rep.meta = meta.find((a) => a.account === rep.account) || {}
+      rep.account_meta = accountMeta.find((a) => a.account === rep.account) || {}
+      rep.representative_meta = repMeta.find((a) => a.account === rep.account) || {}
       rep.uptime = uptime
         .filter((a) => a.account === rep.account)
         .map(({ online, interval }) => ({ online, interval }))
