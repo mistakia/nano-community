@@ -6,7 +6,8 @@ export const Account = new Record({
   watt_hour: null,
   representative: false,
   last_seen: null,
-  meta: new Map(),
+  acccount_meta: new Map(),
+  representative_meta: new Map(),
   uptime: new List(),
   network: new Map(),
   telemetry: new Map()

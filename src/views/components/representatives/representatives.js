@@ -140,13 +140,13 @@ export default class Representatives extends React.Component {
         field: 'cpu_cores',
         headerName: 'CPU Cores',
         width: 130,
-        valueGetter: (p) => p.row.meta.cpu_cores
+        valueGetter: (p) => p.row.representative_meta.cpu_cores
       },
       {
         field: 'cpu_model',
         hide: true,
         headerName: 'CPU Model',
-        valueGetter: (p) => p.row.meta.cpu_model
+        valueGetter: (p) => p.row.representative_meta.cpu_model
       },
       {
         field: 'watt_hour',
