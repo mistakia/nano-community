@@ -16,32 +16,15 @@ At some point, Nano's protocol will mature, but it is never done. Currently, the
 
 As it is with physical money, digital money needs to be secured. If left unprotected or handled carelessly, it can be lost, stolen, or destroyed.
 
-Nano can provide very high levels of security if used correctly. Learn how you can [secure your account](/getting-started-users/storing/basics).
+Nano can provide very high levels of security if used correctly. Learn how you can [secure your account](/getting-started-users/storing/basics), the network, and its value.
 
 ## Securing the network
 
 Nano's network is secured by its holders through nodes that cast votes on behalf of them. Therefore, anyone in possession of Nano is responsible for safeguarding their voting weight and maintaining the network's security.
 
-Nano holders can run nodes to cast votes or they can delegate their voting weight to someone else who is running a node. They can re-delegate their voting weight at any time. Delegating your voting weight has no impact on your funds, as you remain in full control of them and can use them as you normally would.
+Said another way, the security of the network relies on a shared understanding and commitment to maintaining decentralization and self-sovereignty based on a shared interest of maintaining the value of the network.
 
-Delegating voting weight should not be done lightly as it is the main thing securing and controlling the network.
-
-#### How do I change my Nano representative?
-
-You broadcast a change rep operation to the network for a given Nano account. This can be done via most wallet applications.
-
-<small>_Note: If you are not self-custodying Nano, then that Nano and its voting weight is not in an account you control. It is not advised to use exchanges for long-term storage nor is it good for network security to allow exchanges to accumulate a large portion of the voting weight._</small>
-
-#### Where can I find a good representative?
-
-Do not randomly select a representative, you should know the maintainer and why they are running a node/representative. Additionally, a good choice should have:
-
-- A high uptime
-- Below 1 % of total voting weight
-- Not newly created, the older the better
-- Active & known community member
-
-If you don’t know any node maintainers, <a href="https://mynano.ninja/" target="_blank">My Nano Ninja</a> or <a href="https://nanocharts.info/need-a-representative" target="_blank">nanocharts.info</a> are good starting points. Try to select a node operator who is known and has a good reputation in the [community](/community).
+Learn how to do your part in keeping the [network secure](/getting-started-users/choosing-a-representative).
 
 ## Privacy
 

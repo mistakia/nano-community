@@ -4,11 +4,35 @@ description: How to use and store Nano
 tags: nano, wallet, crypto, custody, cold, seed, address, security
 ---
 
-## Overview
+# Storing
 
-Absolute security does not exist. There are only degrees of security, and those degrees come at a cost (in time, accessibility, convenience, etc).
+It's important to understand the difference between self-custody and custodial as it has major implications for yourself and the network.
 
-Thus, no single approach to storing Nano will be ideal for all scenarios. First, it is important to understand a few concepts
+## Self-custody vs Custodial
+
+You can store and control Nano directly (self-custody) or you can give it to another entity (custodian) to control it for you.
+
+The decision is mostly one of responsibility and control with implications for the security and value of the network.
+
+With self-custody, you have full control and with it comes full responsibility. Whereas with custodial services, you have limited control and limited responsibility.
+
+#### Custodial Implications
+
+- **trust:** that your funds are secured, insured, available, not given away
+- **risk:** higher risk exposure and attack surface
+- **privacy / kyc:** in some cases, you may relinquish control over your identity, transaction history, etc
+- **security of funds:** custodians are prime targets for theft
+- **accessibility:** custodial services may experience downtime
+- **network security / control:** lose control over your nano voting weight and how its delegated
+- **network value:** leaving funds on an exchange may contribute to centralization which lowers the value of the network. Additionally, it provides liquidity for shorting.
+
+<small>_Note: over time, adoption of approaches like <a href="https://nanojson.medium.com/how-to-use-nano-multisig-33c8865ef8b1" target="_blank">multi-signature</a> can allow for a blend between self-custody and custodial control over a nano account_</small>
+
+## Self-custody
+
+Determining the right self-custody approach depends on how you intend to use it. Thus, no single approach to storing Nano will be ideal for all scenarios.
+
+First, it is important to understand a few concepts
 
 ### What is an account?
 
@@ -47,26 +71,6 @@ In other words, a wallet is just a messenger, it does not actually "hold" your f
 It is important to carefully choose the wallet you use, as it has your secret key, and with it comes full control of your account.
 
 Before you begin storing and using Nano, understand these <a href="/getting-started-users/basics">basic</a> facts.
-
-## Self-custody vs Custodial
-
-You can store and control Nano directly (self-custody) or you can give it to another entity (custodian) to control it for you.
-
-The decision is mostly one of responsibility and control. With self-custody, you have full control and with it comes full responsibility. Whereas with custodial services, you have limited control and limited responsibility.
-
-#### Custodial Implications
-
-- **trust:** that your funds are secured, insured, available, not given away
-- **privacy / kyc:** in some cases, you may relinquish control over your identity, transaction history, etc
-- **security of funds:** custodians are prime targets for theft
-- **accessibility:** custodial services may experience downtime
-- **network security / control:** lose control over your nano voting weight and how its delegated
-
-<small>_Note: over time, adoption of approaches like <a href="https://nanojson.medium.com/how-to-use-nano-multisig-33c8865ef8b1" target="_blank">multi-signature</a> can allow for a blend between self-custody and custodial control over a nano account_</small>
-
-## Self-custody options
-
-Determining the right self-custody approach depends on how you intend to use it.
 
 #### Considerations
 
