@@ -46,15 +46,15 @@ export default class Representatives extends React.Component {
         headerName: 'Weight',
         width: 110,
         valueFormatter: (p) =>
-          p.row.telemetry.weight
-            ? `${BigNumber(p.row.telemetry.weight)
+          p.row.account_meta.weight
+            ? `${BigNumber(p.row.account_meta.weight)
                 .dividedBy(totalWeight)
                 .multipliedBy(100)
                 .toFixed(2)}%`
             : null,
         valueGetter: (p) =>
-          p.row.telemetry.weight
-            ? BigNumber(p.row.telemetry.weight)
+          p.row.account_meta.weight
+            ? BigNumber(p.row.account_meta.weight)
                 .dividedBy(totalWeight)
                 .multipliedBy(100)
             : null
@@ -92,7 +92,7 @@ export default class Representatives extends React.Component {
         width: 120,
         valueFormatter: (p) => {
           if (p.row.telemetry.bandwidth_cap === 0) return 'Unlimited'
-          return p.row.telemetry.weight
+          return p.row.telemetry.bandwidth_cap
             ? (p.row.telemetry.bandwidth_cap / (1024 * 1024)).toFixed(1)
             : null
         },

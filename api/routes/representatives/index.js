@@ -81,8 +81,10 @@ router.get('/', async (req, res) => {
       .whereIn('account', accounts)
 
     for (const rep of representatives) {
-      rep.account_meta = accountMeta.find((a) => a.account === rep.account) || {}
-      rep.representative_meta = repMeta.find((a) => a.account === rep.account) || {}
+      rep.account_meta =
+        accountMeta.find((a) => a.account === rep.account) || {}
+      rep.representative_meta =
+        repMeta.find((a) => a.account === rep.account) || {}
       rep.uptime = uptime
         .filter((a) => a.account === rep.account)
         .map(({ online, interval }) => ({ online, interval }))

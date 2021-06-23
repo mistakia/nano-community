@@ -41,11 +41,11 @@ const mapStateToProps = createSelector(
     ]
     const metrics = thresholds.map((p) => ({ ...p, total: 0 }))
     for (const rep of accounts.valueSeq()) {
-      if (!rep.telemetry.weight) continue
+      if (!rep.account_meta.weight) continue
 
       const blocksBehind = rep.telemetry.cemented_behind
       if (blocksBehind == null) {
-        metrics[0].total = BigNumber(rep.telemetry.weight)
+        metrics[0].total = BigNumber(rep.account_meta.weight)
           .plus(metrics[0].total)
           .toFixed()
         continue
@@ -56,7 +56,7 @@ const mapStateToProps = createSelector(
       let i = 1
       for (; i < lastIdx; i++) {
         if (blocksBehind <= metrics[i].threshold) {
-          metrics[i].total = BigNumber(rep.telemetry.weight)
+          metrics[i].total = BigNumber(rep.account_meta.weight)
             .plus(metrics[i].total)
             .toFixed()
           break
@@ -65,7 +65,7 @@ const mapStateToProps = createSelector(
 
       // add to catch all
       if (i === lastIdx) {
-        metrics[i].total = BigNumber(rep.telemetry.weight)
+        metrics[i].total = BigNumber(rep.account_meta.weight)
           .plus(metrics[i].total)
           .toFixed()
       }

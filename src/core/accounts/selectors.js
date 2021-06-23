@@ -24,8 +24,8 @@ export function getRepresentativesTotalWeight(state) {
   const accounts = getRepresentatives(state)
   let weight = BigNumber(0)
   for (const rep of accounts.valueSeq()) {
-    if (!rep.telemetry.weight) continue
-    weight = BigNumber(rep.telemetry.weight).plus(weight)
+    if (!rep.account_meta.weight) continue
+    weight = BigNumber(rep.account_meta.weight).plus(weight)
   }
 
   return weight.toNumber()

@@ -19,7 +19,7 @@ const mapStateToProps = createSelector(
     }
 
     for (const rep of accounts.valueSeq()) {
-      if (!rep.telemetry.weight) continue
+      if (!rep.account_meta.weight) continue
 
       /* eslint-disable camelcase */
       const {
@@ -31,14 +31,14 @@ const mapStateToProps = createSelector(
 
       const version = `${major_version}.${minor_version}.${patch_version}.${pre_release_version}`
       if (!major_version) {
-        versions.unknown = BigNumber(rep.telemetry.weight)
+        versions.unknown = BigNumber(rep.account_meta.weight)
           .plus(versions.unknown)
           .toFixed()
         continue
       }
       /* eslint-enable camelcase */
 
-      versions[version] = BigNumber(rep.telemetry.weight)
+      versions[version] = BigNumber(rep.account_meta.weight)
         .plus(versions[version] || 0)
         .toFixed()
     }

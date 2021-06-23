@@ -19,17 +19,17 @@ const mapStateToProps = createSelector(
     }
 
     for (const rep of accounts.valueSeq()) {
-      if (!rep.telemetry.weight) continue
+      if (!rep.account_meta.weight) continue
 
       const provider = rep.network.asname
       if (!provider) {
-        providers.unknown = BigNumber(rep.telemetry.weight)
+        providers.unknown = BigNumber(rep.account_meta.weight)
           .plus(providers.unknown)
           .toFixed()
         continue
       }
 
-      providers[provider] = BigNumber(rep.telemetry.weight)
+      providers[provider] = BigNumber(rep.account_meta.weight)
         .plus(providers[provider] || 0)
         .toFixed()
     }
