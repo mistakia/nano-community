@@ -6,7 +6,7 @@ export const Account = new Record({
   watt_hour: null,
   representative: false,
   last_seen: null,
-  acccount_meta: new Map(),
+  account_meta: new Map(),
   representative_meta: new Map(),
   uptime: new List(),
   network: new Map(),

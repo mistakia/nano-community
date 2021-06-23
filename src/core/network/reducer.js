@@ -20,10 +20,10 @@ export function networkReducer(state = new Map(), { payload, type }) {
       let c = 0
       let i = 0
       for (; c < prs.length && sum < confirmLimit; c++) {
-        sum += prs[c].weight
         if (sum < censorLimit) {
           i = c
         }
+        sum += prs[c].weight
       }
 
       return state.set('stats', {
