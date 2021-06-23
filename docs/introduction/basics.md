@@ -23,6 +23,7 @@ Nano was launched in October 2015 by Colin LeMahieu to address limitations in ex
 
 | Guides                                           | Description                                                        |
 | ------------------------------------------------ | ------------------------------------------------------------------ |
+| [Basics](/getting-started-users/basics)          | The basics that everyone should know                               |
 | [Acquiring](/getting-started-users/acquiring)    | Find out how and where you can get Nano                            |
 | [Storing](/getting-started-users/storing/basics) | Learn the ways you can store Nano and their trade-offs             |
 | [Using](/getting-started-users/using)            | A look at how transactions work                                    |

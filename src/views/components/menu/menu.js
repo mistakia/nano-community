@@ -24,7 +24,7 @@ export default class Menu extends React.Component {
           <div className='menu__section'>
             <div className='menu__heading'>Introduction</div>
             <div className='menu__links'>
-              <Link to='/introduction/basics'>Basics</Link>
+              <Link to='/introduction/basics'>Overview</Link>
               <Link to='/introduction/advantages'>Advantages</Link>
               <Link to='/introduction/how-it-works'>How it works</Link>
               <Link to='/introduction/why-it-matters'>Why it matters</Link>
@@ -37,7 +37,7 @@ export default class Menu extends React.Component {
             </div>
           </div>
           <div className='menu__section'>
-            <div className='menu__heading'>Get Started</div>
+            <div className='menu__heading'>Guides</div>
             <div className='menu__links'>
               <Link to='/getting-started-users/basics'>Basics</Link>
               <Link to='/getting-started-users/storing/basics'>Storing</Link>
