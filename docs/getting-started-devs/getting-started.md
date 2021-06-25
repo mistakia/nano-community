@@ -73,13 +73,25 @@ The most common way to access the network is through RPC commands to either a lo
 
 In most situations, you'll want to derive an account from a seed and it's best to use an existing library. For a more comprehensive guide, view the <a href="https://docs.nano.org/integration-guides/key-management/" target="_blank">key management</a> section of the Official Integration Guides.
 
+```js [g1:JavaScript]
+import { wallet } from 'nanocurrency-web'
+const wallet = wallet.generate()
+```
+
+```python [g1:Python]
+import nanolib
+seed = nanolib.generate_seed()
+account_id = nanolib.generate_account_id(seed, 0)
+```
+
 #### Libraries
 
 - <a href="https://github.com/Matoking/nanolib" target="_blank">nanolib</a> — python
+- <a href="https://github.com/npy0/nanopy" target="_blank">nanopy</a> — python
 - <a href="https://github.com/lukes/nanook" target="_blank">nanook</a> — ruby
-- <a href="https://github.com/appditto/pippin_nano_wallet" target="_blank">pippin</a> — python (production wallet)
 - <a href="https://github.com/numsu/nanocurrency-web-js" target="_blank">nanocurrency-web</a> — node.js / js
 - <a href="https://github.com/marvinroger/nanocurrency-js" target="_blank">nanocurency-js</a> — node.js / js
+- <a href="https://github.com/appditto/pippin_nano_wallet" target="_blank">pippin</a> — python (production wallet)
 
 #### Notable RPC Commands
 
@@ -143,10 +155,11 @@ Every block published to the network, whether a send, receive, or representative
 
 The Proof-of-Work nonce is calculated against the hash of the previous block, or the account public key if it is for an open block.
 
-| block type     | difficulty threshold |
-| -------------- | -------------------- |
-| Send or Change | fffffff800000000     |
-| Receive / Open | fffffe0000000000     |
+| block type     | difficulty threshold | calculated against  |
+| -------------- | -------------------- | ------------------- |
+| Send or Change | fffffff800000000     | previous block hash |
+| Receive        | fffffe0000000000     | previous block hash |
+| Open           | fffffe0000000000     | account publc key   |
 
 #### Proof-of-Work Resources
 
@@ -194,11 +207,14 @@ Once you have a node up and running the ledger should bootstrap from the network
 
 ## Resources
 
-- <a href="https://docs.nano.org/integration-guides/the-basics/" target="_blank">Official Integration Guide</a>
-- <a href="https://nano.org/tools" target="_blank">Tools & Libraries</a>
-- <a href="https://docs.nano.org/running-a-node/test-network/" target="_blank">Test network</a>
-- [Design Overview & Reference](/design/basics)
-- [Documentation](/getting-started-devs/documentation)
-- <a href="https://medium.com/nanocurrency/getting-started-developing-with-nano-currency-part-1-build-your-foundation-cec2013657e1" target="_blank">Getting Started Guide by SomeNano</a>
+| Resources                                                                                                                                                                   | Description                                                                                                                                                     |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <a href="https://docs.nano.org/integration-guides/the-basics/" target="_blank">Integration Guides</a>                                                                       | Comprehensive guides of the basics, key management, block confirmation tracking, work generation, compiling and running a node, websockets, and advanced setups |
+| <a href="https://nano.org/tools" target="_blank">Tools & Libraries</a>                                                                                                      | List of community tools in various platforms and languages                                                                                                      |
+| <a href="https://docs.nano.org/running-a-node/test-network/" target="_blank">Test network</a>                                                                               | Information about how to join and use the test network                                                                                                          |
+| <a href="https://tools.nanos.cc/" target="_blank">tools.nanos.cc</a>                                                                                                        | Helpful tools for unit conversion, key management, block generation, common RPC queries                                                                         |
+| [Design Overview & Reference](/design/basics)                                                                                                                               | An overview and reference to common Nano protocol details                                                                                                       |
+| [Documentation](/getting-started-devs/documentation)                                                                                                                        | Links to documentation information                                                                                                                              |
+| <a href="https://medium.com/nanocurrency/getting-started-developing-with-nano-currency-part-1-build-your-foundation-cec2013657e1" target="_blank">Getting Started Guide</a> | A step-by-step getting started guide by SomeNano                                                                                                                |
 
 Do not hesitate to reach out to the community to start a [discussion](/community) or get [support](/support).

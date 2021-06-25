@@ -3,7 +3,6 @@
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import PropTypes from 'prop-types'
-import marked from 'marked'
 import * as timeago from 'timeago.js'
 import Skeleton from '@material-ui/lab/Skeleton'
 import ImmutablePropTypes from 'react-immutable-proptypes'
@@ -14,6 +13,14 @@ import Tooltip from '@material-ui/core/Tooltip'
 import fm from 'front-matter'
 import LinkIcon from '@material-ui/icons/Link'
 import copy from 'copy-text-to-clipboard'
+import markdown from 'markdown-it'
+import codetabs from 'markdown-it-codetabs'
+import anchor from 'markdown-it-anchor'
+import hljs from 'highlight.js/lib/core'
+import javascript from 'highlight.js/lib/languages/javascript'
+import python from 'highlight.js/lib/languages/python'
+
+import 'highlight.js/styles/github.css'
 
 import Network from '@components/network'
 import Github from '@components/github'
@@ -21,25 +28,41 @@ import { BASE_URL } from '@core/constants'
 import Menu from '@components/menu'
 import Seo from '@components/seo'
 
-const renderer = {
-  heading(text, level) {
-    const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-')
+hljs.registerLanguage('js', javascript)
+hljs.registerLanguage('python', python)
 
-    const link = renderToString(
-      <div className='doc__header-link' data-anchor={escapedText}>
-        <LinkIcon />
-      </div>
-    )
+const md = markdown({
+  html: true,
+  highlight: function (str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(str, { language: lang }).value
+      } catch (__) {}
+    }
 
-    return `
-            <h${level} class="doc__header" id=${escapedText}>
-              ${text}
-              ${link}
-            </h${level}>`
+    return '' // use external default escaping
   }
-}
+})
+md.use(codetabs)
+md.use(anchor, {
+  slugify: (s) => s.toLowerCase().replace(/[^\w]+/g, '-'),
+  permalink: anchor.permalink.ariaHidden({
+    placement: 'after',
+    class: 'doc__header-link',
+    symbol: renderToString(<LinkIcon />),
+    renderAttrs: (slug) => ({ 'data-anchor': slug })
+  })
+})
 
-marked.use({ renderer })
+md.renderer.rules.heading_open = (tokens, idx) => {
+  const token = tokens[idx]
+  const nextToken = tokens[idx + 1]
+  const text = nextToken.content
+  const tag = token.tag
+  const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-')
+
+  return `<${tag} class="doc__header" id=${escapedText}>`
+}
 
 export default class DocPage extends React.Component {
   get path() {
@@ -140,7 +163,7 @@ export default class DocPage extends React.Component {
 
     const frontmatter = fm(doc.content)
     const { title, description, tags } = frontmatter.attributes
-    const html = marked(frontmatter.body)
+    const html = md.render(frontmatter.body)
 
     return (
       <>
