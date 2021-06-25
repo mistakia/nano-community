@@ -15,7 +15,7 @@ Nano was launched in October 2015 by Colin LeMahieu to address limitations in ex
 | [Advantages](/introduction/advantages)               | An overview of what advantages Nano has over existing technologies                             |
 | [How it works](/introduction/how-it-works)           | An introduction to the technology behind Nano geared toward beginners                          |
 | [Why it matters](/introduction/why-it-matters)       | The implications and importance of digital money with the properties of Nano                   |
-| [Investment Thesis](/introduction/investment-thesis) | Learn how Nano can be a high-risk asymmetricxs investment before it evolves into digital money |
+| [Investment Thesis](/introduction/investment-thesis) | Learn how Nano can be a high-risk asymmetric investment before it evolves into digital money |
 | [Questions](/faqs)                                   | Answers to the most common questions                                                           |
 | [Confusions](/introduction/misconceptions)           | An exploration of the most common mistakes and confusions                                      |
 | [Chat](/community)                                   | Join in on the conversation                                                                    |
