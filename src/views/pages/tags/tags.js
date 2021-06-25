@@ -3,13 +3,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import ImmutablePropTypes from 'react-immutable-proptypes'
-import marked from 'marked'
 import Skeleton from '@material-ui/lab/Skeleton'
 import fm from 'front-matter'
 import Button from '@material-ui/core/Button'
 import Avatar from '@material-ui/core/Avatar'
 import AvatarGroup from '@material-ui/lab/AvatarGroup'
 import Tooltip from '@material-ui/core/Tooltip'
+import markdown from 'markdown-it'
 import * as timeago from 'timeago.js'
 
 import Seo from '@components/seo'
@@ -81,7 +81,8 @@ export default class TagsPage extends React.Component {
 
     const frontmatter = fm(doc.content)
     const { title, description, tags } = frontmatter.attributes
-    const html = marked(frontmatter.body)
+    const md = markdown({ html: true })
+    const html = md.render(frontmatter.body)
 
     return (
       <>

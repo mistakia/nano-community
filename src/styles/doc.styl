@@ -169,3 +169,53 @@
     &:hover .doc__header-link
       opacity 1
       background #F6F6F6
+
+.code-tabs
+  background white
+  border 1px solid $borderColor
+  border-radius 3px
+
+  pre
+  input
+    display none
+
+  input:checked + pre
+    background #fcfcfc
+    display block
+    margin-bottom 0
+    border 0
+    code
+      display block
+
+  label
+    color rgba(0,0,0,0.5)
+  input:checked + label
+    color rgba(0,0,0,0.9)
+    font-weight 700
+
+  ul
+    font-size 0
+    padding 0
+    white-space nowrap
+    overflow auto
+    user-select none
+    border-bottom 1px solid $borderColor
+  li
+    list-style none
+    display inline-block
+    position relative
+  label
+    cursor pointer
+    user-select none
+    display inline-block
+    padding 2px 5px
+    margin 5px
+    font-size 14px
+  li ~ li::before
+    content ""
+    height 12px
+    width 1px
+    background rgba(191, 191, 191, 1)
+    position absolute
+    top 50%
+    transform translate(-50%, -50%)
