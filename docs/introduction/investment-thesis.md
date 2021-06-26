@@ -6,7 +6,7 @@ tags: nano, buy, crypto, prediction, value, invest, why, investment, potential, 
 
 # Investment Thesis
 
-Adoption is often slow at first, then all at once. This was the case with personal computers, the internet, and — I believe Nano. It's only after being heavily commercialized by mainstream companies that its inevitability becomes obvious.
+Adoption is often slow at first, then all at once. This was the case with personal computers, the internet, and — I believe self-sovereign digital money. It's only after being heavily commercialized by mainstream companies that its inevitability becomes obvious.
 
 In the meantime, transformational technologies spend most of their time on the fringes, developed by relatively anonymous researchers.
 

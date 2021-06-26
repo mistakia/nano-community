@@ -1,7 +1,15 @@
 import BigNumber from 'bignumber.js'
 
+import { Account } from './account'
+
 export function getAccounts(state) {
   return state.get('accounts')
+}
+
+export function getAccountById(state, props) {
+  const { address } = props.match.params
+  const accounts = getAccounts(state)
+  return accounts.get(`nano_${address}`, new Account())
 }
 
 export function getRepresentatives(state) {
