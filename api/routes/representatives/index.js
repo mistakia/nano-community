@@ -2,6 +2,7 @@ const express = require('express')
 const moment = require('moment')
 
 const top = require('./top')
+const representative = require('./representative')
 
 const router = express.Router()
 
@@ -101,5 +102,6 @@ router.get('/', async (req, res) => {
 })
 
 router.use('/top', top)
+router.use('/:address', representative)
 
 module.exports = router
