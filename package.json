@@ -85,6 +85,8 @@
     "cross-env": "^7.0.3",
     "css-loader": "^5.2.1",
     "deepmerge": "4.2.2",
+    "echarts": "^5.1.2",
+    "echarts-for-react": "^3.0.1",
     "eslint": "7.28.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",

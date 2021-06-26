@@ -2,8 +2,6 @@ const express = require('express')
 
 const router = express.Router({ mergeParams: true })
 
-const addressRe = /^(nano|xrb)_[13]{1}[13456789abcdefghijkmnopqrstuwxyz]{59}$/gi
-
 router.use('/?', async (req, res) => {
   const { logger, cache, db } = req.app.locals
   try {
@@ -13,7 +11,8 @@ router.use('/?', async (req, res) => {
       return res.status(401).send({ error: 'missing address' })
     }
 
-    if (!addressRe.test(address)) {
+    const re = /^(nano|xrb)_[13]{1}[13456789abcdefghijkmnopqrstuwxyz]{59}$/gi
+    if (!re.test(address)) {
       return res.status(401).send({ error: 'invalid address' })
     }
 

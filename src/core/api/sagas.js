@@ -12,7 +12,10 @@ import {
   tagDocCommitRequestActions
 } from '@core/docs'
 import { networkStatsRequestActions } from '@core/network'
-import { representativesRequestActions } from '@core/accounts'
+import {
+  representativesRequestActions,
+  representativeRequestActions
+} from '@core/accounts'
 
 function* fetchAPI(apiFunction, actions, opts = {}) {
   const { token } = yield select(getApp)
@@ -69,4 +72,9 @@ export const getRepresentatives = fetch.bind(
   null,
   api.getRepresentatives,
   representativesRequestActions
+)
+export const getRepresentative = fetch.bind(
+  null,
+  api.getRepresentative,
+  representativeRequestActions
 )
