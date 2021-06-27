@@ -32,16 +32,18 @@ const main = async () => {
 
   logger(`received telemetry for ${telemetry.metrics.length} nodes`)
 
+  const results = {}
+
   // get confirmation_quorum from multiple nodes
   const requests = config.rpcAddresses.map((url) =>
     rpc.confirmationQuorum({ url })
   )
   const responses = await Promise.allSettled(requests)
-  const results = {}
   for (const res of responses) {
     if (res.value && !res.value.error) {
       for (const peer of res.value.peers) {
-        results[peer.account] = peer
+        // do not overwrite main node so ephemeral ports match
+        if (!results[peer.account]) results[peer.account] = peer
       }
     }
   }
