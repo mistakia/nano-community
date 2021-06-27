@@ -3,23 +3,10 @@ import ImmutablePropTypes from 'react-immutable-proptypes'
 import ReactEChartsCore from 'echarts-for-react/lib/core'
 import * as echarts from 'echarts/core'
 import { LineChart } from 'echarts/charts'
-import {
-  GridComponent,
-  TitleComponent,
-  TooltipComponent,
-  DatasetComponent
-} from 'echarts/components'
 
 import { CanvasRenderer } from 'echarts/renderers'
 
-echarts.use([
-  TitleComponent,
-  TooltipComponent,
-  DatasetComponent,
-  GridComponent,
-  LineChart,
-  CanvasRenderer
-])
+echarts.use([LineChart, CanvasRenderer])
 
 export default class RepresentativeConfirmationsGraph extends React.Component {
   render() {
@@ -31,7 +18,6 @@ export default class RepresentativeConfirmationsGraph extends React.Component {
     })
 
     const option = {
-      tooltip: {},
       xAxis: {
         type: 'time'
       },
