@@ -9,6 +9,7 @@ import RepresentativesProviderByWeight from '@components/representatives-provide
 import RepresentativesCountryByWeight from '@components/representatives-country-by-weight'
 import RepresentativesVersionByWeight from '@components/representatives-version-by-weight'
 import RepresentativesBandwidthByWeight from '@components/representatives-bandwidth-by-weight'
+import RepresentativesConfirmationsPlot from '@components/representatives-confirmations-plot'
 
 import './representatives.styl'
 
@@ -43,6 +44,7 @@ export default class RepresentativesPage extends React.Component {
           <RepresentativesCountryByWeight />
         </div>
         <Representatives />
+        <RepresentativesConfirmationsPlot />
         <div className='representatives__footer'>
           <Menu desktop />
         </div>
