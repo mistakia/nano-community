@@ -48,7 +48,7 @@ export default class TagsPage extends React.Component {
 
     if (doc.isPending) {
       return (
-        <>
+        <div className='doc__container'>
           <div className='doc__content'>
             <Skeleton height={80} width={200} />
             <Skeleton height={20} />
@@ -63,19 +63,19 @@ export default class TagsPage extends React.Component {
             <Skeleton height={20} animation='wave' />
           </div>
           <Menu />
-        </>
+        </div>
       )
     }
 
     if (doc.isLoaded && !doc.content) {
       return (
-        <>
+        <div className='doc__container'>
           <div className='doc__content'>
             <h1>404</h1>
             <p>Document not found</p>
           </div>
           <Menu />
-        </>
+        </div>
       )
     }
 
@@ -85,7 +85,7 @@ export default class TagsPage extends React.Component {
     const html = md.render(frontmatter.body)
 
     return (
-      <>
+      <div className='doc__container'>
         <Seo
           title={title}
           description={description}
@@ -131,7 +131,7 @@ export default class TagsPage extends React.Component {
           <Menu />
           <Network />
         </div>
-      </>
+      </div>
     )
   }
 }

@@ -11,7 +11,7 @@ import './home.styl'
 export default class HomePage extends React.Component {
   render() {
     return (
-      <>
+      <div className='home__container'>
         <Seo
           title='Nano Community'
           description='Community gateway and knowledge hub for Nano: digital money (cryptocurrency) that is peer-to-peer, feeless, instant, and environmentally sustainable'
@@ -44,7 +44,7 @@ export default class HomePage extends React.Component {
           <Network />
           <Github />
         </div>
-      </>
+      </div>
     )
   }
 }

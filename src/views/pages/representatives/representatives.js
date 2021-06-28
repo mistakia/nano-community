@@ -16,7 +16,7 @@ import './representatives.styl'
 export default class RepresentativesPage extends React.Component {
   render() {
     return (
-      <>
+      <div className='representatives__container'>
         <Seo
           title='Nano Representatives'
           description='Nano representative explorer'
@@ -48,7 +48,7 @@ export default class RepresentativesPage extends React.Component {
         <div className='representatives__footer'>
           <Menu desktop />
         </div>
-      </>
+      </div>
     )
   }
 }

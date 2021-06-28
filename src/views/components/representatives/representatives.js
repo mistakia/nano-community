@@ -38,13 +38,29 @@ export default class Representatives extends React.Component {
       {
         field: 'confs_behind',
         headerName: 'Confs Behind',
-        width: 140,
+        width: 145,
+        valueFormatter: (p) =>
+          p.row.telemetry.cemented_behind
+            ? BigNumber(p.row.telemetry.cemented_behind).toFormat()
+            : null,
         valueGetter: (p) => p.row.telemetry.cemented_behind
       },
       {
         field: 'weight',
         headerName: 'Weight',
-        width: 110,
+        width: 140,
+        valueFormatter: (p) =>
+          p.row.account_meta.weight
+            ? `${BigNumber(p.row.account_meta.weight)
+                .shiftedBy(-30)
+                .toFormat(0)}`
+            : null,
+        valueGetter: (p) => p.row.account_meta.weight
+      },
+      {
+        field: 'weight_pct',
+        headerName: '%',
+        width: 80,
         valueFormatter: (p) =>
           p.row.account_meta.weight
             ? `${BigNumber(p.row.account_meta.weight)
@@ -106,7 +122,7 @@ export default class Representatives extends React.Component {
       {
         field: 'blocks_behind',
         headerName: 'Blocks Behind',
-        width: 140,
+        width: 145,
         valueFormatter: (p) =>
           p.row.telemetry.block_behind
             ? BigNumber(p.row.telemetry.block_behind).toFormat()
