@@ -35,8 +35,17 @@ const mapStateToProps = createSelector(
     }
 
     for (const [country, weight] of Object.entries(countries)) {
+      const filter =
+        country === 'unknown'
+          ? {
+              empty: true
+            }
+          : {
+              match: country
+            }
       metrics.push({
         label: country,
+        filter,
         value: BigNumber(weight)
           .dividedBy(totalWeight)
           .multipliedBy(100)

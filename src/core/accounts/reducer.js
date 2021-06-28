@@ -1,22 +1,49 @@
 import { Map } from 'immutable'
 
 import { accountsActions } from './actions'
-import { Account } from './account'
+import { createAccount } from './account'
 
-export function accountsReducer(state = new Map(), { payload, type }) {
+const initialState = new Map({
+  isLoading: false,
+  field: null,
+  value: null,
+  label: null,
+  items: new Map()
+})
+
+export function accountsReducer(state = initialState, { payload, type }) {
   switch (type) {
+    case accountsActions.GET_REPRESENTATIVES_PENDING:
+      return state.set('isLoading', true)
+
+    case accountsActions.GET_REPRESENTATIVES_FAILED:
+      return state.set('isLoading', false)
+
     case accountsActions.GET_REPRESENTATIVES_FULFILLED:
       return state.withMutations((accounts) => {
+        accounts.set('isLoading', false)
         payload.data.forEach((accountData) => {
           const account = accounts.get(accountData.account)
           if (!account) {
-            accounts.set(accountData.account, new Account(accountData))
+            accounts.setIn(
+              ['items', accountData.account],
+              createAccount(accountData)
+            )
           }
         })
       })
 
     case accountsActions.GET_REPRESENTATIVE_FULFILLED:
-      return state.set(payload.params, new Account(payload.data))
+      return state.setIn(['items', payload.params], createAccount(payload.data))
+
+    case accountsActions.FILTER_REPRESENTATIVES: {
+      const { field, value, label } = payload
+      return state.merge({
+        field,
+        value,
+        label
+      })
+    }
 
     default:
       return state

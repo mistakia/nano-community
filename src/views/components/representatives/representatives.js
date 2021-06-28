@@ -22,7 +22,7 @@ function LoadingOverlay() {
 
 export default class Representatives extends React.Component {
   render() {
-    const { accounts, checkedMax, totalWeight } = this.props
+    const { accounts, totalWeight, isLoading } = this.props
 
     const columns = [
       {
@@ -108,13 +108,10 @@ export default class Representatives extends React.Component {
         headerName: 'Blocks Behind',
         width: 140,
         valueFormatter: (p) =>
-          p.row.telemetry.block_count
-            ? BigNumber(checkedMax - p.row.telemetry.block_count).toFormat()
+          p.row.telemetry.block_behind
+            ? BigNumber(p.row.telemetry.block_behind).toFormat()
             : null,
-        valueGetter: (p) =>
-          p.row.telemetry.block_count
-            ? checkedMax - p.row.telemetry.block_count
-            : null
+        valueGetter: (p) => p.row.telemetry.block_behind
       },
       {
         field: 'cemented_count',
@@ -185,7 +182,7 @@ export default class Representatives extends React.Component {
         <DataGrid
           components={{ LoadingOverlay }}
           disableColumnMenu={true}
-          loading={accounts.size === 0}
+          loading={isLoading}
           rowHeight={36}
           pageSize={100}
           columns={columns}
@@ -202,5 +199,5 @@ export default class Representatives extends React.Component {
 Representatives.propTypes = {
   accounts: ImmutablePropTypes.list,
   totalWeight: PropTypes.number,
-  checkedMax: PropTypes.number
+  isLoading: PropTypes.bool
 }

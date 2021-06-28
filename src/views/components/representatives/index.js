@@ -2,21 +2,21 @@ import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
 
 import {
-  getRepresentatives,
-  getRepresentativesCheckedMax,
+  getFilteredRepresentatives,
+  getAccounts,
   getRepresentativesTotalWeight
 } from '@core/accounts'
 
 import Representatives from './representatives'
 
 const mapStateToProps = createSelector(
-  getRepresentatives,
-  getRepresentativesCheckedMax,
+  getFilteredRepresentatives,
   getRepresentativesTotalWeight,
-  (accounts, checkedMax, totalWeight) => ({
+  getAccounts,
+  (accounts, totalWeight, accountsState) => ({
     accounts,
-    checkedMax,
-    totalWeight
+    totalWeight,
+    isLoading: accountsState.get('isLoading')
   })
 )
 

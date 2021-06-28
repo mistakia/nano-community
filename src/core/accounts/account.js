@@ -11,5 +11,27 @@ export const Account = new Record({
   telemetry_history: new List(),
   uptime: new List(),
   network: new Map(),
-  telemetry: new Map()
+  telemetry: new Map(),
+
+  version: null
 })
+
+export function createAccount(data) {
+  /* eslint-disable camelcase */
+  const {
+    major_version,
+    minor_version,
+    patch_version,
+    pre_release_version
+  } = data.telemetry
+
+  const version = major_version
+    ? `${major_version}.${minor_version}.${patch_version}.${pre_release_version}`
+    : 'unknown'
+  /* eslint-enable camelcase */
+
+  return new Account({
+    ...data,
+    version
+  })
+}

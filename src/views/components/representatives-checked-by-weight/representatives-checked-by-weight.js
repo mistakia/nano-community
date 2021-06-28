@@ -13,6 +13,7 @@ export default class RepresentativesCheckedByWeight extends React.Component {
         tooltip='Displays the amount of voting weight that is within X number of blocks from the leading node. Useful for getting a sense of how in-sync block propagation is within the network'
         unit='%'
         max={100}
+        field='telemetry.block_behind'
         metrics={metrics}
       />
     )

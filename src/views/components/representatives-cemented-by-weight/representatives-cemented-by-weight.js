@@ -13,6 +13,7 @@ export default class RepresentativesCementedByWeight extends React.Component {
         tooltip='Displays the amount of voting weight that is within X number of confirmations from the leading node. Helpful in knowing how well in-sync and aligned nodes are across the network'
         unit='%'
         max={100}
+        field='telemetry.cemented_behind'
         metrics={metrics}
       />
     )

@@ -13,6 +13,7 @@ export default class RepresentativesBandwidthByWeight extends React.Component {
         tooltip='Displays the amount of voting weight based on the bandwidth limit set locally by each node'
         unit='%'
         max={100}
+        field='telemetry.bandwidth_cap'
         metrics={metrics}
       />
     )
