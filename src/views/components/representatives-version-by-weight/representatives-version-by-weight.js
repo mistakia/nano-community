@@ -12,6 +12,7 @@ export default class RepresentativesVersionByWeight extends React.Component {
         subtitle='By Online Weight'
         unit='%'
         max={100}
+        field='version'
         metrics={metrics}
       />
     )

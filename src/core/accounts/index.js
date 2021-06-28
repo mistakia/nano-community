@@ -7,8 +7,9 @@ export { accountsReducer } from './reducer'
 export { accountSagas } from './sagas'
 export {
   getAccounts,
+  getAccountItems,
   getAccountById,
   getRepresentatives,
-  getRepresentativesCheckedMax,
+  getFilteredRepresentatives,
   getRepresentativesTotalWeight
 } from './selectors'

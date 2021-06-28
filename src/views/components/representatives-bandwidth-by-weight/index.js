@@ -16,31 +16,52 @@ const mapStateToProps = createSelector(
     const thresholds = [
       {
         label: 'Unknown',
-        threshold: null
+        threshold: null,
+        filter: {
+          empty: true
+        }
       },
       {
         label: 'Unlimited',
-        threshold: 0
+        threshold: 0,
+        filter: {
+          match: 0
+        }
       },
       {
         label: '1Mb to 5Mb',
-        threshold: 5 * (1024 * 1024)
+        threshold: 5 * (1024 * 1024),
+        filter: {
+          between: [1, 5 * (1024 * 1024)]
+        }
       },
       {
         label: '6Mb to 10Mb',
-        threshold: 10 * (1024 * 1024)
+        threshold: 10 * (1024 * 1024),
+        filter: {
+          between: [5 * (1024 * 1024) + 1, 10 * (1024 * 1024)]
+        }
       },
       {
         label: '11Mb to 20Mb',
-        threshold: 20 * (1024 * 1024)
+        threshold: 20 * (1024 * 1024),
+        filter: {
+          between: [10 * (1024 * 1024) + 1, 20 * (1024 * 1024)]
+        }
       },
       {
         label: '20Mb to 100Mb',
-        threshold: 100 * (1024 * 1024)
+        threshold: 100 * (1024 * 1024),
+        filter: {
+          between: [20 * (1024 * 1024) + 1, 100 * (1024 * 1024)]
+        }
       },
       {
         label: '101Mb+',
-        threshold: null
+        threshold: null,
+        filter: {
+          between: [100 * (1024 * 1024) + 1, Infinity]
+        }
       }
     ]
     const metrics = thresholds.map((p) => ({ ...p, total: 0 }))

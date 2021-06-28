@@ -1,4 +1,4 @@
-import { getAccounts } from '@core/accounts'
+import { getAccountItems } from '@core/accounts'
 
 export function getNetwork(state) {
   return state.get('network')
@@ -6,7 +6,7 @@ export function getNetwork(state) {
 
 export function getNetworkWattHour(state) {
   const network = getNetwork(state)
-  const accounts = getAccounts(state)
+  const accounts = getAccountItems(state)
 
   const peers = network.getIn(['stats', 'peers'], [])
   const prs = peers.filter((p) => p.PR)

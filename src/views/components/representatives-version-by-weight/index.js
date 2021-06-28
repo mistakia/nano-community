@@ -14,30 +14,12 @@ const mapStateToProps = createSelector(
   getRepresentativesTotalWeight,
   (accounts, totalWeight) => {
     const metrics = []
-    const versions = {
-      unknown: 0
-    }
+    const versions = {}
 
     for (const rep of accounts.valueSeq()) {
       if (!rep.account_meta.weight) continue
 
-      /* eslint-disable camelcase */
-      const {
-        major_version,
-        minor_version,
-        patch_version,
-        pre_release_version
-      } = rep.telemetry
-
-      const version = `${major_version}.${minor_version}.${patch_version}.${pre_release_version}`
-      if (!major_version) {
-        versions.unknown = BigNumber(rep.account_meta.weight)
-          .plus(versions.unknown)
-          .toFixed()
-        continue
-      }
-      /* eslint-enable camelcase */
-
+      const version = rep.version
       versions[version] = BigNumber(rep.account_meta.weight)
         .plus(versions[version] || 0)
         .toFixed()
@@ -46,6 +28,9 @@ const mapStateToProps = createSelector(
     for (const [version, weight] of Object.entries(versions)) {
       metrics.push({
         label: version,
+        filter: {
+          match: version
+        },
         value: BigNumber(weight)
           .dividedBy(totalWeight)
           .multipliedBy(100)

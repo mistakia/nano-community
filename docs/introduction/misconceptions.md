@@ -27,7 +27,7 @@ In other words, the day-to-day price of milk, denominated in USD, is stable even
 
 Nano currently has very little usage and adoption as a form of money. It also has to be worth something before it could bear any amount of real-world payment volume. A classic "chicken and egg" problem with new technology: new technology is not worth much until it’s worth a lot. It can not go from zero usage and denomination to widely adopted and denominated without volatile price changes.
 
-Currently, the price is entirely driven by speculation. In other words, Nano's value is not driven by its use but because people believe it will be used. As it grows to be widely adopted and denominated, the value will no longer be determined purely from speculation. The price will begin to stabilize when it is predominately driven by utility and the network effects hit an inflection point.
+Currently, the price is entirely driven by speculation. In other words, Nano's value is not driven by its use but because people believe it will be used. As it grows to be widely adopted and denominated, the value will no longer be determined purely from speculation. The price will begin to stabilize when it is predominately driven by utility and the network effects can no longer exponentially grow.
 
 #### Understanding Network Effects of Digital Money
 
@@ -39,7 +39,7 @@ The utility of digital money in aggregate is a function of how many merchants wa
 
 In practice, network effects resemble an <a href="https://spectrum.ieee.org/computing/networks/metcalfes-law-is-wrong" target="_blank">S-curve</a> more than an exponential curve. The first 50% of merchants that accept digital cash for payment make it exponentially more useful than the second 50%.
 
-Therefore, the value of digital money will exponentially increase as its network effects grow until it hits an inflection point, at which point it will start to plateau and behave as a store of value. In other words, digital money will start off behaving like a speculative investment before evolving into a stable store of value as its network effects and utilization mature.
+Therefore, the value of digital money will exponentially increase at first then hit an inflection point before finally plateauing. In other words, digital money will start off behaving like a speculative investment before evolving into a stable store of value as its network effects and utilization mature.
 
 Learn more about how it can be an <a href="/introduction/investment-thesis">investment now</a> before it stabilizes as digital money.
 

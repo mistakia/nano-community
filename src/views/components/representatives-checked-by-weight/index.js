@@ -4,7 +4,6 @@ import BigNumber from 'bignumber.js'
 
 import {
   getRepresentatives,
-  getRepresentativesCheckedMax,
   getRepresentativesTotalWeight
 } from '@core/accounts'
 
@@ -12,42 +11,57 @@ import RepresentativesCheckedByWeight from './representatives-checked-by-weight'
 
 const mapStateToProps = createSelector(
   getRepresentatives,
-  getRepresentativesCheckedMax,
   getRepresentativesTotalWeight,
-  (accounts, checkedMax, totalWeight) => {
+  (accounts, totalWeight) => {
     const thresholds = [
       {
         label: 'Unknown',
-        threshold: null
+        threshold: null,
+        filter: {
+          empty: true
+        }
       },
       {
         label: '0 to 10',
-        threshold: 10
+        threshold: 10,
+        filter: {
+          between: [0, 10]
+        }
       },
       {
         label: '11 to 100',
-        threshold: 100
+        threshold: 100,
+        filter: {
+          between: [11, 100]
+        }
       },
       {
         label: '101 to 1000',
-        threshold: 1000
+        threshold: 1000,
+        filter: {
+          between: [101, 1000]
+        }
       },
       {
         label: '1001 to 10000',
-        threshold: 10000
+        threshold: 10000,
+        filter: {
+          between: [1001, 10000]
+        }
       },
       {
         label: '10000+',
-        threshold: null
+        threshold: null,
+        filter: {
+          between: [10001, Infinity]
+        }
       }
     ]
     const metrics = thresholds.map((p) => ({ ...p, total: 0 }))
     for (const rep of accounts.valueSeq()) {
       if (!rep.account_meta.weight) continue
 
-      const blocksBehind = rep.telemetry.block_count
-        ? checkedMax - rep.telemetry.block_count
-        : null
+      const blocksBehind = rep.telemetry.block_behind
       if (blocksBehind == null) {
         metrics[0].total = BigNumber(rep.account_meta.weight)
           .plus(metrics[0].total)

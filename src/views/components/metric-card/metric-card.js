@@ -13,12 +13,35 @@ const formatValue = (value, unit) => {
 }
 
 export default class MetricCard extends React.Component {
+  handleClick = (field, value, label) => {
+    this.props.filter({ field, value, label })
+  }
+
   render() {
-    const { metrics, title, subtitle, max, unit, tooltip } = this.props
+    const {
+      metrics,
+      title,
+      subtitle,
+      max,
+      unit,
+      tooltip,
+      field,
+      selectedField,
+      selectedLabel
+    } = this.props
+    const isSelectedField = field === selectedField
     const rows = metrics.map((p, i) => {
       const width = (p.value / max) * 100
+      const classNames = ['metric__card-row']
+
+      const isSelected = isSelectedField && p.label === selectedLabel
+      if (isSelected) classNames.push('selected')
+
       return (
-        <div className='metric__card-row' key={i}>
+        <div
+          className={classNames.join(' ')}
+          key={i}
+          onClick={() => this.handleClick(field, p.filter, p.label)}>
           <div className='metric__card-row-label'>{p.label}</div>
           <div className='metric__card-row-value'>
             {formatValue(p.value, unit)}
@@ -55,5 +78,9 @@ MetricCard.propTypes = {
   subtitle: PropTypes.string,
   tooltip: PropTypes.string,
   unit: PropTypes.string,
-  max: PropTypes.number
+  max: PropTypes.number,
+  field: PropTypes.string,
+  filter: PropTypes.func,
+  selectedField: PropTypes.string,
+  selectedLabel: PropTypes.string
 }

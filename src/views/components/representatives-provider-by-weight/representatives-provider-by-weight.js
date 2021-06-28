@@ -12,6 +12,7 @@ export default class RepresentativesProviderByWeight extends React.Component {
         subtitle='By Online Weight'
         unit='%'
         max={100}
+        field='network.asname'
         metrics={metrics}
       />
     )

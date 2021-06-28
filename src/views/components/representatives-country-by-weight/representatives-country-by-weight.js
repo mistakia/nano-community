@@ -12,6 +12,7 @@ export default class RepresentativesCountryByWeight extends React.Component {
         subtitle='By Online Weight'
         unit='%'
         max={100}
+        field='network.country'
         metrics={metrics}
       />
     )
