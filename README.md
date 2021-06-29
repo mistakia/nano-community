@@ -1,14 +1,6 @@
 # Nano.Community
 
-**Vision & Purpose**
-
-To improve community communication & onboarding.
-
-## Start Contributing
-
-Nano.Community aims to be a community run project and welcomes anyone to contribute.
-
-Start by reading the [contribution guidelines](https://github.com/mistakia/nano-community/blob/main/CONTRIBUTING.md).
+[Nano.Community](https://nano.community/) is a community run project thats improved over time through contributions from community members. If you're interested in helping improve [nano.community](https://nano.community/), start by reading the [contribution guidelines](https://github.com/mistakia/nano-community/blob/main/CONTRIBUTING.md).
 
 ## Design
 
