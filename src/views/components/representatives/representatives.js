@@ -28,12 +28,12 @@ export default class Representatives extends React.Component {
       {
         field: 'account',
         headerName: 'Account',
-        width: 110
+        width: 120
       },
       {
         field: 'alias',
         headerName: 'Alias',
-        width: 110
+        width: 130
       },
       {
         field: 'confs_behind',
