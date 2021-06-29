@@ -156,6 +156,16 @@ export default class Representatives extends React.Component {
         valueGetter: (p) => p.row.telemetry.block_count
       },
       {
+        field: 'unchecked_count',
+        headerName: 'Unchecked',
+        width: 140,
+        valueFormatter: (p) =>
+          p.row.telemetry.unchecked_count
+            ? BigNumber(p.row.telemetry.unchecked_count).toFormat()
+            : null,
+        valueGetter: (p) => p.row.telemetry.unchecked_count
+      },
+      {
         field: 'cpu_cores',
         headerName: 'CPU Cores',
         width: 130,

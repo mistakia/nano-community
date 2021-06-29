@@ -29,6 +29,7 @@ export default class RepresentativesClusterCharts extends React.Component {
     const blocksData = []
     const peersData = []
     const bandwidthData = []
+    const uncheckedData = []
     accounts.forEach((a) => {
       if (a.telemetry.cemented_behind > 1000) return
       const weight = BigNumber(a.account_meta.weight)
@@ -39,6 +40,7 @@ export default class RepresentativesClusterCharts extends React.Component {
       confirmationsData.push([a.telemetry.cemented_behind, weight, label])
       blocksData.push([a.telemetry.block_behind, weight, label])
       peersData.push([a.telemetry.peer_count, weight, label])
+      uncheckedData.push([a.telemetry.unchecked_count, weight, label])
 
       // exclude 0 (unlimited)
       if (a.telemetry.bandwidth_cap)
@@ -95,13 +97,18 @@ export default class RepresentativesClusterCharts extends React.Component {
           ...titleCommon
         },
         {
-          text: 'Peers Count',
+          text: 'Unchecked Count',
           top: 360,
           ...titleCommon
         },
         {
           text: 'Bandwidth Limit',
           top: 480,
+          ...titleCommon
+        },
+        {
+          text: 'Peers Count',
+          top: 600,
           ...titleCommon
         }
       ],
@@ -129,6 +136,12 @@ export default class RepresentativesClusterCharts extends React.Component {
           axisLabel: {
             formatter: (value) => `${value} mb/s`
           }
+        },
+        {
+          scale: true,
+          type: 'value',
+          top: '480px',
+          height: '100px'
         }
       ],
       series: [
@@ -165,7 +178,7 @@ export default class RepresentativesClusterCharts extends React.Component {
             width: 20,
             overflow: 'truncate'
           },
-          data: peersData,
+          data: uncheckedData,
           ...seriesCommon
         },
         {
@@ -179,6 +192,18 @@ export default class RepresentativesClusterCharts extends React.Component {
           },
           data: bandwidthData,
           ...seriesCommon
+        },
+        {
+          singleAxisIndex: 4,
+          labelLayout: {
+            y: 560,
+            align: 'left',
+            hideOverlap: true,
+            width: 20,
+            overflow: 'truncate'
+          },
+          data: peersData,
+          ...seriesCommon
         }
       ]
     }
@@ -188,7 +213,7 @@ export default class RepresentativesClusterCharts extends React.Component {
         <ReactEChartsCore
           echarts={echarts}
           option={option}
-          style={{ height: '500px' }}
+          style={{ height: '620px' }}
         />
       </div>
     )
