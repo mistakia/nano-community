@@ -86,21 +86,10 @@ export default class Representatives extends React.Component {
         }
       },
       {
-        field: 'major_version',
+        field: 'version',
         headerName: 'Version',
         width: 110,
-        valueGetter: (p) => {
-          if (!p.row.telemetry.major_version) return null
-          /* eslint-disable camelcase */
-          const {
-            major_version,
-            minor_version,
-            patch_version,
-            pre_release_version
-          } = p.row.telemetry
-          return `${major_version}.${minor_version}.${patch_version}.${pre_release_version}`
-          /* eslint-enable camelcase */
-        }
+        valueGetter: (p) => p.row.version
       },
       {
         field: 'bandwidth_cap',
@@ -181,6 +170,12 @@ export default class Representatives extends React.Component {
         field: 'watt_hour',
         width: 120,
         headerName: 'TDP (wH)'
+      },
+      {
+        field: 'protocol_version',
+        headerName: 'Protocol',
+        width: 110,
+        valueGetter: (p) => p.row.telemetry.protocol_version
       },
       {
         field: 'last_seen',
