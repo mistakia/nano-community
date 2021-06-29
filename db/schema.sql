@@ -310,3 +310,23 @@ CREATE TABLE `user_addresses` (
   KEY (`account_id`),
   UNIQUE KEY `address` (`address`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `voting_weight`
+--
+
+DROP TABLE IF EXISTS `voting_weight`;
+
+CREATE TABLE `voting_weight` (
+  `address` varchar(120) NOT NULL,
+  `quorum_delta` decimal(39,0) NOT NULL,
+  `online_weight_quorum_percent` int(3) NOT NULL,
+  `online_weight_minimum` decimal(39,0) NOT NULL,
+  `online_stake_total` decimal(39,0) NOT NULL,
+  `trended_stake_total` decimal(39,0) NOT NULL,
+  `peers_stake_total` decimal(39,0) NOT NULL,
+  `timestamp` int(11) NOT NULL,
+  UNIQUE KEY `timestamp` (`address`, `timestamp`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
