@@ -8,6 +8,7 @@ const initialState = new Map({
   field: null,
   value: null,
   label: null,
+  search: null,
   items: new Map()
 })
 
@@ -44,6 +45,11 @@ export function accountsReducer(state = initialState, { payload, type }) {
         label
       })
     }
+
+    case accountsActions.SEARCH_REPRESENTATIVES:
+      return state.merge({
+        search: payload.value
+      })
 
     default:
       return state

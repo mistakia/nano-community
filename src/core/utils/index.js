@@ -1,3 +1,5 @@
 export { mergeList } from './merge-list'
 export { localStorageAdapter } from './local-storage'
 export { timeago } from './timeago'
+export { debounce } from './debounce'
+export { fuzzySearch } from './fuzzy-search'

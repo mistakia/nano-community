@@ -4,6 +4,7 @@ export const accountsActions = {
   GET_REPRESENTATIVE: 'GET_REPRESENTATIVE',
 
   FILTER_REPRESENTATIVES: 'FILTER_REPRESENTATIVES',
+  SEARCH_REPRESENTATIVES: 'SEARCH_REPRESENTATIVES',
 
   GET_REPRESENTATIVES_FAILED: 'GET_REPRESENTATIVES_FAILED',
   GET_REPRESENTATIVES_PENDING: 'GET_REPRESENTATIVES_PENDING',
@@ -13,12 +14,19 @@ export const accountsActions = {
   GET_REPRESENTATIVE_PENDING: 'GET_REPRESENTATIVE_PENDING',
   GET_REPRESENTATIVE_FULFILLED: 'GET_REPRESENTATIVE_FULFILLED',
 
-  filter: ({ field, value, label }) => ({
+  filter: ({ field, value, label } = {}) => ({
     type: accountsActions.FILTER_REPRESENTATIVES,
     payload: {
       field,
       value,
       label
+    }
+  }),
+
+  search: (value) => ({
+    type: accountsActions.SEARCH_REPRESENTATIVES,
+    payload: {
+      value
     }
   }),
 

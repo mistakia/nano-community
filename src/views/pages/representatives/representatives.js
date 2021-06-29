@@ -3,6 +3,8 @@ import React from 'react'
 import Seo from '@components/seo'
 import Menu from '@components/menu'
 import Representatives from '@components/representatives'
+import RepresentativesSearch from '@components/representatives-search'
+import RepresentativesFilters from '@components/representatives-filters'
 import RepresentativesCementedByWeight from '@components/representatives-cemented-by-weight'
 import RepresentativesCheckedByWeight from '@components/representatives-checked-by-weight'
 import RepresentativesProviderByWeight from '@components/representatives-provider-by-weight'
@@ -43,6 +45,8 @@ export default class RepresentativesPage extends React.Component {
           <RepresentativesVersionByWeight />
           <RepresentativesCountryByWeight />
         </div>
+        <RepresentativesSearch />
+        <RepresentativesFilters />
         <Representatives />
         <RepresentativesClusterCharts />
         <div className='representatives__footer'>

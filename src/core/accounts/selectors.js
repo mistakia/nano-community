@@ -1,5 +1,7 @@
 import BigNumber from 'bignumber.js'
 
+import { fuzzySearch } from '@core/utils'
+
 import { Account } from './account'
 
 export function getAccounts(state) {
@@ -18,7 +20,18 @@ export function getAccountById(state, props) {
 
 export function getFilteredRepresentatives(state) {
   const aState = state.get('accounts')
-  const reps = getRepresentatives(state)
+  let reps = getRepresentatives(state)
+
+  const search = aState.get('search')
+
+  if (search) {
+    reps = reps.filter(
+      (r) =>
+        fuzzySearch(search, r.account || '') ||
+        fuzzySearch(search, r.alias || '') ||
+        fuzzySearch(search, r.telemetry.address || '')
+    )
+  }
 
   // no field to filter by
   const field = aState.get('field')

@@ -88,27 +88,27 @@ export default class RepresentativesClusterCharts extends React.Component {
       title: [
         {
           text: 'Confirmations Behind',
-          top: 120,
+          top: 20,
           ...titleCommon
         },
         {
           text: 'Blocks Behind',
-          top: 240,
+          top: 140,
           ...titleCommon
         },
         {
           text: 'Unchecked Count',
-          top: 360,
+          top: 260,
           ...titleCommon
         },
         {
           text: 'Bandwidth Limit',
-          top: 480,
+          top: 380,
           ...titleCommon
         },
         {
-          text: 'Peers Count',
-          top: 600,
+          text: 'Peer Count',
+          top: 500,
           ...titleCommon
         }
       ],
