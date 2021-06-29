@@ -120,6 +120,12 @@ export default class Representatives extends React.Component {
         }
       },
       {
+        field: 'peer_count',
+        headerName: 'Peers',
+        width: 100,
+        valueGetter: (p) => p.row.telemetry.peer_count
+      },
+      {
         field: 'blocks_behind',
         headerName: 'Blocks Behind',
         width: 145,

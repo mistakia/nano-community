@@ -6,7 +6,7 @@ import {
   getRepresentativesTotalWeight
 } from '@core/accounts'
 
-import RepresentativesConfirmationsPlot from './representatives-confirmations-plot'
+import RepresentativesClusterCharts from './representatives-cluster-charts'
 
 const mapStateToProps = createSelector(
   getRepresentatives,
@@ -14,4 +14,4 @@ const mapStateToProps = createSelector(
   (accounts, totalWeight) => ({ accounts, totalWeight })
 )
 
-export default connect(mapStateToProps)(RepresentativesConfirmationsPlot)
+export default connect(mapStateToProps)(RepresentativesClusterCharts)

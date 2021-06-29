@@ -1,0 +1,201 @@
+import React from 'react'
+import PropTypes from 'prop-types'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import ReactEChartsCore from 'echarts-for-react/lib/core'
+import BigNumber from 'bignumber.js'
+import * as echarts from 'echarts/core'
+import { ScatterChart } from 'echarts/charts'
+import {
+  TitleComponent,
+  TooltipComponent,
+  SingleAxisComponent
+} from 'echarts/components'
+
+import { CanvasRenderer } from 'echarts/renderers'
+
+echarts.use([
+  TitleComponent,
+  TooltipComponent,
+  SingleAxisComponent,
+  ScatterChart,
+  CanvasRenderer
+])
+
+export default class RepresentativesClusterCharts extends React.Component {
+  render() {
+    const { accounts, totalWeight } = this.props
+
+    const confirmationsData = []
+    const blocksData = []
+    const peersData = []
+    const bandwidthData = []
+    accounts.forEach((a) => {
+      if (a.telemetry.cemented_behind > 1000) return
+      const weight = BigNumber(a.account_meta.weight)
+        .dividedBy(totalWeight)
+        .multipliedBy(100)
+        .toFixed()
+      const label = a.alias || a.account
+      confirmationsData.push([a.telemetry.cemented_behind, weight, label])
+      blocksData.push([a.telemetry.block_behind, weight, label])
+      peersData.push([a.telemetry.peer_count, weight, label])
+
+      // exclude 0 (unlimited)
+      if (a.telemetry.bandwidth_cap)
+        bandwidthData.push([
+          a.telemetry.bandwidth_cap / (1024 * 1024),
+          weight,
+          label
+        ])
+    })
+
+    const seriesCommon = {
+      type: 'scatter',
+      coordinateSystem: 'singleAxis',
+      symbolSize: (dataItem) => Math.max(dataItem[1] * 1.1, 8),
+      labelLine: {
+        show: true,
+        length2: 2,
+        lineStyle: {
+          color: '#bbb'
+        }
+      },
+      label: {
+        show: true,
+        formatter: (param) => param.data[2],
+        minMargin: 10
+      },
+      tooltip: {
+        formatter: (params) => params.data[2]
+      }
+    }
+
+    const titleCommon = {
+      left: 'center',
+      textStyle: {
+        fontWeight: 'normal',
+        fontFamily: 'IBM Plex Mono'
+      }
+    }
+
+    const option = {
+      color: ['#FF0000'],
+      tooltip: {
+        position: 'top'
+      },
+      title: [
+        {
+          text: 'Confirmations Behind',
+          top: 120,
+          ...titleCommon
+        },
+        {
+          text: 'Blocks Behind',
+          top: 240,
+          ...titleCommon
+        },
+        {
+          text: 'Peers Count',
+          top: 360,
+          ...titleCommon
+        },
+        {
+          text: 'Bandwidth Limit',
+          top: 480,
+          ...titleCommon
+        }
+      ],
+      singleAxis: [
+        {
+          type: 'value',
+          height: '100px',
+          top: 0
+        },
+        {
+          type: 'value',
+          top: '120px',
+          height: '100px'
+        },
+        {
+          scale: true,
+          type: 'value',
+          top: '240px',
+          height: '100px'
+        },
+        {
+          type: 'value',
+          top: '360px',
+          height: '100px',
+          axisLabel: {
+            formatter: (value) => `${value} mb/s`
+          }
+        }
+      ],
+      series: [
+        {
+          singleAxisIndex: 0,
+          labelLayout: {
+            y: 80,
+            align: 'left',
+            hideOverlap: true,
+            width: 20,
+            overflow: 'truncate'
+          },
+          data: confirmationsData,
+          ...seriesCommon
+        },
+        {
+          singleAxisIndex: 1,
+          labelLayout: {
+            y: 200,
+            align: 'left',
+            hideOverlap: true,
+            width: 20,
+            overflow: 'truncate'
+          },
+          data: blocksData,
+          ...seriesCommon
+        },
+        {
+          singleAxisIndex: 2,
+          labelLayout: {
+            y: 320,
+            align: 'left',
+            hideOverlap: true,
+            width: 20,
+            overflow: 'truncate'
+          },
+          data: peersData,
+          ...seriesCommon
+        },
+        {
+          singleAxisIndex: 3,
+          labelLayout: {
+            y: 440,
+            align: 'left',
+            hideOverlap: true,
+            width: 20,
+            overflow: 'truncate'
+          },
+          data: bandwidthData,
+          ...seriesCommon
+        }
+      ]
+    }
+
+    return (
+      <div className='representative__section graph'>
+        <ReactEChartsCore
+          echarts={echarts}
+          option={option}
+          style={{ height: '500px' }}
+        />
+      </div>
+    )
+  }
+}
+
+RepresentativesClusterCharts.propTypes = {
+  accounts: ImmutablePropTypes.list,
+  totalWeight: PropTypes.number
+}
