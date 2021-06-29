@@ -39,13 +39,31 @@ const main = async () => {
     rpc.confirmationQuorum({ url })
   )
   const responses = await Promise.allSettled(requests)
-  for (const res of responses) {
+  const weightInserts = []
+  for (let i = 0; i < responses.length; i++) {
+    const res = responses[i]
     if (res.value && !res.value.error) {
+      weightInserts.push({
+        address: config.rpcAddresses[i],
+        quorum_delta: res.value.quorum_delta,
+        online_weight_quorum_percent: res.value.online_weight_quorum_percent,
+        online_weight_minimum: res.value.online_weight_minimum,
+        online_stake_total: res.value.online_stake_total,
+        trended_stake_total: res.value.trended_stake_total,
+        peers_stake_total: res.value.peers_stake_total,
+        timestamp
+      })
+
       for (const peer of res.value.peers) {
         // do not overwrite main node so ephemeral ports match
         if (!results[peer.account]) results[peer.account] = peer
       }
     }
+  }
+
+  if (weightInserts.length) {
+    logger(`saving voting weight info from ${weightInserts.length} reps`)
+    await db('voting_weight').insert(weightInserts)
   }
 
   logger(`discovered ${Object.values(results).length} reps`)
