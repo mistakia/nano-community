@@ -6,6 +6,18 @@ tags: nano, crypto, development, building, dev, guide, getting started
 
 # Getting Started
 
+| Resources                                                                                                                                                                   | Description                                                                                                                                                     |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <a href="https://docs.nano.org/integration-guides/the-basics/" target="_blank">Integration Guides</a>                                                                       | Comprehensive guides of the basics, key management, block confirmation tracking, work generation, compiling and running a node, websockets, and advanced setups |
+| <a href="https://nano.org/tools" target="_blank">Tools & Libraries</a>                                                                                                      | List of community tools in various platforms and languages                                                                                                      |
+| <a href="https://docs.nano.org/running-a-node/test-network/" target="_blank">Test network</a>                                                                               | Information about how to join and use the test network                                                                                                          |
+| <a href="https://tools.nanos.cc/" target="_blank">tools.nanos.cc</a>                                                                                                        | Helpful tools for unit conversion, key management, block generation, common RPC queries                                                                         |
+| [Design Overview & Reference](/design/basics)                                                                                                                               | An overview and reference to common Nano protocol details                                                                                                       |
+| [Documentation](/getting-started-devs/documentation)                                                                                                                        | Links to documentation information                                                                                                                              |
+| <a href="https://medium.com/nanocurrency/getting-started-developing-with-nano-currency-part-1-build-your-foundation-cec2013657e1" target="_blank">Getting Started Guide</a> | A step-by-step getting started guide by SomeNano                                                                                                                |
+
+Do not hesitate to reach out to the community to start a [discussion](/community) or get [support](/support).
+
 ## Introduction
 
 Below are a couple of key basics to know to get you going quickly. For a more comprehensive guide, view the <a href="https://docs.nano.org/integration-guides/the-basics/" target="_blank">Official Integration Guides</a>.
@@ -204,17 +216,3 @@ Once you have a node up and running the ledger should bootstrap from the network
 - merchant payment services
 - streaming plugins for payments, tips, donations
 - pay per use intergation (articles)
-
-## Resources
-
-| Resources                                                                                                                                                                   | Description                                                                                                                                                     |
-| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a href="https://docs.nano.org/integration-guides/the-basics/" target="_blank">Integration Guides</a>                                                                       | Comprehensive guides of the basics, key management, block confirmation tracking, work generation, compiling and running a node, websockets, and advanced setups |
-| <a href="https://nano.org/tools" target="_blank">Tools & Libraries</a>                                                                                                      | List of community tools in various platforms and languages                                                                                                      |
-| <a href="https://docs.nano.org/running-a-node/test-network/" target="_blank">Test network</a>                                                                               | Information about how to join and use the test network                                                                                                          |
-| <a href="https://tools.nanos.cc/" target="_blank">tools.nanos.cc</a>                                                                                                        | Helpful tools for unit conversion, key management, block generation, common RPC queries                                                                         |
-| [Design Overview & Reference](/design/basics)                                                                                                                               | An overview and reference to common Nano protocol details                                                                                                       |
-| [Documentation](/getting-started-devs/documentation)                                                                                                                        | Links to documentation information                                                                                                                              |
-| <a href="https://medium.com/nanocurrency/getting-started-developing-with-nano-currency-part-1-build-your-foundation-cec2013657e1" target="_blank">Getting Started Guide</a> | A step-by-step getting started guide by SomeNano                                                                                                                |
-
-Do not hesitate to reach out to the community to start a [discussion](/community) or get [support](/support).
