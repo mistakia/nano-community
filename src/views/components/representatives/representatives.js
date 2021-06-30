@@ -115,6 +115,11 @@ export default class Representatives extends React.Component {
         valueGetter: (p) => p.row.telemetry.peer_count
       },
       {
+        field: 'port',
+        headerName: 'port',
+        valueGetter: (p) => p.row.telemetry.port
+      },
+      {
         field: 'blocks_behind',
         headerName: 'Blocks Behind',
         width: 145,
@@ -198,9 +203,8 @@ export default class Representatives extends React.Component {
         valueGetter: (p) => p.row.network.country
       },
       {
-        field: 'IP',
-        headerName: 'IP',
-        hide: true,
+        field: 'address',
+        headerName: 'Address',
         valueGetter: (p) => p.row.telemetry.address
       }
     ]
