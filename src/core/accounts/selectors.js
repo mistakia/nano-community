@@ -29,7 +29,7 @@ export function getFilteredRepresentatives(state) {
       (r) =>
         fuzzySearch(search, r.account || '') ||
         fuzzySearch(search, r.alias || '') ||
-        fuzzySearch(search, r.telemetry.address || '')
+        (r.telemetry.address || '').includes(search)
     )
   }
 
