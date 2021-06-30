@@ -61,13 +61,26 @@ const main = async () => {
       reddit,
       github,
       twitter,
-      discord,
+      discord
+    }
 
-      timestamp
+    // check for changes
+    if (result.length) {
+      // remove timestamp
+      const prevObj = Object.assign({}, { ...result[0], timestamp: undefined })
+      const newObj = Object.assign({}, { ...meta, timestamp: undefined })
+      if (JSON.stringify(prevObj) === JSON.stringify(newObj)) {
+        logger(`skipping meta for account: ${meta.account}`)
+        await wait(1500)
+        continue
+      }
     }
 
     logger(`saving meta for account: ${meta.account}`)
-    await db('representatives_meta').insert(meta)
+    await db('representatives_meta').insert({
+      ...meta,
+      timestamp
+    })
     await wait(1500)
   }
 }
