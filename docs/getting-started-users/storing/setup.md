@@ -16,16 +16,15 @@ Before you get started make sure to understand some basic facts about [Nano](/ge
 
 ## Setup a password manager
 
-Regardless of what wallet you use (software or hardware), you will need to back it up with a paper wallet. Using a password manager as a paper wallet to backup your seeds and secret keys provides the best mix of convenience, security, and durability.
+Regardless of what wallet you use (software or hardware), you will need to back it up with a paper wallet. Using a password manager as a paper wallet to backup your secrets provides the best mix of convenience, security, and durability.
 
 You should be using a password manager for other reasons anyways.
 
 ### Setup KeePassXC
 
-Feel free to use whatever password manager you would like. KeePassXC is a good starter recommendation for the following reasons:
+Feel free to use whatever password manager you would like. KeePassXC is recommended for the following reasons:
 
-- offline
-- allows you to manage/backup password file
+- offline & local (you manage the password file)
 - open source
 - free
 - strong encryption
