@@ -1,13 +1,32 @@
 import React from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes'
+import BigNumber from 'bignumber.js'
 
 import RepresentativeSection from '@components/representative-section'
+import { timeago } from '@core/utils'
 
 export default class RepresentativeNetwork extends React.Component {
   render() {
     const { account } = this.props
 
     const items = [
+      {
+        label: 'Last Seen',
+        value: timeago.format(account.getIn(['last_seen']) * 1000, 'nano_short')
+      },
+      {
+        label: 'First Seen',
+        value: timeago.format(
+          account.getIn(['representative_meta', 'created_at']) * 1000,
+          'nano_short'
+        )
+      },
+      {
+        label: 'Voting Weight',
+        value: BigNumber(account.getIn(['account_meta', 'weight']))
+          .shiftedBy(-30)
+          .toFormat(0)
+      },
       {
         label: 'Provider',
         value: account.getIn(['network', 'asname'])

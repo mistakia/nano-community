@@ -24,7 +24,8 @@ export function accountsReducer(state = initialState, { payload, type }) {
       return state.withMutations((accounts) => {
         accounts.set('isLoading', false)
         payload.data.forEach((accountData) => {
-          const account = accounts.get(accountData.account)
+          // do not overwrite GET_REPRESENTATIVE_FULFILLED
+          const account = accounts.getIn(['items', accountData.account])
           if (!account) {
             accounts.setIn(
               ['items', accountData.account],
