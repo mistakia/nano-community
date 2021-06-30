@@ -34,9 +34,9 @@ export default class HomePage extends React.Component {
         />
         <div className='posts'>
           <div className='posts__title'>Posts from the community</div>
-          <Posts title='Top' id='top' age={168} />
-          <Menu mobile />
           <Posts title='Announcements' id='announcements' age={36} />
+          <Menu mobile />
+          <Posts title='Top' id='top' age={168} />
           <Posts title='Trending' id='trending' age={72} />
         </div>
         <div className='posts__side'>

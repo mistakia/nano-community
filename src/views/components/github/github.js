@@ -90,7 +90,7 @@ const GithubEvent = (item, index) => {
 export default class Github extends React.Component {
   render() {
     const { events } = this.props
-    const items = events.slice(0, 10).map((i, idx) => GithubEvent(i, idx))
+    const items = events.map((i, idx) => GithubEvent(i, idx))
 
     return (
       <div className='github__container'>
