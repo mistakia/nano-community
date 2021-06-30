@@ -12,6 +12,7 @@ import RepresentativesCountryByWeight from '@components/representatives-country-
 import RepresentativesVersionByWeight from '@components/representatives-version-by-weight'
 import RepresentativesBandwidthByWeight from '@components/representatives-bandwidth-by-weight'
 import RepresentativesClusterCharts from '@components/representatives-cluster-charts'
+import RepresentativesWeightChart from '@components/representatives-weight-chart'
 
 import './representatives.styl'
 
@@ -49,6 +50,7 @@ export default class RepresentativesPage extends React.Component {
         <RepresentativesFilters />
         <Representatives />
         <RepresentativesClusterCharts />
+        <RepresentativesWeightChart />
         <div className='representatives__footer'>
           <Menu desktop />
         </div>
