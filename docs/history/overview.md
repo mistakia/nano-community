@@ -97,14 +97,6 @@ nano_1fioob7u6ia76rfo1medtrwwdobey1ua8qe7z55qyjimir5b9d95hkdabbjn
 
 On 31 January 2018, RaiBlocks rebranded to Nano because it is easier to pronounce and sounds similar in whatever tongue spoken.
 
-## Community
-
-Nano has a large and vibrant online presence on Reddit, Twitter and Discord.
-
-[NanoTrade Discord History](/history/community/nano-trade)
-
-<a href="https://www.reddit.com/r/nanocurrency/comments/o1uzyo/weve_reached_100k_members_to_celebrate_im_buying/" target="_blank">Reddit 100k Giveaway</a>
-
 ## Timeline
 
 <figure>

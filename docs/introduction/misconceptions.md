@@ -14,7 +14,7 @@ Nano does not use a synchronous blockchain and therefore does not need to incent
 
 - feeless tx prioritization
 - resist emergent centralization due <a href="https://medium.com/@clemahieu/emergent-centralization-due-to-economies-of-scale-83cc85a7cbef" target="_blank">to economies of scale</a>
-- network controlled only by holders/users
+- consensus controlled by users
 - a fixed supply
 
 Additionally, many conflate a "node" and a "miner". In Nakamoto Consensus, it is only the latter that is incentivized. The incentives and reasons to run a Bitcoin node and a Nano node are the same. In both cases, the low cost of running a node allows people to run them to use the network without having to trust or rely on anybody else. The advantage in Nano's case is that it doesn't cost much more to run a node that also secures the network, as it does not require specialized hardware.

@@ -41,9 +41,9 @@ export default class RepresentativeBlocksBehind extends React.Component {
     }
 
     return (
-      <div className='representative__section graph'>
+      <>
         <ReactEChartsCore echarts={echarts} option={option} />
-      </div>
+      </>
     )
   }
 }
