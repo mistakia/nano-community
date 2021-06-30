@@ -46,11 +46,13 @@ export default class RepresentativesPage extends React.Component {
           <RepresentativesVersionByWeight />
           <RepresentativesCountryByWeight />
         </div>
-        <RepresentativesSearch />
-        <RepresentativesFilters />
-        <Representatives />
-        <RepresentativesClusterCharts />
-        <RepresentativesWeightChart />
+        <div className='representatives__body'>
+          <RepresentativesSearch />
+          <RepresentativesFilters />
+          <Representatives />
+          <RepresentativesClusterCharts />
+          <RepresentativesWeightChart />
+        </div>
         <div className='representatives__footer'>
           <Menu desktop />
         </div>
