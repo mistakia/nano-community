@@ -2,16 +2,26 @@
   flex 1
 
 .representatives__body
-  display flex
-  flex-wrap wrap
   margin 0 auto
   max-width 1100px
+  display flex
+  flex-wrap wrap
 
 .representatives__header
   display flex
   padding-top 32px
-  flex-wrap wrap
   overflow-x scroll
+
+.representatives__metrics
+  width 100%
+  border 1px solid $borderColor
+  border-radius 3px
+  margin 8px
+  display flex
+
+.representatives__metric
+  background white
+  width 100%
 
 .representatives__footer
   width 100%
@@ -20,3 +30,14 @@
   .representatives__container
     padding-left 32px
     padding-right 32px
+
+@media (min-width 601px)
+  .representatives__metrics-menu
+    border-right 1px solid $borderColor
+
+@media (max-width 600px)
+  .representatives__metrics
+    flex-direction column
+
+  .representatives__metrics-menu
+    border-bottom 1px solid $borderColor

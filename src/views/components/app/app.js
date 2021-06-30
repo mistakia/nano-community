@@ -7,7 +7,6 @@ import Notification from '@components/notification'
 
 import '@styles/normalize.css'
 import '@styles/typography.styl'
-import './app.styl'
 import '@styles/doc.styl'
 
 export default class App extends React.Component {
@@ -22,10 +21,10 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <main>
+      <>
         <Routes />
         <Notification />
-      </main>
+      </>
     )
   }
 }

@@ -209,13 +209,13 @@ export default class RepresentativesClusterCharts extends React.Component {
     }
 
     return (
-      <div className='representative__section graph'>
+      <>
         <ReactEChartsCore
           echarts={echarts}
           option={option}
           style={{ height: '620px' }}
         />
-      </div>
+      </>
     )
   }
 }
