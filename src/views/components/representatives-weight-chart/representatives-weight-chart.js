@@ -37,6 +37,8 @@ export default class RepresentativesWeightChart extends React.Component {
           } %)`
       },
       title: {
+        top: 10,
+        left: 'center',
         text: 'Weight Distribution by Rep',
         textStyle: {
           fontWeight: 'normal',
@@ -47,7 +49,6 @@ export default class RepresentativesWeightChart extends React.Component {
         {
           type: 'pie',
           radius: '50%',
-          center: ['60%', '50%'],
           avoidLabelOverlap: false,
           data: weightData.sort((a, b) => b[0] - a[0]),
           label: {
@@ -63,13 +64,13 @@ export default class RepresentativesWeightChart extends React.Component {
     }
 
     return (
-      <div className='representative__section graph'>
+      <>
         <ReactEChartsCore
           echarts={echarts}
           option={option}
-          style={{ height: '620px' }}
+          style={{ width: '100%', height: '400px' }}
         />
-      </div>
+      </>
     )
   }
 }
