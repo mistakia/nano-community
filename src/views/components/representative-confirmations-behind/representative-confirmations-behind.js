@@ -8,7 +8,7 @@ import { CanvasRenderer } from 'echarts/renderers'
 
 echarts.use([LineChart, CanvasRenderer])
 
-export default class RepresentativeConfirmationsGraph extends React.Component {
+export default class RepresentativeConfirmationsBehind extends React.Component {
   render() {
     const { account } = this.props
     const history = account.get('telemetry_history')
@@ -18,6 +18,10 @@ export default class RepresentativeConfirmationsGraph extends React.Component {
     })
 
     const option = {
+      color: ['red'],
+      tooltip: {
+        trigger: 'axis'
+      },
       xAxis: {
         type: 'time'
       },
@@ -27,6 +31,10 @@ export default class RepresentativeConfirmationsGraph extends React.Component {
       series: [
         {
           type: 'line',
+          showSymbol: false,
+          lineStyle: {
+            width: 1
+          },
           data
         }
       ]
@@ -40,6 +48,6 @@ export default class RepresentativeConfirmationsGraph extends React.Component {
   }
 }
 
-RepresentativeConfirmationsGraph.propTypes = {
+RepresentativeConfirmationsBehind.propTypes = {
   account: ImmutablePropTypes.record
 }
