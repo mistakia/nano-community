@@ -16,7 +16,7 @@ export default class RepresentativesSearch extends React.Component {
 
     this.search = debounce((value) => {
       this.props.search(value)
-    }, 500)
+    }, 300)
   }
 
   handleClick = () => {
