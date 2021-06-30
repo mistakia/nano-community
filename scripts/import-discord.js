@@ -15,7 +15,12 @@ const headers = {
 const excludeChannels = [
   '403628195548495885', // nt - i hear voices
   '403628195548495886', // nt - hangouts hd
+  '403630494387798016', // nt - mod general
+  '403637392440819712', // nt - mod corner
   '403642500973330462', // nt - offtopic
+  '403654013868048384', // nt - mod history
+  '406319587987292160', // nt - mod chat
+  '604423435552030749', // nt - mods and bots
   '403642625527119872', // nt - the circus
   '406318878298210314', // nt - hangouts sd
   '456813985367326720', // nt - worldcup
