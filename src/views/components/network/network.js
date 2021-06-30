@@ -36,7 +36,7 @@ export default class Network extends React.Component {
 
     return (
       <div className='network__container'>
-        <div className='network__title'>Live Network Stats</div>
+        <div className='network__title'>Network Stats</div>
         <div className='network__stat'>
           <div>
             Confirmations (24h)
@@ -162,7 +162,7 @@ export default class Network extends React.Component {
           rel='noreferrer'
           className='network__stat-link'
           target='_blank'>
-          full network stats
+          NanoTicker
         </a>
       </div>
     )
