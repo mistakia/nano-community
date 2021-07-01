@@ -7,5 +7,6 @@ export {
   getGithubEvents,
   getRepresentative,
   getRepresentatives,
-  getNetworkStats
+  getNetworkStats,
+  getWeight
 } from './sagas'

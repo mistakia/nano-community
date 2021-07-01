@@ -47,6 +47,10 @@ export const api = {
       params
     )}`
     return { url }
+  },
+  getWeight() {
+    const url = `${API_URL}/weight`
+    return { url }
   }
 }
 

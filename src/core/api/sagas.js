@@ -11,7 +11,7 @@ import {
   docCommitRequestActions,
   tagDocCommitRequestActions
 } from '@core/docs'
-import { networkStatsRequestActions } from '@core/network'
+import { networkStatsRequestActions, weightRequestActions } from '@core/network'
 import {
   representativesRequestActions,
   representativeRequestActions
@@ -78,3 +78,4 @@ export const getRepresentative = fetch.bind(
   api.getRepresentative,
   representativeRequestActions
 )
+export const getWeight = fetch.bind(null, api.getWeight, weightRequestActions)

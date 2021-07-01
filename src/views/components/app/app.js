@@ -17,6 +17,7 @@ export default class App extends React.Component {
     this.props.getRepresentatives()
     this.props.getNetworkStats()
     this.props.getGithubEvents()
+    this.props.getWeight()
   }
 
   render() {
@@ -33,5 +34,6 @@ App.propTypes = {
   init: PropTypes.func,
   getNetworkStats: PropTypes.func,
   getGithubEvents: PropTypes.func,
-  getRepresentatives: PropTypes.func
+  getRepresentatives: PropTypes.func,
+  getWeight: PropTypes.func
 }
