@@ -1,7 +1,8 @@
 export {
   networkActions,
   networkStatsRequestActions,
-  weightRequestActions
+  weightRequestActions,
+  weightHistoryRequestActions
 } from './actions'
 export { networkReducer } from './reducer'
 export { networkSagas } from './sagas'

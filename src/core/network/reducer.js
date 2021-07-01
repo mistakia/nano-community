@@ -62,6 +62,11 @@ export function networkReducer(state = new Map(), { payload, type }) {
       })
     }
 
+    case networkActions.GET_WEIGHT_HISTORY_FULFILLED:
+      return state.merge({
+        weightHistory: payload.data
+      })
+
     default:
       return state
   }
