@@ -28,7 +28,7 @@ You broadcast a change rep operation to the network for a given Nano account. Th
 
 ### Where can I find a good representative?
 
-Avoid randomly select a representative. Ideally, you should know the maintainer and why they are running a node/representative. Mainly, you should understand their commitment and motivations.
+Avoid randomly selecting a representative. Ideally, you should know the maintainer and why they are running a node/representative. Mainly, you should understand their commitment and motivations.
 
 To mitigate trust, a good choice should have:
 
