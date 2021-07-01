@@ -34,7 +34,7 @@ Nano, unlike Bitcoin, is scalable, fast, asynchronous, uses minimal energy, oper
 - lightweight
 - low latency / ultrafast settlement
 - deterministic finality
-- fair distribution
+- fair & wide initial distribution
 - user-controlled consensus
 
 #### Limitations of other digital money
@@ -116,7 +116,7 @@ Nano uses very little energy because it does not use Proof-of-Work to secure the
 
 There is no inflation and has a Stock-To-Flow ratio of `undefined` since no new Nano will ever be created.
 
-### Nano was fairly & ethically distributed
+### Nano was fairly & widely distributed
 
 Nano was given away for free to anyone willing to manually complete a captcha. Distribution began in 2015 and ended in October 2017, at which point the faucet had distributed 126,248,289 NANO.
 

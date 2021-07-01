@@ -16,13 +16,15 @@ const truncate = (str, n) =>
 
 export default class RepresentativesWeightChart extends React.Component {
   render() {
-    const { accounts, totalWeight } = this.props
+    const { accounts, totalWeight, quorumTotal } = this.props
+
+    const denominator = quorumTotal || totalWeight
 
     const weightData = []
     accounts.forEach((a) => {
       const bn = BigNumber(a.account_meta.weight)
       const weight = bn.shiftedBy(-30).toFixed(0)
-      const pct = bn.dividedBy(totalWeight).multipliedBy(100).toFixed(1)
+      const pct = bn.dividedBy(denominator).multipliedBy(100).toFixed(1)
 
       const label = a.alias || a.account
       weightData.push([weight, label, pct])
@@ -77,5 +79,6 @@ export default class RepresentativesWeightChart extends React.Component {
 
 RepresentativesWeightChart.propTypes = {
   accounts: ImmutablePropTypes.list,
-  totalWeight: PropTypes.number
+  totalWeight: PropTypes.number,
+  quorumTotal: PropTypes.number
 }

@@ -1,4 +1,5 @@
 import { Map } from 'immutable'
+import BigNumber from 'bignumber.js'
 
 import { networkActions } from './actions'
 import { accountsActions } from '@core/accounts'
@@ -48,10 +49,18 @@ export function networkReducer(state = new Map(), { payload, type }) {
       })
     }
 
-    case networkActions.GET_WEIGHT_FULFILLED:
+    case networkActions.GET_WEIGHT_FULFILLED: {
+      const onlineWeight = BigNumber(payload.data.onlineWeight.max || 0)
+      const trendedWeight = BigNumber(payload.data.trendedWeight.median || 0)
+      const quorumTotal = BigNumber.max(onlineWeight, trendedWeight).toNumber()
+
       return state.merge({
-        weight: payload.data
+        weight: {
+          ...payload.data,
+          quorumTotal
+        }
       })
+    }
 
     default:
       return state

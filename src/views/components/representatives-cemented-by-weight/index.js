@@ -36,21 +36,21 @@ const mapStateToProps = createSelector(
         }
       },
       {
-        label: '101 to 1000',
+        label: '101 to 1,000',
         threshold: 1000,
         filter: {
           between: [101, 1000]
         }
       },
       {
-        label: '1001 to 10000',
+        label: '1,001 to 10,000',
         threshold: 10000,
         filter: {
           between: [1001, 10000]
         }
       },
       {
-        label: '10000+',
+        label: '10,000+',
         filter: {
           between: [10001, Infinity]
         },

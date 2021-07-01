@@ -10,11 +10,11 @@ const median = (arr) => {
 
 const summary = (arr) => {
   let max = 0
-  let min = 0
+  let min = Infinity
   for (let i = 0; i < arr.length; i++) {
     const item = arr[i]
-    max = Math.max(item.online_stake_total, max)
-    min = Math.max(item.online_stake_total, min)
+    max = Math.max(item, max)
+    min = Math.min(item, min)
   }
 
   return {
