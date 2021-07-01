@@ -37,5 +37,6 @@ export function* watchGetWeightHistory() {
 
 export const networkSagas = [
   fork(watchGetNetworkStats),
+  fork(watchGetWeight),
   fork(watchGetWeightHistory)
 ]

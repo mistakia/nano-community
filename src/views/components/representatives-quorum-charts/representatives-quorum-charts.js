@@ -28,7 +28,6 @@ export default class RepresentativesQuorumCharts extends React.Component {
 
   render() {
     const { data } = this.props
-    console.log(data)
 
     const commonOptions = {
       tooltip: {
