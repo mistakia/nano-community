@@ -47,7 +47,7 @@ Learn more about how it can be an <a href="/introduction/investment-thesis">inve
 
 ### Nano is a bad currency because it's deflationary or lacks inflation
 
-Nearly all modern money systems are based on fiat money, leading to sconfusion and a lack of distinction between **fiat money** and **money**.
+Nearly all modern money systems are based on fiat money, leading to confusion and a lack of distinction between **fiat money** and **money**.
 
 Nano is a bad form of **fiat money** but a superior form of **money**.
 

@@ -22,7 +22,9 @@ function LoadingOverlay() {
 
 export default class Representatives extends React.Component {
   render() {
-    const { accounts, totalWeight, isLoading } = this.props
+    const { accounts, totalWeight, isLoading, quorumTotal } = this.props
+
+    const denominator = quorumTotal || totalWeight
 
     const columns = [
       {
@@ -64,14 +66,14 @@ export default class Representatives extends React.Component {
         valueFormatter: (p) =>
           p.row.account_meta.weight
             ? `${BigNumber(p.row.account_meta.weight)
-                .dividedBy(totalWeight)
+                .dividedBy(denominator)
                 .multipliedBy(100)
                 .toFixed(2)}%`
             : null,
         valueGetter: (p) =>
           p.row.account_meta.weight
             ? BigNumber(p.row.account_meta.weight)
-                .dividedBy(totalWeight)
+                .dividedBy(denominator)
                 .multipliedBy(100)
             : null
       },
@@ -230,5 +232,6 @@ export default class Representatives extends React.Component {
 Representatives.propTypes = {
   accounts: ImmutablePropTypes.list,
   totalWeight: PropTypes.number,
+  quorumTotal: PropTypes.number,
   isLoading: PropTypes.bool
 }

@@ -6,6 +6,7 @@ import Tab from '@material-ui/core/Tab'
 import Seo from '@components/seo'
 import Menu from '@components/menu'
 import Representatives from '@components/representatives'
+import RepresentativesWeight from '@components/representatives-weight'
 import RepresentativesSearch from '@components/representatives-search'
 import RepresentativesFilters from '@components/representatives-filters'
 import RepresentativesCementedByWeight from '@components/representatives-cemented-by-weight'
@@ -72,6 +73,7 @@ export default class RepresentativesPage extends React.Component {
             'sustainable'
           ]}
         />
+        <RepresentativesWeight />
         <div className='representatives__header'>
           <RepresentativesCementedByWeight />
           <RepresentativesCheckedByWeight />

@@ -6,6 +6,7 @@ import {
   getAccounts,
   getRepresentativesTotalWeight
 } from '@core/accounts'
+import { getNetwork } from '@core/network'
 
 import Representatives from './representatives'
 
@@ -13,10 +14,12 @@ const mapStateToProps = createSelector(
   getFilteredRepresentatives,
   getRepresentativesTotalWeight,
   getAccounts,
-  (accounts, totalWeight, accountsState) => ({
+  getNetwork,
+  (accounts, totalWeight, accountsState, network) => ({
     accounts,
     totalWeight,
-    isLoading: accountsState.get('isLoading')
+    isLoading: accountsState.get('isLoading'),
+    quorumTotal: network.getIn(['weight', 'quorumTotal'], 0)
   })
 )
 
