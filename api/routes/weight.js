@@ -58,4 +58,24 @@ router.get('/', async (req, res) => {
   }
 })
 
+router.get('/history', async (req, res) => {
+  const { logger, cache, db } = req.app.locals
+  try {
+    const cachedHistory = cache.get('weightHistory')
+    if (cachedHistory) {
+      return res.status(200).send(cachedHistory)
+    }
+
+    const weights = await db('voting_weight')
+      .where('timestamp', '>', moment().subtract(3, 'days').unix())
+      .orderBy('timestamp', 'asc')
+
+    cache.set('weightHistory', weights, 120)
+    res.status(200).send(weights)
+  } catch (error) {
+    logger(error)
+    res.status(500).send({ error: error.toString() })
+  }
+})
+
 module.exports = router

@@ -8,5 +8,6 @@ export {
   getRepresentative,
   getRepresentatives,
   getNetworkStats,
-  getWeight
+  getWeight,
+  getWeightHistory
 } from './sagas'

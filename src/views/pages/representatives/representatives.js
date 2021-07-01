@@ -17,6 +17,7 @@ import RepresentativesVersionByWeight from '@components/representatives-version-
 import RepresentativesBandwidthByWeight from '@components/representatives-bandwidth-by-weight'
 import RepresentativesClusterCharts from '@components/representatives-cluster-charts'
 import RepresentativesWeightChart from '@components/representatives-weight-chart'
+import RepresentativesQuorumCharts from '@components/representatives-quorum-charts'
 
 import './representatives.styl'
 
@@ -95,12 +96,16 @@ export default class RepresentativesPage extends React.Component {
               onChange={this.handleChange}>
               <Tab label='Telemetry' />
               <Tab label='Weight Distribution' />
+              <Tab label='Quorum Delta' />
             </Tabs>
             <TabPanel value={this.state.value} index={0}>
               <RepresentativesClusterCharts />
             </TabPanel>
             <TabPanel value={this.state.value} index={1}>
               <RepresentativesWeightChart />
+            </TabPanel>
+            <TabPanel value={this.state.value} index={2}>
+              <RepresentativesQuorumCharts />
             </TabPanel>
           </div>
         </div>

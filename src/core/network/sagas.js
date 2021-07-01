@@ -1,6 +1,6 @@
 import { takeEvery, takeLatest, fork, call } from 'redux-saga/effects'
 
-import { getNetworkStats, getWeight } from '@core/api'
+import { getNetworkStats, getWeight, getWeightHistory } from '@core/api'
 import { networkActions } from './actions'
 
 export function* load({ payload }) {
@@ -9,6 +9,10 @@ export function* load({ payload }) {
 
 export function* loadWeight() {
   yield call(getWeight)
+}
+
+export function* loadWeightHistory() {
+  yield call(getWeightHistory)
 }
 
 //= ====================================
@@ -23,8 +27,15 @@ export function* watchGetWeight() {
   yield takeLatest(networkActions.GET_WEIGHT, loadWeight)
 }
 
+export function* watchGetWeightHistory() {
+  yield takeLatest(networkActions.GET_WEIGHT_HISTORY, loadWeightHistory)
+}
+
 //= ====================================
 //  ROOT
 // -------------------------------------
 
-export const networkSagas = [fork(watchGetNetworkStats), fork(watchGetWeight)]
+export const networkSagas = [
+  fork(watchGetNetworkStats),
+  fork(watchGetWeightHistory)
+]

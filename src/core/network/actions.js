@@ -2,10 +2,15 @@ export const networkActions = {
   GET_NETWORK_STATS: 'GET_NETWORK_STATS',
 
   GET_WEIGHT: 'GET_WEIGHT',
+  GET_WEIGHT_HISTORY: 'GET_WEIGHT_HISTORY',
 
   GET_WEIGHT_FAILED: 'GET_WEIGHT_FAILED',
   GET_WEIGHT_PENDING: 'GET_WEIGHT_PENDING',
   GET_WEIGHT_FULFILLED: 'GET_WEIGHT_FULFILLED',
+
+  GET_WEIGHT_HISTORY_FAILED: 'GET_WEIGHT_HISTORY_FAILED',
+  GET_WEIGHT_HISTORY_PENDING: 'GET_WEIGHT_HISTORY_PENDING',
+  GET_WEIGHT_HISTORY_FULFILLED: 'GET_WEIGHT_HISTORY_FULFILLED',
 
   GET_NETWORK_STATS_FAILED: 'GET_NETWORK_STATS_FAILED',
   GET_NETWORK_STATS_PENDING: 'GET_NETWORK_STATS_PENDING',
@@ -13,6 +18,10 @@ export const networkActions = {
 
   getWeight: () => ({
     type: networkActions.GET_WEIGHT
+  }),
+
+  getWeightHistory: () => ({
+    type: networkActions.GET_WEIGHT_HISTORY
   }),
 
   getWeightFailed: (params, error) => ({
@@ -32,6 +41,29 @@ export const networkActions = {
 
   getWeightFulfilled: (params, data) => ({
     type: networkActions.GET_WEIGHT_FULFILLED,
+    payload: {
+      params,
+      data
+    }
+  }),
+
+  getWeightHistoryFailed: (params, error) => ({
+    type: networkActions.GET_WEIGHT_HISTORY_FAILED,
+    payload: {
+      params,
+      error
+    }
+  }),
+
+  getWeightHistoryPending: (params) => ({
+    type: networkActions.GET_WEIGHT_HISTORY_PENDING,
+    payload: {
+      params
+    }
+  }),
+
+  getWeightHistoryFulfilled: (params, data) => ({
+    type: networkActions.GET_WEIGHT_HISTORY_FULFILLED,
     payload: {
       params,
       data
@@ -76,4 +108,10 @@ export const weightRequestActions = {
   failed: networkActions.getWeightFailed,
   pending: networkActions.getWeightPending,
   fulfilled: networkActions.getWeightFulfilled
+}
+
+export const weightHistoryRequestActions = {
+  failed: networkActions.getWeightHistoryFailed,
+  pending: networkActions.getWeightHistoryPending,
+  fulfilled: networkActions.getWeightHistoryFulfilled
 }

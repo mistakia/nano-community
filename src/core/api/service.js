@@ -51,6 +51,10 @@ export const api = {
   getWeight() {
     const url = `${API_URL}/weight`
     return { url }
+  },
+  getWeightHistory() {
+    const url = `${API_URL}/weight/history`
+    return { url }
   }
 }
 
