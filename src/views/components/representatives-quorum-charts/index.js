@@ -21,19 +21,23 @@ const mapStateToProps = createSelector(getNetwork, (network) => {
       const timestamp = item.timestamp * 1000
       onlineStake.push([
         timestamp,
-        BigNumber(item.online_stake_total).shiftedBy(-36).toNumber()
+        BigNumber(item.online_stake_total).shiftedBy(-36).toNumber(),
+        address
       ])
       peersStake.push([
         timestamp,
-        BigNumber(item.peers_stake_total).shiftedBy(-36).toNumber()
+        BigNumber(item.peers_stake_total).shiftedBy(-36).toNumber(),
+        address
       ])
       trendedStake.push([
         timestamp,
-        BigNumber(item.trended_stake_total).shiftedBy(-36).toNumber()
+        BigNumber(item.trended_stake_total).shiftedBy(-36).toNumber(),
+        address
       ])
       quorumDelta.push([
         timestamp,
-        BigNumber(item.quorum_delta).shiftedBy(-36).toNumber()
+        BigNumber(item.quorum_delta).shiftedBy(-36).toNumber(),
+        address
       ])
     }
     data.push({

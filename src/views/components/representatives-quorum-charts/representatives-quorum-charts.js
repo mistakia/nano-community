@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import BigNumber from 'bignumber.js'
 import ReactEChartsCore from 'echarts-for-react/lib/core'
 import * as echarts from 'echarts/core'
 import { ScatterChart, LineChart } from 'echarts/charts'
@@ -31,14 +32,26 @@ export default class RepresentativesQuorumCharts extends React.Component {
 
     const commonOptions = {
       tooltip: {
-        trigger: 'axis'
+        trigger: 'axis',
+        formatter: (p) =>
+          p
+            .map(
+              (s) =>
+                `${s.marker} ${BigNumber(s.data[1]).toFormat(0)}M - ${
+                  new URL(s.data[2]).hostname
+                }`
+            )
+            .join('<br/>')
       },
       xAxis: {
         type: 'time'
       },
       yAxis: {
         type: 'value',
-        scale: true
+        scale: true,
+        axisLabel: {
+          formatter: (value) => `${value}M`
+        }
       }
     }
 
