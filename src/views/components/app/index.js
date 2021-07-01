@@ -19,7 +19,8 @@ const mapDispatchToProps = {
   init: appActions.init,
   getRepresentatives: accountsActions.getRepresentatives,
   getNetworkStats: networkActions.getNetworkStats,
-  getGithubEvents: githubActions.getGithubEvents
+  getGithubEvents: githubActions.getGithubEvents,
+  getWeight: networkActions.getWeight
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

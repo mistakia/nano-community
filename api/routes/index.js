@@ -4,6 +4,7 @@ const network = require('./network')
 const node = require('./node')
 const github = require('./github')
 const representatives = require('./representatives')
+const weight = require('./weight')
 
 module.exports = {
   auth,
@@ -11,5 +12,6 @@ module.exports = {
   network,
   node,
   github,
-  representatives
+  representatives,
+  weight
 }

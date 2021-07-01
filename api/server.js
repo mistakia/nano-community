@@ -82,6 +82,7 @@ api.use('/api/network', routes.network)
 api.use('/api/github', routes.github)
 api.use('/api/auth', routes.auth)
 api.use('/api/representatives', routes.representatives)
+api.use('/api/weight', routes.weight)
 
 const tagsPath = path.join(__dirname, '..', 'tags')
 api.use('/api/tags', serveStatic(tagsPath))
