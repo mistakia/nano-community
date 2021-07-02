@@ -27,8 +27,7 @@ export default class RepresentativesQuorumCharts extends React.Component {
   }
 
   render() {
-    const { data } = this.props
-
+    const { data, peerData } = this.props
     const commonOptions = {
       tooltip: {
         trigger: 'axis',
@@ -36,9 +35,9 @@ export default class RepresentativesQuorumCharts extends React.Component {
           p
             .map(
               (s) =>
-                `${s.marker} ${BigNumber(s.data[1]).toFormat(0)}M - ${
-                  new URL(s.data[2]).hostname
-                }`
+                `${s.marker} ${s.data[2]} - ${BigNumber(s.data[1]).toFormat(
+                  0
+                )}M`
             )
             .join('<br/>')
       },
@@ -64,54 +63,147 @@ export default class RepresentativesQuorumCharts extends React.Component {
     }
 
     const onlineOption = {
+      color: ['#5470c6', 'red', '#5470c6'],
       title: {
         text: 'Online Weight',
         ...commonTitle
       },
-      series: data.map((d) => ({
-        type: 'line',
-        showSymbol: false,
-        data: d.onlineStake
-      })),
+      series: [
+        {
+          type: 'line',
+          showSymbol: false,
+          data: data.online_stake_total.max,
+          areaStyle: {},
+          lineStyle: {
+            opacity: 0
+          }
+        },
+        {
+          type: 'line',
+          showSymbol: false,
+          data: data.online_stake_total.median,
+          lineStyle: {
+            color: 'red'
+          }
+        },
+        {
+          type: 'line',
+          showSymbol: false,
+          data: data.online_stake_total.min,
+          areaStyle: {
+            color: 'white',
+            opacity: 1
+          },
+          lineStyle: {
+            opacity: 0
+          }
+        }
+      ],
       ...commonOptions
     }
 
     const trendedOption = {
+      color: ['#5470c6', 'red', '#5470c6'],
       title: {
         text: 'Trended Weight',
         ...commonTitle
       },
-      series: data.map((d) => ({
-        type: 'line',
-        showSymbol: false,
-        data: d.trendedStake
-      })),
+      series: [
+        {
+          type: 'line',
+          showSymbol: false,
+          data: data.trended_stake_total.max,
+          areaStyle: {},
+          lineStyle: {
+            opacity: 0
+          }
+        },
+        {
+          type: 'line',
+          showSymbol: false,
+          data: data.trended_stake_total.median,
+          lineStyle: {
+            color: 'red'
+          }
+        },
+        {
+          type: 'line',
+          showSymbol: false,
+          data: data.trended_stake_total.min,
+          areaStyle: {
+            color: 'white',
+            opacity: 1
+          },
+          lineStyle: {
+            opacity: 0
+          }
+        }
+      ],
       ...commonOptions
     }
 
     const peersOption = {
+      ...commonOptions,
       title: {
         text: 'Peers Weight',
         ...commonTitle
       },
-      series: data.map((d) => ({
+      series: peerData.map((data) => ({
         type: 'line',
         showSymbol: false,
-        data: d.peersStake
+        data
       })),
-      ...commonOptions
+      tooltip: {
+        trigger: 'axis',
+        formatter: (p) =>
+          p
+            .map(
+              (s) =>
+                `${s.marker} ${BigNumber(s.data[1]).toFormat(0)}M - ${
+                  new URL(s.data[2]).hostname
+                }`
+            )
+            .join('<br/>')
+      }
     }
 
     const quorumOption = {
+      color: ['#5470c6', 'red', '#5470c6'],
       title: {
         text: 'Quorum Delta',
         ...commonTitle
       },
-      series: data.map((d) => ({
-        type: 'line',
-        showSymbol: false,
-        data: d.quorumDelta
-      })),
+      series: [
+        {
+          type: 'line',
+          showSymbol: false,
+          data: data.quorum_delta.max,
+          areaStyle: {},
+          lineStyle: {
+            opacity: 0
+          }
+        },
+        {
+          type: 'line',
+          showSymbol: false,
+          data: data.quorum_delta.median,
+          lineStyle: {
+            color: 'red'
+          }
+        },
+        {
+          type: 'line',
+          showSymbol: false,
+          data: data.quorum_delta.min,
+          areaStyle: {
+            color: 'white',
+            opacity: 1
+          },
+          lineStyle: {
+            opacity: 0
+          }
+        }
+      ],
       ...commonOptions
     }
 
@@ -143,6 +235,7 @@ export default class RepresentativesQuorumCharts extends React.Component {
 }
 
 RepresentativesQuorumCharts.propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.object,
+  peerData: PropTypes.array,
   load: PropTypes.func
 }

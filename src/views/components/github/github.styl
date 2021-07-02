@@ -12,13 +12,11 @@
 
 .github__events
   background white
-  border-radius 3px
-  border 1px solid $borderColor
+  border-radius 4px
+  box-shadow 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)
 
 .github__event
   padding 8px 14px
-  border-bottom 1px solid $borderColor
-  border-radius 3px
   font-size 11px
   display flex
   a
@@ -28,6 +26,8 @@
       text-decoration-color $nanoSoftBlue
       text-decoration-thickness 2px
       text-underline-offset 2px
+  &:not(:last-child)
+    border-bottom 1px solid $borderColor
 
 .github__event-time
   margin-left 4px

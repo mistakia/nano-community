@@ -3,8 +3,7 @@ import BigNumber from 'bignumber.js'
 
 import { networkActions } from './actions'
 import { accountsActions } from '@core/accounts'
-
-const average = (arr) => arr.reduce((acc, v) => acc + v) / arr.length
+import { average } from '@core/utils'
 
 export function networkReducer(state = new Map(), { payload, type }) {
   switch (type) {
