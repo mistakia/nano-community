@@ -49,7 +49,7 @@ export function networkReducer(state = new Map(), { payload, type }) {
     }
 
     case networkActions.GET_WEIGHT_FULFILLED: {
-      const onlineWeight = BigNumber(payload.data.onlineWeight.max || 0)
+      const onlineWeight = BigNumber(payload.data.onlineWeight.median || 0)
       const trendedWeight = BigNumber(payload.data.trendedWeight.median || 0)
       const quorumTotal = BigNumber.max(onlineWeight, trendedWeight).toNumber()
 
