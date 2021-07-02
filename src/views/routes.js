@@ -7,7 +7,7 @@ import NetworkPage from '@pages/network'
 import RepresentativesPage from '@pages/representatives'
 import TagsPage from '@pages/tags'
 import NotFoundPage from '@pages/not-found'
-import RepresentativePage from '@pages/representative'
+import AccountPage from '@pages/account'
 
 const Routes = () => (
   <Switch>
@@ -21,7 +21,7 @@ const Routes = () => (
       path={
         '/:prefix(nano_|xrb_):address([13]{1}[13456789abcdefghijkmnopqrstuwxyz]{59})'
       }
-      component={RepresentativePage}
+      component={AccountPage}
     />
     <Route path='/*' component={DocPage} />
   </Switch>

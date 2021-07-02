@@ -2,7 +2,6 @@ import React from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import BigNumber from 'bignumber.js'
 
-import RepresentativeSection from '@components/representative-section'
 import { timeago } from '@core/utils'
 
 export default class RepresentativeNetwork extends React.Component {
@@ -46,13 +45,13 @@ export default class RepresentativeNetwork extends React.Component {
     ]
 
     const rows = items.map((i, idx) => (
-      <div className='representative__section-row' key={idx}>
-        <div className='representative__section-row-label'>{i.label}</div>
-        <div className='representative__section-row-value'>{i.value}</div>
+      <div className='account__section-row' key={idx}>
+        <div className='account__section-row-label'>{i.label}</div>
+        <div className='account__section-row-value'>{i.value}</div>
       </div>
     ))
 
-    return <RepresentativeSection body={rows} />
+    return <div className='account__section'>{rows}</div>
   }
 }
 
