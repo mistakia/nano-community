@@ -16,7 +16,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 #### Table of Contents
 
 - [Election Scheduler](#election-scheduler)
-- [Priority Queue / Tx Prioriziation](#priority-queue-tx-prioriziation)
+- [Priority Queue / Tx Prioritization](#priority-queue-tx-prioritization)
 - [Active elections](#active-elections)
 - [Broadcasting a vote](#broadcasting-a-vote)
 - [Processing incoming votes](#processing-incoming-votes)
@@ -58,7 +58,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 
 ---
 
-## Priority Queue / Tx Prioriziation
+## Priority Queue / Tx Prioritization
 
 - 129 buckets based on balance
 - the balance included in the block is used
