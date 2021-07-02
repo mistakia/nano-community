@@ -14,7 +14,7 @@ import RepresentativePeers from '@components/representative-peers'
 import Seo from '@components/seo'
 import Menu from '@components/menu'
 
-import './representative.styl'
+import './account.styl'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -32,7 +32,7 @@ TabPanel.propTypes = {
   index: PropTypes.number
 }
 
-export default class RepresentativePage extends React.Component {
+export default class AccountPage extends React.Component {
   constructor(props) {
     super(props)
 
@@ -55,47 +55,53 @@ export default class RepresentativePage extends React.Component {
     return (
       <>
         <Seo
-          title='Nano Representative'
+          title='Nano Account'
           description='Information for nano representative'
           tags={['nano', 'representatives', 'network', 'account']}
         />
-        <div className='representative__body'>
+        <div className='account__body'>
           {Boolean(account.alias) && (
-            <div className='representative__alias'>
+            <div className='account__alias'>
               <h1>{account.alias}</h1>
             </div>
           )}
-          <div className='representative__section'>
+          <div className='account__section account__address'>
             <div>{account.account}</div>
           </div>
-          <div className='representative__section'>
-            <div>{BigNumber(account.account_meta.balance).toFixed()}</div>
+          <div className='account__section account__balance'>
+            <div>{BigNumber(account.account_meta.balance || 0).toFixed()}</div>
           </div>
-          <RepresentativeUptime account={account} />
-          <RepresentativeNetwork account={account} />
-          <div className='representative__metrics'>
-            <Tabs
-              orientation='vertical'
-              variant='scrollable'
-              value={this.state.value}
-              className='representative__metrics-menu'
-              onChange={this.handleChange}>
-              <Tab label='Conf. Diff' />
-              <Tab label='Block Diff' />
-              <Tab label='Peer Count' />
-            </Tabs>
-            <TabPanel value={this.state.value} index={0}>
-              <RepresentativeConfirmationsBehind account={account} />
-            </TabPanel>
-            <TabPanel value={this.state.value} index={1}>
-              <RepresentativeBlocksBehind account={account} />
-            </TabPanel>
-            <TabPanel value={this.state.value} index={2}>
-              <RepresentativePeers account={account} />
-            </TabPanel>
-          </div>
+          {Boolean(account.representative) && (
+            <RepresentativeUptime account={account} />
+          )}
+          {Boolean(account.representative) && (
+            <RepresentativeNetwork account={account} />
+          )}
+          {Boolean(account.representative) && (
+            <div className='representative__metrics'>
+              <Tabs
+                orientation='vertical'
+                variant='scrollable'
+                value={this.state.value}
+                className='representative__metrics-menu'
+                onChange={this.handleChange}>
+                <Tab label='Conf. Diff' />
+                <Tab label='Block Diff' />
+                <Tab label='Peer Count' />
+              </Tabs>
+              <TabPanel value={this.state.value} index={0}>
+                <RepresentativeConfirmationsBehind account={account} />
+              </TabPanel>
+              <TabPanel value={this.state.value} index={1}>
+                <RepresentativeBlocksBehind account={account} />
+              </TabPanel>
+              <TabPanel value={this.state.value} index={2}>
+                <RepresentativePeers account={account} />
+              </TabPanel>
+            </div>
+          )}
         </div>
-        <div className='representative__footer'>
+        <div className='account__footer'>
           <Menu desktop />
         </div>
       </>
@@ -103,7 +109,7 @@ export default class RepresentativePage extends React.Component {
   }
 }
 
-RepresentativePage.propTypes = {
+AccountPage.propTypes = {
   match: PropTypes.object,
   getRepresentative: PropTypes.func,
   account: ImmutablePropTypes.record

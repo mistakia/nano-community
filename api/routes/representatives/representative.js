@@ -21,7 +21,23 @@ router.use('/?', async (req, res) => {
       return res.status(200).send(cachedRep)
     }
 
-    const representatives = await db('accounts').where({ account: address })
+    const representatives = await db('accounts').where({
+      account: address,
+      representative: true
+    })
+
+    if (!representatives.length) {
+      return res.status(200).send({
+        account: address,
+        representative: false,
+        account_meta: {},
+        representative_meta: {},
+        uptime: [],
+        telemetry: {},
+        telemetry_history: [],
+        network: {}
+      })
+    }
 
     const uptime = await db('representatives_uptime_rollup_2hour')
       .where({ account: address })
