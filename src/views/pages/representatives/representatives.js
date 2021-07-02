@@ -96,7 +96,7 @@ export default class RepresentativesPage extends React.Component {
               onChange={this.handleChange}>
               <Tab label='Telemetry' />
               <Tab label='Weight Distribution' />
-              <Tab label='Quorum Delta' />
+              <Tab label='Weight History' />
             </Tabs>
             <TabPanel value={this.state.value} index={0}>
               <RepresentativesClusterCharts />

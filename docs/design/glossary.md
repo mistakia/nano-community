@@ -164,7 +164,7 @@ A public key is derived from a private key using the ED25519 elliptic curve algo
 
 ### quorum
 
-When the delta between the two successive blocks of a root is > 50% of the online voting weight.
+When the delta between the two successive blocks of a root is > 67% of the online voting weight.
 
 ### representative (rep)
 
