@@ -8,7 +8,7 @@ export default class RepresentativesWeight extends React.Component {
   render() {
     const { network } = this.props
     const onlineWeight = BigNumber(
-      network.getIn(['weight', 'onlineWeight', 'max'], 0)
+      network.getIn(['weight', 'onlineWeight', 'median'], 0)
     )
     const trendedWeight = BigNumber(
       network.getIn(['weight', 'trendedWeight', 'median'], 0)
