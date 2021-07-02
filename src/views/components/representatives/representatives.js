@@ -28,9 +28,14 @@ export default class Representatives extends React.Component {
 
     const columns = [
       {
-        field: 'account',
-        headerName: 'Account',
-        width: 120
+        field: 'status',
+        headerName: 'On',
+        width: 20,
+        renderCell: (p) => <Uptime data={p.row.uptime} length={1} />,
+        valueGetter: (p) => {
+          // TODO
+          return 0
+        }
       },
       {
         field: 'alias',
@@ -38,14 +43,9 @@ export default class Representatives extends React.Component {
         width: 130
       },
       {
-        field: 'confs_behind',
-        headerName: 'Confs Behind',
-        width: 145,
-        valueFormatter: (p) =>
-          p.row.telemetry.cemented_behind
-            ? BigNumber(p.row.telemetry.cemented_behind).toFormat()
-            : null,
-        valueGetter: (p) => p.row.telemetry.cemented_behind
+        field: 'account',
+        headerName: 'Account',
+        width: 160
       },
       {
         field: 'weight',
@@ -78,10 +78,20 @@ export default class Representatives extends React.Component {
             : null
       },
       {
+        field: 'confs_behind',
+        headerName: 'Confs Behind',
+        width: 145,
+        valueFormatter: (p) =>
+          p.row.telemetry.cemented_behind
+            ? BigNumber(p.row.telemetry.cemented_behind).toFormat()
+            : null,
+        valueGetter: (p) => p.row.telemetry.cemented_behind
+      },
+      {
         field: 'uptime',
         headerName: 'Uptime',
         width: 150,
-        renderCell: (p) => <Uptime data={p.row.uptime} />,
+        renderCell: (p) => <Uptime data={p.row.uptime} length={25} />,
         valueGetter: (p) => {
           // TODO
           return 0
@@ -118,7 +128,7 @@ export default class Representatives extends React.Component {
       },
       {
         field: 'port',
-        headerName: 'port',
+        headerName: 'Port',
         valueGetter: (p) => p.row.telemetry.port
       },
       {

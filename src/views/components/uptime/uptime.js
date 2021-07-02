@@ -5,10 +5,11 @@ import './uptime.styl'
 
 export default class Uptime extends React.Component {
   render() {
-    const { data } = this.props
+    const { data, length } = this.props
 
     const ticks = []
-    data.forEach((d, key) =>
+    const sliced = length ? data.slice(0, length) : data
+    sliced.forEach((d, key) =>
       ticks.push(
         <div key={key} className='uptime-tick' data-online={d.online} />
       )

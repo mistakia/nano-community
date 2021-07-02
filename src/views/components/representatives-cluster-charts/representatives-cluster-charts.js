@@ -54,7 +54,7 @@ export default class RepresentativesClusterCharts extends React.Component {
     const seriesCommon = {
       type: 'scatter',
       coordinateSystem: 'singleAxis',
-      symbolSize: (dataItem) => Math.max(dataItem[1] * 1.1, 8),
+      symbolSize: (dataItem) => Math.min(Math.max(dataItem[1] * 6, 6), 35),
       labelLine: {
         show: true,
         length2: 2,
@@ -81,7 +81,7 @@ export default class RepresentativesClusterCharts extends React.Component {
     }
 
     const option = {
-      color: ['#FF0000'],
+      color: ['#ee6666'],
       tooltip: {
         position: 'top'
       },
