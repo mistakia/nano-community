@@ -19,6 +19,8 @@ import anchor from 'markdown-it-anchor'
 import hljs from 'highlight.js/lib/core'
 import javascript from 'highlight.js/lib/languages/javascript'
 import python from 'highlight.js/lib/languages/python'
+import bash from 'highlight.js/lib/languages/bash'
+import powershell from 'highlight.js/lib/languages/powershell'
 
 import 'highlight.js/styles/github.css'
 
@@ -30,6 +32,8 @@ import Seo from '@components/seo'
 
 hljs.registerLanguage('js', javascript)
 hljs.registerLanguage('python', python)
+hljs.registerLanguage('bash', bash)
+hljs.registerLanguage('powershell', powershell)
 
 const md = markdown({
   html: true,
