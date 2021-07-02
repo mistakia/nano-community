@@ -20,5 +20,6 @@ export default class Uptime extends React.Component {
 }
 
 Uptime.propTypes = {
-  data: PropTypes.array
+  data: PropTypes.array,
+  length: PropTypes.number
 }
