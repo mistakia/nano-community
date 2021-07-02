@@ -35,17 +35,18 @@ In the meantime, critics will continually reference its lack of use by ordinary 
 An advanced form of money that is digital and denationalized was predicted by two of the most influential economists of the 1900s.
 
 > One thing that’s missing but will soon be developed is a reliable e-cash, a method whereby on the Internet you can transfer funds from A to B without A knowing B or B knowing A – the way I can take a $20 bill and hand it over to you, and you may get that without knowing who I am.
-> <cite>— Milton Friedman in 1999</cite> > <small>influential economist of the 1900s</small>
+> <cite>Milton Friedman in 1999</cite>
 
 The decentralization of money has its theoretical roots in <a href="https://mises.org/library/denationalisation-money-argument-refined" target="_blank">Denationalisation of Money: The Argument Refined</a> by Friedrich A. Hayek
 
 > I don’t believe we shall ever have a good money again before we take the thing out of the hands of the government, that is, we can’t take it violently… all we can do is by some sly roundabout way introduce something that they can’t stop.
-> <cite>- Friedrich Hayek in 1984</cite> > <small>influential economist of the 1900s</small>
+> <cite>Friedrich Hayek in 1984</cite>
 
 > The thing we call money is just an information system for labor allocation.
 > What actually matters is making goods & providing services.
 > We should look at currencies from an information theory standpoint.
-> **Whichever has least error & latency will win.** > <cite>- Elon Musk in 2021</cite> > <small>self-proclaimed meme-lord</small>
+> Whichever has least error & latency will win.
+> <cite>Elon Musk in 2021</cite>
 
 ### Nano's properties create a strong positive feedback loop
 
@@ -53,13 +54,13 @@ The more people who use Nano, the more valuable Nano is for everyone who uses it
 
 Nano shares this network effect property with the telephone system, the web, and popular Internet services like eBay and Facebook.
 
-With Bitcoin, its reached a point where greater on-chain usage means higher fees and slower transactions. Nano on the other hand is scalable. Its ability to be used enables it to better capture its network effects from utilization, giving it a stronger feedback loop.
-
-This will become increasingly noticeable as payment volume on the network grows.
+Nano's base layer is scalable making it well suited to capture feedback loops driven by utiliziation.
 
 ## Potential
 
-In early 2014, Marc Andreessen made one of the strongest cases for Nano without even knowing it. Nano of course did not even exist yet. In his article <a href="https://dealbook.nytimes.com/2014/01/21/why-bitcoin-matters/" target="_blank">"Why Bitcoin Matters"</a>, he laid out Bitcoin's advantages and potential use cases, relying heavily on its ability to have "low or no fees". Fast forward, Bitcoin is no longer viable for any of the potential use cases he laid out. Though he couldn't predict Bitcoin's high fees, he made up for it with his vision for digital money and its potential.
+In early 2014, Marc Andreessen made one of the strongest cases for Nano without even knowing it. Nano of course did not even exist yet. In his article <a href="https://dealbook.nytimes.com/2014/01/21/why-bitcoin-matters/" target="_blank">"Why Bitcoin Matters"</a>, he laid out Bitcoin's advantages and potential use cases, relying heavily on its ability to have "low or no fees".
+
+Fast forward, Bitcoin is no longer viable for any of the potential use cases he laid out without resorting to layer 2 solutions like the <a href="https://medium.com/@jonaldfyookball/mathematical-proof-that-the-lightning-network-cannot-be-a-decentralized-bitcoin-scaling-solution-1b8147650800" target="_blank">Lightning Network</a>. Though he couldn't predict Bitcoin's high fees or inability to scale, he made up for it with his vision for digital money and its potential.
 
 Nano is still viable for all of them.
 
@@ -80,6 +81,7 @@ Nano is still viable for all of them.
 Nano's anti-fraud properties even extend into the physical world of retail.
 
 > You fill your cart and go to the checkout station like you do now. But instead of handing over your credit card to pay, you pull out your smartphone and take a snapshot of a QR code displayed by the cash register. The QR code contains all the information required for you to send Bitcoin to Target, including the amount. You click “Confirm” on your phone and the transaction is done (including converting dollars from your account into Bitcoin, if you did not own any Bitcoin).
+> <cite>Marc Andreessen</cite>
 
 > Target is happy because it has the money in the form of Bitcoin, which it can immediately turn into dollars if it wants, and it paid no or very low payment processing fees; you are happy because there is no way for hackers to steal any of your personal information; and organized crime is unhappy. (Well, maybe criminals are still happy: They can try to steal money directly from poorly-secured merchant computer systems. But even if they succeed, consumers bear no risk of loss, fraud or identity theft.)
 > <cite>Marc Andreessen</cite>
@@ -94,6 +96,7 @@ Switching to Nano, which charges no fees, will raise the quality of life of many
 ### Banking the unbanked
 
 > Only about 20 countries around the world have what we would consider to be fully modern banking and payment systems; the other roughly 175 have a long way to go. As a result, many people in many countries are excluded from products and services that we in the West take for granted. Even Netflix, a completely virtual service, is only available in about 40 countries.
+> <cite>Marc Andreessen</cite>
 
 > And even here in the United States, a long-recognized problem is the extremely high fees that the “unbanked” — people without conventional bank accounts – pay for even basic financial services. Bitcoin can be used to go straight at that problem, by making it easy to offer extremely low-fee services to people outside of the traditional financial system.
 > <cite>Marc Andreessen</cite>

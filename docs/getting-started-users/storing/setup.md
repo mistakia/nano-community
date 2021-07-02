@@ -44,16 +44,55 @@ Since it is offline, you have full control over how and where you store the encr
 
 ## Generating an account
 
-To generate an account all you need to do is generate either a random seed or secret key. Software wallets will do this for you and allow for you to export the secret seed or key.
+To generate an account, the best way to do it is generate a random seed. Software wallets will do this for you and allow for you to export the secret seed.
 
 To generate one on your own, you can download one of the following static websites and securely generate one on your local machine. These static pages run locally on your computer and so you can disconnect your computer from the internet when using them. To be extra safe you can copy the file and use it on an <a href="https://en.wikipedia.org/wiki/Air_gap_(networking)" target="_blank">"air-gapped"</a> computer.
 
-##### Offline Generators
+### Pages (Offline & Local)
 
 - Numtel (<a href="/resources/numtel-account-generator.html" download>Download</a> / <a href="https://raw.githubusercontent.com/mistakia/nano-community/main/resources/numtel-account-generator.html" target="_blank">Github</a>) — <a href="https://github.com/numtel/rai-paper-wallet/" target="_blank">Source</a>
 - Nanoo.tools (<a href="/resources/nanoo-tools-account-generator.html" download>Download</a> / <a href="https://raw.githubusercontent.com/mistakia/nano-community/main/resources/nanoo-tools-account-generator.html" target="_blank">GitHub</a>) — <a href="https://nanoo.tools/light-paperwallets" target="_blank">Site</a>
 
 <small>_Note: these generators have not been audited yet_</small>
+
+### Command Line
+
+If you are comfortable with the command line, below are commands to generate a seed using cryptographically secure random number generators for each platform.
+
+```bash [g1:Mac OSX]
+cat /dev/urandom | LC_ALL=C tr -dc 'A-F0-9' | fold -w 64 | head -n 1
+```
+
+```bash [g1:Linux]
+echo $(cat /dev/urandom | tr -dc A-F0-9 | head -c64)
+```
+
+```powershell [g1:Windows]
+$randomBuffer = [byte[]](1..1); $seed = [char[]](1..64); -join($seed | foreach { Do {(new-object Security.Cryptography.RNGCryptoServiceProvider).GetBytes($randomBuffer); $randomChar = [char[]]([char]'A'..[char]'F' + [char]'0'..[char]'9')[$randomBuffer[0]]} While ($randomChar -eq $null); $randomChar })
+```
+
+```js [g1:Nodejs]
+;[...Array(64)]
+  .map(() =>
+    (function getRandomChar() {
+      return 'ABCDEF0123456789'[crypto.randomBytes(1)[0]] || getRandomChar()
+    })()
+  )
+  .join('')
+```
+
+```js [g1:Web]
+;[...Array(64)]
+  .map(() =>
+    (function getRandomChar() {
+      return (
+        'ABCDEF0123456789'[window.crypto.getRandomValues(new Uint8Array(1))] ||
+        getRandomChar()
+      )
+    })()
+  )
+  .join('')
+```
 
 ## Software Wallets
 

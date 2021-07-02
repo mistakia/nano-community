@@ -101,4 +101,4 @@ In short, Betamax lost because it wasn't perceivably better. Its advantages were
 
 **You can't just have better stats, you need to have the right stats that are better.** Making improvements in areas that won't have an impact on consumers will go unnoticed.
 
-Nano is cheaper, faster, and more energy-efficient. These are not just better stats, these are the right stats. And even if this is not perceivable by consumers, it will not go unnoticed by profit-driven market forces looking to save time and money.
+Nano is cheaper, faster, and more energy-efficient. These are not just better stats, these are the right stats. And even if this is not perceivable by consumers, it will not go unnoticed by profit-driven market forces relentlessly trying to save time and money.
