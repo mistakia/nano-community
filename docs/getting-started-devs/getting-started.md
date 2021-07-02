@@ -78,6 +78,7 @@ The most common way to access the network is through RPC commands to either a lo
 
 - <a href="https://docs.nano.org/commands/rpc-protocol/" target="_blank">RPC Documentation</a>
 - <a href="https://publicnodes.somenano.com/" target="_target">Public Nodes</a>
+- [Running a node](/getting-started-devs/running-a-node)
 
 ## Basics
 
