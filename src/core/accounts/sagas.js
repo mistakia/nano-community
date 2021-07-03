@@ -1,15 +1,15 @@
-import { takeEvery, fork, call } from 'redux-saga/effects'
+import { takeEvery, fork, call, takeLatest } from 'redux-saga/effects'
 
-import { getRepresentatives, getRepresentative } from '@core/api'
+import { getRepresentatives, getAccount } from '@core/api'
 import { accountsActions } from './actions'
 
 export function* loadReps() {
   yield call(getRepresentatives)
 }
 
-export function* loadRep({ payload }) {
+export function* loadAccount({ payload }) {
   const { account } = payload
-  yield call(getRepresentative, account)
+  yield call(getAccount, account)
 }
 
 //= ====================================
@@ -20,8 +20,8 @@ export function* watchGetRepresentatives() {
   yield takeEvery(accountsActions.GET_REPRESENTATIVES, loadReps)
 }
 
-export function* watchGetRepresentative() {
-  yield takeEvery(accountsActions.GET_REPRESENTATIVE, loadRep)
+export function* watchGetAccount() {
+  yield takeLatest(accountsActions.GET_ACCOUNT, loadAccount)
 }
 
 //= ====================================
@@ -30,5 +30,5 @@ export function* watchGetRepresentative() {
 
 export const accountSagas = [
   fork(watchGetRepresentatives),
-  fork(watchGetRepresentative)
+  fork(watchGetAccount)
 ]

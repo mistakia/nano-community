@@ -18,7 +18,7 @@ import {
 } from '@core/network'
 import {
   representativesRequestActions,
-  representativeRequestActions
+  accountRequestActions
 } from '@core/accounts'
 
 function* fetchAPI(apiFunction, actions, opts = {}) {
@@ -49,6 +49,11 @@ function* fetch(...args) {
   // yield race([call(fetchAPI.bind(null, ...args)), take(LOCATION_CHANGE)])
 }
 
+export const getAccount = fetch.bind(
+  null,
+  api.getAccount,
+  accountRequestActions
+)
 export const getPosts = fetch.bind(null, api.getPosts, postlistRequestActions)
 export const getDoc = fetch.bind(null, api.getDoc, docRequestActions)
 export const getTagDoc = fetch.bind(null, api.getTagDoc, tagDocRequestActions)
@@ -76,11 +81,6 @@ export const getRepresentatives = fetch.bind(
   null,
   api.getRepresentatives,
   representativesRequestActions
-)
-export const getRepresentative = fetch.bind(
-  null,
-  api.getRepresentative,
-  representativeRequestActions
 )
 export const getWeight = fetch.bind(null, api.getWeight, weightRequestActions)
 export const getWeightHistory = fetch.bind(

@@ -35,9 +35,6 @@ export function accountsReducer(state = initialState, { payload, type }) {
         })
       })
 
-    case accountsActions.GET_REPRESENTATIVE_FULFILLED:
-      return state.setIn(['items', payload.params], createAccount(payload.data))
-
     case accountsActions.FILTER_REPRESENTATIVES: {
       const { field, value, label } = payload
       return state.merge({
@@ -51,6 +48,9 @@ export function accountsReducer(state = initialState, { payload, type }) {
       return state.merge({
         search: payload.value
       })
+
+    case accountsActions.GET_ACCOUNT_FULFILLED:
+      return state.setIn(['items', payload.params], createAccount(payload.data))
 
     default:
       return state
