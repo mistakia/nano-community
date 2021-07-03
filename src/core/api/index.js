@@ -1,11 +1,11 @@
 export {
+  getAccount,
   getPosts,
   getDoc,
   getTagDoc,
   getDocCommit,
   getTagDocCommit,
   getGithubEvents,
-  getRepresentative,
   getRepresentatives,
   getNetworkStats,
   getWeight,

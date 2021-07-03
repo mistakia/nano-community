@@ -49,13 +49,13 @@ export default class AccountPage extends React.Component {
 
   componentDidMount() {
     const { address } = this.props.match.params
-    this.props.getRepresentative(`nano_${address}`)
+    this.props.getAccount(`nano_${address}`)
   }
 
   render() {
     const { account } = this.props
 
-    const balance = BigNumber(account.account_meta.balance || 0)
+    const balance = BigNumber(account.getIn(['account_meta', 'balance'], 0))
     // convert to Nano and split into integer and fractional
     const nanoBalance = balance.shiftedBy(-30).toFixed(2).split('.')
 
@@ -128,6 +128,6 @@ export default class AccountPage extends React.Component {
 
 AccountPage.propTypes = {
   match: PropTypes.object,
-  getRepresentative: PropTypes.func,
+  getAccount: PropTypes.func,
   account: ImmutablePropTypes.record
 }

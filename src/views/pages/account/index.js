@@ -10,7 +10,7 @@ const mapStateToProps = createSelector(getAccountById, (account) => ({
 }))
 
 const mapDispatchToProps = {
-  getRepresentative: accountsActions.getRepresentative
+  getAccount: accountsActions.getAccount
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AccountPage)

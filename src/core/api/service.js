@@ -6,6 +6,10 @@ import merge from 'deepmerge'
 import { API_URL } from '@core/constants'
 
 export const api = {
+  getAccount(account) {
+    const url = `${API_URL}/accounts/${account}`
+    return { url }
+  },
   getPosts({ id, ...params }) {
     const url = `${API_URL}/posts/${id}?${queryString.stringify(params)}`
     return { url }
@@ -28,10 +32,6 @@ export const api = {
   },
   getRepresentatives() {
     const url = `${API_URL}/representatives`
-    return { url }
-  },
-  getRepresentative(account) {
-    const url = `${API_URL}/representatives/${account}`
     return { url }
   },
   getDocCommit({ id }) {

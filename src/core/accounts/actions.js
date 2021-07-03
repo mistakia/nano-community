@@ -1,8 +1,6 @@
 export const accountsActions = {
   GET_REPRESENTATIVES: 'GET_REPRESENTATIVES',
 
-  GET_REPRESENTATIVE: 'GET_REPRESENTATIVE',
-
   FILTER_REPRESENTATIVES: 'FILTER_REPRESENTATIVES',
   SEARCH_REPRESENTATIVES: 'SEARCH_REPRESENTATIVES',
 
@@ -10,9 +8,10 @@ export const accountsActions = {
   GET_REPRESENTATIVES_PENDING: 'GET_REPRESENTATIVES_PENDING',
   GET_REPRESENTATIVES_FULFILLED: 'GET_REPRESENTATIVES_FULFILLED',
 
-  GET_REPRESENTATIVE_FAILED: 'GET_REPRESENTATIVE_FAILED',
-  GET_REPRESENTATIVE_PENDING: 'GET_REPRESENTATIVE_PENDING',
-  GET_REPRESENTATIVE_FULFILLED: 'GET_REPRESENTATIVE_FULFILLED',
+  GET_ACCOUNT: 'GET_ACCOUNT',
+  GET_ACCOUNT_FAILED: 'GET_ACCOUNT_FAILED',
+  GET_ACCOUNT_PENDING: 'GET_ACCOUNT_PENDING',
+  GET_ACCOUNT_FULFILLED: 'GET_ACCOUNT_FULFILLED',
 
   filter: ({ field, value, label } = {}) => ({
     type: accountsActions.FILTER_REPRESENTATIVES,
@@ -57,33 +56,33 @@ export const accountsActions = {
     type: accountsActions.GET_REPRESENTATIVES
   }),
 
-  getRepresentativeFailed: (params, error) => ({
-    type: accountsActions.GET_REPRESENTATIVE_FAILED,
+  getAccount: (account) => ({
+    type: accountsActions.GET_ACCOUNT,
     payload: {
-      params,
-      error
+      account
     }
   }),
 
-  getRepresentativePending: (params) => ({
-    type: accountsActions.GET_REPRESENTATIVE_PENDING,
+  getAccountPending: (params) => ({
+    type: accountsActions.GET_ACCOUNT_PENDING,
     payload: {
       params
     }
   }),
 
-  getRepresentativeFulfilled: (params, data) => ({
-    type: accountsActions.GET_REPRESENTATIVE_FULFILLED,
+  getAccountFulfilled: (params, data) => ({
+    type: accountsActions.GET_ACCOUNT_FULFILLED,
     payload: {
       params,
       data
     }
   }),
 
-  getRepresentative: (account) => ({
-    type: accountsActions.GET_REPRESENTATIVE,
+  getAccountFailed: (params, error) => ({
+    type: accountsActions.GET_ACCOUNT_FAILED,
     payload: {
-      account
+      params,
+      error
     }
   })
 }
@@ -94,8 +93,8 @@ export const representativesRequestActions = {
   fulfilled: accountsActions.getRepresentativesFulfilled
 }
 
-export const representativeRequestActions = {
-  failed: accountsActions.getRepresentativeFailed,
-  pending: accountsActions.getRepresentativePending,
-  fulfilled: accountsActions.getRepresentativeFulfilled
+export const accountRequestActions = {
+  failed: accountsActions.getAccountFailed,
+  pending: accountsActions.getAccountPending,
+  fulfilled: accountsActions.getAccountFulfilled
 }
