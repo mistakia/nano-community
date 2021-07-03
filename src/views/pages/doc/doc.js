@@ -148,7 +148,10 @@ export default class DocPage extends React.Component {
             <Skeleton height={20} animation={false} />
             <Skeleton height={20} animation='wave' />
           </div>
-          <Menu />
+          <div className='doc__content-side'>
+            <div className='doc__content-side-head' />
+            <Menu />
+          </div>
         </div>
       )
     }
@@ -160,7 +163,10 @@ export default class DocPage extends React.Component {
             <h1>404</h1>
             <p>Document not found</p>
           </div>
-          <Menu />
+          <div className='doc__content-side'>
+            <div className='doc__content-side-head' />
+            <Menu />
+          </div>
         </div>
       )
     }
@@ -181,37 +187,41 @@ export default class DocPage extends React.Component {
           <div dangerouslySetInnerHTML={{ __html: html }} />
         </div>
         <div className='doc__content-side'>
-          {Boolean(authors.length) && (
-            <AvatarGroup max={6} className='doc__content-authors'>
-              {authors}
-            </AvatarGroup>
-          )}
-          {Boolean(authors.length) && (
-            <div className='doc__content-contributors'>
-              {authors.length} Contibutor{authors.length !== 1 ? 's' : ''}.{' '}
-              <a
-                href='https://github.com/mistakia/nano-community/blob/main/CONTRIBUTING.md'
-                rel='noreferrer'
-                target='_blank'>
-                Help out
-              </a>
+          <div className='doc__content-side-head'>
+            <div className='doc__content-side-meta'>
+              {Boolean(authors.length) && (
+                <AvatarGroup max={6} className='doc__content-authors'>
+                  {authors}
+                </AvatarGroup>
+              )}
+              {Boolean(authors.length) && (
+                <div className='doc__content-contributors'>
+                  {authors.length} Contibutor{authors.length !== 1 ? 's' : ''}.{' '}
+                  <a
+                    href='https://github.com/mistakia/nano-community/blob/main/CONTRIBUTING.md'
+                    rel='noreferrer'
+                    target='_blank'>
+                    Help out
+                  </a>
+                </div>
+              )}
+              {Boolean(author) && (
+                <div className='doc__content-author'>
+                  updated by{' '}
+                  <a href={commitHref} target='_blank' rel='noreferrer'>
+                    {author} {timeago.format(lastUpdated)}
+                  </a>
+                </div>
+              )}
             </div>
-          )}
-          {Boolean(author) && (
-            <div className='doc__content-author'>
-              updated by{' '}
-              <a href={commitHref} target='_blank' rel='noreferrer'>
-                {author} {timeago.format(lastUpdated)}
-              </a>
-            </div>
-          )}
-          <Button
-            variant='outlined'
-            href={`https://github.com/${REPO}/tree/main/docs${this.path}.md`}
-            target='_blank'
-            className='doc__content-edit'>
-            Edit Page
-          </Button>
+            <Button
+              variant='outlined'
+              href={`https://github.com/${REPO}/tree/main/docs${this.path}.md`}
+              target='_blank'
+              className='doc__content-edit'>
+              Edit Page
+            </Button>
+          </div>
           <Menu />
           <Network />
           <Github />
