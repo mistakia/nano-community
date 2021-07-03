@@ -8,34 +8,55 @@ const offline = '#ee6666'
 
 export default class Uptime extends React.Component {
   render() {
-    const { data, length } = this.props
+    const { data, length, expanded } = this.props
 
     const ticks = []
     const sliced = length ? data.slice(0, length) : data
+    const height = expanded ? 18 : 14
+    const width = expanded ? 4 : 3
+    const spacing = expanded ? 4 : 2
     sliced.forEach((d, key) =>
       ticks.push(
         <rect
           key={key}
-          height='14'
-          width='3'
+          height={height}
+          width={width}
           y='0'
-          x={key * 5}
+          x={key * (spacing + width)}
           rx='1.625'
           ry='1.625'
           fill={d.online ? online : offline}
         />
       )
     )
+    const onlineCount = sliced.filter((i) => i.online).length
 
     return (
-      <svg height='14' className='uptime'>
-        {ticks}
-      </svg>
+      <div className='uptime'>
+        <svg
+          height={height}
+          viewBox={`0 0 ${sliced.length * (spacing + width)} ${height}`}>
+          {ticks}
+        </svg>
+        {Boolean(expanded) && (
+          <div className='uptime__legend'>
+            <div className='uptime__legend-text'>Now</div>
+            <div className='uptime__legend-text'>
+              {Math.round((onlineCount / sliced.length) * 10000) / 100}%
+            </div>
+            <div className='uptime__legend-text'>
+              {Math.round((sliced[sliced.length - 1].interval * 2) / 24)} days
+              ago
+            </div>
+          </div>
+        )}
+      </div>
     )
   }
 }
 
 Uptime.propTypes = {
   data: PropTypes.array,
-  length: PropTypes.number
+  length: PropTypes.number,
+  expanded: PropTypes.bool
 }

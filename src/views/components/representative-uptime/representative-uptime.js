@@ -8,8 +8,8 @@ export default class RepresentativeUptime extends React.Component {
     const { uptime } = this.props.account.toJS()
 
     return (
-      <div className='account__section'>
-        <Uptime data={uptime} />
+      <div className='account__section representative__uptime'>
+        <Uptime data={uptime} expanded />
       </div>
     )
   }

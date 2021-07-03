@@ -4,9 +4,11 @@ import ImmutablePropTypes from 'react-immutable-proptypes'
 import BigNumber from 'bignumber.js'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
+import Skeleton from '@material-ui/lab/Skeleton'
 
 import RepresentativeUptime from '@components/representative-uptime'
 import RepresentativeNetwork from '@components/representative-network'
+import RepresentativeTelemetry from '@components/representative-telemetry'
 import RepresentativeConfirmationsBehind from '@components/representative-confirmations-behind'
 import RepresentativeBlocksBehind from '@components/representative-blocks-behind'
 import RepresentativePeers from '@components/representative-peers'
@@ -52,6 +54,11 @@ export default class AccountPage extends React.Component {
 
   render() {
     const { account } = this.props
+
+    const balance = BigNumber(account.account_meta.balance || 0)
+    // convert to Nano and split into integer and fractional
+    const nanoBalance = balance.shiftedBy(-30).toFixed(2).split('.')
+
     return (
       <>
         <Seo
@@ -60,22 +67,32 @@ export default class AccountPage extends React.Component {
           tags={['nano', 'representatives', 'network', 'account']}
         />
         <div className='account__body'>
-          {Boolean(account.alias) && (
-            <div className='account__alias'>
-              <h1>{account.alias}</h1>
-            </div>
-          )}
+          <div className='account__alias'>
+            <h1>{account.alias}</h1>
+          </div>
           <div className='account__section account__address'>
-            <div>{account.account}</div>
+            {account.account || <Skeleton animation='wave' width='100%' />}
           </div>
           <div className='account__section account__balance'>
-            <div>{BigNumber(account.account_meta.balance || 0).toFixed()}</div>
+            <div className='account__balance-nano'>
+              <div className='account__balance-nano-integer'>
+                {nanoBalance[0]}
+              </div>
+              <div className='account__balance-nano-fraction'>
+                .{nanoBalance[1]}
+              </div>
+              <div className='account__balance-nano-unit'>nano</div>
+            </div>
+            <div className='account__balance-raw'>{balance.toFixed()}</div>
           </div>
           {Boolean(account.representative) && (
             <RepresentativeUptime account={account} />
           )}
           {Boolean(account.representative) && (
             <RepresentativeNetwork account={account} />
+          )}
+          {Boolean(account.representative) && (
+            <RepresentativeTelemetry account={account} />
           )}
           {Boolean(account.representative) && (
             <div className='representative__metrics'>
