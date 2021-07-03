@@ -81,7 +81,6 @@ export default class RepresentativesClusterCharts extends React.Component {
     }
 
     const option = {
-      color: ['#ee6666'],
       tooltip: {
         position: 'top'
       },

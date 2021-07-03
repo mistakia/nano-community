@@ -13,6 +13,9 @@ export const Account = new Record({
   network: new Map(),
   telemetry: new Map(),
 
+  last_online: null,
+  last_offline: null,
+
   version: null
 })
 

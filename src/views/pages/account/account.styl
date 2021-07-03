@@ -10,7 +10,7 @@
   flex 1
   background white
   border-radius 3px
-  padding 16px
+  min-height 48px
   display flex
   flex-direction column
   margin 8px
@@ -21,7 +21,7 @@
   display flex
   justify-content space-between
   align-items center
-  padding 8px 0
+  padding 8px 16px
   border-bottom 1px solid rgba(0,0,0,0.08)
   font-family 'IBM Plex Mono', monospace
   font-size 12px
@@ -40,13 +40,6 @@
   max-width 1300px
   margin 0 auto
 
-.representative__uptime
-  font-family 'IBM Plex Mono', monospace
-  flex 1 1 100%
-  letter-spacing 0.02857em
-  line-height 1.75
-  font-size 14px
-
 .account__address
   flex 3
   align-items center
@@ -55,6 +48,7 @@
 .account__balance
   display flex
   flex-direction column
+  padding 16px
 
 .account__balance-nano
 .account__balance-raw
@@ -78,9 +72,10 @@
 .representative__metrics
   flex 1 1 100%
   display flex
-  border 1px solid $borderColor
-  border-radius 3px
+  box-shadow 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.20)
+  border-radius 4px
   margin 8px
+  overflow hidden
 
 .representative__metrics-menu
   border-right 1px solid $borderColor
@@ -88,3 +83,11 @@
 .representative__metric
   flex 1
   background white
+
+@media (max-width 600px)
+  .account__address
+    font-size 12px
+
+@media (max-width 500px)
+  .account__address
+    font-size 11px

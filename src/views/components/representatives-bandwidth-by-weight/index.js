@@ -29,35 +29,35 @@ const mapStateToProps = createSelector(
         }
       },
       {
-        label: '1Mb to 5Mb',
+        label: '1 mb to 5 mb',
         threshold: 5 * (1024 * 1024),
         filter: {
           between: [1, 5 * (1024 * 1024)]
         }
       },
       {
-        label: '6Mb to 10Mb',
+        label: '6 mb to 10 mb',
         threshold: 10 * (1024 * 1024),
         filter: {
           between: [5 * (1024 * 1024) + 1, 10 * (1024 * 1024)]
         }
       },
       {
-        label: '11Mb to 20Mb',
+        label: '11 mb to 20 mb',
         threshold: 20 * (1024 * 1024),
         filter: {
           between: [10 * (1024 * 1024) + 1, 20 * (1024 * 1024)]
         }
       },
       {
-        label: '20Mb to 100Mb',
+        label: '20 mb to 100 mb',
         threshold: 100 * (1024 * 1024),
         filter: {
           between: [20 * (1024 * 1024) + 1, 100 * (1024 * 1024)]
         }
       },
       {
-        label: '101Mb+',
+        label: '101 mb+',
         threshold: null,
         filter: {
           between: [100 * (1024 * 1024) + 1, Infinity]

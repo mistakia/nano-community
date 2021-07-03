@@ -1,0 +1,32 @@
+.representative__uptime.account__section
+  font-family 'IBM Plex Mono', monospace
+  flex 1 1 100%
+  letter-spacing 0.02857em
+  line-height 1.75
+  font-size 14px
+
+.representative__uptime-bar
+  display flex
+  border-bottom 1px solid $borderColor
+  padding 16px 8px 8px
+
+.representative__uptime-metrics
+  display flex
+
+.representative__uptime-metrics-metric
+  padding 16px
+  flex 1
+
+.representative__uptime-metric-header
+  font-size 12px
+  font-weight 800
+  color rgba(0,0,0,0.3)
+
+.representative__uptime-metric-body
+  font-size 22px
+  &.online
+    color #3bd671
+  &.offline
+    color #ee6666
+  &.warning
+    color #FFEF4A
