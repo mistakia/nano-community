@@ -29,7 +29,6 @@ export default class Uptime extends React.Component {
         />
       )
     )
-    const onlineCount = sliced.filter((i) => i.online).length
 
     return (
       <div className='uptime'>
@@ -41,9 +40,6 @@ export default class Uptime extends React.Component {
         {Boolean(expanded) && (
           <div className='uptime__legend'>
             <div className='uptime__legend-text'>Now</div>
-            <div className='uptime__legend-text'>
-              {Math.round((onlineCount / sliced.length) * 10000) / 100}%
-            </div>
             <div className='uptime__legend-text'>
               {Math.round((sliced[sliced.length - 1].interval * 2) / 24)} days
               ago

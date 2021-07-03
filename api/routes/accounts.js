@@ -54,6 +54,22 @@ router.get('/:address', async (req, res) => {
       return res.status(200).send(account)
     }
 
+    const lastOnline = await db('representatives_uptime')
+      .where({
+        account: address,
+        online: 1
+      })
+      .orderBy('timestamp', 'desc')
+      .limit(1)
+
+    const lastOffline = await db('representatives_uptime')
+      .where({
+        account: address,
+        online: 0
+      })
+      .orderBy('timestamp', 'desc')
+      .limit(1)
+
     const uptime = await db('representatives_uptime_rollup_2hour')
       .where({ account: address })
       .orderBy('interval', 'asc')
@@ -82,6 +98,8 @@ router.get('/:address', async (req, res) => {
     rep.telemetry = telemetry[0] || {}
     rep.telemetry_history = telemetry
     rep.network = network[0] || {}
+    rep.last_online = lastOnline[0] ? lastOnline[0].timestamp : null
+    rep.last_offline = lastOffline[0] ? lastOffline[0].timestamp : null
 
     cache.set(cacheKey, rep, 30)
     res.send(rep)

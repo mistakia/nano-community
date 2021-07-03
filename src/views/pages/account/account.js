@@ -71,12 +71,12 @@ export default class AccountPage extends React.Component {
             <h1>{account.alias}</h1>
           </div>
           <div className='account__section account__address'>
-            {account.account || <Skeleton animation='wave' width='100%' />}
+            {account.account || <Skeleton animation='wave' width='90%' />}
           </div>
           <div className='account__section account__balance'>
             <div className='account__balance-nano'>
               <div className='account__balance-nano-integer'>
-                {nanoBalance[0]}
+                {BigNumber(nanoBalance[0]).toFormat()}
               </div>
               <div className='account__balance-nano-fraction'>
                 .{nanoBalance[1]}
