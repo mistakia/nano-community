@@ -105,7 +105,7 @@ export default class RepresentativeUptime extends React.Component {
             </div>
             <div
               className={`representative__uptime-metric-body ${last60Class}`}>
-              {last60Pct}%
+              {last60Pct ? `${last60Pct}%` : '-'}
             </div>
           </div>
           <div className='representative__uptime-metrics-metric'>
@@ -114,7 +114,7 @@ export default class RepresentativeUptime extends React.Component {
             </div>
             <div
               className={`representative__uptime-metric-body ${last240Class}`}>
-              {uptimePct}%
+              {last60Pct ? `${last240Pct}%` : '-'}
             </div>
           </div>
         </div>
