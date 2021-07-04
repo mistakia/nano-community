@@ -246,6 +246,22 @@ CREATE TABLE `representatives_uptime` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `representatives_uptime_summary`
+--
+
+DROP TABLE IF EXISTS `representatives_uptime_summary`;
+
+CREATE TABLE `representatives_uptime_summary` (
+  `account` char(65) NOT NULL,
+  `days` smallint(3) unsigned NOT NULL,
+  `online_count` int(11) unsigned NOT NULL,
+  `offline_count` int(11) unsigned NOT NULL,
+  UNIQUE KEY `account` (`account`, `days`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `representatives_uptime`
 --
 
