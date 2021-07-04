@@ -262,6 +262,23 @@ CREATE TABLE `representatives_uptime_rollup_2hour` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `representatives_uptime_rollup_day`
+--
+
+DROP TABLE IF EXISTS `representatives_uptime_rollup_day`;
+
+CREATE TABLE `representatives_uptime_rollup_day` (
+  `account` char(65) NOT NULL,
+  `online_count` smallint(5) unsigned NOT NULL,
+  `offline_count` smallint(5) unsigned NOT NULL,
+  `longest_downtime` mediumint(5) unsigned NOT NULL,
+  `timestamp` int(11) NOT NULL,
+  UNIQUE KEY `account` (`account`, `timestamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `sources`
 --
 
