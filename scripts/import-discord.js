@@ -1,4 +1,4 @@
-const moment = require('moment')
+const dayjs = require('dayjs')
 const debug = require('debug')
 
 const db = require('../db')
@@ -202,9 +202,9 @@ const main = async (guildId, { getFullHistory = false } = {}) => {
         url: `https://discord.com/channels/${guildId}/${p.channel_id}/${p.id}`,
         author: p.author.username,
         authorid: p.author.id,
-        created_at: moment(p.timestamp).unix(),
+        created_at: dayjs(p.timestamp).unix(),
         updated_at: p.edited_timestamp
-          ? moment(p.edited_timestamp).unix()
+          ? dayjs(p.edited_timestamp).unix()
           : null,
         html: null,
         text: p.content,

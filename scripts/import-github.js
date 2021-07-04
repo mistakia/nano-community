@@ -1,4 +1,4 @@
-const moment = require('moment')
+const dayjs = require('dayjs')
 const debug = require('debug')
 
 const { request } = require('../common')
@@ -116,7 +116,7 @@ const format = (item) => {
     actor_id: item.actor.id,
     actor_name: item.actor.display_login,
     actor_avatar: item.actor.avatar_url,
-    created_at: moment(item.created_at).unix()
+    created_at: dayjs(item.created_at).unix()
   }
 }
 

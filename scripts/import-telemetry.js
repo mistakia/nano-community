@@ -1,5 +1,5 @@
 const debug = require('debug')
-const moment = require('moment')
+const dayjs = require('dayjs')
 
 const config = require('../config')
 const { rpc, getNetworkInfo, wait } = require('../common')
@@ -96,7 +96,7 @@ const main = async () => {
       node_id: node.node_id,
       address: node.address,
       port: node.port,
-      telemetry_timestamp: moment(node.timestamp, 'x').unix(),
+      telemetry_timestamp: dayjs(node.timestamp).unix(),
 
       timestamp
     })
@@ -131,7 +131,7 @@ const main = async () => {
         node_id: node.node_id,
         address: node.address,
         port: node.port,
-        telemetry_timestamp: moment(node.timestamp, 'x').unix(),
+        telemetry_timestamp: dayjs(node.timestamp).unix(),
 
         timestamp
       })
@@ -143,7 +143,7 @@ const main = async () => {
     await db('representatives_telemetry').insert(nodeInserts)
   }
 
-  const now = moment()
+  const now = dayjs()
   for (const item of repInserts) {
     // get last network stat
     const result = await db('representatives_network')
@@ -157,7 +157,7 @@ const main = async () => {
     // ignore any ip / address combos fetched within the last three days
     if (
       result.length &&
-      moment(result[0].timestamp, 'X').add('3', 'day').isAfter(now)
+      dayjs.unix(result[0].timestamp).add('3', 'day').isAfter(now)
     ) {
       continue
     }

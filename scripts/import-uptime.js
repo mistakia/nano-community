@@ -1,5 +1,5 @@
 const debug = require('debug')
-const moment = require('moment')
+const dayjs = require('dayjs')
 
 const { rpc, groupBy } = require('../common')
 const config = require('../config')
@@ -9,7 +9,7 @@ const logger = debug('script')
 debug.enable('script')
 
 const timestamp = Math.round(Date.now() / 1000)
-const now = moment()
+const now = dayjs()
 
 const main = async () => {
   // get representatives online from multiple nodes
@@ -81,7 +81,7 @@ const main = async () => {
   const uptime = await db('representatives_uptime').where(
     'timestamp',
     '>',
-    moment().subtract('7', 'days').unix()
+    dayjs().subtract('14', 'days').unix()
   )
 
   // group by account
@@ -92,7 +92,7 @@ const main = async () => {
     // rollup into groups of every two hours
     const rollup = {}
     for (const d of values) {
-      const diff = moment(d.timestamp, 'X').diff(now, 'hour')
+      const diff = dayjs.unix(d.timestamp).diff(now, 'hour')
       const hour = Math.abs(diff)
       const interval = hour && hour % 2 === 0 ? hour - 1 : hour
       if (!rollup[interval]) rollup[interval] = [d]
