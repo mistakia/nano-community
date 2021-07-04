@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import { DataGrid, GridOverlay } from '@material-ui/data-grid'
@@ -45,6 +46,9 @@ export default class Representatives extends React.Component {
       {
         field: 'account',
         headerName: 'Account',
+        renderCell: (p) => (
+          <Link to={`/${p.row.account}`}>{p.row.account}</Link>
+        ),
         width: 160
       },
       {

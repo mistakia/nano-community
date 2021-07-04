@@ -14,3 +14,7 @@
 
 ## backup mysql
 0 0 * * 0 /bin/bash /root/nano-community/scripts/backup-mysql.sh -f > /var/log/backup-mysql-full.log 2>&1
+
+## rollups
+0 0 * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/rollup-uptime.js --days 2 > /var/log/rollup-uptime.log 2>&1
+0 */6 * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/calculate-uptime.js > /var/log/calculate-uptime.log 2>&1
