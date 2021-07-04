@@ -1,5 +1,5 @@
 const express = require('express')
-const moment = require('moment')
+const dayjs = require('dayjs')
 
 const { groupBy } = require('../../../common')
 
@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
         'representatives_telemetry.account',
         'accounts.account'
       )
-      .where('timestamp', '>', moment().subtract('1', 'week').unix())
+      .where('timestamp', '>', dayjs().subtract('1', 'week').unix())
 
     const grouped = groupBy(rows, 'account')
 

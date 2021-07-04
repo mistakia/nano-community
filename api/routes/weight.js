@@ -1,5 +1,5 @@
 const express = require('express')
-const moment = require('moment')
+const dayjs = require('dayjs')
 const router = express.Router()
 
 const median = (arr) => {
@@ -33,7 +33,7 @@ router.get('/', async (req, res) => {
     }
 
     const weights = await db('voting_weight')
-      .where('timestamp', '>', moment().subtract(15, 'minutes').unix())
+      .where('timestamp', '>', dayjs().subtract(15, 'minutes').unix())
       .orderBy('timestamp', 'asc')
 
     const onlineWeight = []
@@ -67,7 +67,7 @@ router.get('/history', async (req, res) => {
     }
 
     const weights = await db('voting_weight')
-      .where('timestamp', '>', moment().subtract(3, 'days').unix())
+      .where('timestamp', '>', dayjs().subtract(3, 'days').unix())
       .orderBy('timestamp', 'asc')
 
     cache.set('weightHistory', weights, 120)

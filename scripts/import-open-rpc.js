@@ -1,6 +1,6 @@
 const debug = require('debug')
 const net = require('net')
-const moment = require('moment')
+const dayjs = require('dayjs')
 const BigNumber = require('bignumber.js')
 
 const logger = debug('script')
@@ -41,7 +41,7 @@ const main = async () => {
   // get reps seen in the last month
   const representatives = await db('accounts')
     .where({ representative: true })
-    .where('last_seen', '>', moment().subtract('1', 'month').unix())
+    .where('last_seen', '>', dayjs().subtract('1', 'month').unix())
 
   const accounts = representatives.map((r) => r.account)
 

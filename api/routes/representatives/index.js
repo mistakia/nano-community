@@ -1,5 +1,5 @@
 const express = require('express')
-const moment = require('moment')
+const dayjs = require('dayjs')
 
 const top = require('./top')
 
@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
     // get reps seen in the last month
     const representatives = await db('accounts')
       .where({ representative: true })
-      .where('last_seen', '>', moment().subtract('1', 'month').unix())
+      .where('last_seen', '>', dayjs().subtract('1', 'month').unix())
 
     const accounts = representatives.map((r) => r.account)
 

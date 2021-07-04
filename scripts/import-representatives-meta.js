@@ -1,5 +1,5 @@
 const debug = require('debug')
-const moment = require('moment')
+const dayjs = require('dayjs')
 const fetchCheerioObject = require('fetch-cheerio-object')
 
 const { request } = require('../common')
@@ -55,7 +55,7 @@ const main = async () => {
       ninja_type: res.server ? res.server.type : null,
       ninja_provider: res.network ? res.network.provider : null,
       mynano_ninja: ninjaUrl,
-      ninja_created_at: moment(res.created).unix(),
+      ninja_created_at: dayjs(res.created).unix(),
       ninja_description: res.description,
 
       reddit,
