@@ -21,12 +21,6 @@ export default class RepresentativeNetwork extends React.Component {
         )
       },
       {
-        label: 'Voting Weight',
-        value: BigNumber(account.getIn(['account_meta', 'weight']))
-          .shiftedBy(-30)
-          .toFormat(0)
-      },
-      {
         label: 'Provider',
         value: account.getIn(['network', 'asname'])
       },
@@ -51,7 +45,15 @@ export default class RepresentativeNetwork extends React.Component {
       </div>
     ))
 
-    return <div className='account__section'>{rows}</div>
+    return <div className='account__section'>
+      <div className='account__section-metrics'>
+        <div className='account__section-metric-label'>Weight Represented</div>
+        <div className='account__section-metric-body'>{BigNumber(account.getIn(['account_meta', 'weight']))
+          .shiftedBy(-30)
+          .toFormat(0)}</div>
+      </div>
+      {rows}
+    </div>
   }
 }
 

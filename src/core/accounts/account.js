@@ -10,6 +10,7 @@ export const Account = new Record({
   representative_meta: new Map(),
   telemetry_history: new List(),
   uptime: new List(),
+  uptime_summary: new Map(),
   network: new Map(),
   telemetry: new Map(),
 

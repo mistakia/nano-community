@@ -22,7 +22,8 @@
       "https://www.googletagmanager.com"
     ],
     "exclude": [
-      "/resources/**"
+      "/resources/**",
+      "/nano_*"
     ]
   },
   "dependencies": {

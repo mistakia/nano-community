@@ -45,6 +45,7 @@ router.get('/:address', async (req, res) => {
         representative: false,
         representative_meta: {},
         uptime: [],
+        uptime_summary: {},
         telemetry: {},
         telemetry_history: [],
         network: {},
@@ -89,6 +90,10 @@ router.get('/:address', async (req, res) => {
       .orderBy('timestamp', 'desc')
       .limit(1000)
 
+    const uptimeSummary = await db('representatives_uptime_summary').where({
+      account: address
+    })
+
     const rep = {
       ...representatives[0],
       ...data
@@ -100,6 +105,10 @@ router.get('/:address', async (req, res) => {
     rep.network = network[0] || {}
     rep.last_online = lastOnline[0] ? lastOnline[0].timestamp : null
     rep.last_offline = lastOffline[0] ? lastOffline[0].timestamp : null
+    rep.uptime_summary = uptimeSummary.reduce((res, { days, ...item }) => {
+      res[`days_${days}`] = item
+      return res
+    }, {})
 
     cache.set(cacheKey, rep, 30)
     res.send(rep)
