@@ -44,7 +44,9 @@ const main = async (days = 1) => {
         },
         [
           {
-            count: 0
+            count: 0,
+            start: time.unix(),
+            end: time.unix()
           }
         ]
       )
@@ -54,14 +56,14 @@ const main = async (days = 1) => {
       if (downtimeStreaks.length) {
         const counts = downtimeStreaks.map((p) => p.count)
         const longestCount = Math.max(...counts)
-        const idx = counts.findIndex(longestCount)
+        const idx = counts.findIndex((i) => i === longestCount)
         const longestItem = downtimeStreaks[idx]
         const start = dayjs.unix(longestItem.start)
         const end = dayjs.unix(longestItem.end)
-        longest_downtime = start.diff(end, 'second')
+        longest_downtime = end.diff(start, 'second')
       }
 
-      const online_count = values.filter((p) => p.online)
+      const online_count = values.filter((p) => p.online).length
       const offline_count = values.length - online_count
       inserts.push({
         account,
