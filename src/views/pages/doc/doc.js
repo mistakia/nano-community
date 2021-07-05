@@ -136,7 +136,7 @@ export default class DocPage extends React.Component {
       return (
         <div className='doc__container'>
           <div className='doc__content'>
-            <Skeleton height={80} width={200} />
+            <Skeleton height={80} width={200} style={{ marginTop: '32px' }} />
             <Skeleton height={20} />
             <Skeleton height={20} animation={false} />
             <Skeleton height={20} animation='wave' />
