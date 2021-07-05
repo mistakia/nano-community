@@ -76,7 +76,9 @@ Learn [why this matters](/introduction/why-it-matters) and is an essential funct
 
 The smallest <a href="https://docs.nano.org/protocol-design/distribution-and-units/#unit-dividers" target="_blank">unit of Nano</a> is a Raw:
 
-`0.000000000000000000000000000001 or 1e-30 Nano`
+`0.000000000000000000000000000001`
+
+_<small>1e-30 Nano</small>_
 
 Nano is one of the most divisible forms of money in existence.
 
@@ -134,19 +136,19 @@ Nano's distribution is notable as 95% of the supply was given away for free. Unl
 
 ### Nano is deterministic
 
-Transactions achieve irreversible finality. Once a transaction achieves a quorum of support, it is final and can not be reversed.
-
-In contrast, Bitcoin transactions have probabilistic finality; the chance of a transaction being reversed decreases every 10 minutes with the release of a new block.
+Transactions achieve irreversible finality. Once a transaction achieves a quorum of support, it is settled.
 
 ### Nano is ultrafast
 
-Typically, Nano transactions fully settle in under one second, oftentimes around 300ms. Prior to final votes (v22), it was able to settle in around 100ms.
+Typically, Nano transactions settle in under one second, oftentimes around 300ms. Prior to final votes (v22), it was able to settle in around 100ms.
 
 It takes Bitcoin transactions about one hour to reach a <a href="https://bitcoil.co.il/Doublespend.pdf" target="_blank">0.1% chance</a> of potentially being reversed.
 
 Traditional bank transfers, using ACH and Swift, can take anywhere from 1-3 days to settle. Real-Time Gross Settlement (RTGS) systems are available only for banks and can only be used domestically as they are operated by central banks.
 
-### Nano is controlled by its holders
+Nano may be the fastest cross-border settlement network in existence.
+
+### Nano is controlled only by its holders
 
 Nano is secured and controlled by Nano holders, as they have exclusive control over the delegation of their voting weight. Node operators, nor developers, nor any other entities have any ability to overrule the will of Nano holders.
 
