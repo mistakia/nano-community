@@ -33,10 +33,7 @@ export default class Representatives extends React.Component {
         headerName: 'On',
         width: 20,
         renderCell: (p) => <Uptime data={p.row.uptime} length={1} />,
-        valueGetter: (p) => {
-          // TODO
-          return 0
-        }
+        valueGetter: (p) => p.row.is_online
       },
       {
         field: 'alias',
@@ -96,10 +93,7 @@ export default class Representatives extends React.Component {
         headerName: 'Uptime',
         width: 150,
         renderCell: (p) => <Uptime data={p.row.uptime} length={25} />,
-        valueGetter: (p) => {
-          // TODO
-          return 0
-        }
+        valueGetter: (p) => p.row.last_online || 0
       },
       {
         field: 'version',
