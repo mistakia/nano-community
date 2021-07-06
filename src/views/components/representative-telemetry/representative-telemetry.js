@@ -20,7 +20,10 @@ export default class RepresentativeTelemetry extends React.Component {
     const cementedCount = account.getIn(['telemetry', 'cemented_count'], 0)
     const cementedBehind = account.getIn(['telemetry', 'cemented_behind'], 0)
     const uncheckedCount = account.getIn(['telemetry', 'unchecked_count'], 0)
-    const telemetryTimestamp = account.getIn(['telemetry', 'telemetry_timestamp'], 0)
+    const telemetryTimestamp = account.getIn(
+      ['telemetry', 'telemetry_timestamp'],
+      0
+    )
 
     const items = [
       {
@@ -41,40 +44,29 @@ export default class RepresentativeTelemetry extends React.Component {
       },
       {
         label: 'Blocks',
-        value: blockCount ? BigNumber(
-          blockCount
-        ).toFormat() : '-'
+        value: blockCount ? BigNumber(blockCount).toFormat() : '-'
       },
       {
         label: 'Blocks Diff',
-        value: blockBehind ? BigNumber(
-          blockBehind
-        ).toFormat() : '-'
+        value: blockBehind ? BigNumber(blockBehind).toFormat() : '-'
       },
       {
         label: 'Conf.',
-        value: cementedCount ? BigNumber(
-          cementedCount
-        ).toFormat() : '-'
+        value: cementedCount ? BigNumber(cementedCount).toFormat() : '-'
       },
       {
         label: 'Conf. Diff',
-        value: cementedBehind ? BigNumber(
-          cementedBehind
-        ).toFormat() : '-'
+        value: cementedBehind ? BigNumber(cementedBehind).toFormat() : '-'
       },
       {
         label: 'Unchecked',
-        value: uncheckedCount ? BigNumber(
-          uncheckedCount
-        ).toFormat() : '-'
+        value: uncheckedCount ? BigNumber(uncheckedCount).toFormat() : '-'
       },
       {
         label: 'Telemetry Timestamp',
-        value: telemetryTimestamp ? timeago.format(
-          telemetryTimestamp  * 1000,
-          'nano_short'
-        ) : '-'
+        value: telemetryTimestamp
+          ? timeago.format(telemetryTimestamp * 1000, 'nano_short')
+          : '-'
       }
     ]
 

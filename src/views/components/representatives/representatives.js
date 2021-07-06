@@ -93,7 +93,7 @@ export default class Representatives extends React.Component {
         headerName: 'Uptime',
         width: 150,
         renderCell: (p) => <Uptime data={p.row.uptime} length={25} />,
-        valueGetter: (p) => p.row.last_online || 0
+        valueGetter: (p) => (p.row.last_online || 0) - (p.row.last_offline || 0)
       },
       {
         field: 'version',
