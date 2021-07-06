@@ -20,6 +20,7 @@ router.get('/', async (req, res) => {
 
     const accounts = representatives.map((r) => r.account)
 
+    /***********************************************************/
     const telemetryQuery = db('representatives_telemetry')
       .select(db.raw('max(timestamp) AS maxtime, account AS aid'))
       .groupBy('account')
@@ -34,10 +35,12 @@ router.get('/', async (req, res) => {
       })
       .whereIn('account', accounts)
 
+    /***********************************************************/
     const uptime = await db('representatives_uptime_rollup_2hour')
       .whereIn('account', accounts)
       .orderBy('interval', 'asc')
 
+    /***********************************************************/
     const accountMetaQuery = db('accounts_meta')
       .select(db.raw('max(timestamp) AS maxtime, account AS aid'))
       .groupBy('account')
@@ -52,6 +55,7 @@ router.get('/', async (req, res) => {
       })
       .whereIn('account', accounts)
 
+    /***********************************************************/
     const repMetaQuery = db('representatives_meta')
       .select(db.raw('max(timestamp) AS maxtime, account AS aid'))
       .groupBy('account')
@@ -66,6 +70,7 @@ router.get('/', async (req, res) => {
       })
       .whereIn('account', accounts)
 
+    /***********************************************************/
     const networkQuery = db('representatives_network')
       .select(db.raw('max(timestamp) AS maxtime, account AS aid'))
       .groupBy('account')
@@ -73,6 +78,38 @@ router.get('/', async (req, res) => {
       .select('representatives_network.*')
       .from(db.raw('(' + networkQuery.toString() + ') AS X'))
       .innerJoin('representatives_network', function () {
+        this.on(function () {
+          this.on('account', '=', 'aid')
+          this.andOn('timestamp', '=', 'maxtime')
+        })
+      })
+      .whereIn('account', accounts)
+
+    /***********************************************************/
+    const onlineQuery = db('representatives_uptime')
+      .select(db.raw('max(timestamp) AS maxtime, account AS aid'))
+      .where({ online: true })
+      .groupBy('account')
+    const online = await db
+      .select('representatives_uptime.*')
+      .from(db.raw('(' + onlineQuery.toString() + ') AS X'))
+      .innerJoin('representatives_uptime', function () {
+        this.on(function () {
+          this.on('account', '=', 'aid')
+          this.andOn('timestamp', '=', 'maxtime')
+        })
+      })
+      .whereIn('account', accounts)
+
+    /***********************************************************/
+    const offlineQuery = db('representatives_uptime')
+      .select(db.raw('max(timestamp) AS maxtime, account AS aid'))
+      .where({ online: true })
+      .groupBy('account')
+    const offline = await db
+      .select('representatives_uptime.*')
+      .from(db.raw('(' + offlineQuery.toString() + ') AS X'))
+      .innerJoin('representatives_uptime', function () {
         this.on(function () {
           this.on('account', '=', 'aid')
           this.andOn('timestamp', '=', 'maxtime')
@@ -90,6 +127,11 @@ router.get('/', async (req, res) => {
         .map(({ online, interval }) => ({ online, interval }))
       rep.telemetry = telemetry.find((a) => a.account === rep.account) || {}
       rep.network = network.find((a) => a.account === rep.account) || {}
+
+      const lastOnline = online.find((a) => a.account === rep.account)
+      rep.last_online = lastOnline ? lastOnline.timestamp : null
+      const lastOffline = offline.find((a) => a.account === rep.account)
+      rep.last_offline = lastOffline ? lastOffline.timestamp : null
     }
 
     cache.set('representatives', representatives, 60)
