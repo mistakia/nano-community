@@ -3,7 +3,13 @@ import { create } from 'jss'
 import { Provider } from 'react-redux'
 import { withRouter } from 'react-router'
 import { ConnectedRouter } from 'connected-react-router/immutable'
-import { createMuiTheme, createGenerateClassName, StylesProvider, ThemeProvider, jssPreset } from '@material-ui/core/styles'
+import {
+  createMuiTheme,
+  createGenerateClassName,
+  StylesProvider,
+  ThemeProvider,
+  jssPreset
+} from '@material-ui/core/styles'
 
 import createStore from '@core/store'
 import history from '@core/history'
@@ -60,7 +66,7 @@ const store = createStore(history, initialState)
 const ConnectedApp = withRouter(App)
 const jss = create({ plugins: [...jssPreset().plugins] })
 const generateClassName = createGenerateClassName({
-  productionPrefix: navigator.userAgent === 'ReactSnap' ? 'snap' : 'jss',
+  productionPrefix: navigator.userAgent === 'ReactSnap' ? 'snap' : 'jss'
 })
 
 const Root = () => (
