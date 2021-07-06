@@ -16,6 +16,7 @@ export const Account = new Record({
 
   last_online: null,
   last_offline: null,
+  is_online: false,
 
   version: null
 })
@@ -26,9 +27,12 @@ export function createAccount(data) {
     major_version,
     minor_version,
     patch_version,
-    pre_release_version
+    pre_release_version,
+    last_online,
+    last_offline
   } = data.telemetry
 
+  const is_online = last_online && last_online > last_offline
   const version = major_version
     ? `${major_version}.${minor_version}.${patch_version}.${pre_release_version}`
     : 'unknown'
@@ -36,6 +40,7 @@ export function createAccount(data) {
 
   return new Account({
     ...data,
+    is_online,
     version
   })
 }

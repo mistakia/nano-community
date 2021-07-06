@@ -104,7 +104,7 @@ router.get('/', async (req, res) => {
     /***********************************************************/
     const offlineQuery = db('representatives_uptime')
       .select(db.raw('max(timestamp) AS maxtime, account AS aid'))
-      .where({ online: true })
+      .where({ online: false })
       .groupBy('account')
     const offline = await db
       .select('representatives_uptime.*')
@@ -129,9 +129,9 @@ router.get('/', async (req, res) => {
       rep.network = network.find((a) => a.account === rep.account) || {}
 
       const lastOnline = online.find((a) => a.account === rep.account)
-      rep.last_online = lastOnline ? lastOnline.timestamp : null
+      rep.last_online = lastOnline ? lastOnline.timestamp : 0
       const lastOffline = offline.find((a) => a.account === rep.account)
-      rep.last_offline = lastOffline ? lastOffline.timestamp : null
+      rep.last_offline = lastOffline ? lastOffline.timestamp : 0
     }
 
     cache.set('representatives', representatives, 60)

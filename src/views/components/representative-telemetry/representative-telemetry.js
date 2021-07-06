@@ -15,6 +15,13 @@ export default class RepresentativeTelemetry extends React.Component {
       ? 'Unlimited'
       : '-'
 
+    const blockCount = account.getIn(['telemetry', 'block_count'], 0)
+    const blockBehind = account.getIn(['telemetry', 'block_behind'], 0)
+    const cementedCount = account.getIn(['telemetry', 'cemented_count'], 0)
+    const cementedBehind = account.getIn(['telemetry', 'cemented_behind'], 0)
+    const uncheckedCount = account.getIn(['telemetry', 'unchecked_count'], 0)
+    const telemetryTimestamp = account.getIn(['telemetry', 'telemetry_timestamp'], 0)
+
     const items = [
       {
         label: 'Peers',
@@ -34,40 +41,40 @@ export default class RepresentativeTelemetry extends React.Component {
       },
       {
         label: 'Blocks',
-        value: BigNumber(
-          account.getIn(['telemetry', 'block_count'], 0)
-        ).toFormat()
+        value: blockCount ? BigNumber(
+          blockCount
+        ).toFormat() : '-'
       },
       {
         label: 'Blocks Diff',
-        value: BigNumber(
-          account.getIn(['telemetry', 'block_behind'], 0)
-        ).toFormat()
+        value: blockBehind ? BigNumber(
+          blockBehind
+        ).toFormat() : '-'
       },
       {
         label: 'Conf.',
-        value: BigNumber(
-          account.getIn(['telemetry', 'cemented_count'], 0)
-        ).toFormat()
+        value: cementedCount ? BigNumber(
+          cementedCount
+        ).toFormat() : '-'
       },
       {
         label: 'Conf. Diff',
-        value: BigNumber(
-          account.getIn(['telemetry', 'cemented_behind'], 0)
-        ).toFormat()
+        value: cementedBehind ? BigNumber(
+          cementedBehind
+        ).toFormat() : '-'
       },
       {
         label: 'Unchecked',
-        value: BigNumber(
-          account.getIn(['telemetry', 'unchecked_count'], 0)
-        ).toFormat()
+        value: uncheckedCount ? BigNumber(
+          uncheckedCount
+        ).toFormat() : '-'
       },
       {
-        label: 'Timestamp',
-        value: timeago.format(
-          account.getIn(['telemetry', 'telemetry_timestamp'], 0) * 1000,
+        label: 'Telemetry Timestamp',
+        value: telemetryTimestamp ? timeago.format(
+          telemetryTimestamp  * 1000,
           'nano_short'
-        )
+        ) : '-'
       }
     ]
 

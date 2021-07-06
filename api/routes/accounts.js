@@ -103,8 +103,8 @@ router.get('/:address', async (req, res) => {
     rep.telemetry = telemetry[0] || {}
     rep.telemetry_history = telemetry
     rep.network = network[0] || {}
-    rep.last_online = lastOnline[0] ? lastOnline[0].timestamp : null
-    rep.last_offline = lastOffline[0] ? lastOffline[0].timestamp : null
+    rep.last_online = lastOnline[0] ? lastOnline[0].timestamp : 0
+    rep.last_offline = lastOffline[0] ? lastOffline[0].timestamp : 0
     rep.uptime_summary = uptimeSummary.reduce((res, { days, ...item }) => {
       res[`days_${days}`] = item
       return res
