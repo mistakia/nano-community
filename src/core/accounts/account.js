@@ -27,10 +27,9 @@ export function createAccount(data) {
     major_version,
     minor_version,
     patch_version,
-    pre_release_version,
-    last_online,
-    last_offline
+    pre_release_version
   } = data.telemetry
+  const { last_online, last_offline } = data
 
   const is_online = last_online && last_online > last_offline
   const version = major_version

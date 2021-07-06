@@ -6,6 +6,7 @@ import Tab from '@material-ui/core/Tab'
 import Seo from '@components/seo'
 import Menu from '@components/menu'
 import Representatives from '@components/representatives'
+import RepresentativesOffline from '@components/representatives-offline'
 import RepresentativesWeight from '@components/representatives-weight'
 import RepresentativesSearch from '@components/representatives-search'
 import RepresentativesFilters from '@components/representatives-filters'
@@ -97,6 +98,7 @@ export default class RepresentativesPage extends React.Component {
               <Tab label='Telemetry' />
               <Tab label='Weight Distribution' />
               <Tab label='Weight History' />
+              <Tab label='Offline Reps' />
             </Tabs>
             <TabPanel value={this.state.value} index={0}>
               <RepresentativesClusterCharts />
@@ -106,6 +108,9 @@ export default class RepresentativesPage extends React.Component {
             </TabPanel>
             <TabPanel value={this.state.value} index={2}>
               <RepresentativesQuorumCharts />
+            </TabPanel>
+            <TabPanel value={this.state.value} index={3}>
+              <RepresentativesOffline />
             </TabPanel>
           </div>
         </div>
