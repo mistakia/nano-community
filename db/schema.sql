@@ -37,6 +37,22 @@ CREATE TABLE `accounts_meta` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `accounts_rep`
+--
+
+DROP TABLE IF EXISTS `accounts_rep`;
+
+CREATE TABLE `accounts_rep` (
+  `account` char(65) CHARACTER SET utf8 NOT NULL,
+  `representative` char(65) CHARACTER SET utf8 NOT NULL,
+  `balance` decimal(39, 0) DEFAULT NULL,
+  `timestamp` int(11) NOT NULL,
+  UNIQUE KEY `account` (`account`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `accounts_tags`
 --
 
