@@ -53,6 +53,14 @@ export default class AccountPage extends React.Component {
     this.props.getAccount(`nano_${address}`)
   }
 
+  componentDidUpdate(prevProps) {
+    const { address } = this.props.match.params
+    const prevAddress = prevProps.match.params.address
+    if (address !== prevAddress) {
+      this.props.getAccount(`nano_${address}`)
+    }
+  }
+
   render() {
     const { account } = this.props
 
@@ -118,10 +126,10 @@ export default class AccountPage extends React.Component {
               </TabPanel>
             </div>
           )}
-          <RepresentativeDelegators
+          {Boolean(account.representative) && <RepresentativeDelegators
             account={account}
             address={`nano_${this.props.match.params.address}`}
-          />
+          />}
         </div>
         <div className='account__footer'>
           <Menu desktop />
