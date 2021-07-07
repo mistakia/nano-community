@@ -18,3 +18,6 @@
 ## rollups
 0 0 * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/rollup-uptime.js --days 2 > /var/log/rollup-uptime.log 2>&1
 0 */6 * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/calculate-uptime.js > /var/log/calculate-uptime.log 2>&1
+
+## delegators
+15 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-accounts-rep.js > /var/log/import-accounts-rep.log 2>&1
