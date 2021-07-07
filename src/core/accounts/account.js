@@ -13,6 +13,7 @@ export const Account = new Record({
   uptime_summary: new Map(),
   network: new Map(),
   telemetry: new Map(),
+  delegators: new List(),
 
   last_online: null,
   last_offline: null,

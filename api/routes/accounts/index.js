@@ -95,6 +95,13 @@ router.get('/:address', async (req, res) => {
       account: address
     })
 
+    const delegators = await db('accounts_delegators')
+      .select('accounts_delegators.*', 'accounts.alias')
+      .leftJoin('accounts', 'accounts.account', 'accounts_delegators.account')
+      .where('accounts_delegators.representative', address)
+      .orderBy('accounts_delegators.balance', 'desc')
+      .limit(100)
+
     const rep = {
       ...representatives[0],
       ...data
@@ -110,6 +117,7 @@ router.get('/:address', async (req, res) => {
       res[`days_${days}`] = item
       return res
     }, {})
+    rep.delegators = delegators
 
     cache.set(cacheKey, rep, 30)
     res.send(rep)

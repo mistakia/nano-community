@@ -31,11 +31,6 @@ export function accountsReducer(state = initialState, { payload, type }) {
               ['items', accountData.account],
               createAccount(accountData)
             )
-          } else {
-            accounts.mergeIn(
-              ['items', accountData.account],
-              createAccount(accountData)
-            )
           }
         })
       })
