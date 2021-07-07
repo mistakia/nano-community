@@ -65,18 +65,18 @@ const main = async ({
       })
     }
 
-    await db('accounts_rep').insert(inserts).onConflict().merge()
+    await db('accounts_delegators').insert(inserts).onConflict().merge()
 
     index += batchSize
     account = addresses[addressCount - 1]
   } while (addressCount === batchSize)
 
-    // delete if its not filtered by modified_timestamp
-    // addresses not returned are below the threshold
+  // delete if its not filtered by modified_timestamp
+  // addresses not returned are below the threshold
   if (!hours) {
     for (let i = 0; i < returnedAddresses.length; i = i + batchSize) {
       const addresses = returnedAddresses.slice(i, i + batchSize)
-      await db('accounts_rep')
+      await db('accounts_delegators')
         .whereNot({ timestamp })
         .whereNotIn('account', addresses)
         .del()

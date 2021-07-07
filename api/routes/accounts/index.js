@@ -1,7 +1,8 @@
 const express = require('express')
 const router = express.Router()
 
-const { rpc } = require('../../common')
+const { rpc } = require('../../../common')
+const delegators = require('./delegators')
 
 router.get('/:address', async (req, res) => {
   const { logger, cache, db } = req.app.locals
@@ -117,5 +118,7 @@ router.get('/:address', async (req, res) => {
     res.status(500).send({ error: error.toString() })
   }
 })
+
+router.use('/:address/delegators', delegators)
 
 module.exports = router
