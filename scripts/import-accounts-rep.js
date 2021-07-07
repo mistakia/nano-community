@@ -31,6 +31,8 @@ const main = async ({
     opts.modified_since = dayjs().subtract(hours, 'hours').unix()
   }
 
+  logger(opts)
+
   do {
     logger(
       `Fetching accounts from ${index} to ${index + batchSize} (${account})`
@@ -69,10 +71,15 @@ const main = async ({
     account = addresses[addressCount - 1]
   } while (addressCount === batchSize)
 
+    // delete if its not filtered by modified_timestamp
+    // addresses not returned are below the threshold
   if (!hours) {
     for (let i = 0; i < returnedAddresses.length; i = i + batchSize) {
       const addresses = returnedAddresses.slice(i, i + batchSize)
-      await db('accounts_rep').whereNotIn('account', addresses).del()
+      await db('accounts_rep')
+        .whereNot({ timestamp })
+        .whereNotIn('account', addresses)
+        .del()
     }
   }
 }
