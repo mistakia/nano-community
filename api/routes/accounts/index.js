@@ -1,4 +1,5 @@
 const express = require('express')
+const BigNumber = require('bignumber.js')
 const router = express.Router()
 
 const { rpc } = require('../../../common')
@@ -29,10 +30,10 @@ router.get('/:address', async (req, res) => {
       account: address,
       account_meta: {
         account: address,
-        balance: accountInfo.balance,
-        block_count: accountInfo.block_count,
-        weight: accountInfo.weight,
-        confirmation_height: accountInfo.confirmation_height
+        balance: BigNumber(accountInfo.balance).toNumber(),
+        block_count: BigNumber(accountInfo.block_count).toNumber(),
+        weight: BigNumber(accountInfo.weight).toNumber(),
+        confirmation_height: BigNumber(accountInfo.confirmation_height).toNumber()
       }
     }
 
