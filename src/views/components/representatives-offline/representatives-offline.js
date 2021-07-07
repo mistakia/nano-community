@@ -32,8 +32,6 @@ export default class RepresentativesOffline extends React.Component {
         }
       })
 
-    console.log(rows.toJS())
-
     const sorted = rows.sort((a, b) => b.weight - a.weight)
 
     return (

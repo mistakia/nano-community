@@ -26,10 +26,10 @@ router.get('/?', async (req, res) => {
     }
 
     const delegators = await db('accounts_delegators')
-      .where({
-        representative: address
-      })
-      .orderBy('balance', 'desc')
+      .select('accounts_delegators.*', 'accounts.alias')
+      .leftJoin('accounts', 'accounts.account', 'accounts_delegators.account')
+      .where('accounts_delegators.representative', address)
+      .orderBy('accounts_delegators.balance', 'desc')
       .limit(limit)
       .offset(offset)
 

@@ -6,6 +6,7 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import Skeleton from '@material-ui/lab/Skeleton'
 
+import RepresentativeDelegators from '@components/representative-delegators'
 import RepresentativeUptime from '@components/representative-uptime'
 import RepresentativeNetwork from '@components/representative-network'
 import RepresentativeTelemetry from '@components/representative-telemetry'
@@ -117,6 +118,10 @@ export default class AccountPage extends React.Component {
               </TabPanel>
             </div>
           )}
+          <RepresentativeDelegators
+            account={account}
+            address={`nano_${this.props.match.params.address}`}
+          />
         </div>
         <div className='account__footer'>
           <Menu desktop />
