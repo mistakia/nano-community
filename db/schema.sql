@@ -47,7 +47,8 @@ CREATE TABLE `accounts_rep` (
   `representative` char(65) CHARACTER SET utf8 NOT NULL,
   `balance` decimal(39, 0) DEFAULT NULL,
   `timestamp` int(11) NOT NULL,
-  UNIQUE KEY `account` (`account`)
+  UNIQUE KEY `account` (`account`),
+  INDEX `representative` (`representative`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
