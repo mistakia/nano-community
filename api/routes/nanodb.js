@@ -4,10 +4,12 @@ const router = express.Router()
 const { request } = require('../../common')
 const { nanodbAPI } = require('../../config')
 
-router.get('/?', async (req, res) => {
+router.get(/^(.*)$/, async (req, res) => {
   const { logger } = req.app.locals
   try {
-    const data = await request({ url: `${nanodbAPI}/status` })
+    const path = req.params[0]
+    const url = `${nanodbAPI}${path}`
+    const data = await request({ url })
     res.status(200).send(data)
   } catch (error) {
     logger(error)
