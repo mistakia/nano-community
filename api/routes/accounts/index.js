@@ -33,7 +33,9 @@ router.get('/:address', async (req, res) => {
         balance: BigNumber(accountInfo.balance).toNumber(),
         block_count: BigNumber(accountInfo.block_count).toNumber(),
         weight: BigNumber(accountInfo.weight).toNumber(),
-        confirmation_height: BigNumber(accountInfo.confirmation_height).toNumber()
+        confirmation_height: BigNumber(
+          accountInfo.confirmation_height
+        ).toNumber()
       }
     }
 
@@ -97,7 +99,11 @@ router.get('/:address', async (req, res) => {
     })
 
     const delegators = await db('accounts_delegators')
-      .select('accounts_delegators.account', 'accounts_delegators.balance', 'accounts.alias')
+      .select(
+        'accounts_delegators.account',
+        'accounts_delegators.balance',
+        'accounts.alias'
+      )
       .leftJoin('accounts', 'accounts.account', 'accounts_delegators.account')
       .where('accounts_delegators.representative', address)
       .orderBy('accounts_delegators.balance', 'desc')
