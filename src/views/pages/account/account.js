@@ -126,10 +126,12 @@ export default class AccountPage extends React.Component {
               </TabPanel>
             </div>
           )}
-          {Boolean(account.representative) && <RepresentativeDelegators
-            account={account}
-            address={`nano_${this.props.match.params.address}`}
-          />}
+          {Boolean(account.representative) && (
+            <RepresentativeDelegators
+              account={account}
+              address={`nano_${this.props.match.params.address}`}
+            />
+          )}
         </div>
         <div className='account__footer'>
           <Menu desktop />
