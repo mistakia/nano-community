@@ -96,7 +96,7 @@ const main = async () => {
       node_id: node.node_id,
       address: node.address,
       port: node.port,
-      telemetry_timestamp: dayjs(node.timestamp).unix(),
+      telemetry_timestamp: dayjs(parseInt(node.timestamp, 10)).unix(),
 
       timestamp
     })
