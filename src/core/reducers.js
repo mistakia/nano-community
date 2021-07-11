@@ -5,6 +5,7 @@ import { appReducer } from './app'
 import { accountsReducer } from './accounts'
 import { docsReducer } from './docs'
 import { githubReducer } from './github'
+import { ledgerReducer } from './ledger'
 import { networkReducer } from './network'
 import { notificationReducer } from './notifications'
 import { postsReducer } from './posts'
@@ -17,6 +18,7 @@ const rootReducer = (history) =>
     accounts: accountsReducer,
     docs: docsReducer,
     github: githubReducer,
+    ledger: ledgerReducer,
     network: networkReducer,
     notification: notificationReducer,
     posts: postsReducer,

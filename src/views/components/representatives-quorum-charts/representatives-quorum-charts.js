@@ -3,23 +3,12 @@ import PropTypes from 'prop-types'
 import BigNumber from 'bignumber.js'
 import ReactEChartsCore from 'echarts-for-react/lib/core'
 import * as echarts from 'echarts/core'
-import { ScatterChart, LineChart } from 'echarts/charts'
-import {
-  TitleComponent,
-  TooltipComponent,
-  SingleAxisComponent
-} from 'echarts/components'
+import { LineChart } from 'echarts/charts'
+import { TitleComponent, TooltipComponent } from 'echarts/components'
 
 import { CanvasRenderer } from 'echarts/renderers'
 
-echarts.use([
-  TitleComponent,
-  TooltipComponent,
-  SingleAxisComponent,
-  ScatterChart,
-  LineChart,
-  CanvasRenderer
-])
+echarts.use([TitleComponent, TooltipComponent, LineChart, CanvasRenderer])
 
 export default class RepresentativesQuorumCharts extends React.Component {
   componentDidMount() {

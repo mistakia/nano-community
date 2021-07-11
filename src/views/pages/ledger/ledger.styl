@@ -1,0 +1,57 @@
+.ledger__body
+  display flex
+  flex-direction column
+  padding 32px
+  max-width 1300px
+  width 100%
+  margin 0 auto
+
+.ledger__metric
+  width 100%
+
+.ledger__body-menu
+  background white
+  border 1px solid $borderColor
+  border-radius 4px
+
+.ledger__footer
+  margin 32px auto
+  max-width 1100px
+  width 100%
+
+.ledger__chart-sections
+  display flex
+  flex-wrap wrap
+
+.ledger__chart-section
+  max-width 500px
+  margin 16px
+  flex 1 0 300px
+
+.ledger__chart-section-heading
+  flex 1
+  font-family 'IBM Plex Mono', monospace
+  letter-spacing 0.5em
+  text-transform uppercase
+  color $nanoBlueGrey
+  position relative
+  font-size 8pt
+  line-height 1rem
+  margin 15px 0
+  &::before
+    content ""
+    display block
+    position absolute
+    top 10px
+    width 100%
+    border-top 3px solid lighten($borderColor, 40%)
+  span
+    display inline-block
+    position relative
+    background $backgroundColor
+    padding 3px 8px 2px 12px
+
+.ledger__chart-section-body
+  padding 0 12px
+  font-family 'IBM Plex Mono', monospace
+  font-size 12px

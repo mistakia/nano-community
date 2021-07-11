@@ -9,5 +9,6 @@ export {
   getRepresentatives,
   getNetworkStats,
   getWeight,
-  getWeightHistory
+  getWeightHistory,
+  getDaily
 } from './sagas'
