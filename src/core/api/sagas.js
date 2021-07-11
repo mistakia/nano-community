@@ -20,6 +20,7 @@ import {
   representativesRequestActions,
   accountRequestActions
 } from '@core/accounts'
+import { dailyRequestActions } from '@core/ledger'
 
 function* fetchAPI(apiFunction, actions, opts = {}) {
   const { token } = yield select(getApp)
@@ -88,3 +89,4 @@ export const getWeightHistory = fetch.bind(
   api.getWeightHistory,
   weightHistoryRequestActions
 )
+export const getDaily = fetch.bind(null, api.getDaily, dailyRequestActions)
