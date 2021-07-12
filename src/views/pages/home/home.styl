@@ -1,27 +1,15 @@
 .home__container
-  max-width 900px
   display flex
   margin 0 auto
   flex-wrap wrap
 
-.posts
+.home__body
   flex 1 1 550px
   padding 0 16px
+  overflow hidden
 
-.posts__side
+.home__side
   flex 1
   min-width 200px
-
-.posts__title
-  font-size 9pt
-  font-weight 300
-  text-align center
-  padding-top 16px
-  font-family 'IBM Plex Mono', monospace
-  letter-spacing 0.1em
-  text-transform capitalize
-  color $nanoBlueGrey
-
-@media (min-width 750px)
-  .posts
-    max-width 550px
+  max-width 350px
+  margin 0 auto
