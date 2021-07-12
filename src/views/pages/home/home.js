@@ -1,5 +1,6 @@
 import React from 'react'
 
+import RepresentativeAlerts from '@components/representative-alerts'
 import Posts from '@components/posts'
 import Network from '@components/network'
 import Github from '@components/github'
@@ -32,17 +33,16 @@ export default class HomePage extends React.Component {
             'sustainable'
           ]}
         />
-        <div className='posts'>
-          <div className='posts__title'>Posts from the community</div>
-          <Posts title='Announcements' id='announcements' age={36} />
-          <Menu mobile />
-          <Posts title='Top' id='top' age={168} />
-          <Posts title='Trending' id='trending' age={72} />
-        </div>
-        <div className='posts__side'>
-          <Menu desktop />
+        <div className='home__side'>
+          <Menu />
           <Network />
           <Github />
+        </div>
+        <div className='home__body'>
+          <RepresentativeAlerts />
+          <Posts title='Nano Foundation' id='announcements' age={36} />
+          <Posts title='Top' id='top' age={168} />
+          <Posts title='Trending' id='trending' age={72} />
         </div>
       </div>
     )

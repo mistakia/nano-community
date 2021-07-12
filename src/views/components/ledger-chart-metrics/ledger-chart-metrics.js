@@ -29,7 +29,7 @@ export default class LedgerChartMetrics extends React.Component {
               {min ? BigNumber(min).toFormat(0) : '-'}
             </div>
             <div className='ledger__chart-row-value'>
-              {minTimestamp ? dayjs(minTimestamp).format('MMM D YYYY') : '-'}
+              {minTimestamp ? dayjs(minTimestamp).format('MMM D, YYYY') : '-'}
             </div>
           </div>
           <div className='leger__chart-row'>
@@ -38,7 +38,7 @@ export default class LedgerChartMetrics extends React.Component {
               {max ? BigNumber(max).toFormat(0) : '-'}
             </div>
             <div className='ledger__chart-row-value'>
-              {maxTimestamp ? dayjs(maxTimestamp).format('MMM D YYYY') : '-'}
+              {maxTimestamp ? dayjs(maxTimestamp).format('MMM D, YYYY') : '-'}
             </div>
           </div>
         </div>

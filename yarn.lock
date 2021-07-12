@@ -8031,6 +8031,11 @@ pend@~1.2.0:
   resolved "https://registry.yarnpkg.com/pend/-/pend-1.2.0.tgz#7a57eb550a6783f9115331fcf4663d5c8e007a50"
   integrity sha1-elfrVQpng/kRUzH89GY9XI4AelA=
 
+percentile@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/percentile/-/percentile-1.4.0.tgz#84e03f1f37722ddcc1f527d5367743b7bb30f336"
+  integrity sha512-W/Q9I9nUm9Z7JvVHWQ0zRfUUdSu3NVLeiECBCrWqxdMKAOMcUBST0RhAtlvN1itLnR8HI/LSDD96clw3RenzZQ==
+
 pg-connection-string@2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/pg-connection-string/-/pg-connection-string-2.4.0.tgz#c979922eb47832999a204da5dbe1ebf2341b6a10"

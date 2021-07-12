@@ -33,8 +33,6 @@ export default class Posts extends React.Component {
     let skeletons = new List()
     if (isPending) {
       skeletons = skeletons.push(new PostRecord())
-      skeletons = skeletons.push(new PostRecord())
-      skeletons = skeletons.push(new PostRecord())
     }
 
     const items = (posts.size ? posts : skeletons).map((p, k) => (
