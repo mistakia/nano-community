@@ -20,7 +20,7 @@ Nano can provide very high levels of security if used correctly. Learn how you c
 
 ## Securing the network
 
-Nano's network is secured by its holders through nodes that cast votes on behalf of them. Therefore, anyone in possession of Nano is responsible for safeguarding their voting weight and maintaining the network's security.
+Nano's network is secured by its holders through nodes that cast votes on behalf of them. Therefore, anyone in possession of Nano is responsible for safeguarding their voting weight and maintaining the network's decentralization.
 
 Said another way, the security of the network relies on a shared understanding and commitment to maintaining decentralization and self-sovereignty based on a shared interest of maintaining the value of the network.
 
