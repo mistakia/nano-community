@@ -1,5 +1,9 @@
 .post
-  margin-bottom 16px
+  background #ffffff
+  cursor pointer
+  &:hover
+    .post__title
+      color $nanoSoftBlue
 
 .post__title
   font-family 'Inter', sans-serif
@@ -8,15 +12,8 @@
   line-height 1.45
   letter-spacing .005rem
   display block
-  padding 0px 16px
   word-wrap break-word
-  box-shadow 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)
-  border-radius 4px
-  background #ffffff
-  padding 14px
-
-  &:hover
-    color $nanoSoftBlue
+  padding 14px 14px 0
 
   &.discord
     white-space pre-line
@@ -25,11 +22,10 @@
 .post__meta
   font-family 'Roboto Mono', monospace
   color $nanoBlueGrey
-  font-size 7pt
-  margin-top 4px
+  font-size 10px
+  padding 8px 16px 16px
   display flex
   flex-direction row
-  padding 0 16px
   align-items center
 
   div + div

@@ -35,11 +35,6 @@ export default class RepresentativeAlerts extends React.Component {
 
     return (
       <>
-        <div className='posts__header'>
-          <div className='posts__heading'>
-            <span>Representative Alerts</span>
-          </div>
-        </div>
         <TableContainer className='representatives__alerts'>
           <Table size='small'>
             <TableHead>

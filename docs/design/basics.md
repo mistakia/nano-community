@@ -38,4 +38,4 @@ This architecture allows Nano to function without direct monetary incentives to 
 | Circulating supply | 133,248,297                       |
 | Total Supply       | 133,248,297                       |
 | Scalability        | Limited by hardware or bandwidth  |
-| Distribution       | Free via Captcha Faucet           |
+| Distribution       | Free via Proof-of-Captcha-Work    |
