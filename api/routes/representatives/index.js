@@ -127,8 +127,6 @@ router.get('/', async (req, res) => {
       online // 6
     ])
 
-    console.log(Object.keys(queryResults))
-
     for (const rep of representatives) {
       rep.account_meta =
         queryResults[0].find((a) => a.account === rep.account) || {}
@@ -147,7 +145,7 @@ router.get('/', async (req, res) => {
       rep.last_offline = lastOffline ? lastOffline.timestamp : 0
     }
 
-    cache.set('representatives', representatives, 60)
+    cache.set('representatives', representatives, 60 * 5)
     res.status(200).send(representatives)
   } catch (error) {
     logger(error)
