@@ -29,6 +29,9 @@ const getTooltipText = (type) => {
 
     case 'overweight':
       return "Representative has beyond 3M Nano voting weight. Delegators should consider distributing the weight to improve the network's resilience and value."
+
+    case 'low uptime':
+      return 'Representative has been offline more than 25% in the last 28 days.'
   }
 }
 
