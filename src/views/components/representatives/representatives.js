@@ -5,6 +5,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import { DataGrid, GridOverlay } from '@material-ui/data-grid'
 import BigNumber from 'bignumber.js'
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 
 import Uptime from '@components/uptime'
 import { timeago } from '@core/utils'
@@ -196,8 +197,12 @@ export default class Representatives extends React.Component {
         field: 'last_seen',
         width: 130,
         headerName: 'Last Seen',
-        valueFormatter: (p) =>
-          timeago.format(p.row.last_seen * 1000, 'nano_short'),
+        renderCell: (p) =>
+          p.row.is_online ? (
+            <FiberManualRecordIcon className='green' />
+          ) : (
+            timeago.format(p.row.last_seen * 1000, 'nano_short')
+          ),
         valueGetter: (p) => Math.floor(Date.now() / 1000) - p.row.last_seen
       },
       {

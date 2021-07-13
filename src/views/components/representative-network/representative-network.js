@@ -1,6 +1,7 @@
 import React from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import BigNumber from 'bignumber.js'
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 
 import { timeago } from '@core/utils'
 
@@ -11,7 +12,11 @@ export default class RepresentativeNetwork extends React.Component {
     const items = [
       {
         label: 'Last Seen',
-        value: timeago.format(account.getIn(['last_seen']) * 1000, 'nano_short')
+        value: account.get('is_online') ? (
+          <FiberManualRecordIcon className='green' />
+        ) : (
+          timeago.format(account.getIn(['last_seen']) * 1000, 'nano_short')
+        )
       },
       {
         label: 'First Seen',
