@@ -4,12 +4,22 @@ import BigNumber from 'bignumber.js'
 import ReactEChartsCore from 'echarts-for-react/lib/core'
 import * as echarts from 'echarts/core'
 import { LineChart } from 'echarts/charts'
-import { TooltipComponent, LegendComponent } from 'echarts/components'
+import {
+  TooltipComponent,
+  LegendComponent,
+  GridComponent
+} from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 
 import LedgerChartMetrics from '@components/ledger-chart-metrics'
 
-echarts.use([TooltipComponent, LegendComponent, LineChart, CanvasRenderer])
+echarts.use([
+  TooltipComponent,
+  LegendComponent,
+  LineChart,
+  CanvasRenderer,
+  GridComponent
+])
 
 export default class LedgerChartBlocks extends React.Component {
   render() {
@@ -18,29 +28,37 @@ export default class LedgerChartBlocks extends React.Component {
     const spanStyle =
       'float:right;margin-left:20px;font-size:14px;color:#666;font-weight:900'
     const option = {
+      grid: {
+        containLabel: true
+      },
       legend: {
         show: true,
         bottom: 0
       },
       tooltip: {
+        className: 'echarts-tooltip',
         trigger: 'axis',
-        formatter: (series) =>
-          series
-            .map(
-              (s) =>
-                `${s.marker} ${
-                  s.seriesName
-                } <span style="${spanStyle}">${BigNumber(s.data[1])
-                  .shiftedBy(-30)
-                  .toFormat(0)}</span>`
-            )
-            .join('<br/>')
+        formatter: (series) => {
+          const values = series.map(
+            (s) =>
+              `${s.marker} ${
+                s.seriesName
+              } <span style="${spanStyle}">${BigNumber(s.data[1])
+                .shiftedBy(-30)
+                .toFormat(0)}</span>`
+          )
+
+          values.unshift(series[0].axisValueLabel)
+
+          return values.join('<br/>')
+        }
       },
       xAxis: {
         type: 'time'
       },
       yAxis: {
         type: 'value',
+        name: 'Nano',
         axisLabel: {
           formatter: (value) => `${BigNumber(value).shiftedBy(-30).toFormat(0)}`
         }
@@ -79,9 +97,9 @@ export default class LedgerChartBlocks extends React.Component {
             <div className='ledger__chart-section-heading'>
               <span>Description</span>
             </div>
-            <div className='ledger__chart-section-body'>
-              The total amount sent and total amount of voting weight changed
-              per day.
+            <div className='ledger__chart-section-body description'>
+              The total amount sent (in Nano) and total amount of voting weight
+              changed per day.
             </div>
           </div>
           <LedgerChartMetrics

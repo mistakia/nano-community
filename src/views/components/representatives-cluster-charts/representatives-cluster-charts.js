@@ -68,6 +68,7 @@ export default class RepresentativesClusterCharts extends React.Component {
         minMargin: 10
       },
       tooltip: {
+        className: 'echarts-tooltip',
         formatter: (params) => params.data[2]
       }
     }
@@ -82,6 +83,7 @@ export default class RepresentativesClusterCharts extends React.Component {
 
     const option = {
       tooltip: {
+        className: 'echarts-tooltip',
         position: 'top'
       },
       title: [

@@ -32,6 +32,7 @@ export default class RepresentativesWeightChart extends React.Component {
 
     const option = {
       tooltip: {
+        className: 'echarts-tooltip',
         trigger: 'item',
         formatter: (p) =>
           `${p.data[1]}<br/>${BigNumber(p.data[0]).toFormat(0)} (${
