@@ -7,7 +7,9 @@ import LedgerPage from './ledger'
 
 const mapStateToProps = createSelector(getLedger, (ledger) => {
   const daily = ledger.get('daily', [])
-  const data = {}
+  const data = {
+    reused_addresses: []
+  }
   const metrics = [
     'active_addresses',
 
@@ -49,6 +51,8 @@ const mapStateToProps = createSelector(getLedger, (ledger) => {
       const metric = metrics[i]
       data[metric].push([timestamp, d[metric]])
     }
+
+    data.reused_addresses.push([timestamp, d.active_addresses - d.open_count])
   })
 
   return { data }
