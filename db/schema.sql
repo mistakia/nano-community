@@ -257,6 +257,7 @@ CREATE TABLE `representatives_uptime` (
   `online` tinyint(1) NOT NULL,
 
   `timestamp` int(11) NOT NULL,
+  INDEX `online` (`online`),
   UNIQUE KEY `account` (`account`, `timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
