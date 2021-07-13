@@ -120,15 +120,15 @@ export default class Network extends React.Component {
         </div>
         <div className='network__stat'>
           <div>Principal Reps</div>
-          <div>{network.getIn(['stats', 'prCount'])}</div>
+          <div>{network.getIn(['stats', 'prCount'], '-')}</div>
         </div>
         <div className='network__stat'>
           <div>Total Reps (24h)</div>
-          <div>{network.getIn(['totalReps'])}</div>
+          <div>{network.getIn(['totalReps'], '-')}</div>
         </div>
         <div className='network__stat'>
           <div>Peers</div>
-          <div>{network.getIn(['stats', 'peersMax'])}</div>
+          <div>{network.getIn(['stats', 'peersMax'], '-')}</div>
         </div>
         <div className='network__stat'>
           <div>
@@ -137,7 +137,7 @@ export default class Network extends React.Component {
               <HelpOutlineIcon fontSize='inherit' />
             </Tooltip>
           </div>
-          <div>{network.getIn(['stats', 'confirmReps'])}</div>
+          <div>{network.getIn(['stats', 'confirmReps'], '-')}</div>
         </div>
         <div className='network__stat'>
           <div>
@@ -146,7 +146,7 @@ export default class Network extends React.Component {
               <HelpOutlineIcon fontSize='inherit' />
             </Tooltip>
           </div>
-          <div>{network.getIn(['stats', 'censorReps'])}</div>
+          <div>{network.getIn(['stats', 'censorReps'], '-')}</div>
         </div>
         <div className='network__stat'>
           <div>
@@ -155,7 +155,7 @@ export default class Network extends React.Component {
               <HelpOutlineIcon fontSize='inherit' />
             </Tooltip>
           </div>
-          <div>{(wattHour / 1000).toFixed(3)} kWh</div>
+          <div>{wattHour ? `${(wattHour / 1000).toFixed(3)} kWh` : '-'}</div>
         </div>
         <a
           href='https://nanoticker.info/'

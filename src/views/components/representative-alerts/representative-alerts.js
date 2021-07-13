@@ -27,7 +27,7 @@ const getTooltipText = (type) => {
       return 'Representative has fallen behind or is bootstrapping. The cutoff is a cemented count beyond the 95th percentile. (via telemetry)'
 
     case 'overweight':
-      return 'Representative has beyond 3M Nano voting weight. Delegators should consider distributing the weight to improve the network resilience and value.'
+      return 'Representative has beyond 3M Nano voting weight. Delegators should consider distributing the weight to improve the network\'s resilience and value.'
   }
 }
 
