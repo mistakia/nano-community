@@ -4,6 +4,8 @@ description: Frequently asked questions about Nano
 tags: nano, faqs
 ---
 
+# FAQs
+
 ### How can Nano be useful as a currency if the price is volatile?
 
 All currencies have exchange rate volatility. When Nano is widely adopted and denominated, its volatility will not be noticeable. Its price will be more stable as it will be driven by usage as opposed to entirely driven by speculation and its network effects growth will have leveled off.

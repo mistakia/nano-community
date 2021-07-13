@@ -6,13 +6,15 @@ import percentile from 'percentile'
 
 import { getRepresentatives, getAccounts } from '@core/accounts'
 import { REP_MAX_WEIGHT } from '@core/constants'
+import { getNetwork } from '@core/network'
 
 import RepresentativeAlerts from './representative-alerts'
 
 const mapStateToProps = createSelector(
   getRepresentatives,
   getAccounts,
-  (reps, accounts) => {
+  getNetwork,
+  (reps, accounts, network) => {
     const items = {}
 
     /**************** offline ****************/
@@ -55,7 +57,8 @@ const mapStateToProps = createSelector(
 
     return {
       items: sorted,
-      isLoading: accounts.get('isLoading')
+      isLoading: accounts.get('isLoading'),
+      onlineWeight: network.getIn(['weight', 'onlineWeight', 'median'], 0)
     }
   }
 )
