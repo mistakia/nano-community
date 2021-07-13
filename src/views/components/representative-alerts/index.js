@@ -27,6 +27,18 @@ const mapStateToProps = createSelector(
       items[account.account] = { account, type: 'overweight' }
     })
 
+    /**************** lowUptime ****************/
+    const lowUptime = reps.filter((a) => {
+      const uptime = a.get('uptime')
+      const online = uptime.filter((u) => u.online)
+      const total = uptime.length
+      const pct = online / total
+      return pct < 0.75
+    })
+    lowUptime.forEach((account) => {
+      items[account.account] = { account, type: 'low uptime' }
+    })
+
     /**************** behind ****************/
     const confirmationDifferentials = reps
       .map((a) => a.getIn(['telemetry', 'cemented_behind']))
