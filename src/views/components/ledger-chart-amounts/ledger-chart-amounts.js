@@ -74,7 +74,8 @@ export default class LedgerChartBlocks extends React.Component {
               <span>Description</span>
             </div>
             <div className='ledger__chart-section-body'>
-              The number of confirmed send blocks by amount per day.
+              The number of confirmed send-type blocks per day where the amount
+              in the block is in a given range (in Nano)
             </div>
           </div>
         </div>
