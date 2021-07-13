@@ -17,16 +17,6 @@ const mapStateToProps = createSelector(
   (reps, accounts, network) => {
     const items = {}
 
-    /**************** offline ****************/
-    const offline = reps.filter(
-      (a) =>
-        !a.get('is_online') &&
-        dayjs(a.get('last_seen') * 1000).isBefore(dayjs().subtract(1, 'hour'))
-    )
-    offline.forEach((account) => {
-      items[account.account] = { account, type: 'offline' }
-    })
-
     /**************** overweight ****************/
     const overweight = reps.filter((a) =>
       BigNumber(a.getIn(['account_meta', 'weight'])).isGreaterThan(
@@ -47,6 +37,16 @@ const mapStateToProps = createSelector(
     )
     behind.forEach((account) => {
       items[account.account] = { account, type: 'behind' }
+    })
+
+    /**************** offline ****************/
+    const offline = reps.filter(
+      (a) =>
+        !a.get('is_online') &&
+        dayjs(a.get('last_seen') * 1000).isBefore(dayjs().subtract(1, 'hour'))
+    )
+    offline.forEach((account) => {
+      items[account.account] = { account, type: 'offline' }
     })
 
     const sorted = Object.values(items).sort(
