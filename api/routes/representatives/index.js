@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
     const telemetryQuery = db('representatives_telemetry')
       .select(db.raw('max(timestamp) AS maxtime, account AS aid'))
       .groupBy('account')
-    const telemetry = await db
+    const telemetry = db
       .select('representatives_telemetry.*')
       .from(db.raw('(' + telemetryQuery.toString() + ') AS X'))
       .innerJoin('representatives_telemetry', function () {
@@ -36,7 +36,7 @@ router.get('/', async (req, res) => {
       .whereIn('account', accounts)
 
     /***********************************************************/
-    const uptime = await db('representatives_uptime_rollup_2hour')
+    const uptime = db('representatives_uptime_rollup_2hour')
       .whereIn('account', accounts)
       .orderBy('interval', 'asc')
 
@@ -44,7 +44,7 @@ router.get('/', async (req, res) => {
     const accountMetaQuery = db('accounts_meta')
       .select(db.raw('max(timestamp) AS maxtime, account AS aid'))
       .groupBy('account')
-    const accountMeta = await db
+    const accountMeta = db
       .select('accounts_meta.*')
       .from(db.raw('(' + accountMetaQuery.toString() + ') AS X'))
       .innerJoin('accounts_meta', function () {
@@ -59,7 +59,7 @@ router.get('/', async (req, res) => {
     const repMetaQuery = db('representatives_meta')
       .select(db.raw('max(timestamp) AS maxtime, account AS aid'))
       .groupBy('account')
-    const repMeta = await db
+    const repMeta = db
       .select('representatives_meta.*')
       .from(db.raw('(' + repMetaQuery.toString() + ') AS X'))
       .innerJoin('representatives_meta', function () {
@@ -74,7 +74,7 @@ router.get('/', async (req, res) => {
     const networkQuery = db('representatives_network')
       .select(db.raw('max(timestamp) AS maxtime, account AS aid'))
       .groupBy('account')
-    const network = await db
+    const network = db
       .select('representatives_network.*')
       .from(db.raw('(' + networkQuery.toString() + ') AS X'))
       .innerJoin('representatives_network', function () {
@@ -90,7 +90,7 @@ router.get('/', async (req, res) => {
       .select(db.raw('max(timestamp) AS maxtime, account AS aid'))
       .where({ online: true })
       .groupBy('account')
-    const online = await db
+    const online = db
       .select('representatives_uptime.*')
       .from(db.raw('(' + onlineQuery.toString() + ') AS X'))
       .innerJoin('representatives_uptime', function () {
@@ -106,7 +106,7 @@ router.get('/', async (req, res) => {
       .select(db.raw('max(timestamp) AS maxtime, account AS aid'))
       .where({ online: false })
       .groupBy('account')
-    const offline = await db
+    const offline = db
       .select('representatives_uptime.*')
       .from(db.raw('(' + offlineQuery.toString() + ') AS X'))
       .innerJoin('representatives_uptime', function () {
@@ -117,20 +117,33 @@ router.get('/', async (req, res) => {
       })
       .whereIn('account', accounts)
 
+    const queryResults = await Promise.all([
+      accountMeta, // 0
+      telemetry, // 1
+      uptime, // 2
+      network, // 3
+      repMeta, // 4
+      offline, // 5
+      online // 6
+    ])
+
+    console.log(Object.keys(queryResults))
+
     for (const rep of representatives) {
       rep.account_meta =
-        accountMeta.find((a) => a.account === rep.account) || {}
+        queryResults[0].find((a) => a.account === rep.account) || {}
       rep.representative_meta =
-        repMeta.find((a) => a.account === rep.account) || {}
-      rep.uptime = uptime
+        queryResults[4].find((a) => a.account === rep.account) || {}
+      rep.uptime = queryResults[2]
         .filter((a) => a.account === rep.account)
         .map(({ online, interval }) => ({ online, interval }))
-      rep.telemetry = telemetry.find((a) => a.account === rep.account) || {}
-      rep.network = network.find((a) => a.account === rep.account) || {}
+      rep.telemetry =
+        queryResults[1].find((a) => a.account === rep.account) || {}
+      rep.network = queryResults[3].find((a) => a.account === rep.account) || {}
 
-      const lastOnline = online.find((a) => a.account === rep.account)
+      const lastOnline = queryResults[6].find((a) => a.account === rep.account)
       rep.last_online = lastOnline ? lastOnline.timestamp : 0
-      const lastOffline = offline.find((a) => a.account === rep.account)
+      const lastOffline = queryResults[5].find((a) => a.account === rep.account)
       rep.last_offline = lastOffline ? lastOffline.timestamp : 0
     }
 
