@@ -20,6 +20,7 @@ export default class RepresentativeBlocksBehind extends React.Component {
     const option = {
       color: ['red'],
       tooltip: {
+        className: 'echarts-tooltip',
         trigger: 'axis'
       },
       xAxis: {

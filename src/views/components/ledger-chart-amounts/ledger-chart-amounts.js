@@ -3,7 +3,11 @@ import PropTypes from 'prop-types'
 import ReactEChartsCore from 'echarts-for-react/lib/core'
 import * as echarts from 'echarts/core'
 import { LineChart, BarChart, ThemeRiverChart } from 'echarts/charts'
-import { TooltipComponent, LegendComponent } from 'echarts/components'
+import {
+  TooltipComponent,
+  LegendComponent,
+  GridComponent
+} from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 
 echarts.use([
@@ -12,7 +16,8 @@ echarts.use([
   LegendComponent,
   LineChart,
   BarChart,
-  CanvasRenderer
+  CanvasRenderer,
+  GridComponent
 ])
 
 export default class LedgerChartBlocks extends React.Component {
@@ -36,11 +41,16 @@ export default class LedgerChartBlocks extends React.Component {
     }
 
     const option = {
+      grid: {
+        containLabel: true,
+        bottom: 120
+      },
       legend: {
         show: true,
         bottom: 0
       },
       tooltip: {
+        className: 'echarts-tooltip',
         trigger: 'axis'
       },
       xAxis: {
@@ -48,6 +58,7 @@ export default class LedgerChartBlocks extends React.Component {
       },
       yAxis: {
         type: 'log',
+        name: 'Blocks',
         min: 1
       },
       series: Object.entries(ranges).map((item) => ({
@@ -66,14 +77,14 @@ export default class LedgerChartBlocks extends React.Component {
         <ReactEChartsCore
           echarts={echarts}
           option={option}
-          style={{ width: '100%', height: '400px' }}
+          style={{ width: '100%', height: '600px' }}
         />
         <div className='ledger__chart-sections'>
           <div className='ledger__chart-section'>
             <div className='ledger__chart-section-heading'>
               <span>Description</span>
             </div>
-            <div className='ledger__chart-section-body'>
+            <div className='ledger__chart-section-body description'>
               The number of confirmed send-type blocks per day where the amount
               in the block is in a given range (in Nano)
             </div>

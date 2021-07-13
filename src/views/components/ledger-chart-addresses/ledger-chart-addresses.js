@@ -3,23 +3,37 @@ import PropTypes from 'prop-types'
 import ReactEChartsCore from 'echarts-for-react/lib/core'
 import * as echarts from 'echarts/core'
 import { LineChart } from 'echarts/charts'
-import { TooltipComponent, LegendComponent } from 'echarts/components'
+import {
+  TooltipComponent,
+  LegendComponent,
+  GridComponent
+} from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 
 import LedgerChartMetrics from '@components/ledger-chart-metrics'
 
-echarts.use([TooltipComponent, LegendComponent, LineChart, CanvasRenderer])
+echarts.use([
+  TooltipComponent,
+  LegendComponent,
+  LineChart,
+  CanvasRenderer,
+  GridComponent
+])
 
 export default class LedgerChartAddresses extends React.Component {
   render() {
     const { data } = this.props
 
     const option = {
+      grid: {
+        containLabel: true
+      },
       legend: {
         show: true,
         bottom: 0
       },
       tooltip: {
+        className: 'echarts-tooltip',
         trigger: 'axis'
       },
       xAxis: {
@@ -27,6 +41,7 @@ export default class LedgerChartAddresses extends React.Component {
       },
       yAxis: {
         type: 'log',
+        name: 'Addresses',
         min: 1
       },
       series: [
@@ -63,7 +78,7 @@ export default class LedgerChartAddresses extends React.Component {
             <div className='ledger__chart-section-heading'>
               <span>Description</span>
             </div>
-            <div className='ledger__chart-section-body'>
+            <div className='ledger__chart-section-body description'>
               The total number of unique and new addresses per day.
             </div>
           </div>

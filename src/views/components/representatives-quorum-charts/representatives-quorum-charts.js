@@ -19,6 +19,7 @@ export default class RepresentativesQuorumCharts extends React.Component {
     const { data, peerData } = this.props
     const commonOptions = {
       tooltip: {
+        className: 'echarts-tooltip',
         trigger: 'axis',
         formatter: (p) =>
           p
@@ -143,6 +144,7 @@ export default class RepresentativesQuorumCharts extends React.Component {
         data
       })),
       tooltip: {
+        className: 'echarts-tooltip',
         trigger: 'axis',
         formatter: (p) =>
           p
