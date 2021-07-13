@@ -11,6 +11,7 @@ import TableRow from '@material-ui/core/TableRow'
 import Chip from '@material-ui/core/Chip'
 import Tooltip from '@material-ui/core/Tooltip'
 import Skeleton from '@material-ui/lab/Skeleton'
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 
 import { timeago } from '@core/utils'
 
@@ -27,7 +28,7 @@ const getTooltipText = (type) => {
       return 'Representative has fallen behind or is bootstrapping. The cutoff is a cemented count beyond the 95th percentile. (via telemetry)'
 
     case 'overweight':
-      return 'Representative has beyond 3M Nano voting weight. Delegators should consider distributing the weight to improve the network\'s resilience and value.'
+      return "Representative has beyond 3M Nano voting weight. Delegators should consider distributing the weight to improve the network's resilience and value."
   }
 }
 
@@ -104,9 +105,13 @@ export default class RepresentativeAlerts extends React.Component {
                       </Tooltip>
                     </TableCell>
                     <TableCell align='right'>
-                      {timeago.format(
-                        row.account.last_online * 1000,
-                        'nano_short'
+                      {row.account.is_online ? (
+                        <FiberManualRecordIcon className='green' />
+                      ) : (
+                        timeago.format(
+                          row.account.last_online * 1000,
+                          'nano_short'
+                        )
                       )}
                     </TableCell>
                     <TableCell align='right'>
@@ -115,10 +120,12 @@ export default class RepresentativeAlerts extends React.Component {
                         .toFormat(0)}
                     </TableCell>
                     <TableCell align='right'>
-                      {(row.account.account_meta.weight && onlineWeight) ? `${BigNumber(row.account.account_meta.weight)
-                        .dividedBy(onlineWeight)
-                        .multipliedBy(100)
-                        .toFormat(2)} %` : '-'}
+                      {row.account.account_meta.weight && onlineWeight
+                        ? `${BigNumber(row.account.account_meta.weight)
+                            .dividedBy(onlineWeight)
+                            .multipliedBy(100)
+                            .toFormat(2)} %`
+                        : '-'}
                     </TableCell>
                     <TableCell align='right'>
                       {row.account.telemetry.cemented_behind >= 0
