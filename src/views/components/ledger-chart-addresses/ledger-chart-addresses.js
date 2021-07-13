@@ -57,6 +57,15 @@ export default class LedgerChartAddresses extends React.Component {
         {
           type: 'line',
           showSymbol: false,
+          name: 'Reused',
+          lineStyle: {
+            width: 1
+          },
+          data: data.reused_addresses
+        },
+        {
+          type: 'line',
+          showSymbol: false,
           name: 'New',
           lineStyle: {
             width: 1
@@ -79,7 +88,15 @@ export default class LedgerChartAddresses extends React.Component {
               <span>Description</span>
             </div>
             <div className='ledger__chart-section-body description'>
-              The total number of unique and new addresses per day.
+              <p>
+                The total number of active, new, and reused addresses used per
+                day.
+              </p>
+              <p>
+                Active shows the number of unique addresses used. New shows the
+                number of addresses created. Reused shows the number of
+                addresses used that were created on a previous day.
+              </p>
             </div>
           </div>
           <LedgerChartMetrics
