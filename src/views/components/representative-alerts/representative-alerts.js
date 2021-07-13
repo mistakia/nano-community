@@ -9,6 +9,7 @@ import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Chip from '@material-ui/core/Chip'
+import Tooltip from '@material-ui/core/Tooltip'
 import Skeleton from '@material-ui/lab/Skeleton'
 
 import { timeago } from '@core/utils'
@@ -16,6 +17,19 @@ import { timeago } from '@core/utils'
 import './representative-alerts.styl'
 
 const ITEMS_LIMIT = 7
+
+const getTooltipText = (type) => {
+  switch (type) {
+    case 'offline':
+      return 'Representative has stopped voting and appears offline.'
+
+    case 'behind':
+      return 'Representative has fallen behind or is bootstrapping. The cutoff is a cemented count beyond the 95th percentile. (via telemetry)'
+
+    case 'overweight':
+      return 'Representative has beyond 3M Nano voting weight. Delegators should consider distributing the weight to improve the network resilience and value.'
+  }
+}
 
 export default class RepresentativeAlerts extends React.Component {
   constructor(props) {
@@ -31,7 +45,7 @@ export default class RepresentativeAlerts extends React.Component {
   }
 
   render() {
-    const { items, isLoading } = this.props
+    const { items, isLoading, onlineWeight } = this.props
 
     return (
       <>
@@ -43,12 +57,16 @@ export default class RepresentativeAlerts extends React.Component {
                 <TableCell>Issue</TableCell>
                 <TableCell align='right'>Last Online</TableCell>
                 <TableCell align='right'>Weight</TableCell>
+                <TableCell align='right'>% Online</TableCell>
                 <TableCell align='right'>Behind</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {isLoading && (
                 <TableRow>
+                  <TableCell>
+                    <Skeleton height={30} />
+                  </TableCell>
                   <TableCell>
                     <Skeleton height={30} />
                   </TableCell>
@@ -76,12 +94,14 @@ export default class RepresentativeAlerts extends React.Component {
                       </Link>
                     </TableCell>
                     <TableCell>
-                      <Chip
-                        className={`rep__alert ${row.type}`}
-                        variant='outlined'
-                        size='small'
-                        label={row.type}
-                      />
+                      <Tooltip title={getTooltipText(row.type)}>
+                        <Chip
+                          className={`rep__alert ${row.type}`}
+                          variant='outlined'
+                          size='small'
+                          label={row.type}
+                        />
+                      </Tooltip>
                     </TableCell>
                     <TableCell align='right'>
                       {timeago.format(
@@ -93,6 +113,12 @@ export default class RepresentativeAlerts extends React.Component {
                       {BigNumber(row.account.account_meta.weight)
                         .shiftedBy(-30)
                         .toFormat(0)}
+                    </TableCell>
+                    <TableCell align='right'>
+                      {(row.account.account_meta.weight && onlineWeight) ? `${BigNumber(row.account.account_meta.weight)
+                        .dividedBy(onlineWeight)
+                        .multipliedBy(100)
+                        .toFormat(2)} %` : '-'}
                     </TableCell>
                     <TableCell align='right'>
                       {row.account.telemetry.cemented_behind >= 0
@@ -108,7 +134,7 @@ export default class RepresentativeAlerts extends React.Component {
                 <TableRow
                   className='representatives__alerts-expand'
                   onClick={this.handleClick}>
-                  <TableCell colSpan={5}>
+                  <TableCell colSpan={6}>
                     {this.state.expanded
                       ? 'Collapse'
                       : `Show ${items.length - ITEMS_LIMIT} more`}
@@ -125,5 +151,6 @@ export default class RepresentativeAlerts extends React.Component {
 
 RepresentativeAlerts.propTypes = {
   items: PropTypes.array,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  onlineWeight: PropTypes.number
 }
