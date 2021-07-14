@@ -9,6 +9,7 @@ export default class RepresentativeNetwork extends React.Component {
   render() {
     const { account } = this.props
 
+    const createdAt = account.getIn(['representative_meta', 'created_at'])
     const items = [
       {
         label: 'Last Seen',
@@ -20,10 +21,7 @@ export default class RepresentativeNetwork extends React.Component {
       },
       {
         label: 'First Seen',
-        value: timeago.format(
-          account.getIn(['representative_meta', 'created_at']) * 1000,
-          'nano_short'
-        )
+        value: createdAt ? timeago.format(createdAt * 1000, 'nano_short') : '-'
       },
       {
         label: 'Provider',

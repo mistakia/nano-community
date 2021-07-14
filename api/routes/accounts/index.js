@@ -4,7 +4,8 @@ const router = express.Router()
 
 const { rpc } = require('../../../common')
 const delegators = require('./delegators')
-const summary = require('./summary')
+const blocks = require('./blocks')
+const open = require('./open')
 
 router.get('/:address', async (req, res) => {
   const { logger, cache, db } = req.app.locals
@@ -26,7 +27,11 @@ router.get('/:address', async (req, res) => {
       return res.status(200).send(cachedAccount)
     }
 
-    const accountInfo = await rpc.accountInfo({ account: address })
+    const accountInfo = await rpc.accountInfo({
+      account: address,
+      pending: true,
+      representative: true
+    })
     const data = {
       account: address,
       account_meta: {
@@ -135,7 +140,8 @@ router.get('/:address', async (req, res) => {
   }
 })
 
-router.use('/:address/blocks/', summary)
+router.use('/:address/blocks', blocks)
 router.use('/:address/delegators', delegators)
+router.use('/:address/open', open)
 
 module.exports = router
