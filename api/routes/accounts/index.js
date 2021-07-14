@@ -4,6 +4,7 @@ const router = express.Router()
 
 const { rpc } = require('../../../common')
 const delegators = require('./delegators')
+const summary = require('./summary')
 
 router.get('/:address', async (req, res) => {
   const { logger, cache, db } = req.app.locals
@@ -134,6 +135,7 @@ router.get('/:address', async (req, res) => {
   }
 })
 
+router.use('/:address/blocks/', summary)
 router.use('/:address/delegators', delegators)
 
 module.exports = router
