@@ -31,7 +31,7 @@ router.get('/:type/summary', async (req, res) => {
     const limit = Math.min(parseInt(req.query.limit || 100, 0), 100)
     const offset = parseInt(req.query.offset, 0) || 0
 
-    const url = `${nanodbAPI}/accounts/${address}/transactions/${type}?limit=${limit}&offset=${offset}`
+    const url = `${nanodbAPI}/accounts/${address}/blocks/${type}/summary?limit=${limit}&offset=${offset}`
     const data = await request({ url })
     const addresses = data.map((d) => d.destination_account)
     const rows = await db('accounts')

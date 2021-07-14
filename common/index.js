@@ -109,14 +109,25 @@ const rpcRepresentativesOnline = ({ url } = {}) => {
   return rpcRequest(data, { url })
 }
 
-const rpcAccountInfo = ({ account, url } = {}) => {
+/* eslint-disable camelcase */
+const rpcAccountInfo = ({
+  account,
+  url,
+  representative = false,
+  pending = false,
+  include_confirmed = false
+} = {}) => {
   const data = {
     action: 'account_info',
     weight: true,
+    representative,
+    include_confirmed,
+    pending,
     account
   }
   return rpcRequest(data, { url })
 }
+/* eslint-enable camelcase */
 
 const rpcRepresentatives = ({ url } = {}) => {
   const data = {
