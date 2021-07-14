@@ -32,10 +32,17 @@ router.get('/:address', async (req, res) => {
       pending: true,
       representative: true
     })
+
     const data = {
       account: address,
       account_meta: {
         account: address,
+        modified_timestamp: BigNumber(
+          accountInfo.modified_timestamp
+        ).toNumber(),
+        account_version: BigNumber(accountInfo.account_version).toNumber(),
+        representative: accountInfo.representative,
+        pending: BigNumber(accountInfo.pending).toNumber(),
         balance: BigNumber(accountInfo.balance).toNumber(),
         block_count: BigNumber(accountInfo.block_count).toNumber(),
         weight: BigNumber(accountInfo.weight).toNumber(),
