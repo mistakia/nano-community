@@ -74,7 +74,7 @@ export default class RepresentativeUptime extends React.Component {
         : ''
 
     return (
-      <div className='account__section representative__uptime'>
+      <div className='representative__section representative__uptime'>
         <div className='representative__uptime-bar'>
           <Uptime data={uptime} expanded />
         </div>
