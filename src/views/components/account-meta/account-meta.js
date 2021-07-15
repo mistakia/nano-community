@@ -2,6 +2,7 @@ import React from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import dayjs from 'dayjs'
 import { Link } from 'react-router-dom'
+import BigNumber from 'bignumber.js'
 
 import { timeago } from '@core/utils'
 
@@ -12,6 +13,8 @@ export default class AccountMeta extends React.Component {
     const fundingAccount = account.getIn(['open', 'funding_account'], '')
     const fundingTimestamp = account.getIn(['open', 'funding_timestamp'])
     const openTimestamp = account.getIn(['open', 'open_timestamp'])
+    const openBalance = account.getIn(['open', 'open_balance'])
+    const pendingBalance = account.getIn(['account_meta', 'pending'])
     const modifiedTimestamp = account.getIn([
       'account_meta',
       'modified_timestamp'
@@ -34,7 +37,7 @@ export default class AccountMeta extends React.Component {
           ? `${dayjs(fundingTimestamp * 1000).format(
               'MMM D, YYYY h:mm a'
             )} (${timeago.format(fundingTimestamp * 1000, 'nano_short')} ago)`
-          : 'Unknown'
+          : '-'
       },
       {
         label: 'Open Timestamp',
@@ -42,15 +45,19 @@ export default class AccountMeta extends React.Component {
           ? `${dayjs(openTimestamp * 1000).format(
               'MMM D, YYYY h:mm a'
             )} (${timeago.format(openTimestamp * 1000, 'nano_short')} ago)`
-          : 'Unknown'
+          : '-'
       },
       {
         label: 'Opening Balance',
-        value: account.getIn(['open', 'open_balance'])
+        value: openBalance
+          ? BigNumber(openBalance).shiftedBy(-30).toFormat()
+          : '-'
       },
       {
         label: 'Receivable Balance',
-        value: account.getIn(['account_meta', 'pending'])
+        value: pendingBalance
+          ? BigNumber(pendingBalance).shiftedBy(-30).toFormat()
+          : '-'
       },
       {
         label: 'Version',
