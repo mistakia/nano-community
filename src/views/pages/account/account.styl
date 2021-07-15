@@ -16,6 +16,15 @@
   margin 8px
   box-shadow 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)
 
+  &.account__meta
+    flex 1 0 300px
+
+  &.account__balance
+    flex 1 0 200px
+
+  &.account__address
+    flex 3 0 300px
+
 .account__section-row
   position relative
   display flex
@@ -25,6 +34,16 @@
   border-bottom 1px solid rgba(0,0,0,0.08)
   font-family 'IBM Plex Mono', monospace
   font-size 12px
+
+  a
+    color $nanoSoftBlue
+    overflow hidden
+    text-overflow ellipsis
+    &:hover
+      text-decoration underline
+      text-decoration-color $nanoSoftBlue
+      text-decoration-thickness 2px
+      text-underline-offset 2px
 
 .account__section-row-label
   padding-right 24px
@@ -68,13 +87,8 @@
   align-items center
 
 .account__balance-nano
-.account__balance-raw
   display flex
   align-items baseline
-
-.account__balance-raw
-  color rgba(0,0,0,0.5)
-  font-size 10px
 
 .account__balance-nano-integer
   font-size 24px

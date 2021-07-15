@@ -10,6 +10,10 @@ export const api = {
     const url = `${API_URL}/accounts/${account}`
     return { url }
   },
+  getAccountOpen(account) {
+    const url = `${API_URL}/accounts/${account}/open`
+    return { url }
+  },
   getDaily() {
     const url = `${API_URL}/nanodb/ledger/daily`
     return { url }

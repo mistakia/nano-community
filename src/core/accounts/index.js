@@ -1,7 +1,8 @@
 export {
   accountsActions,
   representativesRequestActions,
-  accountRequestActions
+  accountRequestActions,
+  accountOpenRequestActions
 } from './actions'
 export { accountsReducer } from './reducer'
 export { accountSagas } from './sagas'

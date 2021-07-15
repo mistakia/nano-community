@@ -109,7 +109,9 @@ export default class Representatives extends React.Component {
         valueFormatter: (p) => {
           if (p.row.telemetry.bandwidth_cap === 0) return 'Unlimited'
           return p.row.telemetry.bandwidth_cap
-            ? (p.row.telemetry.bandwidth_cap / (1024 * 1024)).toFixed(1)
+            ? `${(p.row.telemetry.bandwidth_cap / (1024 * 1024)).toFixed(
+                0
+              )} Mb/s`
             : null
         },
         valueGetter: (p) => {
