@@ -18,7 +18,8 @@ import {
 } from '@core/network'
 import {
   representativesRequestActions,
-  accountRequestActions
+  accountRequestActions,
+  accountOpenRequestActions
 } from '@core/accounts'
 import { dailyRequestActions } from '@core/ledger'
 
@@ -54,6 +55,11 @@ export const getAccount = fetch.bind(
   null,
   api.getAccount,
   accountRequestActions
+)
+export const getAccountOpen = fetch.bind(
+  null,
+  api.getAccountOpen,
+  accountOpenRequestActions
 )
 export const getPosts = fetch.bind(null, api.getPosts, postlistRequestActions)
 export const getDoc = fetch.bind(null, api.getDoc, docRequestActions)

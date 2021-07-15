@@ -1,6 +1,6 @@
 import { takeEvery, fork, call, takeLatest } from 'redux-saga/effects'
 
-import { getRepresentatives, getAccount } from '@core/api'
+import { getRepresentatives, getAccount, getAccountOpen } from '@core/api'
 import { accountsActions } from './actions'
 
 export function* loadReps() {
@@ -10,6 +10,7 @@ export function* loadReps() {
 export function* loadAccount({ payload }) {
   const { account } = payload
   yield call(getAccount, account)
+  yield call(getAccountOpen, account)
 }
 
 //= ====================================

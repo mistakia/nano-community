@@ -13,6 +13,10 @@ export const accountsActions = {
   GET_ACCOUNT_PENDING: 'GET_ACCOUNT_PENDING',
   GET_ACCOUNT_FULFILLED: 'GET_ACCOUNT_FULFILLED',
 
+  GET_ACCOUNT_OPEN_FAILED: 'GET_ACCOUNT_OPEN_FAILED',
+  GET_ACCOUNT_OPEN_PENDING: 'GET_ACCOUNT_OPEN_PENDING',
+  GET_ACCOUNT_OPEN_FULFILLED: 'GET_ACCOUNT_OPEN_FULFILLED',
+
   filter: ({ field, value, label } = {}) => ({
     type: accountsActions.FILTER_REPRESENTATIVES,
     payload: {
@@ -84,6 +88,29 @@ export const accountsActions = {
       params,
       error
     }
+  }),
+
+  getAccountOpenPending: (params) => ({
+    type: accountsActions.GET_ACCOUNT_OPEN_PENDING,
+    payload: {
+      params
+    }
+  }),
+
+  getAccountOpenFulfilled: (params, data) => ({
+    type: accountsActions.GET_ACCOUNT_OPEN_FULFILLED,
+    payload: {
+      params,
+      data
+    }
+  }),
+
+  getAccountOpenFailed: (params, error) => ({
+    type: accountsActions.GET_ACCOUNT_OPEN_FAILED,
+    payload: {
+      params,
+      error
+    }
   })
 }
 
@@ -97,4 +124,10 @@ export const accountRequestActions = {
   failed: accountsActions.getAccountFailed,
   pending: accountsActions.getAccountPending,
   fulfilled: accountsActions.getAccountFulfilled
+}
+
+export const accountOpenRequestActions = {
+  failed: accountsActions.getAccountOpenFailed,
+  pending: accountsActions.getAccountOpenPending,
+  fulfilled: accountsActions.getAccountOpenFulfilled
 }

@@ -14,6 +14,8 @@ import RepresentativeConfirmationsBehind from '@components/representative-confir
 import RepresentativeBlocksBehind from '@components/representative-blocks-behind'
 import RepresentativePeers from '@components/representative-peers'
 
+import AccountMeta from '@components/account-meta'
+
 import Seo from '@components/seo'
 import Menu from '@components/menu'
 
@@ -92,8 +94,8 @@ export default class AccountPage extends React.Component {
               </div>
               <div className='account__balance-nano-unit'>nano</div>
             </div>
-            <div className='account__balance-raw'>{balance.toFixed()}</div>
           </div>
+          <AccountMeta account={account} />
           {Boolean(account.representative) && (
             <RepresentativeUptime account={account} />
           )}
