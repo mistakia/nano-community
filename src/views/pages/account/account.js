@@ -8,6 +8,7 @@ import Skeleton from '@material-ui/lab/Skeleton'
 
 import RepresentativeDelegators from '@components/representative-delegators'
 import RepresentativeUptime from '@components/representative-uptime'
+import RepresentativeInfo from '@components/representative-info'
 import RepresentativeNetwork from '@components/representative-network'
 import RepresentativeTelemetry from '@components/representative-telemetry'
 import RepresentativeConfirmationsBehind from '@components/representative-confirmations-behind'
@@ -77,62 +78,64 @@ export default class AccountPage extends React.Component {
           description='Information for nano representative'
           tags={['nano', 'representatives', 'network', 'account']}
         />
-        <div className='account__body'>
+        <div className='account__container'>
           <div className='account__alias'>
             <h1>{account.alias}</h1>
           </div>
-          <div className='account__section account__address'>
-            {account.account || <Skeleton animation='wave' width='90%' />}
-          </div>
-          <div className='account__section account__balance'>
-            <div className='account__balance-nano'>
-              <div className='account__balance-nano-integer'>
-                {BigNumber(nanoBalance[0]).toFormat()}
+          <div className='account__head'>
+            <div className='account__section account__address'>
+              {account.account || <Skeleton animation='wave' width='90%' />}
+            </div>
+            <div className='account__section account__balance'>
+              <div className='account__balance-nano'>
+                <div className='account__balance-nano-integer'>
+                  {BigNumber(nanoBalance[0]).toFormat()}
+                </div>
+                <div className='account__balance-nano-fraction'>
+                  .{nanoBalance[1]}
+                </div>
+                <div className='account__balance-nano-unit'>nano</div>
               </div>
-              <div className='account__balance-nano-fraction'>
-                .{nanoBalance[1]}
-              </div>
-              <div className='account__balance-nano-unit'>nano</div>
             </div>
           </div>
           <AccountMeta account={account} />
           {Boolean(account.representative) && (
-            <RepresentativeUptime account={account} />
-          )}
-          {Boolean(account.representative) && (
-            <RepresentativeNetwork account={account} />
-          )}
-          {Boolean(account.representative) && (
-            <RepresentativeTelemetry account={account} />
-          )}
-          {Boolean(account.representative) && (
-            <div className='representative__metrics'>
-              <Tabs
-                orientation='vertical'
-                variant='scrollable'
-                value={this.state.value}
-                className='representative__metrics-menu'
-                onChange={this.handleChange}>
-                <Tab label='Conf. Diff' />
-                <Tab label='Block Diff' />
-                <Tab label='Peer Count' />
-              </Tabs>
-              <TabPanel value={this.state.value} index={0}>
-                <RepresentativeConfirmationsBehind account={account} />
-              </TabPanel>
-              <TabPanel value={this.state.value} index={1}>
-                <RepresentativeBlocksBehind account={account} />
-              </TabPanel>
-              <TabPanel value={this.state.value} index={2}>
-                <RepresentativePeers account={account} />
-              </TabPanel>
+            <div className='representative__container'>
+              <div className='account__section-heading'>
+                <span>Representative</span>
+              </div>
+              <div className='representative__head'>
+                <RepresentativeInfo account={account} />
+                <RepresentativeUptime account={account} />
+              </div>
+              <RepresentativeNetwork account={account} />
+              <RepresentativeTelemetry account={account} />
+              <div className='representative__metrics'>
+                <Tabs
+                  orientation='vertical'
+                  variant='scrollable'
+                  value={this.state.value}
+                  className='representative__metrics-menu'
+                  onChange={this.handleChange}>
+                  <Tab label='Conf. Diff' />
+                  <Tab label='Block Diff' />
+                  <Tab label='Peer Count' />
+                </Tabs>
+                <TabPanel value={this.state.value} index={0}>
+                  <RepresentativeConfirmationsBehind account={account} />
+                </TabPanel>
+                <TabPanel value={this.state.value} index={1}>
+                  <RepresentativeBlocksBehind account={account} />
+                </TabPanel>
+                <TabPanel value={this.state.value} index={2}>
+                  <RepresentativePeers account={account} />
+                </TabPanel>
+              </div>
+              <RepresentativeDelegators
+                account={account}
+                address={`nano_${this.props.match.params.address}`}
+              />
             </div>
-          )}
-          {Boolean(account.representative) && (
-            <RepresentativeDelegators
-              account={account}
-              address={`nano_${this.props.match.params.address}`}
-            />
           )}
         </div>
         <div className='account__footer'>

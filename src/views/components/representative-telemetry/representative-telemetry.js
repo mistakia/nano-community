@@ -77,7 +77,14 @@ export default class RepresentativeTelemetry extends React.Component {
       </div>
     ))
 
-    return <div className='account__section'>{rows}</div>
+    return (
+      <div className='representative__section representative__telemetry'>
+        <div className='account__section-heading'>
+          <span>Telemetry</span>
+        </div>
+        {rows}
+      </div>
+    )
   }
 }
 
