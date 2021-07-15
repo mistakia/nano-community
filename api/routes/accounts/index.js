@@ -52,13 +52,12 @@ router.get('/:address', async (req, res) => {
       }
     }
 
-    const representatives = await db('accounts').where({
-      account: address,
-      representative: true
-    })
+    const representatives = await db('accounts').where({ account: address })
 
-    if (!representatives.length) {
+    // if not a representative
+    if (!representatives.length || !representatives[0].representative) {
       const account = {
+        alias: representatives.length ? representatives[0].alias : null,
         representative: false,
         representative_meta: {},
         uptime: [],
