@@ -67,9 +67,11 @@ export default class AccountPage extends React.Component {
   render() {
     const { account } = this.props
 
-    const balance = BigNumber(account.getIn(['account_meta', 'balance'], 0))
+    const balance = BigNumber(account.getIn(['account_meta', 'balance']) || 0)
     // convert to Nano and split into integer and fractional
     const nanoBalance = balance.shiftedBy(-30).toFixed(2).split('.')
+    const isLoading = account.get('is_loading')
+    const isOpened = account.getIn(['account_meta', 'height'])
 
     return (
       <>
@@ -98,7 +100,26 @@ export default class AccountPage extends React.Component {
               </div>
             </div>
           </div>
-          <AccountMeta account={account} />
+          {!isLoading && !isOpened ? (
+            <div className='account__unopened account__section'>
+              <h2>This account hasn&apos;t been opened yet</h2>
+              <p>
+                While the account address is valid, no blocks have been
+                observed. If NANO has been sent to this account, it still needs
+                to publish a corresponding block to receive the funds and
+                establish an opening balance. An accounts balance can only be
+                updated by the account holder as they are the only ones who can
+                publish blocks to their chain.
+              </p>
+              <p>
+                If an opening block has already been published, it may take a
+                few moments to spread through the network and be observed by the
+                nano.community nodes.
+              </p>
+            </div>
+          ) : (
+            <AccountMeta account={account} />
+          )}
           {Boolean(account.representative) && (
             <div className='representative__container'>
               <div className='account__section-heading'>

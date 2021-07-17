@@ -161,7 +161,7 @@ export default class DocPage extends React.Component {
         <div className='doc__container'>
           <div className='doc__content'>
             <h1>404</h1>
-            <p>Document not found</p>
+            <p>Document (or Account) not found</p>
           </div>
           <div className='doc__content-side'>
             <div className='doc__content-side-head' />

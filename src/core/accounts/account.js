@@ -1,6 +1,8 @@
 import { Record, Map, List } from 'immutable'
 
 export const Account = new Record({
+  is_loading: true,
+
   account: null,
   alias: null,
   watt_hour: null,
@@ -42,6 +44,7 @@ export function createAccount(data) {
   return new Account({
     ...data,
     is_online,
-    version
+    version,
+    is_loading: false
   })
 }
