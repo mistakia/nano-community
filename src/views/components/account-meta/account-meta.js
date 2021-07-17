@@ -15,6 +15,7 @@ export default class AccountMeta extends React.Component {
     const openTimestamp = account.getIn(['open', 'open_timestamp'])
     const openBalance = account.getIn(['open', 'open_balance'])
     const pendingBalance = account.getIn(['account_meta', 'pending'])
+    const height = account.getIn(['account_meta', 'confirmation_height'])
     const modifiedTimestamp = account.getIn([
       'account_meta',
       'modified_timestamp'
@@ -61,11 +62,11 @@ export default class AccountMeta extends React.Component {
       },
       {
         label: 'Version',
-        value: account.getIn(['account_meta', 'account_version'])
+        value: account.getIn(['account_meta', 'account_version'], '-')
       },
       {
         label: 'Height',
-        value: account.getIn(['account_meta', 'confirmation_height'])
+        value: height ? BigNumber(height).toFormat() : '-'
       },
       {
         label: 'Last Modified',
