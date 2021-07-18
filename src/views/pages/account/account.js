@@ -71,7 +71,7 @@ export default class AccountPage extends React.Component {
     // convert to Nano and split into integer and fractional
     const nanoBalance = balance.shiftedBy(-30).toFixed(2).split('.')
     const isLoading = account.get('is_loading')
-    const isOpened = account.getIn(['account_meta', 'height'])
+    const isOpened = account.getIn(['account_meta', 'block_count'])
 
     return (
       <>
