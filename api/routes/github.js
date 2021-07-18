@@ -4,16 +4,28 @@ const router = express.Router()
 router.get('/', async (req, res) => {
   const { logger, cache, db } = req.app.locals
   try {
-    const cachedEvents = cache.get('github')
+    let exclude = req.params.exclude || []
+    if (!Array.isArray(exclude)) {
+      exclude = [exclude]
+    }
+
+    const cacheKey = `/api/github/${exclude.join(',')}`
+    const cachedEvents = cache.get(cacheKey)
     if (cachedEvents) {
       return res.status(200).send(cachedEvents)
     }
 
-    const events = await db('github_events')
+    let query = await db('github_events')
       .orderBy('created_at', 'desc')
       .limit(20)
 
-    cache.set('github', events, 60)
+    if (exclude.length) {
+      query = query.whereNotIn('type', exclude)
+    }
+
+    const events = await query
+
+    cache.set(cacheKey, events, 60)
     res.status(200).send(events)
   } catch (error) {
     logger(error)

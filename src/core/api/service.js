@@ -31,7 +31,7 @@ export const api = {
     return { url }
   },
   getGithubEvents() {
-    const url = `${API_URL}/github`
+    const url = `${API_URL}/github?exclude=WatchEvent`
     return { url }
   },
   getNetworkStats() {
