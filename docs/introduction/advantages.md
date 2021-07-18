@@ -6,9 +6,9 @@ tags: nano, crypto, advantage, better, benefit, feeless, energy, green, sustaina
 
 # Advantages
 
-Nano, like Bitcoin, is a new form of money that's completely digital. Nano is not controlled by any person, company, or government. The development is open-source and the network is run by a global community of users. Nano can be used without having to trust or rely on any other user, developer, or operator on the network.
+Nano is a new form of money that's completely digital. Nano is not controlled by any person, company, or government. The development is open-source and the network is run by a global community of users. Nano can be used without having to trust or rely on any other user, developer, or operator on the network.
 
-Nano, unlike Bitcoin, is scalable, fast, asynchronous, uses minimal energy, operates without any fees, has deterministic finality, and is secured and controlled only by its holders.
+Nano, unlike other approaches, is scalable, instant, asynchronous, uses minimal energy, operates without any fees, has deterministic finality, and is secured and controlled only by its holders.
 
 #### Benefits over traditional money (i.e. fiat, gold, etc)
 
@@ -98,7 +98,7 @@ Starting with v22, Nano will use the account balance and the time since the last
 
 A good way to view it is that during congestion all accounts are guaranteed a throughput proportional to their stake in the network.
 
-When the network isn't congested, everything is instant. When it's congested, everyone has a guaranteed minimum throughput that's feeless.
+When the network isn't congested, everything is instant. When it's congested, everyone has a guaranteed minimum throughput that's feeless and instant.
 
 ### Nano is scalable
 
@@ -124,7 +124,7 @@ Nano was given away for free to anyone willing to manually complete a captcha. D
 
 7,000,000 NANO (~5%) was set aside as a <a href="https://www.nanolooker.com/developer-fund" target="_blank">developer fund</a>, of which about ~300,000 Nano remain as of April 2021.
 
-Because the distribution process was conducted on-chain, it is publicly available to be reviewed and audited by looking at the <a href="https://nanex.cc/accountstats?account=nano_13ezf4od79h1tgj9aiu4djzcmmguendtjfuhwfukhuucboua8cpoihmh8byo" target="_blank">Landing Account</a>.
+Because the distribution process was conducted on-chain, it is publicly available to be reviewed and audited by looking at the <a href="https://nanex.cc/accountstats?account=nano_35jjmmmh81kydepzeuf9oec8hzkay7msr6yxagzxpcht7thwa5bus5tomgz9" target="_blank">Core Faucet Account</a>.
 
 A few notable statistics compiled by <a href="https://www.reddit.com/r/nanocurrency/comments/h7fmge/the_nano_faucet_distribution_visualized_and/" target="_blank">u/hanzyfranzy</a>:
 
@@ -132,7 +132,7 @@ A few notable statistics compiled by <a href="https://www.reddit.com/r/nanocurre
 - There were a total of 130,814 faucet receive addresses.
 - The biggest faucet recipient received 1,724,105 Nano, likely from abusing the Captchas at the very beginning. These types of accounts appear to be very rare and they seem to have sold much of their Nano long before the initial runup in 2017.
 
-Nano's distribution is notable as 95% of the supply was given away for free. Unlike Bitcoin, Nano has been fully distributed since 2017 and has been undergoing the process of redistribution for over 4 years. Bitcoin is still being distributed and is increasingly ending up in the hands of fewer miners due to emergent centralization.
+Nano's distribution is notable as 95% of the supply was given away for free. Nano has been fully distributed since 2017.
 
 ### Nano is deterministic
 
@@ -178,6 +178,6 @@ Stateful blocks combined with a block-lattice structure allow for operation usin
 
 **Nano is like Bitcoin:** it is decentralized, making it permissionless, self-sovereign, and censorship-resistant. The development is open-source and the network is run by a global community of users. It can be used without having to trust or rely on any other user, developer, or operator on the network.
 
-**Nano is unlike Bitcoin:** is feeless, instant, irreversible, scalable, and energy-efficient. Making it inclusive to all people and sustainable for the planet. Nano's security and network are controlled only by its holders and does not need to contest with miners who profit and extract value from users and holders.
+**Nano is unlike Bitcoin:** it is feeless, instant, irreversible, scalable, and energy-efficient. Making it inclusive to all people and sustainable. Nano's security and network are controlled only by its holders. Since Nano has no mining, it does not have to deal with any of its issues: inflation, high resource consumption & waste, conflicting interests, fees, value extraction, etc).
 
 <a href="https://blog.oleganza.com/post/85111558553/bitcoin-is-like" target="_blank">Inspired by "Bitcoin is like..." by Oleg Andreev</a>
