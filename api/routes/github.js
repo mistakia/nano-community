@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
       return res.status(200).send(cachedEvents)
     }
 
-    let query = await db('github_events')
+    let query = db('github_events')
       .orderBy('created_at', 'desc')
       .limit(20)
 
