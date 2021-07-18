@@ -14,7 +14,6 @@ const jwt = require('jsonwebtoken')
 const expressJwt = require('express-jwt')
 const compression = require('compression')
 const debug = require('debug')
-const NodeCache = require('node-cache')
 const serveStatic = require('serve-static')
 const cors = require('cors')
 const favicon = require('express-favicon')
@@ -24,6 +23,7 @@ const logger = debug('api')
 
 const config = require('../config')
 const routes = require('./routes')
+const cache = require('./cache')
 const db = require('../db')
 require('./cron')
 // const sockets = require('./sockets')
@@ -43,7 +43,7 @@ const api = express()
 
 api.locals.db = db
 api.locals.logger = logger
-api.locals.cache = new NodeCache({ stdTTL: 600, checkperiod: 120 })
+api.locals.cache = cache
 
 api.enable('etag')
 api.disable('x-powered-by')
