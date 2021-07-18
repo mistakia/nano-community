@@ -70,9 +70,11 @@ export default class AccountMeta extends React.Component {
       },
       {
         label: 'Last Modified',
-        value: modifiedTimestamp ? `${dayjs(modifiedTimestamp * 1000).format(
-          'MMM D, YYYY h:mm a'
-        )} (${timeago.format(modifiedTimestamp * 1000, 'nano_short')} ago)` : '-'
+        value: modifiedTimestamp
+          ? `${dayjs(modifiedTimestamp * 1000).format(
+              'MMM D, YYYY h:mm a'
+            )} (${timeago.format(modifiedTimestamp * 1000, 'nano_short')} ago)`
+          : '-'
       }
     ]
 
