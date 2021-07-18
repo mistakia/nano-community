@@ -21,3 +21,7 @@
 
 ## delegators
 15 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-accounts-rep.js > /var/log/import-accounts-rep.log 2>&1
+
+## aliases
+18 3 * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-nanotipbot-twitter.js > /var/log/import-nanotipbot-twitter.log 2>&1
+18 4 * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-nanotipbot-telegram.js > /var/log/import-nanotipbot-telegram.log 2>&1
