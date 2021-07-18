@@ -11,9 +11,9 @@ tags: nano, buy, how, where, get, purchase, crypto, exchange, faucets, earn, gam
 Get some free Nano from community maintained and donated faucets to test it out.
 
 - <a href="https://nano-faucet.org/" target="_blank">nano-faucet.org</a>
+- <a href="https://nanodrop.io/" target="_blank">NanoDrop.io</a>
 - <a href="https://www.freenanofaucet.com/" target="_blank">freenanofaucet.com</a>
 - <a href="https://www.trynano.io/" target="_blank">trynano.io</a>
-- <a href="https://tetraloom.com/nano/" target="_blank">tetraloom.com</a>
 - <a href="http://nendlyy5734pdfflygapdayez6dcorodcio72jwfvaux4fsrzyh7rzqd.onion/faucet/" target="_blank">nendlyy5734...yh7rzqd.onion</a> (TOR)
 - <a href="https://apollonano.com/" target="_blank">apollonano.com</a>
 - <a href="https://nanocafe.cc/faucet" target="_blank">nanocafe.cc</a>
