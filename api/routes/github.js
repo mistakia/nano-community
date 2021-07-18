@@ -4,7 +4,7 @@ const router = express.Router()
 router.get('/', async (req, res) => {
   const { logger, cache, db } = req.app.locals
   try {
-    let exclude = req.params.exclude || []
+    let exclude = req.query.exclude || []
     if (!Array.isArray(exclude)) {
       exclude = [exclude]
     }
