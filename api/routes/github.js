@@ -15,9 +15,7 @@ router.get('/', async (req, res) => {
       return res.status(200).send(cachedEvents)
     }
 
-    let query = db('github_events')
-      .orderBy('created_at', 'desc')
-      .limit(20)
+    let query = db('github_events').orderBy('created_at', 'desc').limit(20)
 
     if (exclude.length) {
       query = query.whereNotIn('type', exclude)
