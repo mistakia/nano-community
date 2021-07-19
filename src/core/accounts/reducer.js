@@ -55,6 +55,17 @@ export function accountsReducer(state = initialState, { payload, type }) {
     case accountsActions.GET_ACCOUNT_OPEN_FULFILLED:
       return state.mergeIn(['items', payload.params, 'open'], payload.data)
 
+    case accountsActions.GET_ACCOUNT_BLOCKS_SUMMARY_FULFILLED:
+      return state.setIn(
+        [
+          'items',
+          payload.params.account,
+          'blocks_summary',
+          payload.params.type
+        ],
+        payload.data
+      )
+
     default:
       return state
   }
