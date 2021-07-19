@@ -35,11 +35,13 @@ export default class HomePage extends React.Component {
         />
         <div className='home__side'>
           <Menu />
-          <Network />
-          <Github />
         </div>
         <div className='home__body'>
           <RepresentativeAlerts />
+          <div className='home__sections'>
+            <Network />
+            <Github />
+          </div>
           <Posts title='Nano Foundation' id='announcements' age={36} />
           <Posts title='Top' id='top' age={168} />
           <Posts title='Trending' id='trending' age={72} />
