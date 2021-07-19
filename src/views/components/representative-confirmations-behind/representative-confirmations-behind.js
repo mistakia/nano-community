@@ -27,7 +27,8 @@ export default class RepresentativeConfirmationsBehind extends React.Component {
         type: 'time'
       },
       yAxis: {
-        type: 'value'
+        type: 'value',
+        name: 'Blocks'
       },
       series: [
         {
