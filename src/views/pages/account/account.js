@@ -17,6 +17,7 @@ import RepresentativeBlocksBehind from '@components/representative-blocks-behind
 import RepresentativePeers from '@components/representative-peers'
 
 import AccountMeta from '@components/account-meta'
+import AccountBlocksSummary from '@components/account-blocks-summary'
 
 import Seo from '@components/seo'
 import Menu from '@components/menu'
@@ -90,7 +91,7 @@ export default class AccountPage extends React.Component {
               {account.account || <Skeleton animation='wave' width='90%' />}
             </div>
             <div className='account__section account__balance'>
-              {account.getIn(['account_meta', 'balance']) ? (
+              {!isLoading ? (
                 <div className='account__balance-nano'>
                   <div className='account__balance-nano-integer'>
                     {BigNumber(nanoBalance[0]).toFormat()}
@@ -167,12 +168,27 @@ export default class AccountPage extends React.Component {
               </p>
             </div>
           ) : (
-            !isLoading && <AccountMeta account={account} />
+            !isLoading && (
+              <>
+                <AccountMeta account={account} />
+                <AccountBlocksSummary
+                  type='send'
+                  accountLabel='Receiving'
+                  account={account}
+                />
+                {/* <AccountBlocksSummary type='receive' accountLabel='Sending' account={account} /> */}
+                <AccountBlocksSummary
+                  type='change'
+                  accountLabel='Representative'
+                  account={account}
+                />
+              </>
+            )
           )}
         </div>
         {!isLoading && (
           <div className='account__footer'>
-            <Menu desktop />
+            <Menu />
           </div>
         )}
       </>

@@ -16,9 +16,9 @@ export function* loadAccount({ payload }) {
   const { account } = payload
   yield call(getAccount, account)
   yield call(getAccountOpen, account)
-  yield fork(getAccountBlocksSummary, { account, type: 'send' })
-  yield fork(getAccountBlocksSummary, { account, type: 'receive' })
-  yield fork(getAccountBlocksSummary, { account, type: 'change' })
+  yield fork(getAccountBlocksSummary, { account, type: 'send', limit: 10 })
+  // yield fork(getAccountBlocksSummary, { account, type: 'receive', limit: 10 })
+  yield fork(getAccountBlocksSummary, { account, type: 'change', limit: 10 })
 }
 
 //= ====================================
