@@ -27,7 +27,8 @@ export default class RepresentativePeers extends React.Component {
         type: 'time'
       },
       yAxis: {
-        type: 'value'
+        type: 'value',
+        name: 'Peers'
       },
       series: [
         {
