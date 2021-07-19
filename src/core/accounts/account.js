@@ -18,6 +18,8 @@ export const Account = new Record({
   delegators: new List(),
   open: new Map(),
 
+  blocks_summary: new Map(),
+
   last_online: null,
   last_offline: null,
   is_online: false,

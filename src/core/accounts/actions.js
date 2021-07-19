@@ -17,6 +17,10 @@ export const accountsActions = {
   GET_ACCOUNT_OPEN_PENDING: 'GET_ACCOUNT_OPEN_PENDING',
   GET_ACCOUNT_OPEN_FULFILLED: 'GET_ACCOUNT_OPEN_FULFILLED',
 
+  GET_ACCOUNT_BLOCKS_SUMMARY_FAILED: 'GET_ACCOUNT_BLOCKS_SUMMARY_FAILED',
+  GET_ACCOUNT_BLOCKS_SUMMARY_PENDING: 'GET_ACCOUNT_BLOCKS_SUMMARY_PENDING',
+  GET_ACCOUNT_BLOCKS_SUMMARY_FULFILLED: 'GET_ACCOUNT_BLOCKS_SUMMARY_FULFILLED',
+
   filter: ({ field, value, label } = {}) => ({
     type: accountsActions.FILTER_REPRESENTATIVES,
     payload: {
@@ -111,7 +115,36 @@ export const accountsActions = {
       params,
       error
     }
+  }),
+
+  getAccountBlocksSummaryFailed: (params, error) => ({
+    type: accountsActions.GET_ACCOUNT_BLOCKS_SUMMARY_FAILED,
+    payload: {
+      params,
+      error
+    }
+  }),
+
+  getAccountBlocksSummaryPending: (params) => ({
+    type: accountsActions.GET_ACCOUNT_BLOCKS_SUMMARY_PENDING,
+    payload: {
+      params
+    }
+  }),
+
+  getAccountBlocksSummaryFulfilled: (params, data) => ({
+    type: accountsActions.GET_ACCOUNT_BLOCKS_SUMMARY_FULFILLED,
+    payload: {
+      params,
+      data
+    }
   })
+}
+
+export const accountBlocksSummaryRequestActions = {
+  failed: accountsActions.getAccountBlocksSummaryFailed,
+  pending: accountsActions.getAccountBlocksSummaryPending,
+  fulfilled: accountsActions.getAccountBlocksSummaryFulfilled
 }
 
 export const representativesRequestActions = {

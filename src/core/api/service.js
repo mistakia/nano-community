@@ -14,6 +14,12 @@ export const api = {
     const url = `${API_URL}/accounts/${account}/open`
     return { url }
   },
+  getAccountBlocksSummary({ account, type, ...params }) {
+    const url = `${API_URL}/accounts/${account}/blocks/${type}/summary?${queryString.stringify(
+      params
+    )}`
+    return { url }
+  },
   getDaily() {
     const url = `${API_URL}/nanodb/ledger/daily`
     return { url }

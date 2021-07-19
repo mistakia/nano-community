@@ -19,7 +19,8 @@ import {
 import {
   representativesRequestActions,
   accountRequestActions,
-  accountOpenRequestActions
+  accountOpenRequestActions,
+  accountBlocksSummaryRequestActions
 } from '@core/accounts'
 import { dailyRequestActions } from '@core/ledger'
 
@@ -60,6 +61,11 @@ export const getAccountOpen = fetch.bind(
   null,
   api.getAccountOpen,
   accountOpenRequestActions
+)
+export const getAccountBlocksSummary = fetch.bind(
+  null,
+  api.getAccountBlocksSummary,
+  accountBlocksSummaryRequestActions
 )
 export const getPosts = fetch.bind(null, api.getPosts, postlistRequestActions)
 export const getDoc = fetch.bind(null, api.getDoc, docRequestActions)
