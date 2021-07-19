@@ -127,14 +127,17 @@
 .representative__metrics
   flex 1 1 100%
   display flex
-  border 1px solid $borderColor
-  border-radius 4px
+  flex-direction column
   margin 8px
   overflow hidden
 
 .representative__metrics-menu
-  border-right 1px solid $borderColor
-  background white
+  background #FFFEF2
+  font-family 'IBM Plex Mono', monospace
+  border 1px solid lighten($borderColor, 50%)
+  border-radius 4px
+  .MuiTab-root
+    text-transform capitalize
 
 .representative__metric
   flex 1
