@@ -124,7 +124,7 @@ export default class AccountPage extends React.Component {
               <RepresentativeTelemetry account={account} />
               <div className='representative__metrics'>
                 <Tabs
-                  orientation='vertical'
+                  orientation='horizontal'
                   variant='scrollable'
                   value={this.state.value}
                   className='representative__metrics-menu'
