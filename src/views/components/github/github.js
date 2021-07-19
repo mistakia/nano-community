@@ -44,7 +44,7 @@ const action = (item) => {
       return 'commented on pr review'
 
     case 'PushEvent':
-      return `pushed commit to ${item.ref}`
+      return `pushed commit to ${item.ref.slice(0, 15)}`
 
     case 'ReleaseEvent':
       return 'published release'
