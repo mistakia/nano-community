@@ -59,7 +59,7 @@ const link = (item) => {
     case 'ForkEvent':
     case 'CommitCommentEvent':
     case 'ReleaseEvent':
-      return item.ref
+      return item.ref.slice(0, 15)
 
     case 'IssueCommentEvent':
     case 'IssuesEvent':
