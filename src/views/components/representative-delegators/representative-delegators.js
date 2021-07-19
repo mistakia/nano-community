@@ -11,7 +11,21 @@ import { Link } from 'react-router-dom'
 
 import './representative-delegators.styl'
 
+const ITEMS_LIMIT = 10
+
 export default class RepresentativeDelegators extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      expanded: false
+    }
+  }
+
+  handleClick = () => {
+    this.setState({ expanded: !this.state.expanded })
+  }
+
   render() {
     const { account } = this.props
 
@@ -28,7 +42,10 @@ export default class RepresentativeDelegators extends React.Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {account.delegators.map((row) => (
+            {(this.state.expanded
+              ? account.delegators
+              : account.delegators.slice(0, ITEMS_LIMIT)
+            ).map((row) => (
               <TableRow key={row.account}>
                 <TableCell component='th' scope='row'>
                   <Link to={`/${row.account}`}>
@@ -46,6 +63,15 @@ export default class RepresentativeDelegators extends React.Component {
                 </TableCell>
               </TableRow>
             ))}
+            {account.delegators.length > ITEMS_LIMIT && (
+              <TableRow className='table__expand' onClick={this.handleClick}>
+                <TableCell colSpan={3}>
+                  {this.state.expanded
+                    ? 'Collapse'
+                    : `Show ${account.delegators.length - ITEMS_LIMIT} more`}
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
         <div className='representative__delegators-footer'>
