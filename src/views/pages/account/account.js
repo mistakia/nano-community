@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import Skeleton from '@material-ui/lab/Skeleton'
+import LinearProgress from '@material-ui/core/LinearProgress'
 
 import RepresentativeDelegators from '@components/representative-delegators'
 import RepresentativeUptime from '@components/representative-uptime'
@@ -89,36 +90,26 @@ export default class AccountPage extends React.Component {
               {account.account || <Skeleton animation='wave' width='90%' />}
             </div>
             <div className='account__section account__balance'>
-              <div className='account__balance-nano'>
-                <div className='account__balance-nano-integer'>
-                  {BigNumber(nanoBalance[0]).toFormat()}
+              {account.getIn(['account_meta', 'balance']) ? (
+                <div className='account__balance-nano'>
+                  <div className='account__balance-nano-integer'>
+                    {BigNumber(nanoBalance[0]).toFormat()}
+                  </div>
+                  <div className='account__balance-nano-fraction'>
+                    .{nanoBalance[1]}
+                  </div>
+                  <div className='account__balance-nano-unit'>nano</div>
                 </div>
-                <div className='account__balance-nano-fraction'>
-                  .{nanoBalance[1]}
-                </div>
-                <div className='account__balance-nano-unit'>nano</div>
-              </div>
+              ) : (
+                <Skeleton animation='wave' width='90%' />
+              )}
             </div>
           </div>
-          {!isLoading && !isOpened ? (
-            <div className='account__unopened account__section'>
-              <h2>This account hasn&apos;t been opened yet</h2>
-              <p>
-                While the account address is valid, no blocks have been
-                observed. If NANO has been sent to this account, it still needs
-                to publish a corresponding block to receive the funds and
-                establish an opening balance. An accounts balance can only be
-                updated by the account holder as they are the only ones who can
-                publish blocks to their chain.
-              </p>
-              <p>
-                If an opening block has already been published, it may take a
-                few moments to spread through the network and be observed by the
-                nano.community nodes.
-              </p>
-            </div>
-          ) : (
-            <AccountMeta account={account} />
+          {isLoading && (
+            <LinearProgress
+              color='secondary'
+              style={{ width: '100%', margin: '32px' }}
+            />
           )}
           {Boolean(account.representative) && (
             <div className='representative__container'>
@@ -158,10 +149,32 @@ export default class AccountPage extends React.Component {
               />
             </div>
           )}
+          {!isLoading && !isOpened ? (
+            <div className='account__unopened account__section'>
+              <h2>This account hasn&apos;t been opened yet</h2>
+              <p>
+                While the account address is valid, no blocks have been
+                observed. If NANO has been sent to this account, it still needs
+                to publish a corresponding block to receive the funds and
+                establish an opening balance. An accounts balance can only be
+                updated by the account holder as they are the only ones who can
+                publish blocks to their chain.
+              </p>
+              <p>
+                If an opening block has already been published, it may take a
+                few moments to spread through the network and be observed by the
+                nano.community nodes.
+              </p>
+            </div>
+          ) : (
+            !isLoading && <AccountMeta account={account} />
+          )}
         </div>
-        <div className='account__footer'>
-          <Menu desktop />
-        </div>
+        {!isLoading && (
+          <div className='account__footer'>
+            <Menu desktop />
+          </div>
+        )}
       </>
     )
   }
