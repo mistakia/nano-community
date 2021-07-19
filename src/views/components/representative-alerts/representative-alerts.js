@@ -141,9 +141,7 @@ export default class RepresentativeAlerts extends React.Component {
                 )
               )}
               {items.length > ITEMS_LIMIT && (
-                <TableRow
-                  className='representatives__alerts-expand'
-                  onClick={this.handleClick}>
+                <TableRow className='table__expand' onClick={this.handleClick}>
                   <TableCell colSpan={6}>
                     {this.state.expanded
                       ? 'Collapse'
