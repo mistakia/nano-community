@@ -105,8 +105,8 @@ export default class Github extends React.Component {
           {Boolean(items.size) && items}
           {!items.size &&
             skeletons.map((i, idx) => (
-              <div className='github__event'>
-                <Skeleton key={idx} animation='wave' width='100%' />
+              <div className='github__event' key={idx}>
+                <Skeleton animation='wave' width='100%' />
               </div>
             ))}
         </div>

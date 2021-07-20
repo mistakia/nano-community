@@ -38,12 +38,12 @@ export default class HomePage extends React.Component {
         </div>
         <div className='home__body'>
           <RepresentativeAlerts />
+          <Posts title='Nano Foundation' id='announcements' age={36} />
+          <Posts title='Top' id='top' age={168} />
           <div className='home__sections'>
             <Network />
             <Github />
           </div>
-          <Posts title='Nano Foundation' id='announcements' age={36} />
-          <Posts title='Top' id='top' age={168} />
           <Posts title='Trending' id='trending' age={72} />
         </div>
       </div>

@@ -61,14 +61,14 @@ const mapStateToProps = createSelector(
       items[account.account] = { account, type: 'offline' }
     })
 
-    const sorted = Object.values(items).sort(
-      (a, b) =>
-        b.account.getIn(['account_meta', 'weight']) -
-        a.account.getIn(['account_meta', 'weight'])
-    )
+    const sortByWeight = (a, b) =>
+      b.getIn(['account_meta', 'weight']) - a.getIn(['account_meta', 'weight'])
 
     return {
-      items: sorted,
+      offline: offline.sort(sortByWeight),
+      behind: behind.sort(sortByWeight),
+      overweight: overweight.sort(sortByWeight),
+      lowUptime: lowUptime.sort(sortByWeight),
       isLoading: accounts.get('isLoading'),
       onlineWeight: network.getIn(['weight', 'onlineWeight', 'median'], 0)
     }

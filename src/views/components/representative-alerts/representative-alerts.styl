@@ -1,7 +1,8 @@
 .representatives__alerts
   margin 32px 0
   border-radius 4px
-  box-shadow 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)
+  display flex
+  flex-wrap wrap
   .MuiTableRow-root
     background white
     &.low.uptime
@@ -11,20 +12,60 @@
     &.offline
       background lighten(#bf4f4f, 95%)
 
-.rep__alert
+.representatives__alert-section
+  position relative
+  flex 1 0 200px
+  display flex
+  flex-direction column
+  padding 16px
+  margin 16px
+  border-radius 8px
+  box-shadow 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)
+
+  a
+    color $nanoSoftBlue
+    overflow hidden
+    text-overflow ellipsis
+    &:hover
+      text-decoration underline
+      text-decoration-color $nanoSoftBlue
+      text-decoration-thickness 2px
+      text-underline-offset 2px
+
   .MuiChip-label
     text-transform uppercase
     font-size 10px
 
-  &.overweight
-    background #E5F0F9
-    border-color transparent
+  &.info
+    background lighten(#E5F0F9, 70%)
 
-  &.low.uptime
-  &.behind
-    background darken(#FEF8EA, 10%)
-    border-color transparent
+  &.warning
+    background darken(#FEF8EA, 2%)
 
-  &.offline
-    border-color #bf4f4f
-    color #bf4f4f
+  &.error
+    background lighten(#FFEFE2, 20%)
+
+.rep__alert-title
+  font-family 'IBM Plex Mono', monospace
+  font-weight 800
+  font-size 14px
+  letter-spacing 0.2em
+  margin-bottom 8px
+
+.rep__alert-rows
+  flex 1
+  display flex
+  flex-direction column
+  justify-content flex-end
+
+.rep__alert-row
+  border-bottom 1px solid lighten($borderColor, 40%)
+  padding 6px 0
+  font-family 'Inter', sans-serif
+  font-size 14px
+  display flex
+  justify-content space-between
+
+.rep__alert-row-pct
+  font-family 'IBM Plex Mono', monospace
+  font-size 12px
