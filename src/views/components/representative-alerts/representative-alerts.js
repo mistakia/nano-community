@@ -1,164 +1,113 @@
 import React from 'react'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 import PropTypes from 'prop-types'
 import BigNumber from 'bignumber.js'
 import { Link } from 'react-router-dom'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableContainer from '@material-ui/core/TableContainer'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import Chip from '@material-ui/core/Chip'
 import Tooltip from '@material-ui/core/Tooltip'
-import Skeleton from '@material-ui/lab/Skeleton'
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
-
-import { timeago } from '@core/utils'
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
 
 import './representative-alerts.styl'
 
-const ITEMS_LIMIT = 7
-
 const getTooltipText = (type) => {
   switch (type) {
-    case 'offline':
+    case 'Offline':
       return 'Representative has stopped voting and appears offline.'
 
-    case 'behind':
+    case 'Behind':
       return 'Representative has fallen behind or is bootstrapping. The cutoff is a cemented count beyond the 95th percentile. (via telemetry)'
 
-    case 'overweight':
+    case 'Overweight':
       return "Representative has beyond 3M Nano voting weight. Delegators should consider distributing the weight to improve the network's resilience and value."
 
-    case 'low uptime':
+    case 'Low Uptime':
       return 'Representative has been offline more than 25% in the last 28 days.'
   }
 }
 
+function Section({ items, title, level, onlineWeight }) {
+  return (
+    <div className={`representatives__alert-section ${level}`}>
+      <div className='rep__alert-title'>{title}</div>
+      <Tooltip title={getTooltipText(title)} className='metric__card-tooltip'>
+        <HelpOutlineIcon />
+      </Tooltip>
+      <div className='rep__alert-rows'>
+        {items.map((i, idx) => (
+          <div className='rep__alert-row' key={idx}>
+            <div>
+              <Link to={`/${i.account}`}>
+                {i.alias || `${i.account.slice(0, 15)}...`}
+              </Link>
+            </div>
+            <div className='rep__alert-row-pct'>
+              {i.account_meta.weight && onlineWeight
+                ? `${BigNumber(i.account_meta.weight)
+                    .dividedBy(onlineWeight)
+                    .multipliedBy(100)
+                    .toFormat(2)} %`
+                : '-'}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+Section.propTypes = {
+  items: ImmutablePropTypes.list,
+  title: PropTypes.string,
+  level: PropTypes.string,
+  onlineWeight: PropTypes.number
+}
+
 export default class RepresentativeAlerts extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      expanded: false
-    }
-  }
-
-  handleClick = () => {
-    this.setState({ expanded: !this.state.expanded })
-  }
-
   render() {
-    const { items, isLoading, onlineWeight } = this.props
+    const {
+      offline,
+      behind,
+      overweight,
+      lowUptime,
+      isLoading,
+      onlineWeight
+    } = this.props
 
     return (
-      <>
-        <TableContainer className='representatives__alerts'>
-          <Table size='small'>
-            <TableHead>
-              <TableRow>
-                <TableCell>Representative</TableCell>
-                <TableCell>Issue</TableCell>
-                <TableCell align='right'>Last Online</TableCell>
-                <TableCell align='right'>Weight</TableCell>
-                <TableCell align='right'>% Online</TableCell>
-                <TableCell align='right'>Behind</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {isLoading && (
-                <TableRow>
-                  <TableCell>
-                    <Skeleton height={30} />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton height={30} />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton height={30} />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton height={30} />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton height={30} />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton height={30} />
-                  </TableCell>
-                </TableRow>
-              )}
-              {(this.state.expanded ? items : items.slice(0, ITEMS_LIMIT)).map(
-                (row, idx) => (
-                  <TableRow key={idx} className={row.type}>
-                    <TableCell component='th' scope='row'>
-                      <Link to={`/${row.account.account}`}>
-                        {row.account.alias ||
-                          `${row.account.account.slice(0, 15)}...`}
-                      </Link>
-                    </TableCell>
-                    <TableCell>
-                      <Tooltip title={getTooltipText(row.type)}>
-                        <Chip
-                          className={`rep__alert ${row.type}`}
-                          variant='outlined'
-                          size='small'
-                          label={row.type}
-                        />
-                      </Tooltip>
-                    </TableCell>
-                    <TableCell align='right'>
-                      {row.account.is_online ? (
-                        <FiberManualRecordIcon className='green' />
-                      ) : (
-                        timeago.format(
-                          row.account.last_online * 1000,
-                          'nano_short'
-                        )
-                      )}
-                    </TableCell>
-                    <TableCell align='right'>
-                      {BigNumber(row.account.account_meta.weight)
-                        .shiftedBy(-30)
-                        .toFormat(0)}
-                    </TableCell>
-                    <TableCell align='right'>
-                      {row.account.account_meta.weight && onlineWeight
-                        ? `${BigNumber(row.account.account_meta.weight)
-                            .dividedBy(onlineWeight)
-                            .multipliedBy(100)
-                            .toFormat(2)} %`
-                        : '-'}
-                    </TableCell>
-                    <TableCell align='right'>
-                      {row.account.telemetry.cemented_behind >= 0
-                        ? BigNumber(
-                            row.account.telemetry.cemented_behind
-                          ).toFormat(0)
-                        : '-'}
-                    </TableCell>
-                  </TableRow>
-                )
-              )}
-              {items.length > ITEMS_LIMIT && (
-                <TableRow className='table__expand' onClick={this.handleClick}>
-                  <TableCell colSpan={6}>
-                    {this.state.expanded
-                      ? 'Collapse'
-                      : `Show ${items.length - ITEMS_LIMIT} more`}
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </>
+      <div className='representatives__alerts'>
+        <Section
+          items={offline}
+          title='Offline'
+          level='error'
+          onlineWeight={onlineWeight}
+        />
+        <Section
+          items={behind}
+          title='Behind'
+          level='warning'
+          onlineWeight={onlineWeight}
+        />
+        <Section
+          items={lowUptime}
+          title='Low Uptime'
+          level='warning'
+          onlineWeight={onlineWeight}
+        />
+        <Section
+          items={overweight}
+          title='Overweight'
+          level='info'
+          onlineWeight={onlineWeight}
+        />
+      </div>
     )
   }
 }
 
 RepresentativeAlerts.propTypes = {
-  items: PropTypes.array,
+  offline: ImmutablePropTypes.list,
+  overweight: ImmutablePropTypes.list,
+  lowUptime: ImmutablePropTypes.list,
+  behind: ImmutablePropTypes.list,
   isLoading: PropTypes.bool,
   onlineWeight: PropTypes.number
 }
