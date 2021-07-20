@@ -1,5 +1,6 @@
 import React from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes'
+import Skeleton from '@material-ui/lab/Skeleton'
 
 import { timeago } from '@core/utils'
 
@@ -95,11 +96,20 @@ export default class Github extends React.Component {
 
     const { events } = this.props
     const items = events.map((i, idx) => GithubEvent(i, idx))
+    const skeletons = new Array(15).fill(undefined)
 
     return (
       <div className='github__container'>
         <div className='github__title'>Development Events</div>
-        <div className='github__events'>{items}</div>
+        <div className='github__events'>
+          {Boolean(items.size) && items}
+          {!items.size &&
+            skeletons.map((i, idx) => (
+              <div className='github__event'>
+                <Skeleton key={idx} animation='wave' width='100%' />
+              </div>
+            ))}
+        </div>
       </div>
     )
   }
