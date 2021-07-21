@@ -6,7 +6,7 @@ tags: nano, crypto, analysis, adoption, future, inflation, potential, supply, us
 
 # Why it matters
 
-Nano is a scarce digital asset with an unchangeable monetary policy: its supply is fixed and fully distributed, thus has no inflation. Only 133 million Nano will ever exist. It operates independently of the fiat money system, yet is a liquid, globally tradeable asset. It is self-sovereign and can be self-stored or custodied with 3rd parties. It can be securely and instantly transferred between parties with no pre-existing trust and with zero fees.
+Nano is a scarce digital asset with an unchangeable monetary policy: its supply is fixed and fully distributed and thus has no inflation. Only 133 million Nano will ever exist. It operates independently of the fiat money system, yet is a liquid, globally tradeable asset. It is self-sovereign and can be self-stored or custodied with 3rd parties. It can be securely and instantly transferred between parties with no pre-existing trust and with zero fees.
 
 It is capable of being a strong <a href="https://en.wikipedia.org/wiki/Store_of_value" target="_blank">store of value</a> (SoV) and a frictionless <a href="https://en.wikipedia.org/wiki/Medium_of_exchange" target="_blank">medium of exchange</a> (MoE), making it one of the most advanced forms of money to ever exist.
 
