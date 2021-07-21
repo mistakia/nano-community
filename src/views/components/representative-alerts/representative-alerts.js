@@ -101,13 +101,14 @@ export default class RepresentativeAlerts extends React.Component {
                       <Tooltip title={getTooltipText(row.type)}>
                         <Chip
                           className={`rep__alert ${row.type}`}
-                          variant='outlined'
                           size='small'
                           label={row.type}
                         />
                       </Tooltip>
                     </TableCell>
-                    <TableCell align='right'>
+                    <TableCell
+                      className='rep__alert-metric offline'
+                      align='right'>
                       {row.account.is_online ? (
                         <FiberManualRecordIcon className='green' />
                       ) : (
@@ -117,12 +118,12 @@ export default class RepresentativeAlerts extends React.Component {
                         )
                       )}
                     </TableCell>
-                    <TableCell align='right'>
+                    <TableCell className='rep__alert-metric' align='right'>
                       {BigNumber(row.account.account_meta.weight)
                         .shiftedBy(-30)
                         .toFormat(0)}
                     </TableCell>
-                    <TableCell align='right'>
+                    <TableCell className='rep__alert-metric' align='right'>
                       {row.account.account_meta.weight && onlineWeight
                         ? `${BigNumber(row.account.account_meta.weight)
                             .dividedBy(onlineWeight)
@@ -130,7 +131,7 @@ export default class RepresentativeAlerts extends React.Component {
                             .toFormat(2)} %`
                         : '-'}
                     </TableCell>
-                    <TableCell align='right'>
+                    <TableCell className='rep__alert-metric' align='right'>
                       {row.account.telemetry.cemented_behind >= 0
                         ? BigNumber(
                             row.account.telemetry.cemented_behind
