@@ -6,18 +6,26 @@
 
 .rep__alert
   .MuiChip-label
-    text-transform uppercase
-    font-size 10px
+    text-transform capitalize
+    font-size 12px
+    font-weight 600
+    font-family 'IBM Plex Mono', monospace !important
 
   &.overweight
     background #E5F0F9
-    border-color transparent
 
   &.low.uptime
   &.behind
     background darken(#FEF8EA, 10%)
-    border-color transparent
 
   &.offline
-    border-color #bf4f4f
+    background lighten(#FFEFE2, 20%)
+    color #bf4f4f
+    border 1px solid #bf4f4f
+
+.rep__alert-metric
+  font-family 'IBM Plex Mono', monospace !important
+
+  &.offline
+    font-weight 600
     color #bf4f4f
