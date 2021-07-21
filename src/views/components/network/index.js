@@ -1,14 +1,15 @@
 import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
 
-import { getNetwork, getNetworkWattHour } from '@core/network'
+import { getNetwork, getNetworkStats, getNetworkWattHour } from '@core/network'
 
 import Network from './network'
 
 const mapStateToProps = createSelector(
   getNetwork,
+  getNetworkStats,
   getNetworkWattHour,
-  (network, wattHour) => ({ network, wattHour })
+  (network, stats, wattHour) => ({ network, stats, wattHour })
 )
 
 export default connect(mapStateToProps)(Network)
