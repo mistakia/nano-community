@@ -14,8 +14,14 @@ const mapStateToProps = createSelector(
   getRepresentatives,
   getAccounts,
   getNetwork,
-  (reps, accounts, network) => {
+  (representatives, accounts, network) => {
     const items = {}
+
+    const reps = representatives.filter((a) =>
+      BigNumber(a.getIn(['account_meta', 'weight'])).isGreaterThan(
+        1e34
+      )
+    )
 
     /**************** overweight ****************/
     const overweight = reps.filter((a) =>
@@ -24,7 +30,7 @@ const mapStateToProps = createSelector(
       )
     )
     overweight.forEach((account) => {
-      items[account.account] = { account, type: 'overweight' }
+      items[account.account] = { account, type: 'overweight', severity: 1 }
     })
 
     /**************** lowUptime ****************/
@@ -36,7 +42,7 @@ const mapStateToProps = createSelector(
       return pct < 0.75
     })
     lowUptime.forEach((account) => {
-      items[account.account] = { account, type: 'low uptime' }
+      items[account.account] = { account, type: 'low uptime', severity: 2 }
     })
 
     /**************** behind ****************/
@@ -48,7 +54,7 @@ const mapStateToProps = createSelector(
       (a) => a.getIn(['telemetry', 'cemented_behind'], 0) > p95
     )
     behind.forEach((account) => {
-      items[account.account] = { account, type: 'behind' }
+      items[account.account] = { account, type: 'behind', severity: 2 }
     })
 
     /**************** offline ****************/
@@ -58,17 +64,18 @@ const mapStateToProps = createSelector(
         dayjs(a.get('last_seen') * 1000).isBefore(dayjs().subtract(1, 'hour'))
     )
     offline.forEach((account) => {
-      items[account.account] = { account, type: 'offline' }
+      items[account.account] = { account, type: 'offline', severity: 3 }
     })
 
-    const sortByWeight = (a, b) =>
-      b.getIn(['account_meta', 'weight']) - a.getIn(['account_meta', 'weight'])
+    const sorted = Object.values(items).sort(
+      (a, b) =>
+        b.severity - a.severity ||
+        b.account.getIn(['account_meta', 'weight']) -
+        a.account.getIn(['account_meta', 'weight'])
+    )
 
     return {
-      offline: offline.sort(sortByWeight),
-      behind: behind.sort(sortByWeight),
-      overweight: overweight.sort(sortByWeight),
-      lowUptime: lowUptime.sort(sortByWeight),
+      items: sorted,
       isLoading: accounts.get('isLoading'),
       onlineWeight: network.getIn(['weight', 'onlineWeight', 'median'], 0)
     }
