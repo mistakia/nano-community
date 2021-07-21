@@ -18,9 +18,7 @@ const mapStateToProps = createSelector(
     const items = {}
 
     const reps = representatives.filter((a) =>
-      BigNumber(a.getIn(['account_meta', 'weight'])).isGreaterThan(
-        1e34
-      )
+      BigNumber(a.getIn(['account_meta', 'weight'])).isGreaterThan(1e34)
     )
 
     /**************** overweight ****************/
@@ -71,7 +69,7 @@ const mapStateToProps = createSelector(
       (a, b) =>
         b.severity - a.severity ||
         b.account.getIn(['account_meta', 'weight']) -
-        a.account.getIn(['account_meta', 'weight'])
+          a.account.getIn(['account_meta', 'weight'])
     )
 
     return {

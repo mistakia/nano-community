@@ -21,7 +21,7 @@ const action = (item) => {
       return 'forked'
 
     case 'IssueCommentEvent':
-      return `${item.action} issue`
+      return `commented on issue`
 
     case 'IssuesEvent':
       return `${item.action} issue`
