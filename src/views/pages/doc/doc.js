@@ -196,7 +196,7 @@ export default class DocPage extends React.Component {
               )}
               {Boolean(authors.length) && (
                 <div className='doc__content-contributors'>
-                  {authors.length} Contibutor{authors.length !== 1 ? 's' : ''}.{' '}
+                  {authors.length} Contributor{authors.length !== 1 ? 's' : ''}.{' '}
                   <a
                     href='https://github.com/mistakia/nano-community/blob/main/CONTRIBUTING.md'
                     rel='noreferrer'
