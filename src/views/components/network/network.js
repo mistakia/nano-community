@@ -11,7 +11,7 @@ const formatNumber = (x) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
 export default class Network extends React.Component {
   render() {
-    const { network, wattHour } = this.props
+    const { network, wattHour, stats } = this.props
 
     const prText =
       'as observed across the networks principal representatives: voting nodes with more than 0.1% of the online voting weight delegated to them'
@@ -29,7 +29,7 @@ export default class Network extends React.Component {
     const confirmText =
       'The minimum number of representatives needed to confirm transactions'
     const censorText =
-      'The minimum number of representatives needed to censor transactions'
+      'The minimum number of representatives needed to censor transactions or stall the network'
     const feeText = 'The Nano network operates without fees'
     const energyText =
       'Estimated live network CPU energy usage of Principle Representatives based on collected CPU model info. The estimate is based on CPU TDP, which is the average power, in watts, the processor dissipates when operating at base frequency with all cores active under manufacture-defined, high-complexity workload'
@@ -120,7 +120,7 @@ export default class Network extends React.Component {
         </div>
         <div className='network__stat'>
           <div>Principal Reps</div>
-          <div>{network.getIn(['stats', 'prCount'], '-')}</div>
+          <div>{stats.prCount || '-'}</div>
         </div>
         <div className='network__stat'>
           <div>Total Reps (24h)</div>
@@ -137,16 +137,16 @@ export default class Network extends React.Component {
               <HelpOutlineIcon fontSize='inherit' />
             </Tooltip>
           </div>
-          <div>{network.getIn(['stats', 'confirmReps'], '-')}</div>
+          <div>{stats.confirmReps || '-'}</div>
         </div>
         <div className='network__stat'>
           <div>
-            Reps to Censor
+            Reps to Censor or Stall
             <Tooltip title={censorText}>
               <HelpOutlineIcon fontSize='inherit' />
             </Tooltip>
           </div>
-          <div>{network.getIn(['stats', 'censorReps'], '-')}</div>
+          <div>{stats.censorReps || '-'}</div>
         </div>
         <div className='network__stat'>
           <div>
@@ -171,5 +171,6 @@ export default class Network extends React.Component {
 
 Network.propTypes = {
   network: ImmutablePropTypes.map,
+  stats: ImmutablePropTypes.stats,
   wattHour: PropTypes.number
 }
