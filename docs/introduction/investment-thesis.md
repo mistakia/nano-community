@@ -20,7 +20,7 @@ This is digital money, one of its most advanced forms.
 
 The Nano ledger is a new kind of payment system. Anyone in the world can pay anyone else in the world any amount of value, with no authorization required and with no fees.
 
-That last part is essential. Nano intends for all transactions to have no fees. Traditional payment systems charge fees of about <a href="https://squareup.com/us/en/townsquare/credit-card-processing-fees-and-rates" target="_blank">2 to 3 percent</a> – and that’s in the developed world. In lots of other places, there either are no modern payment systems or the rates are significantly higher.
+That last part is essential. Nano intends for all transactions to be feeless, meaning no value is lost during a transaction. Traditional payment systems charge fees of about <a href="https://squareup.com/us/en/townsquare/credit-card-processing-fees-and-rates" target="_blank">2 to 3 percent</a> – and that’s in the developed world. In lots of other places, there either are no modern payment systems or the rates are significantly higher.
 
 Nano's value is driven by two things: the use of the payment system today and speculation on future use. In other words, Nano has value because of its usefulness as money, something that can be traded with no fraud, no fees, etc.
 
@@ -73,7 +73,7 @@ Nano is still viable for all of them.
 
 - eliminates the risk of credit card fraud for merchants
 - protects sender identity information from criminals
-- merchants pay no fees
+- merchants save money on fees
 
 > Credit card fraud is such a big deal for merchants, credit card processors, and banks that online fraud detection systems are hair-trigger wired to stop transactions that look even slightly suspicious, whether or not they are fraudulent. As a result, many online merchants are forced to turn away 5 to 10 percent of incoming orders that they could take without fear if the customers were paying with Bitcoin, where such fraud would not be possible. Since these are orders that were coming in already, they are inherently the highest margin orders a merchant can get, and so being able to take them will drastically increase many merchants’ profit margins.
 > <cite>Marc Andreessen</cite>
