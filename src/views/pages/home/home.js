@@ -34,7 +34,7 @@ export default class HomePage extends React.Component {
           ]}
         />
         <div className='home__side'>
-          <Menu />
+          <Menu hide />
         </div>
         <div className='home__body'>
           <RepresentativeAlerts />
