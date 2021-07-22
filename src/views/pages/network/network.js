@@ -27,7 +27,7 @@ export default class NetworkPage extends React.Component {
         />
         <h1>Network</h1>
         <div className='network__footer'>
-          <Menu desktop />
+          <Menu />
         </div>
       </>
     )
