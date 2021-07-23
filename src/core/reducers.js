@@ -3,6 +3,7 @@ import { connectRouter } from 'connected-react-router/immutable'
 
 import { appReducer } from './app'
 import { accountsReducer } from './accounts'
+import { blocksReducer } from './blocks'
 import { docsReducer } from './docs'
 import { githubReducer } from './github'
 import { ledgerReducer } from './ledger'
@@ -15,6 +16,7 @@ const rootReducer = (history) =>
   combineReducers({
     router: connectRouter(history),
     app: appReducer,
+    blocks: blocksReducer,
     accounts: accountsReducer,
     docs: docsReducer,
     github: githubReducer,

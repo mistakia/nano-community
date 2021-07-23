@@ -20,6 +20,10 @@ export const api = {
     )}`
     return { url }
   },
+  getBlock(hash) {
+    const url = `${API_URL}/blocks/${hash}`
+    return { url }
+  },
   getDaily() {
     const url = `${API_URL}/nanodb/ledger/daily`
     return { url }

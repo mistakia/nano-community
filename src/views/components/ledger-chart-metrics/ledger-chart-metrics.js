@@ -19,7 +19,7 @@ export default class LedgerChartMetrics extends React.Component {
 
     return (
       <div className='ledger__chart-section'>
-        <div className='ledger__chart-section-heading'>
+        <div className='section__heading'>
           <span>{label}</span>
         </div>
         <div className='ledger__chart-section-body'>

@@ -84,7 +84,7 @@ export default class LedgerChartAddresses extends React.Component {
         />
         <div className='ledger__chart-sections'>
           <div className='ledger__chart-section'>
-            <div className='ledger__chart-section-heading'>
+            <div className='section__heading'>
               <span>Description</span>
             </div>
             <div className='ledger__chart-section-body description'>

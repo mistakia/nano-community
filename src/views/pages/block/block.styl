@@ -1,0 +1,58 @@
+.block__container
+  width 100%
+  display flex
+  flex-wrap wrap
+  padding 32px 16px 0
+  max-width 800px
+  margin 0 auto
+  align-items flex-start
+  a
+    color $nanoSoftBlue
+    overflow hidden
+    text-overflow ellipsis
+    &:hover
+      text-decoration underline
+      text-decoration-color $nanoSoftBlue
+      text-decoration-thickness 2px
+      text-underline-offset 2px
+
+.block__hash
+  font-family 'IBM Plex Mono', monospace
+  background white
+  padding 16px
+  border-radius 8px
+  display flex
+  flex 1 0 100%
+  justify-content center
+  align-items center
+  margin-bottom 8px
+  word-break break-word
+
+.block__head
+  flex 1 0 100%
+  display flex
+  align-items center
+
+.block__action
+  width 100%
+  border-radius 6px
+  margin 8px 0
+
+.block__amount
+.block__link-account
+  padding 16px
+  border-radius 4px
+  width 100%
+  background white
+
+  .display__nano
+    margin-bottom 16px
+
+.block__description
+  font-family 'Inter', sans-serif
+  font-size 14px
+
+.block__footer
+  width 100%
+  max-width 1300px
+  margin 64px auto

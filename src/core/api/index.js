@@ -2,6 +2,7 @@ export {
   getAccount,
   getAccountOpen,
   getAccountBlocksSummary,
+  getBlock,
   getPosts,
   getDoc,
   getTagDoc,

@@ -25,15 +25,15 @@ export default class RepresentativeNetwork extends React.Component {
     ]
 
     const rows = items.map((i, idx) => (
-      <div className='account__section-row' key={idx}>
-        <div className='account__section-row-label'>{i.label}</div>
-        <div className='account__section-row-value'>{i.value}</div>
+      <div className='section__row' key={idx}>
+        <div className='section__row-label'>{i.label}</div>
+        <div className='section__row-value'>{i.value}</div>
       </div>
     ))
 
     return (
       <div className='representative__section representative__network'>
-        <div className='account__section-heading'>
+        <div className='section__heading'>
           <span>Network</span>
         </div>
         {rows}

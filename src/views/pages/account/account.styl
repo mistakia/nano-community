@@ -49,29 +49,6 @@
 .account__head .account__section
   background white
 
-.account__section-row
-  position relative
-  display flex
-  justify-content space-between
-  align-items center
-  padding 8px 16px
-  border-bottom 1px solid rgba(0,0,0,0.08)
-  font-family 'IBM Plex Mono', monospace
-  font-size 12px
-
-  a
-    color $nanoSoftBlue
-    overflow hidden
-    text-overflow ellipsis
-    &:hover
-      text-decoration underline
-      text-decoration-color $nanoSoftBlue
-      text-decoration-thickness 2px
-      text-underline-offset 2px
-
-.account__section-row-label
-  padding-right 24px
-
 .account__section-metrics
   font-family 'IBM Plex Mono', monospace
   padding 16px
@@ -111,22 +88,8 @@
 
 .representative__network
 .representative__telemetry
-  .account__section-heading
+  .section__heading
     flex 0
-
-.account__balance-nano
-  display flex
-  align-items baseline
-
-.account__balance-nano-integer
-  font-size 24px
-
-.account__balance-nano-fraction
-  font-size 13px
-
-.account__balance-nano-unit
-  text-transform uppercase
-  padding-left 8px
 
 .representative__metrics
   flex 1 1 100%
@@ -145,22 +108,6 @@
 
 .representative__metric
   flex 1
-
-.account__section-heading
-  flex 1
-  font-family 'IBM Plex Mono', monospace
-  letter-spacing 0.1em
-  text-transform capitalize
-  font-weight 600
-  position relative
-  font-size 8pt
-  line-height 1rem
-  margin 8px 0
-  span
-    display inline-block
-    position relative
-    background $backgroundColor
-    padding 3px 8px 2px 0px
 
 .account__unopened
   background white
