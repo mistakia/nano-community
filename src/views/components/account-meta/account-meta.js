@@ -87,11 +87,13 @@ export default class AccountMeta extends React.Component {
 
     // rep status
     return (
-      <div className='account__meta account__section'>
-        <div className='account__section-heading'>
-          <span>Account Info</span>
+      <div className='account__meta'>
+        <div className='account__section'>
+          <div className='account__section-heading'>
+            <span>Account Info</span>
+          </div>
+          {rows}
         </div>
-        {rows}
       </div>
     )
   }

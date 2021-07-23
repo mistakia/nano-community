@@ -9,6 +9,7 @@ import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import { Link } from 'react-router-dom'
+import dayjs from 'dayjs'
 
 import './account-blocks-summary.styl'
 
@@ -20,24 +21,32 @@ export default class AccountBlocksSummary extends React.Component {
     const isChange = type === 'change'
 
     return (
-      <div className='account__section'>
+      <div className='blocks__summary'>
         <div className='account__section-heading'>
           <span>{type} Summary</span>
         </div>
-        <TableContainer className='blocks__summary'>
+        <TableContainer>
           <Table size='small'>
             <TableHead>
               <TableRow>
                 <TableCell>{accountLabel} Account</TableCell>
                 <TableCell align='left'>TXs</TableCell>
-                {!isChange && <TableCell align='left'>Total</TableCell>}
+                {!isChange && (
+                   <>
+                     <TableCell align='left'>Total</TableCell>
+                     <TableCell align='left'>Max Amount</TableCell>
+                     <TableCell align='left'>Min Amount</TableCell>
+                   </>
+                )}
+                <TableCell align='left'>First Timestamp</TableCell>
+                <TableCell align='left'>Last Timestamp</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {!items.length && (
-                <TableRow>
-                  <TableCell colSpan={3}>No Records</TableCell>
-                </TableRow>
+                 <TableRow>
+                   <TableCell colSpan={7}>No Records</TableCell>
+                 </TableRow>
               )}
               {items.map((row) => (
                 <TableRow key={row.destination_account}>
@@ -51,18 +60,36 @@ export default class AccountBlocksSummary extends React.Component {
                     {BigNumber(row.block_count).toFormat(0)}
                   </TableCell>
                   {!isChange && (
-                    <TableCell align='left' className='number'>
-                      {BigNumber(row.total_amount).shiftedBy(-30).toFormat()}
-                    </TableCell>
+                     <>
+                       <TableCell align='left' className='number'>
+                         {BigNumber(row.total_amount).shiftedBy(-30).toFormat()}
+                       </TableCell>
+                       <TableCell align='left' className='number'>
+                         {BigNumber(row.max_amount).shiftedBy(-30).toFormat()}
+                       </TableCell>
+                       <TableCell align='left' className='number'>
+                         {BigNumber(row.min_amount).shiftedBy(-30).toFormat()}
+                       </TableCell>
+                     </>
                   )}
+                  <TableCell align='left' className='number'>
+                    {row.first_timestamp ? dayjs(row.first_timestamp * 1000).format(
+                       'YYYY-MM-DD h:mm a'
+                    ) : '-'}
+                  </TableCell>
+                  <TableCell align='left' className='number'>
+                    {row.last_timestamp ? dayjs(row.last_timestamp * 1000).format(
+                       'YYYY-MM-DD h:mm a'
+                    ) : '-'}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
           {items.length === 10 && (
-            <div className='representative__delegators-footer'>
-              Showing top 10 accounts by total descending
-            </div>
+             <div className='representative__delegators-footer'>
+               Showing top 10 accounts by total descending
+             </div>
           )}
         </TableContainer>
       </div>
