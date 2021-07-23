@@ -4,6 +4,8 @@ const logger = debug('server')
 const server = require('./api')
 const { port } = require('./config')
 
+debug.enable('server')
+
 const main = async () => {
   server.listen(port, () => logger(`API listening on port ${port}`))
 }

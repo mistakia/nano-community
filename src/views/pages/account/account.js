@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import ImmutablePropTypes from 'react-immutable-proptypes'
-import BigNumber from 'bignumber.js'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import Skeleton from '@material-ui/lab/Skeleton'
@@ -15,6 +14,7 @@ import RepresentativeTelemetry from '@components/representative-telemetry'
 import RepresentativeConfirmationsBehind from '@components/representative-confirmations-behind'
 import RepresentativeBlocksBehind from '@components/representative-blocks-behind'
 import RepresentativePeers from '@components/representative-peers'
+import DisplayNano from '@components/display-nano'
 
 import AccountMeta from '@components/account-meta'
 import AccountBlocksSummary from '@components/account-blocks-summary'
@@ -69,9 +69,6 @@ export default class AccountPage extends React.Component {
   render() {
     const { account } = this.props
 
-    const balance = BigNumber(account.getIn(['account_meta', 'balance']) || 0)
-    // convert to Nano and split into integer and fractional
-    const nanoBalance = balance.shiftedBy(-30).toFixed(2).split('.')
     const isLoading = account.get('is_loading')
     const isOpened = account.getIn(['account_meta', 'block_count'])
 
@@ -93,13 +90,9 @@ export default class AccountPage extends React.Component {
             <div className='account__section account__balance'>
               {!isLoading ? (
                 <div className='account__balance-nano'>
-                  <div className='account__balance-nano-integer'>
-                    {BigNumber(nanoBalance[0]).toFormat()}
-                  </div>
-                  <div className='account__balance-nano-fraction'>
-                    .{nanoBalance[1]}
-                  </div>
-                  <div className='account__balance-nano-unit'>nano</div>
+                  <DisplayNano
+                    value={account.getIn(['account_meta', 'balance'])}
+                  />
                 </div>
               ) : (
                 <Skeleton animation='wave' width='90%' />
@@ -114,7 +107,7 @@ export default class AccountPage extends React.Component {
           )}
           {Boolean(account.representative) && (
             <div className='representative__container'>
-              <div className='account__section-heading'>
+              <div className='section__heading'>
                 <span>Representative</span>
               </div>
               <div className='representative__head'>

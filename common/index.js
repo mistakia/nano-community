@@ -161,11 +161,40 @@ const rpcLedger = ({
 }
 /* eslint-enable camelcase */
 
+const rpcBlockInfo = ({ url, hash } = {}) => {
+  const data = {
+    action: 'block_info',
+    json_block: true,
+    hash
+  }
+  return rpcRequest(data, { url })
+}
+
+const rpcBlocksInfo = ({
+  url,
+  hashes,
+  pending = false,
+  source = false,
+  balance = false
+} = {}) => {
+  const data = {
+    action: 'blocks_info',
+    json_block: true,
+    pending,
+    source,
+    balance,
+    hashes
+  }
+  return rpcRequest(data, { url })
+}
+
 const rpc = {
   telemetry: rpcTelemetry,
   confirmationQuorum: rpcConfirmationQuorum,
   representativesOnline: rpcRepresentativesOnline,
   accountInfo: rpcAccountInfo,
+  blockInfo: rpcBlockInfo,
+  blocksInfo: rpcBlocksInfo,
   representatives: rpcRepresentatives,
   ledger: rpcLedger
 }

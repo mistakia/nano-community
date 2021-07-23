@@ -2,6 +2,7 @@ import React from 'react'
 import { Route, Switch } from 'react-router'
 
 import AccountPage from '@pages/account'
+import BlockPage from '@pages/block'
 import DocPage from '@pages/doc'
 import HomePage from '@pages/home'
 import LedgerPage from '@pages/ledger'
@@ -25,6 +26,7 @@ const Routes = () => (
       }
       component={AccountPage}
     />
+    <Route exact path={'/:hash([0-9A-F]{64})'} component={BlockPage} />
     <Route path='/*' component={DocPage} />
   </Switch>
 )

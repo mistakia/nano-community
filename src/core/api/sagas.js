@@ -22,6 +22,7 @@ import {
   accountOpenRequestActions,
   accountBlocksSummaryRequestActions
 } from '@core/accounts'
+import { blockRequestActions } from '@core/blocks'
 import { dailyRequestActions } from '@core/ledger'
 
 function* fetchAPI(apiFunction, actions, opts = {}) {
@@ -67,6 +68,7 @@ export const getAccountBlocksSummary = fetch.bind(
   api.getAccountBlocksSummary,
   accountBlocksSummaryRequestActions
 )
+export const getBlock = fetch.bind(null, api.getBlock, blockRequestActions)
 export const getPosts = fetch.bind(null, api.getPosts, postlistRequestActions)
 export const getDoc = fetch.bind(null, api.getDoc, docRequestActions)
 export const getTagDoc = fetch.bind(null, api.getTagDoc, tagDocRequestActions)

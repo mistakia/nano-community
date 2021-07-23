@@ -1,0 +1,57 @@
+.block__info
+  background white
+  padding 4px
+  border-radius 6px
+  width 100%
+
+.block__status
+  display flex
+  align-items center
+  padding 8px
+  border-radius 4px
+  font-size 14px
+  text-transform uppercase
+  font-family 'IBM Plex Mono', monospace
+
+  &.confirmed
+    background #e6ffe6
+    color #389e0d
+
+  .MuiSvgIcon-root
+    margin-right 8px
+    font-size 18px
+
+  &.unconfirmed .MuiSvgIcon-root
+    animation spin 4s linear infinite
+
+.block__type
+  background white
+  padding 8px
+  border-radius 4px
+  font-size 14px
+  text-transform uppercase
+  font-family 'IBM Plex Mono', monospace
+
+  &.send
+    color #e04576
+    border-color #ffa2bf
+    background #fff0f2
+
+  &.receive
+  &.open
+    background #e6ffe6
+    color #389e0d
+
+  &.change
+    background #f9f0ff
+    color #531dab
+
+  &.epoch
+    background #fafafa
+    border 1px solid #d9d9d9
+
+@keyframes spin
+  0%
+    transform rotate(0deg)
+  100%
+    transform rotate(-360deg)
