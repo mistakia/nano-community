@@ -8,12 +8,15 @@ export default class DisplayNano extends React.Component {
   render() {
     const { value } = this.props
     const raw = BigNumber(value || 0)
-    const nano = raw.shiftedBy(-30).toString().split('.')
+    const nano = raw.shiftedBy(-30).toNumber()
+    const parts = (nano >= 1 ? nano : BigNumber(nano).toFormat())
+      .toString()
+      .split('.')
 
     return (
       <div className='display__nano'>
-        <div className='integer'>{BigNumber(nano[0]).toFormat()}</div>
-        {Boolean(nano[1]) && <div className='fraction'>.{nano[1]}</div>}
+        <div className='integer'>{BigNumber(parts[0]).toFormat()}</div>
+        {Boolean(parts[1]) && <div className='fraction'>.{parts[1]}</div>}
         <div className='unit'>nano</div>
       </div>
     )
