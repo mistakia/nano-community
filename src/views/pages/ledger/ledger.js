@@ -46,7 +46,7 @@ export default class LedgerPage extends React.Component {
   }
 
   render() {
-    const { data } = this.props
+    const { data, isLoading } = this.props
 
     return (
       <>
@@ -82,16 +82,16 @@ export default class LedgerPage extends React.Component {
             <Tab label='Amounts' />
           </Tabs>
           <TabPanel value={this.state.value} index={0}>
-            <LedgerChartAddresses data={data} />
+            <LedgerChartAddresses data={data} isLoading={isLoading} />
           </TabPanel>
           <TabPanel value={this.state.value} index={1}>
-            <LedgerChartBlocks data={data} />
+            <LedgerChartBlocks data={data} isLoading={isLoading} />
           </TabPanel>
           <TabPanel value={this.state.value} index={2}>
-            <LedgerChartVolume data={data} />
+            <LedgerChartVolume data={data} isLoading={isLoading} />
           </TabPanel>
           <TabPanel value={this.state.value} index={3}>
-            <LedgerChartAmounts data={data} />
+            <LedgerChartAmounts data={data} isLoading={isLoading} />
           </TabPanel>
         </div>
         <div className='ledger__footer'>
@@ -104,5 +104,6 @@ export default class LedgerPage extends React.Component {
 
 LedgerPage.propTypes = {
   load: PropTypes.func,
-  data: PropTypes.object
+  data: PropTypes.object,
+  isLoading: PropTypes.bool
 }

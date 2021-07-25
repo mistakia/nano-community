@@ -22,7 +22,7 @@ echarts.use([
 
 export default class LedgerChartBlocks extends React.Component {
   render() {
-    const { data } = this.props
+    const { data, isLoading } = this.props
 
     const ranges = {
       _1000000_count: '>1M',
@@ -77,6 +77,8 @@ export default class LedgerChartBlocks extends React.Component {
         <ReactEChartsCore
           echarts={echarts}
           option={option}
+          showLoading={isLoading}
+          loadingOption={{ maskColor: 'rgba(255, 255, 255, 0)', text: '' }}
           style={{ width: '100%', height: '600px' }}
         />
         <div className='ledger__chart-sections'>
@@ -96,5 +98,6 @@ export default class LedgerChartBlocks extends React.Component {
 }
 
 LedgerChartBlocks.propTypes = {
-  data: PropTypes.object
+  data: PropTypes.object,
+  isLoading: PropTypes.bool
 }
