@@ -6,6 +6,9 @@ import AppsIcon from '@material-ui/icons/Apps'
 import CloseIcon from '@material-ui/icons/Close'
 import Fab from '@material-ui/core/Fab'
 
+import SearchBar from '@components/search-bar'
+import history from '@core/history'
+
 import './menu.styl'
 
 const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
@@ -106,6 +109,8 @@ export default class Menu extends React.Component {
 
   render() {
     const { hide } = this.props
+    const isHome = history.location.pathname === '/'
+
     return (
       <div className='menu__container'>
         <SwipeableDrawer
@@ -117,16 +122,24 @@ export default class Menu extends React.Component {
           anchor='top'>
           <MenuSections />
         </SwipeableDrawer>
-        <div className='menu__sections'>
-          <Fab onClick={this.handleClick}>
-            {this.state.open ? <CloseIcon /> : <AppsIcon />}
-          </Fab>
-          <Link to='/' className='menu__logo'>
-            <img
-              alt='Nano is feeless, instant, and green / energy efficient digital money (cryptocurrency)'
-              src='/resources/nano+full.svg'
-            />
-          </Link>
+        <Fab onClick={this.handleClick}>
+          {this.state.open ? <CloseIcon /> : <AppsIcon />}
+        </Fab>
+        <Link to='/' className='menu__logo'>
+          <img
+            alt='Nano is feeless, instant, and green / energy efficient digital money (cryptocurrency)'
+            src='/resources/nano+circle.svg'
+          />
+        </Link>
+        <div className='menu__body'>
+          {isHome ? (
+            <div className='menu__text'>NANO</div>
+          ) : (
+            <Link to='/' className='menu__text'>
+              NANO
+            </Link>
+          )}
+          <SearchBar />
           {!hide && <MenuSections />}
         </div>
       </div>

@@ -2,42 +2,45 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ClearIcon from '@material-ui/icons/Clear'
 
-import { debounce } from '@core/utils'
+import history from '@core/history'
 
-import './representatives-search.styl'
+import './search-bar.styl'
 
-export default class RepresentativesSearch extends React.Component {
+const ACCOUNT_REGEX = /((nano|xrb)_)?[13][13-9a-km-uw-z]{59}/
+const BLOCK_REGEX = /[0-9A-F]{64}/
+
+export default class SearchBar extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      value: this.props.value || ''
+      value: this.props.value || '',
+      invalid: false
     }
-
-    this.search = debounce((value) => {
-      this.props.search(value)
-    }, 300)
   }
 
   handleClick = () => {
     const value = ''
     this.setState({ value })
-    this.props.search(value)
   }
 
   handleChange = (event) => {
     const { value } = event.target
     this.setState({ value })
-    this.search(value)
+    if (ACCOUNT_REGEX.test(value) || BLOCK_REGEX.test(value)) {
+      history.push(`/${value}`)
+    } else {
+      this.setState({ invalid: true })
+    }
   }
 
-  render = () => {
+  render() {
     return (
-      <div className='representatives__search'>
+      <div className={`search__bar ${this.state.invalid && 'invalid'}`}>
         <input
           className='search__input'
           type='text'
-          placeholder='Filter by account, alias, ip'
+          placeholder='Search by Address / Block Hash'
           value={this.state.value}
           onChange={this.handleChange}
         />
@@ -49,9 +52,4 @@ export default class RepresentativesSearch extends React.Component {
       </div>
     )
   }
-}
-
-RepresentativesSearch.propTypes = {
-  value: PropTypes.string,
-  search: PropTypes.func
 }

@@ -33,13 +33,11 @@ export default class HomePage extends React.Component {
             'sustainable'
           ]}
         />
-        <div className='home__side'>
-          <Menu hide />
-        </div>
+        <Menu hide />
         <div className='home__body'>
           <RepresentativeAlerts />
-          <Posts title='Nano Foundation' id='announcements' age={36} />
           <Posts title='Top' id='top' age={168} />
+          <Posts title='Nano Foundation' id='announcements' age={36} />
           <div className='home__sections'>
             <Network />
             <Github />

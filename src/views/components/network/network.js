@@ -171,6 +171,6 @@ export default class Network extends React.Component {
 
 Network.propTypes = {
   network: ImmutablePropTypes.map,
-  stats: ImmutablePropTypes.stats,
+  stats: PropTypes.object,
   wattHour: PropTypes.number
 }
