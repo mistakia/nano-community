@@ -21,15 +21,16 @@ export default class RepresentativesQuorumCharts extends React.Component {
       tooltip: {
         className: 'echarts-tooltip',
         trigger: 'axis',
-        formatter: (p) =>
-          p
-            .map(
-              (s) =>
-                `${s.marker} ${s.data[2]} - ${BigNumber(s.data[1]).toFormat(
-                  0
-                )}M`
-            )
-            .join('<br/>')
+        formatter: (p) => {
+          const values = p.map(
+            (s) =>
+              `${s.marker} ${s.data[2]} - ${BigNumber(s.data[1]).toFormat(0)}M`
+          )
+
+          values.unshift(p[0].axisValueLabel)
+
+          return values.join('<br/>')
+        }
       },
       xAxis: {
         type: 'time'
@@ -146,15 +147,16 @@ export default class RepresentativesQuorumCharts extends React.Component {
       tooltip: {
         className: 'echarts-tooltip',
         trigger: 'axis',
-        formatter: (p) =>
-          p
-            .map(
-              (s) =>
-                `${s.marker} ${BigNumber(s.data[1]).toFormat(0)}M - ${
-                  new URL(s.data[2]).hostname
-                }`
-            )
-            .join('<br/>')
+        formatter: (p) => {
+          const values = p.map(
+            (s) =>
+              `${s.marker} ${BigNumber(s.data[1]).toFormat(0)}M - ${
+                new URL(s.data[2]).hostname
+              }`
+          )
+          values.unshift(p[0].axisValueLabel)
+          return values.join('<br/>')
+        }
       }
     }
 

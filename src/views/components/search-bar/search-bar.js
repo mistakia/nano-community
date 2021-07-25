@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import ClearIcon from '@material-ui/icons/Clear'
 
 import history from '@core/history'
@@ -14,7 +13,7 @@ export default class SearchBar extends React.Component {
     super(props)
 
     this.state = {
-      value: this.props.value || '',
+      value: '',
       invalid: false
     }
   }
