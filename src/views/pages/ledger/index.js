@@ -55,7 +55,7 @@ const mapStateToProps = createSelector(getLedger, (ledger) => {
     data.reused_addresses.push([timestamp, d.active_addresses - d.open_count])
   })
 
-  return { data }
+  return { data, isLoading: ledger.get('isLoading') }
 })
 
 const mapDispatchToProps = {

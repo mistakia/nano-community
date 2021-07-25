@@ -23,7 +23,7 @@ echarts.use([
 
 export default class LedgerChartBlocks extends React.Component {
   render() {
-    const { data } = this.props
+    const { data, isLoading } = this.props
 
     const spanStyle =
       'float:right;margin-left:20px;font-size:14px;color:#666;font-weight:900'
@@ -90,6 +90,8 @@ export default class LedgerChartBlocks extends React.Component {
         <ReactEChartsCore
           echarts={echarts}
           option={option}
+          showLoading={isLoading}
+          loadingOption={{ maskColor: 'rgba(255, 255, 255, 0)', text: '' }}
           style={{ width: '100%', height: '400px' }}
         />
         <div className='ledger__chart-sections'>
@@ -123,5 +125,6 @@ export default class LedgerChartBlocks extends React.Component {
 }
 
 LedgerChartBlocks.propTypes = {
-  data: PropTypes.object
+  data: PropTypes.object,
+  isLoading: PropTypes.bool
 }
