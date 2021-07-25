@@ -61,7 +61,7 @@ export default class RepresentativeAlerts extends React.Component {
                 <TableCell>Issue</TableCell>
                 <TableCell align='right'>Last Online</TableCell>
                 <TableCell align='right'>Weight</TableCell>
-                <TableCell align='right'>% Online</TableCell>
+                <TableCell align='right'>% Online Weight</TableCell>
                 <TableCell align='right'>Behind</TableCell>
               </TableRow>
             </TableHead>
