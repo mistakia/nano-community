@@ -1,12 +1,17 @@
 .posts__header
   display flex
   align-items center
+  background white
+  padding 0 16px 0 0
+  margin 0 8px
+  border-radius 6px 6px 0 0
 
 .posts__body
+  background white
   border-radius 4px
   overflow hidden
-  margin-bottom 32px
-  min-height 32px
+  margin 0 8px 32px
+  min-height 48px
   position relative
 
   &:empty:before
@@ -31,13 +36,6 @@
   font-size 8pt
   line-height 1rem
   margin 15px 0
-  &::before
-    content ""
-    display block
-    position absolute
-    top 10px
-    width 100%
-    border-top 3px solid lighten($borderColor, 40%)
   span
   a
     display inline-block
