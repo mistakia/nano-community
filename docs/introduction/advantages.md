@@ -8,7 +8,7 @@ tags: nano, crypto, advantage, better, benefit, feeless, energy, green, sustaina
 
 Nano is a new form of money that's completely digital. Nano is not controlled by any person, company, or government. The development is open-source and the network is run by a global community of users. Nano can be used without having to trust or rely on any other user, developer, or operator on the network.
 
-Nano, unlike other approaches, is scalable, instant, asynchronous, uses minimal energy, operates without any fees, has deterministic finality, and is secured and controlled only by its holders.
+Nano, unlike other approaches, is scalable, instant, asynchronous, uses minimal energy, feeless (no value lost during transfers), has deterministic finality, and is secured and controlled only by its holders.
 
 #### Benefits over traditional money (i.e. fiat, gold, etc)
 
@@ -90,7 +90,9 @@ Nano is self-sovereign, controlled only by its secret key, making it resistant t
 
 ### Nano is feeless
 
-All network transactions are feeless. Nano does not rely on transaction fees to secure the network or prioritize transactions.
+All network transactions are feeless, meaning no value is lost during a transfer. Any amount of value lost during a transfer creates friction. Thus, a feeless medium of exchange would be feeless.
+
+Nano does not rely on transaction fees to secure the network or prioritize transactions.
 
 Initially, Nano has relied upon <a href="https://en.wikipedia.org/wiki/Proof_of_work" target="_blank">Proof-of-Work</a> for prioritization and spam mitigation.
 
@@ -164,7 +166,7 @@ Stateful blocks combined with a block-lattice structure allow for operation usin
 
 ## Nano is like
 
-**Nano is like physical cash:** it can be given to someone without fees and the transfer is instant. It is not reversible. You are responsible for handling it. If you lose your wallet, you lose your money. Your nano can be given to others to hold for you but you need to trust they won't lose it or take it.
+**Nano is like physical cash:** it can be given to someone without losing value (i.e. fees) and the transfer is instant. It is not reversible. You are responsible for handling it. If you lose your wallet, you lose your money. Your nano can be given to others to hold for you but you need to trust they won't lose it or take it.
 
 **Nano is unlike physical cash:** it takes no space, regardless of how much you hold. You can hand it to anyone regardless of the distance in between. It can not be counterfeited.
 
@@ -178,6 +180,6 @@ Stateful blocks combined with a block-lattice structure allow for operation usin
 
 **Nano is like Bitcoin:** it is decentralized, making it permissionless, self-sovereign, and censorship-resistant. The development is open-source and the network is run by a global community of users. It can be used without having to trust or rely on any other user, developer, or operator on the network.
 
-**Nano is unlike Bitcoin:** it is feeless, instant, irreversible, scalable, and energy-efficient. Making it inclusive to all people and sustainable. Nano's security and network are controlled only by its holders. Since Nano has no mining, it does not have to deal with any of its issues: inflation, high resource consumption & waste, conflicting interests, fees, value extraction, etc).
+**Nano is unlike Bitcoin:** it is feeless, instant, irreversible, scalable, and energy-efficient. Making it more inclusive, accessible, sustainable, and useful as a base layer for settling value. Nano's security and network are controlled only by its holders. Since Nano has no mining, it does not have to deal with any of its issues: inflation, high resource consumption & waste, conflicting interests, value loss (i.e. fees), value extraction, etc).
 
 <a href="https://blog.oleganza.com/post/85111558553/bitcoin-is-like" target="_blank">Inspired by "Bitcoin is like..." by Oleg Andreev</a>

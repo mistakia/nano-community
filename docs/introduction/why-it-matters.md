@@ -6,7 +6,7 @@ tags: nano, crypto, analysis, adoption, future, inflation, potential, supply, us
 
 # Why it matters
 
-Nano is a scarce digital asset with an unchangeable monetary policy: its supply is fixed and fully distributed and thus has no inflation. Only 133 million Nano will ever exist. It operates independently of the fiat money system, yet is a liquid, globally tradeable asset. It is self-sovereign and can be self-stored or custodied with 3rd parties. It can be securely and instantly transferred between parties with no pre-existing trust and with zero fees.
+Nano is a scarce digital asset with an unchangeable monetary policy: its supply is fixed and fully distributed and thus has no inflation. Only 133 million Nano will ever exist. It operates independently of the fiat money system, yet is a liquid, globally tradeable asset. It is self-sovereign and can be self-stored or custodied with 3rd parties. It can be securely and instantly transferred between parties with no pre-existing trust and with no value loss during transfers (feeless).
 
 It is capable of being a strong <a href="https://en.wikipedia.org/wiki/Store_of_value" target="_blank">store of value</a> (SoV) and a frictionless <a href="https://en.wikipedia.org/wiki/Medium_of_exchange" target="_blank">medium of exchange</a> (MoE), making it one of the most advanced forms of money to ever exist.
 
@@ -54,11 +54,13 @@ Nano is self-sovereign money. Its only ruler is the secret key that is associate
 
 <small>_Note: without decentralization, Nano would not maintain this quality_</small>
 
-### The importance of zero-fees
+### The importance of feeless
 
-The lower the fee, the more accessible and useful it will be. High fees disproportionately impact the less fortunate and limit use cases.
+Any amount of value lost during a transfer creates friction. Thus, a feeless medium of exchange would be feeless.
 
-Nano has no fees making it inclusive to all and useful in ways that were not previously possible.
+The lower the friction (i.e. fee), the more accessible and useful it will be. High fees disproportionately impact the less fortunate and limit use cases.
+
+Nano is feeless making it inclusive to all and useful in ways that were not previously possible.
 
 ### The importance of instant settlement
 
