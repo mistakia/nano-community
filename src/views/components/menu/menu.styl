@@ -1,16 +1,25 @@
 $hoverBackground = rgba(255, 255, 255, 0.8)
 $hoverBorder = rgba(0, 0, 0, 0.23)
 
+.menu__dial
+  position fixed
+  left 16px
+  top 20px
+  z-index 99999 !important
+
 .menu__container
   margin-bottom 32px
   flex 1
 
   .MuiFab-root
-    background white
-    position fixed
-    right 24px
-    top 20px
-    z-index 99999
+    img
+      transition transform 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms
+      border-radius 99em
+
+    &:hover
+      img
+        box-shadow 0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12)
+        transform scale(1.1)
 
 .menu__body
   flex 1 0 100%
@@ -61,30 +70,6 @@ $hoverBorder = rgba(0, 0, 0, 0.23)
   text-transform capitalize
   font-family 'IBM Plex Mono', monospace
 
-.menu__logo
-  position absolute
-  left 8px
-  top 24px
-  z-index 9
-  height 48px
-  border 1px solid transparent
-  border-radius 3px
-  display flex
-  justify-content center
-  align-items center
-
-  img
-    transition transform 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms
-    height 48px
-    margin 16px
-    border-radius 99em
-
-  &:hover
-    color $nanoSoftBlue
-    img
-      box-shadow 0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12)
-      transform scale(1.1)
-
 .menu__text
   font-family 'Montserrat', sans-serif
   font-size 32px
@@ -96,12 +81,8 @@ a.menu__text:hover
   color $nanoSoftBlue
 
 @media (max-width 749px)
-  .menu__container .MuiFab-root
+  .menu__dial
     top auto
+    left auto
+    right 16px
     bottom 16px
-    background $nanoSoftBlue
-    .MuiSvgIcon-root
-      fill white
-
-  .menu__logo
-    display none

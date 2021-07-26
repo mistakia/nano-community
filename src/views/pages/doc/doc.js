@@ -150,7 +150,7 @@ export default class DocPage extends React.Component {
           </div>
           <div className='doc__content-side'>
             <div className='doc__content-side-head' />
-            <Menu />
+            <Menu hideSearch />
           </div>
         </div>
       )
@@ -165,7 +165,7 @@ export default class DocPage extends React.Component {
           </div>
           <div className='doc__content-side'>
             <div className='doc__content-side-head' />
-            <Menu />
+            <Menu hideSearch />
           </div>
         </div>
       )
@@ -222,7 +222,7 @@ export default class DocPage extends React.Component {
               Edit Page
             </Button>
           </div>
-          <Menu />
+          <Menu hideSearch />
           <Network />
           <Github />
         </div>

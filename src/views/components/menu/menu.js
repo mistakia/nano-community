@@ -2,9 +2,10 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer'
-import AppsIcon from '@material-ui/icons/Apps'
 import CloseIcon from '@material-ui/icons/Close'
-import Fab from '@material-ui/core/Fab'
+import SpeedDial from '@material-ui/lab/SpeedDial'
+import SpeedDialAction from '@material-ui/lab/SpeedDialAction'
+import HomeIcon from '@material-ui/icons/Home'
 
 import SearchBar from '@components/search-bar'
 import history from '@core/history'
@@ -106,10 +107,12 @@ export default class Menu extends React.Component {
   handleOpen = () => this.setState({ open: true })
   handleClose = () => this.setState({ open: false })
   handleClick = () => this.setState({ open: !this.state.open })
+  handleHomeClick = () => history.push('/')
 
   render() {
-    const { hide } = this.props
+    const { hide, hideSearch } = this.props
     const isHome = history.location.pathname === '/'
+    const isMobile = window.innerWidth < 750
 
     return (
       <div className='menu__container'>
@@ -122,15 +125,29 @@ export default class Menu extends React.Component {
           anchor='top'>
           <MenuSections />
         </SwipeableDrawer>
-        <Fab onClick={this.handleClick}>
-          {this.state.open ? <CloseIcon /> : <AppsIcon />}
-        </Fab>
-        <Link to='/' className='menu__logo'>
-          <img
-            alt='Nano is feeless, instant, and green / energy efficient digital money (cryptocurrency)'
-            src='/resources/nano+circle.svg'
-          />
-        </Link>
+        <SpeedDial
+          className='menu__dial'
+          ariaLabel='menu dial'
+          transitionDuration={0}
+          direction={isMobile ? 'up' : 'down'}
+          onClick={this.handleClick}
+          open={this.state.open}
+          icon={
+            <img
+              alt='Nano is feeless, instant, and green / energy efficient digital money (cryptocurrency)'
+              src='/resources/nano+circle.svg'
+            />
+          }
+          openIcon={<CloseIcon />}>
+          {!isHome && (
+            <SpeedDialAction
+              icon={<HomeIcon />}
+              tooltipTitle='Home'
+              tooltipPlacement={isMobile ? 'left' : 'right'}
+              onClick={this.handleHomeClick}
+            />
+          )}
+        </SpeedDial>
         <div className='menu__body'>
           {isHome ? (
             <div className='menu__text'>NANO</div>
@@ -139,7 +156,7 @@ export default class Menu extends React.Component {
               NANO
             </Link>
           )}
-          <SearchBar />
+          {!hideSearch && <SearchBar />}
           {!hide && <MenuSections />}
         </div>
       </div>
@@ -148,5 +165,6 @@ export default class Menu extends React.Component {
 }
 
 Menu.propTypes = {
-  hide: PropTypes.bool
+  hide: PropTypes.bool,
+  hideSearch: PropTypes.bool
 }

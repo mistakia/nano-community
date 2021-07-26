@@ -75,12 +75,9 @@ export default class RepresentativeUptime extends React.Component {
 
     return (
       <div className='representative__section representative__uptime'>
-        <div className='representative__uptime-bar'>
-          <Uptime data={uptime} expanded />
-        </div>
         <div className='representative__uptime-metrics'>
           <div className='representative__uptime-metrics-metric'>
-            <div className='representative__uptime-metric-header'>
+            <div className='representative__uptime-metric-header section__label'>
               Current Status
             </div>
             <div
@@ -91,7 +88,7 @@ export default class RepresentativeUptime extends React.Component {
             </div>
           </div>
           <div className='representative__uptime-metrics-metric'>
-            <div className='representative__uptime-metric-header'>
+            <div className='representative__uptime-metric-header section__label'>
               2W Uptime
             </div>
             <div
@@ -100,7 +97,7 @@ export default class RepresentativeUptime extends React.Component {
             </div>
           </div>
           <div className='representative__uptime-metrics-metric'>
-            <div className='representative__uptime-metric-header'>
+            <div className='representative__uptime-metric-header section__label'>
               2M Uptime
             </div>
             <div
@@ -109,7 +106,7 @@ export default class RepresentativeUptime extends React.Component {
             </div>
           </div>
           <div className='representative__uptime-metrics-metric'>
-            <div className='representative__uptime-metric-header'>
+            <div className='representative__uptime-metric-header section__label'>
               8M Uptime
             </div>
             <div
@@ -117,6 +114,9 @@ export default class RepresentativeUptime extends React.Component {
               {last60Pct ? `${last240Pct}%` : '-'}
             </div>
           </div>
+        </div>
+        <div className='representative__uptime-bar'>
+          <Uptime data={uptime} expanded />
         </div>
       </div>
     )
