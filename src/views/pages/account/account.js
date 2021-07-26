@@ -5,6 +5,10 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import Skeleton from '@material-ui/lab/Skeleton'
 import LinearProgress from '@material-ui/core/LinearProgress'
+import FilterNoneIcon from '@material-ui/icons/FilterNone'
+import IconButton from '@material-ui/core/IconButton'
+import copy from 'copy-text-to-clipboard'
+import Tooltip from '@material-ui/core/Tooltip'
 
 import RepresentativeDelegators from '@components/representative-delegators'
 import RepresentativeUptime from '@components/representative-uptime'
@@ -53,6 +57,15 @@ export default class AccountPage extends React.Component {
     this.setState({ value })
   }
 
+  handleClick = () => {
+    const { address } = this.props.match.params
+    copy(`nano_${address}`)
+    this.props.showNotification({
+      message: 'copied',
+      severity: 'success'
+    })
+  }
+
   componentDidMount() {
     const { address } = this.props.match.params
     this.props.getAccount(`nano_${address}`)
@@ -85,7 +98,13 @@ export default class AccountPage extends React.Component {
           </div>
           <div className='account__head'>
             <div className='account__section account__address'>
-              {account.account || <Skeleton animation='wave' width='90%' />}
+              <span className='section__label'>Account Address</span>
+              <div>{account.account || <Skeleton animation='wave' width='90%' />}</div>
+              {!isLoading && <Tooltip title='click to copy'>
+                <IconButton className='section__copy' onClick={this.handleClick}>
+                  <FilterNoneIcon />
+                </IconButton>
+              </Tooltip>}
             </div>
             <div className='account__section account__balance'>
               {!isLoading ? (
@@ -192,5 +211,6 @@ export default class AccountPage extends React.Component {
 AccountPage.propTypes = {
   match: PropTypes.object,
   getAccount: PropTypes.func,
-  account: ImmutablePropTypes.record
+  account: ImmutablePropTypes.record,
+  showNotification: PropTypes.func,
 }

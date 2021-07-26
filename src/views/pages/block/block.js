@@ -3,6 +3,10 @@ import PropTypes from 'prop-types'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import { Link } from 'react-router-dom'
+import FilterNoneIcon from '@material-ui/icons/FilterNone'
+import IconButton from '@material-ui/core/IconButton'
+import copy from 'copy-text-to-clipboard'
+import Tooltip from '@material-ui/core/Tooltip'
 
 import Seo from '@components/seo'
 import BlockInfo from '@components/block-info'
@@ -164,6 +168,15 @@ export default class BlockPage extends React.Component {
     }
   }
 
+  handleClick = () => {
+    const { hash } = this.props.match.params
+    copy(hash)
+    this.props.showNotification({
+      message: 'copied',
+      severity: 'success'
+    })
+  }
+
   render() {
     const { block } = this.props
     const { hash } = this.props.match.params
@@ -179,8 +192,15 @@ export default class BlockPage extends React.Component {
           tags={['nano', 'block', 'network', 'account', 'hash']}
         />
         <div className='block__container'>
-          <div className='section__heading'>Block Hash</div>
-          <div className='block__hash'>{hash}</div>
+          <div className='block__hash'>
+            <span className='section__label'>Block Hash</span>
+            <div>{hash}</div>
+            {!isLoading && <Tooltip title='click to copy'>
+              <IconButton className='section__copy' onClick={this.handleClick}>
+                <FilterNoneIcon />
+              </IconButton>
+            </Tooltip>}
+          </div>
           {isLoading && (
             <LinearProgress
               color='secondary'
@@ -207,5 +227,6 @@ export default class BlockPage extends React.Component {
 BlockPage.propTypes = {
   match: PropTypes.object,
   block: ImmutablePropTypes.record,
-  getBlock: PropTypes.func
+  getBlock: PropTypes.func,
+  showNotification: PropTypes.func,
 }
