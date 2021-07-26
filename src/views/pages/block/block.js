@@ -172,7 +172,7 @@ export default class BlockPage extends React.Component {
     const { hash } = this.props.match.params
     copy(hash)
     this.props.showNotification({
-      message: 'copied',
+      message: 'Block hash copied',
       severity: 'success'
     })
   }

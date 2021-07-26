@@ -84,7 +84,7 @@ export default class DocPage extends React.Component {
     const url = `${BASE_URL}${this.path}#${anchor}`
     copy(url)
     this.props.showNotification({
-      message: 'copied',
+      message: 'Section link copied',
       severity: 'success'
     })
   }
