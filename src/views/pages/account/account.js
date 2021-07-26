@@ -19,6 +19,7 @@ import RepresentativeConfirmationsBehind from '@components/representative-confir
 import RepresentativeBlocksBehind from '@components/representative-blocks-behind'
 import RepresentativePeers from '@components/representative-peers'
 import DisplayNano from '@components/display-nano'
+import Collapsible from '@components/collapsible'
 
 import AccountMeta from '@components/account-meta'
 import AccountBlocksSummary from '@components/account-blocks-summary'
@@ -132,40 +133,42 @@ export default class AccountPage extends React.Component {
           )}
           {Boolean(account.representative) && (
             <div className='representative__container'>
-              <div className='section__heading'>
-                <span>Representative</span>
-              </div>
               <div className='representative__head'>
                 <RepresentativeInfo account={account} />
                 <RepresentativeUptime account={account} />
               </div>
+              <AccountMeta account={account} />
               <RepresentativeNetwork account={account} />
               <RepresentativeTelemetry account={account} />
-              <div className='representative__metrics'>
-                <Tabs
-                  orientation='horizontal'
-                  variant='scrollable'
-                  value={this.state.value}
-                  className='representative__metrics-menu'
-                  onChange={this.handleChange}>
-                  <Tab label='Conf. Diff' />
-                  <Tab label='Block Diff' />
-                  <Tab label='Peer Count' />
-                </Tabs>
-                <TabPanel value={this.state.value} index={0}>
-                  <RepresentativeConfirmationsBehind account={account} />
-                </TabPanel>
-                <TabPanel value={this.state.value} index={1}>
-                  <RepresentativeBlocksBehind account={account} />
-                </TabPanel>
-                <TabPanel value={this.state.value} index={2}>
-                  <RepresentativePeers account={account} />
-                </TabPanel>
-              </div>
-              <RepresentativeDelegators
-                account={account}
-                address={`nano_${this.props.match.params.address}`}
-              />
+              <Collapsible title='Telemetry Charts'>
+                <div className='representative__metrics'>
+                  <Tabs
+                    orientation='horizontal'
+                    variant='scrollable'
+                    value={this.state.value}
+                    className='representative__metrics-menu'
+                    onChange={this.handleChange}>
+                    <Tab label='Conf. Diff' />
+                    <Tab label='Block Diff' />
+                    <Tab label='Peer Count' />
+                  </Tabs>
+                  <TabPanel value={this.state.value} index={0}>
+                    <RepresentativeConfirmationsBehind account={account} />
+                  </TabPanel>
+                  <TabPanel value={this.state.value} index={1}>
+                    <RepresentativeBlocksBehind account={account} />
+                  </TabPanel>
+                  <TabPanel value={this.state.value} index={2}>
+                    <RepresentativePeers account={account} />
+                  </TabPanel>
+                </div>
+              </Collapsible>
+              <Collapsible title='Delegators'>
+                <RepresentativeDelegators
+                  account={account}
+                  address={`nano_${this.props.match.params.address}`}
+                />
+              </Collapsible>
             </div>
           )}
           {!isLoading && !isOpened ? (
@@ -188,18 +191,25 @@ export default class AccountPage extends React.Component {
           ) : (
             !isLoading && (
               <>
-                <AccountMeta account={account} />
-                <AccountBlocksSummary
-                  type='send'
-                  accountLabel='Receiving'
-                  account={account}
-                />
+                {Boolean(!account.representative) && (
+                  <AccountMeta account={account} />
+                )}
+                <Collapsible title='Send Summary'>
+                  <AccountBlocksSummary
+                    type='send'
+                    accountLabel='Receiving'
+                    account={account}
+                  />
+                </Collapsible>
+
                 {/* <AccountBlocksSummary type='receive' accountLabel='Sending' account={account} /> */}
-                <AccountBlocksSummary
-                  type='change'
-                  accountLabel='Representative'
-                  account={account}
-                />
+                <Collapsible title='Change Summary'>
+                  <AccountBlocksSummary
+                    type='change'
+                    accountLabel='Representative'
+                    account={account}
+                  />
+                </Collapsible>
               </>
             )
           )}
