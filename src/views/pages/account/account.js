@@ -61,7 +61,7 @@ export default class AccountPage extends React.Component {
     const { address } = this.props.match.params
     copy(`nano_${address}`)
     this.props.showNotification({
-      message: 'copied',
+      message: 'Account address copied',
       severity: 'success'
     })
   }
