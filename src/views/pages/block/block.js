@@ -195,11 +195,15 @@ export default class BlockPage extends React.Component {
           <div className='block__hash'>
             <span className='section__label'>Block Hash</span>
             <div>{hash}</div>
-            {!isLoading && <Tooltip title='click to copy'>
-              <IconButton className='section__copy' onClick={this.handleClick}>
-                <FilterNoneIcon />
-              </IconButton>
-            </Tooltip>}
+            {!isLoading && (
+              <Tooltip title='click to copy'>
+                <IconButton
+                  className='section__copy'
+                  onClick={this.handleClick}>
+                  <FilterNoneIcon />
+                </IconButton>
+              </Tooltip>
+            )}
           </div>
           {isLoading && (
             <LinearProgress
@@ -228,5 +232,5 @@ BlockPage.propTypes = {
   match: PropTypes.object,
   block: ImmutablePropTypes.record,
   getBlock: PropTypes.func,
-  showNotification: PropTypes.func,
+  showNotification: PropTypes.func
 }

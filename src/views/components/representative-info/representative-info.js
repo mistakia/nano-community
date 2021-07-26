@@ -35,7 +35,7 @@ export default class RepresentativeNetwork extends React.Component {
     return (
       <div className='representative__section'>
         <div className='account__section-metrics'>
-          <div className='account__section-metric-label'>
+          <div className='account__section-metric-label section__label'>
             Weight Represented
           </div>
           <div className='account__section-metric-body'>

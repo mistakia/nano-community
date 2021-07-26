@@ -99,12 +99,18 @@ export default class AccountPage extends React.Component {
           <div className='account__head'>
             <div className='account__section account__address'>
               <span className='section__label'>Account Address</span>
-              <div>{account.account || <Skeleton animation='wave' width='90%' />}</div>
-              {!isLoading && <Tooltip title='click to copy'>
-                <IconButton className='section__copy' onClick={this.handleClick}>
-                  <FilterNoneIcon />
-                </IconButton>
-              </Tooltip>}
+              <div>
+                {account.account || <Skeleton animation='wave' width='90%' />}
+              </div>
+              {!isLoading && (
+                <Tooltip title='click to copy'>
+                  <IconButton
+                    className='section__copy'
+                    onClick={this.handleClick}>
+                    <FilterNoneIcon />
+                  </IconButton>
+                </Tooltip>
+              )}
             </div>
             <div className='account__section account__balance'>
               {!isLoading ? (
@@ -212,5 +218,5 @@ AccountPage.propTypes = {
   match: PropTypes.object,
   getAccount: PropTypes.func,
   account: ImmutablePropTypes.record,
-  showNotification: PropTypes.func,
+  showNotification: PropTypes.func
 }
