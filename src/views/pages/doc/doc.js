@@ -24,8 +24,6 @@ import powershell from 'highlight.js/lib/languages/powershell'
 
 import 'highlight.js/styles/github.css'
 
-import Network from '@components/network'
-import Github from '@components/github'
 import { BASE_URL } from '@core/constants'
 import Menu from '@components/menu'
 import Seo from '@components/seo'
@@ -223,8 +221,6 @@ export default class DocPage extends React.Component {
             </Button>
           </div>
           <Menu hideSearch />
-          <Network />
-          <Github />
         </div>
       </div>
     )
