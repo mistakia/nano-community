@@ -90,10 +90,6 @@ const GithubEvent = (item, index) => {
 
 export default class Github extends React.Component {
   render() {
-    if (window.innerWidth < 750) {
-      return null
-    }
-
     const { events } = this.props
     const items = events.map((i, idx) => GithubEvent(i, idx))
     const skeletons = new Array(15).fill(undefined)
