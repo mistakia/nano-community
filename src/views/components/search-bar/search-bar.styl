@@ -1,15 +1,13 @@
 .search__bar
-  width 100%
-  max-width 384px
   background white
   border-radius 32px
-  border 1px solid $borderColor
-  margin 0 auto 32px
-  padding 0 8px
-  height 60px
+  margin 0 32px 16px
+  height 48px
   display flex
   overflow hidden
   align-items center
+  position relative
+  transition box-shadow 40ms cubic-bezier(0.4, 0, 0.2, 1) 0ms
 
   &:hover
     box-shadow 0 1px 6px rgba(32, 33, 36 ,28%)
@@ -17,5 +15,24 @@
   &.invalid
     border-color red
 
+  .search__icon
+    margin-left 16px
+    font-size 20px
+
   .search__input
-    padding 16px
+    width 320px
+    transition width 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms
+
+  .search__input-clear
+    position absolute
+    right 0
+    top 0
+    bottom 0
+    display flex
+    align-items center
+
+@media (min-width 750px)
+  .search__bar .search__input
+    &.filled
+    &:focus
+      width 582px

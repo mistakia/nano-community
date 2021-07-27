@@ -46,14 +46,12 @@ export default class Notification extends React.Component {
 
   render = () => {
     const { info } = this.state
-    const isMobile = window.innerWidth < 750
-
     return (
       <Snackbar
         key={info ? info.key : undefined}
         anchorOrigin={{
-          vertical: isMobile ? 'bottom' : 'top',
-          horizontal: isMobile ? 'left' : 'right'
+          vertical: 'bottom',
+          horizontal: 'left'
         }}
         open={this.state.open}
         autoHideDuration={6000}
