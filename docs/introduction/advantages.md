@@ -25,14 +25,14 @@ Nano, unlike other approaches, is scalable, instant, asynchronous, uses minimal 
 
 #### Benefits over other digital money
 
-- feeless
+- feeless / no value lost
 - fully decentralized / permissionless
 - asynchronous
 - scalable
 - energy-efficient / sustainable
 - fully distributed supply
 - lightweight
-- low latency / ultrafast settlement
+- low latency settlement
 - deterministic finality
 - fair & wide initial distribution
 - user-controlled consensus
