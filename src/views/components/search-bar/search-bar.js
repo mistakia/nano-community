@@ -1,5 +1,6 @@
 import React from 'react'
 import ClearIcon from '@material-ui/icons/Clear'
+import SearchIcon from '@material-ui/icons/Search'
 
 import history from '@core/history'
 
@@ -34,10 +35,12 @@ export default class SearchBar extends React.Component {
   }
 
   render() {
+    const isFilled = Boolean(this.state.value)
     return (
       <div className={`search__bar ${this.state.invalid && 'invalid'}`}>
+        <SearchIcon className='search__icon' />
         <input
-          className='search__input'
+          className={`search__input ${isFilled ? 'filled' : ''}`}
           type='text'
           placeholder='Search by Address / Block Hash'
           value={this.state.value}

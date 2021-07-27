@@ -22,9 +22,6 @@ export default class AccountBlocksSummary extends React.Component {
 
     return (
       <div className='blocks__summary'>
-        <div className='section__heading'>
-          <span>{type} Summary</span>
-        </div>
         <TableContainer>
           <Table size='small'>
             <TableHead>
