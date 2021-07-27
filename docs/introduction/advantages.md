@@ -12,7 +12,7 @@ Nano, unlike other approaches, is scalable, instant, asynchronous, uses minimal 
 
 #### Benefits over traditional money (i.e. fiat, gold, etc)
 
-- denationalized
+- denationalized / borderless
 - self-sovereign
 - instantly verifiable
 - fixed supply / incorruptible monetary policy
