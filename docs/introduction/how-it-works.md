@@ -21,18 +21,20 @@ The concept of a distributed ledger is the starting point to understanding digit
 
 ### Accounts & Ownership
 
-Cryptocurrencies use the magic of <a href="https://en.wikipedia.org/wiki/Public-key_cryptography" target="_blank">public-key cryptography</a> to establish & secure accounts. To create a Nano account, users generate a random secret key, a computation done in a split second. The corresponding public key is used for the nano address. Computing the secret key of a given nano address is practically unfeasible. This allows users to share their nano address without compromising their secret key.
+Cryptocurrencies use the magic of <a href="https://en.wikipedia.org/wiki/Public-key_cryptography" target="_blank">public-key cryptography</a> to establish & secure accounts. To create a Nano account, users generate a random 64-character (A-F 0-9) secret key, a computation done in a split second. The corresponding public key is used for the nano address. Computing the secret key of a given nano address is practically unfeasible. This allows users to share their nano address without compromising their secret key.
 
 #### secret key
 
 ```
-3BFA2A120BC1190DA0DE79022C56AFBC334767B12E7AB84724A45D52BE390995
+3BFA2A12 0BC1190D A0DE7902 2C56AFBC
+334767B1 2E7AB847 24A45D52 BE390995
 ```
 
 #### public key
 
 ```
-B6DFC31DA8A600B0D5C497CAEABC9BEAEA75DE47636DB4A9E52E526727069B47
+B6DFC31D A8A600B0 D5C497CA EABC9BEA
+EA75DE47 636DB4A9 E52E5267 27069B47
 ```
 
 #### nano address

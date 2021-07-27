@@ -49,6 +49,7 @@
     code
       background transparent
       border none
+      padding 0
 
   figure
     max-width 100%
@@ -106,6 +107,28 @@
   td
     padding 2px 16px
     border-bottom 1px solid $borderColor
+
+  details
+    min-height 48px
+    overflow hidden
+    summary
+      color rgba(0, 0, 0, 0.87)
+      padding 16px
+      font-size 0.875rem
+      border-bottom 1px solid $borderColor
+      min-width 64px
+      box-sizing border-box
+      transition background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms
+      font-family 'IBM Plex Mono', monospace
+      font-weight 500
+      line-height 1.75
+      border-radius 4px
+      letter-spacing 0.02857em
+      text-transform uppercase
+      &:hover
+        color: #4A90E2;
+        text-decoration: none;
+        background-color: #ffffff;
 
 .doc__content-side
   flex 1
@@ -203,6 +226,7 @@
   background white
   border-radius 4px
   box-shadow 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)
+  margin-bottom 32px
   pre
   input
     display none
