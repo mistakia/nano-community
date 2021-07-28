@@ -279,6 +279,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - online weight is based on:
   - votes from a rep on an active election
   - vote responses to rep crawler requests
+  - reps are removed 5m after their last observed vote (`weight_period`)
 - online weight is calculated on every new rep or if it has been 5m
 - the online weight is saved every 5m
 - the trending weight is calculated every 5m by selecting the median weight over the last `4032` periods (i.e. 14 days)
