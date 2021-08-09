@@ -21,7 +21,6 @@ const mapStateToProps = createSelector(
       BigNumber(a.getIn(['account_meta', 'weight'])).isGreaterThan(1e34)
     )
 
-    /**************** overweight ****************/
     const overweight = reps.filter((a) =>
       BigNumber(a.getIn(['account_meta', 'weight'])).isGreaterThan(
         REP_MAX_WEIGHT
@@ -31,7 +30,6 @@ const mapStateToProps = createSelector(
       items[account.account] = { account, type: 'overweight', severity: 1 }
     })
 
-    /**************** lowUptime ****************/
     const lowUptime = reps.filter((a) => {
       const uptime = a.get('uptime')
       const online = uptime.filter((u) => u.online)
@@ -43,7 +41,6 @@ const mapStateToProps = createSelector(
       items[account.account] = { account, type: 'low uptime', severity: 2 }
     })
 
-    /**************** behind ****************/
     const confirmationDifferentials = reps
       .map((a) => a.getIn(['telemetry', 'cemented_behind']))
       .toJS()
@@ -55,7 +52,6 @@ const mapStateToProps = createSelector(
       items[account.account] = { account, type: 'behind', severity: 2 }
     })
 
-    /**************** offline ****************/
     const offline = reps.filter(
       (a) =>
         !a.get('is_online') &&

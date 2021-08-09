@@ -34,17 +34,13 @@ All transactions are stored publicly and permanently on the network, which means
 
 Read more about how you can manage your [privacy](/getting-started-users/privacy).
 
-## Nano payments are irreversible
-
-Nano transactions work just like physical cash, it cannot be reversed, it can only be refunded by the person receiving the funds. This means you should be mindful of who you transact with.
-
 ## Unconfirmed transactions
 
 Most of the time, you may not notice unconfirmed transactions as they will settle before you can blink. At times, due to network congestion or poorly integrated services, you may have to wait for a transaction to become confirmed.
 
 ## Price volatility
 
-The price of a Nano can unpredictably increase or decrease over a short period of time due to its young economy, novel nature, and sometimes illiquid markets. Consequently, keeping your savings with Nano is not recommended at this point. Nano should be seen as a high-risk, asymmetric investment, and you should never store money that you cannot afford to lose with Nano.
+The exchange rate for Nano can unpredictably increase or decrease over a short period of time due to its young economy, novel nature, and sometimes illiquid markets. Consequently, keeping your savings with Nano is not recommended at this point. Nano should be seen as a high-risk, asymmetric investment, and you should never store money that you cannot afford to lose with Nano.
 
 Learn more about how it is [an asymmetric investment now](/introduction/investment-thesis) before it stabilizes as a store of value used as digital money.
 

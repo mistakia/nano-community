@@ -38,7 +38,7 @@ Modern society is built on top of <a href="https://en.wikipedia.org/wiki/Fiat_mo
 
 ### The importance of scarcity
 
-Another core function of money is being a <a href="https://en.wikipedia.org/wiki/Store_of_value" target="_blank">store of value</a>. Money needs to be able to maintain its value and purchasing power over time. Scarcity is at the core of maintaining value over time. The problem is that all modern money has an inflationary supply, which reduces its value over time, and diminishes its ability to function as a store of value.
+Another core function of money is being a <a href="https://en.wikipedia.org/wiki/Store_of_value" target="_blank">store of value</a>. Money needs to be able to maintain its purchasing power over time. Scarcity is at the core of maintaining purchasing power over time. All modern money has an inflationary supply, which reduces its purchasing power over time, and diminishes its ability to function as a store of value.
 
 <small>_Note: modern fiat money is inflationary as it is argued that small amounts of inflation drive economic growth and an adjustable monetary supply is a tool for governments to respond to economic events._</small>
 
@@ -56,9 +56,9 @@ Nano is self-sovereign money. Its only ruler is the secret key that is associate
 
 ### The importance of feeless
 
-Any amount of value lost during a transfer creates friction. Thus, a feeless medium of exchange would be feeless.
+Any amount of value lost during a transfer creates friction. No value will ever be lost transferring Nano, making it an ideal medium of exchange.
 
-The lower the friction (i.e. fee), the more accessible and useful it will be. High fees disproportionately impact the less fortunate and limit use cases.
+The lower the friction (fee), the more accessible and useful it will be. High fees disproportionately impact the less fortunate and limit use cases.
 
 Nano is feeless making it inclusive to all and useful in ways that were not previously possible.
 
