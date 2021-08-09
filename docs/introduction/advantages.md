@@ -90,31 +90,27 @@ Nano is self-sovereign, controlled only by its secret key, making it resistant t
 
 ### Nano is feeless
 
-All network transactions are feeless, meaning no value is lost during a transfer. Any amount of value lost during a transfer creates friction. Thus, a feeless medium of exchange would be feeless.
+All network transactions are feeless, meaning no value is lost during a transfer. Any amount of value lost during a transfer creates friction as it discourages use.
 
 Nano does not rely on transaction fees to secure the network or prioritize transactions.
 
 Initially, Nano has relied upon <a href="https://en.wikipedia.org/wiki/Proof_of_work" target="_blank">Proof-of-Work</a> for prioritization and spam mitigation.
 
-Starting with v22, Nano will use the account balance and the time since the last transaction to prioritize transactions. As a result, transaction flooding attacks (i.e. spam) will be financially prohibitive (i.e. you need 50% of the supply to consume 50% of the throughput).
+Starting with v22, Nano will use the account balance and the time since the last transaction to prioritize transactions. As a result, transaction flooding attacks (i.e. spam) will be financially prohibitive (i.e. you need 50% of the supply to consume 50% of the throughput) and the network provides a guaranteed minimum quality of service to all accounts.
 
-A good way to view it is that during congestion all accounts are guaranteed a throughput proportional to their stake in the network.
-
-When the network isn't congested, everything is instant. When it's congested, everyone has a guaranteed minimum throughput that's feeless and instant.
+When the network isn't congested, everything is instant. When it's congested, everyone has a guaranteed minimum throughput that's feeless.
 
 ### Nano is scalable
 
-Unlike almost all digital currencies, the Nano protocol itself has no scalability limits.
+The Nano protocol itself has no scalability limits.
 
-Nano can scale by increasing whatever the limiting factor is among bandwidth, CPU cycles, and disk operations.
+Nano can scale horizontally or by increasing whatever the limiting factor is among bandwidth, CPU cycles, and disk operations.
 
 ### Nano is energy-efficient
 
-The network currently runs on about 200-300 nodes made up of average hardware. The average node likely uses around 25-140W.
+The network runs on standard hardware, where security is achieved through cooperation, not competition. As a result, the average node uses ~25-140W.
 
 For each transaction, it is estimated that Nano uses only 0.000112 kWh, compared to <a href="https://digiconomist.net/bitcoin-energy-consumption/" target="_blank">1121.71 kWh</a> for Bitcoin as of May 15th, 2021.
-
-Nano uses very little energy because it does not use Proof-of-Work to secure the network.
 
 ### Nano is fully distributed
 
@@ -122,11 +118,13 @@ There is no inflation and has a Stock-To-Flow ratio of `undefined` since no new 
 
 ### Nano was fairly & widely distributed
 
-Nano was given away for free to anyone willing to manually complete a captcha. Distribution began in 2015 and ended in October 2017, at which point the faucet had distributed 126,248,289 NANO.
+Nano was given away for free, proportional to time spent completing a captcha. Distribution began in 2015 and ended in October 2017, at which point the faucet had distributed 126,248,289 NANO.
+
+Nano's distribution was widely accessible as it had only two requirements: knowledge of its existence and a device capable of connecting to the internet. Most other distribution methods (ICO, mining, etc) have additional barriers (wealth, hardware, etc).
 
 7,000,000 NANO (~5%) was set aside as a <a href="https://www.nanolooker.com/developer-fund" target="_blank">developer fund</a>, of which about ~300,000 Nano remain as of April 2021.
 
-Because the distribution process was conducted on-chain, it is publicly available to be reviewed and audited by looking at the <a href="https://nanex.cc/accountstats?account=nano_35jjmmmh81kydepzeuf9oec8hzkay7msr6yxagzxpcht7thwa5bus5tomgz9" target="_blank">Core Faucet Account</a>.
+Because the distribution process was conducted on-chain, it is publicly available to be reviewed and audited by looking at the <a href="https://nanex.cc/accountstats?account=nano_35jjmmmh81kydepzeuf9oec8hzkay7msr6yxagzxpcht7thwa5bus5tomgz9" target="_blank">Core Faucet</a> and <a href="https://nanex.cc/accountstats?account=nano_13ezf4od79h1tgj9aiu4djzcmmguendtjfuhwfukhuucboua8cpoihmh8byo" target="_blank">Landing</a> account.
 
 A few notable statistics compiled by <a href="https://www.reddit.com/r/nanocurrency/comments/h7fmge/the_nano_faucet_distribution_visualized_and/" target="_blank">u/hanzyfranzy</a>:
 
@@ -154,7 +152,7 @@ Nano may be the fastest cross-border settlement network in existence.
 
 Nano is secured and controlled by Nano holders, as they have exclusive control over the delegation of their voting weight. Node operators, nor developers, nor any other entities have any ability to overrule the will of Nano holders.
 
-For example, control of Nano's scalability is decentralized and in the hands of Nano holders collectively. They alone determine how voting weight is distributed and what hardware the network operates on by delegating to node operators as they see fit.
+For example, control of Nano's scalability is decentralized and in the hands of Nano holders collectively. They alone determine how voting weight is distributed and what version or hardware the network operates on by delegating to node operators as they see fit.
 
 ### Nano is lightweight and Prunable
 
