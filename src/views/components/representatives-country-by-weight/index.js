@@ -3,15 +3,15 @@ import { createSelector } from 'reselect'
 import BigNumber from 'bignumber.js'
 
 import {
-  getRepresentatives,
-  getRepresentativesTotalWeight
+  getOnlineRepresentatives,
+  getOnlineRepresentativesTotalWeight
 } from '@core/accounts'
 
 import RepresentativesCountryByWeight from './representatives-country-by-weight'
 
 const mapStateToProps = createSelector(
-  getRepresentatives,
-  getRepresentativesTotalWeight,
+  getOnlineRepresentatives,
+  getOnlineRepresentativesTotalWeight,
   (accounts, totalWeight) => {
     const metrics = []
     const countries = {
