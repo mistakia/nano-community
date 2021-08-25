@@ -74,7 +74,23 @@ export function getRepresentatives(state) {
     .toList()
 }
 
+export function getOnlineRepresentatives(state) {
+  const reps = getRepresentatives(state)
+  return reps.filter((r) => r.is_online)
+}
+
 export function getRepresentativesTotalWeight(state) {
+  const accounts = getRepresentatives(state)
+  let weight = BigNumber(0)
+  for (const rep of accounts.valueSeq()) {
+    if (!rep.account_meta.weight) continue
+    weight = BigNumber(rep.account_meta.weight).plus(weight)
+  }
+
+  return weight.toNumber()
+}
+
+export function getOnlineRepresentativesTotalWeight(state) {
   const accounts = getRepresentatives(state)
   let weight = BigNumber(0)
   for (const rep of accounts.valueSeq()) {

@@ -12,6 +12,8 @@ export {
   getAccountItems,
   getAccountById,
   getRepresentatives,
+  getOnlineRepresentatives,
   getFilteredRepresentatives,
-  getRepresentativesTotalWeight
+  getRepresentativesTotalWeight,
+  getOnlineRepresentativesTotalWeight
 } from './selectors'
