@@ -91,7 +91,7 @@ export function getRepresentativesTotalWeight(state) {
 }
 
 export function getOnlineRepresentativesTotalWeight(state) {
-  const accounts = getRepresentatives(state)
+  const accounts = getOnlineRepresentatives(state)
   let weight = BigNumber(0)
   for (const rep of accounts.valueSeq()) {
     if (!rep.account_meta.weight) continue
