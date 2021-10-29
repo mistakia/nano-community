@@ -12,20 +12,21 @@ debug.enable('archive')
 
 const dir = '/root/archives'
 
-const zip = async ({ qzFilename, csvFilename }) => {
+const zip = async ({ gzFilename, csvFilename }) => {
   const { stdout, stderr } = await exec(
-    `tar -zvcf ${qzFilename} ${csvFilename}`
+    `tar -zvcf ${dir}/${gzFilename} -C ${dir} ${csvFilename}`
   )
   console.log(stderr)
-  fs.unlinkSync(csvFilename)
+  fs.unlinkSync(`${dir}/${csvFilename}`)
 }
 
-const upload = async (qzFilename) => {
+const upload = async (gzFilename) => {
+  const file = `${dir}/${gzFilename}`
   const { stdout, stderr } = await exec(
-    `/root/.google-drive-upload/bin/gupload ${qzFilename}`
+    `/root/.google-drive-upload/bin/gupload ${file}`
   )
   console.log(stderr)
-  fs.unlinkSync(qzFilename)
+  fs.unlinkSync(file)
 }
 
 const archiveRepresentativesUptime = async () => {
@@ -35,10 +36,10 @@ const archiveRepresentativesUptime = async () => {
     `select * from representatives_uptime where timestamp < UNIX_TIMESTAMP(NOW() - INTERVAL ${hours} HOUR)`
   )
   const rows = resp[0]
-  const filename = `${dir}/representatives-uptime-archive_${timestamp}`
+  const filename = `representatives-uptime-archive_${timestamp}`
   const csvFilename = `${filename}.csv`
   const csvWriter = createCsvWriter({
-    path: csvFilename,
+    path: `${dir}/${csvFilename}`,
     header: [
       { id: 'account', title: 'account' },
       { id: 'online', title: 'online' },
@@ -47,9 +48,9 @@ const archiveRepresentativesUptime = async () => {
   })
   await csvWriter.writeRecords(rows)
 
-  const qzFilename = `${filename}.tar.qz`
-  await zip({ qzFilename, csvFilename })
-  await upload(qzFilename)
+  const gzFilename = `${filename}.tar.gz`
+  await zip({ gzFilename, csvFilename })
+  await upload(gzFilename)
   // delete
 }
 
@@ -60,10 +61,10 @@ const archiveRepresentativesTelemetry = async () => {
     `select * from representatives_telemetry where timestamp < UNIX_TIMESTAMP(NOW() - INTERVAL ${hours} HOUR)`
   )
   const rows = resp[0]
-  const filename = `${dir}/representatives-telemetry-archive_${timestamp}`
+  const filename = `representatives-telemetry-archive_${timestamp}`
   const csvFilename = `${filename}.csv`
   const csvWriter = createCsvWriter({
-    path: csvFilename,
+    path: `${dir}/${csvFilename}`,
     header: [
       { id: 'account', title: 'account' },
       { id: 'weight', title: 'weight' },
@@ -90,9 +91,9 @@ const archiveRepresentativesTelemetry = async () => {
   })
   await csvWriter.writeRecords(rows)
 
-  const qzFilename = `${filename}.tar.qz`
-  await zip({ qzFilename, csvFilename })
-  await upload(qzFilename)
+  const gzFilename = `${filename}.tar.gz`
+  await zip({ gzFilename, csvFilename })
+  await upload(gzFilename)
   // delete
 }
 
