@@ -29,15 +29,14 @@ export default class RepresentativeUptime extends React.Component {
         ? 'warning'
         : ''
 
-    const last240 = this.props.account.getIn(['uptime_summary', 'days_240'], {})
-    const last240Pct =
+    const last90 = this.props.account.getIn(['uptime_summary', 'days_90'], {})
+    const last90Pct =
       Math.round(
-        (last240.online_count /
-          (last240.online_count + last240.offline_count)) *
+        (last90.online_count / (last90.online_count + last90.offline_count)) *
           10000
       ) / 100
-    const last240Class =
-      last240Pct > 95 ? 'online' : last240Pct < 80 ? 'offline' : ''
+    const last90Class =
+      last90Pct > 95 ? 'online' : last90Pct < 80 ? 'offline' : ''
 
     let text
     let online = true
@@ -107,11 +106,11 @@ export default class RepresentativeUptime extends React.Component {
           </div>
           <div className='representative__uptime-metrics-metric'>
             <div className='representative__uptime-metric-header section__label'>
-              8M Uptime
+              3M Uptime
             </div>
             <div
-              className={`representative__uptime-metric-body ${last240Class}`}>
-              {last60Pct ? `${last240Pct}%` : '-'}
+              className={`representative__uptime-metric-body ${last90Class}`}>
+              {last90Pct ? `${last90Pct}%` : '-'}
             </div>
           </div>
         </div>
