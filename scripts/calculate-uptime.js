@@ -29,7 +29,7 @@ const main = async () => {
   // main
   const reps = await db('accounts').where({ representative: true })
 
-  const sets = [7, 30, 60, 90, 120, 240, 365]
+  const sets = [7, 30, 60, 90]
 
   const inserts = []
   for (const { account } of reps) {
