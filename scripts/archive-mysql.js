@@ -1,23 +1,44 @@
 const debug = require('debug')
+const util = require('util')
+const fs = require('fs')
+const exec = util.promisify(require('child_process').exec)
 const createCsvWriter = require('csv-writer').createObjectCsvWriter
 const dayjs = require('dayjs')
 
-/* eslint-disable no-unused-vars */
-const { request } = require('../common')
 const db = require('../db')
 
 const logger = debug('archive')
 debug.enable('archive')
-/* eslint-enable no-unused-vars */
+
+const dir = '/root/archives'
+
+const zip = async ({ qzFilename, csvFilename }) => {
+  const { stdout, stderr } = await exec(
+    `tar -zvcf ${qzFilename} ${csvFilename}`
+  )
+  console.log(stderr)
+  fs.unlinkSync(csvFilename)
+}
+
+const upload = async (qzFilename) => {
+  const { stdout, stderr } = await exec(
+    `/root/.google-drive-upload/bin/gupload ${qzFilename}`
+  )
+  console.log(stderr)
+  fs.unlinkSync(qzFilename)
+}
 
 const archiveRepresentativesUptime = async () => {
   const timestamp = dayjs().format('YYYY-MM-DD_HH-mm-ss')
+  const hours = 12 * 7 * 24 // 12 weeks
   const resp = await db.raw(
-    'select * from representatives_uptime where timestamp < UNIX_TIMESTAMP(NOW() - INTERVAL 12 WEEK)'
+    `select * from representatives_uptime where timestamp < UNIX_TIMESTAMP(NOW() - INTERVAL ${hours} HOUR)`
   )
   const rows = resp[0]
+  const filename = `${dir}/representatives-uptime-archive_${timestamp}`
+  const csvFilename = `${filename}.csv`
   const csvWriter = createCsvWriter({
-    path: `representatives-uptime-archive_${timestamp}.csv`,
+    path: csvFilename,
     header: [
       { id: 'account', title: 'account' },
       { id: 'online', title: 'online' },
@@ -25,16 +46,24 @@ const archiveRepresentativesUptime = async () => {
     ]
   })
   await csvWriter.writeRecords(rows)
+
+  const qzFilename = `${filename}.tar.qz`
+  await zip({ qzFilename, csvFilename })
+  await upload(qzFilename)
+  // delete
 }
 
 const archiveRepresentativesTelemetry = async () => {
   const timestamp = dayjs().format('YYYY-MM-DD_HH-mm-ss')
+  const hours = 6 * 7 * 24 // 6 weeks
   const resp = await db.raw(
-    'select * from representatives_telemetry where timestamp < UNIX_TIMESTAMP(NOW() - INTERVAL 6 WEEK)'
+    `select * from representatives_telemetry where timestamp < UNIX_TIMESTAMP(NOW() - INTERVAL ${hours} HOUR)`
   )
   const rows = resp[0]
+  const filename = `${dir}/representatives-telemetry-archive_${timestamp}`
+  const csvFilename = `${filename}.csv`
   const csvWriter = createCsvWriter({
-    path: `representatives-telemetry-archive_${timestamp}.csv`,
+    path: csvFilename,
     header: [
       { id: 'account', title: 'account' },
       { id: 'weight', title: 'weight' },
@@ -60,11 +89,14 @@ const archiveRepresentativesTelemetry = async () => {
     ]
   })
   await csvWriter.writeRecords(rows)
+
+  const qzFilename = `${filename}.tar.qz`
+  await zip({ qzFilename, csvFilename })
+  await upload(qzFilename)
+  // delete
 }
 
-const archivePosts = async () => {
-
-}
+const archivePosts = async () => {}
 
 const main = async () => {
   try {
@@ -75,7 +107,7 @@ const main = async () => {
 
   try {
     await archiveRepresentativesTelemetry()
-  } catch(err) {
+  } catch (err) {
     console.log(err)
   }
 }
