@@ -8,24 +8,29 @@ const dayjs = require('dayjs')
 const db = require('../db')
 
 const logger = debug('archive')
-debug.enable('archive')
 
 const dir = '/root/archives'
 
 const zip = async ({ gzFilename, csvFilename }) => {
+  logger(`creating zip of ${csvFilename}`)
   const { stdout, stderr } = await exec(
     `tar -zvcf ${dir}/${gzFilename} -C ${dir} ${csvFilename}`
   )
-  console.log(stderr)
+  if (stderr) {
+    throw new Error(stderr)
+  }
   fs.unlinkSync(`${dir}/${csvFilename}`)
 }
 
 const upload = async (gzFilename) => {
   const file = `${dir}/${gzFilename}`
+  logger(`uploading ${file}`)
   const { stdout, stderr } = await exec(
     `/root/.google-drive-upload/bin/gupload ${file}`
   )
-  console.log(stderr)
+  if (stderr) {
+    throw new Error(stderr)
+  }
   fs.unlinkSync(file)
 }
 
@@ -36,6 +41,7 @@ const archiveRepresentativesUptime = async () => {
     `select * from representatives_uptime where timestamp < UNIX_TIMESTAMP(NOW() - INTERVAL ${hours} HOUR)`
   )
   const rows = resp[0]
+  logger(`archving ${rows} representatives_uptime entries`)
   const filename = `representatives-uptime-archive_${timestamp}`
   const csvFilename = `${filename}.csv`
   const csvWriter = createCsvWriter({
@@ -61,6 +67,7 @@ const archiveRepresentativesTelemetry = async () => {
     `select * from representatives_telemetry where timestamp < UNIX_TIMESTAMP(NOW() - INTERVAL ${hours} HOUR)`
   )
   const rows = resp[0]
+  logger(`archving ${rows} representatives_telemetry entries`)
   const filename = `representatives-telemetry-archive_${timestamp}`
   const csvFilename = `${filename}.csv`
   const csvWriter = createCsvWriter({
@@ -100,6 +107,7 @@ const archiveRepresentativesTelemetry = async () => {
 const archivePosts = async () => {}
 
 const main = async () => {
+  debug.enable('archive')
   try {
     await archiveRepresentativesUptime()
   } catch (err) {
