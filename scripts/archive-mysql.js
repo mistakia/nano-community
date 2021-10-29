@@ -41,7 +41,7 @@ const archiveRepresentativesUptime = async () => {
     `select * from representatives_uptime where timestamp < UNIX_TIMESTAMP(NOW() - INTERVAL ${hours} HOUR)`
   )
   const rows = resp[0]
-  logger(`archving ${rows} representatives_uptime entries`)
+  logger(`archving ${rows.length} representatives_uptime entries`)
   const filename = `representatives-uptime-archive_${timestamp}`
   const csvFilename = `${filename}.csv`
   const csvWriter = createCsvWriter({
@@ -57,7 +57,13 @@ const archiveRepresentativesUptime = async () => {
   const gzFilename = `${filename}.tar.gz`
   await zip({ gzFilename, csvFilename })
   await upload(gzFilename)
-  // delete
+
+  const timestamps = rows.map((r) => r.timestamp)
+  const uniqTimestamps = [...new Set(timestamps)]
+  const count = await db('representatives_uptime')
+    .whereIn('timestamp', uniqTimestamps)
+    .del()
+  logger(`removed ${count} rows from representatives_uptime`)
 }
 
 const archiveRepresentativesTelemetry = async () => {
@@ -67,7 +73,7 @@ const archiveRepresentativesTelemetry = async () => {
     `select * from representatives_telemetry where timestamp < UNIX_TIMESTAMP(NOW() - INTERVAL ${hours} HOUR)`
   )
   const rows = resp[0]
-  logger(`archving ${rows} representatives_telemetry entries`)
+  logger(`archving ${rows.length} representatives_telemetry entries`)
   const filename = `representatives-telemetry-archive_${timestamp}`
   const csvFilename = `${filename}.csv`
   const csvWriter = createCsvWriter({
@@ -101,7 +107,13 @@ const archiveRepresentativesTelemetry = async () => {
   const gzFilename = `${filename}.tar.gz`
   await zip({ gzFilename, csvFilename })
   await upload(gzFilename)
-  // delete
+
+  const timestamps = rows.map((r) => r.timestamp)
+  const uniqTimestamps = [...new Set(timestamps)]
+  const count = await db('representatives_telemetry')
+    .whereIn('timestamp', uniqTimestamps)
+    .del()
+  logger(`removed ${count} rows from representatives_telemetry`)
 }
 
 const archivePosts = async () => {}
