@@ -13,7 +13,7 @@ const dir = '/root/archives'
 
 const zip = async ({ gzFilename, csvFilename }) => {
   logger(`creating zip of ${csvFilename}`)
-  const { stdout, stderr } = await exec(
+  const { stderr } = await exec(
     `tar -zvcf ${dir}/${gzFilename} -C ${dir} ${csvFilename}`
   )
   if (stderr) {
@@ -25,7 +25,7 @@ const zip = async ({ gzFilename, csvFilename }) => {
 const upload = async (gzFilename) => {
   const file = `${dir}/${gzFilename}`
   logger(`uploading ${file}`)
-  const { stdout, stderr } = await exec(
+  const { stderr } = await exec(
     `/root/.google-drive-upload/bin/gupload ${file}`
   )
   if (stderr) {
@@ -41,6 +41,11 @@ const archiveRepresentativesUptime = async () => {
     `select * from representatives_uptime where timestamp < UNIX_TIMESTAMP(NOW() - INTERVAL ${hours} HOUR)`
   )
   const rows = resp[0]
+  if (!rows.length) {
+    logger('no rows to archive')
+    return
+  }
+
   logger(`archving ${rows.length} representatives_uptime entries`)
   const filename = `representatives-uptime-archive_${timestamp}`
   const csvFilename = `${filename}.csv`
@@ -73,6 +78,11 @@ const archiveRepresentativesTelemetry = async () => {
     `select * from representatives_telemetry where timestamp < UNIX_TIMESTAMP(NOW() - INTERVAL ${hours} HOUR)`
   )
   const rows = resp[0]
+  if (!rows.length) {
+    logger('no rows to archive')
+    return
+  }
+
   logger(`archving ${rows.length} representatives_telemetry entries`)
   const filename = `representatives-telemetry-archive_${timestamp}`
   const csvFilename = `${filename}.csv`
@@ -116,7 +126,54 @@ const archiveRepresentativesTelemetry = async () => {
   logger(`removed ${count} rows from representatives_telemetry`)
 }
 
-const archivePosts = async () => {}
+const archivePosts = async () => {
+  const timestamp = dayjs().format('YYYY-MM-DD_HH-mm-ss')
+  const hours = 6 * 7 * 24 // 6 weeks
+  const posts = await db('posts')
+    .select('posts.*')
+    .leftJoin('post_tags', 'posts.id', 'post_tags.post_id')
+    .whereNull('post_tags.tag')
+    .whereRaw(`created_at < UNIX_TIMESTAMP(NOW() - INTERVAL ${hours} HOUR)`)
+
+  if (!posts.length) {
+    logger('no posts to archive')
+    return
+  }
+
+  logger(`archving ${posts.length} posts`)
+  const filename = `posts-archive_${timestamp}`
+  const csvFilename = `${filename}.csv`
+  const csvWriter = createCsvWriter({
+    path: `${dir}/${csvFilename}`,
+    header: [
+      { id: 'id', title: 'id' },
+      { id: 'pid', title: 'pid' },
+      { id: 'sid', title: 'sid' },
+      { id: 'title', title: 'title' },
+      { id: 'url', title: 'url' },
+      { id: 'content_url', title: 'content_url' },
+      { id: 'author', title: 'author' },
+      { id: 'authorid', title: 'authorid' },
+      { id: 'text', title: 'text' },
+      { id: 'html', title: 'html' },
+      { id: 'summary', title: 'summary' },
+      { id: 'score', title: 'score' },
+      { id: 'social_score', title: 'social_score' },
+      { id: 'created_at', title: 'created_at' },
+      { id: 'updated_at', title: 'updated_at' }
+    ]
+  })
+  await csvWriter.writeRecords(posts)
+
+  const gzFilename = `${filename}.tar.gz`
+  await zip({ gzFilename, csvFilename })
+  await upload(gzFilename)
+
+  const postIds = posts.map((r) => r.id)
+  const uniqPostIds = [...new Set(postIds)]
+  const count = await db('posts').whereIn('id', uniqPostIds).del()
+  logger(`removed ${count} rows from posts`)
+}
 
 const main = async () => {
   debug.enable('archive')
@@ -128,6 +185,12 @@ const main = async () => {
 
   try {
     await archiveRepresentativesTelemetry()
+  } catch (err) {
+    console.log(err)
+  }
+
+  try {
+    await archivePosts()
   } catch (err) {
     console.log(err)
   }
