@@ -1,7 +1,7 @@
 ---
 title: Nano Communities (reddit, discord, forum) & Discussions
 description: Where to discuss and ask questions about nano
-tags: nano, reddit, discord, forum, github
+tags: nano, xno, reddit, discord, forum, github
 ---
 
 # Communities

@@ -1,7 +1,7 @@
 ---
 title: Best Practices
 description: General tips and suggestions on how to use and handle Nano
-tags: nano, crypto, tips, guide
+tags: nano, xno, crypto, tips, guide
 ---
 
 # Best Practices

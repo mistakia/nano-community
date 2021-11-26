@@ -1,7 +1,7 @@
 ---
 title: Support
 description: How to get help & support with Nano
-tags: nano, crypto, help, support, get, how, questions
+tags: nano, xno, crypto, help, support, get, how, questions
 ---
 
 # Support

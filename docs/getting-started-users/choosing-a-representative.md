@@ -1,12 +1,12 @@
 ---
 title: Choosing a Representative
 description: How to choose a representative and its importance
-tags: nano, representative, choosing, selection, voting, weight
+tags: nano, xno, representative, choosing, selection, voting, weight
 ---
 
 # Choosing a Representative
 
-Nano holders can run their own nodes to cast votes or they can delegate their voting weight to someone else who is running a node. They can re-delegate their voting weight at any time. Delegating your voting weight has no impact on your funds, as you remain in full control of them and can use them as you normally would.
+Nano (XNO) holders can run their own nodes to cast votes or they can delegate their voting weight to someone else who is running a node. They can re-delegate their voting weight at any time. Delegating your voting weight has no impact on your funds, as you remain in full control of them and can use them as you normally would.
 
 Delegating voting weight should not be done lightly as it is the main thing securing and controlling the network.
 

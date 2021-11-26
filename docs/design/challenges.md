@@ -1,7 +1,7 @@
 ---
 title: Challenges
-description: A summary of the challenges Nano faces before it can be widely adopted and used
-tags: nano, challenges, problems, issues, downsides, flaws
+description: A summary of the challenges Nano (XNO) faces before it can be widely adopted and used
+tags: nano, xno, challenges, problems, issues, downsides, flaws
 ---
 
 # Challenges

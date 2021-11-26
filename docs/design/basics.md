@@ -1,7 +1,7 @@
 ---
 title: Protocol design
 description: Nano protocol design information & whitepapers
-tags: nano, protocol, crypto, digital, money, whitepaper, design
+tags: nano, protocol, xno, crypto, digital, money, whitepaper, design
 ---
 
 # Design
@@ -19,7 +19,7 @@ For a general overview for those new to the topic of digital money, start with a
 
 ### Overview
 
-Nano uses a block-lattice data structure, where every account has its own blockchain (account-chain). It is the first cryptocurrency created on a directed acyclic graph (DAG), where a "block" is just one transaction, and each transaction contains the account's current balance.
+Nano (XNO) uses a block-lattice data structure, where every account has its own blockchain (account-chain). It is the first cryptocurrency created on a directed acyclic graph (DAG), where a "block" is just one transaction, and each transaction contains the account's current balance.
 
 Consensus is reached through an algorithm similar to proof of stake named Open Representative Voting (ORV). In this system, the voting weight is distributed to accounts based on the amount of NANO they hold: accounts then freely delegate this weight to a node of their choice. In the event that two contradictory transactions are broadcast to the network (as in a double spend attempt), nodes vote for one of them and broadcast their vote to the other nodes. The first transaction to reach a delta of 67% of the total voting weight is confirmed, and the other discarded.
 
@@ -27,6 +27,8 @@ This architecture allows Nano to function without direct monetary incentives to 
 
 | Feature            | Nano                              |
 | ------------------ | --------------------------------- |
+| Ticker Symbol      | XNO                               |
+| Currency Symbol    | Ӿ                                 |
 | Ledger Structure   | Block-lattice                     |
 | Consensus          | Open Representative Voting        |
 | Tx Prioritization  | Feeless — Balance, Time since Use |
