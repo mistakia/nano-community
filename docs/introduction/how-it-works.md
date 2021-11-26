@@ -1,7 +1,7 @@
 ---
 title: How it works
 description: Basics about Nano's ledger and consensus design
-tags: nano, crypto, block, lattice, ORV, consensus, how, design, works, does
+tags: nano, xno, crypto, block, lattice, ORV, consensus, how, design, works, does
 ---
 
 # How it works

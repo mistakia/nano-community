@@ -1,7 +1,7 @@
 ---
 title: FAQs
-description: Frequently asked questions about Nano
-tags: nano, faqs
+description: Frequently asked questions about Nano (XNO)
+tags: nano, xno, faqs
 ---
 
 # FAQs

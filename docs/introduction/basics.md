@@ -1,12 +1,12 @@
 ---
-title: What is Nano
+title: What is Nano (XNO)
 description: Nano is feeless, instant, green / energy-efficient digital money (cryptocurrency)
-tags: nano, crypto, what, how, feeless, green, energy, sustainable, information, instant, wiki
+tags: nano, xno, Ӿ, crypto, what, how, feeless, green, energy, sustainable, information, instant, wiki
 ---
 
 # Introduction
 
-Nano (NANO) is a form of money that enables feeless, instant, and sustainable value transfer between anyone, anywhere in the world. Feeless meaning no value is lost during a transfer. It operates without intermediaries, using a distributed ledger with a unique block-lattice data structure collectively managed by a peer-to-peer network.
+Nano (XNO) is a form of money that enables feeless, instant, and sustainable value transfer between anyone, anywhere in the world. Feeless meaning no value is lost during a transfer. It operates without intermediaries, using a distributed ledger with a unique block-lattice data structure collectively managed by a peer-to-peer network.
 
 Nano was launched in October 2015 by Colin LeMahieu to address limitations in existing blockchain-based distributed ledgers. By allowing for scalability within the protocol and offering feeless transactions that typically achieve full confirmation in under one second, Nano is well suited to be a widely used base layer for settling value.
 

@@ -15,9 +15,9 @@ export default class DisplayNano extends React.Component {
 
     return (
       <div className='display__nano'>
+        <div className='unit'>Ӿ</div>
         <div className='integer'>{BigNumber(parts[0]).toFormat()}</div>
         {Boolean(parts[1]) && <div className='fraction'>.{parts[1]}</div>}
-        <div className='unit'>nano</div>
       </div>
     )
   }

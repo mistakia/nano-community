@@ -1,12 +1,12 @@
 ---
 title: Advantages
 description: Benefits / advantages of nano over other technologies
-tags: nano, crypto, advantage, better, benefit, feeless, energy, green, sustainable
+tags: nano, xno, crypto, advantage, better, benefit, feeless, energy, green, sustainable
 ---
 
 # Advantages
 
-Nano is a new form of money that's completely digital. Nano is not controlled by any person, company, or government. The development is open-source and the network is run by a global community of users. Nano can be used without having to trust or rely on any other user, developer, or operator on the network.
+Nano (XNO) is a new form of money that's completely digital. Nano is not controlled by any person, company, or government. The development is open-source and the network is run by a global community of users. Nano can be used without having to trust or rely on any other user, developer, or operator on the network.
 
 Nano, unlike other approaches, is scalable, instant, asynchronous, uses minimal energy, feeless (no value lost during transfers), has deterministic finality, and is secured and controlled only by its holders.
 
@@ -68,7 +68,7 @@ Unlike fiat money and gold, ownership and authenticity are instantly verifiable 
 
 The supply is fixed and fully distributed. The monetary policy is incorruptible, making it a reliable store of value. No new Nano will ever enter the market.
 
-There will only ever be a maximum of <a href="https://docs.nano.org/protocol-design/distribution-and-units/#distribution" target="_blank">~133,248,297 Nano</a>.
+There will only ever be a maximum of <a href="https://docs.nano.org/protocol-design/distribution-and-units/#distribution" target="_blank">Ӿ 133,248,297</a>.
 
 Learn [why this matters](/introduction/why-it-matters) and is an essential function of money.
 
@@ -78,7 +78,7 @@ The smallest <a href="https://docs.nano.org/protocol-design/distribution-and-uni
 
 `0.000000000000000000000000000001`
 
-_<small>1e-30 Nano</small>_
+_<small>1e-30 Nano/XNO/Ӿ</small>_
 
 Nano is one of the most divisible forms of money in existence.
 
@@ -118,19 +118,19 @@ There is no inflation and has a Stock-To-Flow ratio of `undefined` since no new 
 
 ### Nano was fairly & widely distributed
 
-Nano was given away for free, proportional to time spent completing a captcha. Distribution began in 2015 and ended in October 2017, at which point the faucet had distributed 126,248,289 NANO.
+Nano was given away for free, proportional to time spent completing a captcha. Distribution began in 2015 and ended in October 2017, at which point the faucet had distributed Ӿ 126,248,289.
 
 Nano's distribution was widely accessible as it had only two requirements: knowledge of its existence and a device capable of connecting to the internet. Most other distribution methods (ICO, mining, etc) have additional barriers (wealth, hardware, etc).
 
-7,000,000 NANO (~5%) was set aside as a <a href="https://www.nanolooker.com/developer-fund" target="_blank">developer fund</a>, of which about ~300,000 Nano remain as of April 2021.
+Ӿ 7,000,000 (~5%) was set aside as a <a href="https://www.nanolooker.com/developer-fund" target="_blank">developer fund</a>, of which about Ӿ 300,000 remain as of Novemeber 2021.
 
 Because the distribution process was conducted on-chain, it is publicly available to be reviewed and audited by looking at the <a href="https://nanex.cc/accountstats?account=nano_35jjmmmh81kydepzeuf9oec8hzkay7msr6yxagzxpcht7thwa5bus5tomgz9" target="_blank">Core Faucet</a> and <a href="https://nanex.cc/accountstats?account=nano_13ezf4od79h1tgj9aiu4djzcmmguendtjfuhwfukhuucboua8cpoihmh8byo" target="_blank">Landing</a> account.
 
 A few notable statistics compiled by <a href="https://www.reddit.com/r/nanocurrency/comments/h7fmge/the_nano_faucet_distribution_visualized_and/" target="_blank">u/hanzyfranzy</a>:
 
-- The median faucet user got 192.76 Nano from the faucet.
+- The median faucet user got Ӿ 192.76 from the faucet.
 - There were a total of 130,814 faucet receive addresses.
-- The biggest faucet recipient received 1,724,105 Nano, likely from abusing the Captchas at the very beginning. These types of accounts appear to be very rare and they seem to have sold much of their Nano long before the initial runup in 2017.
+- The biggest faucet recipient received Ӿ 1,724,105, likely from abusing the Captchas at the very beginning. These types of accounts appear to be very rare and they seem to have sold much of their Nano long before the initial runup in 2017.
 
 Nano's distribution is notable as 95% of the supply was given away for free. Nano has been fully distributed since 2017.
 

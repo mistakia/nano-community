@@ -1,7 +1,7 @@
 ---
 title: Privacy with Nano
 description: How to protect your privacy while using Nano
-tags: nano, crypto, privacy, kyc, guide, tips, mixing, shielding, anonymity, address
+tags: nano, xno, crypto, privacy, kyc, guide, tips, mixing, shielding, anonymity, address
 ---
 
 # Privacy
@@ -30,7 +30,7 @@ Be mindful when you transact with an identifiable public account, like a tip add
 
 You can use an exchange to create separation between your accounts by depositing Nano and making multiple withdrawals to new addresses. This makes it difficult for anyone aware of your previous account to track you, like when you withdraw from a public tip bot address.
 
-Exchanges will generally allow free deposits and charge a small fee for withdrawals (i.e. `0.01` Nano). Withdrawals from exchanges come from a single account that pools everyone's deposits together, making it difficult for an outsider to establish a link between a deposit and a withdrawal. To further obfuscate the link, it is good practice to scatter your withdrawals over some time.
+Exchanges will generally allow free deposits and charge a small fee for withdrawals (i.e. Ӿ `0.01`). Withdrawals from exchanges come from a single account that pools everyone's deposits together, making it difficult for an outsider to establish a link between a deposit and a withdrawal. To further obfuscate the link, it is good practice to scatter your withdrawals over some time.
 
 To further protect your privacy, create a new exchange account for this process and do not verify your identity.
 

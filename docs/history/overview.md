@@ -1,7 +1,7 @@
 ---
 title: History of Nano
 description: History of Nano
-tags: nano, crypto, history, distribution, development, creation, background
+tags: nano, xno, raiblocks, crypto, history, distribution, development, creation, background
 ---
 
 # History
@@ -65,17 +65,17 @@ Similar to Satoshi's initial announcement, Colin's project garnered little atten
 
 Nano was given away for free to anyone willing to manually complete captcha puzzles (i.e. transcribing challenging to read or hear letters to text). The goal was to distribute Nano as widely and fairly as possible. The <a href="https://medium.com/nanocurrency/the-nano-faucet-c99e18ae1202" target="_blank">captcha faucet</a> allowed anyone with a computer to participate, without the need for specialized computers (Proof-Of-Work) or favoring those with more wealth (Initial Coin Offering).
 
-Distribution began in 2015 and ended in October 2017, at which point the faucet had distributed 126,248,289 NANO.
+Distribution began in 2015 and ended in October 2017, at which point the faucet had distributed Ӿ 126,248,289.
 
-7,000,000 NANO (~5%) was set aside as a <a href="https://www.nanolooker.com/developer-fund" target="_blank">developer fund</a>, of which about ~300,000 Nano remain as of April 2021.
+Ӿ 7,000,000 (~5%) was set aside as a <a href="https://www.nanolooker.com/developer-fund" target="_blank">developer fund</a>, of which about Ӿ 300,000 Nano remain as of November 2021.
 
 Because the distribution process was conducted on-chain, it is publicly available to be reviewed and audited by looking at the <a href="https://nanex.cc/accountstats?account=nano_13ezf4od79h1tgj9aiu4djzcmmguendtjfuhwfukhuucboua8cpoihmh8byo" target="_blank">Landing Account</a>.
 
 A few notable statistics compiled by <a href="https://www.reddit.com/r/nanocurrency/comments/h7fmge/the_nano_faucet_distribution_visualized_and/" target="_blank">u/hanzyfranzy</a>:
 
-- The median faucet user got 192.76 Nano from the faucet.
+- The median faucet user got Ӿ 192.76 from the faucet.
 - There were a total of 130,814 faucet receive addresses.
-- The biggest faucet recipient received 1,724,105 Nano, likely from abusing the Captchas at the very beginning. These types of accounts appear to be very rare and they seem to have sold much of their Nano long before the initial runup in 2017.
+- The biggest faucet recipient received Ӿ 1,724,105, likely from abusing the Captchas at the very beginning. These types of accounts appear to be very rare and they seem to have sold much of their Nano long before the initial runup in 2017.
 
 Nano's distribution is notable as 95% of the supply was given away for free. Nano has been fully distributed since 2017 and is now undergoing the process of redistribution through open markets.
 

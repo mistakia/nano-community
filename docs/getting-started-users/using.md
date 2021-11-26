@@ -1,7 +1,7 @@
 ---
 title: Using Nano
 description: How to use Nano, sending & receiving transactions, changing representatives
-tags: nano, crypto, use, transaction, send, receive, change, representative
+tags: nano, xno, crypto, use, transaction, send, receive, change, representative
 ---
 
 # Using

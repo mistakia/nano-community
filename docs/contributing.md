@@ -1,7 +1,7 @@
 ---
 title: Contributing to Nano
-description: how to contribute to nano development and ecosystem
-tags: nano, contribute, github, code, development, team
+description: how to contribute to nano protocol development and ecosystem
+tags: nano, xno, protocol, contribute, github, code, development, team
 ---
 
 # Contributing

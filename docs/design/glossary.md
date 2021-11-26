@@ -62,7 +62,7 @@ nano_1111111111111111111111111111111111111111111111111111hifc8npp
 
 ### circulating supply
 
-133,248,297.920938463463374607431768211455 Nano. This is the supply that resulted after burns were made from the genesis account, landing account and faucet account, following original distribution. Actual circulating supply is lower due to lost keys and sends to burn accounts. The original supply minus any amounts sent to the burn account can be found using the available_supply RPC.
+Ӿ 133,248,297.920938463463374607431768211455. This is the supply that resulted after burns were made from the genesis account, landing account and faucet account, following original distribution. Actual circulating supply is lower due to lost keys and sends to burn accounts. The original supply minus any amounts sent to the burn account can be found using the available_supply RPC.
 
 ### cementing
 

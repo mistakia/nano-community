@@ -1,7 +1,7 @@
 ---
 title: Misconceptions
 description: Misfacts and confusion about Nano
-tags: nano, criticism, fud, crypto, downsides, flaws
+tags: nano, xno, criticism, fud, crypto, downsides, flaws
 ---
 
 # Misconceptions

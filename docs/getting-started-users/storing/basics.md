@@ -1,7 +1,7 @@
 ---
 title: Storing Nano
 description: How to use and store Nano
-tags: nano, wallet, crypto, custody, cold, seed, address, security
+tags: nano, xno, wallet, crypto, custody, cold, seed, address, security
 ---
 
 # Storing
@@ -10,7 +10,7 @@ It's important to understand the difference between self-custody and custodial a
 
 ## Self-custody vs Custodial
 
-You can store and control Nano directly (self-custody) or you can give it to another entity (custodian) to control it for you.
+You can store and control Nano (XNO) directly (self-custody) or you can give it to another entity (custodian) to control it for you.
 
 The decision is mostly one of responsibility and control with implications for the security and value of the network.
 

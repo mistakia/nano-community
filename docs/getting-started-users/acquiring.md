@@ -1,14 +1,14 @@
 ---
-title: Buying, acquiring or earning Nano
-description: How to buy Nano from exchanges & services, get, earn, or acquire from faucets
-tags: nano, buy, how, where, get, purchase, crypto, exchange, faucets, earn, games
+title: Buying, acquiring or earning Nano (XNO)
+description: How to buy Nano (XNO) from exchanges & services, get, earn, or acquire from faucets
+tags: nano, xno, buy, how, where, get, purchase, crypto, exchange, faucets, earn, games
 ---
 
 # Acquiring
 
 ## Faucets
 
-Get some free Nano from community maintained and donated faucets to test it out.
+Get some free Nano (XNO) from community maintained and donated faucets to test it out.
 
 - <a href="https://nano-faucet.org/" target="_blank">nano-faucet.org</a>
 - <a href="https://nanodrop.io/" target="_blank">NanoDrop.io</a>
@@ -20,7 +20,7 @@ Get some free Nano from community maintained and donated faucets to test it out.
 
 ## Purchasing
 
-Because Nano is an emerging technology, it is not yet easy to purchase and therefore has limited availability, volume, and liquidity. Over time, its availability will improve with further adoption and development.
+Because Nano (XNO) is an emerging technology, it is not yet easy to purchase and therefore has limited availability, volume, and liquidity. Over time, its availability will improve with further adoption and development.
 
 In the meantime, there are two main ways to purchase Nano:
 
@@ -42,36 +42,36 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 
 | Exchange                                                                                                                | Maker Fee | Taker Fee | Withdrawal Fee |
 | ----------------------------------------------------------------------------------------------------------------------- | --------- | --------- | -------------- |
-| <a href="https://www.binance.com/en/trade/NANO_USDT?layout=pro" target="_blank">Binance.com</a>                         | 0.1%      | 0.1%      | 0.01 Nano      |
-| <a href="https://www.kraken.com/en-us/prices/nano-price-chart/usd-us-dollar?interval=1m" target="_blank">Kraken.com</a> | 0.16%     | 0.26%     | 0.05 Nano      |
-| <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>                                                 | 0.1%      | 0.1%      | 0.01 Nano      |
-| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                                                  | 0.4%      | 0.4%      | 0.008 Nano     |
+| <a href="https://www.binance.com/en/trade/NANO_USDT?layout=pro" target="_blank">Binance.com</a>                         | 0.1%      | 0.1%      | Ӿ 0.01         |
+| <a href="https://www.kraken.com/en-us/prices/nano-price-chart/usd-us-dollar?interval=1m" target="_blank">Kraken.com</a> | 0.16%     | 0.26%     | Ӿ 0.05         |
+| <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>                                                 | 0.1%      | 0.1%      | Ӿ 0.01         |
+| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                                                  | 0.4%      | 0.4%      | Ӿ 0.008        |
 
 #### Canada
 
 | Exchange                                                                                                                | Maker Fee | Taker Fee | Withdrawal Fee |
 | ----------------------------------------------------------------------------------------------------------------------- | --------- | --------- | -------------- |
-| <a href="https://www.binance.com/en/trade/NANO_USDT?layout=pro" target="_blank">Binance.com</a>                         | 0.1%      | 0.1%      | 0.01 Nano      |
-| <a href="https://www.kraken.com/en-us/prices/nano-price-chart/usd-us-dollar?interval=1m" target="_blank">Kraken.com</a> | 0.16%     | 0.26%     | 0.05 Nano      |
-| <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>                                                 | 0.1%      | 0.1%      | 0.01 Nano      |
-| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                                                  | 0.4%      | 0.4%      | 0.008 Nano     |
+| <a href="https://www.binance.com/en/trade/NANO_USDT?layout=pro" target="_blank">Binance.com</a>                         | 0.1%      | 0.1%      | Ӿ 0.01         |
+| <a href="https://www.kraken.com/en-us/prices/nano-price-chart/usd-us-dollar?interval=1m" target="_blank">Kraken.com</a> | 0.16%     | 0.26%     | Ӿ 0.05         |
+| <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>                                                 | 0.1%      | 0.1%      | Ӿ 0.01         |
+| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                                                  | 0.4%      | 0.4%      | Ӿ 0.008        |
 
 #### Europe
 
 | Exchange                                                                                                     | Maker Fee | Taker Fee | Withdrawal Fee |
 | ------------------------------------------------------------------------------------------------------------ | --------- | --------- | -------------- |
-| <a href="https://www.binance.com/en/trade/NANO_USDT?layout=pro" target="_blank">Binance.com</a>              | 0.1%      | 0.1%      | 0.01 Nano      |
-| <a href="https://www.kraken.com/prices/nano-price-chart/eur-euro?interval=1m" target="_blank">Kraken.com</a> | 0.16%     | 0.26%     | 0.05 Nano      |
-| <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>                                      | 0.1%      | 0.1%      | 0.01 Nano      |
-| <a href="https://account.bitvavo.com/markets/NANO-EUR" target="_blank">Bitvavo.com</a>                       | 0.15%     | 0.25%     | 0.00025 Nano   |
-| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                                       | 0.4%      | 0.4%      | 0.008 Nano     |
+| <a href="https://www.binance.com/en/trade/NANO_USDT?layout=pro" target="_blank">Binance.com</a>              | 0.1%      | 0.1%      | Ӿ 0.01         |
+| <a href="https://www.kraken.com/prices/nano-price-chart/eur-euro?interval=1m" target="_blank">Kraken.com</a> | 0.16%     | 0.26%     | Ӿ 0.05         |
+| <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>                                      | 0.1%      | 0.1%      | Ӿ 0.01         |
+| <a href="https://account.bitvavo.com/markets/NANO-EUR" target="_blank">Bitvavo.com</a>                       | 0.15%     | 0.25%     | Ӿ 0.00025      |
+| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                                       | 0.4%      | 0.4%      | Ӿ 0.008        |
 
 #### India
 
 | Exchange                                                                   | Maker Fee | Taker Fee | Withdrawal Fee |
 | -------------------------------------------------------------------------- | --------- | --------- | -------------- |
-| <a href="https://wazirx.com/exchange/NANO-USDT" target="_blank">WazirX</a> | 0.2%      | 0.2%      | 3.1 NANO       |
-| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>     | 0.4%      | 0.4%      | 0.008 Nano     |
+| <a href="https://wazirx.com/exchange/NANO-USDT" target="_blank">WazirX</a> | 0.2%      | 0.2%      | Ӿ 3.1          |
+| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>     | 0.4%      | 0.4%      | Ӿ 0.008        |
 
 #### South Korea
 
@@ -79,26 +79,26 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 | ------------------------------------------------------------------------------------------- | --------- | --------- | -------------- |
 | <a href="https://www.probit.kr/app/exchange/NANO-KRW" target="_blank">Probit.kr</a>         | 0.2%      | 0.2%      | Unknown        |
 | <a href="https://www.huobi.co.kr/en-us/exchange/nano_usdt/" target="_blank">Huobi.co.kr</a> | 0.1%      | 0.1%      | Unknown        |
-| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                      | 0.4%      | 0.4%      | 0.008 Nano     |
+| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                      | 0.4%      | 0.4%      | Ӿ 0.008        |
 
 #### United Kingdom
 
 | Exchange                                                                                                     | Maker Fee | Taker Fee | Withdrawal Fee |
 | ------------------------------------------------------------------------------------------------------------ | --------- | --------- | -------------- |
-| <a href="https://www.binance.com/en/trade/NANO_USDT?layout=pro" target="_blank">Binance.com</a>              | 0.1%      | 0.1%      | 0.01 Nano      |
-| <a href="https://www.kraken.com/prices/nano-price-chart/eur-euro?interval=1m" target="_blank">Kraken.com</a> | 0.16%     | 0.26%     | 0.05 Nano      |
-| <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>                                      | 0.1%      | 0.1%      | 0.01 Nano      |
-| <a href="https://account.bitvavo.com/markets/NANO-EUR" target="_blank">Bitvavo.com</a>                       | 0.15%     | 0.25%     | 0.00025 Nano   |
-| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                                       | 0.4%      | 0.4%      | 0.008 Nano     |
+| <a href="https://www.binance.com/en/trade/NANO_USDT?layout=pro" target="_blank">Binance.com</a>              | 0.1%      | 0.1%      | Ӿ 0.01         |
+| <a href="https://www.kraken.com/prices/nano-price-chart/eur-euro?interval=1m" target="_blank">Kraken.com</a> | 0.16%     | 0.26%     | Ӿ 0.05         |
+| <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>                                      | 0.1%      | 0.1%      | Ӿ 0.01         |
+| <a href="https://account.bitvavo.com/markets/NANO-EUR" target="_blank">Bitvavo.com</a>                       | 0.15%     | 0.25%     | Ӿ 0.00025      |
+| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                                       | 0.4%      | 0.4%      | Ӿ 0.008        |
 
 #### United States
 
 | Exchange                                                                                                                | Maker Fee | Taker Fee | Withdrawal Fee |
 | ----------------------------------------------------------------------------------------------------------------------- | --------- | --------- | -------------- |
-| <a href="https://www.binance.us/en/trade/NANO_USD" target="_blank">Binance.US</a>                                       | 0.1%      | 0.1%      | 0.01 Nano      |
-| <a href="https://www.kraken.com/en-us/prices/nano-price-chart/usd-us-dollar?interval=1m" target="_blank">Kraken.com</a> | 0.16%     | 0.26%     | 0.05 Nano      |
-| <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>                                                 | 0.1%      | 0.1%      | 0.01 Nano      |
-| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                                                  | 0.4%      | 0.4%      | 0.008 Nano     |
+| <a href="https://www.binance.us/en/trade/NANO_USD" target="_blank">Binance.US</a>                                       | 0.1%      | 0.1%      | Ӿ 0.01         |
+| <a href="https://www.kraken.com/en-us/prices/nano-price-chart/usd-us-dollar?interval=1m" target="_blank">Kraken.com</a> | 0.16%     | 0.26%     | Ӿ 0.05         |
+| <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>                                                 | 0.1%      | 0.1%      | Ӿ 0.01         |
+| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                                                  | 0.4%      | 0.4%      | Ӿ 0.008        |
 
 ### Services
 
@@ -116,13 +116,13 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 | ----------------------------------------------------------------------------------------- | ------ | -------- | -------------- |
 | <a href="https://www.simplex.com/" target="_blank">Simplex</a>                            | 2.5-8% | ?        | $10            |
 | <a href="https://uphold.com/en/prices/crypto/nano-price" target="_blank">Uphold</a>       | ?      | 0.8-1.8% | No Withdrawls  |
-| <a href="https://wirexapp.com/live-rates?query=nano" target="_blank">Wirex</a>            | 1%     | ?        | 0.00 Nano      |
+| <a href="https://wirexapp.com/live-rates?query=nano" target="_blank">Wirex</a>            | 1%     | ?        | Ӿ 0.00         |
 | <a href="https://changelly.com/" target="_blank">Changelly</a>                            | 0%     | ~10.7%   | Unknown        |
 | <a href="https://www.moonpay.com/" target="_blank">MoonPay</a>                            | 4.5%   | ?        | Unknown        |
-| <a href="https://buy.coingate.com/" target="_blank">CoinGate</a>                          | 0%     | ~18%     | 0.00 Nano      |
-| <a href="https://swyftx.com.au/buy/nano-nano/" target="_blank">Swyftx</a>                 | 0.6%   | >0.45%   | 0.01 Nano      |
+| <a href="https://buy.coingate.com/" target="_blank">CoinGate</a>                          | 0%     | ~18%     | Ӿ 0.00         |
+| <a href="https://swyftx.com.au/buy/nano-nano/" target="_blank">Swyftx</a>                 | 0.6%   | >0.45%   | Ӿ 0.01         |
 | <a href="https://www.coinspot.com.au/buy/xrb" target="_blank">CoinSpot</a>                | 1%     | ~3.8%    | Unknown        |
-| <a href="https://changenow.io/exchange?from=aud&to=nano" target="_blank">ChangeNOW.io</a> | 1%     | ~5.5%    | 0.00 Nano      |
+| <a href="https://changenow.io/exchange?from=aud&to=nano" target="_blank">ChangeNOW.io</a> | 1%     | ~5.5%    | Ӿ 0.00         |
 
 #### Azerbaijan
 
@@ -142,11 +142,11 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 | ----------------------------------------------------------------------------------------- | ------ | -------- | -------------- |
 | <a href="https://www.simplex.com/" target="_blank">Simplex</a>                            | 2.5-8% | ?        | $10            |
 | <a href="https://uphold.com/en/prices/crypto/nano-price" target="_blank">Uphold</a>       | ?      | 0.8-1.8% | No Withdrawls  |
-| <a href="https://wirexapp.com/live-rates?query=nano" target="_blank">Wirex</a>            | 1%     | ?        | 0.00 Nano      |
+| <a href="https://wirexapp.com/live-rates?query=nano" target="_blank">Wirex</a>            | 1%     | ?        | Ӿ 0.00         |
 | <a href="https://changelly.com/" target="_blank">Changelly</a>                            | 0%     | ~10.7%   | Unknown        |
 | <a href="https://www.moonpay.com/" target="_blank">MoonPay</a>                            | 4.5%   | ?        | Unknown        |
-| <a href="https://buy.coingate.com/" target="_blank">CoinGate</a>                          | 0%     | ~18%     | 0.00 Nano      |
-| <a href="https://changenow.io/exchange?from=cad&to=nano" target="_blank">ChangeNOW.io</a> | 1%     | ~5.5%    | 0.00 Nano      |
+| <a href="https://buy.coingate.com/" target="_blank">CoinGate</a>                          | 0%     | ~18%     | Ӿ 0.00         |
+| <a href="https://changenow.io/exchange?from=cad&to=nano" target="_blank">ChangeNOW.io</a> | 1%     | ~5.5%    | Ӿ 0.00         |
 
 #### Chile
 
@@ -208,12 +208,12 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 | ----------------------------------------------------------------------------------------- | ------ | -------- | -------------- |
 | <a href="https://www.simplex.com/" target="_blank">Simplex</a>                            | 2.5-8% | ?        | $10            |
 | <a href="https://uphold.com/en/prices/crypto/nano-price" target="_blank">Uphold</a>       | ?      | 0.8-1.8% | No Withdrawls  |
-| <a href="https://wirexapp.com/live-rates?query=nano" target="_blank">Wirex</a>            | 1%     | ?        | 0.00 Nano      |
+| <a href="https://wirexapp.com/live-rates?query=nano" target="_blank">Wirex</a>            | 1%     | ?        | Ӿ 0.00         |
 | <a href="https://changelly.com/" target="_blank">Changelly</a>                            | 0%     | ~10.7%   | Unknown        |
 | <a href="https://www.moonpay.com/" target="_blank">MoonPay</a>                            | 4.5%   | ?        | Unknown        |
-| <a href="https://buy.coingate.com/" target="_blank">CoinGate</a>                          | 0%     | ~18%     | 0.00 Nano      |
-| <a href="https://www.bitcoinsuisse.com/" target="_blank">BitcoinSuisse</a>                | 1.25%  | ~18%     | 0.00 Nano      |
-| <a href="https://changenow.io/exchange?from=eur&to=nano" target="_blank">ChangeNOW.io</a> | 1%     | ~5.5%    | 0.00 Nano      |
+| <a href="https://buy.coingate.com/" target="_blank">CoinGate</a>                          | 0%     | ~18%     | Ӿ 0.00         |
+| <a href="https://www.bitcoinsuisse.com/" target="_blank">BitcoinSuisse</a>                | 1.25%  | ~18%     | Ӿ 0.00         |
+| <a href="https://changenow.io/exchange?from=eur&to=nano" target="_blank">ChangeNOW.io</a> | 1%     | ~5.5%    | Ӿ 0.00         |
 
 #### Malaysia
 
@@ -323,11 +323,11 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 | ----------------------------------------------------------------------------------------- | ------ | -------- | -------------- |
 | <a href="https://www.simplex.com/" target="_blank">Simplex</a>                            | 2.5-8% | ?        | $10            |
 | <a href="https://uphold.com/en/prices/crypto/nano-price" target="_blank">Uphold</a>       | ?      | 0.8-1.8% | No Withdrawls  |
-| <a href="https://wirexapp.com/live-rates?query=nano" target="_blank">Wirex</a>            | 1%     | ?        | 0.00 Nano      |
+| <a href="https://wirexapp.com/live-rates?query=nano" target="_blank">Wirex</a>            | 1%     | ?        | Ӿ 0.00         |
 | <a href="https://changelly.com/" target="_blank">Changelly</a>                            | 0%     | ~10.7%   | Unknown        |
 | <a href="https://www.moonpay.com/" target="_blank">MoonPay</a>                            | 4.5%   | ?        | Unknown        |
-| <a href="https://buy.coingate.com/" target="_blank">CoinGate</a>                          | 0%     | ~18%     | 0.00 Nano      |
-| <a href="https://changenow.io/exchange?from=gbp&to=nano" target="_blank">ChangeNOW.io</a> | 1%     | ~5.5%    | 0.00 Nano      |
+| <a href="https://buy.coingate.com/" target="_blank">CoinGate</a>                          | 0%     | ~18%     | Ӿ 0.00         |
+| <a href="https://changenow.io/exchange?from=gbp&to=nano" target="_blank">ChangeNOW.io</a> | 1%     | ~5.5%    | Ӿ 0.00         |
 
 #### United States
 
@@ -336,10 +336,10 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 | <a href="http://www.metalpay.com/" target="_blank">MetalPay</a>                     | 5%     | ?        | No Withdrawls  |
 | <a href="https://www.simplex.com/" target="_blank">Simplex</a>                      | 2.5-8% | ?        | $10            |
 | <a href="https://uphold.com/en/prices/crypto/nano-price" target="_blank">Uphold</a> | ?      | 0.8-1.8% | No Withdrawls  |
-| <a href="https://wirexapp.com/live-rates?query=nano" target="_blank">Wirex</a>      | 1%     | ?        | 0.00 Nano      |
+| <a href="https://wirexapp.com/live-rates?query=nano" target="_blank">Wirex</a>      | 1%     | ?        | Ӿ 0.00         |
 | <a href="https://changelly.com/" target="_blank">Changelly</a>                      | 0%     | ~10.7%   | Unknown        |
 | <a href="https://www.moonpay.com/" target="_blank">MoonPay</a>                      | 4.5%   | ?        | Unknown        |
-| <a href="https://buy.coingate.com/" target="_blank">CoinGate</a>                    | 0%     | ~18%     | 0.00 Nano      |
+| <a href="https://buy.coingate.com/" target="_blank">CoinGate</a>                    | 0%     | ~18%     | Ӿ 0.00         |
 
 #### Uruguay
 

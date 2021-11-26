@@ -1,7 +1,7 @@
 ---
 title: Setup Wallet & Account
 description: How to create a nano account and wallet
-tags: nano, wallet, account, crypto, setup, create, use, address, seed, secure, instructions
+tags: nano, xno, wallet, account, crypto, setup, create, use, address, seed, secure, instructions
 ---
 
 # Setting up an Account
