@@ -5,31 +5,6 @@ const { request } = require('../common')
 const db = require('../db')
 const logger = debug('script')
 debug.enable('script')
-
-// const formatEvent = (item) => {
-//   return {
-//     actor: item.payload.user,
-//     action: item.payload.action, // opened, closed, reopened, assigned, unassigned, labeled, unlabled
-//     event_url: item.payload.html_url,
-//     title: item.payload.title,
-//     labels: item.payload.labels,
-//     body: item.payload.body
-//   }
-// }
-// const format = (item) => {
-//   const { id, type } = item
-//   const event = formatEvent(item)
-//   return {
-//     ...event,
-//     id,
-//     type,
-//     actor_id: item.author.id,
-//     actor_name: item.author.login,
-//     actor_avatar: item.author.avatar_url,
-//     created_at: dayjs(item.created_at).unix()
-//   }
-// }
-
 const main = async () => {
   const params = {
     state: 'open'
@@ -53,16 +28,17 @@ const main = async () => {
     const issue = {}
 
     // populate issue with various properties
+    issue.id = item.id
     issue.actor_id = item.user.id
     issue.actor_name = item.user.login
     issue.actor_avatar_url = item.user.actor_avatar_url
-    issue.id = item.id
-    issue.url = item.html_url
+    issue.ref = item.number
     issue.title = item.title
     issue.body = item.body
+    issue.url = item.html_url
     issue.date = dayjs(item.created_at).unix()
     issues.push(issue)
-    item.labels.forEach((label) => issueLabels.push({ id: item.id, name: label.name, color: item.color }))
+    item.labels.forEach((label) => issueLabels.push({ issue_id: issue.id, label_id: item.id, label_name: label.name, label_color: item.color }))
   }
   if (issues.length) {
     logger(`saving ${issues.length} issues from github`)
