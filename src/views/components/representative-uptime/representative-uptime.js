@@ -82,7 +82,8 @@ export default class RepresentativeUptime extends React.Component {
             <div
               className={`representative__uptime-metric-body ${
                 online ? 'online' : 'offline'
-              }`}>
+              }`}
+            >
               {text}
             </div>
           </div>
@@ -91,7 +92,8 @@ export default class RepresentativeUptime extends React.Component {
               2W Uptime
             </div>
             <div
-              className={`representative__uptime-metric-body ${uptimeClass}`}>
+              className={`representative__uptime-metric-body ${uptimeClass}`}
+            >
               {uptimePct}%
             </div>
           </div>
@@ -100,7 +102,8 @@ export default class RepresentativeUptime extends React.Component {
               2M Uptime
             </div>
             <div
-              className={`representative__uptime-metric-body ${last60Class}`}>
+              className={`representative__uptime-metric-body ${last60Class}`}
+            >
               {last60Pct ? `${last60Pct}%` : '-'}
             </div>
           </div>
@@ -109,7 +112,8 @@ export default class RepresentativeUptime extends React.Component {
               3M Uptime
             </div>
             <div
-              className={`representative__uptime-metric-body ${last90Class}`}>
+              className={`representative__uptime-metric-body ${last90Class}`}
+            >
               {last90Pct ? `${last90Pct}%` : '-'}
             </div>
           </div>

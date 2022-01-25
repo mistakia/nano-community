@@ -10,8 +10,8 @@ const main = async () => {
     state: 'open'
   }
   const url = `https://api.github.com/repos/mistakia/nano-community/issues${queryString.stringify(
-      params
-    )}`
+    params
+  )}`
 
   let res
   try {
@@ -38,7 +38,14 @@ const main = async () => {
     issue.url = item.html_url
     issue.date = dayjs(item.created_at).unix()
     issues.push(issue)
-    item.labels.forEach((label) => issueLabels.push({ issue_id: issue.id, label_id: item.id, label_name: label.name, label_color: item.color }))
+    item.labels.forEach((label) =>
+      issueLabels.push({
+        issue_id: issue.id,
+        label_id: item.id,
+        label_name: label.name,
+        label_color: item.color
+      })
+    )
   }
   if (issues.length) {
     logger(`saving ${issues.length} issues from github`)

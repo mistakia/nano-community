@@ -29,12 +29,8 @@ export const Account = new Record({
 
 export function createAccount(data) {
   /* eslint-disable camelcase */
-  const {
-    major_version,
-    minor_version,
-    patch_version,
-    pre_release_version
-  } = data.telemetry
+  const { major_version, minor_version, patch_version, pre_release_version } =
+    data.telemetry
   const { last_online, last_offline } = data
 
   const is_online = last_online && last_online > last_offline
