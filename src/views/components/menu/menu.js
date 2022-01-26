@@ -122,7 +122,8 @@ export default class Menu extends React.Component {
           onClose={this.handleClose}
           disableBackdropTransition={!iOS}
           disableDiscovery={iOS}
-          anchor='top'>
+          anchor='top'
+        >
           <MenuSections />
         </SwipeableDrawer>
         <SpeedDial
@@ -138,7 +139,8 @@ export default class Menu extends React.Component {
               src='/resources/nano+circle.svg'
             />
           }
-          openIcon={<CloseIcon />}>
+          openIcon={<CloseIcon />}
+        >
           {!isHome && (
             <SpeedDialAction
               icon={<HomeIcon />}

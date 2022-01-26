@@ -27,7 +27,8 @@ export default class Collapsible extends React.Component {
             startIcon={
               this.state.expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />
             }
-            onClick={this.handleClick}>
+            onClick={this.handleClick}
+          >
             {title}
           </Button>
         </div>

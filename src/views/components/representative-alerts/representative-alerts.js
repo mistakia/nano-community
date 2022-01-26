@@ -108,7 +108,8 @@ export default class RepresentativeAlerts extends React.Component {
                     </TableCell>
                     <TableCell
                       className='rep__alert-metric offline'
-                      align='right'>
+                      align='right'
+                    >
                       {row.account.is_online ? (
                         <FiberManualRecordIcon className='green' />
                       ) : (

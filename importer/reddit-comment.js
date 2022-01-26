@@ -1,6 +1,7 @@
 const { request } = require('../common')
 
-const reRedditComment = /reddit.com\/r\/nanocurrency\/comments\/(?<postId>[a-z0-9]{6})\/[A-Za-z0-9\-_]+\/(?<commentId>[a-z0-9]+)/
+const reRedditComment =
+  /reddit.com\/r\/nanocurrency\/comments\/(?<postId>[a-z0-9]{6})\/[A-Za-z0-9\-_]+\/(?<commentId>[a-z0-9]+)/
 
 const main = async (link) => {
   const m = link.match(reRedditComment)

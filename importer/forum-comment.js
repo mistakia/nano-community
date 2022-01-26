@@ -1,6 +1,7 @@
 const { request } = require('../common')
 
-const reForumComment = /forum.nano.org\/t\/[A-z-]+\/(?<topicId>[0-9]+)\/(?<postNum>[0-9]+)/
+const reForumComment =
+  /forum.nano.org\/t\/[A-z-]+\/(?<topicId>[0-9]+)\/(?<postNum>[0-9]+)/
 
 const main = async (link) => {
   const m = link.match(reForumComment)

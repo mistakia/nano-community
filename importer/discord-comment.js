@@ -1,7 +1,8 @@
 const { request } = require('../common')
 const config = require('../config')
 
-const reDiscordComment = /discord.com\/channels\/(?<guildId>370266023905198083|403628195548495882)\/(?<channelId>[0-9]{18})\/(?<messageId>[0-9]{18})/
+const reDiscordComment =
+  /discord.com\/channels\/(?<guildId>370266023905198083|403628195548495882)\/(?<channelId>[0-9]{18})\/(?<messageId>[0-9]{18})/
 
 const main = async (link) => {
   const m = link.match(reDiscordComment)
