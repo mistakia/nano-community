@@ -29,7 +29,8 @@ function TabPanel(props) {
     <div
       className='representatives__metric'
       hidden={value !== index}
-      {...other}>
+      {...other}
+    >
       {value === index && children}
     </div>
   )
@@ -94,7 +95,8 @@ export default class RepresentativesPage extends React.Component {
               variant='scrollable'
               value={this.state.value}
               className='representatives__metrics-menu'
-              onChange={this.handleChange}>
+              onChange={this.handleChange}
+            >
               <Tab label='Telemetry' />
               <Tab label='Weight Distribution' />
               <Tab label='Weight History' />

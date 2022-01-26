@@ -107,7 +107,8 @@ export default class AccountPage extends React.Component {
                 <Tooltip title='click to copy'>
                   <IconButton
                     className='section__copy'
-                    onClick={this.handleClick}>
+                    onClick={this.handleClick}
+                  >
                     <FilterNoneIcon />
                   </IconButton>
                 </Tooltip>
@@ -147,7 +148,8 @@ export default class AccountPage extends React.Component {
                     variant='scrollable'
                     value={this.state.value}
                     className='representative__metrics-menu'
-                    onChange={this.handleChange}>
+                    onChange={this.handleChange}
+                  >
                     <Tab label='Conf. Diff' />
                     <Tab label='Block Diff' />
                     <Tab label='Peer Count' />

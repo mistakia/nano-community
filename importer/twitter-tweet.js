@@ -1,7 +1,8 @@
 const { request } = require('../common')
 const config = require('../config')
 
-const reTwitterTweet = /twitter.com\/[a-zA-Z0-9_]{4,25}\/status\/(?<tweetId>[0-9]{13})/
+const reTwitterTweet =
+  /twitter.com\/[a-zA-Z0-9_]{4,25}\/status\/(?<tweetId>[0-9]{13})/
 
 const main = async (link) => {
   const m = link.match(reTwitterTweet)
