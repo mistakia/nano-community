@@ -9,7 +9,7 @@ const main = async () => {
   const params = {
     state: 'open'
   }
-  const url = `https://api.github.com/repos/mistakia/nano-community/issues${queryString.stringify(
+  const url = `https://api.github.com/repos/mistakia/nano-community/issues?${queryString.stringify(
     params
   )}`
 
@@ -31,19 +31,19 @@ const main = async () => {
     issue.id = item.id
     issue.actor_id = item.user.id
     issue.actor_name = item.user.login
-    issue.actor_avatar_url = item.user.actor_avatar_url
+    issue.actor_avatar = item.user.avatar_url
     issue.ref = item.number
     issue.title = item.title
     issue.body = item.body
     issue.url = item.html_url
-    issue.date = dayjs(item.created_at).unix()
+    issue.created_at = dayjs(item.created_at).unix()
     issues.push(issue)
     item.labels.forEach((label) =>
       issueLabels.push({
         issue_id: issue.id,
-        label_id: item.id,
+        label_id: label.id,
         label_name: label.name,
-        label_color: item.color
+        label_color: label.color
       })
     )
   }

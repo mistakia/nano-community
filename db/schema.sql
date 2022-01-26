@@ -397,20 +397,20 @@ CREATE TABLE `github_issues` (
   `actor_avatar` varchar(255) CHARACTER SET utf8 NOT NULL,
   `ref` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
   `body` text CHARACTER SET utf8mb4 DEFAULT NULL,
-  `event_url` varchar(255) DEFAULT NULL,
   `created_at` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 --
--- Table structure for table `github_issues_labels`
+-- Table structure for table `github_issue_labels`
 --
 
-DROP TABLE IF EXISTS `github_issues_labels`;
+DROP TABLE IF EXISTS `github_issue_labels`;
 
-CREATE TABLE `github_issues_labels` (
+CREATE TABLE `github_issue_labels` (
   `issue_id` varchar(15) NOT NULL,
   `label_id` varchar(255) CHARACTER SET utf8 NOT NULL,
   `label_name` varchar(255) CHARACTER SET utf8 NOT NULL,
