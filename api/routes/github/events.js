@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-router.get('/', async (req, res) => {
+router.get('/nano-node', async (req, res) => {
   const { logger, cache, db } = req.app.locals
   try {
     let exclude = req.query.exclude || []
@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
       exclude = [exclude]
     }
 
-    const cacheKey = `/api/github/${exclude.join(',')}`
+    const cacheKey = `/api/github/events/nano-node/${exclude.join(',')}`
     const cachedEvents = cache.get(cacheKey)
     if (cachedEvents) {
       return res.status(200).send(cachedEvents)
