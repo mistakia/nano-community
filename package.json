@@ -142,7 +142,7 @@
     "markdown-it-anchor": "^8.0.3",
     "nib": "^1.1.2",
     "percentile": "^1.4.0",
-    "prettier": "^2.2.1",
+    "prettier": "2.5.1",
     "react-immutable-proptypes": "^2.2.0",
     "react-router-dom": "^5.2.0",
     "react-snap": "mistakia/react-snap#473f746",
