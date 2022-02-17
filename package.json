@@ -86,7 +86,7 @@
     "markdown-it-codetabs": "^1.2.0",
     "morgan": "^1.10.0",
     "morgan-debug": "^2.0.0",
-    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
     "nanocurrency": "^2.5.0",
     "nanocurrency-web": "^1.3.3",
     "node-cache": "^5.1.2",
