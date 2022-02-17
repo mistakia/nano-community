@@ -58,7 +58,7 @@ function MenuSections() {
           <NavLink to='/design/security'>Security</NavLink>
           <NavLink to='/design/attack-vectors'>Attack Vectors</NavLink>
           <NavLink to='/design/challenges'>Challenges</NavLink>
-          <NavLink to='/design/roadmap'>Roadmap</NavLink>
+          <NavLink to='/roadmap'>Roadmap</NavLink>
           <NavLink to='/design/glossary'>Glossary</NavLink>
         </div>
       </div>

@@ -62,6 +62,9 @@
       "/nano_*"
     ]
   },
+  "resolutions": {
+    "nib/stylus": "0.56.0"
+  },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "bignumber.js": "^9.0.1",
@@ -121,7 +124,7 @@
     "concurrently": "^6.0.2",
     "copy-text-to-clipboard": "^3.0.1",
     "cross-env": "^7.0.3",
-    "css-loader": "^5.2.1",
+    "css-loader": "6.6.0",
     "deepmerge": "4.2.2",
     "echarts": "^5.1.2",
     "echarts-for-react": "^3.0.1",

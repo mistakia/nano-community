@@ -171,7 +171,12 @@ export default class DocPage extends React.Component {
 
     const frontmatter = fm(doc.content)
     const { title, description, tags } = frontmatter.attributes
-    const html = md.render(frontmatter.body)
+    const html = md
+      .render(frontmatter.body)
+      .replace(
+        /<code>#([a-z0-9]{6})<\/code>/gi,
+        '<code style="background:#$1">#$1</code>'
+      )
 
     return (
       <div className='doc__container'>

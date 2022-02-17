@@ -9,6 +9,7 @@ export {
   getDocCommit,
   getTagDocCommit,
   getGithubEvents,
+  getGithubIssues,
   getRepresentatives,
   getNetworkStats,
   getWeight,

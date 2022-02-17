@@ -4,7 +4,8 @@ import { appSagas } from './app'
 import { accountSagas } from './accounts'
 import { blockSagas } from './blocks'
 import { docSagas } from './docs'
-import { githubSagas } from './github'
+import { githubEventsSagas } from './github-events'
+import { githubIssuesSagas } from './github-issues'
 import { ledgerSagas } from './ledger'
 import { networkSagas } from './network'
 import { postlistSagas } from './postlists'
@@ -15,7 +16,8 @@ export default function* rootSage() {
     ...accountSagas,
     ...blockSagas,
     ...docSagas,
-    ...githubSagas,
+    ...githubEventsSagas,
+    ...githubIssuesSagas,
     ...ledgerSagas,
     ...networkSagas,
     ...postlistSagas

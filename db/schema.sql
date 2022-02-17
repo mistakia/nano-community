@@ -399,6 +399,7 @@ CREATE TABLE `github_issues` (
   `ref` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `url` varchar(255) DEFAULT NULL,
+  `repo` varchar(255)  NOT NULL,
   `body` text CHARACTER SET utf8mb4 DEFAULT NULL,
   `created_at` int(11) NOT NULL,
   PRIMARY KEY (`id`)

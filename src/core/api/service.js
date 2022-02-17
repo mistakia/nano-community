@@ -44,6 +44,10 @@ export const api = {
     const url = `${API_URL}/github/events/nano-node?exclude=WatchEvent&exclude=DeleteEvent`
     return { url }
   },
+  getGithubIssues() {
+    const url = `${API_URL}/github/issues/nano-community`
+    return { url }
+  },
   getNetworkStats() {
     const url = `${API_URL}/network`
     return { url }

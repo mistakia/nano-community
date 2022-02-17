@@ -16,7 +16,7 @@ import Seo from '@components/seo'
 import Menu from '@components/menu'
 import Posts from '@components/posts'
 import Network from '@components/network'
-import Github from '@components/github'
+import GithubEvents from '@components/github-events'
 
 export default class TagsPage extends React.Component {
   get path() {
@@ -141,7 +141,7 @@ export default class TagsPage extends React.Component {
           </div>
           <Menu />
           <Network />
-          <Github />
+          <GithubEvents />
         </div>
       </div>
     )
