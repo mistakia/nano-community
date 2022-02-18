@@ -91,7 +91,7 @@ const Seo = ({
   description,
   path = history.location.pathname,
   contentType = 'website',
-  image = '/resources/nano-circle.png',
+  image = '/resources/symbol-white.png',
   published,
   updated,
   category,
