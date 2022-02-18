@@ -75,8 +75,7 @@ export default class LedgerPage extends React.Component {
             className='ledger__body-menu'
             variant='scrollable'
             value={this.state.value}
-            onChange={this.handleChange}
-          >
+            onChange={this.handleChange}>
             <Tab label='Addresses' />
             <Tab label='Blocks' />
             <Tab label='Volume' />

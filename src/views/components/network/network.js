@@ -161,8 +161,7 @@ export default class Network extends React.Component {
           href='https://nanoticker.info/'
           rel='noreferrer'
           className='network__stat-link'
-          target='_blank'
-        >
+          target='_blank'>
           NanoTicker
         </a>
       </div>

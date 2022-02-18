@@ -41,8 +41,7 @@ export default class MetricCard extends React.Component {
         <div
           className={classNames.join(' ')}
           key={i}
-          onClick={() => this.handleClick(field, p.filter, p.label)}
-        >
+          onClick={() => this.handleClick(field, p.filter, p.label)}>
           <div className='metric__card-row-label'>{p.label}</div>
           <div className='metric__card-row-value'>
             {formatValue(p.value, unit)}

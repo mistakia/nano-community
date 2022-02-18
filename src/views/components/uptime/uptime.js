@@ -34,8 +34,7 @@ export default class Uptime extends React.Component {
       <div className='uptime'>
         <svg
           height={height}
-          viewBox={`0 0 ${sliced.length * (spacing + width)} ${height}`}
-        >
+          viewBox={`0 0 ${sliced.length * (spacing + width)} ${height}`}>
           {ticks}
         </svg>
         {Boolean(expanded) && (

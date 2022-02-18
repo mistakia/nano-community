@@ -199,8 +199,7 @@ export default class BlockPage extends React.Component {
               <Tooltip title='click to copy'>
                 <IconButton
                   className='section__copy'
-                  onClick={this.handleClick}
-                >
+                  onClick={this.handleClick}>
                   <FilterNoneIcon />
                 </IconButton>
               </Tooltip>

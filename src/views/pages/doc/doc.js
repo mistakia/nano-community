@@ -198,8 +198,7 @@ export default class DocPage extends React.Component {
                   <a
                     href='https://github.com/mistakia/nano-community/blob/main/CONTRIBUTING.md'
                     rel='noreferrer'
-                    target='_blank'
-                  >
+                    target='_blank'>
                     Help out
                   </a>
                 </div>
@@ -217,8 +216,7 @@ export default class DocPage extends React.Component {
               variant='outlined'
               href={`https://github.com/${REPO}/tree/main/docs${this.path}.md`}
               target='_blank'
-              className='doc__content-edit'
-            >
+              className='doc__content-edit'>
               Edit Page
             </Button>
           </div>
