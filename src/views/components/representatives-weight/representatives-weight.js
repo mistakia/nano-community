@@ -27,8 +27,7 @@ export default class RepresentativesWeight extends React.Component {
           <div
             className={`representatives__weight-section ${
               !onlineSelected && 'selected'
-            }`}
-          >
+            }`}>
             <div className='representatives__weight-section-label'>Trended</div>
             <div className='representatives__weight-section-value'>
               {trendedNano.isNaN() ? '-' : `${trendedNano.toFormat(1)}M`}
@@ -37,8 +36,7 @@ export default class RepresentativesWeight extends React.Component {
           <div
             className={`representatives__weight-section ${
               onlineSelected && 'selected'
-            }`}
-          >
+            }`}>
             <div className='representatives__weight-section-label'>Online</div>
             <div className='representatives__weight-section-value'>
               {onlineNano.isNaN() ? '-' : `${onlineNano.toFormat(1)}M`}

@@ -55,8 +55,7 @@ export default class Post extends React.Component {
           className={classNames.join(' ')}
           href={formatUrl(post.main_url, post.sid)}
           rel='noreferrer'
-          target='_blank'
-        >
+          target='_blank'>
           {post.title || post.text}
         </a>
         <div className='post__meta'>
