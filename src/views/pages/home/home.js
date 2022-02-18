@@ -35,9 +35,9 @@ export default class HomePage extends React.Component {
         />
         <Menu hide />
         <div className='home__body'>
-          <RepresentativeAlerts />
           <Posts title='Top' id='top' age={168} />
           <Posts title='Nano Foundation' id='announcements' age={36} />
+          <RepresentativeAlerts />
           <div className='home__sections'>
             <Network />
             <Github />
