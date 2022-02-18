@@ -135,7 +135,7 @@ export default class Menu extends React.Component {
           icon={
             <img
               alt='Nano is feeless, instant, and green / energy efficient digital money (cryptocurrency)'
-              src='/resources/nano+circle.svg'
+              src='/resources/symbol-white.svg'
             />
           }
           openIcon={<CloseIcon />}>
