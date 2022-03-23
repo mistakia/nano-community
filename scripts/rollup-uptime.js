@@ -89,7 +89,7 @@ const main = async (days = 1) => {
   } while (time.isAfter(end))
 }
 
-module.exprots = main
+module.exports = main
 
 if (!module.parent) {
   const yargs = require('yargs/yargs')

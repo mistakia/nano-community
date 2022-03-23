@@ -48,7 +48,7 @@ const main = async () => {
   }
 }
 
-module.exprots = main
+module.exports = main
 
 if (!module.parent) {
   const init = async () => {
