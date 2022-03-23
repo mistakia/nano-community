@@ -81,7 +81,7 @@ const main = async () => {
   logger(`Total weight: ${totalWeight}`)
 }
 
-module.exprots = main
+module.exports = main
 
 if (!module.parent) {
   const init = async () => {
