@@ -12,7 +12,7 @@ CREATE TABLE `accounts` (
   `monitor_url` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `watt_hour` int(11) DEFAULT NULL,
   `representative` tinyint(1) DEFAULT 0,
-  `last_seen` int(11) DEFAULT NULL
+  `last_seen` int(11) DEFAULT NULL,
   UNIQUE KEY `account` (`account`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -209,7 +209,7 @@ CREATE TABLE `representatives_telemetry` (
   `telemetry_timestamp` int(11) NOT NULL,
 
   `timestamp` int(11) NOT NULL,
-  UNIQUE KEY `account` (`account`, `node_id`, `timestamp`),
+  UNIQUE KEY `account` (`account`, `node_id`, `timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
