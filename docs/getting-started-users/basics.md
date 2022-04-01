@@ -6,11 +6,9 @@ tags: nano, xno, learn, know, crypto, info, how, facts, basics, guide, wiki
 
 ## Nano is experimental & under development
 
-Nano (XNO) is an experimental new currency that is in active development. Each improvement makes Nano more appealing but can also reveal new challenges as it operates in uncharted waters. You might encounter slow or stalled confirmations, downtime, or even more severe issues.
+Nano (XNO) is an experimental currency that is in active development. Each improvement makes nano more appealing but can also reveal new challenges as it explores uncharted waters. While funds have never been lost due to the fault of the network, it is important to note that you may encounter slow or stalled confirmations, downtime, or other severe issues.
 
-Be prepared for problems.
-
-At some point, Nano's protocol will mature, but it is never done. Currently, there exists a large gap between Nano conceptually and Nano operationally. Over time this gap will close.
+Nano's protocol will eventually mature to the point of being 'feature complete'. Currently, there exists a gap between Nano conceptually and operationally. Over time this gap will continue to close.
 
 ## Securing your account
 
