@@ -4,6 +4,7 @@ import { appSagas } from './app'
 import { accountSagas } from './accounts'
 import { blockSagas } from './blocks'
 import { docSagas } from './docs'
+import { githubDiscussionsSagas } from './github-discussions'
 import { githubEventsSagas } from './github-events'
 import { githubIssuesSagas } from './github-issues'
 import { ledgerSagas } from './ledger'
@@ -16,6 +17,7 @@ export default function* rootSage() {
     ...accountSagas,
     ...blockSagas,
     ...docSagas,
+    ...githubDiscussionsSagas,
     ...githubEventsSagas,
     ...githubIssuesSagas,
     ...ledgerSagas,

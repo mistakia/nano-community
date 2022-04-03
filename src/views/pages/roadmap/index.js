@@ -1,17 +1,20 @@
 import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
 
-import { getGithubIssuesState, githubIssuesActions } from '@core/github-issues'
+import {
+  getGithubDiscussions,
+  githubDiscussionsActions
+} from '@core/github-discussions'
 
 import RoadmapPage from './roadmap'
 
-const mapStateToProps = createSelector(getGithubIssuesState, (state) => ({
-  issues: state.get('issues'),
+const mapStateToProps = createSelector(getGithubDiscussions, (state) => ({
+  discussions: state.get('discussions'),
   isPending: state.get('isPending')
 }))
 
 const mapDispatchToProps = {
-  load: githubIssuesActions.getGithubIssues
+  load: githubDiscussionsActions.getGithubDiscussions
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(RoadmapPage)

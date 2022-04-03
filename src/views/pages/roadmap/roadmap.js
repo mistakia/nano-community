@@ -2,12 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import { List } from 'immutable'
-import Grid from '@material-ui/core/Grid'
 
 import Seo from '@components/seo'
 import Menu from '@components/menu'
-import Issue from '@components/issue'
-import { GithubIssue } from '@core/github-issues'
+import Discussion from '@components/github-discussion'
+import { GithubDiscussion } from '@core/github-discussions'
 
 import './roadmap.styl'
 
@@ -34,20 +33,20 @@ export default class RoadmapPage extends React.Component {
   }
 
   render() {
-    const { issues, isPending } = this.props
+    const { discussions, isPending } = this.props
 
     let skeletons = new List()
     if (isPending) {
-      skeletons = skeletons.push(new GithubIssue())
-      skeletons = skeletons.push(new GithubIssue())
-      skeletons = skeletons.push(new GithubIssue())
-    } else if (!issues.size) {
+      skeletons = skeletons.push(new GithubDiscussion())
+      skeletons = skeletons.push(new GithubDiscussion())
+      skeletons = skeletons.push(new GithubDiscussion())
+    } else if (!discussions.size) {
       return null
     }
 
-    const items = (issues.size ? issues : skeletons).map((item, key) => (
-      <Issue key={key} issue={item} />
-    ))
+    const items = (discussions.size ? discussions : skeletons).map(
+      (item, key) => <Discussion key={key} discussion={item} />
+    )
 
     return (
       <>
@@ -61,7 +60,7 @@ export default class RoadmapPage extends React.Component {
             'release',
             'design',
             'tasks',
-            'issues',
+            'discussions',
             'community',
             'ambassadors',
             'managers'
@@ -77,28 +76,22 @@ export default class RoadmapPage extends React.Component {
             <div className='roadmap__body'>{items}</div>
           </div>
           <div className='roadmap__side'>
-            <Grid container>
-              <Grid item sm={12}>
-                <MenuCard
-                  title='Node Development'
-                  description='GitHub issue board of the major features to give a consolidated view of the current development roadmap'
-                  url='https://github.com/orgs/nanocurrency/projects/5'
-                />
-              </Grid>
-              <Grid item sm={12} container>
-                <MenuCard
-                  title='Network Upgrades'
-                  url='https://docs.nano.org/releases/network-upgrades/'
-                />
-              </Grid>
-              <Grid item sm={12} container>
-                <MenuCard
-                  title='Node Releases'
-                  url='https://docs.nano.org/releases/node-releases/#next-planned-release'
-                />
-              </Grid>
-            </Grid>
-            <Menu />
+            <div className='roadmap__menu'>
+              <MenuCard
+                title='Node Development'
+                description='GitHub issue board of the major features to give a consolidated view of the current development roadmap'
+                url='https://github.com/orgs/nanocurrency/projects/5'
+              />
+              <MenuCard
+                title='Network Upgrades'
+                url='https://docs.nano.org/releases/network-upgrades/'
+              />
+              <MenuCard
+                title='Node Releases'
+                url='https://docs.nano.org/releases/node-releases/#next-planned-release'
+              />
+            </div>
+            <Menu hideSearch />
           </div>
         </div>
       </>
@@ -108,6 +101,6 @@ export default class RoadmapPage extends React.Component {
 
 RoadmapPage.propTypes = {
   load: PropTypes.func,
-  issues: ImmutablePropTypes.list,
+  discussions: ImmutablePropTypes.list,
   isPending: PropTypes.bool
 }

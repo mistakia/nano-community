@@ -3,6 +3,7 @@ import { call, put, cancelled, select } from 'redux-saga/effects'
 
 import { api, apiRequest } from '@core/api/service'
 import { getApp } from '@core/app'
+import { githubDiscussionsRequestActions } from '@core/github-discussions'
 import { githubEventsRequestActions } from '@core/github-events'
 import { githubIssuesRequestActions } from '@core/github-issues'
 import { postlistRequestActions } from '@core/postlists'
@@ -82,6 +83,11 @@ export const getTagDocCommit = fetch.bind(
   null,
   api.getTagDocCommit,
   tagDocCommitRequestActions
+)
+export const getGithubDiscussions = fetch.bind(
+  null,
+  api.getGithubDiscussions,
+  githubDiscussionsRequestActions
 )
 export const getGithubEvents = fetch.bind(
   null,

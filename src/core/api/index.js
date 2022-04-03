@@ -8,6 +8,7 @@ export {
   getTagDoc,
   getDocCommit,
   getTagDocCommit,
+  getGithubDiscussions,
   getGithubEvents,
   getGithubIssues,
   getRepresentatives,

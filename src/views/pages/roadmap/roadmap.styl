@@ -2,10 +2,7 @@
   background white
   padding 45px 0
   display flex
-  justify-content space-around
-
-  .menu__container .search__bar
-    border 1px solid $borderColor
+  justify-content center
 
 .roadmap__main
   flex 1 1 550px
@@ -16,13 +13,14 @@
   margin-bottom 32px
   width 100%
   max-width 550px
+  border 1px solid lighten($borderColor, 40%)
+  border-radius 4px
 
 .roadmap__side
   flex 1
   min-width 200px
   padding 0 8px
   max-width 350px
-  padding-top 8px
 
 .roadmap__body
   overflow hidden
@@ -35,13 +33,21 @@
   flex-direction column
   justify-content space-between
 
+.roadmap__menu
+  display flex
+  flex-direction column
+
+.roadmap__link
+  margin 0 8px
+  margin-bottom 8px
+
+  .menu__heading
+    font-size 16px
+    font-weight 600
+    color $nanoSoftBlue
+
 .roadmap__link-description
   font-family 'Inter', sans-serif
   font-size 14px
   line-height 20px
   margin-top 4px
-
-.roadmap__link .menu__heading
-  font-size 16px
-  font-weight 600
-  color $nanoSoftBlue

@@ -5,6 +5,7 @@ import { appReducer } from './app'
 import { accountsReducer } from './accounts'
 import { blocksReducer } from './blocks'
 import { docsReducer } from './docs'
+import { githubDiscussionsReducer } from './github-discussions'
 import { githubEventsReducer } from './github-events'
 import { githubIssuesReducer } from './github-issues'
 import { ledgerReducer } from './ledger'
@@ -20,6 +21,7 @@ const rootReducer = (history) =>
     blocks: blocksReducer,
     accounts: accountsReducer,
     docs: docsReducer,
+    githubDiscussions: githubDiscussionsReducer,
     githubEvents: githubEventsReducer,
     githubIssues: githubIssuesReducer,
     ledger: ledgerReducer,

@@ -40,6 +40,10 @@ export const api = {
     const url = `${API_URL}${id}.md`
     return { url }
   },
+  getGithubDiscussions() {
+    const url = `${API_URL}/github/discussions/nano-community`
+    return { url }
+  },
   getGithubEvents() {
     const url = `${API_URL}/github/events/nano-node?exclude=WatchEvent&exclude=DeleteEvent`
     return { url }
