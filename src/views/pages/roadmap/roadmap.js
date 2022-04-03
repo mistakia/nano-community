@@ -2,10 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import { List } from 'immutable'
-import Card from '@material-ui/core/Card'
-import CardActionArea from '@material-ui/core/CardActionArea'
-import CardContent from '@material-ui/core/CardContent'
-import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 
 import Seo from '@components/seo'
@@ -14,6 +10,23 @@ import Issue from '@components/issue'
 import { GithubIssue } from '@core/github-issues'
 
 import './roadmap.styl'
+
+const MenuCard = ({ title, description, url }) => (
+  <div className='roadmap__link menu__section'>
+    <a href={url} target='_blank' rel='noreferrer'>
+      <div className='menu__heading'>{title}</div>
+      {Boolean(description) && (
+        <div className='roadmap__link-description'>{description}</div>
+      )}
+    </a>
+  </div>
+)
+
+MenuCard.propTypes = {
+  title: PropTypes.string,
+  description: PropTypes.string,
+  url: PropTypes.string
+}
 
 export default class RoadmapPage extends React.Component {
   componentDidMount() {
@@ -54,93 +67,39 @@ export default class RoadmapPage extends React.Component {
             'managers'
           ]}
         />
-        <div className='issues__container'>
-          <Grid container spacing={2}>
-            <Grid item sm={6}>
-              <Card variant='outlined'>
-                <CardActionArea
-                  onClick={() =>
-                    window.open(
-                      'https://docs.nano.org/releases/network-upgrades/'
-                    )
-                  }>
-                  <CardContent>
-                    <Typography gutterBottom variant='h5' component='h2'>
-                      Network Upgrades
-                    </Typography>
-                    <Typography
-                      variant='body2'
-                      color='textSecondary'
-                      component='p'>
-                      Lizards are a widespread group of squamate reptiles, with
-                      over 6,000 species, ranging across all continents except
-                      Antarctica
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
+        <div className='roadmap__container'>
+          <div className='roadmap__main'>
+            <div className='header__container'>
+              <div className='header__title'>
+                <span>Community objectives & key results</span>
+              </div>
+            </div>
+            <div className='roadmap__body'>{items}</div>
+          </div>
+          <div className='roadmap__side'>
+            <Grid container>
+              <Grid item sm={12}>
+                <MenuCard
+                  title='Node Development'
+                  description='GitHub issue board of the major features to give a consolidated view of the current development roadmap'
+                  url='https://github.com/orgs/nanocurrency/projects/5'
+                />
+              </Grid>
+              <Grid item sm={12} container>
+                <MenuCard
+                  title='Network Upgrades'
+                  url='https://docs.nano.org/releases/network-upgrades/'
+                />
+              </Grid>
+              <Grid item sm={12} container>
+                <MenuCard
+                  title='Node Releases'
+                  url='https://docs.nano.org/releases/node-releases/#next-planned-release'
+                />
+              </Grid>
             </Grid>
-            <Grid item sm={6}>
-              <Card variant='outlined'>
-                <CardActionArea
-                  onClick={() =>
-                    window.open(
-                      'https://github.com/orgs/nanocurrency/projects/5'
-                    )
-                  }>
-                  <CardContent>
-                    <Typography gutterBottom variant='h5' component='h2'>
-                      Refrence Implementation
-                    </Typography>
-                    <Typography
-                      variant='body2'
-                      color='textSecondary'
-                      component='p'>
-                      Lizards are a widespread group of squamate reptiles, with
-                      over 6,000 species, ranging across all continents except
-                      Antarctica
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-            </Grid>
-            <Grid item sm={12}>
-              <Card variant='outlined'>
-                <CardActionArea
-                  onClick={() =>
-                    window.open(
-                      'https://docs.nano.org/releases/node-releases/#next-planned-release'
-                    )
-                  }>
-                  <CardContent>
-                    <Typography gutterBottom variant='h5' component='h2'>
-                      Node Releases
-                    </Typography>
-                    <Typography
-                      variant='body2'
-                      color='textSecondary'
-                      component='p'>
-                      Lizards are a widespread group of squamate reptiles, with
-                      over 6,000 species, ranging across all continents except
-                      Antarctica
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-            </Grid>
-          </Grid>
-          <Grid container>
-            <Grid item xs>
-              <Typography gutterBottom variant='h5' component='h2'>
-                Community Objectives & Key Results
-              </Typography>
-            </Grid>
-          </Grid>
-          <Typography gutterBottom variant='h5' component='h2'>
-            Community Tasks
-          </Typography>
-          <div className='issues__body'>{items}</div>
-          <Menu />
+            <Menu />
+          </div>
         </div>
       </>
     )
