@@ -1,14 +1,31 @@
 You don't need permission to work on anything, but it's always best to let others know what you're planning to do. You can do this by:
 
 - Commenting on an [issue or PR in GitHub](https://github.com/mistakia/nano-community/issues)
-- Messaging on the [Nano Discord server](https://chat.nano.org/)
 - Starting a [discussion](https://github.com/mistakia/nano-community/discussions)
+- Messaging on the [Nano Discord server](https://chat.nano.org/)
 
 Make sure you're familiar with <a href="https://guides.github.com/introduction/flow/index.html" tagret="_blank">GitHub Flow</a>.
+
+#### Community Guidelines
+
+1. Issues should be used for reporting bugs or typos.
+1. Discussions should be used for questions, feature/content proposals, and planning objecitves & key results.
+1. Smaller pull requests are preferred over a single large one.
+1. Pull requests are preferred to issues, especially for small changes such as typos.
+1. Avoid tribal knowledge. Prefer public discourse to support future contributors (and yourself) (eg. opening an issue vs. sending a DM)
+1. Treat missing documentation as a bug. Once you get your answer, contribute it so that it benefits others
 
 ### Contributing content
 
 All you need is a GitHub account to contribute. Every page is a MarkDown file, which is an <a href="https://guides.github.com/features/mastering-markdown/" target="_blank">easy to learn syntax</a>.
+
+#### Content Guidelines
+
+1. [Write simply](http://www.paulgraham.com/simply.html)
+1. Keep content for users concise, while detailed for developers
+1. When possible, direct users to existing content on the [official Nano documentation](https://docs.nano.org/)
+1. Use an impartial tone and neutral point of view. Content should be as objective as possible.
+1. Limit mentioning or using content that changes over time, to prevent content from going stale and needing updates
 
 #### Submitting Edits
 
@@ -20,20 +37,6 @@ All you need is a GitHub account to contribute. Every page is a MarkDown file, w
 #### Responding to Change Requests
 
 Occasionally, changes will be requested for proposed changes. Navigate to your pull request to respond with any questions or comments. To make changes, navigate to the branch you used on your fork, make changes and commit them. The pull request will then be automatically updated with those changes.
-
-#### Recommendations
-
-1. [Write simply](http://www.paulgraham.com/simply.html)
-1. Keep content for users concise, while detailed for developers
-1. When possible, direct users to existing content on the [official Nano documentation](https://docs.nano.org/)
-1. Use an impartial tone and neutral point of view. Content should be as objective as possible.
-1. Pull requests are preferred to issues, especially for small changes such as typos.
-1. Issues should be used for reporting bugs, typos, or asking specific questions
-1. Discussions should be used for high-level changes or broad questions
-1. Smaller pull requests are preferred over a single large one.
-1. Limit mentioning or using content that changes over time, to prevent content from going stale and needing updates
-1. Prefer opening an issue vs. sending a DM
-1. If you find documentation missing, treat it as a bug. Once you get your answer, contribute it so that it benefits others
 
 ### Contributing code
 
