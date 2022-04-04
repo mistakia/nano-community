@@ -4,6 +4,8 @@ description: Common terms used when discussing the nano cryptocurrency protocol 
 tags: what, does, mean, nano, docs, glossary, terms, documentation, crypto, protocol, cryptocurrency
 ---
 
+# Glossary
+
 ### account
 
 Refers to a public address (starts with `xrb*` or `nano*` which are interchangeable) derived from a private key. An address is a reinterpretation of the 256-bit public key using BASE32 encoding and a checksum. Previously supported `xrb-` or `nano-` prefixes are deprecated.
