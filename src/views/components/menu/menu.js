@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer'
 import CloseIcon from '@material-ui/icons/Close'
@@ -20,76 +20,88 @@ function MenuSections() {
       <div className='menu__section'>
         <div className='menu__heading'>Introduction</div>
         <div className='menu__links'>
-          <Link to='/introduction/basics'>Overview</Link>
-          <Link to='/introduction/advantages'>Advantages</Link>
-          <Link to='/introduction/how-it-works'>How it works</Link>
-          <Link to='/introduction/why-it-matters'>Why it matters</Link>
-          <Link to='/introduction/misconceptions'>Misconceptions</Link>
-          <Link to='/introduction/investment-thesis'>Investment thesis</Link>
-          <Link to='/history/overview'>History</Link>
-          <Link to='/faqs'>FAQs</Link>
+          <NavLink to='/introduction/basics'>Overview</NavLink>
+          <NavLink to='/introduction/advantages'>Advantages</NavLink>
+          <NavLink to='/introduction/how-it-works'>How it works</NavLink>
+          <NavLink to='/introduction/why-it-matters'>Why it matters</NavLink>
+          <NavLink to='/introduction/misconceptions'>Misconceptions</NavLink>
+          <NavLink to='/introduction/investment-thesis'>
+            Investment thesis
+          </NavLink>
+          <NavLink to='/history/overview'>History</NavLink>
+          <NavLink to='/faqs'>FAQs</NavLink>
         </div>
       </div>
       <div className='menu__section'>
         <div className='menu__heading'>Guides</div>
         <div className='menu__links'>
-          <Link to='/getting-started-users/basics'>Basics</Link>
-          <Link to='/getting-started-users/storing/basics'>Storing</Link>
-          <Link to='/getting-started-users/acquiring'>Acquiring</Link>
-          <Link to='/getting-started-users/choosing-a-representative'>
+          <NavLink to='/getting-started-users/basics'>Basics</NavLink>
+          <NavLink to='/getting-started-users/storing/basics'>Storing</NavLink>
+          <NavLink to='/getting-started-users/acquiring'>Acquiring</NavLink>
+          <NavLink to='/getting-started-users/choosing-a-representative'>
             Choosing a Rep
-          </Link>
-          <Link to='/getting-started-users/using'>Using</Link>
-          <Link to='/getting-started-users/storing/setup'>Account Setup</Link>
-          <Link to='/getting-started-users/privacy'>Privacy</Link>
-          <Link to='/getting-started-users/best-practices'>Best Practices</Link>
+          </NavLink>
+          <NavLink to='/getting-started-users/using'>Using</NavLink>
+          <NavLink to='/getting-started-users/storing/setup'>
+            Account Setup
+          </NavLink>
+          <NavLink to='/getting-started-users/privacy'>Privacy</NavLink>
+          <NavLink to='/getting-started-users/best-practices'>
+            Best Practices
+          </NavLink>
         </div>
       </div>
       <div className='menu__section'>
         <div className='menu__heading'>Learn</div>
         <div className='menu__links'>
-          <Link to='/design/basics'>Design</Link>
-          <Link to='/design/security'>Security</Link>
-          <Link to='/design/attack-vectors'>Attack Vectors</Link>
-          <Link to='/design/challenges'>Challenges</Link>
-          <Link to='/design/roadmap'>Roadmap</Link>
-          <Link to='/design/glossary'>Glossary</Link>
+          <NavLink to='/design/basics'>Design</NavLink>
+          <NavLink to='/design/security'>Security</NavLink>
+          <NavLink to='/design/attack-vectors'>Attack Vectors</NavLink>
+          <NavLink to='/design/challenges'>Challenges</NavLink>
+          <NavLink to='/design/roadmap'>Roadmap</NavLink>
+          <NavLink to='/design/glossary'>Glossary</NavLink>
         </div>
       </div>
       <div className='menu__section'>
         <div className='menu__heading'>Developers</div>
         <div className='menu__links'>
-          <Link to='/getting-started-devs/getting-started'>
+          <NavLink to='/getting-started-devs/getting-started'>
             Getting Started
-          </Link>
-          <Link to='/getting-started-devs/running-a-node'>Running a node</Link>
-          {/* <Link to='/getting-started-devs/tutorials/overview'>
+          </NavLink>
+          <NavLink to='/getting-started-devs/running-a-node'>
+            Running a node
+          </NavLink>
+          {/* <NavLink to='/getting-started-devs/tutorials/overview'>
               Tutorials
-              </Link> */}
-          <Link to='/getting-started-devs/documentation'>Documentation</Link>
-          <Link to='/getting-started-devs/protocol-reference'>Protocol</Link>
-          {/* <Link to='/getting-started-devs/integrations'>Integrations</Link> */}
+              </NavLink> */}
+          <NavLink to='/getting-started-devs/documentation'>
+            Documentation
+          </NavLink>
+          <NavLink to='/getting-started-devs/protocol-reference'>
+            Protocol
+          </NavLink>
+          {/* <NavLink to='/getting-started-devs/integrations'>Integrations</NavLink> */}
         </div>
       </div>
       <div className='menu__section'>
         <div className='menu__heading'>Get Involved</div>
         <div className='menu__links'>
-          <Link to='/contributing'>Contributing</Link>
-          <Link to='/community'>Discussions</Link>
-          <Link to='/support'>Support</Link>
+          <NavLink to='/contributing'>Contributing</NavLink>
+          <NavLink to='/community'>Communities</NavLink>
+          <NavLink to='/support'>Support</NavLink>
         </div>
       </div>
       <div className='menu__section'>
         <div className='menu__heading'>Stats</div>
         <div className='menu__links'>
-          <Link to='/representatives'>Representatives</Link>
-          <Link to='/ledger'>Ledger</Link>
+          <NavLink to='/representatives'>Representatives</NavLink>
+          <NavLink to='/ledger'>Ledger</NavLink>
         </div>
       </div>
       <div className='menu__section'>
         <div className='menu__heading'>Topics</div>
         <div className='menu__links'>
-          <Link to='/tags/privacy'>Privacy</Link>
+          <NavLink to='/tags/privacy'>Privacy</NavLink>
         </div>
       </div>
     </div>
@@ -152,9 +164,9 @@ export default class Menu extends React.Component {
           {isHome ? (
             <div className='menu__text'>NANO</div>
           ) : (
-            <Link to='/' className='menu__text'>
+            <NavLink to='/' className='menu__text'>
               NANO
-            </Link>
+            </NavLink>
           )}
           {!hideSearch && <SearchBar />}
           {!hide && <MenuSections />}

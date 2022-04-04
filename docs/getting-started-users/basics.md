@@ -4,6 +4,8 @@ description: Basic things to understand before you start using Nano
 tags: nano, xno, learn, know, crypto, info, how, facts, basics, guide, wiki
 ---
 
+# Basics
+
 ## Nano is experimental & under development
 
 Nano (XNO) is an experimental currency that is in active development. Each improvement makes nano more appealing but can also reveal new challenges as it explores uncharted waters. While funds have never been lost due to the fault of the network, it is important to note that you may encounter slow or stalled confirmations, downtime, or other severe issues.
