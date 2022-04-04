@@ -95,6 +95,12 @@ const main = async ({ repo }) => {
   }
 
   if (issueLabels.length) {
+    // delete any potentially stale labels
+    const issueIds = issueLabels.map((i) => i.issue_id)
+    await db('github_issue_labels')
+      .del()
+      .whereIn('issue_id', issueIds)
+
     log(`saving ${issues.length} issue labels from github`)
     await db('github_issue_labels').insert(issueLabels).onConflict().merge()
   }
