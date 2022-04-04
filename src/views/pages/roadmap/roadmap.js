@@ -70,27 +70,13 @@ export default class RoadmapPage extends React.Component {
           <div className='roadmap__main'>
             <div className='header__container'>
               <div className='header__title'>
+                <h1>Planning</h1>
                 <span>Community objectives</span>
               </div>
             </div>
             <div className='roadmap__body'>{items}</div>
           </div>
           <div className='roadmap__side'>
-            <div className='roadmap__menu'>
-              <MenuCard
-                title='Node Development'
-                description='GitHub issue board of the major features to give a consolidated view of the current development roadmap'
-                url='https://github.com/orgs/nanocurrency/projects/5'
-              />
-              <MenuCard
-                title='Network Upgrades'
-                url='https://docs.nano.org/releases/network-upgrades/'
-              />
-              <MenuCard
-                title='Node Releases'
-                url='https://docs.nano.org/releases/node-releases/#next-planned-release'
-              />
-            </div>
             <Menu hideSearch />
           </div>
         </div>

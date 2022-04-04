@@ -57,7 +57,7 @@ export default class GithubDiscussion extends React.Component {
         </AccordionSummary>
         <AccordionDetails>
           <div
-            className='github__discussion-body'
+            className='github__discussion-body markdown__content'
             dangerouslySetInnerHTML={{ __html: html }}
           />
         </AccordionDetails>

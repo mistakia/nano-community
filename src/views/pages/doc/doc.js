@@ -186,7 +186,7 @@ export default class DocPage extends React.Component {
           tags={tags ? tags.split(',').map((t) => t.trim()) : []}
           path={this.path}
         />
-        <div className='doc__content'>
+        <div className='doc__content markdown__content'>
           <div dangerouslySetInnerHTML={{ __html: html }} />
         </div>
         <div className='doc__content-side'>

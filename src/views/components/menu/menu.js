@@ -58,8 +58,8 @@ function MenuSections() {
           <NavLink to='/design/security'>Security</NavLink>
           <NavLink to='/design/attack-vectors'>Attack Vectors</NavLink>
           <NavLink to='/design/challenges'>Challenges</NavLink>
-          <NavLink to='/roadmap'>Roadmap</NavLink>
           <NavLink to='/design/glossary'>Glossary</NavLink>
+          <NavLink to='/support'>Get Support</NavLink>
         </div>
       </div>
       <div className='menu__section'>
@@ -86,9 +86,9 @@ function MenuSections() {
       <div className='menu__section'>
         <div className='menu__heading'>Get Involved</div>
         <div className='menu__links'>
-          <NavLink to='/contributing'>Contributing</NavLink>
+          <NavLink to='/roadmap'>Planning 👾</NavLink>
+          <NavLink to='/contributing'>Contribution Guide</NavLink>
           <NavLink to='/community'>Communities</NavLink>
-          <NavLink to='/support'>Support</NavLink>
         </div>
       </div>
       <div className='menu__section'>
