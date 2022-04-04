@@ -70,7 +70,7 @@ export default class RoadmapPage extends React.Component {
           <div className='roadmap__main'>
             <div className='header__container'>
               <div className='header__title'>
-                <span>Community objectives & key results</span>
+                <span>Community objectives</span>
               </div>
             </div>
             <div className='roadmap__body'>{items}</div>
