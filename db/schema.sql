@@ -193,6 +193,7 @@ CREATE TABLE `representatives_telemetry` (
   `block_behind` int(11) NOT NULL,
   `cemented_count` int(11) NOT NULL,
   `cemented_behind` int(11) NOT NULL,
+  `account_count` int(11) NOT NULL,
   `unchecked_count` int(11) NOT NULL,
   `bandwidth_cap` int(11) NOT NULL,
   `peer_count` int(11) NOT NULL,
