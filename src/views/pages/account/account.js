@@ -152,6 +152,7 @@ export default class AccountPage extends React.Component {
                     <Tab label='Blocks Diff' />
                     <Tab label='Unchecked' />
                     <Tab label='Peer Count' />
+                    <Tab label='Accounts' />
                   </Tabs>
                   <TabPanel value={this.state.value} index={0}>
                     <RepresentativeTelemetryChart
@@ -193,6 +194,13 @@ export default class AccountPage extends React.Component {
                       account={account}
                       stat='peer_count'
                       label='Peers'
+                    />
+                  </TabPanel>
+                  <TabPanel value={this.state.value} index={6}>
+                    <RepresentativeTelemetryChart
+                      account={account}
+                      stat='account_count'
+                      label='Accounts'
                     />
                   </TabPanel>
                 </div>
