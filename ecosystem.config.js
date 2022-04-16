@@ -13,7 +13,7 @@ module.exports = {
   deploy: {
     production: {
       user: 'root',
-      host: '104.236.2.237',
+      host: '178.18.253.104',
       ref: 'origin/master',
       repo: 'https://github.com/mistakia/nano-community.git',
       path: '/root/nano-community',
