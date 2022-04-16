@@ -14,7 +14,7 @@ module.exports = {
     production: {
       user: 'root',
       host: '178.18.253.104',
-      ref: 'origin/master',
+      ref: 'origin/main',
       repo: 'https://github.com/mistakia/nano-community.git',
       path: '/root/nano-community',
       'pre-deploy': 'git pull',
