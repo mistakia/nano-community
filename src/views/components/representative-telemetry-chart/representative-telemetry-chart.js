@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import ReactEChartsCore from 'echarts-for-react/lib/core'
 import * as echarts from 'echarts/core'
@@ -8,13 +9,13 @@ import { CanvasRenderer } from 'echarts/renderers'
 
 echarts.use([LineChart, CanvasRenderer])
 
-export default class RepresentativeBlocksBehind extends React.Component {
+export default class RepresentativeTelemetryChart extends React.Component {
   render() {
-    const { account } = this.props
+    const { account, stat, label } = this.props
     const history = account.get('telemetry_history')
     const data = []
     history.forEach((i) => {
-      data.push([i.timestamp * 1000, i.block_behind])
+      data.push([i.timestamp * 1000, i[stat]])
     })
 
     const option = {
@@ -28,7 +29,7 @@ export default class RepresentativeBlocksBehind extends React.Component {
       },
       yAxis: {
         type: 'value',
-        name: 'Blocks'
+        name: label
       },
       series: [
         {
@@ -50,6 +51,8 @@ export default class RepresentativeBlocksBehind extends React.Component {
   }
 }
 
-RepresentativeBlocksBehind.propTypes = {
-  account: ImmutablePropTypes.record
+RepresentativeTelemetryChart.propTypes = {
+  account: ImmutablePropTypes.record,
+  stat: PropTypes.string,
+  label: PropTypes.string
 }
