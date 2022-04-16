@@ -10,14 +10,12 @@ import IconButton from '@material-ui/core/IconButton'
 import copy from 'copy-text-to-clipboard'
 import Tooltip from '@material-ui/core/Tooltip'
 
+import RepresentativeTelemetryChart from '@components/representative-telemetry-chart'
 import RepresentativeDelegators from '@components/representative-delegators'
 import RepresentativeUptime from '@components/representative-uptime'
 import RepresentativeInfo from '@components/representative-info'
 import RepresentativeNetwork from '@components/representative-network'
 import RepresentativeTelemetry from '@components/representative-telemetry'
-import RepresentativeConfirmationsBehind from '@components/representative-confirmations-behind'
-import RepresentativeBlocksBehind from '@components/representative-blocks-behind'
-import RepresentativePeers from '@components/representative-peers'
 import DisplayNano from '@components/display-nano'
 import Collapsible from '@components/collapsible'
 
@@ -148,18 +146,54 @@ export default class AccountPage extends React.Component {
                     value={this.state.value}
                     className='representative__metrics-menu'
                     onChange={this.handleChange}>
+                    <Tab label='Conf.' />
                     <Tab label='Conf. Diff' />
-                    <Tab label='Block Diff' />
+                    <Tab label='Blocks' />
+                    <Tab label='Blocks Diff' />
+                    <Tab label='Unchecked' />
                     <Tab label='Peer Count' />
                   </Tabs>
                   <TabPanel value={this.state.value} index={0}>
-                    <RepresentativeConfirmationsBehind account={account} />
+                    <RepresentativeTelemetryChart
+                      account={account}
+                      stat='cemented_count'
+                      label='Blocks'
+                    />
                   </TabPanel>
                   <TabPanel value={this.state.value} index={1}>
-                    <RepresentativeBlocksBehind account={account} />
+                    <RepresentativeTelemetryChart
+                      account={account}
+                      stat='cemented_behind'
+                      label='Blocks'
+                    />
                   </TabPanel>
                   <TabPanel value={this.state.value} index={2}>
-                    <RepresentativePeers account={account} />
+                    <RepresentativeTelemetryChart
+                      account={account}
+                      stat='block_count'
+                      label='Blocks'
+                    />
+                  </TabPanel>
+                  <TabPanel value={this.state.value} index={3}>
+                    <RepresentativeTelemetryChart
+                      account={account}
+                      stat='block_behind'
+                      label='Blocks'
+                    />
+                  </TabPanel>
+                  <TabPanel value={this.state.value} index={4}>
+                    <RepresentativeTelemetryChart
+                      account={account}
+                      stat='unchecked_count'
+                      label='Blocks'
+                    />
+                  </TabPanel>
+                  <TabPanel value={this.state.value} index={5}>
+                    <RepresentativeTelemetryChart
+                      account={account}
+                      stat='peer_count'
+                      label='Peers'
+                    />
                   </TabPanel>
                 </div>
               </Collapsible>
