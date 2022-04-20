@@ -60,7 +60,6 @@ const main = async () => {
     .whereIn('account', accounts)
 
   const open = []
-  /* eslint-disable camelcase */
   for (const { address, account, node_id, weight } of telemetry) {
     const match = ipRe.exec(address)
     const ip = match ? match[1] : address
@@ -72,7 +71,6 @@ const main = async () => {
       logger(`port 7076 is closed for ${ip}`)
     }
   }
-  /* eslint-enable camelcase */
   logger(open)
   let totalWeight = 0
   for (const node of open) {

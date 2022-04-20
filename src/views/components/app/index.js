@@ -4,7 +4,7 @@ import { createSelector } from 'reselect'
 
 import { getApp, appActions } from '@core/app'
 import { networkActions } from '@core/network'
-import { githubActions } from '@core/github'
+import { githubEventsActions } from '@core/github-events'
 import { accountsActions } from '@core/accounts'
 
 import App from './app'
@@ -19,7 +19,7 @@ const mapDispatchToProps = {
   init: appActions.init,
   getRepresentatives: accountsActions.getRepresentatives,
   getNetworkStats: networkActions.getNetworkStats,
-  getGithubEvents: githubActions.getGithubEvents,
+  getGithubEvents: githubEventsActions.getGithubEvents,
   getWeight: networkActions.getWeight
 }
 

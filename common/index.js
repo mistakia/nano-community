@@ -109,7 +109,6 @@ const rpcRepresentativesOnline = ({ url } = {}) => {
   return rpcRequest(data, { url })
 }
 
-/* eslint-disable camelcase */
 const rpcAccountInfo = ({
   account,
   url,
@@ -127,7 +126,6 @@ const rpcAccountInfo = ({
   }
   return rpcRequest(data, { url })
 }
-/* eslint-enable camelcase */
 
 const rpcRepresentatives = ({ url } = {}) => {
   const data = {
@@ -136,7 +134,6 @@ const rpcRepresentatives = ({ url } = {}) => {
   return rpcRequest(data, { url })
 }
 
-/* eslint-disable camelcase */
 const rpcLedger = ({
   url,
   account = constants.BURN_ACCOUNT,
@@ -159,7 +156,6 @@ const rpcLedger = ({
   }
   return rpcRequest(data, { url, trusted: true })
 }
-/* eslint-enable camelcase */
 
 const rpcBlockInfo = ({ url, hash } = {}) => {
   const data = {

@@ -3,7 +3,7 @@ import React from 'react'
 import RepresentativeAlerts from '@components/representative-alerts'
 import Posts from '@components/posts'
 import Network from '@components/network'
-import Github from '@components/github'
+import GithubEvents from '@components/github-events'
 import Menu from '@components/menu'
 import Seo from '@components/seo'
 
@@ -40,7 +40,7 @@ export default class HomePage extends React.Component {
           <RepresentativeAlerts />
           <div className='home__sections'>
             <Network />
-            <Github />
+            <GithubEvents />
           </div>
           <Posts title='Trending' id='trending' age={72} />
         </div>

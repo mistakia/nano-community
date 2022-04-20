@@ -4,6 +4,8 @@ module.exports = {
 
   port: 8080, // api port
 
+  github_access_token: '',
+
   // jwt token config
   jwt: {
     secret: 'xxxxx',

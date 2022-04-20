@@ -171,7 +171,12 @@ export default class DocPage extends React.Component {
 
     const frontmatter = fm(doc.content)
     const { title, description, tags } = frontmatter.attributes
-    const html = md.render(frontmatter.body)
+    const html = md
+      .render(frontmatter.body)
+      .replace(
+        /<code>#([a-z0-9]{6})<\/code>/gi,
+        '<code style="background:#$1">#$1</code>'
+      )
 
     return (
       <div className='doc__container'>
@@ -181,7 +186,7 @@ export default class DocPage extends React.Component {
           tags={tags ? tags.split(',').map((t) => t.trim()) : []}
           path={this.path}
         />
-        <div className='doc__content'>
+        <div className='doc__content markdown__content'>
           <div dangerouslySetInnerHTML={{ __html: html }} />
         </div>
         <div className='doc__content-side'>

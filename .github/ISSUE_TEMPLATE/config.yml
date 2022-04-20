@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Nano.Community Discussions
+    url: https://github.com/mistakia/nano-community/discussions
+    about: For general questions and discussions (not node related)
+  - name: Nano Official Forum
+    url: https://forum.nano.org
+    about: For general questions, support requests and discussions (nano node related)
