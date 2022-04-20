@@ -101,7 +101,7 @@ function MenuSections() {
       <div className='menu__section'>
         <div className='menu__heading'>Topics</div>
         <div className='menu__links'>
-          <NavLink to='/tags/privacy'>Privacy</NavLink>
+          <NavLink to='/labels/privacy'>Privacy</NavLink>
         </div>
       </div>
     </div>

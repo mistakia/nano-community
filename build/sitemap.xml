@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>https://nano.community/introduction/advantages</loc>
-<lastmod>2022-04-20</lastmod>
-<priority>0.5</priority>
-</url>
-<url>
 <loc>https://nano.community/</loc>
 <lastmod>2022-04-20</lastmod>
 <priority>0.5</priority>
@@ -16,12 +11,17 @@
 <priority>0.5</priority>
 </url>
 <url>
+<loc>https://nano.community/introduction/advantages</loc>
+<lastmod>2022-04-20</lastmod>
+<priority>0.5</priority>
+</url>
+<url>
 <loc>https://nano.community/introduction/how-it-works</loc>
 <lastmod>2022-04-20</lastmod>
 <priority>0.5</priority>
 </url>
 <url>
-<loc>https://nano.community/introduction/why-it-matters</loc>
+<loc>https://nano.community/introduction/investment-thesis</loc>
 <lastmod>2022-04-20</lastmod>
 <priority>0.5</priority>
 </url>
@@ -31,7 +31,7 @@
 <priority>0.5</priority>
 </url>
 <url>
-<loc>https://nano.community/introduction/investment-thesis</loc>
+<loc>https://nano.community/introduction/why-it-matters</loc>
 <lastmod>2022-04-20</lastmod>
 <priority>0.5</priority>
 </url>
@@ -61,12 +61,12 @@
 <priority>0.5</priority>
 </url>
 <url>
-<loc>https://nano.community/getting-started-users/acquiring</loc>
+<loc>https://nano.community/getting-started-users/choosing-a-representative</loc>
 <lastmod>2022-04-20</lastmod>
 <priority>0.5</priority>
 </url>
 <url>
-<loc>https://nano.community/getting-started-users/choosing-a-representative</loc>
+<loc>https://nano.community/getting-started-users/acquiring</loc>
 <lastmod>2022-04-20</lastmod>
 <priority>0.5</priority>
 </url>
@@ -167,11 +167,6 @@
 </url>
 <url>
 <loc>https://nano.community/tags/privacy</loc>
-<lastmod>2022-04-20</lastmod>
-<priority>0.5</priority>
-</url>
-<url>
-<loc>https://nano.community/roadmap</loc>
 <lastmod>2022-04-20</lastmod>
 <priority>0.5</priority>
 </url>
