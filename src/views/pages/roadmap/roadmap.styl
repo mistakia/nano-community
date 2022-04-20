@@ -1,0 +1,60 @@
+.roadmap__container
+  background white
+  display flex
+  flex-wrap wrap
+  justify-content center
+
+.roadmap__main
+  flex 1 1 550px
+  padding 32px 24px 0
+  font-size 14px
+  font-family 'Roboto Mono',monospace
+  line-height 1.6
+  margin-bottom 32px
+  width 100%
+  max-width 800px
+  background $backgroundColor
+
+.roadmap__side
+  flex 1
+  min-width 200px
+  padding 0 8px
+
+.roadmap__body
+  margin 0 8px 32px
+  min-height 48px
+  position relative
+
+.roadmap__container .MuiCard-root
+  display flex
+  flex-direction column
+  justify-content space-between
+
+.roadmap__menu
+  display flex
+  flex-direction column
+
+.roadmap__link
+  margin 0 8px
+  margin-bottom 8px
+  border-color transparent
+
+  .menu__heading
+    font-size 16px
+    font-weight 600
+    color $nanoSoftBlue
+
+.roadmap__link-description
+  font-family 'Inter', sans-serif
+  font-size 14px
+  line-height 20px
+  margin-top 4px
+
+@media (min-width 750px)
+  .roadmap__side
+    max-width 350px
+  .roadmap__container
+    padding-top 45px
+  .roadmap__main
+    border 1px solid lighten($borderColor, 40%)
+    border-radius 4px

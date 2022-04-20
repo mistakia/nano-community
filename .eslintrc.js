@@ -20,6 +20,7 @@ module.exports = {
   },
   plugins: ['react'],
   rules: {
+    camelcase: ['off'],
     curly: ['off'],
     indent: ['off'],
     'multiline-ternary': ['off', 'always'],

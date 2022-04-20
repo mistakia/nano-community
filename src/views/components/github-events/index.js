@@ -1,11 +1,11 @@
 import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
 
-import { getGithub } from '@core/github'
+import { getGithubEvents } from '@core/github-events'
 
-import Github from './github'
+import GithubEvents from './github-events'
 
-const mapStateToProps = createSelector(getGithub, (events) => {
+const mapStateToProps = createSelector(getGithubEvents, (events) => {
   // 48 hours ago
   const cutoff = Math.round(Date.now() / 1000) - 172800
   const filtered = events.filter((p) => p.created_at > cutoff)
@@ -13,4 +13,4 @@ const mapStateToProps = createSelector(getGithub, (events) => {
   return { events: filtered.size < 15 ? events.slice(0, 15) : filtered }
 })
 
-export default connect(mapStateToProps)(Github)
+export default connect(mapStateToProps)(GithubEvents)

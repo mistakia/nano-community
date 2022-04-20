@@ -28,7 +28,6 @@ export const Account = new Record({
 })
 
 export function createAccount(data) {
-  /* eslint-disable camelcase */
   const { major_version, minor_version, patch_version, pre_release_version } =
     data.telemetry
   const { last_online, last_offline } = data
@@ -37,7 +36,6 @@ export function createAccount(data) {
   const version = major_version
     ? `${major_version}.${minor_version}.${patch_version}.${pre_release_version}`
     : 'unknown'
-  /* eslint-enable camelcase */
 
   return new Account({
     ...data,

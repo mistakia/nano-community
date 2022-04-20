@@ -4,7 +4,7 @@ import Skeleton from '@material-ui/lab/Skeleton'
 
 import { timeago } from '@core/utils'
 
-import './github.styl'
+import './github-events.styl'
 
 const action = (item) => {
   switch (item.type) {
@@ -88,7 +88,7 @@ const GithubEvent = (item, index) => {
   )
 }
 
-export default class Github extends React.Component {
+export default class GithubEvents extends React.Component {
   render() {
     const { events } = this.props
     const items = events.map((i, idx) => GithubEvent(i, idx))
@@ -111,6 +111,6 @@ export default class Github extends React.Component {
   }
 }
 
-Github.propTypes = {
+GithubEvents.propTypes = {
   events: ImmutablePropTypes.list
 }

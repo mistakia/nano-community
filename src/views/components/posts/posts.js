@@ -43,8 +43,8 @@ export default class Posts extends React.Component {
 
     return (
       <>
-        <div className='posts__header'>
-          <div className='posts__heading'>
+        <div className='header__container'>
+          <div className='header__title'>
             <span>{title}</span>
           </div>
           {this.props.id === 'top' && (

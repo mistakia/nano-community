@@ -383,6 +383,44 @@ CREATE TABLE `voting_weight` (
   UNIQUE KEY `timestamp` (`address`, `timestamp`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `github_discussions`
+--
+
+DROP TABLE IF EXISTS `github_discussions`;
+
+CREATE TABLE `github_discussions` (
+  `id` varchar(100) NOT NULL,
+  `author_id` varchar(100) NOT NULL,
+  `author_name` varchar(100) CHARACTER SET utf8 NOT NULL,
+  `author_avatar` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `ref` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  `repo` varchar(255)  NOT NULL,
+  `body` text CHARACTER SET utf8mb4 DEFAULT NULL,
+  `upvotes` int(11) NOT NULL,
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `github_discussion_labels`
+--
+
+DROP TABLE IF EXISTS `github_discussion_labels`;
+
+CREATE TABLE `github_discussion_labels` (
+  `discussion_id` varchar(100) NOT NULL,
+  `label_id` varchar(100) CHARACTER SET utf8 NOT NULL,
+  `label_name` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `label_color` varchar(255) CHARACTER SET utf8 NOT NULL,
+  PRIMARY KEY (`discussion_id`, `label_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 --
@@ -399,6 +437,7 @@ CREATE TABLE `github_issues` (
   `ref` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `url` varchar(255) DEFAULT NULL,
+  `repo` varchar(255)  NOT NULL,
   `body` text CHARACTER SET utf8mb4 DEFAULT NULL,
   `created_at` int(11) NOT NULL,
   PRIMARY KEY (`id`)
