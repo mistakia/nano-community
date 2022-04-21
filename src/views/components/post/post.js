@@ -35,7 +35,7 @@ export default class Post extends React.Component {
       return (
         <div className='post'>
           <div className='post__title'>
-            <Skeleton height={30} />
+            <Skeleton height={30} width='100%' />
           </div>
           <div className='post__meta'>
             <Skeleton animation='wave' width={200} />
@@ -44,9 +44,18 @@ export default class Post extends React.Component {
       )
     }
 
+    let html = post.title || post.text
+
     const classNames = ['post__title']
     if (post.sid === 'discord:370266023905198083') {
       classNames.push('discord')
+      html = post.text.replace(/<:[^:]*:(\d*)>/g, (match, id) => {
+        return `<span class='post__emoji'><img src='https://cdn.discordapp.com/emojis/${id}.webp?size=240&quality=lossless' /></span>`
+      })
+
+      html = html.replace(/<@!?(\d*)>/g, (match, id) => {
+        return ''
+      })
     }
 
     return (
@@ -55,9 +64,8 @@ export default class Post extends React.Component {
           className={classNames.join(' ')}
           href={formatUrl(post.main_url, post.sid)}
           rel='noreferrer'
-          target='_blank'>
-          {post.title || post.text}
-        </a>
+          target='_blank'
+          dangerouslySetInnerHTML={{ __html: html }}></a>
         <div className='post__meta'>
           <Source post={post} />
           <div>{post.author}</div>

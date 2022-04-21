@@ -4,6 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes'
 import { List } from 'immutable'
 import ToggleButton from '@material-ui/lab/ToggleButton'
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
+import Paper from '@material-ui/core/Paper'
 
 import Post from '@components/post'
 import { Post as PostRecord } from '@core/posts'
@@ -33,6 +34,8 @@ export default class Posts extends React.Component {
     let skeletons = new List()
     if (isPending) {
       skeletons = skeletons.push(new PostRecord())
+      skeletons = skeletons.push(new PostRecord())
+      skeletons = skeletons.push(new PostRecord())
     } else if (!posts.size) {
       return null
     }
@@ -42,7 +45,7 @@ export default class Posts extends React.Component {
     ))
 
     return (
-      <>
+      <div className='posts__container'>
         <div className='header__container'>
           <div className='header__title'>
             <span>{title}</span>
@@ -74,7 +77,7 @@ export default class Posts extends React.Component {
           )}
         </div>
         <div className='posts__body'>{items}</div>
-      </>
+      </div>
     )
   }
 }

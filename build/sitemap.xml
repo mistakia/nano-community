@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>https://nano.community/</loc>
-<lastmod>2022-04-21</lastmod>
-<priority>0.5</priority>
-</url>
-<url>
 <loc>https://nano.community/introduction/basics</loc>
 <lastmod>2022-04-21</lastmod>
 <priority>0.5</priority>
@@ -16,12 +11,17 @@
 <priority>0.5</priority>
 </url>
 <url>
-<loc>https://nano.community/introduction/how-it-works</loc>
+<loc>https://nano.community/</loc>
 <lastmod>2022-04-21</lastmod>
 <priority>0.5</priority>
 </url>
 <url>
-<loc>https://nano.community/introduction/why-it-matters</loc>
+<loc>https://nano.community/introduction/investment-thesis</loc>
+<lastmod>2022-04-21</lastmod>
+<priority>0.5</priority>
+</url>
+<url>
+<loc>https://nano.community/introduction/how-it-works</loc>
 <lastmod>2022-04-21</lastmod>
 <priority>0.5</priority>
 </url>
@@ -31,7 +31,7 @@
 <priority>0.5</priority>
 </url>
 <url>
-<loc>https://nano.community/introduction/investment-thesis</loc>
+<loc>https://nano.community/introduction/why-it-matters</loc>
 <lastmod>2022-04-21</lastmod>
 <priority>0.5</priority>
 </url>
@@ -106,11 +106,6 @@
 <priority>0.5</priority>
 </url>
 <url>
-<loc>https://nano.community/design/roadmap</loc>
-<lastmod>2022-04-21</lastmod>
-<priority>0.5</priority>
-</url>
-<url>
 <loc>https://nano.community/design/glossary</loc>
 <lastmod>2022-04-21</lastmod>
 <priority>0.5</priority>
@@ -132,6 +127,11 @@
 </url>
 <url>
 <loc>https://nano.community/getting-started-devs/protocol-reference</loc>
+<lastmod>2022-04-21</lastmod>
+<priority>0.5</priority>
+</url>
+<url>
+<loc>https://nano.community/roadmap</loc>
 <lastmod>2022-04-21</lastmod>
 <priority>0.5</priority>
 </url>
@@ -166,12 +166,7 @@
 <priority>0.5</priority>
 </url>
 <url>
-<loc>https://nano.community/tags/privacy</loc>
-<lastmod>2022-04-21</lastmod>
-<priority>0.5</priority>
-</url>
-<url>
-<loc>https://nano.community/roadmap</loc>
+<loc>https://nano.community/labels/privacy</loc>
 <lastmod>2022-04-21</lastmod>
 <priority>0.5</priority>
 </url>
