@@ -33,7 +33,6 @@ export default class LabelPage extends React.Component {
       doc,
       match: { params }
     } = this.props
-    console.log(params)
 
     const author = doc.getIn(['commit', 'commit', 'author', 'name'])
     const lastUpdated = doc.getIn(['commit', 'commit', 'author', 'date'])

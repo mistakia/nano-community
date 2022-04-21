@@ -36,19 +36,19 @@
       "/design/security",
       "/design/attack-vectors",
       "/design/challenges",
-      "/design/roadmap",
       "/design/glossary",
       "/getting-started-devs/getting-started",
       "/getting-started-devs/running-a-node",
       "/getting-started-devs/documentation",
       "/getting-started-devs/protocol-reference",
+      "/roadmap",
       "/contributing",
       "/community",
       "/support",
       "/faqs",
       "/representatives",
       "/ledger",
-      "/tags/privacy"
+      "/labels/privacy"
     ],
     "preconnectThirdParty": false,
     "excludedThirdPartyRequests": [

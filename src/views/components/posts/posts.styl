@@ -1,3 +1,6 @@
+.posts__container
+  margin-bottom 16px
+
 .posts__body
   background white
   border-radius 4px
@@ -32,3 +35,18 @@
     &:not(:first-child)
     &:first-child
       border-radius 4px
+
+@media (min-width 750px)
+  .posts__container
+    border-radius 16px
+    padding 0 16px
+    background lighten($backgroundColor, 30%)
+    border 1px solid lighten($borderColor, 50%)
+
+  .posts__body
+    box-shadow 0px 3px 1px -2px rgba(0, 0, 0, 20%), 0px 2px 2px 0px rgba(0, 0, 0, 14%), 0px 1px 5px 0px rgba(0, 0, 0, 12%)
+
+@media (max-width 749px)
+  .posts__container
+    border-left none
+    border-right none
