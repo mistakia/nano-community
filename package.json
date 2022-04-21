@@ -1,6 +1,7 @@
 {
   "scripts": {
     "dev": "concurrently \"yarn start\" \"yarn start:api\"",
+    "dev:live": "NC_DEV_LIVE=true yarn start",
     "start": "webpack serve --mode=development --config internals/webpack/webpack.dev.babel.js --port 8081 --history-api-fallback",
     "start:api": "NODE_ENV=development node server",
     "deploy": "ipfs-deploy build/index.html",
