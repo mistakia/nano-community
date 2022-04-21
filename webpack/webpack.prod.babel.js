@@ -5,7 +5,7 @@ const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin')
 const webpack = require('webpack')
 const CompressionPlugin = require('compression-webpack-plugin')
 
-const constants = require('../../constants')
+const constants = require('../constants')
 
 module.exports = require('./webpack.base.babel')({
   mode: 'production',
