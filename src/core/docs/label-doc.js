@@ -1,6 +1,6 @@
 import { Record, Map } from 'immutable'
 
-export const TagDoc = new Record({
+export const LabelDoc = new Record({
   isPending: true,
   isLoaded: false,
   content: null,

@@ -1,9 +1,9 @@
 export {
   docActions,
   docRequestActions,
-  tagDocRequestActions,
+  labelDocRequestActions,
   docCommitRequestActions,
-  tagDocCommitRequestActions
+  labelDocCommitRequestActions
 } from './actions'
 export { docsReducer } from './reducer'
 export { docSagas } from './sagas'

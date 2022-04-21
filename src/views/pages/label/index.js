@@ -3,12 +3,12 @@ import { createSelector } from 'reselect'
 
 import { docActions, getDocById } from '@core/docs'
 
-import TagsPage from './tags'
+import LabelPage from './label'
 
 const mapStateToProps = createSelector(getDocById, (doc) => ({ doc }))
 
 const mapDispatchToProps = {
-  getTagDoc: docActions.getTagDoc
+  getLabelDoc: docActions.getLabelDoc
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TagsPage)
+export default connect(mapStateToProps, mapDispatchToProps)(LabelPage)

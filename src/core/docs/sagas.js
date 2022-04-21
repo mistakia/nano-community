@@ -1,6 +1,6 @@
 import { takeLatest, fork, call, select } from 'redux-saga/effects'
 
-import { getDoc, getTagDoc, getDocCommit, getTagDocCommit } from '@core/api'
+import { getDoc, getLabelDoc, getDocCommit, getLabelDocCommit } from '@core/api'
 import { docActions } from './actions'
 import { getDocById } from './selectors'
 
@@ -12,11 +12,11 @@ export function* fetch({ payload }) {
   }
 }
 
-export function* fetchTag({ payload }) {
-  yield call(getTagDoc, payload)
+export function* fetchLabel({ payload }) {
+  yield call(getLabelDoc, payload)
   const doc = yield select(getDocById, { location: { pathname: payload.id } })
   if (doc.content) {
-    yield call(getTagDocCommit, payload)
+    yield call(getLabelDocCommit, payload)
   }
 }
 
@@ -28,12 +28,12 @@ export function* watchGetDoc() {
   yield takeLatest(docActions.GET_DOC, fetch)
 }
 
-export function* watchGetTagDoc() {
-  yield takeLatest(docActions.GET_TAG_DOC, fetchTag)
+export function* watchGetLabelDoc() {
+  yield takeLatest(docActions.GET_LABEL_DOC, fetchLabel)
 }
 
 //= ====================================
 //  ROOT
 // -------------------------------------
 
-export const docSagas = [fork(watchGetDoc), fork(watchGetTagDoc)]
+export const docSagas = [fork(watchGetDoc), fork(watchGetLabelDoc)]

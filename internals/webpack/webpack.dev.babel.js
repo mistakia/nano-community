@@ -36,7 +36,7 @@ module.exports = require('./webpack.base.babel')({
       favicon: 'resources/favicon.ico'
     }),
     new webpack.DefinePlugin({
-      IS_DEV: process.env.NC_DEV_LIVE ? false : true,
+      IS_DEV: !process.env.NC_DEV_LIVE,
       REPO: JSON.stringify(constants.repo)
     }),
     new CircularDependencyPlugin({

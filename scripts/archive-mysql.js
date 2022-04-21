@@ -131,8 +131,8 @@ const archivePosts = async () => {
   const hours = 6 * 7 * 24 // 6 weeks
   const posts = await db('posts')
     .select('posts.*')
-    .leftJoin('post_tags', 'posts.id', 'post_tags.post_id')
-    .whereNull('post_tags.tag')
+    .leftJoin('post_labels', 'posts.id', 'post_labels.post_id')
+    .whereNull('post_labels.label')
     .whereRaw(`created_at < UNIX_TIMESTAMP(NOW() - INTERVAL ${hours} HOUR)`)
 
   if (!posts.length) {

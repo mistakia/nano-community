@@ -3,24 +3,24 @@ const router = express.Router()
 
 const { groupBy } = require('../../common')
 
-router.get('/tags', async (req, res) => {
+router.get('/labels', async (req, res) => {
   const { db, logger, cache } = req.app.locals
   try {
     const offset = parseInt(req.query.offset || 0, 10)
     const limit = Math.min(parseInt(req.query.limit || 50, 10), 100)
-    let { tag } = req.query
+    let { label } = req.query
 
-    if (!tag) {
-      return res.status(401).send({ error: 'missing tag param' })
+    if (!label) {
+      return res.status(401).send({ error: 'missing label param' })
     }
 
-    if (!Array.isArray(tag)) {
-      tag = [tag]
+    if (!Array.isArray(label)) {
+      label = [label]
     }
 
-    tag = tag.sort((a, b) => a - b)
+    label = label.sort((a, b) => a - b)
 
-    const cacheId = `tags_${tag.join('-')}`
+    const cacheId = `labels_${label.join('-')}`
     const cachePosts = cache.get(cacheId)
     if (cachePosts) {
       return res.status(200).send(cachePosts)
@@ -37,10 +37,10 @@ router.get('/tags', async (req, res) => {
     query.select(db.raw('sources.logo_url as source_logo_url'))
     query.select(db.raw('(posts.score / sources.score_avg) as strength'))
     query.join('posts', 'posts.sid', 'sources.id')
-    query.leftJoin('post_tags', 'posts.id', 'post_tags.post_id')
+    query.leftJoin('post_labels', 'posts.id', 'post_labels.post_id')
     query.whereNotNull('posts.text')
 
-    query.whereIn('post_tags.tag', tag)
+    query.whereIn('post_labels.label', label)
 
     query.whereNot('posts.text', '')
     query.whereNot('posts.pid', 'like', 'discord:844618231553720330:%') // network status
@@ -56,11 +56,11 @@ router.get('/tags', async (req, res) => {
 
     const posts = await query
     const postIds = posts.map((p) => p.id)
-    const tags = await db('post_tags').whereIn('post_id', postIds)
-    const tagsByPostId = groupBy(tags, 'post_id')
+    const labels = await db('post_labels').whereIn('post_id', postIds)
+    const labelsByPostId = groupBy(labels, 'post_id')
     for (const post of posts) {
-      const postTags = tagsByPostId[post.id] || []
-      post.tags = postTags
+      const postLabels = labelsByPostId[post.id] || []
+      post.labels = postLabels
     }
 
     cache.set(cacheId, posts)
@@ -121,11 +121,11 @@ router.get('/trending', async (req, res) => {
 
     const posts = await query
     const postIds = posts.map((p) => p.id)
-    const tags = await db('post_tags').whereIn('post_id', postIds)
-    const tagsByPostId = groupBy(tags, 'post_id')
+    const labels = await db('post_labels').whereIn('post_id', postIds)
+    const labelsByPostId = groupBy(labels, 'post_id')
     for (const post of posts) {
-      const postTags = tagsByPostId[post.id] || []
-      post.tags = postTags
+      const postLabels = labelsByPostId[post.id] || []
+      post.labels = postLabels
     }
 
     cache.set('trending', posts)
@@ -171,11 +171,11 @@ router.get('/announcements', async (req, res) => {
 
     const posts = await query
     const postIds = posts.map((p) => p.id)
-    const tags = await db('post_tags').whereIn('post_id', postIds)
-    const tagsByPostId = groupBy(tags, 'post_id')
+    const labels = await db('post_labels').whereIn('post_id', postIds)
+    const labelsByPostId = groupBy(labels, 'post_id')
     for (const post of posts) {
-      const postTags = tagsByPostId[post.id] || []
-      post.tags = postTags
+      const postLabels = labelsByPostId[post.id] || []
+      post.labels = postLabels
     }
 
     cache.set(cacheId, posts)
@@ -230,11 +230,11 @@ router.get('/top', async (req, res) => {
 
     const posts = await query
     const postIds = posts.map((p) => p.id)
-    const tags = await db('post_tags').whereIn('post_id', postIds)
-    const tagsByPostId = groupBy(tags, 'post_id')
+    const labels = await db('post_labels').whereIn('post_id', postIds)
+    const labelsByPostId = groupBy(labels, 'post_id')
     for (const post of posts) {
-      const postTags = tagsByPostId[post.id] || []
-      post.tags = postTags
+      const postLabels = labelsByPostId[post.id] || []
+      post.labels = postLabels
     }
 
     cache.set(cacheId, posts)

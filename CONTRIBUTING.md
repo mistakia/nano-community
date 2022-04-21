@@ -49,8 +49,7 @@ JavaScript & markdown are used to make the project as accessible as possible.
 |-- docs        community markdown documents
 |-- scripts     data aggregation or processing
 |-- server      server configs
-|-- src         single page react app (deployed to IPFS)
-`-- labels      label documents
+`-- src         single page react app (deployed to IPFS)
 ```
 
 #### Set up your local environment

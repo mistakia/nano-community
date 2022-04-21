@@ -9,9 +9,9 @@ import { githubIssuesRequestActions } from '@core/github-issues'
 import { postlistRequestActions } from '@core/postlists'
 import {
   docRequestActions,
-  tagDocRequestActions,
+  labelDocRequestActions,
   docCommitRequestActions,
-  tagDocCommitRequestActions
+  labelDocCommitRequestActions
 } from '@core/docs'
 import {
   networkStatsRequestActions,
@@ -73,16 +73,20 @@ export const getAccountBlocksSummary = fetch.bind(
 export const getBlock = fetch.bind(null, api.getBlock, blockRequestActions)
 export const getPosts = fetch.bind(null, api.getPosts, postlistRequestActions)
 export const getDoc = fetch.bind(null, api.getDoc, docRequestActions)
-export const getTagDoc = fetch.bind(null, api.getTagDoc, tagDocRequestActions)
+export const getLabelDoc = fetch.bind(
+  null,
+  api.getLabelDoc,
+  labelDocRequestActions
+)
 export const getDocCommit = fetch.bind(
   null,
   api.getDocCommit,
   docCommitRequestActions
 )
-export const getTagDocCommit = fetch.bind(
+export const getLabelDocCommit = fetch.bind(
   null,
-  api.getTagDocCommit,
-  tagDocCommitRequestActions
+  api.getLabelDocCommit,
+  labelDocCommitRequestActions
 )
 export const getGithubDiscussions = fetch.bind(
   null,
