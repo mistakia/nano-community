@@ -2,10 +2,10 @@
   "scripts": {
     "dev": "concurrently \"yarn start\" \"yarn start:api\"",
     "dev:live": "NC_DEV_LIVE=true yarn start",
-    "start": "webpack serve --mode=development --config internals/webpack/webpack.dev.babel.js --port 8081 --history-api-fallback",
+    "start": "webpack serve --mode=development --config webpack/webpack.dev.babel.js --port 8081 --history-api-fallback",
     "start:api": "NODE_ENV=development node server",
     "deploy": "ipfs-deploy build/index.html",
-    "build": "cross-env NODE_ENV=production webpack --config internals/webpack/webpack.prod.babel.js --color --progress && react-snap",
+    "build": "cross-env NODE_ENV=production webpack --config webpack/webpack.prod.babel.js --color --progress && react-snap",
     "lint": "eslint .",
     "prettier": "prettier --write ."
   },

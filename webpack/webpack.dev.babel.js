@@ -7,7 +7,7 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CircularDependencyPlugin = require('circular-dependency-plugin')
 
-const constants = require('../../constants')
+const constants = require('../constants')
 
 module.exports = require('./webpack.base.babel')({
   mode: 'development',

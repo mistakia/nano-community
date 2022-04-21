@@ -51,7 +51,8 @@ JavaScript & markdown are used to make the project as accessible as possible.
 |-- resources   static assets (png, svg, jpg, pdf, html)
 |-- scripts     data aggregation or processing
 |-- server      server configs
-`-- src         single page react & redux app (deployed to IPFS)
+|-- src         single page react & redux app (deployed to IPFS)
+`-- webpack     webpack configuration files
 ```
 
 ### Setting up your local environment

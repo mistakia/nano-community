@@ -56,7 +56,7 @@ module.exports = (options) => ({
                 use: [nib()],
                 import: [
                   'nib',
-                  path.resolve(__dirname, '../../src/styles/variables.styl')
+                  path.resolve(__dirname, '../src/styles/variables.styl')
                 ],
                 includeCSS: true
               }
