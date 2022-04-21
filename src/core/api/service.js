@@ -36,8 +36,8 @@ export const api = {
     const url = `${API_URL}/docs${id}.md`
     return { url }
   },
-  getTagDoc({ id }) {
-    const url = `${API_URL}${id}.md`
+  getLabelDoc({ id }) {
+    const url = `${API_URL}/docs${id}.md`
     return { url }
   },
   getGithubDiscussions() {
@@ -67,7 +67,7 @@ export const api = {
     )}`
     return { url }
   },
-  getTagDocCommit({ id }) {
+  getLabelDocCommit({ id }) {
     const params = { path: `${id}.md`, page: 1, per_page: 100 }
     const url = `https://api.github.com/repos/${REPO}/commits?${queryString.stringify(
       params
@@ -88,7 +88,7 @@ export const apiRequest = (apiFunction, opts, token) => {
   const controller = new AbortController()
   const abort = controller.abort.bind(controller)
   const headers =
-    apiFunction !== api.getDocCommit && apiFunction !== api.getTagDocCommit
+    apiFunction !== api.getDocCommit && apiFunction !== api.getLabelDocCommit
       ? { Authorization: `Bearer ${token}`, credentials: 'include' }
       : {}
   const defaultOptions = { headers }

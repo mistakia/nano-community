@@ -28,12 +28,12 @@ export const postlistActions = {
     }
   }),
 
-  getPosts: (id, { age, tag }) => ({
+  getPosts: (id, { age, label }) => ({
     type: postlistActions.GET_POSTS,
     payload: {
       id,
       age,
-      tag
+      label
     }
   })
 }

@@ -87,12 +87,6 @@ api.use('/api/blocks', routes.blocks)
 api.use('/api/representatives', routes.representatives)
 api.use('/api/weight', routes.weight)
 
-const tagsPath = path.join(__dirname, '..', 'tags')
-api.use('/api/tags', serveStatic(tagsPath))
-api.get('/api/tags/*', (req, res) => {
-  res.status(404).send('Not found')
-})
-
 const docsPath = path.join(__dirname, '..', 'docs')
 api.use('/api/docs', serveStatic(docsPath))
 api.get('/api/docs/*', (req, res) => {

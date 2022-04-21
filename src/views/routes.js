@@ -10,7 +10,7 @@ import LedgerPage from '@pages/ledger'
 import NetworkPage from '@pages/network'
 import NotFoundPage from '@pages/not-found'
 import RepresentativesPage from '@pages/representatives'
-import TagsPage from '@pages/tags'
+import LabelPage from '@pages/label'
 
 const Routes = () => (
   <Switch>
@@ -19,7 +19,7 @@ const Routes = () => (
     <Route exact path='/ledger' component={LedgerPage} />
     <Route exact path='/network' component={NetworkPage} />
     <Route exact path='/representatives' component={RepresentativesPage} />
-    <Route exact path='/tags/:tag' component={TagsPage} />
+    <Route exact path='/labels/:label' component={LabelPage} />
     <Route exact path='/404.html' component={NotFoundPage} />
     <Route
       exact

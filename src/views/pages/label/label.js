@@ -18,14 +18,14 @@ import Posts from '@components/posts'
 import Network from '@components/network'
 import GithubEvents from '@components/github-events'
 
-export default class TagsPage extends React.Component {
+export default class LabelPage extends React.Component {
   get path() {
     const path = this.props.location.pathname
     return path.endsWith('/') ? path.slice(0, -1) : path
   }
 
   componentDidMount() {
-    this.props.getTagDoc(this.path)
+    this.props.getLabelDoc(this.path)
   }
 
   render() {
@@ -33,6 +33,7 @@ export default class TagsPage extends React.Component {
       doc,
       match: { params }
     } = this.props
+    console.log(params)
 
     const author = doc.getIn(['commit', 'commit', 'author', 'name'])
     const lastUpdated = doc.getIn(['commit', 'commit', 'author', 'date'])
@@ -50,7 +51,7 @@ export default class TagsPage extends React.Component {
     if (doc.isPending) {
       return (
         <div className='doc__container'>
-          <div className='doc__content'>
+          <div className='doc__content markdown__content'>
             <Skeleton height={80} width={200} />
             <Skeleton height={20} />
             <Skeleton height={20} animation={false} />
@@ -74,7 +75,7 @@ export default class TagsPage extends React.Component {
     if (doc.isLoaded && !doc.content) {
       return (
         <div className='doc__container'>
-          <div className='doc__content'>
+          <div className='doc__content markdown__content'>
             <h1>404</h1>
             <p>Topic not found</p>
           </div>
@@ -99,9 +100,9 @@ export default class TagsPage extends React.Component {
           tags={tags ? tags.split(',').map((t) => t.trim()) : []}
           path={this.path}
         />
-        <div className='doc__content'>
+        <div className='doc__content markdown__content'>
           <div dangerouslySetInnerHTML={{ __html: html }} />
-          <Posts title='Discussions' id='tags' tag={params.tag} />
+          <Posts title='Discussions' id='labels' label={params.label} />
         </div>
         <div className='doc__content-side'>
           <div className='doc__content-side-head'>
@@ -148,8 +149,8 @@ export default class TagsPage extends React.Component {
   }
 }
 
-TagsPage.propTypes = {
-  getTagDoc: PropTypes.func,
+LabelPage.propTypes = {
+  getLabelDoc: PropTypes.func,
   match: PropTypes.object,
   doc: ImmutablePropTypes.record,
   location: PropTypes.object

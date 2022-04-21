@@ -123,18 +123,18 @@ CREATE TABLE `posts` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `post_tags`
+-- Table structure for table `post_labels`
 --
 
-DROP TABLE IF EXISTS `post_tags`;
+DROP TABLE IF EXISTS `post_labels`;
 
-CREATE TABLE `post_tags` (
+CREATE TABLE `post_labels` (
   `post_id` int(11) NOT NULL,
-  `tag` varchar(65) NOT NULL,
+  `label` varchar(65) NOT NULL,
   `account_id` int(11) NOT NULL,
   KEY `post_id` (`post_id`),
-  KEY `tag` (`tag`),
-  UNIQUE KEY `user_tag` (`post_id`,`tag`,`account_id`)
+  KEY `label` (`label`),
+  UNIQUE KEY `user_label` (`post_id`,`label`,`account_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------

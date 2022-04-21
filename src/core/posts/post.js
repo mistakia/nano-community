@@ -14,7 +14,7 @@ export const Post = new Record({
   score_social: null,
   created_at: null,
   updated_at: null,
-  tags: new List(),
+  labels: new List(),
 
   source_title: null,
   source_url: null,
