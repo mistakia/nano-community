@@ -22,6 +22,30 @@ function LoadingOverlay() {
   )
 }
 
+function bytesToSize(bytes) {
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+  if (bytes === 0)
+    return {
+      value: 0,
+      label: 'Unlimited'
+    }
+
+  const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10)
+  if (i === 0) {
+    return {
+      value: bytes,
+      label: `${bytes} ${sizes[i]}/s`
+    }
+  }
+
+  const value = bytes / 1024 ** i
+
+  return {
+    value,
+    label: `${value.toFixed(1)} ${sizes[i]}/s`
+  }
+}
+
 export default class Representatives extends React.Component {
   render() {
     const { accounts, totalWeight, isLoading, quorumTotal } = this.props
@@ -109,15 +133,13 @@ export default class Representatives extends React.Component {
         valueFormatter: (p) => {
           if (p.row.telemetry.bandwidth_cap === 0) return 'Unlimited'
           return p.row.telemetry.bandwidth_cap
-            ? `${(p.row.telemetry.bandwidth_cap / (1024 * 1024)).toFixed(
-                0
-              )} Mb/s`
+            ? bytesToSize(p.row.telemetry.bandwidth_cap).label
             : null
         },
         valueGetter: (p) => {
           if (p.row.telemetry.bandwidth_cap === 0) return Infinity
           return p.row.telemetry.bandwidth_cap
-            ? p.row.telemetry.bandwidth_cap / (1024 * 1024)
+            ? bytesToSize(p.row.telemetry.bandwidth_cap).value
             : null
         }
       },
