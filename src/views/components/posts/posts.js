@@ -4,7 +4,6 @@ import ImmutablePropTypes from 'react-immutable-proptypes'
 import { List } from 'immutable'
 import ToggleButton from '@material-ui/lab/ToggleButton'
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
-import Paper from '@material-ui/core/Paper'
 
 import Post from '@components/post'
 import { Post as PostRecord } from '@core/posts'
