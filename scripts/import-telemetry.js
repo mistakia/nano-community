@@ -4,6 +4,7 @@ const dayjs = require('dayjs')
 const config = require('../config')
 const { rpc, getNetworkInfo, wait } = require('../common')
 const db = require('../db')
+const mapped_reps = require('../mapped-reps')
 
 const logger = debug('script')
 debug.enable('script')
@@ -12,29 +13,28 @@ const timestamp = Math.round(Date.now() / 1000)
 
 const main = async () => {
   logger(`saving telemetry for interval: ${timestamp}`)
+
   // get telemetry from single node
   const telemetry = await rpc.telemetry()
   if (!telemetry || telemetry.error) {
     return
   }
 
+  logger(`received telemetry for ${telemetry.metrics.length} nodes`)
+
+  // get max counts
   let maxCementedCount = 0
   let maxBlockCount = 0
-  const telemetryByIp = {}
   for (const item of telemetry.metrics) {
     const blockCount = parseInt(item.block_count, 10)
     if (blockCount > maxBlockCount) maxBlockCount = blockCount
 
     const cementedCount = parseInt(item.cemented_count, 10)
     if (cementedCount > maxCementedCount) maxCementedCount = cementedCount
-    telemetryByIp[`[${item.address}]:${item.port}`] = item
   }
 
-  logger(`received telemetry for ${telemetry.metrics.length} nodes`)
-
-  const results = {}
-
   // get confirmation_quorum from multiple nodes
+  const rep_peers = {}
   const requests = config.rpcAddresses.map((url) =>
     rpc.confirmationQuorum({ url })
   )
@@ -56,7 +56,7 @@ const main = async () => {
 
       for (const peer of res.value.peers) {
         // do not overwrite main node so ephemeral ports match
-        if (!results[peer.account]) results[peer.account] = peer
+        if (!rep_peers[peer.account]) rep_peers[peer.account] = peer
       }
     }
   }
@@ -66,18 +66,11 @@ const main = async () => {
     await db('voting_weight').insert(weightInserts)
   }
 
-  logger(`discovered ${Object.values(results).length} reps`)
+  logger(`discovered ${Object.values(rep_peers).length} reps`)
 
-  // merge data using ip address & port
-  const repInserts = []
-  for (const item of Object.values(results)) {
-    const node = telemetryByIp[item.ip]
-    if (!node) continue
-    repInserts.push({
-      // data from confirmation_quorum
-      account: item.account,
-      weight: item.weight,
-
+  const nodeInserts = []
+  for (const node of telemetry.metrics) {
+    const insert = {
       // data from telemetry
       block_count: node.block_count,
       block_behind: maxBlockCount - node.block_count,
@@ -100,52 +93,52 @@ const main = async () => {
       telemetry_timestamp: dayjs(parseInt(node.timestamp, 10)).unix(),
 
       timestamp
-    })
-  }
-
-  if (repInserts.length) {
-    logger(`saving metrics for ${repInserts.length} reps`)
-    await db('representatives_telemetry').insert(repInserts)
-  }
-
-  const nodeInserts = []
-  for (const node of telemetry.metrics) {
-    // check to see if node exists as a representative
-    const rep = repInserts.find((r) => r.node_id === node.node_id)
-    if (!rep) {
-      nodeInserts.push({
-        // data from telemetry
-        block_count: node.block_count,
-        block_behind: maxBlockCount - node.block_count,
-        cemented_count: node.cemented_count,
-        cemented_behind: maxCementedCount - node.cemented_count,
-        unchecked_count: node.unchecked_count,
-        account_count: node.account_count,
-        bandwidth_cap: node.bandwidth_cap,
-        peer_count: node.peer_count,
-        protocol_version: node.protocol_version,
-        uptime: node.uptime,
-        major_version: node.major_version,
-        minor_version: node.minor_version,
-        patch_version: node.patch_version,
-        pre_release_version: node.pre_release_version,
-        maker: node.maker,
-        node_id: node.node_id,
-        address: node.address,
-        port: node.port,
-        telemetry_timestamp: dayjs(parseInt(node.timestamp, 10)).unix(),
-
-        timestamp
-      })
     }
+
+    // associate telemetry with a mapped rep (or through rep crawler)
+    const mapped_rep = mapped_reps[node.address]
+    let telemetry_rep
+    if (mapped_rep) {
+      telemetry_rep = rep_peers[mapped_rep]
+    }
+
+    // if no mapped rep — associate using rep crawler if there are no conflicts
+    if (!telemetry_rep) {
+      // map telemetry to rep by matching address to rep crawler (quorum confirmation)
+      const quorum_mapped_rep = Object.values(rep_peers).find(
+        (p) => p.ip === `[${node.address}]:${node.port}`
+      )
+      if (quorum_mapped_rep) {
+        // get any associated mapped addresses for matched rep
+        const mapped_addresses = Object.entries(mapped_reps)
+          .filter((i) => i[1] === quorum_mapped_rep)
+          .map((i) => i[0])
+        // make sure no telemetry exists for those mapped addresses
+        const mapped_telemetry_found = telemetry.metrics.find((i) =>
+          mapped_addresses.includes(i.address)
+        )
+        if (!mapped_telemetry_found) {
+          telemetry_rep = quorum_mapped_rep
+        }
+      }
+    }
+
+    if (telemetry_rep) {
+      insert.account = telemetry_rep.account
+      insert.weight = telemetry_rep.weight
+    }
+
+    nodeInserts.push(insert)
   }
 
   if (nodeInserts.length) {
     logger(`saving metrics for ${nodeInserts.length} nodes`)
+    logger(`saving metrics for ${nodeInserts.filter(n => n.account).length} nodes w/ reps`)
     await db('representatives_telemetry').insert(nodeInserts)
   }
 
   const now = dayjs()
+  const repInserts = nodeInserts.filter((n) => n.account)
   for (const item of repInserts) {
     // get last network stat
     const result = await db('representatives_network')
