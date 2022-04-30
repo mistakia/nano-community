@@ -133,7 +133,11 @@ const main = async () => {
 
   if (nodeInserts.length) {
     logger(`saving metrics for ${nodeInserts.length} nodes`)
-    logger(`saving metrics for ${nodeInserts.filter(n => n.account).length} nodes w/ reps`)
+    logger(
+      `saving metrics for ${
+        nodeInserts.filter((n) => n.account).length
+      } nodes w/ reps`
+    )
     await db('representatives_telemetry').insert(nodeInserts)
   }
 

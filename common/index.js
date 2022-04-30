@@ -4,8 +4,12 @@ const config = require('../config')
 const constants = require('../constants')
 
 const request = async (options) => {
-  const request = new Request(options.url, options)
+  const request = new Request(options.url, {
+    timeout: 20000,
+    ...options
+  })
   const response = await fetch(request)
+
   if (response.status >= 200 && response.status < 300) {
     return response.json()
   } else {
