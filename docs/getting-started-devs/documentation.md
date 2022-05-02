@@ -10,3 +10,4 @@ tags: nano, docs, documentation, crypto, protocol, development
 - <a href="https://docs.nano.org/commands/command-line-interface/" target="_blank">Command Line Interface</a>
 - <a href="https://docs.nano.org/glossary/" target="_blank">Glossary</a>
 - [Protocol](/getting-started-devs/protocol-reference)
+- [Adding Custom Stats](/getting-started-devs/adding_custom_stats)
