@@ -21,6 +21,7 @@ import javascript from 'highlight.js/lib/languages/javascript'
 import python from 'highlight.js/lib/languages/python'
 import bash from 'highlight.js/lib/languages/bash'
 import powershell from 'highlight.js/lib/languages/powershell'
+import diff from 'highlight.js/lib/languages/diff'
 
 import 'highlight.js/styles/github.css'
 
@@ -28,6 +29,7 @@ import { BASE_URL } from '@core/constants'
 import Menu from '@components/menu'
 import Seo from '@components/seo'
 
+hljs.registerLanguage('diff', diff)
 hljs.registerLanguage('js', javascript)
 hljs.registerLanguage('python', python)
 hljs.registerLanguage('bash', bash)
