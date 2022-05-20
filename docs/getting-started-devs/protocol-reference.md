@@ -145,7 +145,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
   - between 77% and 88%, PRs above 1% weight
   - above 88%, PRs above 5% weight
 - vote signature is verified
-- republish a newly seen vote if the node itself is not a rep with > 0.05% voting weight
+- broadcast a newly seen vote if the node itself is not a rep with > 0.05% voting weight
   - fanout to random peers (0.5 \* sqrt(peers))
 - votes for inactive elections are added to an inactive vote cache (see [vote hinting](#vote-hinting))
 
@@ -154,6 +154,11 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - <a href="https://github.com/nanocurrency/nano-node/blob/f7f83e79cbf2f6edf30460fcd77a4283bffa2d5e/nano/node/vote_processor.cpp#L42-L92" target="_blank">process_loop</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/f7f83e79cbf2f6edf30460fcd77a4283bffa2d5e/nano/node/vote_processor.cpp#L136-L169" target="_blank">verify_votes</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/f7f83e79cbf2f6edf30460fcd77a4283bffa2d5e/nano/node/vote_processor.cpp#L171-L204" target="_blank">vote_blocking</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/f7f83e79cbf2f6edf30460fcd77a4283bffa2d5e/nano/node/active_transactions.cpp#L877-L952" target="_blank">active_transactions::vote</a>
 - <a href="https://github.com/nanocurrency/nano-node/blob/f7f83e79cbf2f6edf30460fcd77a4283bffa2d5e/nano/node/vote_processor.cpp#L94-L134" target="_blank">vote_processor::vote</a> — queue vote for processing
 - <a href="https://github.com/nanocurrency/nano-node/blob/98af16459a3cf6ac8a4e7523788eb70f5bdbf813/nano/node/blockprocessor.cpp#L335-L358" target="_blank">block_processor::process_live</a> — process block from network
+
+#### Broadcast incoming vote pathway
+
+- <a href="https://github.com/nanocurrency/nano-node/blob/1885e9cb0ebc308db936d9f90a8432b3a3bf384d/nano/node/network.cpp#L478-L489" target="_blank">message_visitor.confirm_ack()</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/1885e9cb0ebc308db936d9f90a8432b3a3bf384d/nano/node/vote_processor.cpp#L94-L134" target="_blank">vote_processor.vote()</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/1885e9cb0ebc308db936d9f90a8432b3a3bf384d/nano/node/vote_processor.cpp#L42-L92" target="_blank">vote_processor.process_loop</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/1885e9cb0ebc308db936d9f90a8432b3a3bf384d/nano/node/vote_processor.cpp#L136-L169" target="_blank">vote_processor.verify_votes()</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/1885e9cb0ebc308db936d9f90a8432b3a3bf384d/nano/node/vote_processor.cpp#L171-L204" target="_blank">vote_processor.vote_blocking()</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/1885e9cb0ebc308db936d9f90a8432b3a3bf384d/nano/node/active_transactions.cpp#L858-L912" target="_blank">active_transactions.vote()</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/1885e9cb0ebc308db936d9f90a8432b3a3bf384d/nano/node/network.cpp#L229-L236" target="_blank">network.flood_vote()</a>
+  - Relevant Func: <a href="https://github.com/nanocurrency/nano-node/blob/1885e9cb0ebc308db936d9f90a8432b3a3bf384d/nano/node/election.cpp#L341-L396" target="_blank">election.vote()</a>
 
 ---
 
