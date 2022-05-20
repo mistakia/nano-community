@@ -2,7 +2,7 @@ const debug = require('debug')
 const dayjs = require('dayjs')
 
 const config = require('../config')
-const { rpc, getNetworkInfo, wait } = require('../common')
+const { rpc, getNetworkInfo, wait, median } = require('../common')
 const db = require('../db')
 const mapped_reps = require('../mapped-reps')
 
@@ -21,17 +21,6 @@ const main = async () => {
   }
 
   logger(`received telemetry for ${telemetry.metrics.length} nodes`)
-
-  // get max counts
-  let maxCementedCount = 0
-  let maxBlockCount = 0
-  for (const item of telemetry.metrics) {
-    const blockCount = parseInt(item.block_count, 10)
-    if (blockCount > maxBlockCount) maxBlockCount = blockCount
-
-    const cementedCount = parseInt(item.cemented_count, 10)
-    if (cementedCount > maxCementedCount) maxCementedCount = cementedCount
-  }
 
   // get confirmation_quorum from multiple nodes
   const rep_peers = {}
@@ -61,6 +50,15 @@ const main = async () => {
     }
   }
 
+  const median_online_weight = median(
+    weightInserts.map((w) => parseInt(w.online_stake_total, 10))
+  )
+  const median_trended_weight = median(
+    weightInserts.map((w) => parseInt(w.trended_stake_total, 10))
+  )
+  const half_principal_rep_weight =
+    Math.max(median_online_weight, median_trended_weight) / 1000 / 2
+
   if (weightInserts.length) {
     logger(`saving voting weight info from ${weightInserts.length} reps`)
     await db('voting_weight').insert(weightInserts)
@@ -73,9 +71,7 @@ const main = async () => {
     const insert = {
       // data from telemetry
       block_count: node.block_count,
-      block_behind: maxBlockCount - node.block_count,
       cemented_count: node.cemented_count,
-      cemented_behind: maxCementedCount - node.cemented_count,
       unchecked_count: node.unchecked_count,
       account_count: node.account_count,
       bandwidth_cap: node.bandwidth_cap,
@@ -129,6 +125,24 @@ const main = async () => {
     }
 
     nodeInserts.push(insert)
+  }
+
+  // get max counts
+  let maxCementedCount = 0
+  let maxBlockCount = 0
+  for (const item of nodeInserts) {
+    if (!item.weight || item.weight < half_principal_rep_weight) continue
+    const blockCount = parseInt(item.block_count, 10)
+    if (blockCount > maxBlockCount) maxBlockCount = blockCount
+
+    const cementedCount = parseInt(item.cemented_count, 10)
+    if (cementedCount > maxCementedCount) maxCementedCount = cementedCount
+  }
+
+  // set blocks behind
+  for (const item of nodeInserts) {
+    item.block_behind = maxBlockCount - item.block_count
+    item.cemented_behind = maxCementedCount - item.cemented_count
   }
 
   if (nodeInserts.length) {
