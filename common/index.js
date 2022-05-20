@@ -3,6 +3,12 @@ const { default: fetch, Request } = require('node-fetch')
 const config = require('../config')
 const constants = require('../constants')
 
+const median = (arr) => {
+  const mid = Math.floor(arr.length / 2)
+  const nums = [...arr].sort((a, b) => a - b)
+  return arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2
+}
+
 const request = async (options) => {
   const request = new Request(options.url, {
     timeout: 20000,
@@ -208,6 +214,7 @@ const groupBy = (xs, key) =>
 /* eslint-enable no-extra-semi */
 
 module.exports = {
+  median,
   request,
   getNetworkInfo,
   POST,
