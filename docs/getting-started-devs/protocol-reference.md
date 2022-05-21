@@ -202,7 +202,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 
 ## Final Votes
 
-- For unconfirmed blcoks, regular voting quorum is checked and a final vote is generated in two instances:
+- For unconfirmed blocks, regular voting quorum is checked and a final vote is generated in three instances:
   - on a new vote for an active election
   - on election activation
   - on receiving a new live fork
