@@ -78,7 +78,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 
 ## Broadcasting a Vote
 
-- only when an election is first started, which can be by the election scheduler or via vote hinting
+- when an election is first started, which can be by the election scheduler or via [vote hinting](#vote-hinting)
 
 #### Notable Functions
 
@@ -88,10 +88,9 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 
 ## Active Elections
 
-- container size: 5000 (soft limit — set to change in v22.1)
+- container size: 5000
   - can be exceeded by elections started by vote hinting
 - every 500ms active elections are evaluated based on the order they were added
-- any unconfirmed elections beyond the container size limit that are older than 2s are kicked out (this is an issue and will be modified in v22.1)
 - election states are transitioned as follows
   - passing -> active after 5 seconds
   - confirmed -> expired confirmed after 5 seconds
@@ -202,6 +201,19 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 ---
 
 ## Final Votes
+
+- For unconfirmed blcoks, regular voting quorum is checked and a final vote is generated in two instances:
+  - on a new vote for an active election
+  - on election activation
+  - on receiving a new live fork
+
+#### Notable Pathways
+
+- <a href="https://github.com/nanocurrency/nano-node/blob/aefa4d015284bab44c4f46e9504c40995b4c7fd8/nano/node/active_transactions.cpp#L851-L926" target="_blank">active_transactions::vote()</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/aefa4d015284bab44c4f46e9504c40995b4c7fd8/nano/node/election.cpp#L342-L397" target="_blank">election::vote()</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/aefa4d015284bab44c4f46e9504c40995b4c7fd8/nano/node/election.cpp#L270-L310" target="_blank">election::confirm_if_quorum</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/aefa4d015284bab44c4f46e9504c40995b4c7fd8/nano/node/voting.cpp#L180-L217" target="_blank">vote_generator::add()</a>
+- <a href="https://github.com/nanocurrency/nano-node/blob/aefa4d015284bab44c4f46e9504c40995b4c7fd8/nano/node/active_transactions.cpp#L790-L848" target="_blank">active_transactions::insert_impl()</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/aefa4d015284bab44c4f46e9504c40995b4c7fd8/nano/node/election.cpp#L457-L486" target="_blank">election::insert_inactive_votes_cache()</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/aefa4d015284bab44c4f46e9504c40995b4c7fd8/nano/node/election.cpp#L270-L310" target="_blank">election::confirm_if_quorum</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/aefa4d015284bab44c4f46e9504c40995b4c7fd8/nano/node/voting.cpp#L180-L217" target="_blank">vote_generator::add()</a>
+- <a href="https://github.com/nanocurrency/nano-node/blob/aefa4d015284bab44c4f46e9504c40995b4c7fd8/nano/node/blockprocessor.cpp#L489" target="_blank">block_processor::process_one()</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/aefa4d015284bab44c4f46e9504c40995b4c7fd8/nano/node/active_transactions.cpp#L1073-L1094" target="_blank">active_transactions::publish()</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/aefa4d015284bab44c4f46e9504c40995b4c7fd8/nano/node/election.cpp#L457-L486" target="_blank">election::insert_inactive_votes_cache()</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/aefa4d015284bab44c4f46e9504c40995b4c7fd8/nano/node/election.cpp#L270-L310" target="_blank">election::confirm_if_quorum</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/aefa4d015284bab44c4f46e9504c40995b4c7fd8/nano/node/voting.cpp#L180-L217" target="_blank">vote_generator::add()</a>
+
+---
 
 ## Vote Spacing
 
