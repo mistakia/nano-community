@@ -89,7 +89,8 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 ## Active Elections
 
 - container size: 5000
-  - can be exceeded by elections started by vote hinting
+- elections are activated through the [election scheduler](#election-scheduler) and [vote hinting](#vote-hinting)
+- only 10 forks are tracked. On a new fork, the one with the lowest weight will be dropped
 - every 500ms active elections are evaluated based on the order they were added
 - election states are transitioned as follows
   - passing -> active after 5 seconds
@@ -221,16 +222,17 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 
 - validates the block signature, height, representative, balance, and work field
 - excludes burn account blocks
-- if the previous or source block is missing, it is added to unchecked and gap cache
-- only 10 forks are tracked. On a new fork, the one with the lowest weight will be dropped
+- if the previous block or source block is missing, it is added to unchecked
 - new checked blocks added locally (via RPC) are broadcasted to the network
   - sent directly to all PRs
   - fanout to sqrt(non-PR peers)
-- the block is added to the election scheduler if the dependents are confirmed and it is a new block or an old block with higher work
+- new checked blocks from the network are rebroadcasted
+  - fanout to sqrt(all peers)
+- the block is added to the election scheduler if the dependents are confirmed and it is a new block
 
 #### Notable Functions
 
-- <a href="https://github.com/nanocurrency/nano-node/blob/98af16459a3cf6ac8a4e7523788eb70f5bdbf813/nano/node/blockprocessor.cpp#L360-L535" target="_blank">block_processor::process_one</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/98af16459a3cf6ac8a4e7523788eb70f5bdbf813/nano/node/blockprocessor.cpp#L335-L358" target="_blank">block_processor::process_live</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/b43c218c4f824191e6062e2a3d10873428dbbc0c/nano/node/election_scheduler.cpp#L24-L46" target="_blank">election_scheduler::activate</a>
+- <a href="https://github.com/nanocurrency/nano-node/blob/1885e9cb0ebc308db936d9f90a8432b3a3bf384d/nano/node/blockprocessor.cpp#L344-L498" target="_blank">block_processor::process_one</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/1885e9cb0ebc308db936d9f90a8432b3a3bf384d/nano/node/blockprocessor.cpp#L315-L342" target="_blank">block_processor::process_live</a> -> <a href="https://github.com/nanocurrency/nano-node/blob/1885e9cb0ebc308db936d9f90a8432b3a3bf384d/nano/node/election_scheduler.cpp#L24-L46" target="_blank">election_scheduler::activate</a>
 
 ---
 
