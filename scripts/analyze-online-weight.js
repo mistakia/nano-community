@@ -17,9 +17,10 @@ value_types.forEach((i) => {
 })
 
 const main = async () => {
-  const timestamps = await db('voting_weight')
+  const rows = await db('voting_weight')
     .select('timestamp')
     .groupBy('timestamp')
+  const timestamps = rows.map((r) => r.timestamp)
 
   const update = (values, value_type) => {
     const r = results[value_type]
@@ -46,11 +47,11 @@ const main = async () => {
       )
       const online_weight = percentile(
         percentiles,
-        measurements.map((p) => p.online_stake_total)
+        measurements.map((p) => BigInt(p.online_stake_total))
       )
       const trended_weight = percentile(
         percentiles,
-        measurements.map((p) => p.trended_stake_total)
+        measurements.map((p) => BigInt(p.trended_stake_total))
       )
 
       update(online_weight, 'online_weight')
