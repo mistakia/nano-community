@@ -48,6 +48,7 @@ router.get('/labels', async (req, res) => {
     query.whereNot('posts.pid', 'like', 'discord:572793415138410517:%') // beta-announcements
     query.whereNot('posts.pid', 'like', 'discord:644987172935565335:%') // rep-announcements
     query.whereNot('posts.sid', 'discord:403628195548495882') // NanoTrade Server
+    query.whereNot('posts.sid', 'discord:431804330853662721') // Nano rep-support
 
     query.orderBy('strength', 'desc')
     query.groupBy('main_url')
@@ -113,6 +114,7 @@ router.get('/trending', async (req, res) => {
     query.where('posts.score', '>', 4)
     query.whereNot('posts.pid', 'like', 'discord:370266023905198085:%') // exclude posts from general channel
     query.whereNot('posts.sid', 'discord:403628195548495882') // NanoTrade Server
+    query.whereNot('posts.sid', 'discord:431804330853662721') // Nano rep-support
 
     // if (excludedIds.length) query.whereNotIn('posts.id', excludedIds)
     query.groupBy('main_url')
@@ -222,6 +224,7 @@ router.get('/top', async (req, res) => {
     query.whereNot('posts.pid', 'like', 'discord:572793415138410517:%') // beta-announcements
     query.whereNot('posts.pid', 'like', 'discord:644987172935565335:%') // rep-announcements
     query.whereNot('posts.sid', 'discord:403628195548495882') // NanoTrade Server
+    query.whereNot('posts.sid', 'discord:431804330853662721') // Nano rep-support
 
     query.orderBy('strength', 'desc')
     query.groupBy('main_url')
