@@ -8,6 +8,16 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
+# Yarn
+#
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
 # App specific
 #
 build/favicon.ico
