@@ -30,7 +30,7 @@
 ## github
 */15 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-github-issues.mjs --repo mistakia/nano-community > /var/log/import-github-issues.log 2>&1
 */15 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-github-discussions.mjs --repo mistakia/nano-community > /var/log/import-github-discussions.log 2>&1
-*/15 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-github.mjs > /var/log/import-github.log 2>&1
+*/15 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-github-events.mjs > /var/log/import-github-events.log 2>&1
 
 ## representatives
 0 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-representatives.mjs > /var/log/import-representatives.log 2>&1
