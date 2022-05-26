@@ -21,36 +21,36 @@
 #
 # m h  dom mon dow   command
 
-*/5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-subreddit.js -r nanocurrency > /var/log/import-nanocurrency.log 2>&1
-*/10 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-subreddit.js -r nanotrade > /var/log/import-nanotrade.log 2>&1
-*/10 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-forum.js > /var/log/import-forum.log 2>&1
-*/15 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-discord.js --gid 370266023905198083 > /var/log/import-nano-discord.log 2>&1
-*/10 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-discord.js --gid 403628195548495882 > /var/log/import-nano-trade-discord.log 2>&1
+*/5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-subreddit.mjs -r nanocurrency > /var/log/import-nanocurrency.log 2>&1
+*/10 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-subreddit.mjs -r nanotrade > /var/log/import-nanotrade.log 2>&1
+*/10 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-forum.mjs > /var/log/import-forum.log 2>&1
+*/15 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-discord.mjs --gid 370266023905198083 > /var/log/import-nano-discord.log 2>&1
+*/10 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-discord.mjs --gid 403628195548495882 > /var/log/import-nano-trade-discord.log 2>&1
 
 ## github
-*/15 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-github-issues.js --repo mistakia/nano-community > /var/log/import-github-issues.log 2>&1
-*/15 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-github-discussions.js --repo mistakia/nano-community > /var/log/import-github-discussions.log 2>&1
-*/15 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-github.js > /var/log/import-github.log 2>&1
+*/15 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-github-issues.mjs --repo mistakia/nano-community > /var/log/import-github-issues.log 2>&1
+*/15 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-github-discussions.mjs --repo mistakia/nano-community > /var/log/import-github-discussions.log 2>&1
+*/15 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-github.mjs > /var/log/import-github.log 2>&1
 
 ## representatives
-0 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-representatives.js > /var/log/import-representatives.log 2>&1
-0 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-representatives-meta.js > /var/log/import-representatives-meta.log 2>&1
-*/5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-telemetry.js > /var/log/import-telemetry.log 2>&1
-*/5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-uptime.js > /var/log/import-uptime.log 2>&1
-*/5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-accounts-meta.js > /var/log/import-accounts-meta.log 2>&1
+0 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-representatives.mjs > /var/log/import-representatives.log 2>&1
+0 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-representatives-meta.mjs > /var/log/import-representatives-meta.log 2>&1
+*/5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-telemetry.mjs > /var/log/import-telemetry.log 2>&1
+*/5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-uptime.mjs > /var/log/import-uptime.log 2>&1
+*/5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-accounts-meta.mjs > /var/log/import-accounts-meta.log 2>&1
 
 ## backup mysql
 0 0 * * 0 /bin/bash /root/nano-community/current/scripts/backup-mysql.sh -f > /var/log/backup-mysql-full.log 2>&1
-0 1 * * 0 NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/archive-mysql.js > /var/log/archive-mysql.log 2>&1
+0 1 * * 0 NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/archive-mysql.mjs > /var/log/archive-mysql.log 2>&1
 
 ## rollups
-0 0 * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/rollup-uptime.js --days 2 > /var/log/rollup-uptime.log 2>&1
-0 */6 * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/calculate-uptime.js > /var/log/calculate-uptime.log 2>&1
+0 0 * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/rollup-uptime.mjs --days 2 > /var/log/rollup-uptime.log 2>&1
+0 */6 * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/calculate-uptime.mjs > /var/log/calculate-uptime.log 2>&1
 
 ## delegators
-15 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-accounts-rep.js > /var/log/import-accounts-rep.log 2>&1
+15 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-accounts-rep.mjs > /var/log/import-accounts-rep.log 2>&1
 
 ## aliases
-18 3 * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-nanotipbot-twitter.js > /var/log/import-nanotipbot-twitter.log 2>&1
-18 4 * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-nanotipbot-telegram.js > /var/log/import-nanotipbot-telegram.log 2>&1
-18 3 * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-graham-tipbot.js > /var/log/import-graham-tipbot.log 2>&1
+18 3 * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-nanotipbot-twitter.mjs > /var/log/import-nanotipbot-twitter.log 2>&1
+18 4 * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-nanotipbot-telegram.mjs > /var/log/import-nanotipbot-telegram.log 2>&1
+18 3 * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-graham-tipbot.mjs > /var/log/import-graham-tipbot.log 2>&1
