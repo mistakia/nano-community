@@ -1,5 +1,7 @@
 import { fileURLToPath } from 'url'
 import fetch, { Request } from 'node-fetch'
+import fs from 'fs-extra'
+import path, { dirname } from 'path'
 
 import * as config from '#config'
 import { BURN_ACCOUNT } from '#constants'
@@ -11,6 +13,19 @@ const POST = (data) => ({
     'Content-Type': 'application/json'
   }
 })
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const data_path = path.join(__dirname, '../data')
+
+export const getData = async (name) => {
+  const file_path = `${data_path}/${name}.json`
+  return fs.readJson(file_path)
+}
+
+export const saveData = async (name, data) => {
+  const file_path = `${data_path}/${name}.json`
+  await fs.writeJson(file_path, data, { spaces: 2 })
+}
 
 export const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 export const isMain = (path) => process.argv[1] === fileURLToPath(path)
