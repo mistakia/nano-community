@@ -1,10 +1,13 @@
 import { fileURLToPath } from 'url'
-import fetch, { Request } from 'node-fetch'
 import fs from 'fs-extra'
 import path, { dirname } from 'path'
 
 import * as config from '#config'
 import { BURN_ACCOUNT } from '#constants'
+import request from './request.mjs'
+
+export * as cloudflare from './cloudflare.mjs'
+export { request }
 
 const POST = (data) => ({
   method: 'POST',
@@ -19,7 +22,12 @@ const data_path = path.join(__dirname, '../data')
 
 export const getData = async (name) => {
   const file_path = `${data_path}/${name}.json`
-  return fs.readJson(file_path)
+  const exists = await fs.pathExists(file_path)
+  if (!exists) {
+    return null
+  }
+
+  return fs.readJson(file_path, { throws: false })
 }
 
 export const saveData = async (name, data) => {
@@ -33,23 +41,6 @@ export const median = (arr) => {
   const mid = Math.floor(arr.length / 2)
   const nums = [...arr].sort((a, b) => a - b)
   return arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2
-}
-
-export const request = async (options) => {
-  const request = new Request(options.url, {
-    timeout: 20000,
-    ...options
-  })
-  const response = await fetch(request)
-
-  if (response.status >= 200 && response.status < 300) {
-    return response.json()
-  } else {
-    const res = await response.json()
-    const error = new Error(res.error || response.statusText)
-    error.response = response
-    throw error
-  }
 }
 
 export const getNetworkInfo = (ip) => {

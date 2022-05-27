@@ -1,0 +1,807 @@
+[
+  {
+    "alias": "1NANO Community",
+    "account": "nano_16d45ow3tsj1y3z9n4satwzxgj6qiue1ggxbwbrj3b33qr58bzchkpsffpx4",
+    "weight": 2.090430016874903e+35,
+    "node_id": "node_1xq8f5axaagj4b835g6pk9135rnomzmt9a8sm96tqegq4y7mteznbwec7tiy",
+    "address": "::ffff:78.129.253.179"
+  },
+  {
+    "alias": "NanoWallet Bot",
+    "account": "nano_16k5pimotz9zehjk795wa4qcx54mtusk8hc5mdsjgy57gnhbj3hj6zaib4ic",
+    "weight": 4.1218707444047446e+34,
+    "node_id": "node_14nqqg6toadjk4ign9bph1ep9jr6owaa1h9bow5pynbqzfq5y3sb18wbrnc3",
+    "address": "::ffff:139.162.199.142"
+  },
+  {
+    "alias": "Nano Node London",
+    "account": "nano_18bpu81x4oyqsjjsyaeb7ek4rag1bw8gerhaiumookzc4t5prrm4d7zg56ww",
+    "weight": 6.39420668691578e+35,
+    "node_id": "node_3o3ynmn7inm1dj1mbwq3edytfmty84skjnxj7fu8uj6e7s6gsczk39q93a5w",
+    "address": "::ffff:139.59.181.118"
+  },
+  {
+    "alias": "1. High Performance Server 🚀 - DE",
+    "account": "nano_18shbirtzhmkf7166h39nowj9c9zrpufeg75bkbyoobqwf1iu3srfm9eo3pz",
+    "weight": 7.519522784872902e+35,
+    "node_id": "node_1xzsz5pjkc73bixqqm9dts8cjr4ft81q5wxt5udu4u7uqy5d3534wuumbggj",
+    "address": "::ffff:167.86.66.13"
+  },
+  {
+    "alias": "Nano Foundation #7",
+    "account": "nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs",
+    "weight": 4.2408146003818875e+35,
+    "node_id": "node_34qdpnc65gwz566rt3xgw33ix75opiddktqxef7sirody93uqg39kz8b35k6",
+    "address": "::ffff:45.76.114.63"
+  },
+  {
+    "alias": "Nano Foundation #6",
+    "account": "nano_1awsn43we17c1oshdru4azeqjz9wii41dy8npubm4rg11so7dx3jtqgoeahy",
+    "weight": 9.519417041233331e+35,
+    "node_id": "node_36s1qep946tkkbmxgqyaytz6ns3wjueq8ctj3p4sb34z5skt4nyjdwdi64t7",
+    "address": "::ffff:95.217.104.44"
+  },
+  {
+    "alias": "NiF's Node - nano.nifni.net",
+    "account": "nano_1fnx59bqpx11s1yn7i5hba3ot5no4ypy971zbkp5wtium3yyafpwhhwkq8fc",
+    "weight": 5.1409048988295514e+35,
+    "node_id": "node_14xmhaj4u85t49d1r69zrangsb8gnodhjakxegmeqby8x71uxiscgs1o3o1c",
+    "address": "::ffff:2.56.98.216"
+  },
+  {
+    "alias": "Nano Foundation #8",
+    "account": "nano_1hza3f7wiiqa7ig3jczyxj5yo86yegcmqk3criaz838j91sxcckpfhbhhra1",
+    "weight": 5.6835678827803516e+35,
+    "node_id": "node_1mjgzapy5c9hambwmepkpmg6u5di163zfocfsqc4pxu658cmmge7zsm1mg5r",
+    "address": "2a03:b0c0:2:d0::5d7:4001"
+  },
+  {
+    "alias": "Noli Me Tangere",
+    "account": "nano_1isgusmnf1xe45iyjtfxw4qiai36zxdituu7gpni1trtj5ojyujobq13bjah",
+    "weight": 3.293948747112157e+35,
+    "node_id": "node_1aib1hdqdjrwoao8zjwffdenxmkm86r9z66j9zyecmre75cn4khzbtgzjur5",
+    "address": "::ffff:67.205.189.200"
+  },
+  {
+    "alias": "NanoTicker",
+    "account": "nano_1iuz18n4g4wfp9gf7p1s8qkygxw7wx9qfjq6a9aq68uyrdnningdcjontgar",
+    "weight": 1.2729709805085419e+36,
+    "node_id": "node_3aw3qa5t5bynypo31n84gjfui4dzosyxegfaxaoa6jwt6se98masosfkku3b",
+    "address": "::ffff:202.61.250.18"
+  },
+  {
+    "alias": "NanoQuake",
+    "account": "nano_1kd4h9nqaxengni43xy9775gcag8ptw8ddjifnm77qes1efuoqikoqy5sjq3",
+    "weight": 5.621364837020418e+35,
+    "node_id": "node_33oqee7uaptsd56sp19mmobsa9xmam39cskcig6axhhxsx1qqgb3yh73et1q",
+    "address": "::ffff:78.129.241.16"
+  },
+  {
+    "alias": "KuCoin",
+    "account": "nano_1niabkx3gbxit5j5yyqcpas71dkffggbr6zpd3heui8rpoocm5xqbdwq44oh",
+    "weight": 3.199825818501291e+35,
+    "node_id": "node_3rkosjzyawgn64c79ismz9qeh13wck478so534dq75zd4ccfkocngj19wzy4",
+    "address": "::ffff:95.216.218.49"
+  },
+  {
+    "alias": "My Nano Ninja",
+    "account": "nano_1ninja7rh37ehfp9utkor5ixmxyg8kme8fnzc4zty145ibch8kf5jwpnzr3r",
+    "weight": 5.0186831195217583e+36,
+    "node_id": "node_397pi86qt5qtcj3g3gj86nsma9h1ofgfpijx3deo6n7w4rhx5sqat4p4yoxk",
+    "address": "::ffff:193.41.237.131"
+  },
+  {
+    "alias": "Nano Foundation #3",
+    "account": "nano_1q3hqecaw15cjt7thbtxu3pbzr1eihtzzpzxguoc37bj1wc5ffoh7w74gi6p",
+    "weight": 7.579970717009776e+35,
+    "node_id": "node_1oysj5h37647ifcpq77t7ckm74scbkmoh69psngyb7b8d6zjzxrdko4gpm3e",
+    "address": "::ffff:178.22.67.112"
+  },
+  {
+    "alias": "oFLIPSTARo's Node",
+    "account": "nano_1qgkdadcbwn65sp95gr144fuc99tm5tn6gx9y8ow9bgaam6r5ixgtx19tw93",
+    "weight": 4.6464377970294236e+35,
+    "node_id": "node_17eo4a8cug3s1opg68d5dnjnc8eeozrgi11hu67tm97u8uzbfsxr4ns777ei",
+    "address": "::ffff:5.189.171.217"
+  },
+  {
+    "alias": "Nano Foundation #2",
+    "account": "nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou",
+    "weight": 2.1196482846387435e+36,
+    "node_id": "node_3pdbcjytjwpfytbjrn7he3xrotcr9js8rgkgxyxfetpc1h3ty531qiu3peb1",
+    "address": "::ffff:94.16.109.134"
+  },
+  {
+    "alias": "NanoCrawler / meltingice",
+    "account": "nano_1x7biz69cem95oo7gxkrw6kzhfywq4x5dupw4z1bdzkb74dk9kpxwzjbdhhs",
+    "weight": 2.0336046321700125e+36,
+    "node_id": "node_1x9yqazteies3eok478sgyugcbwp4ogekd4wynybz5an9swcestqgsw6zr6r",
+    "address": "::ffff:116.203.62.225"
+  },
+  {
+    "alias": "warai",
+    "account": "nano_33ad5app7jeo6jfe9ure6zsj8yg7knt6c1zrr5yg79ktfzk5ouhmpn6p5d7p",
+    "weight": 7.319563976620522e+35,
+    "node_id": "node_3fsyygc35mf1digc9sf7g8ymu8f5wpnfxd68krurkc8jjs8dw1qkoj8sxbqy",
+    "address": "::ffff:142.93.249.19"
+  },
+  {
+    "alias": "❤️❤️ Nanolove ❤️❤️",
+    "account": "nano_34amtofxstsfyqcgphp8piij9u33widykq9wbz6ysjpxhbgmqu8btu1eexer",
+    "weight": 4.976326166581156e+35,
+    "node_id": "node_194knxjbthsyw65bp4kmgiic6z5q1qz4hbazdsiojxh98ayx4h8xw5reewfu",
+    "address": "::ffff:188.165.216.204"
+  },
+  {
+    "alias": "SupeNode",
+    "account": "nano_396sch48s3jmzq1bk31pxxpz64rn7joj38emj4ueypkb9p9mzrym34obze6c",
+    "weight": 5.031620944031647e+35,
+    "node_id": "node_3zsexif3oskyfskk7gyky7ow5ek4a3amt1abfx48sukhb63gz957nw8hu4pe",
+    "address": "::ffff:109.73.65.118"
+  },
+  {
+    "alias": "Nano Foundation #1",
+    "account": "nano_3arg3asgtigae3xckabaaewkx3bzsh7nwz7jkmjos79ihyaxwphhm6qgjps4",
+    "weight": 5.591670289085809e+36,
+    "node_id": "node_347x4bp9qxwct5rptr1g34zk5ieyaqyrcn48mg9w3fygwh83uawyerzowdwc",
+    "address": "::ffff:95.217.231.50"
+  },
+  {
+    "alias": "Marvel's Node - Europe",
+    "account": "nano_3caprkc56ebsaakn4j4n7g9p8h358mycfjcyzkrfw1nai6prbyk8ihc5yjjk",
+    "weight": 7.143176323373336e+35,
+    "node_id": "node_1xznk34k6bnaw93ha9ins7nrmqwc3ni8u7wa193jri686t6d3s6djaywrah7",
+    "address": "::ffff:45.129.180.39"
+  },
+  {
+    "alias": "Nano Foundation #4",
+    "account": "nano_3dmtrrws3pocycmbqwawk6xs7446qxa36fcncush4s1pejk16ksbmakis78m",
+    "weight": 7.340744416707425e+35,
+    "node_id": "node_37anxj1bo9mbdxjagqxpx994frza8erigfmnm54x9qrbuekr3cqn8jgngmo7",
+    "address": "::ffff:45.79.207.119"
+  },
+  {
+    "alias": "Nano Foundation #5",
+    "account": "nano_3hd4ezdgsp15iemx7h81in7xz5tpxi43b6b41zn3qmwiuypankocw3awes5k",
+    "weight": 4.671060986001256e+35,
+    "node_id": "node_1ezu5m11zzdntakx7fmyjqtbe9sf7k4tp67qh4m5uoezy77817sqo71pizm8",
+    "address": "2400:6180:100:d0::2f1:d001"
+  },
+  {
+    "alias": "Binance",
+    "account": "nano_3jwrszth46rk1mu7rmb4rhm54us8yg1gw3ipodftqtikf5yqdyr7471nsg1k",
+    "weight": 9.733114773564993e+36,
+    "node_id": "node_3j4p38g7c1g7otpgw6rmknirkpokkqramo1sr9j78n4peoj13xmr9aijwip6",
+    "address": "::ffff:3.112.138.57"
+  },
+  {
+    "alias": "gr0vity",
+    "account": "nano_3msc38fyn67pgio16dj586pdrceahtn75qgnx7fy19wscixrc8dbb3abhbw6",
+    "weight": 3.4572202370471704e+35,
+    "node_id": "node_1smnktpjw893fuxgzrub7q5bc7ks9axaj6csegafs8z96k5kd4iemd8ipf85",
+    "address": "2a01:4f9:6a:4645::2"
+  },
+  {
+    "alias": "NanoWallet.io",
+    "account": "nano_3pczxuorp48td8645bs3m6c3xotxd3idskrenmi65rbrga5zmkemzhwkaznh",
+    "weight": 3.3668742132331964e+36,
+    "node_id": "node_1jcjcobu7abo91yikz49g7syfww898g7urtftda6dk6aik1fyr4kog95fdz1",
+    "address": "::ffff:138.68.165.210"
+  },
+  {
+    "alias": "Kedrin",
+    "account": "nano_15nt4cis8ac184q9mj7bedww9ay9zh5jk5k7sj9ypmz44twjcpz3cn6oijir",
+    "weight": 5.291809318204745e+35,
+    "node_id": "node_1ncsqn7opcgq8jjbkm6ia65bwqft65umwpdifu99tgisxye6bzobtw3q438o",
+    "address": "::ffff:95.216.220.194"
+  },
+  {
+    "alias": "NANO Skynode 🏔️",
+    "account": "nano_3u7d5iohy14swyhxhgfm9iq4xa9yibhcgnyj697uwhicp14dhx4woik5e9ek",
+    "weight": 1.7975070744418468e+35,
+    "node_id": "node_3s6q7i6eqm7tzmgmutbcdgf6ykwb8dukwnodkdomcskpmi7pdtpir7g57tfd",
+    "address": "::ffff:164.68.121.140"
+  },
+  {
+    "alias": "NANO TipBot",
+    "account": "nano_3o7uzba8b9e1wqu5ziwpruteyrs3scyqr761x7ke6w1xctohxfh5du75qgaj",
+    "weight": 6.3020048652814334e+35,
+    "node_id": "node_3pgqaxgpscqgg9kernqc79685izcmnb3fk8m7659obj7hiyzgwupm9d5hd4s",
+    "address": "::ffff:65.21.61.128"
+  },
+  {
+    "alias": "nanoble",
+    "account": "nano_16d3mdshcfqayyx8rd9ioimjiicrma743qpd86ohfs9kdzgejmnba1zifo8m",
+    "weight": 4.702496370010163e+35,
+    "node_id": "node_11xbauntur7zwgm9qh81wy3gddq38ahp1c7eih9i9ezdqddpzj19ipnm9oxh",
+    "address": "::ffff:137.184.87.161"
+  },
+  {
+    "alias": "ARaiNode",
+    "account": "nano_3kqdiqmqiojr1aqqj51aq8bzz5jtwnkmhb38qwf3ppngo8uhhzkdkn7up7rp",
+    "weight": 5.874978724227239e+35,
+    "node_id": "node_13rtsqoxf6or31cnutc5cag5a5yia63kxf8nf68m1y4uwfu9rd738yrbc9nx",
+    "address": "::ffff:143.198.101.143"
+  },
+  {
+    "alias": "Nonna",
+    "account": "nano_1just1zdsnke856mu5pmed1qdkzk6adh3d13iiqr3so66sr8pbcnh15bdjda",
+    "weight": 4.77307559059677e+35,
+    "node_id": "node_3zjbcbm48uy5xp3ksfhw1ci3c8ccdz1qwjhtjzk44ieneqoagyxbk59wfzpe",
+    "address": "::ffff:62.171.182.17"
+  },
+  {
+    "alias": "Buckeye Nano Node",
+    "account": "nano_3i3dqy5xs98ewtk9ejfpxfwbsscejc6njz9hk5ia1446gdkxpxkjeeia719n",
+    "weight": 1.5309603008814363e+35,
+    "node_id": "node_1wak79we4cac6akpitcdr5yegxewmf6s1jcrdcsx6g9huy5zfu8pkexk97id",
+    "address": "::ffff:208.38.224.11"
+  },
+  {
+    "alias": "Puddy",
+    "account": "nano_3abuqtbaotp9myn6ihb6mg96hf7jnapuddydf6ytgd174t4phg86nnq4cmxj",
+    "weight": 5.606305809386553e+35,
+    "node_id": "node_3zgfxcjxdew9nma99m9m57z7apewainjynd7iyqs5z1s6a68rpmneomb7qog",
+    "address": "::ffff:104.131.169.14"
+  },
+  {
+    "alias": "Redeemfor.me 🛍️🛒 —  Luckynano.com 🎰💰",
+    "account": "nano_1oenixj4qtpfcembga9kqwggkb87wooicfy5df8nhdywrjrrqxk7or4gz15b",
+    "weight": 5.825834177914072e+35,
+    "node_id": "node_3xfq5po69uq7zac5smx6j5cggonprysxq1fohsmf15nhmt3yts4e41141hky",
+    "address": "::ffff:173.212.221.138"
+  },
+  {
+    "alias": "⋰·⋰FastFeeless.com⋰·⋰",
+    "account": "nano_3afmp9hx6pp6fdcjq96f9qnoeh1kiqpqyzp7c18byaipf48t3cpzmfnhc1b7",
+    "weight": 8.18968558710545e+35,
+    "node_id": "node_3r8gbkniabnb9rsezy6zteouu3se7iqs4a93rrnrceue7jb74biy48s6fo6n",
+    "address": "::ffff:173.249.53.54"
+  },
+  {
+    "alias": "Bryan's 24/7 Node 🇿🇦",
+    "account": "nano_3tta9pdxr4djdcm6r3c7969syoirj3dunrtynmmi8n1qtxzk9iksoz1gxdrh",
+    "weight": 5.767255188291369e+35,
+    "node_id": "node_3hir1dehiyesr5367dupza9tffwhiqkufsi768gq7ip3o5c78q3k1qt99f7e",
+    "address": "::ffff:102.165.20.242"
+  },
+  {
+    "alias": "NANO Voting 🌍",
+    "account": "nano_3uaydiszyup5zwdt93dahp7mri1cwa5ncg9t4657yyn3o4i1pe8sfjbimbas",
+    "weight": 9.343528420477173e+35,
+    "node_id": "node_34crh1eb8c5b1fqgjj6q47byzgxry7fshs4rt3s3jdgzb81nbqjm7cmuyy4c",
+    "address": "::ffff:162.55.62.26"
+  },
+  {
+    "alias": "Natrium",
+    "account": "nano_1natrium1o3z5519ifou7xii8crpxpk8y65qmkih8e8bpsjri651oza8imdd",
+    "weight": 5.892509802219139e+36,
+    "node_id": "node_3jywrbpmdadrim8b7me9sk57z8e9mtxfid8hmybsazb3bwqzp9dadwqbqgje",
+    "address": "2a01:4f9:c010:8b6b::1"
+  },
+  {
+    "alias": "Huobi Representative",
+    "account": "nano_1bj5cf9hkgkcspmn15day8cyn3hyaciufbba4rqmbnkmbdpjdmo9pwyatjoi",
+    "weight": 1.5093538714905092e+36,
+    "node_id": "node_1oycwzghsx7aotwbsa7ianwe3m9aejqsby3dguk5f6hkh9p6udj3cqftbzia",
+    "address": "::ffff:18.181.254.140"
+  },
+  {
+    "alias": "Nano Charts 📊",
+    "account": "nano_3chartsi6ja8ay1qq9xg3xegqnbg1qx76nouw6jedyb8wx3r4wu94rxap7hg",
+    "weight": 1.6852960350378114e+36,
+    "node_id": "node_3ce3m6dcukqe45u3qpmfn8wxjnyhpdhrg98pp44hcgprdw6rczf3jdps6pco",
+    "address": "::ffff:173.249.54.87"
+  },
+  {
+    "alias": "Finland Green 💚",
+    "account": "nano_3hjo1cehsxrssawmpew98u4ug8bxy4ppht5ch647zpuscdgedfy1xh4yga7z",
+    "weight": 6.195461189804299e+35,
+    "node_id": "node_3cs871z7q4sx9f8himko3qhiqj7ucptpocknu59ei6pxx33xa5xmp3o8z98z",
+    "address": "::ffff:95.216.148.200"
+  },
+  {
+    "alias": "Nanovert",
+    "account": "nano_375pi67f4i4ag5rudoziza86z715bepsmp1r6ri4domt7ct6tk67mjsxtebm",
+    "weight": 5.796369648401054e+35,
+    "node_id": "node_1jos9ay3ty1qz4nf9tp6p5nq1nbyqirr6hid781q3887kb5i4eegjoi8hs9j",
+    "address": "::ffff:15.235.14.159"
+  },
+  {
+    "alias": "nanowallets.guide",
+    "account": "nano_1zuksmn4e8tjw1ch8m8fbrwy5459bx8645o9euj699rs13qy6ysjhrewioey",
+    "weight": 1.0539298992884248e+36,
+    "node_id": "node_3nuqqrqktnti85qthoig3thkcfjejfcrtn6wykp51388er9wt3p3f9tdczdm",
+    "address": "::ffff:65.21.104.141"
+  },
+  {
+    "alias": "nano.strnmn.me 🌿",
+    "account": "nano_3strnmn7h9b7oghxa6h9ckrpf5r454fsobpicixps6xwiwc5q4hat7wjbpqz",
+    "weight": 8.219259599280393e+35,
+    "node_id": "node_1xyundhizom5xwd4rakf8c3jsq5khjpgskeqh9xyzeazajfzwire5kxhc83b",
+    "address": "::ffff:78.47.159.121"
+  },
+  {
+    "alias": "Wirex",
+    "account": "nano_3ngt59dc7hbsjd1dum1bw9wbb87mbtuj4qkwcruididsb5rhgdt9zb4w7kb9",
+    "weight": 7.484367174315687e+35,
+    "node_id": "node_1knpowsagco8ckx1ku9fhk5uryci8ee5zf5w99qkf5im9eu8rjim6sxp3bew",
+    "address": "::ffff:51.105.192.193"
+  },
+  {
+    "alias": "Ӿ Makonode 🦈",
+    "account": "nano_37ortkby6k68z8tkk8g63ndbp8wjbmofhn56oyxb4rm6s3x51pkpiwcnpgmq",
+    "weight": 6.1313138616959826e+35,
+    "node_id": "node_11pxq3i7iejom7djweh1d6nkszfwdy5szsu7ztpz9enmrjk3way3dzqg5j4j",
+    "address": "::ffff:173.212.217.166"
+  },
+  {
+    "alias": "NanoBrasil 🇧🇷",
+    "account": "nano_1j78msn5omp8jrjge8txwxm4x3smusa1cojg7nuk8fdzoux41fqeeogg5aa1",
+    "weight": 1.41353448839638e+35,
+    "node_id": "node_3xbt1f5ea1bj3cga1skewiimouykdrbcth5cxi6hs6iion6iajxowbws17re",
+    "address": "::ffff:177.66.167.199"
+  },
+  {
+    "alias": "Yakamoz Node - nano.trade",
+    "account": "nano_3pg8khw8gs94c1qeq9741n99ubrut8sj3n9kpntim1rm35h4wdzirofazmwt",
+    "weight": 4.781440338443872e+35,
+    "node_id": "node_13ds417kzo6ixjgqrwswyene9xpga8h4ydknpbfcj6mcbhas7hnthmxrmgyn",
+    "address": "::ffff:45.129.183.236"
+  },
+  {
+    "alias": "Nalli | [Fast 💨 - Dedicated 💻 - Green 🍀]",
+    "account": "nano_3zapp5z141qpjipsb1jnjdmk49jwqy58i6u6wnyrh6x7woajeyme85shxewt",
+    "weight": 5.8461883290043334e+35,
+    "node_id": "node_3w3zw4tg4sx78aj5fg1gy94p4ypykstehh5br38gnadbzpjcpc1t4dbspjqt",
+    "address": "::ffff:91.153.6.55"
+  },
+  {
+    "alias": "NanOslo 🐯",
+    "account": "nano_1jtx5p8141zjtukz4msp1x93st7nh475f74odj8673qqm96xczmtcnanos1o",
+    "weight": 6.669189903071262e+35,
+    "node_id": "node_376y5edak7j8j96qpubcx5yr1zptwpiycczcmm4rfyhcnwjgjiy668o7eohd",
+    "address": "::ffff:37.191.207.40"
+  },
+  {
+    "alias": "Kappture",
+    "account": "nano_3ktybzzy14zxgb6osbhcc155pwk7osbmf5gbh5fo73bsfu9wuiz54t1uozi1",
+    "weight": 9.343421008303095e+35,
+    "node_id": "node_3efc7ozh65rm5i7js8ok1j8e74zqdak7muqw7z6ucwptiwbtwz79k9t8rb6s",
+    "address": "::ffff:54.77.3.59"
+  },
+  {
+    "alias": "PowerNode",
+    "account": "nano_3power3gwb43rs7u9ky3rsjp6fojftejceexfkf845sfczyue4q3r1hfpr3o",
+    "weight": 9.088486215904132e+35,
+    "node_id": "node_1oqrezqeii6uyeot8zyf7is3j5prdpxsy3os4kpanmdaeojktxrq9eedwb3h",
+    "address": "::ffff:209.89.187.162"
+  },
+  {
+    "alias": "mimenode-old",
+    "account": "nano_139tfuxmn4xne7kac8gy46rzg3tj8dcahyjjrexk9pc8udh3i1cjxs1h5rme",
+    "weight": 5.057761209212042e+34,
+    "node_id": "node_1y35qbp1ohgdhb8ywe6o98khaj4szmgtdjn3n5oat7jes4es98rm9get38c3",
+    "address": "::ffff:134.209.200.73"
+  },
+  {
+    "alias": "Nano Frogs",
+    "account": "nano_1frogs8fqpdk17w17dpsdbgtbcdmm4egnty8oinxppkwykjzedrbt3suh4as",
+    "weight": 6.5458744835337475e+35,
+    "node_id": "node_1ww6be8f75d6uzyjypz98go98dxsxawxaqz96afxnnx4onestgbxintdo68k",
+    "address": "::ffff:167.71.87.249"
+  },
+  {
+    "alias": "mimenode",
+    "account": "nano_1mime3jd7dbnshd6zw1gjqax5zit31h6y1x6pczfuz7au33ftacjib5cc1ez",
+    "weight": 3.559291062715924e+35,
+    "node_id": "node_1y35qbp1ohgdhb8ywe6o98khaj4szmgtdjn3n5oat7jes4es98rm9get38c3",
+    "address": "::ffff:134.209.200.73"
+  },
+  {
+    "alias": "Kraken",
+    "account": "nano_37imps4zk1dfahkqweqa91xpysacb7scqxf3jqhktepeofcxqnpx531b3mnt",
+    "weight": 1.0852211172943096e+37,
+    "node_id": "node_1idgoqe19z6xauf8fbwei3gtktcjginuanwuykaqqgod8wq6w7qf8ioozhxi",
+    "address": "::ffff:52.24.24.124"
+  },
+  {
+    "alias": "Flying Amigos 🇮🇳",
+    "account": "nano_1xckpezrhg56nuokqh6t1stjca67h37jmrp9qnejjkfgimx1msm9ehuaieuq",
+    "weight": 3.772332044360502e+35,
+    "node_id": "node_38hxn93cgfk3gh39a55hn8nyf54emwf1ejj8x3fgosx736umdph7t36rsr6m",
+    "address": "::ffff:172.105.52.63"
+  },
+  {
+    "alias": "WeNano",
+    "account": "nano_1wenanoqm7xbypou7x3nue1isaeddamjdnc3z99tekjbfezdbq8fmb659o7t",
+    "weight": 1.0119990534895409e+36,
+    "node_id": "node_3rwccdksguyyabjf83ja8qmwffqnkuhmcwhrrksre3ypghg5t5hujo1y9s5g",
+    "address": "::ffff:78.47.124.255"
+  },
+  {
+    "alias": "Atomic Wallet",
+    "account": "nano_35btiz1mgfwp95c3ckazmzbp5gepduxtijuijd9xebeau8u1gsbea41smjca",
+    "weight": 1.0451890145327308e+36,
+    "node_id": "node_39kok3gs4jih41jfuuhzgrhxm33ia43rf3o33wphsykaz1c4p6xb5sutk5e6",
+    "address": "::ffff:51.81.243.15"
+  },
+  {
+    "alias": "Nanick",
+    "account": "nano_3ekb6tp8ixtkibimyygepgkwckzhds9basxd5zfue4efjnxaan77gsnanick",
+    "weight": 2.036980583017124e+35,
+    "node_id": "node_19eu4ijd31b35nzn576ixz5taneqzco1r88gw7tho3kb9t3pe74mssydhe7k",
+    "address": "::ffff:173.70.214.221"
+  },
+  {
+    "alias": "nano.lol",
+    "account": "nano_31xitw55kb3ko8yaz3439hqaqpibxa9shx76suaa3no786do3hjuz8dy6izw",
+    "weight": 5.469909813823505e+35,
+    "node_id": "node_1h7sac9mnus4d3zkpmq6t5fogm6zrdkj9cd3uuiexskyue68sq4bar9ihbur",
+    "address": "::ffff:178.128.13.12"
+  },
+  {
+    "alias": "PagCripto.com.br Representative",
+    "account": "nano_3ewhro1uzpbgjztkc5t3yawcqw7mz4acp519m4b7qw14t58t67gndaxswxad",
+    "weight": 4.2955270762573275e+32,
+    "node_id": "node_3cthjtsdus1c56rqgrsntujxtumh4obih4ynmqt7d9ijs6o6uypwacny8hgx",
+    "address": "::ffff:51.81.73.179"
+  },
+  {
+    "alias": "humble_nano_finland 🇫🇮",
+    "account": "nano_3n7ky76t4g57o9skjawm8pprooz1bminkbeegsyt694xn6d31c6s744fjzzz",
+    "weight": 6.210369561700111e+35,
+    "node_id": "node_3nqqxbbra6a34x9j3mt96dkzmkpm7jtyyoazp6ymnodmobd3w9h6fuyyg3f3",
+    "address": "::ffff:135.181.243.19"
+  },
+  {
+    "alias": "ScandiNode 🌐 Green, fast & capable! ",
+    "account": "nano_318uu1tsbios3kp4dts5b6zy1y49uyb88jajfjyxwmozht8unaxeb43keork",
+    "weight": 7.681960598752072e+35,
+    "node_id": "node_36h5ctejhpwsyeqx1fp5qc8gr3cffrojhjk961nduce9b85c53yz4zmomrnm",
+    "address": "::ffff:77.33.36.59"
+  },
+  {
+    "alias": "jserv 🇹🇼🐧",
+    "account": "nano_1bko7zpcow7w6e11az8tnxdnyszgkt61miwuo9i9pom3czdzxqknpiuc7tdb",
+    "weight": 4.381555639080175e+34,
+    "node_id": "node_1k3jnprfcgw63rcn3xrkokjcebwy9i6cjw7phdb3r5z11uj15ngxisymnc3a",
+    "address": "::ffff:140.116.245.162"
+  },
+  {
+    "alias": "NANO ITALIA",
+    "account": "nano_1wcxcjbwnnsdpee3d9i365e8bcj1uuyoqg9he5zjpt3r57dnjqe3gdc184ck",
+    "weight": 8.483935889415026e+35,
+    "node_id": "node_3efikobwe9w9pjymc9pp311pr65oumgdc1opkoyuiq3nbodnqn76qdut6jfp",
+    "address": "::ffff:77.72.193.181"
+  },
+  {
+    "alias": "Upstart Hosting",
+    "account": "nano_1ebq356ex7n5efth49o1p31r4fmuuoara5tmwduarg7b9jphyxsatr3ja6g8",
+    "weight": 4.2108222389081404e+35,
+    "node_id": "node_3yw9ezsu34rz1oxa6gkgq8thuxggmo717adtnhtkb67c5n7ojb75jbbhs1cy",
+    "address": "::ffff:167.71.245.153"
+  },
+  {
+    "alias": "nanotps.com",
+    "account": "nano_3mhrc9czyfzzok7xeoeaknq6w5ok9horo7d4a99m8tbtbyogg8apz491pkzt",
+    "weight": 1.5738408001490688e+35,
+    "node_id": "node_3ek5hhsu1hysgp7dogrpcmi61afdyn3tzosi83q5f5ezswbzzco56pku3s7f",
+    "address": "::ffff:157.245.241.60"
+  },
+  {
+    "alias": "NanoBank",
+    "account": "nano_1ec5optppmndqsb3rxu1qa4hpo39957s7mfqycpbd547jga4768o6xz8gfie",
+    "weight": 1.5302927258351182e+35,
+    "node_id": "node_16xc3tugefom5na7uprcqc6keuwumdi5kxc68s1xwzcems86r9d4gr14pw6x",
+    "address": "::ffff:94.237.111.22"
+  },
+  {
+    "alias": "TRUSTABLE - NN1",
+    "account": "nano_1b9wguhh39at8qtm93oghd6r4f4ubk7zmqc9oi5ape6yyz4s1gamuwn3jjit",
+    "weight": 1.6064183925854387e+37,
+    "node_id": "node_1mwzo9gqeokrk7ei7ptd4s4pehgqpj98my3u8e9ygf9ygmdxwzcbbrhqf3p5",
+    "address": "::ffff:178.63.21.53"
+  },
+  {
+    "alias": "Madora",
+    "account": "nano_3g6ue89jij6bxaz3hodne1c7gzgw77xawpdz4p38siu145u3u17c46or4jeu",
+    "weight": 3.2431143294562516e+35,
+    "node_id": "node_38d87w3o99k5npubbypz1ywzxwbqb93eeenrn6q78yq6yfs6wnz36kui3re5",
+    "address": "::ffff:159.65.161.206"
+  },
+  {
+    "alias": "nano-no.de 🌍🚀🌑",
+    "account": "nano_1fe17w13stn8rqos3nxmupoez9sne4pc4njmr1fbz9nci6obnng6jatton5q",
+    "weight": 2.113595190838545e+35,
+    "node_id": "node_1159gen9e799fq1ucr1yq7cs43r9ch9nkefc6n9jybmsbrwj77u65idfnek3",
+    "address": "::ffff:95.216.16.116"
+  },
+  {
+    "alias": "My1s Nano Node",
+    "account": "nano_1my1snode8rwccjxkckjirj65zdxo6g5nhh16fh6sn7hwewxooyyesdsmii3",
+    "weight": 1.2280115936405032e+35,
+    "node_id": "node_1my1srepp9jemtjqfz7z1aachjtzpf8nm9hrmkqmn3yyscs1gmoqcxbcrpyx",
+    "address": "::ffff:2.59.133.106"
+  },
+  {
+    "alias": "TRUSTABLE - NN2",
+    "account": "nano_19qo4gtzpoyqf6zzezbcuazcsxtqtdin5qbtk8jkoz4fdmq4ssagn3u1odhz",
+    "weight": 2.8820387465012964e+36,
+    "node_id": "node_1g1tch659x84c9c65axbw4oufzrjse3toiobjmmw69s8so5q6mgfdxro1ae3",
+    "address": "::ffff:135.181.141.91"
+  },
+  {
+    "alias": "1.NANONODE.FR 🇫🇷",
+    "account": "nano_1aoxwfsmu6wazes9jq4xu695jx5txa3qrrfsrg4w4uk35bhmxkn378fwebng",
+    "weight": 1.444568960862168e+35,
+    "node_id": "node_3obqf4ri7jcw3ctggpoonqbea1hbkez5ij1iazbbsztafbearwrfphraxe6a",
+    "address": "::ffff:82.64.100.254"
+  },
+  {
+    "alias": "Moonstruck.dev 🌙",
+    "account": "nano_1ota8bpwwawmc8ksdz4ezzrb3afbdeipk1n7rbeguhm4muy1r649uzw5moon",
+    "weight": 2.0858895927724876e+35,
+    "node_id": "node_1n7rmtpw13aoig89kqyqgoowpi7rh39berioqe196gj9pjh34m38qc196sh8",
+    "address": "::ffff:94.130.12.236"
+  },
+  {
+    "alias": "Nano Germany 🇩🇪",
+    "account": "nano_34zuxqdsucurhjrmpc4aixzbgaa4wjzz6bn5ryn56emc9tmd3pnxjoxfzyb6",
+    "weight": 1.0991828740417794e+36,
+    "node_id": "node_3mehwjxa8scbg8sqo3uzj6zipcqp7qxeymwta6h89dtctkp4ee3yroiqwzfu",
+    "address": "::ffff:116.202.52.114"
+  },
+  {
+    "alias": "PixelStix",
+    "account": "nano_1u7anedrbmqx4gr8x44r6k4egg9nhi75yb1qsz63e5ykhz3mx3r3jw463r3t",
+    "weight": 1.5108835064007298e+35,
+    "node_id": "node_39kwkjr858yoye3z1jaonyskgh1azqxqdtwdceapf6p17r3qdd7yggmrxnxg",
+    "address": "::ffff:164.90.136.60"
+  },
+  {
+    "alias": "『Node Geass』",
+    "account": "nano_1ba7uuq9kt68jzzw51a5kt577xtzaq37cnj8otqbhhnkgjyhwu91wtsjacez",
+    "weight": 1.3667026459482677e+34,
+    "node_id": "node_39aoo7sgab3jj3b84yupfnhcfejzjdrt7p4ipn3nmahd6u9hertrsyidrham",
+    "address": "::ffff:81.82.118.82"
+  },
+  {
+    "alias": "FEES? OMEGALUL",
+    "account": "nano_1nk9zdf1otddxhxfqimjdkmbtq17yzf3z6giz1as7x1huyug8er1ukeqpqpe",
+    "weight": 1.2704722849521844e+35,
+    "node_id": "node_3suw5i5jxwqu9zrw5df7hw5fwnijrz7efjxrtusujcmo9hfr851gqunx5e9q",
+    "address": "::ffff:135.125.20.75"
+  },
+  {
+    "alias": "scoin.cool",
+    "account": "nano_3o5oeefdnrha7x7styp1tnmefen7fnrooy4jgnfb1otws54yf7uqfuxmojoy",
+    "weight": 3.42419374958838e+33,
+    "node_id": "node_3ih586yb9ahqggx1hfjg6mh5h4tjkcrdok5jgcm1hckouayj7mhsf7bh1o9u",
+    "address": "::ffff:165.232.158.215"
+  },
+  {
+    "alias": " 🔐 IronClad 🔐 ➡ Reliable node built to last",
+    "account": "nano_11pb5aa6uirs9hoqsg4swnzyehoiqowj94kdpthwkhwufmtd6a11xx35iron",
+    "weight": 3.615236278197006e+35,
+    "node_id": "node_36rgbzkdzu63xe6a1bxh8rih3rx97icygcbmg6msic9bat83sup1jojkako3",
+    "address": "::ffff:104.255.228.27"
+  },
+  {
+    "alias": "AnarkNode V23",
+    "account": "nano_3kc8wwut3u8g1kwa6x4drkzu346bdbyqzsn14tmabrpeobn8igksfqkzajbb",
+    "weight": 1.6016104760182464e+35,
+    "node_id": "node_1q4ex6suwoht6938wwakx7zkhgthm7fodsnij55wweyein61riqidbtw8nye",
+    "address": "::ffff:38.242.208.200"
+  },
+  {
+    "alias": "RsNano.com - Nano Rust Port",
+    "account": "nano_1tk8h3yzkibbsti8upkfa69wqafz6mzfzgu8bu5edaay9k7hidqdunpr4tb6",
+    "weight": 1.61435980857393e+35,
+    "node_id": "node_16s98fiy4pxwr6wkt49jxpain9yuy64sb8fz4gpreds94ch8soptm1khi6cf",
+    "address": "::ffff:217.160.65.156"
+  },
+  {
+    "alias": "Coinbattles.co",
+    "account": "nano_18xwtze8sgprtd1jg917uaersr1nqwubqqsw5kabk1yygjsbwy3jb44d9bkz",
+    "weight": 3.309189113787738e+33,
+    "node_id": "node_1jwor8m97dg18q9twnqd14kk9q9r5jnewjm8qpaqkr3r8c6upw9hh8e7piq7",
+    "address": "::ffff:95.217.197.116"
+  },
+  {
+    "alias": "NanoSG - DeckardCain 🇸🇬",
+    "account": "nano_14mp1ua4oi45rxosft3d8qe4g6a1u1srma59jg85ax6s8zuwhi4yzgdnqhz3",
+    "weight": 1.9934381866578634e+34,
+    "node_id": "node_3cxu7exgc6kfcdikubsponqoie3uu91ewtbakb6jptdrq9w4xz76fb3tfxrt",
+    "address": "::ffff:182.55.49.221"
+  },
+  {
+    "alias": "VINO Community Rep",
+    "account": "nano_1sw898hgeexgrsq8x16wdadwdrs3obn418z6x98parb5tymz879mu89qndju",
+    "weight": 4.989724855161513e+34,
+    "node_id": "node_1w4pqu4wuoqndq8g6u15io33rcdw61ywmkjmquec7f1ed8yj3e5qha9tfakm",
+    "address": "::ffff:143.198.59.250"
+  },
+  {
+    "alias": "Art Node",
+    "account": "nano_1artnod3zc5e4rrra73ii4698t7pfiqt4c445efd499psaxyjae5bhm9susp",
+    "weight": 3.650721082722236e+34,
+    "node_id": "node_3onbr4bz7yifyibydcd38tsw6bp6wha64kjaypnnc7t19kcjttr3g9waod4z",
+    "address": "::ffff:49.12.197.72"
+  },
+  {
+    "alias": null,
+    "account": "nano_16u1uufyoig8777y6r8iqjtrw8sg8maqrm36zzcm95jmbd9i9aj5i8abr8u5",
+    "weight": 1.8223235856846413e+35,
+    "node_id": "node_14nqqg6toadjk4ign9bph1ep9jr6owaa1h9bow5pynbqzfq5y3sb18wbrnc3",
+    "address": "::ffff:139.162.199.142"
+  },
+  {
+    "alias": null,
+    "account": "nano_3kc9wsf9y4y9r3k9yj1d5da53ytjepcf993bcto17xh1s691wyc6im9xaodr",
+    "weight": 1.1544158142500002e+35,
+    "node_id": "node_1g1tch659x84c9c65axbw4oufzrjse3toiobjmmw69s8so5q6mgfdxro1ae3",
+    "address": "::ffff:135.181.141.91"
+  },
+  {
+    "alias": null,
+    "account": "nano_39jnmbpgqez7d4zdh83u44jcbf9nb5y3s8z495jf6hxb6719ybdew1ph5qk8",
+    "weight": 1.11995122885e+35,
+    "node_id": "node_347x4bp9qxwct5rptr1g34zk5ieyaqyrcn48mg9w3fygwh83uawyerzowdwc",
+    "address": "::ffff:95.217.231.50"
+  },
+  {
+    "alias": null,
+    "account": "nano_3fg3hi6b4ptj5y5ss4a3cwarbzahaeazzs6mjf18t1cqm3pmetgtgrtafafp",
+    "weight": 1.0707822631256784e+35,
+    "node_id": "node_1mwzo9gqeokrk7ei7ptd4s4pehgqpj98my3u8e9ygf9ygmdxwzcbbrhqf3p5",
+    "address": "::ffff:178.63.21.53"
+  },
+  {
+    "alias": "PlayNANO Representative",
+    "account": "nano_3pnanopr3d5g7o45zh3nmdkqpaqxhhp3mw14nzr41smjz8xsrfyhtf9xac77",
+    "weight": 6.003260351353056e+34,
+    "node_id": "node_3msckd1zua8ajy8a1jbsb88os4e8ngkzc3b5nx73aq5o4tmgfpoqa1cej1a7",
+    "address": "2a01:4f8:13b:119e::2"
+  },
+  {
+    "alias": "The Crypto Umbrella",
+    "account": "nano_39gwh6ci76qpeqhsebg98nn75xour7komga39r9qn6mrmg99yajo4d7nrurw",
+    "weight": 2.411870286613146e+34,
+    "node_id": "node_1hrxrcnsdwgcmc3ekfu8kjftmcfwb3xrs9fxor3718nc5ntz8ytgggojz8ej",
+    "address": "::ffff:62.163.0.183"
+  },
+  {
+    "alias": null,
+    "account": "nano_1k5fqb5q6t44tsd13ziny66w6mxbya6x397g7tkz7hnkcpppofuojzs7qmik",
+    "weight": 6.980834961096526e+34,
+    "node_id": "node_1eiag57hqrjpj4ndz6kff68wn4t84jobm8wnmycp4k8k4sxjw56nqo17se6n",
+    "address": "::ffff:89.58.8.22"
+  },
+  {
+    "alias": "MajorChump's Node",
+    "account": "nano_1gemini56efw4qrfzfcc71cky1wj7a6673fu5ue5afyyz55zb1cxkj8rkr1n",
+    "weight": 2.4510727587734004e+34,
+    "node_id": "node_3rcgok7x1fk15ijf7zcxr7dqoefj3a76a9cdq6cx4eus7i9khjfgyztcqhrt",
+    "address": "::ffff:94.130.135.50"
+  },
+  {
+    "alias": "Nanswap",
+    "account": "nano_1banexkcfuieufzxksfrxqf6xy8e57ry1zdtq9yn7jntzhpwu4pg4hajojmq",
+    "weight": 2.696757713758194e+34,
+    "node_id": "node_37m6nsuyu8x5jyb5njkaf88jxfmfpxa33nt7trdcmb6gaef8gi1k45mkhr5g",
+    "address": "::ffff:51.15.20.194"
+  },
+  {
+    "alias": "Brainroot Nano Node [DE]",
+    "account": "nano_385dyw65hwqtp7pm5igh9ekmaai7qg61tp4mcdine7su3jt69uypa7o9umm8",
+    "weight": 6.719282697565093e+33,
+    "node_id": "node_3dgiuxhwhbzjwzyoorxz7y8rpmaiyip4grp1utwpikuau85spf1orjsq1mu6",
+    "address": "::ffff:162.55.4.173"
+  },
+  {
+    "alias": "XNOPay - Node 1",
+    "account": "nano_1xnopay1bfmyx5eit8ut4gg1j488kt8bjukijerbn37jh3wdm81y6mxjg8qj",
+    "weight": 2.2319938964004968e+34,
+    "node_id": "node_3f1177qhqpcm8re3penq313xypw5cf3jtjurenujjhzm9p74ns3o3n79sqzo",
+    "address": "::ffff:65.108.91.106"
+  },
+  {
+    "alias": "CRPay",
+    "account": "nano_1crpaybw8jip7fm98fzfxnjajb55ty76oyzmpfwe9s66u4aod37tm3kxba8q",
+    "weight": 3.1779102089092997e+35,
+    "node_id": "node_1j4nsypfc88jrsztj5737sdnffmt5du3cjn88p8941bwksx76u56s9skwkhe",
+    "address": "2a02:1210:6c4c:aa00:4df0:421d:634e:e8eb"
+  },
+  {
+    "alias": "Urbanano NL",
+    "account": "nano_1m1afmq54gum53md3dm3o9arctwn8buwqk8kynxszh468qmm3kn7sawmgihz",
+    "weight": 1.1515935799271408e+34,
+    "node_id": "node_3igieossp7dws76rz6mhgs1wgyst6hu1io593b8gf149bj4ox7s4jfgzzog3",
+    "address": "::ffff:45.137.89.184"
+  },
+  {
+    "alias": "NanoLooker",
+    "account": "nano_1ookerz3adg5rxc4zwwoshim5yyyihf6dpogjihwwq6ksjpq7ea4fuam5mmc",
+    "weight": 8.21325464479767e+35,
+    "node_id": "node_1fn44ir9j8gqgh4zkpht3zzqqdr5eeggahe8nmpctryspd15yg1xdsxw8ca4",
+    "address": "::ffff:68.183.110.185"
+  },
+  {
+    "alias": null,
+    "account": "nano_1ac8snzjkwniynpe3nsshf34iwe46rpjo3tjqtdntktjhqsp5sdndqworgwe",
+    "weight": 4.2273455565855324e+33,
+    "node_id": "node_3qxghxofop8x547kaurwgi5uycimpq7qedc97hk1q69rtmt9e7nzwtyw1waw",
+    "address": "::ffff:212.83.181.47"
+  },
+  {
+    "alias": null,
+    "account": "nano_3cxj9z11z1um61m51paiff4pw5fdttzmpojbwcr1hqbduwi4rqtjws7cxdc8",
+    "weight": 5.946181930746177e+33,
+    "node_id": "node_1i4zoa4pspupyr71ey86qawmq7m9zhnx91bpzr6fe6zngcjqcp7pqbdydrgp",
+    "address": "::ffff:37.205.12.210"
+  },
+  {
+    "alias": "TipNano ⛲",
+    "account": "nano_1tipnanogsu7q59pnie3qfc4w378wm43fg4ksqc8wmnnfnizrq1xrpt5geho",
+    "weight": 1.6539378866441562e+33,
+    "node_id": "node_1g8zi3qn97ycrgex3eee58rrmnwkae3wcegu6ou73yq9egprcz7ceanzgfpt",
+    "address": "::ffff:136.243.110.153"
+  },
+  {
+    "alias": null,
+    "account": "nano_3oxhohaxp9ceobppkhp7wahauxd4zgyz4fhxfniyp4mb9opq4upfnaccswo7",
+    "weight": 4.201556263986356e+36,
+    "node_id": "node_1infp36n51cddwfxt8frcu5eatoaunt69g98zmujy8c7p9kecwox4jx4fpic",
+    "address": "::ffff:5.9.59.174"
+  },
+  {
+    "alias": "CryptoVision Nano Node",
+    "account": "nano_3bsnis6ha3m9cepuaywskn9jykdggxcu8mxsp76yc3oinrt3n7gi77xiggtm",
+    "weight": 2.1657671357258985e+33,
+    "node_id": "node_16hemg7fpbhpfsu63587izjkmt5gmpd5bzky4f717bt8fh89wcpszspeoyeg",
+    "address": "::ffff:188.40.212.65"
+  },
+  {
+    "alias": "Flowhub",
+    "account": "nano_3f1owhubic8wa8rfmj5x6w9ore9btbtju5eampghs3y9ere6q6u96jraoo5s",
+    "weight": 6.76711669871251e+35,
+    "node_id": "node_3bkqpwtkyj54hog3bqzoptjbyhotr6e6irn8mt6rfww77oqj1f3oodop1zun",
+    "address": "::ffff:104.131.14.200"
+  },
+  {
+    "alias": "validierung.cc 🇩🇪",
+    "account": "nano_15gfawgrsc6tkkm5p1gy749tkibchu73st1ojs3knz6rd3ejfcgt7rj5cmx9",
+    "weight": 1.3132588290578272e+33,
+    "node_id": "node_1wzzemot5cwbhgi7mkc3a1f94no5r1bttgzi6s4xqi8kd87a96bdx6oncwoy",
+    "address": "::ffff:46.4.30.229"
+  },
+  {
+    "alias": "Drowzee's Nano Node",
+    "account": "nano_3ciiorjr88nd9xdperhj6u4bmxqxgkariohi1inuqad4b8urr9bgpirgbmqy",
+    "weight": 1.9882426603137826e+33,
+    "node_id": "node_18je17d64qamiuxrfn3wu8epfssw5pxw384xmp5eb39qrocf11rag5fzt36x",
+    "address": "::ffff:135.134.237.37"
+  },
+  {
+    "alias": "Kraken Melted Wallet",
+    "account": "nano_1jscc38479gwjdkwz4xhxj5m1jp3p41mnfq3zdngcbqe6xtyex3ij7qtr67s",
+    "weight": 4.334220729411403e+31,
+    "node_id": "node_3qnj861gheyp4arjwsiuhzax4urkgjq3qssgwtanb7p4sb8aiyymjm85r1dh",
+    "address": "::ffff:206.189.20.198"
+  },
+  {
+    "alias": null,
+    "account": "nano_3ai8w4pbxrbo41twyjwx7bmdyck1hqrso1rjai6nk1iy8bw7e6ji86nhy9ec",
+    "weight": 7.433491042620798e+33,
+    "node_id": "node_33qji5j8zqpmf5q6ndgihdynojd31shsemqqz3wxaronr4ejjftiamab4rft",
+    "address": "::ffff:78.46.80.199"
+  },
+  {
+    "alias": "Nano Vancouver",
+    "account": "nano_3pwe9ip5ioxpwti6sbq1f1bxaa4s78pcupxgd13dzgn8gx6asjmk53kpy349",
+    "weight": 1.075174288946714e+34,
+    "node_id": "node_3tenthj3fijtdtqp9xp1qd5njr75t7t4cmo7ukjhx83wpcq78fki5xxauyyn",
+    "address": "::ffff:96.49.238.17"
+  }
+]

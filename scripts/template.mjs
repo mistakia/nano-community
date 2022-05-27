@@ -3,7 +3,7 @@ import debug from 'debug'
 /* eslint-disable no-unused-vars */
 import { request, isMain } from '#common'
 
-const logger = debug('script')
+const log = debug('script')
 debug.enable('script')
 /* eslint-enable no-unused-vars */
 

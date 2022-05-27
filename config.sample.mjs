@@ -35,3 +35,9 @@ export const mysql = {
 export const nanodbAPI = ''
 export const trustedAddresses = []
 export const rpcAddresses = []
+
+export const cloudflare = {
+  zone_id: '',
+  user_email: '',
+  token: ''
+}

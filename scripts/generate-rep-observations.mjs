@@ -121,7 +121,11 @@ const generateRepObseravtions = async () => {
   await saveData('representative-observations', representatives)
 
   const end = process.hrtime.bigint()
-  log(`Generated observations for ${representatives.length} in ${Number((end - start) / BigInt(1e+9))} secs`)
+  log(
+    `Generated observations for ${representatives.length} in ${Number(
+      (end - start) / BigInt(1e9)
+    )} secs`
+  )
 }
 
 if (isMain(import.meta.url)) {
