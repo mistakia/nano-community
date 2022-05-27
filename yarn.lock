@@ -6062,6 +6062,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"filter-obj@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "filter-obj@npm:1.1.0"
+  checksum: cf2104a7c45ff48e7f505b78a3991c8f7f30f28bd8106ef582721f321f1c6277f7751aacd5d83026cb079d9d5091082f588d14a72e7c5d720ece79118fa61e10
+  languageName: node
+  linkType: hard
+
 "finalhandler@npm:~1.1.2":
   version: 1.1.2
   resolution: "finalhandler@npm:1.1.2"
@@ -11784,6 +11791,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"query-string@npm:^7.1.1":
+  version: 7.1.1
+  resolution: "query-string@npm:7.1.1"
+  dependencies:
+    decode-uri-component: ^0.2.0
+    filter-obj: ^1.1.0
+    split-on-first: ^1.0.0
+    strict-uri-encode: ^2.0.0
+  checksum: b227d1f588ae93f9f0ad078c6b811295fa151dc5a160a03bb2bac5fa0e6919cb1daa570aad1d288e77c8e89fde5362ba505b1014e6e793da9b1e885b59a690a6
+  languageName: node
+  linkType: hard
+
 "querystring@npm:0.2.0":
   version: 0.2.0
   resolution: "querystring@npm:0.2.0"
@@ -12689,6 +12708,7 @@ __metadata:
     p-queue: 6.6.2
     percentile: ^1.6.0
     prettier: 2.5.1
+    query-string: ^7.1.1
     react: ^17.0.2
     react-dom: ^17.0.2
     react-helmet: ^6.1.0
@@ -13378,6 +13398,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"split-on-first@npm:^1.0.0":
+  version: 1.1.0
+  resolution: "split-on-first@npm:1.1.0"
+  checksum: 16ff85b54ddcf17f9147210a4022529b343edbcbea4ce977c8f30e38408b8d6e0f25f92cd35b86a524d4797f455e29ab89eb8db787f3c10708e0b47ebf528d30
+  languageName: node
+  linkType: hard
+
 "split-string@npm:^3.0.1, split-string@npm:^3.0.2":
   version: 3.1.0
   resolution: "split-string@npm:3.1.0"
@@ -13467,6 +13494,13 @@ __metadata:
   version: 1.1.0
   resolution: "strict-uri-encode@npm:1.1.0"
   checksum: 9466d371f7b36768d43f7803f26137657559e4c8b0161fb9e320efb8edba3ae22f8e99d4b0d91da023b05a13f62ec5412c3f4f764b5788fac11d1fea93720bb3
+  languageName: node
+  linkType: hard
+
+"strict-uri-encode@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "strict-uri-encode@npm:2.0.0"
+  checksum: eaac4cf978b6fbd480f1092cab8b233c9b949bcabfc9b598dd79a758f7243c28765ef7639c876fa72940dac687181b35486ea01ff7df3e65ce3848c64822c581
   languageName: node
   linkType: hard
 

@@ -33,7 +33,7 @@ const generateRepMappings = async () => {
         ...rep.current_observation
       })
     } else {
-      const addresses = rep.node_ids.map(n => n.addresses).flat()
+      const addresses = rep.node_ids.map((n) => n.addresses).flat()
       const sorted_addresses = addresses.sort(
         (a, b) => b.observations - a.observations
       )
