@@ -38,6 +38,7 @@
 */5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-telemetry.mjs > /var/log/import-telemetry.log 2>&1
 */5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-uptime.mjs > /var/log/import-uptime.log 2>&1
 */5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/import-accounts-meta.mjs > /var/log/import-accounts-meta.log 2>&1
+8 5 * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/current/scripts/generate-rep-observations.mjs > /var/log/generate-rep-observations.log 2>&1
 
 ## backup mysql
 0 0 * * 0 /bin/bash /root/nano-community/current/scripts/backup-mysql.sh -f > /var/log/backup-mysql-full.log 2>&1
