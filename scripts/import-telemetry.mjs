@@ -2,17 +2,22 @@ import debug from 'debug'
 import dayjs from 'dayjs'
 
 import * as config from '#config'
-import { rpc, getNetworkInfo, wait, median, isMain } from '#common'
+import { rpc, getNetworkInfo, wait, median, isMain, getData } from '#common'
 import db from '#db'
-import mapped_reps from '#root/mapped-reps.mjs'
 
-const logger = debug('import-telemetry')
+const log = debug('import-telemetry')
 debug.enable('import-telemetry')
 
 const timestamp = Math.round(Date.now() / 1000)
 
 const importTelemetry = async () => {
-  logger(`saving telemetry for interval: ${timestamp}`)
+  const mappings = await getData('representative-mappings')
+  if (!mappings) {
+    log('representative mappings not found')
+    return
+  }
+
+  log(`saving telemetry for interval: ${timestamp}`)
 
   // get telemetry from single node
   const telemetry = await rpc.telemetry()
@@ -20,7 +25,7 @@ const importTelemetry = async () => {
     return
   }
 
-  logger(`received telemetry for ${telemetry.metrics.length} nodes`)
+  log(`received telemetry for ${telemetry.metrics.length} nodes`)
 
   // get confirmation_quorum from multiple nodes
   const rep_peers = {}
@@ -44,7 +49,8 @@ const importTelemetry = async () => {
       })
 
       for (const peer of res.value.peers) {
-        // do not overwrite main node so ephemeral ports match
+        // do not overwrite main node so that if an ephemeral port is
+        // used it can be matched with telemtry from the main node
         if (!rep_peers[peer.account]) rep_peers[peer.account] = peer
       }
     }
@@ -60,11 +66,11 @@ const importTelemetry = async () => {
     Math.max(median_online_weight, median_trended_weight) / 1000 / 2
 
   if (weightInserts.length) {
-    logger(`saving voting weight info from ${weightInserts.length} reps`)
+    log(`saving voting weight info from ${weightInserts.length} reps`)
     await db('voting_weight').insert(weightInserts)
   }
 
-  logger(`discovered ${Object.values(rep_peers).length} reps`)
+  log(`discovered ${Object.values(rep_peers).length} reps`)
 
   const nodeInserts = []
   for (const node of telemetry.metrics) {
@@ -78,8 +84,8 @@ const importTelemetry = async () => {
       peer_count: node.peer_count,
       protocol_version: node.protocol_version,
       uptime: node.uptime,
-      major_version: node.major_version,
-      minor_version: node.minor_version,
+      major_version: parseInt(node.major_version, 10),
+      minor_version: parseInt(node.minor_version, 10),
       patch_version: node.patch_version,
       pre_release_version: node.pre_release_version,
       maker: node.maker,
@@ -91,30 +97,41 @@ const importTelemetry = async () => {
       timestamp
     }
 
-    // associate telemetry with a mapped rep (or through rep crawler)
-    const mapped_rep = mapped_reps[node.address]
+    let existing_mapped_rep
     let telemetry_rep
-    if (mapped_rep) {
-      telemetry_rep = rep_peers[mapped_rep]
+
+    // match node_id if using v23.1 or newer (otherwise use address)
+    if (
+      insert.major_version > 23 ||
+      (insert.major_version === 23 && insert.minor_version >= 1)
+    ) {
+      existing_mapped_rep = mappings.find((m) => m.node_id === node.node_id)
+    } else {
+      existing_mapped_rep = mappings.find((m) => m.address === node.address)
+    }
+
+    // associate telemetry using rep mapping
+    if (existing_mapped_rep) {
+      telemetry_rep = rep_peers[existing_mapped_rep.account]
     }
 
     // if no mapped rep — associate using rep crawler if there are no conflicts
     if (!telemetry_rep) {
       // map telemetry to rep by matching address to rep crawler (quorum confirmation)
-      const quorum_mapped_rep = Object.values(rep_peers).find(
+      const repcrawler_mapped_rep = Object.values(rep_peers).find(
         (p) => p.ip === `[${node.address}]:${node.port}`
       )
-      if (quorum_mapped_rep) {
+      if (repcrawler_mapped_rep) {
         // get any associated mapped addresses for matched rep
-        const mapped_addresses = Object.entries(mapped_reps)
-          .filter((i) => i[1] === quorum_mapped_rep)
-          .map((i) => i[0])
+        const mapped_addresses = mappings
+          .filter((m) => m.account === repcrawler_mapped_rep)
+          .map((m) => m.address)
         // make sure no telemetry exists for those mapped addresses
-        const mapped_telemetry_found = telemetry.metrics.find((i) =>
-          mapped_addresses.includes(i.address)
+        const telemetry_exists_for_mapped_addresses = telemetry.metrics.find(
+          (i) => mapped_addresses.includes(i.address)
         )
-        if (!mapped_telemetry_found) {
-          telemetry_rep = quorum_mapped_rep
+        if (!telemetry_exists_for_mapped_addresses) {
+          telemetry_rep = repcrawler_mapped_rep
         }
       }
     }
@@ -146,8 +163,8 @@ const importTelemetry = async () => {
   }
 
   if (nodeInserts.length) {
-    logger(`saving metrics for ${nodeInserts.length} nodes`)
-    logger(
+    log(`saving metrics for ${nodeInserts.length} nodes`)
+    log(
       `saving metrics for ${
         nodeInserts.filter((n) => n.account).length
       } nodes w/ reps`
@@ -177,9 +194,7 @@ const importTelemetry = async () => {
 
     const network = await getNetworkInfo(item.address)
     if (network.status === 'success') {
-      logger(
-        `saving network info for account ${item.account} at ${item.address}`
-      )
+      log(`saving network info for account ${item.account} at ${item.address}`)
       await db('representatives_network').insert({
         account: item.account,
         address: item.address,
