@@ -1,6 +1,7 @@
 import debug from 'debug'
 
-import { cloudflare, isMain, getData } from '#common'
+import { rpcAddresses } from '#config'
+import { rpc, cloudflare, isMain, getData } from '#common'
 
 const log = debug('update-cloudflare-dns')
 debug.enable('update-cloudflare-dns')
@@ -12,13 +13,29 @@ const updateCloudflareDNS = async () => {
     return
   }
 
+  // calculte half PR weight
+  const confirmation_quorum = await rpc.confirmationQuorum({
+    url: rpcAddresses[0]
+  })
+  const weight_threshold = Math.max(
+    confirmation_quorum.online_stake_total,
+    confirmation_quorum.trended_stake_total
+  )
+  const half_principal_rep_weight = BigInt(weight_threshold / 1000 / 2)
+
+  // filter mappings by weight
+  const filtered_mappings = mappings.filter(
+    (m) => BigInt(m.weight) >= half_principal_rep_weight
+  )
+
+  // get current DNS records
   const records = await cloudflare.getRecords({
     name: 'representatives.nano.community'
   })
 
-  // delete any records not in mapping
+  // delete any records not in filtered mapping
   for (const record of records.result) {
-    const exists = mappings.find((m) => m.address === record.content)
+    const exists = filtered_mappings.find((m) => m.address === record.content)
     if (!exists) {
       try {
         log(`Deleting record for ${record.content}`)
@@ -29,7 +46,8 @@ const updateCloudflareDNS = async () => {
     }
   }
 
-  for (const mapping of mappings) {
+  // create anny missing records
+  for (const mapping of filtered_mappings) {
     const exists = records.result.find((r) => r.content === mapping.address)
     if (exists) {
       continue
