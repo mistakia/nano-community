@@ -42,11 +42,11 @@ const generateRepObseravtions = async () => {
         })
       })
       .where({ account })
-    representative.weight = accountMeta[0].weight
+    representative.weight = BigInt(accountMeta[0].weight).toString()
 
     // get latest observation
     const current_observation_re = await db('representatives_telemetry')
-      .select('node_id', 'address')
+      .select('node_id', 'address', 'port')
       .where({ account })
       .orderBy('timestamp', 'desc')
       .limit(1)
@@ -99,6 +99,7 @@ const generateRepObseravtions = async () => {
         .select(
           'representatives_telemetry.timestamp as last_seen',
           'representatives_telemetry.address',
+          'representatives_telemetry.port',
           'X.observations'
         )
         .from(db.raw('(' + nodeIdSubQuery.toString() + ') AS X'))
@@ -108,13 +109,6 @@ const generateRepObseravtions = async () => {
             this.andOn('timestamp', '=', 'maxtime')
           })
         })
-      /*
-       *
-       *       row.addresses = await db('representatives_telemetry')
-       *         .select('timestamp', 'address')
-       *         .count('* as observations')
-       *         .where({ node_id })
-       *         .groupBy('address') */
     }
   }
 
