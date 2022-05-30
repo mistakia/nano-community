@@ -33,8 +33,26 @@ const updateCloudflareDNS = async () => {
     name: 'representatives.nano.community'
   })
 
-  // delete any records not in filtered mapping
-  for (const record of records.result) {
+  const a_records = records.result.filter((r) => r.type === 'A')
+  const aaaa_records = records.result.filter((r) => r.type === 'AAAA')
+
+  // delete any A records not in filtered mapping
+  for (const record of a_records) {
+    const exists = filtered_mappings.find(
+      (m) => m.address.replace('::ffff:', '') === record.content
+    )
+    if (!exists) {
+      try {
+        log(`Deleting record for ${record.content}`)
+        await cloudflare.deleteRecord(record)
+      } catch (err) {
+        log(err)
+      }
+    }
+  }
+
+  // delete any AAAA records not in filtered mapping
+  for (const record of aaaa_records) {
     const exists = filtered_mappings.find((m) => m.address === record.content)
     if (!exists) {
       try {
@@ -48,26 +66,50 @@ const updateCloudflareDNS = async () => {
 
   // create anny missing records
   for (const mapping of filtered_mappings) {
-    const exists = records.result.find((r) => r.content === mapping.address)
-    if (exists) {
+    const aaaa_exists = aaaa_records.find((r) => r.content === mapping.address)
+    if (!aaaa_exists) {
+      log(`Creating AAAA record for ${mapping.address}`)
+
+      const options = {
+        type: 'AAAA',
+        name: 'representatives.nano.community',
+        content: mapping.address,
+        ttl: 60,
+        proxied: false
+      }
+
+      try {
+        await cloudflare.createRecord(options)
+      } catch (err) {
+        log(err)
+        log(options)
+      }
+    }
+
+    const isIPV4 = mapping.address.includes('::ffff:')
+    if (!isIPV4) {
       continue
     }
 
-    log(`Creating record for ${mapping.address}`)
+    const ipv4_address = mapping.address.replace('::ffff:', '')
+    const a_exists = a_records.find((r) => r.content === ipv4_address)
+    if (!a_exists) {
+      log(`Creating A record for ${ipv4_address}`)
 
-    const options = {
-      type: 'AAAA',
-      name: 'representatives.nano.community',
-      content: mapping.address,
-      ttl: 60,
-      proxied: false
-    }
+      const options = {
+        type: 'A',
+        name: 'representatives.nano.community',
+        content: ipv4_address,
+        ttl: 60,
+        proxied: false
+      }
 
-    try {
-      await cloudflare.createRecord(options)
-    } catch (err) {
-      log(err)
-      log(options)
+      try {
+        await cloudflare.createRecord(options)
+      } catch (err) {
+        log(err)
+        log(options)
+      }
     }
   }
 
