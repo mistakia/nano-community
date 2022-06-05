@@ -3,8 +3,8 @@ import debug from 'debug'
 import { rpcAddresses } from '#config'
 import { rpc, cloudflare, isMain, getData } from '#common'
 
-const log = debug('update-cloudflare-dns')
-debug.enable('update-cloudflare-dns')
+const log = debug('update-cloudflare-dns-reps')
+debug.enable('update-cloudflare-dns-reps')
 
 const updateCloudflareDNS = async () => {
   const mappings = await getData('representative-mappings')

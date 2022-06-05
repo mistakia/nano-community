@@ -1,21 +1,31 @@
 import debug from 'debug'
 
-import { cloudflare, isMain } from '#common'
+import { request, cloudflare, isMain, getData } from '#common'
 
-const log = debug('update-cloudflare-dns')
-debug.enable('update-cloudflare-dns')
+const log = debug('update-cloudflare-dns-nodes')
+debug.enable('update-cloudflare-dns-nodes')
 
 const updateCloudflareDNS = async () => {
   const url = 'https://nano.community/data/node-observations.json'
   const nodes = await request({ url })
+  const mappings = (await getData('representative-mappings')) || []
+  const rep_addresses = mappings.map((p) => p.address)
 
   const max_observations = Math.max(...nodes.map((n) => n.observations))
-  const observations_threshold = Math.round(max_observations * 0.5)
+  const observations_threshold = 2000
+
+  log(
+    `Max observations: ${max_observations}, threshold: ${observations_threshold}`
+  )
 
   // filter mappings by weight
   const filtered_nodes = nodes.filter(
-    (m) => m.observations > observations_threshold
+    (m) =>
+      m.observations > observations_threshold &&
+      !rep_addresses.includes(m.address)
   )
+
+  log(`Nodes meeting threshold: ${filtered_nodes.length}`)
 
   // get current DNS records
   const records = await cloudflare.getRecords({
