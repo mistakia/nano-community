@@ -210,7 +210,8 @@ CREATE TABLE `representatives_telemetry` (
   `telemetry_timestamp` int(11) NOT NULL,
 
   `timestamp` int(11) NOT NULL,
-  UNIQUE KEY `account` (`account`, `node_id`, `timestamp`)
+  UNIQUE KEY `account` (`account`, `node_id`, `timestamp`),
+  KEY `address` (`address`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
