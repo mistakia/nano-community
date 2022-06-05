@@ -116,7 +116,7 @@ const generateRepObseravtions = async () => {
 
   const end = process.hrtime.bigint()
   log(
-    `Generated observations for ${representatives.length} in ${Number(
+    `Generated observations for ${representatives.length} reps in ${Number(
       (end - start) / BigInt(1e9)
     )} secs`
   )
