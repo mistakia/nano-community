@@ -16,7 +16,7 @@ The term <a href="https://en.wikipedia.org/wiki/Money" target="_blank">money</a>
 
 The core function of money is being a <a href="https://en.wikipedia.org/wiki/Medium_of_exchange" target="_blank">medium of exchange</a> that enables society to collaborate, cooperate, organize, specialize, and much more. Thus money, like communication, is foundational to society as it is a prerequisite for all complex cooperation. The concept of money was one of the first, and among the most important, collaborative innovations of mankind.
 
-The concept of money is believed to have originated in the form of "promises" (i.e. debt), sometimes kept on a publicly accesible ledger (sound familiar?). Over time it evolved to <a href="https://en.wikipedia.org/wiki/Commodity_money" target="_blank">commodity money</a>, gold, coins, and eventually fiat money.
+The concept of money is believed to have originated in the form of "promises" (i.e. debt), sometimes kept on a publicly accessible ledger (sound familiar?). Over time it evolved to <a href="https://en.wikipedia.org/wiki/Commodity_money" target="_blank">commodity money</a>, gold, coins, and eventually fiat money.
 
 ##### Properties of Money
 
