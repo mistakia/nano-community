@@ -89,7 +89,7 @@ Before you begin storing and using Nano, understand these <a href="/getting-star
   - password manager
 - Hardware
 
-Paper wallets can provide a higher level of security but can not support frequent use, making them an ideal choice for long-term storage of large amounts of value.
+Paper wallets can provide a higher level of security but cannot support frequent use, making them an ideal choice for long-term storage of large amounts of value.
 
 The ideal choice for frequent use is software wallets: desktop, mobile, online (from most to least secure).
 

@@ -54,7 +54,7 @@ The more people who use Nano, the more valuable Nano is for everyone who uses it
 
 Nano shares this network effect property with the telephone system, the web, and popular Internet services like eBay and Facebook.
 
-Nano's base layer is scalable making it well suited to capture feedback loops driven by utiliziation.
+Nano's base layer is scalable making it well suited to capture feedback loops driven by utilization.
 
 ## Potential
 

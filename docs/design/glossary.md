@@ -52,7 +52,7 @@ During initial sync, the nano_node requests old transactions to independently ve
 
 ### burn
 
-When a 'burn' takes place, funds are sent to a specifc address that no one can access. Because no one can ever access funds sent to a burn address, it reduces the circulating supply.
+When a 'burn' takes place, funds are sent to a specific address that no one can access. Because no one can ever access funds sent to a burn address, it reduces the circulating supply.
 
 ### burn address
 

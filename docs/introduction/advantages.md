@@ -122,7 +122,7 @@ Nano was given away for free, proportional to time spent completing a captcha. D
 
 Nano's distribution was widely accessible as it had only two requirements: knowledge of its existence and a device capable of connecting to the internet. Most other distribution methods (ICO, mining, etc) have additional barriers (wealth, hardware, etc).
 
-Ӿ 7,000,000 (~5%) was set aside as a <a href="https://www.nanolooker.com/developer-fund" target="_blank">developer fund</a>, of which about Ӿ 300,000 remain as of Novemeber 2021.
+Ӿ 7,000,000 (~5%) was set aside as a <a href="https://www.nanolooker.com/developer-fund" target="_blank">developer fund</a>, of which about Ӿ 300,000 remain as of November 2021.
 
 Because the distribution process was conducted on-chain, it is publicly available to be reviewed and audited by looking at the <a href="https://nanex.cc/accountstats?account=nano_35jjmmmh81kydepzeuf9oec8hzkay7msr6yxagzxpcht7thwa5bus5tomgz9" target="_blank">Core Faucet</a> and <a href="https://nanex.cc/accountstats?account=nano_13ezf4od79h1tgj9aiu4djzcmmguendtjfuhwfukhuucboua8cpoihmh8byo" target="_blank">Landing</a> account.
 

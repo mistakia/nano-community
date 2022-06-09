@@ -283,3 +283,19 @@ By: unknown
 Date: unknown
 Context:
 ```
+
+```
+if nano had teslas market cap each nano would be worth like $7500
+
+By: shanners - still bullish
+Date: February 24, 2022
+Context: Bullish delusion
+```
+
+```
+I want to giga add the puke, but want to understand more what you're talking about
+
+By: Arthur Rehktman leader Supreme
+Date: March 15, 2022
+Context: Bullish delusion
+```

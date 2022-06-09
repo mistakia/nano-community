@@ -172,7 +172,7 @@ The Proof-of-Work nonce is calculated against the hash of the previous block, or
 | -------------- | -------------------- | ------------------- |
 | Send or Change | fffffff800000000     | previous block hash |
 | Receive        | fffffe0000000000     | previous block hash |
-| Open           | fffffe0000000000     | account publc key   |
+| Open           | fffffe0000000000     | account public key  |
 
 #### Proof-of-Work Resources
 
