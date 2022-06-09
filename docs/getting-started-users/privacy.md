@@ -10,7 +10,7 @@ Nano puts you in control of your privacy. You are responsible for protecting it 
 
 All transactions are stored publicly and permanently on the network, which means anyone can look up the balance and transactions of any account. However, the identity of an account holder remains unknown until a link is made to a known account through a transaction or in other circumstances.
 
-With more time and development, there will be services and <a href="https://github.com/mistakia/nanowallet" target="_blank">wallets</a> with built-in privacy-minded strategies that make it effortless to protect and manage your privacy. In the meantime, following these best practices to safeguard your privacy.
+With more time and development, there will be services and <a href="https://github.com/mistakia/nanowallet" target="_blank">wallets</a> with built-in privacy-minded strategies that make it effortless to protect and manage your privacy. In the meantime, follow these best practices to safeguard your privacy.
 
 ### Avoid address re-use
 
