@@ -30,6 +30,10 @@ const getDiscussions = async ({ repo, query }) => {
         id
         title
         url
+        category {
+          id
+          name
+        }
         author {
           avatarUrl
           ... on User {
@@ -81,6 +85,8 @@ const formatDiscussion = ({ item, repo }) => ({
   repo: repo,
   body: item.body,
   upvotes: item.upvoteCount,
+  category_id: item.category.id,
+  category_name: item.category.name,
   created_at: dayjs(item.publishedAt).unix(),
   updated_at: item.updatedAt ? dayjs(item.updatedAt).unix() : null
 })
@@ -125,16 +131,25 @@ const saveDiscussions = async ({ items, repo }) => {
   }
 }
 
-const importGithubDiscussions = async ({ repo }) => {
+const importGithubDiscussions = async ({ repo, all = false }) => {
+  if (!repo) {
+    log('missing repo')
+    return
+  }
+
   log(`importing discussions from ${repo}`)
 
-  // get latest updated_at from database
-  const rows = await db('github_discussions')
-    .where({ repo })
-    .orderBy('updated_at', 'desc')
-    .limit(1)
-  const lastUpdated = rows.length ? rows[0].updated_at : undefined
-  log(`last updated: ${lastUpdated}`)
+  let lastUpdated
+  if (all) {
+    log('importing all discussions')
+  } else {
+    const rows = await db('github_discussions')
+      .where({ repo })
+      .orderBy('updated_at', 'desc')
+      .limit(1)
+    lastUpdated = rows.length ? rows[0].updated_at : undefined
+    log(`importing discussions updated since: ${lastUpdated}`)
+  }
 
   let result = {}
   do {

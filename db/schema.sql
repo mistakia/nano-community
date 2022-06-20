@@ -403,6 +403,8 @@ CREATE TABLE `github_discussions` (
   `repo` varchar(255)  NOT NULL,
   `body` text CHARACTER SET utf8mb4 DEFAULT NULL,
   `upvotes` int(11) NOT NULL,
+  `category_name` varchar(100) NOT NULL,
+  `category_id` varchar(100) NOT NULL,
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
