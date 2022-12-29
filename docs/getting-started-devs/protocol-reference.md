@@ -71,7 +71,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 
 #### Notable Functions
 
-- <a href="https://github.com/nanocurrency/nano-node/blob/develop/nano/node/election_scheduler.cpp#L43" target="_blank">election_scheduler::activate</a> — adding a block with its priority to the scheduler
+- <a href="https://github.com/nanocurrency/nano-node/blob/V24.0RC2/nano/node/election_scheduler.cpp#L43" target="_blank">election_scheduler::activate</a> — adding a block with its priority to the scheduler
 - <a href="https://github.com/nanocurrency/nano-node/blob/3135095da26738ba1a08cf2fdba02bdce3fe7abe/nano/node/prioritization.cpp#L43-L58" target="_blank">prioritization::prioritization</a> — bucket setup
 - <a href="https://github.com/nanocurrency/nano-node/blob/3135095da26738ba1a08cf2fdba02bdce3fe7abe/nano/node/prioritization.cpp#L60-L77" target="_blank">prioritization::push</a> — adding a block
 - <a href="https://github.com/nanocurrency/nano-node/blob/3135095da26738ba1a08cf2fdba02bdce3fe7abe/nano/node/prioritization.cpp#L87-L94" target="_blank">prioritization::pop</a> — getting a block
