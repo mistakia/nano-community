@@ -60,10 +60,10 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 
 ## Priority Queue / Tx Prioritization
 
-- 129 buckets based on balance
-- the balance included in the block is used
+- 62 buckets based on balance (<a href="https://github.com/nanocurrency/nano-node/pull/3980" target="_blank">prior to V24</a>, there were 129 balance buckets)
+- the max of current or previous block balance is used (<a href="https://github.com/nanocurrency/nano-node/pull/4022" target="_blank">prior to V24</a>, only the current balance was used)
   - based on bit, determined by number of leading zeros
-- maximum of 1,937 (`250,000 / 129`) blocks per bucket
+- maximum of 4,032 (`250,000 / 62`) blocks per bucket (formerly 1,937)
 - bucket sorted by account last modified time (local time of last received block)
 - when adding to a full bucket, the last block (newest account modified timestamp) in the bucket is dropped
 - when getting a block, the buckets are iterated one at a time and the first block in a bucket is selected.
