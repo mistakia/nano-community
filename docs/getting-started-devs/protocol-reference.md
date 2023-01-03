@@ -60,16 +60,18 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 
 ## Priority Queue / Tx Prioritization
 
-- 129 buckets based on balance
-- the balance included in the block is used
+- 62 buckets based on balance (there were 129 balance buckets <a href="https://github.com/nanocurrency/nano-node/pull/3980" target="_blank">before V24</a> )
+- the `max (balance, previous_balance)` is used (only the current balance was used <a href="https://github.com/nanocurrency/nano-node/pull/4022" target="_blank">before V24</a>)
   - based on bit, determined by number of leading zeros
-- maximum of 1,937 (`250,000 / 129`) blocks per bucket
+  - done <a href="https://nano.org/en/blog/v24-siglos-development-update-final-phase-of-testing--eb7075e2" target="_blank">to address</a> sending the full balance putting the transaction in the lowest priority tier
+- maximum of 4,032 (`250,000 / 62`) blocks per bucket (formerly 1,937)
 - bucket sorted by account last modified time (local time of last received block)
 - when adding to a full bucket, the last block (newest account modified timestamp) in the bucket is dropped
 - when getting a block, the buckets are iterated one at a time and the first block in a bucket is selected.
 
 #### Notable Functions
 
+- <a href="https://github.com/nanocurrency/nano-node/blob/V24.0RC2/nano/node/election_scheduler.cpp#L43" target="_blank">election_scheduler::activate</a> — adding a block with its priority to the scheduler
 - <a href="https://github.com/nanocurrency/nano-node/blob/3135095da26738ba1a08cf2fdba02bdce3fe7abe/nano/node/prioritization.cpp#L43-L58" target="_blank">prioritization::prioritization</a> — bucket setup
 - <a href="https://github.com/nanocurrency/nano-node/blob/3135095da26738ba1a08cf2fdba02bdce3fe7abe/nano/node/prioritization.cpp#L60-L77" target="_blank">prioritization::push</a> — adding a block
 - <a href="https://github.com/nanocurrency/nano-node/blob/3135095da26738ba1a08cf2fdba02bdce3fe7abe/nano/node/prioritization.cpp#L87-L94" target="_blank">prioritization::pop</a> — getting a block
