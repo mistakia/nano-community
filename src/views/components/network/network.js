@@ -150,12 +150,14 @@ export default class Network extends React.Component {
         </div>
         <div className='network__stat'>
           <div>
-            Energy Usage (TDP)
+            Energy Usage (TDP) (24h)
             <Tooltip title={energyText}>
               <HelpOutlineIcon fontSize='inherit' />
             </Tooltip>
           </div>
-          <div>{wattHour ? `${(wattHour / 1000).toFixed(3)} kWh` : '-'}</div>
+          <div>
+            {wattHour ? `${((wattHour * 24) / 1000).toFixed(2)} kWh` : '-'}
+          </div>
         </div>
         <a
           href='https://nanoticker.info/'
