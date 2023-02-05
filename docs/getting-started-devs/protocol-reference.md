@@ -266,9 +266,9 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 
 ## Confirmation Height Processor
 
- - After confirmation, the Nano node cements transactions as final and irreversible. The confirmation_height_processor is responsible for this process. 
- - There is (as of V24) a bounded & unbounded implementation of the cementing algorithm. See: `unbounded_processor` & `bounded_processor`.
- - "Confirmation height" is a number that represents the most recently confirmed block in an account chain. For example, if there are 15 transactions in an account, and 14 of them are confirmed, the confirmation height would be 14, while the block height would be 15.
+- After confirmation, the Nano node cements transactions as final and irreversible. The confirmation_height_processor is responsible for this process.
+- There is (as of V24) a bounded & unbounded implementation of the cementing algorithm. See: `unbounded_processor` & `bounded_processor`.
+- `Confirmation height` is a number that represents the most recently confirmed block in an account chain. For example, if there are 15 transactions in an account, and 14 of them are confirmed, the confirmation height would be 14, while the block height would be 15.
 
 #### Notable Functions
 
