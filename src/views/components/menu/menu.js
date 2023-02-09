@@ -95,6 +95,7 @@ function MenuSections() {
         <div className='menu__heading'>Stats</div>
         <div className='menu__links'>
           <NavLink to='/representatives'>Representatives</NavLink>
+          <NavLink to='/telemetry'>Telemetry</NavLink>
           <NavLink to='/ledger'>Ledger</NavLink>
         </div>
       </div>
@@ -122,7 +123,7 @@ export default class Menu extends React.Component {
   handleHomeClick = () => history.push('/')
 
   render() {
-    const { hide, hideSearch } = this.props
+    const { hide, hideSearch, hide_speed_dial } = this.props
     const isHome = history.location.pathname === '/'
     const isMobile = window.innerWidth < 750
 
@@ -137,29 +138,31 @@ export default class Menu extends React.Component {
           anchor='top'>
           <MenuSections />
         </SwipeableDrawer>
-        <SpeedDial
-          className='menu__dial'
-          ariaLabel='menu dial'
-          transitionDuration={0}
-          direction={isMobile ? 'up' : 'down'}
-          onClick={this.handleClick}
-          open={this.state.open}
-          icon={
-            <img
-              alt='Nano is feeless, instant, and green / energy efficient digital money (cryptocurrency)'
-              src='/resources/symbol-white.svg'
-            />
-          }
-          openIcon={<CloseIcon />}>
-          {!isHome && (
-            <SpeedDialAction
-              icon={<HomeIcon />}
-              tooltipTitle='Home'
-              tooltipPlacement={isMobile ? 'left' : 'right'}
-              onClick={this.handleHomeClick}
-            />
-          )}
-        </SpeedDial>
+        {!hide_speed_dial && (
+          <SpeedDial
+            className='menu__dial'
+            ariaLabel='menu dial'
+            transitionDuration={0}
+            direction={isMobile ? 'up' : 'down'}
+            onClick={this.handleClick}
+            open={this.state.open}
+            icon={
+              <img
+                alt='Nano is feeless, instant, and green / energy efficient digital money (cryptocurrency)'
+                src='/resources/symbol-white.svg'
+              />
+            }
+            openIcon={<CloseIcon />}>
+            {!isHome && (
+              <SpeedDialAction
+                icon={<HomeIcon />}
+                tooltipTitle='Home'
+                tooltipPlacement={isMobile ? 'left' : 'right'}
+                onClick={this.handleHomeClick}
+              />
+            )}
+          </SpeedDial>
+        )}
         <div className='menu__body'>
           {isHome ? (
             <div className='menu__text'>NANO</div>
@@ -178,5 +181,6 @@ export default class Menu extends React.Component {
 
 Menu.propTypes = {
   hide: PropTypes.bool,
-  hideSearch: PropTypes.bool
+  hideSearch: PropTypes.bool,
+  hide_speed_dial: PropTypes.bool
 }

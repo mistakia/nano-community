@@ -48,7 +48,13 @@ function bytesToSize(bytes) {
 
 export default class Representatives extends React.Component {
   render() {
-    const { accounts, totalWeight, isLoading, quorumTotal } = this.props
+    const {
+      accounts,
+      totalWeight,
+      isLoading,
+      quorumTotal,
+      table_height = 600
+    } = this.props
 
     const denominator = quorumTotal || totalWeight
 
@@ -248,7 +254,7 @@ export default class Representatives extends React.Component {
       }
     ]
     return (
-      <div className='representatives' style={{ height: 500 }}>
+      <div className='representatives' style={{ height: table_height }}>
         <DataGrid
           components={{ LoadingOverlay }}
           disableColumnMenu={true}
@@ -270,5 +276,6 @@ Representatives.propTypes = {
   accounts: ImmutablePropTypes.list,
   totalWeight: PropTypes.number,
   quorumTotal: PropTypes.number,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  table_height: PropTypes.number
 }

@@ -10,6 +10,7 @@ import LedgerPage from '@pages/ledger'
 import NetworkPage from '@pages/network'
 import NotFoundPage from '@pages/not-found'
 import RepresentativesPage from '@pages/representatives'
+import TelemetryPage from '@pages/telemetry'
 import LabelPage from '@pages/label'
 
 const Routes = () => (
@@ -19,6 +20,7 @@ const Routes = () => (
     <Route exact path='/ledger' component={LedgerPage} />
     <Route exact path='/network' component={NetworkPage} />
     <Route exact path='/representatives' component={RepresentativesPage} />
+    <Route exact path='/telemetry' component={TelemetryPage} />
     <Route exact path='/labels/:label' component={LabelPage} />
     <Route exact path='/404.html' component={NotFoundPage} />
     <Route
