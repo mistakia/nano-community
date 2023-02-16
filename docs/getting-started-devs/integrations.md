@@ -20,7 +20,7 @@ The `payto:` URI scheme, defined in [RFC-8905](https://www.rfc-editor.org/rfc/rf
 
 #### Syntax
 
-`payto:nano/nano_<encoded_address>/[?][amount=[<currency>:]<raw_amount>][&][receiver_name=<recipient_name>][&][message=<message>]`
+`payto:nano/nano_<encoded_address>/[?][amount=[<currency>:]<raw_amount>][&][receiver_name=<receiver_name>][&][message=<message>]`
 
 Clients *MUST* accept URIs with options in any order.
 
