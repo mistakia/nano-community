@@ -86,20 +86,20 @@ nano:nano_<encoded_address>[?][amount=<raw_amount>][&][label=<label>][&][message
 
 The recipient's [public Nano address](https://docs.nano.org/integration-guides/the-basics/#account-public-address). MUST be provided, and MUST be encoded using Nano's base32 encoding algorithm.
 
-#### raw_amount
+#### amount
 
 MUST not occur more than once.
 The amount to transfer in [RAW units](https://docs.nano.org/protocol-design/distribution-and-units/).
 
-#### receiver_name
+#### label
 
-Name of the entity that receives the payment (creditor).
+A short label to identify or organize the transaction.
 
 <small>Note: The Nano protocol does not support receiver names. The client may choose to use or ignore this option.</small>
 
 #### message
 
-A short message to identify the purpose of the payment.
+A short message for the transaction recipient.
 
 <small>Note: The Nano protocol does not support messages. The client may choose to use or ignore this option.</small>
 
