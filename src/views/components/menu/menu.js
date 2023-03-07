@@ -68,6 +68,9 @@ function MenuSections() {
           <NavLink to='/getting-started-devs/getting-started'>
             Getting Started
           </NavLink>
+          <NavLink to='/getting-started-devs/integrations'>
+            Integrations
+          </NavLink>
           <NavLink to='/getting-started-devs/running-a-node'>
             Running a node
           </NavLink>
