@@ -82,7 +82,7 @@ const formatDiscussion = ({ item, repo }) => ({
   ref: item.number,
   title: item.title,
   url: item.url,
-  repo: repo,
+  repo,
   body: item.body,
   upvotes: item.upvoteCount,
   category_id: item.category.id,
