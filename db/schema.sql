@@ -54,6 +54,24 @@ CREATE TABLE `accounts_meta` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `accounts_meta_index`
+--
+
+DROP TABLE IF EXISTS `accounts_meta_index`;
+
+CREATE TABLE `accounts_meta_index` (
+  `account` char(65) CHARACTER SET utf8 NOT NULL,
+  `balance` decimal(39, 0) DEFAULT NULL,
+  `block_count` int(11) DEFAULT NULL,
+  `weight` decimal(39,0) DEFAULT NULL,
+  `delegators` int(11) DEFAULT NULL,
+  `timestamp` int(11) NOT NULL,
+  UNIQUE KEY `account` (`account`, `timestamp`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `accounts_tags`
 --
 
