@@ -1,5 +1,5 @@
 module.exports = {
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   ignorePatterns: ['build/*'],
   env: {
     browser: true,
