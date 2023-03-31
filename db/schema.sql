@@ -275,6 +275,43 @@ CREATE TABLE `representatives_telemetry` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `representatives_telemetry_index`
+--
+
+DROP TABLE IF EXISTS `representatives_telemetry_index`;
+
+CREATE TABLE `representatives_telemetry_index` (
+  `account` char(65) DEFAULT NULL,
+  `weight` decimal(39,0) DEFAULT NULL,
+
+  `block_count` int(11) NOT NULL,
+  `block_behind` int(11) NOT NULL,
+  `cemented_count` int(11) NOT NULL,
+  `cemented_behind` int(11) NOT NULL,
+  `account_count` int(11) NOT NULL,
+  `unchecked_count` int(11) NOT NULL,
+  `bandwidth_cap` int(11) NOT NULL,
+  `peer_count` int(11) NOT NULL,
+  `protocol_version` int(11) NOT NULL,
+  `uptime` int(11) NOT NULL,
+  `major_version` int(11) NOT NULL,
+  `minor_version` int(11) NOT NULL,
+  `patch_version` int(11) NOT NULL,
+  `pre_release_version` varchar(10) NOT NULL,
+  `maker` varchar(10) NOT NULL,
+  `node_id` char(65) NOT NULL,
+  `address` char(65) NOT NULL,
+  `port` int(11) NOT NULL,
+  `telemetry_timestamp` int(11) NOT NULL,
+
+  `timestamp` int(11) NOT NULL,
+  UNIQUE KEY `account` (`account`),
+  KEY `address` (`address`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `representatives_network`
 --
 
