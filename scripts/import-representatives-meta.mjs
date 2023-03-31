@@ -40,13 +40,12 @@ const importRepresentativesMeta = async () => {
     const github = sanitize($('.fa-github').parent().text())
     const discord = sanitize($('.fa-discord').parent().text())
 
-    const result = await db('representatives_meta')
+    const existing_meta = await db('representatives_meta_index')
       .where({ account: res.account })
-      .orderBy('timestamp', 'desc')
-      .limit(1)
+      .first()
 
     const meta = {
-      ...(result.length ? result[0] : {}),
+      ...(existing_meta || {}),
 
       account: res.account,
 
@@ -65,9 +64,12 @@ const importRepresentativesMeta = async () => {
     }
 
     // check for changes
-    if (result.length) {
+    if (existing_meta) {
       // remove timestamp
-      const prevObj = Object.assign({}, { ...result[0], timestamp: undefined })
+      const prevObj = Object.assign(
+        {},
+        { ...existing_meta, timestamp: undefined }
+      )
       const newObj = Object.assign({}, { ...meta, timestamp: undefined })
       if (JSON.stringify(prevObj) === JSON.stringify(newObj)) {
         logger(`skipping meta for account: ${meta.account}`)
@@ -81,10 +83,13 @@ const importRepresentativesMeta = async () => {
       ...meta,
       timestamp
     })
-    await db('representatives_meta_index').insert({
-      ...meta,
-      timestamp
-    })
+    await db('representatives_meta_index')
+      .insert({
+        ...meta,
+        timestamp
+      })
+      .onConflict('account')
+      .merge()
     await wait(1500)
   }
 }
