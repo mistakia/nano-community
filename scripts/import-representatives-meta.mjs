@@ -81,6 +81,10 @@ const importRepresentativesMeta = async () => {
       ...meta,
       timestamp
     })
+    await db('representatives_meta_index').insert({
+      ...meta,
+      timestamp
+    })
     await wait(1500)
   }
 }

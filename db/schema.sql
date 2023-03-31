@@ -66,7 +66,7 @@ CREATE TABLE `accounts_meta_index` (
   `weight` decimal(39,0) DEFAULT NULL,
   `delegators` int(11) DEFAULT NULL,
   `timestamp` int(11) NOT NULL,
-  UNIQUE KEY `account` (`account`, `timestamp`)
+  UNIQUE KEY `account` (`account`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -193,6 +193,46 @@ CREATE TABLE `representatives_meta` (
 
   `timestamp` int(11) NOT NULL,
   UNIQUE KEY `account` (`account`, `timestamp`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `representatives_meta_index`
+--
+
+DROP TABLE IF EXISTS `representatives_meta_index`;
+
+CREATE TABLE `representatives_meta` (
+  `account` char(65) CHARACTER SET utf8 NOT NULL,
+  `cpu_cores` int(2) DEFAULT NULL,
+  `cpu_description` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `cpu_model` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `bandwidth_description` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `ram` int(3) DEFAULT NULL,
+  `ram_description` varchar(255) DEFAULT NULL,
+
+  `description` text CHARACTER SET utf8mb4 DEFAULT NULL,
+  `dedicated` tinyint(1) DEFAULT NULL,
+  `type` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `provider` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `created_at` int(11) DEFAULT NULL,
+
+  `mynano_ninja` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `ninja_ram_description` varchar(255) DEFAULT NULL,
+  `ninja_cpu_description` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `ninja_description` text CHARACTER SET utf8mb4 DEFAULT NULL,
+  `ninja_type` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `ninja_created_at` int(11) DEFAULT NULL,
+  `ninja_provider` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+
+  `reddit` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `twitter` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `discord` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `github` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+
+  `timestamp` int(11) NOT NULL,
+  UNIQUE KEY `account` (`account`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
