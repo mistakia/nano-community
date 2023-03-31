@@ -203,7 +203,7 @@ CREATE TABLE `representatives_meta` (
 
 DROP TABLE IF EXISTS `representatives_meta_index`;
 
-CREATE TABLE `representatives_meta` (
+CREATE TABLE `representatives_meta_index` (
   `account` char(65) CHARACTER SET utf8 NOT NULL,
   `cpu_cores` int(2) DEFAULT NULL,
   `cpu_description` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
