@@ -56,7 +56,7 @@ Because Nano does not need to pay to secure the network, it is resistant to <a h
 
 Nano's ledger is pseudonymous. All accounts on the ledger, the balances, and the entire transaction history, are public. However, the identity of the owner is anonymous.
 
-Nano puts users in control of their privacy, allowing them to better preserve it. Users are not reliant on intermediaries like banks to prevent breaches of privacy.
+Nano puts users in control of their privacy, allowing them to better preserve it. Users are not reliant on intermediaries like banks to prevent breaches of privacy. The feeless nature helps users to improve privacy with mixing tools, multi-accounting and other manoeuvres with no extra cost.
 
 ### Nano is instantly verifiable
 
