@@ -16,55 +16,18 @@ const loadRepresentatives = async () => {
 
   const accounts = representatives.map((r) => r.account)
 
-  /***********************************************************/
-  const telemetryQuery = db('representatives_telemetry')
-    .select(db.raw('max(timestamp) AS maxtime, account AS aid'))
-    .groupBy('account')
-  const telemetry = db
-    .select('representatives_telemetry.*')
-    .from(db.raw('(' + telemetryQuery.toString() + ') AS X'))
-    .innerJoin('representatives_telemetry', function () {
-      this.on(function () {
-        this.on('account', '=', 'aid')
-        this.andOn('timestamp', '=', 'maxtime')
-      })
-    })
-    .whereIn('account', accounts)
+  const telemetry = db('representatives_telemetry_index').whereIn(
+    'account',
+    accounts
+  )
 
-  /***********************************************************/
   const uptime = db('representatives_uptime_rollup_2hour')
     .whereIn('account', accounts)
     .orderBy('interval', 'asc')
 
-  /***********************************************************/
-  const accountMetaQuery = db('accounts_meta')
-    .select(db.raw('max(timestamp) AS maxtime, account AS aid'))
-    .groupBy('account')
-  const accountMeta = db
-    .select('accounts_meta.*')
-    .from(db.raw('(' + accountMetaQuery.toString() + ') AS X'))
-    .innerJoin('accounts_meta', function () {
-      this.on(function () {
-        this.on('account', '=', 'aid')
-        this.andOn('timestamp', '=', 'maxtime')
-      })
-    })
-    .whereIn('account', accounts)
+  const account_meta = db('accounts_meta_index').whereIn('account', accounts)
 
-  /***********************************************************/
-  const repMetaQuery = db('representatives_meta')
-    .select(db.raw('max(timestamp) AS maxtime, account AS aid'))
-    .groupBy('account')
-  const repMeta = db
-    .select('representatives_meta.*')
-    .from(db.raw('(' + repMetaQuery.toString() + ') AS X'))
-    .innerJoin('representatives_meta', function () {
-      this.on(function () {
-        this.on('account', '=', 'aid')
-        this.andOn('timestamp', '=', 'maxtime')
-      })
-    })
-    .whereIn('account', accounts)
+  const rep_meta = db('representatives_meta_index').whereIn('account', accounts)
 
   /***********************************************************/
   const networkQuery = db('representatives_network')
@@ -114,11 +77,11 @@ const loadRepresentatives = async () => {
     .whereIn('account', accounts)
 
   const queryResults = await Promise.all([
-    accountMeta, // 0
+    account_meta, // 0
     telemetry, // 1
     uptime, // 2
     network, // 3
-    repMeta, // 4
+    rep_meta, // 4
     offline, // 5
     online // 6
   ])
