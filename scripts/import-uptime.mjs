@@ -75,6 +75,10 @@ const importUptime = async () => {
   if (uptimeInserts.length) {
     logger(`saving uptime for ${uptimeInserts.length} reps`)
     await db('representatives_uptime').insert(uptimeInserts)
+    await db('representatives_uptime_index')
+      .insert(uptimeInserts)
+      .onConflict('account')
+      .merge()
   }
 
   // calculate rollup
