@@ -179,6 +179,7 @@ const importTelemetry = async () => {
   const now = dayjs()
   const repInserts = nodeInserts.filter((n) => n.account)
   for (const item of repInserts) {
+    // TODO transition to index table
     // get last network stat
     const result = await db('representatives_network')
       .where({
@@ -199,7 +200,7 @@ const importTelemetry = async () => {
     const network = await getNetworkInfo(item.address)
     if (network.status === 'success') {
       log(`saving network info for account ${item.account} at ${item.address}`)
-      await db('representatives_network').insert({
+      const rep_network_insert = {
         account: item.account,
         address: item.address,
 
@@ -220,7 +221,12 @@ const importTelemetry = async () => {
         hosted: network.hosting,
 
         timestamp
-      })
+      }
+      await db('representatives_network').insert(rep_network_insert)
+      await db('representatives_network_index')
+        .insert(rep_network_insert)
+        .onConflict('account')
+        .merge()
     }
 
     await wait(2000)

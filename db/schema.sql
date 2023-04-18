@@ -344,6 +344,38 @@ CREATE TABLE `representatives_network` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `representatives_network_index`
+--
+
+DROP TABLE IF EXISTS `representatives_network_index`;
+
+CREATE TABLE `representatives_network_index` (
+  `account` char(65) NOT NULL,
+  `address` varchar(65) NOT NULL,
+
+  `continent` varchar(65) NOT NULL,
+  `country` varchar(65) NOT NULL,
+  `countryCode` char(2) NOT NULL,
+  `region` varchar(65) NOT NULL,
+  `regionName` varchar(65) NOT NULL,
+  `city` varchar(65) NOT NULL,
+  `zip` varchar(65) NOT NULL,
+  `lat` varchar(65) NOT NULL,
+  `lon` varchar(65) NOT NULL,
+  `timezone` varchar(65) NOT NULL,
+  `isp` varchar(65) NOT NULL,
+  `org` varchar(65) NOT NULL,
+  `as` varchar(65) NOT NULL,
+  `asname` varchar(65) NOT NULL,
+  `hosted` tinyint(1) NOT NULL,
+
+  `timestamp` int(11) NOT NULL,
+  UNIQUE KEY `account` (`account`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `representatives_uptime`
 --
 
@@ -356,6 +388,23 @@ CREATE TABLE `representatives_uptime` (
   `timestamp` int(11) NOT NULL,
   INDEX `online` (`online`),
   UNIQUE KEY `account` (`account`, `timestamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `representatives_uptime_index`
+--
+
+DROP TABLE IF EXISTS `representatives_uptime_index`;
+
+CREATE TABLE `representatives_uptime_index` (
+  `account` char(65) NOT NULL,
+  `online` tinyint(1) NOT NULL,
+
+  `timestamp` int(11) NOT NULL,
+  INDEX `online` (`online`),
+  UNIQUE KEY `account` (`account`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
