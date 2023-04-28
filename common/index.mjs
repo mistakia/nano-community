@@ -8,6 +8,7 @@ import request from './request.mjs'
 
 export * as cloudflare from './cloudflare.mjs'
 export { request }
+export { default as convertToCSV } from './convert-to-csv.mjs'
 
 const POST = (data) => ({
   method: 'POST',
