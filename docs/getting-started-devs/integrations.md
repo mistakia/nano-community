@@ -210,12 +210,15 @@ An internet identifier, defined in [RFC-5322 Section 3.4.1](https://datatracker.
 ### Nano Identifier Services
 
 #### Table of Contents
+- [.well-known/nano-currency.json endpoint](#well-knownnano-currencyjson-endpoint)
 - [Request and response formats](#request-and-response-formats)
 - [Re-assignment of Nano identifiers](#re-assignment-of-nano-identifiers)
 - [Serving from a subdomain](#serving-from-a-subdomain)
 - [Static self-hosting](#static-self-hosting)
 - [Allowing access from JavaScript clients](#allowing-access-from-javascript-clients)
 - [Security constraints](#security-constraints)
+
+#### .well-known/nano-currency.json endpoint
 
 Nano identifier services MUST accept and respond to requests made to
 
