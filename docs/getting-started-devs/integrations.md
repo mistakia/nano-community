@@ -212,11 +212,11 @@ An internet identifier, defined in [RFC-5322 Section 3.4.1](https://datatracker.
 ##### Table of Contents
 - [.well-known/nano-currency.json endpoint](#well-knownnano-currencyjson-endpoint)
 - [Request and response formats](#request-and-response-formats)
-- [Re-assignment of Nano identifiers](#re-assignment-of-nano-identifiers)
 - [Serving from a subdomain](#serving-from-a-subdomain)
 - [Static self-hosting](#static-self-hosting)
 - [Allowing access from JavaScript clients](#allowing-access-from-javascript-clients)
 - [Security constraints](#security-constraints)
+- [Re-assignment of Nano identifiers](#re-assignment-of-nano-identifiers)
 
 #### .well-known/nano-currency.json endpoint
 
@@ -249,14 +249,6 @@ The `.well-known` directory, defined in [RFC-8615](https://datatracker.ietf.org/
 By using a query list instead of a path parameter to specify `<local-part>`, the protocol can support both dynamic services that can generate JSON on-demand and static servers with a JSON file that may contain multiple names. A static file server will simply ignore the query parameters and return the entire file.
 
 Allowing comma-separated values to be provided for the `names` query parameter, and responding with a list structured `names` field also allows clients to make requests for multiple Nano identifier names in a single request.
-
-#### Re-assignment of Nano identifiers
-
-Nano identifier services SHOULD ONLY allow re-assignment of currently or previously registered identifiers to the current or original owner, even in the case of an expired registration. 
-
-For example, a Nano identifier service MAY allow the original owner of an expired registered identifier to re-register the identifier to the original or a new Nano public address by requiring authentication with the originally assigned address or an alternative authentication method.
-
-This restriction ensures that a new user cannot claim an expired identifier and receive payments that were intended for the original owner.
 
 #### Serving from a subdomain
 
@@ -307,6 +299,14 @@ Services should ensure that their `/.well-known/nano-currency.json` is served wi
 The `/.well-known/nano-currency.json` endpoint MUST NOT return any HTTP redirects.
 
 Clients MUST ignore any HTTP redirects given by the `/.well-known/nano-currency.json` endpoint.
+
+#### Re-assignment of Nano identifiers
+
+Nano identifier services SHOULD ONLY allow re-assignment of currently or previously registered identifiers to the current or original owner, even in the case of an expired registration. 
+
+For example, a Nano identifier service MAY allow the original owner of an expired registered identifier to re-register the identifier to the original or a new Nano public address by requiring authentication with the originally assigned address or an alternative authentication method.
+
+This restriction ensures that a new user cannot claim an expired identifier and receive payments that were intended for the original owner.
 
 ### Client Use of Nano Identifiers
 
