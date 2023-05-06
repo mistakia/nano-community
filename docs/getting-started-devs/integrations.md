@@ -6,7 +6,7 @@ tags: nano, integration, guide, building, development, uri, links, qr
 
 # Integrations
 
-### Table of Contents
+##### Table of Contents
 
 - [URI Schemes](#uri-schemes)
 - [Payment Verifications](#payment-verifications)
@@ -28,7 +28,7 @@ Deep links for payment invocation should prefer the payto standard and use the f
 
 See [URI Examples](#uri-examples) for examples.
 
-### Table of Contents
+##### Table of Contents
 
 - [`payto:` URI scheme](#payto-payment-invocation-uri-scheme)
 - [`nano:` URI scheme](#nano-payment-invocation-uri-scheme)
@@ -196,7 +196,7 @@ It's also worth noting that currently many popular Nano wallet clients limit the
 
 ## Nano Internet Identifiers
 
-### Table of Contents
+##### Table of Contents
 
 - [Nano Identifier Services](#nano-identifier-services)
 - [Client Use of Nano Identifiers](#client-use-of-nano-identifiers)
@@ -209,7 +209,7 @@ An internet identifier, defined in [RFC-5322 Section 3.4.1](https://datatracker.
 
 ### Nano Identifier Services
 
-#### Table of Contents
+##### Table of Contents
 - [.well-known/nano-currency.json endpoint](#well-knownnano-currencyjson-endpoint)
 - [Request and response formats](#request-and-response-formats)
 - [Re-assignment of Nano identifiers](#re-assignment-of-nano-identifiers)
