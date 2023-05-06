@@ -196,6 +196,11 @@ It's also worth noting that currently many popular Nano wallet clients limit the
 
 ## Nano Internet Identifiers
 
+### Table of Contents
+
+- [Nano Identifier Services](#nano-identifier-services)
+- [Client Use of Nano Identifiers](#client-use-of-nano-identifiers)
+
 For convenience, users may prefer to use internet identifiers as an alternative to public addresses when specifying send or receive targets.
 
 For this reason, it is preferable for Nano wallet clients to support handling of Nano internet identifiers in addition to Nano public addresses. 
@@ -204,10 +209,18 @@ An internet identifier, defined in [RFC-5322 Section 3.4.1](https://datatracker.
 
 ### Nano Identifier Services
 
+#### Table of Contents
+- [Request and response formats](#request-and-response-formats)
+- [Re-assignment of Nano identifiers](#re-assignment-of-nano-identifiers)
+- [Serving from a subdomain](#serving-from-a-subdomain)
+- [Static self-hosting](#static-self-hosting)
+- [Allowing access from JavaScript clients](#allowing-access-from-javascript-clients)
+- [Security constraints](#security-constraints)
+
 Nano identifier services MUST accept and respond to requests made to
 
 ```
-<domain>/.well-known/nano-currency-names.json?names=<local-part>
+<domain>/.well-known/nano-currency.json?names=<local-part>
 ```
 
 with a JSON document response in the format of
@@ -246,7 +259,7 @@ This restriction ensures that a new user cannot claim an expired identifier and 
 
 If a Nano identifier service prefers to serve from a subdomain (eg. `nano.example.com`) rather than the root domain (eg `example.com`), they may define a [DNS SRV record](https://en.wikipedia.org/wiki/SRV_record) to specify the subdomain and port used for serving Nano identifiers with a `_nano_currency_names._tcp.<doman>` SRV record.
 
-The client, upon receiving an error when sending a request to `<domain>/.well-known/nano-currency-names.json?names=<local-part>`, may resolve the DNS SRV record `_nano_currency_names._tcp.<domain>` to determine which subdomain (and port) to send requests to. The client may also do this lookup preemptively if preferred.
+The client, upon receiving an error when sending a request to `<domain>/.well-known/nano-currency.json?names=<local-part>`, may resolve the DNS SRV record `_nano_currency_names._tcp.<domain>` to determine which subdomain (and port) to send requests to. The client may also do this lookup preemptively if preferred.
 
 An example of a DNS SRV record for the subdomain `nano.example.com` using the default port of 443.
 
@@ -254,31 +267,47 @@ An example of a DNS SRV record for the subdomain `nano.example.com` using the de
 _nano_currency_names._tcp.example.com 86400 IN SRV 0 0 443 nano.example.com
 ```
 
-#### Allowing access from JavaScript apps
+#### Static self-hosting
 
-JavaScript Nano clients may be restricted by browser [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) policies that prevent them from accessing `/.well-known/nano-currency-names.json` on the user's domain. 
+Users may choose to host their own Nano identifiers through a static file server.
+
+This may be done in the same way as a public static file server, by hosting the file `.well-known/nano-currency.json` from the root of the static file server, in the same format as described above, such as
+
+```json
+{
+    "names": [
+        {
+            "name": "user",
+            "address": "nano_3wm37qz19zhei7nzscjcopbrbnnachs4p1gnwo5oroi3qonw6inwgoeuufdp",
+            "expiry": null
+        },
+    ]
+}
+```
+
+#### Allowing access from JavaScript clients
+
+JavaScript Nano clients may be restricted by browser [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) policies that prevent them from accessing `/.well-known/nano-currency.json` on the user's domain. 
 
 When CORS prevents JS from loading a resource, the JS program sees it as a network failure identical to the resource not existing, so it is not possible for a pure-JS app to tell the user for certain that the failure was caused by a CORS issue. 
 
-JavaScript Nano clients that see network failures requesting `/.well-known/nano-currency-names.json` files may want to recommend to users that they check the CORS policy of their servers, e.g.:
+JavaScript Nano clients that see network failures requesting `/.well-known/nano-currency.json` files may want to recommend to users that they check the CORS policy of their servers, e.g.:
 
 ```
-$ curl -sI https://example.com/.well-known/nano-currency-names.json?names=bob | grep -i ^Access-Control
+$ curl -sI https://example.com/.well-known/nano-currency.json?names=user | grep -i ^Access-Control
 Access-Control-Allow-Origin: *
 ```
 
-Services should ensure that their `/.well-known/nano-currency-names.json` is served with the HTTP header `Access-Control-Allow-Origin: *` to ensure it can be validated by pure JS clients running in modern browsers.
+Services should ensure that their `/.well-known/nano-currency.json` is served with the HTTP header `Access-Control-Allow-Origin: *` to ensure it can be validated by pure JS clients running in modern browsers.
 
-#### Security Constraints
-The `/.well-known/nano-currency-names.json` endpoint MUST NOT return any HTTP redirects.
+#### Security constraints
+The `/.well-known/nano-currency.json` endpoint MUST NOT return any HTTP redirects.
 
-Clients MUST ignore any HTTP redirects given by the `/.well-known/nano-currency-names.json` endpoint.
+Clients MUST ignore any HTTP redirects given by the `/.well-known/nano-currency.json` endpoint.
 
 ### Client Use of Nano Identifiers
 
-#### Retrieving a Nano address from a Nano identifier service
-
-Upon encountering a Nano identifier in the format `<local-part>@<domain>`, the client SHOULD perform an address lookup by sending a GET request to the endpoint `<domain>/.well-known/nano-currency-names.json?names=<local-part>`.
+Upon encountering a Nano identifier in the format `<local-part>@<domain>`, the client SHOULD perform an address lookup by sending a GET request to the endpoint `<domain>/.well-known/nano-currency.json?names=<local-part>`.
 
 If an error is received, the client SHOULD attempt to resolve a DNS SRV record for the service with the name `_nano_curency_names._tcp.<domain>`, and retry with the resolved subdomain and port. If preferred, the client MAY preemptively do this resolution prior to the initial request.
 
