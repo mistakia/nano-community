@@ -196,16 +196,16 @@ It's also worth noting that currently many popular Nano wallet clients limit the
 
 ## Nano Internet Identifiers
 
-##### Table of Contents
-
-- [Nano Identifier Services](#nano-identifier-services)
-- [Client Use of Nano Identifiers](#client-use-of-nano-identifiers)
-
 For convenience, users may prefer to use internet identifiers as an alternative to public addresses when specifying send or receive targets.
 
 For this reason, it is preferable for Nano wallet clients to support handling of Nano internet identifiers in addition to Nano public addresses. 
 
 An internet identifier, defined in [RFC-5322 Section 3.4.1](https://datatracker.ietf.org/doc/html/rfc5322#section-3.4.1) as an `"addr-spec"`, is an email address-like identifier that contains a locally interpreted string, the `<local-part>`, followed by the at-sign character ("@"), followed by an Internet domain, the `<domain>`, resulting in `<local-part>@<doman>`.
+
+##### Table of Contents
+
+- [Nano Identifier Services](#nano-identifier-services)
+- [Client Use of Nano Identifiers](#client-use-of-nano-identifiers)
 
 ### Nano Identifier Services
 
@@ -252,14 +252,14 @@ Allowing comma-separated values to be provided for the `names` query parameter, 
 
 #### Serving from a subdomain
 
-If a Nano identifier service prefers to serve from a subdomain (eg. `nano.example.com`) rather than the root domain (eg `example.com`), they may define a [DNS SRV record](https://en.wikipedia.org/wiki/SRV_record) to specify the subdomain and port used for serving Nano identifiers with a `_nano_currency_names._tcp.<doman>` SRV record.
+If a Nano identifier service prefers to serve from a subdomain (eg. `nano.example.com`) rather than the root domain (eg `example.com`), they may define a [DNS SRV record](https://en.wikipedia.org/wiki/SRV_record) to specify the subdomain and port used for serving Nano identifiers with a `_nano_currency._tcp.<doman>` SRV record.
 
-The client, upon receiving an error when sending a request to `<domain>/.well-known/nano-currency.json?names=<local-part>`, may resolve the DNS SRV record `_nano_currency_names._tcp.<domain>` to determine which subdomain (and port) to send requests to. The client may also do this lookup preemptively if preferred.
+The client, upon receiving an error when sending a request to `<domain>/.well-known/nano-currency.json?names=<local-part>`, may resolve the DNS SRV record `_nano_currency._tcp.<domain>` to determine which subdomain (and port) to send requests to. The client may also do this lookup preemptively if preferred.
 
 An example of a DNS SRV record for the subdomain `nano.example.com` using the default port of 443.
 
 ```dns
-_nano_currency_names._tcp.example.com 86400 IN SRV 0 0 443 nano.example.com
+_nano_currency._tcp.example.com 86400 IN SRV 0 0 443 nano.example.com
 ```
 
 #### Static self-hosting
