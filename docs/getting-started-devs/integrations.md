@@ -246,7 +246,7 @@ with a JSON document response in the format of
 
 The `.well-known` directory, defined in [RFC-8615](https://datatracker.ietf.org/doc/html/rfc8615), is a standardized directory in the root of a website that serves as a location for storing files that specify how clients and other services should interact with the site or web application. This is an ideal path from which to serve Nano identifier mappings.
 
-By using a query list instead of a path parameter to specify `<local-part>`, the protocol can support both dynamic services that can generate JSON on-demand and static servers with a JSON file that may contain multiple names. A static file server will simply ignore the query parameters and return the entire file.
+By using the `nano-currency.json` file path and a query list instead of a path parameter to specify `<local-part>`, the protocol can support both dynamic services that can generate JSON on-demand and static servers with a JSON file that may contain multiple names. A static file server will simply ignore the query parameters and return the entire file.
 
 Allowing comma-separated values to be provided for the `names` query parameter, and responding with a list structured `names` field also allows clients to make requests for multiple Nano identifier names in a single request.
 
