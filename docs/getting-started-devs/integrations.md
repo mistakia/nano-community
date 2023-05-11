@@ -1,7 +1,7 @@
 ---
 title: Integrations
 description: Integrating with Nano
-tags: nano, integration, guide, building, development, uri, links, qr
+tags: nano, integration, guide, building, development, uri, links, qr, identifier, identifiers, nfc
 ---
 
 # Integrations
