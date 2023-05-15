@@ -23,7 +23,6 @@
 
 */5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-subreddit.mjs -r nanocurrency &>> /var/log/nano-community/import-nanocurrency.log
 */10 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-subreddit.mjs -r nanotrade &>> /var/log/nano-community/import-nanotrade.log
-*/10 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-forum.mjs &>> /var/log/nano-community/import-forum.log
 */15 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-discord.mjs --gid 370266023905198083 &>> /var/log/nano-community/import-nano-discord.log
 */10 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-discord.mjs --gid 403628195548495882 &>> /var/log/nano-community/import-nano-trade-discord.log
 
