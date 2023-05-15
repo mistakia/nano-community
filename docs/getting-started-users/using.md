@@ -30,4 +30,4 @@ Review these [best practices](/getting-started-users/best-practices) and learn h
 
 #### Confusion over the term "Pending"
 
-Some block explorers and services refer to funds that have the send part confirmed, but lacks a receive part, as pending. This has led to a lot of <a href="https://forum.nano.org/t/replacing-pending-terminology-once-and-for-all/329" target="_blank">confusion</a> as it is easily confused with an unconfirmed send, despite it being confirmed and irreversible. The user just needs to open up their account on a wallet to broadcast the receive part, which is done automatically by most wallets when they see that you have a confirmed send to your account.
+Some block explorers and services refer to funds that have the send part confirmed, but lacks a receive part, as pending. This has led to a lot of confusion as it is easily confused with an unconfirmed send, despite it being confirmed and irreversible. The user just needs to open up their account on a wallet to broadcast the receive part, which is done automatically by most wallets when they see that you have a confirmed send to your account.

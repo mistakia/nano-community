@@ -38,7 +38,7 @@ A penny-spend attack is where an attacker spends infinitesimal quantities to a l
 
 #### Defense
 
-Blocks publishing is rate-limited by work so this limits accounts to a certain extent. The addition of a <a href="https://forum.nano.org/t/bounded-block-backlog/1559" target="_blank">bounded backlog</a> in conjunction with a bandwidth limit could further rate-limit (or reject) a penny-spend attack.
+Blocks publishing is rate-limited by work so this limits accounts to a certain extent. The addition of a bounded backlog in conjunction with a bandwidth limit could further rate-limit (or reject) a penny-spend attack.
 
 Nodes that are not full historical nodes can prune accounts below a statistical metric where the account is probably not a valid account. Finally, Nano is tuned to use minimal permanent storage space so space required to store one additional account is proportional to the size of one block + indexing ~ 96b + 32b ~ 128b. This equates to 1GB being able to store 8 million penny-spend account.
 

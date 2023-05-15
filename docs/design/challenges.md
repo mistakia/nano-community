@@ -36,8 +36,6 @@ One of the key properties for money is acceptability. This is mostly an issue th
 
 Data loss and transmission latency can lead to situations where nodes mistakenly attribute a voting state to a representative that has changed their vote. This issue was largely addressed in v22 with the release of vote spacing, ensuring a representative doesn't flip its vote too quickly, and final votes. Further work is needed to refine the process of vote spacing to provide a formal specification that can be better analyzed and formally proven.
 
-<a href="https://forum.nano.org/t/consensus-improvement-draft/1522" target="_blank">Consensus improvement draft</a>
-
 ### Privacy
 
 Nano's ledger provides pseudonymous protection, which by itself is not enough to ensure that privacy is preserved. Currently, users bear most of the burden of preserving their privacy as there are limited tools, services and wallets that support managing and safeguarding privacy.

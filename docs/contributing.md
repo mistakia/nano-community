@@ -12,7 +12,7 @@ Nano has a relatively small community of developers and only a handful of develo
 - Contribute code to the <a href="https://docs.nano.org/node-implementation/contributing/" target="_blank">reference nano node implementation</a>
 - Help with <a href="https://docs.nano.org/running-a-node/beta-network/" target="_blank">beta testing</a>
 
-Next, participate in community [discussions](/community), by reading and replying to <a href="https://forum.nano.org/" target="_blank">forum posts</a> and <a href="https://chat.nano.org/" target="_blank">discord messages</a>. This gives you a great insight into the pain points that currently exist with the software.
+Next, participate in the community [discussions](/community), by following along on <a href="https://chat.nano.org/" target="_blank">discord</a>. This gives you great insight into the pain points that currently exist with the project.
 
 ### Contribute to the ecosystem
 
