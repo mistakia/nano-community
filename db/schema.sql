@@ -214,7 +214,7 @@ CREATE TABLE `representatives_meta_index` (
 
   `description` text CHARACTER SET utf8mb4 DEFAULT NULL,
   `dedicated` tinyint(1) DEFAULT NULL,
-  `type` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `type` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT 'server type description: Home, Dedicated, VPS, etc',
   `provider` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `created_at` int(11) DEFAULT NULL,
 
