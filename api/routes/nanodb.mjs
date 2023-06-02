@@ -14,7 +14,7 @@ router.get(/^(.*)$/, async (req, res) => {
     res.status(200).send(data)
   } catch (error) {
     logger(error)
-    res.status(500).send({ error: error.toString() })
+    res.status(500).send({ error: 'Nanodb API unavailable' })
   }
 })
 
