@@ -22,6 +22,8 @@ const mapStateToProps = createSelector(getLedger, (ledger) => {
     'change_volume',
     'send_volume',
 
+    'total_usd_send_value',
+
     // TODO open_volume
     // TODO receive_volume
 
