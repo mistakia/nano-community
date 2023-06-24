@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import BigNumber from 'bignumber.js'
 import ReactEChartsCore from 'echarts-for-react/lib/core'
+import BigNumber from 'bignumber.js'
 import * as echarts from 'echarts/core'
 import { LineChart } from 'echarts/charts'
 import {
@@ -21,7 +21,7 @@ echarts.use([
   GridComponent
 ])
 
-export default class LedgerChartBlocks extends React.Component {
+export default class LedgerUSDTransferred extends React.Component {
   render() {
     const { data, isLoading } = this.props
 
@@ -43,9 +43,9 @@ export default class LedgerChartBlocks extends React.Component {
             (s) =>
               `${s.marker} ${
                 s.seriesName
-              } <span style="${spanStyle}">${BigNumber(s.data[1])
-                .shiftedBy(-30)
-                .toFormat(0)}</span>`
+              } <span style="${spanStyle}">$${BigNumber(s.data[1]).toFormat(
+                2
+              )}</span>`
           )
 
           values.unshift(series[0].axisValueLabel)
@@ -60,27 +60,18 @@ export default class LedgerChartBlocks extends React.Component {
         type: 'value',
         name: 'Nano',
         axisLabel: {
-          formatter: (value) => `${BigNumber(value).shiftedBy(-30).toFormat(0)}`
+          formatter: (value) => `$${value}`
         }
       },
       series: [
         {
           type: 'line',
-          name: 'Send',
+          name: 'USD Transferred',
           showSymbol: false,
           lineStyle: {
             width: 1
           },
-          data: data.send_volume
-        },
-        {
-          type: 'line',
-          name: 'Change',
-          showSymbol: false,
-          lineStyle: {
-            width: 1
-          },
-          data: data.change_volume
+          data: data.total_usd_send_value
         }
       ]
     }
@@ -100,24 +91,16 @@ export default class LedgerChartBlocks extends React.Component {
               <span>Description</span>
             </div>
             <div className='ledger__chart-section-body description'>
-              The total amount sent (in Nano) and total amount of voting weight
-              changed per day.
+              <p>The total amount of value transferred (in USD) per day.</p>
+              <p>
+                Based on the daily closing price of Nano/USD and the total
+                amount of Nano transferred that day.
+              </p>
             </div>
           </div>
           <LedgerChartMetrics
-            data={data.send_volume.map((d) => [
-              d[0],
-              BigNumber(d[1]).shiftedBy(-30).toNumber()
-            ])}
-            label='Send Stats'
-            show_total
-          />
-          <LedgerChartMetrics
-            data={data.change_volume.map((d) => [
-              d[0],
-              BigNumber(d[1]).shiftedBy(-30).toNumber()
-            ])}
-            label='Change Stats'
+            data={data.total_usd_send_value.map((d) => [d[0], d[1]])}
+            label='USD Transferred Stats'
             show_total
           />
         </div>
@@ -126,7 +109,7 @@ export default class LedgerChartBlocks extends React.Component {
   }
 }
 
-LedgerChartBlocks.propTypes = {
+LedgerUSDTransferred.propTypes = {
   data: PropTypes.object,
   isLoading: PropTypes.bool
 }

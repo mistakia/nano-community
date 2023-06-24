@@ -111,16 +111,30 @@ export default class LedgerChartBlocks extends React.Component {
               The number of confirmed blocks (by type) per day.
             </div>
           </div>
-          <LedgerChartMetrics data={data.blocks} label='Total Block Stats' />
-          <LedgerChartMetrics data={data.send_count} label='Send Block Stats' />
+          <LedgerChartMetrics
+            data={data.blocks}
+            label='Total Block Stats'
+            show_total
+          />
+          <LedgerChartMetrics
+            data={data.send_count}
+            label='Send Block Stats'
+            show_total
+          />
           <LedgerChartMetrics
             data={data.receive_count}
             label='Receive Block Stats'
+            show_total
           />
-          <LedgerChartMetrics data={data.open_count} label='Open Block Stats' />
+          <LedgerChartMetrics
+            data={data.open_count}
+            label='Open Block Stats'
+            show_total
+          />
           <LedgerChartMetrics
             data={data.change_count}
             label='Change Block Stats'
+            show_total
           />
         </div>
       </>

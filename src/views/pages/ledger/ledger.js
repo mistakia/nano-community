@@ -7,6 +7,7 @@ import LedgerChartBlocks from '@components/ledger-chart-blocks'
 import LedgerChartAddresses from '@components/ledger-chart-addresses'
 import LedgerChartVolume from '@components/ledger-chart-volume'
 import LedgerChartAmounts from '@components/ledger-chart-amounts'
+import LedgerChartUSDTransferred from '@components/ledger-chart-usd-transferred'
 import Seo from '@components/seo'
 import Menu from '@components/menu'
 
@@ -79,6 +80,7 @@ export default class LedgerPage extends React.Component {
             <Tab label='Addresses' />
             <Tab label='Blocks' />
             <Tab label='Volume' />
+            <Tab label='Value Transferred' />
             <Tab label='Amounts' />
           </Tabs>
           <TabPanel value={this.state.value} index={0}>
@@ -91,6 +93,9 @@ export default class LedgerPage extends React.Component {
             <LedgerChartVolume data={data} isLoading={isLoading} />
           </TabPanel>
           <TabPanel value={this.state.value} index={3}>
+            <LedgerChartUSDTransferred data={data} isLoading={isLoading} />
+          </TabPanel>
+          <TabPanel value={this.state.value} index={4}>
             <LedgerChartAmounts data={data} isLoading={isLoading} />
           </TabPanel>
         </div>
