@@ -37,4 +37,4 @@ To mitigate trust, a good choice should have:
 - Active & known community member
 - A high uptime
 
-If you don’t know any node maintainers, <a href="https://mynano.ninja/" target="_blank">My Nano Ninja</a> or <a href="https://nanocharts.info/need-a-representative" target="_blank">nanocharts.info</a> are good starting points. Try to select a node operator who is known and has a good reputation in the [community](/community).
+If you don’t know any node maintainers, <a href="https://nanocharts.info/need-a-representative" target="_blank">nanocharts.info</a> is a good starting point. Try to select a node operator who is known and has a good reputation in the [community](/community).
