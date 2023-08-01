@@ -10,7 +10,7 @@ body:
         ## Objective
         - Objective 1
         - Objective 2
-  - type: markdown
+  - type: textarea
     attributes:
       label: 'Tasks'
       description: 'A list of tasks and/or sub-tasks to be carried out by a community member'
