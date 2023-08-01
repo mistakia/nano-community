@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: Nano.Community Discussions
-    url: https://github.com/mistakia/nano-community/discussions
-    about: For general questions and discussions (not node related)
+    url: https://github.com/mistakia/nano-community/discussions/new/choose
+    about: For questions, feature requests, sharing ideas, getting feedback and general discussions.
+  - name: Nano Node
+    url: https://github.com/nanocurrency/nano-node/issues/new/choose
+    about: For reporting bugs, security vulnerability and requesting new features related to the Nano Node reference implementation (C++).

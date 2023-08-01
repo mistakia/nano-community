@@ -1,0 +1,23 @@
+name: Nano.Community Task
+description: For tracking tasks to be carried out by a community member (should be created by repo maintainer or task assignee).
+title: '[Type] - [Task Title]'
+body:
+  - type: textarea
+    attributes:
+      label: 'Objective'
+      description: 'A brief description of what the objectives are'
+      value: |
+        ## Objective
+        - Objective 1
+        - Objective 2
+  - type: markdown
+    attributes:
+      label: 'Tasks'
+      description: 'A list of tasks and/or sub-tasks to be carried out by a community member'
+      value: |
+        ## Tasks
+        - [ ] Task 1
+          - [ ] Sub-task 1
+          - [ ] Sub-task 2
+        - [ ] Task 2
+        - [ ] Task 3
