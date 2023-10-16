@@ -84,6 +84,9 @@ function MenuSections() {
             Protocol
           </NavLink>
           {/* <NavLink to='/getting-started-devs/integrations'>Integrations</NavLink> */}
+          <NavLink to='/getting-started-devs/developer-discussions'>
+            Developer Discussions
+          </NavLink>
         </div>
       </div>
       <div className='menu__section'>
