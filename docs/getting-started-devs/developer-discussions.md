@@ -8,13 +8,18 @@ tags: nano, crypto, development, building, dev, guide, getting started
 
 Links & notes for recurring live discussions about Nano development. Includes discussion between community developers and the Nano Foundation. Technical, developer-focused.
 
-> [!NOTE]
-> These developer discussions are **best effort**, live discussions, and may not contain the most accurate (or most recent) information. The intent of these discussions is to promote transparency, collaboration, & community-driven efforts, but development plans may change at any time. 
+> These developer discussions are **best effort**, live discussions, and may not contain the most accurate (or most recent) information. The intent of these discussions is to promote transparency, collaboration, & community-driven efforts, but development plans may change at any time.
 > The below notes are also best effort, and may not be 100% accurate.
+
+# Table of Contents
+
+- [October 10th, 2023](#october-10th-2023)
+- [October 3rd, 2023](#october-3rd-2023)
+- [September 26th, 2023](#september-26th-2023)
 
 ## October 10th, 2023
 
-Source: https://twitter.com/i/spaces/1LyGBneNWayGN?s=20
+Source: [https://twitter.com/i/spaces/1LyGBneNWayGN](https://twitter.com/i/spaces/1LyGBneNWayGN)
 
 **Q&A**
 
@@ -59,6 +64,7 @@ Source: https://twitter.com/i/spaces/1LyGBneNWayGN?s=20
 **Colin**
 
 - Thank you again for the community code contributions - there were a few more this week, and one of them fixed a tricky race condition in the RocksDB store. There were also some nice PRs for a Boost filesystem change & some code cleanup. Big shout-out to Ricki!
+
   - For the Boost change, one of the tests was removed because filesystem errors aren't handled very well (naïve check that directory exists, but on actual opening of the file by LMDB it'll just abort/quit if there's an issue). The test is still useful though, Colin will add an exception and then re-enable the test
 
 - The way that we typically look at performance is that if it's not a performance issue currently, we don't look at it until it becomes a performance issue. Otherwise you're optimizing things that won't make an impact. And usually optimizing comes with a complexity increase, which you don't want to do unless it's necessary
@@ -103,13 +109,13 @@ Source: https://twitter.com/i/spaces/1LyGBneNWayGN?s=20
 
   - Bob & Piotr tested two different scenarios. Bob actively published blocks at random to different nodes, while Piotr tested an already desynchronized network. In Piotr's case, there were relatively few final votes because nodes didn't have the same election set active, so they couldn't generate final votes, while Bob's case was a little different. The final solution is a hybrid of what works well for both scenarios - we first sort blocks that receive the most votes by final tally, and if there is a tie we sort by the normal tally
 
-- Going forward we'll probably need better network communication, so Piotr may look into replacing our network prioritization code. The way we do it currently is fairly primitive - a single token/bucket rate limiter for the whole node, and we do not differentiate the traffic by type (e.g. priority traffic like live voting). This would help for network stability. 
+- Going forward we'll probably need better network communication, so Piotr may look into replacing our network prioritization code. The way we do it currently is fairly primitive - a single token/bucket rate limiter for the whole node, and we do not differentiate the traffic by type (e.g. priority traffic like live voting). This would help for network stability.
 
 **Fosse**
 
 - Developed the Nautilus wallet & then started working with Cake Wallet
 
-- The Cake Wallet Nano integration has been released! Sending/receiving, changing representative, and other basic functionality is all there. There are a few issues with exchanging, but they're being worked on 
+- The Cake Wallet Nano integration has been released! Sending/receiving, changing representative, and other basic functionality is all there. There are a few issues with exchanging, but they're being worked on
 
 - On the Nautilus side, Fosse pushed an update that updates packages, fixes bugs, and fixes a lot of translation issues
 
@@ -121,7 +127,7 @@ Source: https://twitter.com/i/spaces/1LyGBneNWayGN?s=20
 
 ## October 3rd, 2023
 
-Source: https://twitter.com/i/spaces/1LyxBneZBQnxN?s=20
+Source: [https://twitter.com/i/spaces/1LyxBneZBQnxN](https://twitter.com/i/spaces/1LyxBneZBQnxN)
 
 **Overall**
 
@@ -159,11 +165,11 @@ Source: https://twitter.com/i/spaces/1LyxBneZBQnxN?s=20
 
 **Brainstorm on Block Splitting Bootstrapping Improvements**
 
-- If we do the block split, we have all the blocks in sequential order (with a number associated with them) - is it possible to use that for bootstrapping (especially for bootstrapping for scratch / direct connecting to another node to bootstrap very quickly)? 
+- If we do the block split, we have all the blocks in sequential order (with a number associated with them) - is it possible to use that for bootstrapping (especially for bootstrapping for scratch / direct connecting to another node to bootstrap very quickly)?
 
 - May not work very well for node restarting/incremental bootstrapping (at least not without tweaks). But it should help with beginning-to-end bootstrapping
 
-- Wouldn't be able to split the traffic from multiple other nodes - so would effectively be rsyncing from another node directly (since every node has a different order of blocks), *but* this would allow the node to sequentially send the blocks and then the bootstrapping ledger could insert them in that exact order
+- Wouldn't be able to split the traffic from multiple other nodes - so would effectively be rsyncing from another node directly (since every node has a different order of blocks), _but_ this would allow the node to sequentially send the blocks and then the bootstrapping ledger could insert them in that exact order
 
 - Piotr thinks this is basically a topological sort, which makes a lot of sense & would make it very fast. You could probably make it restart after node restarts by just bin searching a missing block?
 
@@ -179,7 +185,7 @@ Source: https://twitter.com/i/spaces/1LyxBneZBQnxN?s=20
 
 **Monotonically increasing index**
 
-- Right now the monotonically increasing index is using a 64 bit number (8 bytes on disk), but 3 of those bytes are not necessary in reality (always 0). Is it worth doing 5 bytes to save space, or is that a waste of time? 
+- Right now the monotonically increasing index is using a 64 bit number (8 bytes on disk), but 3 of those bytes are not necessary in reality (always 0). Is it worth doing 5 bytes to save space, or is that a waste of time?
 
 - May not be worth it - probably need benchmarks to determine
 
@@ -195,7 +201,7 @@ Source: https://twitter.com/i/spaces/1LyxBneZBQnxN?s=20
 
 ## September 26th, 2023
 
-Source: https://twitter.com/i/spaces/1YqxoDeyNVbKv?s=20
+Source: [https://twitter.com/i/spaces/1YqxoDeyNVbKv](https://twitter.com/i/spaces/1YqxoDeyNVbKv)
 
 **Introduction**
 
@@ -219,7 +225,7 @@ Source: https://twitter.com/i/spaces/1YqxoDeyNVbKv?s=20
 
 - Some pain points that Colin is slowly working through: 1) adding a table to RocksDB is difficult (column family that must be added in multiple places) 2) direct access to blocks coming directly out of the block store
 
-- Also recently worked on some code renaming to make things easier to understand 
+- Also recently worked on some code renaming to make things easier to understand
 
 **Gustav**
 
