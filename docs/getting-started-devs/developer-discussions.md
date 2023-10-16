@@ -19,7 +19,7 @@ Links & notes for recurring live discussions about Nano development. Includes di
 
 ## October 10th, 2023
 
-Source: [https://twitter.com/i/spaces/1LyGBneNWayGN](https://twitter.com/i/spaces/1LyGBneNWayGN)
+Source: <a href="https://twitter.com/i/spaces/1LyGBneNWayGN" target="_blank">https://twitter.com/i/spaces/1LyGBneNWayGN</a>
 
 **Q&A**
 
