@@ -4,14 +4,18 @@ import fs from 'fs'
 import { exec } from 'child_process'
 import { createObjectCsvWriter as createCsvWriter } from 'csv-writer'
 import dayjs from 'dayjs'
+import Knex from 'knex'
 
 import db from '#db'
 import { isMain } from '#common'
+import * as config from '#config'
+
+const storage_mysql = Knex(config.storage_mysql)
 
 const execp = util.promisify(exec)
 const logger = debug('archive')
 
-const dir = '/root/archives'
+const dir = '/home/user/nano-community-archives'
 
 const zip = async ({ gzFilename, csvFilename }) => {
   logger(`creating zip of ${csvFilename}`)
@@ -47,6 +51,12 @@ const archiveRepresentativesUptime = async () => {
     logger('no rows to archive')
     return
   }
+
+  await storage_mysql('representatives_uptime')
+    .insert(rows)
+    .onConflict()
+    .merge()
+  logger(`copied ${rows.length} rows to storage_mysql`)
 
   logger(`archving ${rows.length} representatives_uptime entries`)
   const filename = `representatives-uptime-archive_${timestamp}`
@@ -84,6 +94,12 @@ const archiveRepresentativesTelemetry = async () => {
     logger('no rows to archive')
     return
   }
+
+  await storage_mysql('representatives_telemetry')
+    .insert(rows)
+    .onConflict()
+    .merge()
+  logger(`copied ${rows.length} rows to storage_mysql`)
 
   logger(`archving ${rows.length} representatives_telemetry entries`)
   const filename = `representatives-telemetry-archive_${timestamp}`
@@ -141,6 +157,9 @@ const archivePosts = async () => {
     logger('no posts to archive')
     return
   }
+
+  await storage_mysql('posts').insert(posts).onConflict().merge()
+  logger(`copied ${posts.length} rows to storage_mysql`)
 
   logger(`archving ${posts.length} posts`)
   const filename = `posts-archive_${timestamp}`
