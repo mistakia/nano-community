@@ -32,6 +32,21 @@ export const mysql = {
   }
 }
 
+export const storage_mysql = {
+  client: 'mysql',
+  connection: {
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'nano_development',
+    charset: 'utf8mb4'
+  },
+  pool: {
+    min: 2,
+    max: 20
+  }
+}
+
 export const nanodbAPI = ''
 export const trustedAddresses = []
 export const rpcAddresses = []
