@@ -1,0 +1,7 @@
+################################### Storage Server Nano.Community Crontab ###################################
+
+0 */4 * * * NODE_ENV=production /home/user/.nvm/versions/node/v16.14.0/bin/node /home/user/projects/nano-community/scripts/import-subreddit.mjs -r nanocurrency &>> /var/log/nano-community/import-nanocurrency.log
+0 */6 * * * NODE_ENV=production /home/user/.nvm/versions/node/v16.14.0/bin/node /home/user/projects/nano-community/scripts/import-subreddit.mjs -r nanotrade &>> /var/log/nano-community/import-nanotrade.log
+
+
+0 1 * * * NODE_ENV=production /home/user/.nvm/versions/node/v16.14.0/bin/node /home/user/projects/nano-community/scripts/archive-mysql.mjs &>> /var/log/nano-community/archive-mysql.log
