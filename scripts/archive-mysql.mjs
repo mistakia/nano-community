@@ -14,25 +14,27 @@ const storage_mysql = Knex(config.storage_mysql)
 
 const execp = util.promisify(exec)
 const logger = debug('archive')
+debug.enable('archive')
 
 const dir = '/home/user/nano-community-archives'
 
-const zip = async ({ gzFilename, csvFilename }) => {
-  logger(`creating zip of ${csvFilename}`)
-  const { stderr } = await exec(
-    `tar -zvcf ${dir}/${gzFilename} -C ${dir} ${csvFilename}`
-  )
-  if (stderr) {
-    throw new Error(stderr)
-  }
-  fs.unlinkSync(`${dir}/${csvFilename}`)
-}
+// const zip = async ({ gzFilename, csvFilename }) => {
+//   logger(`creating zip of ${csvFilename}`)
+//   const { stderr } = await exec(
+//     `tar -zvcf ${dir}/${gzFilename} -C ${dir} ${csvFilename}`
+//   )
+//   if (stderr) {
+//     logger(stderr)
+//     throw new Error(stderr)
+//   }
+//   fs.unlinkSync(`${dir}/${csvFilename}`)
+// }
 
 const upload = async (gzFilename) => {
   const file = `${dir}/${gzFilename}`
   logger(`uploading ${file}`)
   const { stderr } = await execp(
-    `/root/.google-drive-upload/bin/gupload ${file}`
+    `/home/user/.google-drive-upload/bin/gupload ${file}`
   )
   if (stderr) {
     throw new Error(stderr)
@@ -41,6 +43,7 @@ const upload = async (gzFilename) => {
 }
 
 const archiveRepresentativesUptime = async () => {
+  logger('archiving representatives_uptime')
   const timestamp = dayjs().format('YYYY-MM-DD_HH-mm-ss')
   const hours = 12 * 7 * 24 // 12 weeks
   const resp = await db.raw(
@@ -71,9 +74,9 @@ const archiveRepresentativesUptime = async () => {
   })
   await csvWriter.writeRecords(rows)
 
-  const gzFilename = `${filename}.tar.gz`
-  await zip({ gzFilename, csvFilename })
-  await upload(gzFilename)
+  // const gzFilename = `${filename}.tar.gz`
+  // await zip({ gzFilename, csvFilename })
+  await upload(csvFilename)
 
   const timestamps = rows.map((r) => r.timestamp)
   const uniqTimestamps = [...new Set(timestamps)]
@@ -84,6 +87,7 @@ const archiveRepresentativesUptime = async () => {
 }
 
 const archiveRepresentativesTelemetry = async () => {
+  logger('archiving representatives_telemetry')
   const timestamp = dayjs().format('YYYY-MM-DD_HH-mm-ss')
   const hours = 6 * 7 * 24 // 6 weeks
   const resp = await db.raw(
@@ -132,9 +136,9 @@ const archiveRepresentativesTelemetry = async () => {
   })
   await csvWriter.writeRecords(rows)
 
-  const gzFilename = `${filename}.tar.gz`
-  await zip({ gzFilename, csvFilename })
-  await upload(gzFilename)
+  // const gzFilename = `${filename}.tar.gz`
+  // await zip({ gzFilename, csvFilename })
+  await upload(csvFilename)
 
   const timestamps = rows.map((r) => r.timestamp)
   const uniqTimestamps = [...new Set(timestamps)]
@@ -145,6 +149,7 @@ const archiveRepresentativesTelemetry = async () => {
 }
 
 const archivePosts = async () => {
+  logger('archiving posts')
   const timestamp = dayjs().format('YYYY-MM-DD_HH-mm-ss')
   const hours = 6 * 7 * 24 // 6 weeks
   const posts = await db('posts')
@@ -186,9 +191,9 @@ const archivePosts = async () => {
   })
   await csvWriter.writeRecords(posts)
 
-  const gzFilename = `${filename}.tar.gz`
-  await zip({ gzFilename, csvFilename })
-  await upload(gzFilename)
+  // const gzFilename = `${filename}.tar.gz`
+  // await zip({ gzFilename, csvFilename })
+  await upload(csvFilename)
 
   const postIds = posts.map((r) => r.id)
   const uniqPostIds = [...new Set(postIds)]
@@ -197,7 +202,6 @@ const archivePosts = async () => {
 }
 
 const archiveMysql = async () => {
-  debug.enable('archive')
   try {
     await archiveRepresentativesUptime()
   } catch (err) {
