@@ -39,8 +39,11 @@ const importSubreddit = async (subreddit, { getFullHistory = false } = {}) => {
     }
 
     if (!res) {
+      logger('no response received')
       break
     }
+
+    logger(`found ${res.data.children.length} posts`)
 
     const inserts = []
 
