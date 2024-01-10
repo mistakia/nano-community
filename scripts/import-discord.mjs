@@ -194,9 +194,16 @@ const importDiscord = async (guildId, { getFullHistory = false } = {}) => {
         // console.log(err)
       }
 
-      if (!res) {
+      if (!res || !res.length) {
         break
       }
+
+      // log the date of the first message
+      logger(
+        `fetched ${res.length} messages from ${channel.name} from ${dayjs(
+          res[0].timestamp
+        ).format('YYYY-MM-DD')}`
+      )
 
       const posts = res.map((p) => ({
         pid: `discord:${p.channel_id}:${p.id}`,
@@ -215,13 +222,26 @@ const importDiscord = async (guildId, { getFullHistory = false } = {}) => {
       }))
 
       if (posts.length) {
-        logger(`saving ${posts.length} posts from ${channel.name}`)
         await db('posts').insert(posts).onConflict().merge()
+        logger(`saved ${posts.length} posts from ${channel.name}`)
       }
 
       messageIds = res.map((p) => p.id)
       beforeId = messageIds[messageIds.length - 1]
       if (!getFullHistory && messageIds.includes(messageId)) {
+        break
+      }
+
+      // stop importing if last post is older than a week if we're not getting the full history
+      if (
+        !getFullHistory &&
+        dayjs(res[res.length - 1].timestamp).isBefore(
+          dayjs().subtract(1, 'week')
+        )
+      ) {
+        logger(
+          `last message is older than a week, stopping import of ${channel.name}`
+        )
         break
       }
 
