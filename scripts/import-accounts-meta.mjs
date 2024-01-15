@@ -1,4 +1,5 @@
 import debug from 'debug'
+import dayjs from 'dayjs'
 
 import { rpc, isMain } from '#common'
 import db from '#db'
@@ -13,11 +14,12 @@ const importAccountsMeta = async () => {
   const rows = await db('accounts')
     .select('account')
     .where({ representative: true })
+    .where('last_seen', '>', dayjs().subtract('1', 'month').unix())
   const accounts = rows.map((r) => r.account)
 
   const inserts = []
   for (const account of accounts) {
-    const accountInfo = await rpc.accountInfo({ account })
+    const accountInfo = await rpc.accountInfo({ account, timeout: 5000 })
     if (!accountInfo || accountInfo.error) {
       logger(`unable to get account info for ${account}`)
 
