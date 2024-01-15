@@ -77,9 +77,12 @@ export const formatRedditPost = (p) => ({
   score: p.data.score // p.data.upvote_ratio + p.data.ups + p.data.total_awards_received + p.data.score + p.num_comments - p.data.downs
 })
 
-const rpcRequest = async (data, { url, trusted = false } = {}) => {
+const rpcRequest = async (
+  data,
+  { url, trusted = false, timeout = 20000 } = {}
+) => {
   if (url) {
-    const options = { url, ...POST(data) }
+    const options = { url, timeout, ...POST(data) }
     return request(options)
   }
 
@@ -89,7 +92,7 @@ const rpcRequest = async (data, { url, trusted = false } = {}) => {
   for (let i = 0; i < addresses.length; i++) {
     try {
       const url = addresses[i]
-      const options = { url, ...POST(data) }
+      const options = { url, timeout, ...POST(data) }
       res = await request(options)
     } catch (err) {
       res = null
@@ -132,7 +135,8 @@ const rpcAccountInfo = ({
   url,
   representative = false,
   pending = false,
-  include_confirmed = false
+  include_confirmed = false,
+  timeout = 20000
 } = {}) => {
   const data = {
     action: 'account_info',
@@ -142,7 +146,7 @@ const rpcAccountInfo = ({
     pending,
     account
   }
-  return rpcRequest(data, { url })
+  return rpcRequest(data, { url, timeout })
 }
 
 const rpcRepresentatives = ({ url } = {}) => {
