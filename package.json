@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "concurrently \"yarn start\" \"yarn start:api\"",
     "dev:live": "NC_DEV_LIVE=true yarn start",
-    "start": "webpack serve --mode=development --config webpack/webpack.dev.babel.mjs --port 8081 --history-api-fallback",
+    "start": "webpack serve --mode=development --config webpack/webpack.dev.babel.mjs --port 8081 --history-api-fallback --static-directory resources --static-public-path /resources --open",
     "start:api": "NODE_ENV=development node server.mjs",
     "deploy": "ipfs-deploy build/index.html",
     "build": "cross-env NODE_ENV=production webpack --config webpack/webpack.prod.babel.mjs --color --progress && react-snap",
@@ -175,7 +175,7 @@
     "url-loader": "^4.1.1",
     "webpack": "^5.88.2",
     "webpack-cli": "^4.10.0",
-    "webpack-dev-server": "^3.11.3",
+    "webpack-dev-server": "4.15.1",
     "yargs": "^16.2.0"
   },
   "packageManager": "yarn@3.2.1"
