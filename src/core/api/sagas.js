@@ -3,29 +3,29 @@ import { call, put, cancelled, select } from 'redux-saga/effects'
 
 import { api, apiRequest } from '@core/api/service'
 import { getApp } from '@core/app'
-import { githubDiscussionsRequestActions } from '@core/github-discussions'
-import { githubEventsRequestActions } from '@core/github-events'
-import { githubIssuesRequestActions } from '@core/github-issues'
-import { postlistRequestActions } from '@core/postlists'
+import { githubDiscussionsRequestActions } from '@core/github-discussions/actions'
+import { githubEventsRequestActions } from '@core/github-events/actions'
+import { githubIssuesRequestActions } from '@core/github-issues/actions'
+import { postlistRequestActions } from '@core/postlists/actions'
 import {
   docRequestActions,
   labelDocRequestActions,
   docCommitRequestActions,
   labelDocCommitRequestActions
-} from '@core/docs'
+} from '@core/docs/actions'
 import {
   networkStatsRequestActions,
   weightRequestActions,
   weightHistoryRequestActions
-} from '@core/network'
+} from '@core/network/actions'
 import {
   representativesRequestActions,
   accountRequestActions,
   accountOpenRequestActions,
   accountBlocksSummaryRequestActions
-} from '@core/accounts'
-import { blockRequestActions } from '@core/blocks'
-import { dailyRequestActions } from '@core/ledger'
+} from '@core/accounts/actions'
+import { blockRequestActions } from '@core/blocks/actions'
+import { dailyRequestActions } from '@core/ledger/actions'
 
 function* fetchAPI(apiFunction, actions, opts = {}) {
   const { token } = yield select(getApp)
