@@ -11,7 +11,7 @@ import morganDebug from 'morgan-debug'
 import extend from 'deep-extend'
 import bodyParser from 'body-parser'
 import jwt from 'jsonwebtoken'
-import expressJwt from 'express-jwt'
+import { expressjwt } from 'express-jwt'
 import compression from 'compression'
 import debug from 'debug'
 import serveStatic from 'serve-static'
@@ -73,7 +73,7 @@ api.use('/resources', serveStatic(resourcesPath))
 const dataPath = path.join(__dirname, '..', 'data')
 api.use('/data', serveStatic(dataPath))
 
-api.use('/api/*', expressJwt(config.jwt), (err, req, res, next) => {
+api.use('/api/*', expressjwt(config.jwt), (err, req, res, next) => {
   res.set('Expires', '0')
   res.set('Pragma', 'no-cache')
   res.set('Surrogate-Control', 'no-store')
