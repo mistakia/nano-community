@@ -1,4 +1,4 @@
-import { getPosts } from '@core/posts'
+import { getPosts } from '@core/posts/selectors'
 
 import { Postlist } from './postlist'
 
