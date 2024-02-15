@@ -158,7 +158,7 @@
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.5.3",
     "image-webpack-loader": "^7.0.1",
-    "ipfs-deploy": "^8.1.0",
+    "ipfs-deploy": "^12.0.1",
     "jss": "^10.10.0",
     "markdown-it-anchor": "^8.6.7",
     "nib": "^1.2.0",
