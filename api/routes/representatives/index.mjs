@@ -11,8 +11,17 @@ const router = express.Router()
 const loadRepresentatives = async () => {
   // get reps seen in the last month
   const representatives = await db('accounts')
+    .select('accounts.*')
     .where({ representative: true })
     .where('last_seen', '>', dayjs().subtract('1', 'month').unix())
+    .leftJoin(
+      'accounts_meta_index',
+      'accounts.account',
+      '=',
+      'accounts_meta_index.account'
+    )
+    .orderBy('accounts_meta_index.weight', 'desc')
+    .limit(1000) // TODO - remove limit at some point
 
   const accounts = representatives.map((r) => r.account)
 
@@ -45,36 +54,16 @@ const loadRepresentatives = async () => {
     .whereIn('account', accounts)
 
   /***********************************************************/
-  const onlineQuery = db('representatives_uptime')
-    .select(db.raw('max(timestamp) AS maxtime, account AS aid'))
-    .where({ online: true })
-    .groupBy('account')
-  const online = db
-    .select('representatives_uptime.*')
-    .from(db.raw('(' + onlineQuery.toString() + ') AS X'))
-    .innerJoin('representatives_uptime', function () {
-      this.on(function () {
-        this.on('account', '=', 'aid')
-        this.andOn('timestamp', '=', 'maxtime')
-      })
-    })
-    .whereIn('account', accounts)
+  const online_query = db('representatives_uptime_index').where({
+    online: true
+  })
+  const online = online_query.whereIn('account', accounts)
 
   /***********************************************************/
-  const offlineQuery = db('representatives_uptime')
-    .select(db.raw('max(timestamp) AS maxtime, account AS aid'))
-    .where({ online: false })
-    .groupBy('account')
-  const offline = db
-    .select('representatives_uptime.*')
-    .from(db.raw('(' + offlineQuery.toString() + ') AS X'))
-    .innerJoin('representatives_uptime', function () {
-      this.on(function () {
-        this.on('account', '=', 'aid')
-        this.andOn('timestamp', '=', 'maxtime')
-      })
-    })
-    .whereIn('account', accounts)
+  const offline_query = db('representatives_uptime_index').where({
+    online: false
+  })
+  const offline = offline_query.whereIn('account', accounts)
 
   const queryResults = await Promise.all([
     account_meta, // 0
