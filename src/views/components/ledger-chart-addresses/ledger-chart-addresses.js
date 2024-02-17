@@ -10,6 +10,7 @@ import {
 } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import Button from '@mui/material/Button'
+import { useTranslation } from 'react-i18next'
 
 import { download_csv, download_json } from '@core/utils'
 import LedgerChartMetrics from '@components/ledger-chart-metrics'
@@ -23,6 +24,7 @@ echarts.use([
 ])
 
 export default function LedgerChartAddresses({ data, isLoading }) {
+  const { t } = useTranslation()
   const option = {
     grid: {
       containLabel: true
@@ -126,17 +128,20 @@ export default function LedgerChartAddresses({ data, isLoading }) {
       <div className='ledger__chart-sections'>
         <div className='ledger__chart-section'>
           <div className='section__heading'>
-            <span>Description</span>
+            <span>{t('ledger.description', 'Description')}</span>
           </div>
           <div className='ledger__chart-section-body description'>
             <p>
-              The total number of active, new, and reused addresses used per
-              day.
+              {t(
+                'ledger.addresses.total_number',
+                'The total number of active, new, and reused addresses used per day.'
+              )}
             </p>
             <p>
-              Active shows the number of unique addresses used. New shows the
-              number of addresses created. Reused shows the number of addresses
-              used that were created on a previous day.
+              {t(
+                'ledger.addresses.active_detail',
+                'Active shows the number of unique addresses used. New shows the number of addresses created. Reused shows the number of addresses used that were created on a previous day.'
+              )}
             </p>
           </div>
           {!isLoading && (
@@ -152,9 +157,12 @@ export default function LedgerChartAddresses({ data, isLoading }) {
         </div>
         <LedgerChartMetrics
           data={data.active_addresses}
-          label='Active Address Stats'
+          label={t('ledger.addresses.active_stats', 'Active Address Stats')}
         />
-        <LedgerChartMetrics data={data.open_count} label='New Address Stats' />
+        <LedgerChartMetrics
+          data={data.open_count}
+          label={t('ledger.addresses.new_stats', 'New Address Stats')}
+        />
       </div>
     </>
   )

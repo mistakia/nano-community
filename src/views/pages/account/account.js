@@ -10,6 +10,7 @@ import FilterNoneIcon from '@mui/icons-material/FilterNone'
 import IconButton from '@mui/material/IconButton'
 import copy from 'copy-text-to-clipboard'
 import Tooltip from '@mui/material/Tooltip'
+import { useTranslation } from 'react-i18next'
 
 import RepresentativeTelemetryChart from '@components/representative-telemetry-chart'
 import RepresentativeDelegators from '@components/representative-delegators'
@@ -28,9 +29,7 @@ import Menu from '@components/menu'
 
 import './account.styl'
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props
-
+function TabPanel({ children, value, index, ...other }) {
   return (
     <div className='representative__metric' hidden={value !== index} {...other}>
       {value === index && children}
@@ -50,6 +49,7 @@ export default function AccountPage({
   getAccount,
   account
 }) {
+  const { t } = useTranslation()
   const [value, setValue] = useState(0)
 
   const handleChange = (event, value) => {
@@ -60,7 +60,7 @@ export default function AccountPage({
     const { address } = match.params
     copy(`nano_${address}`)
     showNotification({
-      message: 'Account address copied',
+      message: t('account_page.copy_notification', 'Account address copied'),
       severity: 'success'
     })
   }
@@ -78,8 +78,11 @@ export default function AccountPage({
   return (
     <>
       <Seo
-        title='Nano Account'
-        description='Information for nano representative'
+        title={t('account_page.seo_title', 'Nano Account')}
+        description={t(
+          'account_page.seo_description',
+          'Information for nano representative'
+        )}
         tags={['nano', 'representatives', 'network', 'account']}
       />
       <div className='account__container'>
@@ -88,12 +91,14 @@ export default function AccountPage({
         </div>
         <div className='account__head'>
           <div className='account__section account__address'>
-            <span className='section__label'>Account Address</span>
+            <span className='section__label'>
+              {t('account_page.address', 'Account Address')}
+            </span>
             <div>
               {account.account || <Skeleton animation='wave' width='90%' />}
             </div>
-            {is_loaded && (
-              <Tooltip title='click to copy'>
+            {!is_loading && (
+              <Tooltip title={t('common.click_to_copy', 'click to copy')}>
                 <IconButton className='section__copy' onClick={handleClick}>
                   <FilterNoneIcon />
                 </IconButton>
@@ -126,7 +131,8 @@ export default function AccountPage({
             <AccountMeta account={account} />
             <RepresentativeNetwork account={account} />
             <RepresentativeTelemetry account={account} />
-            <Collapsible title='Telemetry Charts'>
+            <Collapsible
+              title={t('account_page.telemetry_charts', 'Telemetry Charts')}>
               {is_loading ? (
                 <div style={{ textAlign: 'center', margin: '16px 0' }}>
                   <CircularProgress />
@@ -140,67 +146,79 @@ export default function AccountPage({
                     value={value}
                     className='representative__metrics-menu'
                     onChange={handleChange}>
-                    <Tab label='Conf.' />
-                    <Tab label='Conf. Diff' />
-                    <Tab label='Blocks' />
-                    <Tab label='Blocks Diff' />
-                    <Tab label='Unchecked' />
-                    <Tab label='Peer Count' />
-                    <Tab label='Accounts' />
+                    <Tab label={t('common.conf_short', 'Conf.')} />
+                    <Tab label={t('common.conf_diff_short', 'Conf. Diff')} />
+                    <Tab label={t('common.blocks', 'Blocks')} />
+                    <Tab label={t('common.blocks_diff_short', 'Blocks Diff')} />
+                    <Tab label={t('common.unchecked', 'Unchecked')} />
+                    <Tab label={t('common.peers', 'Peers')} />
+                    <Tab
+                      label={t('common.account', {
+                        count: 2,
+                        defaultValue: 'Accounts'
+                      })}
+                    />
                   </Tabs>
                   <TabPanel value={value} index={0}>
                     <RepresentativeTelemetryChart
                       account={account}
                       stat='cemented_count'
-                      label='Blocks'
+                      label={t('common.blocks', 'Blocks')}
                     />
                   </TabPanel>
                   <TabPanel value={value} index={1}>
                     <RepresentativeTelemetryChart
                       account={account}
                       stat='cemented_behind'
-                      label='Blocks'
+                      label={t('common.blocks', 'Blocks')}
                     />
                   </TabPanel>
                   <TabPanel value={value} index={2}>
                     <RepresentativeTelemetryChart
                       account={account}
                       stat='block_count'
-                      label='Blocks'
+                      label={t('common.blocks', 'Blocks')}
                     />
                   </TabPanel>
                   <TabPanel value={value} index={3}>
                     <RepresentativeTelemetryChart
                       account={account}
                       stat='block_behind'
-                      label='Blocks'
+                      label={t('common.blocks', 'Blocks')}
                     />
                   </TabPanel>
                   <TabPanel value={value} index={4}>
                     <RepresentativeTelemetryChart
                       account={account}
                       stat='unchecked_count'
-                      label='Blocks'
+                      label={t('common.blocks', 'Blocks')}
                     />
                   </TabPanel>
                   <TabPanel value={value} index={5}>
                     <RepresentativeTelemetryChart
                       account={account}
                       stat='peer_count'
-                      label='Peers'
+                      label={t('common.peers', 'Peers')}
                     />
                   </TabPanel>
                   <TabPanel value={value} index={6}>
                     <RepresentativeTelemetryChart
                       account={account}
                       stat='account_count'
-                      label='Accounts'
+                      label={t('common.account', {
+                        count: 2,
+                        defaultValue: 'Accounts'
+                      })}
                     />
                   </TabPanel>
                 </div>
               )}
             </Collapsible>
-            <Collapsible title='Delegators'>
+            <Collapsible
+              title={t('common.delegator', {
+                count: 2,
+                defaultValue: 'Delegators'
+              })}>
               <RepresentativeDelegators
                 account={account}
                 address={`nano_${match.params.address}`}
@@ -210,19 +228,23 @@ export default function AccountPage({
         )}
         {is_loaded && !is_opened ? (
           <div className='account__unopened account__section'>
-            <h2>This account hasn&apos;t been opened yet</h2>
+            <h2>
+              {t(
+                'account_page.unopened_title',
+                "This account hasn't been opened yet"
+              )}
+            </h2>
             <p>
-              While the account address is valid, no blocks have been observed.
-              If NANO has been sent to this account, it still needs to publish a
-              corresponding block to receive the funds and establish an opening
-              balance. An accounts balance can only be updated by the account
-              holder as they are the only ones who can publish blocks to their
-              chain.
+              {t(
+                'account_page.unopened_description',
+                "While the account address is valid, no blocks have been observed. If NANO has been sent to this account, it still needs to publish a corresponding block to receive the funds and establish an opening balance. An account's balance can only be updated by the account holder as they are the only ones who can publish blocks to their chain."
+              )}
             </p>
             <p>
-              If an opening block has already been published, it may take a few
-              moments to spread through the network and be observed by the
-              nano.community nodes.
+              {t(
+                'account_page.unopened_note',
+                'If an opening block has already been published, it may take a few moments to spread through the network and be observed by the nano.community nodes.'
+              )}
             </p>
           </div>
         ) : (
@@ -231,19 +253,23 @@ export default function AccountPage({
               {Boolean(!account.representative) && (
                 <AccountMeta account={account} />
               )}
-              <Collapsible title='Send Summary'>
+              <Collapsible title={t('common.send_summary', 'Send Summary')}>
                 <AccountBlocksSummary
                   type='send'
-                  accountLabel='Receiving'
+                  accountLabel={t('common.receiving_account', 'Receiving')}
                   account={account}
                 />
               </Collapsible>
 
               {/* <AccountBlocksSummary type='receive' accountLabel='Sending' account={account} /> */}
-              <Collapsible title='Change Summary'>
+              <Collapsible
+                title={t('account_page.change_summary', 'Change Summary')}>
                 <AccountBlocksSummary
                   type='change'
-                  accountLabel='Representative'
+                  accountLabel={t('common.representative', {
+                    count: 1,
+                    defaultValue: 'Representative'
+                  })}
                   account={account}
                 />
               </Collapsible>

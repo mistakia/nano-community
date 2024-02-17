@@ -11,6 +11,7 @@ import {
 } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import Button from '@mui/material/Button'
+import { useTranslation } from 'react-i18next'
 
 import { download_csv, download_json } from '@core/utils'
 
@@ -48,6 +49,7 @@ const color_map = {
 }
 
 export default function LedgerChartAmounts({ data, isLoading }) {
+  const { t } = useTranslation()
   const ranges = {
     _1000000_count: '>1M',
     _100000_count: '100k to 1M',
@@ -114,7 +116,8 @@ export default function LedgerChartAmounts({ data, isLoading }) {
       {
         type: 'log',
         min: 1,
-        max: 5000000
+        max: 5000000,
+        name: t('common.blocks', 'Blocks')
       }
     ],
     series: series_data
@@ -170,11 +173,13 @@ export default function LedgerChartAmounts({ data, isLoading }) {
       <div className='ledger__chart-sections'>
         <div className='ledger__chart-section'>
           <div className='section__heading'>
-            <span>Description</span>
+            <span>{t('ledger.description', 'Description')}</span>
           </div>
           <div className='ledger__chart-section-body description'>
-            The number of confirmed send-type blocks per day where the amount in
-            the block is in a given range (in Nano)
+            {t(
+              'ledger.amounts.total_number',
+              'The number of confirmed send-type blocks per day where the amount in the block is in a given range (in Nano)'
+            )}
           </div>
           {!isLoading && (
             <div className='ledger__chart-section-body download'>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import LinearProgress from '@mui/material/LinearProgress'
@@ -7,6 +7,7 @@ import FilterNoneIcon from '@mui/icons-material/FilterNone'
 import IconButton from '@mui/material/IconButton'
 import copy from 'copy-text-to-clipboard'
 import Tooltip from '@mui/material/Tooltip'
+import { useTranslation } from 'react-i18next'
 
 import Seo from '@components/seo'
 import BlockInfo from '@components/block-info'
@@ -34,13 +35,15 @@ const getBlockType = (block) => {
 }
 
 function BlockOperation({ type, block }) {
-  const sourceAccount =
+  const { t } = useTranslation()
+
+  const source_account =
     block.getIn(['blockInfo', 'source_account']) ||
     block.getIn(['blockInfo', 'contents', 'source'])
-  const destinationAccount =
+  const destination_account =
     block.getIn(['blockInfo', 'contents', 'link_as_account']) ||
     block.getIn(['blockInfo', 'contents', 'destination'])
-  const votingWeight =
+  const voting_weight =
     block.getIn(['blockInfo', 'contents', 'balance']) ||
     block.getIn(['blockInfo', 'balance'])
 
@@ -48,14 +51,18 @@ function BlockOperation({ type, block }) {
     case 'send':
       return (
         <div className='block__action send'>
-          <div className='section__heading'>Receiving Account</div>
+          <div className='section__heading'>
+            {t('block_page.receiving_account', 'Receiving Account')}
+          </div>
           <div className='block__link-account'>
-            <Link to={`/${destinationAccount}`}>
+            <Link to={`/${destination_account}`}>
               {block.linkAccountAlias ||
-                `${destinationAccount.slice(0, 15)}...`}
+                `${destination_account.slice(0, 15)}...`}
             </Link>
           </div>
-          <div className='section__heading'>Amount</div>
+          <div className='section__heading'>
+            {t('block_page.amount', 'Amount')}
+          </div>
           <div className='block__amount'>
             <DisplayNano value={block.getIn(['blockInfo', 'amount'])} />
             <DisplayRaw value={block.getIn(['blockInfo', 'amount'])} />
@@ -66,13 +73,17 @@ function BlockOperation({ type, block }) {
     case 'receive':
       return (
         <div className='block__action receive'>
-          <div className='section__heading'>Sending Account</div>
+          <div className='section__heading'>
+            {t('block_page.sending_account', 'Sending Account')}
+          </div>
           <div className='block__link-account'>
-            <Link to={`/${sourceAccount}`}>
-              {block.linkAccountAlias || `${sourceAccount.slice(0, 15)}...`}
+            <Link to={`/${source_account}`}>
+              {block.linkAccountAlias || `${source_account.slice(0, 15)}...`}
             </Link>
           </div>
-          <div className='section__heading'>Amount</div>
+          <div className='section__heading'>
+            {t('block_page.amount', 'Amount')}
+          </div>
           <div className='block__amount'>
             <DisplayNano value={block.getIn(['blockInfo', 'amount'])} />
             <DisplayRaw value={block.getIn(['blockInfo', 'amount'])} />
@@ -83,17 +94,24 @@ function BlockOperation({ type, block }) {
     case 'change':
       return (
         <div className='block__action change'>
-          <div className='section__heading'>Delegated Representative</div>
+          <div className='section__heading'>
+            {t(
+              'block_page.delegated_representative',
+              'Delegated Representative'
+            )}
+          </div>
           <div className='block__link-account'>
             <Link to={`/${block.blockInfo.contents.representative}`}>
               {block.linkAccountAlias ||
                 `${block.blockInfo.contents.representative.slice(0, 15)}...`}
             </Link>
           </div>
-          <div className='section__heading'>Voting Weight</div>
+          <div className='section__heading'>
+            {t('block_page.voting_weight', 'Voting Weight')}
+          </div>
           <div className='block__amount'>
-            <DisplayNano value={votingWeight} />
-            <DisplayRaw value={votingWeight} />
+            <DisplayNano value={voting_weight} />
+            <DisplayRaw value={voting_weight} />
           </div>
         </div>
       )
@@ -105,10 +123,14 @@ function BlockOperation({ type, block }) {
       ) {
         return (
           <div className='block__action epoch'>
-            <div className='section__heading'>Description</div>
+            <div className='section__heading'>
+              {t('block_page.description', 'Description')}
+            </div>
             <div className='block__description'>
-              Epoch v1 — Upgraded account-chains from legacy blocks (open,
-              receive, send, change) to state blocks.
+              {t(
+                'block_page.epoch_v1',
+                'Epoch v1 — Upgraded account-chains from legacy blocks (open, receive, send, change) to state blocks.'
+              )}
             </div>
           </div>
         )
@@ -118,10 +140,14 @@ function BlockOperation({ type, block }) {
       ) {
         return (
           <div className='block__action epoch'>
-            <div className='section__heading'>Description</div>
+            <div className='section__heading'>
+              {t('block_page.description', 'Description')}
+            </div>
             <div className='block__description'>
-              Epoch v2 - Upgraded account-chains to use higher Proof-of-Work
-              difficulty.
+              {t(
+                'block_page.epoch_v2',
+                'Epoch v2 - Upgraded account-chains to use higher Proof-of-Work difficulty.'
+              )}
             </div>
           </div>
         )
@@ -133,13 +159,17 @@ function BlockOperation({ type, block }) {
     case 'open':
       return (
         <div className='block__action open'>
-          <div className='section__heading'>Sending Account</div>
+          <div className='section__heading'>
+            {t('block_page.sending_account', 'Sending Account')}
+          </div>
           <div className='block__link-account'>
-            <Link to={`/${sourceAccount}`}>
-              {block.linkAccountAlias || `${sourceAccount.slice(0, 15)}...`}
+            <Link to={`/${source_account}`}>
+              {block.linkAccountAlias || `${source_account.slice(0, 15)}...`}
             </Link>
           </div>
-          <div className='section__heading'>Amount</div>
+          <div className='section__heading'>
+            {t('block_page.amount', 'Amount')}
+          </div>
           <div className='block__amount'>
             <DisplayNano value={block.getIn(['blockInfo', 'amount'])} />
             <DisplayRaw value={block.getIn(['blockInfo', 'amount'])} />
@@ -154,78 +184,77 @@ BlockOperation.propTypes = {
   type: PropTypes.string
 }
 
-export default class BlockPage extends React.Component {
-  componentDidMount() {
-    const { hash } = this.props.match.params
-    this.props.getBlock(hash)
-  }
+export default function BlockPage({
+  block,
+  getBlock,
+  showNotification,
+  match
+}) {
+  const { t } = useTranslation()
+  const { hash } = match.params
 
-  componentDidUpdate(prevProps) {
-    const { hash } = this.props.match.params
-    const prevHash = prevProps.match.params.hash
-    if (hash !== prevHash) {
-      this.props.getBlock(hash)
-    }
-  }
+  useEffect(() => {
+    getBlock(hash)
+  }, [hash])
 
-  handleClick = () => {
-    const { hash } = this.props.match.params
+  const handleClick = () => {
     copy(hash)
-    this.props.showNotification({
-      message: 'Block hash copied',
+    showNotification({
+      message: t('block_page.copy_notification', 'Block hash copied'),
       severity: 'success'
     })
   }
 
-  render() {
-    const { block } = this.props
-    const { hash } = this.props.match.params
+  const is_loading = block.get('isLoading')
+  const type = getBlockType(block)
 
-    const isLoading = block.get('isLoading')
-    const type = getBlockType(block)
-
-    return (
-      <>
-        <Seo
-          title={`Nano Block — ${hash}`}
-          description='Information related to a Nano Block'
-          tags={['nano', 'block', 'network', 'account', 'hash']}
-        />
-        <div className='block__container'>
-          <div className='block__hash'>
-            <span className='section__label'>Block Hash</span>
-            <div>{hash}</div>
-            {!isLoading && (
-              <Tooltip title='click to copy'>
-                <IconButton
-                  className='section__copy'
-                  onClick={this.handleClick}>
-                  <FilterNoneIcon />
-                </IconButton>
-              </Tooltip>
-            )}
-          </div>
-          {isLoading && (
-            <LinearProgress
-              color='error'
-              style={{ width: '100%', margin: '32px' }}
-            />
-          )}
-          {!isLoading && (
-            <>
-              <BlockInfo type={type} block={block} />
-              <BlockOperation type={type} block={block} />
-            </>
+  return (
+    <>
+      <Seo
+        title={t('block_page.seo_title', {
+          hash,
+          defaultValue: `Nano Block — ${hash}`
+        })}
+        description={t(
+          'block_page.seo_description',
+          'Information related to a Nano Block'
+        )}
+        tags={['nano', 'block', 'network', 'account', 'hash']}
+      />
+      <div className='block__container'>
+        <div className='block__hash'>
+          <span className='section__label'>
+            {t('block_page.section_label', 'Block Hash')}
+          </span>
+          <div>{hash}</div>
+          {!is_loading && (
+            <Tooltip title={t('common.click_to_copy', 'click to copy')}>
+              <IconButton className='section__copy' onClick={handleClick}>
+                <FilterNoneIcon />
+              </IconButton>
+            </Tooltip>
           )}
         </div>
-        {!isLoading && (
-          <div className='block__footer'>
-            <Menu />
-          </div>
+        {is_loading && (
+          <LinearProgress
+            color='error'
+            style={{ width: '100%', margin: '32px' }}
+          />
         )}
-      </>
-    )
-  }
+        {!is_loading && (
+          <>
+            <BlockInfo type={type} block={block} />
+            <BlockOperation type={type} block={block} />
+          </>
+        )}
+      </div>
+      {!is_loading && (
+        <div className='block__footer'>
+          <Menu />
+        </div>
+      )}
+    </>
+  )
 }
 
 BlockPage.propTypes = {

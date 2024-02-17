@@ -1,6 +1,7 @@
 /* global REPO */
 
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import { renderToString } from 'react-dom/server'
 import PropTypes from 'prop-types'
 import * as timeago from 'timeago.js'
@@ -22,6 +23,7 @@ import python from 'highlight.js/lib/languages/python'
 import bash from 'highlight.js/lib/languages/bash'
 import powershell from 'highlight.js/lib/languages/powershell'
 import diff from 'highlight.js/lib/languages/diff'
+import { useTranslation } from 'react-i18next'
 
 import 'highlight.js/styles/github.css'
 
@@ -68,170 +70,162 @@ md.renderer.rules.heading_open = (tokens, idx) => {
   return `<${tag} class="doc__header" id=${escapedText}>`
 }
 
-export default class DocPage extends React.Component {
-  get path() {
-    const path = this.props.location.pathname
-    return path.endsWith('/') ? path.slice(0, -1) : path
-  }
+export default function DocPage({ getDoc, showNotification, doc, location }) {
+  const { t } = useTranslation()
+  const path = location.pathname.endsWith('/')
+    ? location.pathname.slice(0, -1)
+    : location.pathname
 
-  componentDidMount() {
-    this.props.getDoc(this.path)
-  }
+  const { locale } = useParams()
 
-  handleClick = (e) => {
-    const elem = e.path.find((p) => p.className === 'doc__header-link')
-    const anchor = elem.dataset.anchor
-    const url = `${BASE_URL}${this.path}#${anchor}`
+  useEffect(() => {
+    getDoc({ id: path, locale })
+  }, [getDoc, path, locale])
+
+  const handleClick = (e) => {
+    const event_path = e.composedPath()
+    const element = event_path.find((p) => p.className === 'doc__header-link')
+    const anchor = element ? element.dataset.anchor : ''
+    const url = `${BASE_URL}${path}#${anchor}`
     copy(url)
-    this.props.showNotification({
-      message: 'Section link copied',
+    showNotification({
+      message: t('doc.section_link_copied', 'Section link copied'),
       severity: 'success'
     })
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.location.hash) {
-      const elem = document.getElementById(
-        this.props.location.hash.substring(1)
-      )
+  useEffect(() => {
+    if (location.hash) {
+      const elem = document.getElementById(location.hash.substring(1))
       if (elem) elem.scrollIntoView()
     }
 
-    if (
-      this.props.location.pathname === prevProps.location.pathname &&
-      this.props.location.hash !== prevProps.location.hash
-    ) {
-      return
-    }
-
     const headers = document.querySelectorAll('.doc__header-link')
-    for (const header of headers) {
-      header.addEventListener('click', this.handleClick)
-    }
-
-    const location = JSON.stringify(this.props.location)
-    const prevLocation = JSON.stringify(prevProps.location)
-    if (location !== prevLocation) {
-      this.props.getDoc(this.path)
-    }
-  }
-
-  render() {
-    const { doc } = this.props
-
-    const author = doc.getIn(['commit', 'commit', 'author', 'name'])
-    const lastUpdated = doc.getIn(['commit', 'commit', 'author', 'date'])
-    const commitHref = doc.getIn(['commit', 'html_url'])
-
-    const authors = []
-    doc.get('authors').forEach((author, index) => {
-      authors.push(
-        <Tooltip key={index} title={author.login}>
-          <Avatar alt={author.login} src={author.avatar_url} />
-        </Tooltip>
-      )
+    headers.forEach((header) => {
+      header.addEventListener('click', handleClick)
     })
 
-    if (doc.isPending) {
-      return (
-        <div className='doc__container'>
-          <div className='doc__content'>
-            <Skeleton height={80} width={200} style={{ marginTop: '32px' }} />
-            <Skeleton height={20} />
-            <Skeleton height={20} animation={false} />
-            <Skeleton height={20} animation='wave' />
-            <Skeleton height={20} />
-            <Skeleton height={30} width={300} style={{ marginTop: '32px' }} />
-            <Skeleton height={20} animation={false} />
-            <Skeleton height={20} animation='wave' />
-            <Skeleton height={20} />
-            <Skeleton height={20} animation={false} />
-            <Skeleton height={20} animation='wave' />
-          </div>
-          <div className='doc__content-side'>
-            <div className='doc__content-side-head' />
-            <Menu hideSearch />
-          </div>
-        </div>
-      )
-    }
+    return () =>
+      headers.forEach((header) => {
+        header.removeEventListener('click', handleClick)
+      })
+  }, [location, handleClick])
 
-    if (doc.isLoaded && !doc.content) {
-      return (
-        <div className='doc__container'>
-          <div className='doc__content'>
-            <h1>404</h1>
-            <p>Document (or Account) not found</p>
-          </div>
-          <div className='doc__content-side'>
-            <div className='doc__content-side-head' />
-            <Menu hideSearch />
-          </div>
-        </div>
-      )
-    }
+  const author = doc.getIn(['commit', 'commit', 'author', 'name'])
+  const lastUpdated = doc.getIn(['commit', 'commit', 'author', 'date'])
+  const commitHref = doc.getIn(['commit', 'html_url'])
 
-    const frontmatter = fm(doc.content)
-    const { title, description, tags } = frontmatter.attributes
-    const html = md
-      .render(frontmatter.body)
-      .replace(
-        /<code>#([a-z0-9]{6})<\/code>/gi,
-        '<code style="background:#$1">#$1</code>'
-      )
+  const authors = []
+  doc.get('authors', []).forEach((author, index) => {
+    authors.push(
+      <Tooltip key={index} title={author.login}>
+        <Avatar alt={author.login} src={author.avatar_url} />
+      </Tooltip>
+    )
+  })
 
+  if (doc.isPending) {
     return (
       <div className='doc__container'>
-        <Seo
-          title={title}
-          description={description}
-          tags={tags ? tags.split(',').map((t) => t.trim()) : []}
-          path={this.path}
-        />
-        <div className='doc__content markdown__content'>
-          <div dangerouslySetInnerHTML={{ __html: html }} />
+        <div className='doc__content'>
+          <Skeleton height={80} width={200} style={{ marginTop: '32px' }} />
+          <Skeleton height={20} />
+          <Skeleton height={20} animation={false} />
+          <Skeleton height={20} animation='wave' />
+          <Skeleton height={20} />
+          <Skeleton height={30} width={300} style={{ marginTop: '32px' }} />
+          <Skeleton height={20} animation={false} />
+          <Skeleton height={20} animation='wave' />
+          <Skeleton height={20} />
+          <Skeleton height={20} animation={false} />
+          <Skeleton height={20} animation='wave' />
         </div>
         <div className='doc__content-side'>
-          <div className='doc__content-side-head'>
-            <div className='doc__content-side-meta'>
-              {Boolean(authors.length) && (
-                <AvatarGroup max={6} className='doc__content-authors'>
-                  {authors}
-                </AvatarGroup>
-              )}
-              {Boolean(authors.length) && (
-                <div className='doc__content-contributors'>
-                  {authors.length} Contributor{authors.length !== 1 ? 's' : ''}.{' '}
-                  <a
-                    href='https://github.com/mistakia/nano-community/blob/main/CONTRIBUTING.md'
-                    rel='noreferrer'
-                    target='_blank'>
-                    Help out
-                  </a>
-                </div>
-              )}
-              {Boolean(author) && (
-                <div className='doc__content-author'>
-                  updated by{' '}
-                  <a href={commitHref} target='_blank' rel='noreferrer'>
-                    {author} {timeago.format(lastUpdated)}
-                  </a>
-                </div>
-              )}
-            </div>
-            <Button
-              variant='outlined'
-              href={`https://github.com/${REPO}/tree/main/docs${this.path}.md`}
-              target='_blank'
-              className='doc__content-edit'>
-              Edit Page
-            </Button>
-          </div>
+          <div className='doc__content-side-head' />
           <Menu hideSearch />
         </div>
       </div>
     )
   }
+
+  if (doc.isLoaded && !doc.content) {
+    return (
+      <div className='doc__container'>
+        <div className='doc__content'>
+          <h1>{t('doc.not_found_404', '404')}</h1>
+          <p>
+            {t('doc.document_not_found', 'Document (or Account) not found')}
+          </p>
+        </div>
+        <div className='doc__content-side'>
+          <div className='doc__content-side-head' />
+          <Menu hideSearch />
+        </div>
+      </div>
+    )
+  }
+
+  const frontmatter = fm(doc.content)
+  const { title, description, tags } = frontmatter.attributes
+  const html = md
+    .render(frontmatter.body)
+    .replace(
+      /<code>#([a-z0-9]{6})<\/code>/gi,
+      '<code style="background:#$1">#$1</code>'
+    )
+
+  return (
+    <div className='doc__container'>
+      <Seo
+        title={title}
+        description={description}
+        tags={tags ? tags.split(',').map((t) => t.trim()) : []}
+        path={path}
+      />
+      <div className='doc__content markdown__content'>
+        <div dangerouslySetInnerHTML={{ __html: html }} />
+      </div>
+      <div className='doc__content-side'>
+        <div className='doc__content-side-head'>
+          <div className='doc__content-side-meta'>
+            {Boolean(authors.length) && (
+              <AvatarGroup max={6} className='doc__content-authors'>
+                {authors}
+              </AvatarGroup>
+            )}
+            {Boolean(authors.length) && (
+              <div className='doc__content-contributors'>
+                {authors.length} {t('doc.contributors', 'Contributor')}
+                {authors.length !== 1 ? 's' : ''}.{' '}
+                <a
+                  href='https://github.com/mistakia/nano-community/blob/main/CONTRIBUTING.md'
+                  rel='noreferrer'
+                  target='_blank'>
+                  {t('doc.help_out', 'Help out')}
+                </a>
+              </div>
+            )}
+            {Boolean(author) && (
+              <div className='doc__content-author'>
+                {t('doc.updated_by', 'updated by')}{' '}
+                <a href={commitHref} target='_blank' rel='noreferrer'>
+                  {author} {timeago.format(lastUpdated)}
+                </a>
+              </div>
+            )}
+          </div>
+          <Button
+            variant='outlined'
+            href={`https://github.com/${REPO}/tree/main/docs${path}.md`}
+            target='_blank'
+            className='doc__content-edit'>
+            {t('doc.edit_page', 'Edit Page')}
+          </Button>
+        </div>
+        <Menu hideSearch />
+      </div>
+    </div>
+  )
 }
 
 DocPage.propTypes = {

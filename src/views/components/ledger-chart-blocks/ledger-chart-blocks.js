@@ -10,6 +10,7 @@ import {
   GridComponent
 } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
+import { useTranslation } from 'react-i18next'
 
 import LedgerChartMetrics from '@components/ledger-chart-metrics'
 import { download_csv, download_json } from '@core/utils'
@@ -23,6 +24,7 @@ echarts.use([
 ])
 
 export default function LedgerChartBlocks({ data, isLoading }) {
+  const { t } = useTranslation()
   const option = {
     grid: {
       containLabel: true
@@ -40,13 +42,13 @@ export default function LedgerChartBlocks({ data, isLoading }) {
     },
     yAxis: {
       type: 'log',
-      name: 'Blocks',
+      name: t('common.blocks', 'Blocks'),
       min: 1
     },
     series: [
       {
         type: 'line',
-        name: 'Total',
+        name: t('common.Total', 'Total'),
         showSymbol: false,
         lineStyle: {
           width: 1
@@ -55,7 +57,7 @@ export default function LedgerChartBlocks({ data, isLoading }) {
       },
       {
         type: 'line',
-        name: 'Send',
+        name: t('block_type.send', 'Send'),
         showSymbol: false,
         lineStyle: {
           width: 1
@@ -64,7 +66,7 @@ export default function LedgerChartBlocks({ data, isLoading }) {
       },
       {
         type: 'line',
-        name: 'Change',
+        name: t('block_type.change', 'Change'),
         showSymbol: false,
         lineStyle: {
           width: 1
@@ -73,7 +75,7 @@ export default function LedgerChartBlocks({ data, isLoading }) {
       },
       {
         type: 'line',
-        name: 'Receive',
+        name: t('block_type.receive', 'Receive'),
         showSymbol: false,
         lineStyle: {
           width: 1
@@ -82,7 +84,7 @@ export default function LedgerChartBlocks({ data, isLoading }) {
       },
       {
         type: 'line',
-        name: 'Open',
+        name: t('block_type.open', 'Open'),
         showSymbol: false,
         lineStyle: {
           width: 1
@@ -148,10 +150,13 @@ export default function LedgerChartBlocks({ data, isLoading }) {
       <div className='ledger__chart-sections'>
         <div className='ledger__chart-section'>
           <div className='section__heading'>
-            <span>Description</span>
+            <span>{t('ledger.description', 'Description')}</span>
           </div>
           <div className='ledger__chart-section-body description'>
-            The number of confirmed blocks (by type) per day.
+            {t(
+              'ledger.blocks.description',
+              'The number of blocks confirmed per day.'
+            )}
           </div>
           {!isLoading && (
             <div className='ledger__chart-section-body download'>
@@ -166,27 +171,27 @@ export default function LedgerChartBlocks({ data, isLoading }) {
         </div>
         <LedgerChartMetrics
           data={data.blocks}
-          label='Total Block Stats'
+          label={t('ledger.blocks.total', 'Total Block Stats')}
           show_total
         />
         <LedgerChartMetrics
           data={data.send_count}
-          label='Send Block Stats'
+          label={t('ledger.blocks.send', 'Send Block Stats')}
           show_total
         />
         <LedgerChartMetrics
           data={data.receive_count}
-          label='Receive Block Stats'
+          label={t('ledger.blocks.receive', 'Receive Block Stats')}
           show_total
         />
         <LedgerChartMetrics
           data={data.open_count}
-          label='Open Block Stats'
+          label={t('ledger.blocks.open', 'Open Block Stats')}
           show_total
         />
         <LedgerChartMetrics
           data={data.change_count}
-          label='Change Block Stats'
+          label={t('ledger.blocks.change', 'Change Block Stats')}
           show_total
         />
       </div>

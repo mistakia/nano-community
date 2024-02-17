@@ -32,9 +32,14 @@ export const api = {
     const url = `${API_URL}/posts/${id}?${queryString.stringify(params)}`
     return { url }
   },
-  getDoc({ id }) {
-    const url = `${API_URL}/docs${id}.md`
-    return { url }
+  getDoc({ id, locale = 'en' }) {
+    if (locale === 'en') {
+      const url = `${API_URL}/docs${id}.md`
+      return { url }
+    } else {
+      const url = `${API_URL}/docs/${locale}/${id}.md`
+      return { url }
+    }
   },
   getLabelDoc({ id }) {
     const url = `${API_URL}/docs${id}.md`

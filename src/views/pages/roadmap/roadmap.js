@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import { List } from 'immutable'
 import { GithubIssue as GithubIssueRecord } from '@core/github-issues'
+import { useTranslation } from 'react-i18next'
 
 import Seo from '@components/seo'
 import Menu from '@components/menu'
@@ -78,6 +79,8 @@ export default function RoadmapPage({
   load_github_discussions,
   load_github_issues
 }) {
+  const { t } = useTranslation()
+
   useEffect(() => {
     load_github_discussions()
     load_github_issues({
@@ -131,9 +134,12 @@ export default function RoadmapPage({
   return (
     <>
       <Seo
-        title='Roadmap'
-        description='Nano development & community roadmap'
-        tags={[
+        title={t('roadmap.seo.title', 'Roadmap')}
+        description={t(
+          'roadmap.seo.description',
+          'Nano development & community roadmap'
+        )}
+        tags={t('roadmap.seo.tags', [
           'roadmap',
           'nano',
           'future',
@@ -144,7 +150,7 @@ export default function RoadmapPage({
           'community',
           'ambassadors',
           'managers'
-        ]}
+        ])}
       />
       <div className='roadmap__container'>
         <div className='roadmap__header'>
@@ -182,8 +188,10 @@ export default function RoadmapPage({
         <div className='roadmap__main'>
           <div className='header__container'>
             <div className='header__title'>
-              <h1>Planning</h1>
-              <span>Community discussions</span>
+              <h1>{t('roadmap.header.title', 'Planning')}</h1>
+              <span>
+                {t('roadmap.header.subtitle', 'Community objectives')}
+              </span>
             </div>
           </div>
           <div className='roadmap__body'>{items}</div>
