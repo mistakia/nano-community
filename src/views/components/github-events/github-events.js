@@ -1,57 +1,92 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import Skeleton from '@mui/material/Skeleton'
+import { useTranslation } from 'react-i18next'
 
 import { timeago } from '@core/utils'
 
 import './github-events.styl'
 
-const action = (item) => {
+const action = ({ item, t }) => {
   switch (item.type) {
     case 'CommitCommentEvent':
-      return 'commented on commit'
+      return t(
+        'github_events.action.commented_on_commit',
+        'commented on commit'
+      )
 
     case 'CreateEvent':
-      return `created ${item.action}`
+      return t(
+        'github_events.action.created',
+        { action: item.action },
+        `created ${item.action}`
+      )
 
     case 'DeleteEvent':
-      return `deleted ${item.action}`
+      return t(
+        'github_events.action.deleted',
+        { action: item.action },
+        `deleted ${item.action}`
+      )
 
     case 'ForkEvent':
-      return 'forked'
+      return t('github_events.action.forked', 'forked')
 
     case 'IssueCommentEvent':
-      return 'commented on issue'
+      return t('github_events.action.commented_on_issue', 'commented on issue')
 
     case 'IssuesEvent':
-      return `${item.action} issue`
+      return t(
+        'github_events.action.issue_action',
+        { action: item.action },
+        `${item.action} issue`
+      )
 
     case 'PublicEvent':
-      return 'made public'
+      return t('github_events.action.made_public', 'made public')
 
     case 'MemberEvent':
-      return 'added member'
+      return t('github_events.action.added_member', 'added member')
 
     case 'SponsorshipEvent':
-      return 'sponshorship started'
+      return t(
+        'github_events.action.sponsorship_started',
+        'sponsorship started'
+      )
 
     case 'PullRequestEvent':
-      return `${item.action} pr`
+      return t(
+        'github_events.action.pr_action',
+        { action: item.action },
+        `${item.action} pr`
+      )
 
     case 'PullRequestReviewEvent':
-      return `pr review ${item.title}`
+      return t(
+        'github_events.action.pr_review',
+        { title: item.title },
+        `pr review ${item.title}`
+      )
 
     case 'PullRequestReviewCommentEvent':
-      return 'commented on pr review'
+      return t(
+        'github_events.action.commented_on_pr_review',
+        'commented on pr review'
+      )
 
     case 'PushEvent':
-      return `pushed commit to ${item.ref.slice(0, 15)}`
+      return t(
+        'github_events.action.pushed_commit',
+        { ref: item.ref.slice(0, 15) },
+        `pushed commit to ${item.ref.slice(0, 15)}`
+      )
 
     case 'ReleaseEvent':
-      return 'published release'
+      return t('github_events.action.published_release', 'published release')
 
     case 'WatchEvent':
-      return 'watching repo'
+      return t('github_events.action.watching_repo', 'watching repo')
   }
 }
 
@@ -71,11 +106,11 @@ const link = (item) => {
   }
 }
 
-const GithubEvent = (item, index) => {
+const GithubEvent = ({ item, index, t }) => {
   return (
     <div className='github__event' key={index}>
       <div className='github__event-author'>{item.actor_name}</div>
-      <div className='github__event-action'>{action(item)}</div>
+      <div className='github__event-action'>{action({ item, t })}</div>
       {item.event_url && (
         <a href={item.event_url} target='_blank' rel='noreferrer'>
           {link(item)}
@@ -88,27 +123,34 @@ const GithubEvent = (item, index) => {
   )
 }
 
-export default class GithubEvents extends React.Component {
-  render() {
-    const { events } = this.props
-    const items = events.map((i, idx) => GithubEvent(i, idx))
-    const skeletons = new Array(15).fill(undefined)
+GithubEvent.propTypes = {
+  item: ImmutablePropTypes.record,
+  index: ImmutablePropTypes.number,
+  t: PropTypes.func
+}
 
-    return (
-      <div className='github__container'>
-        <div className='github__title'>Development Events</div>
-        <div className='github__events'>
-          {Boolean(items.size) && items}
-          {!items.size &&
-            skeletons.map((i, idx) => (
-              <div className='github__event' key={idx}>
-                <Skeleton animation='wave' width='100%' />
-              </div>
-            ))}
-        </div>
+export default function GithubEvents({ events }) {
+  const { t } = useTranslation()
+
+  const items = events.map((item, index) => GithubEvent({ item, index, t }))
+  const skeletons = new Array(15).fill(undefined)
+
+  return (
+    <div className='github__container'>
+      <div className='github__title'>
+        {t('github_events.events_title', 'Development Events')}
       </div>
-    )
-  }
+      <div className='github__events'>
+        {Boolean(items.size) && items}
+        {!items.size &&
+          skeletons.map((i, idx) => (
+            <div className='github__event' key={idx}>
+              <Skeleton animation='wave' width='100%' />
+            </div>
+          ))}
+      </div>
+    </div>
+  )
 }
 
 GithubEvents.propTypes = {

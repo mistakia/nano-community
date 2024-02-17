@@ -12,3 +12,23 @@ export const WS_URL = IS_DEV ? 'ws://localhost:8080' : 'wss://nano.community'
 
 // 3 Million Nano (3e36)
 export const REP_MAX_WEIGHT = BigNumber(3).shiftedBy(36)
+export const SUPPORTED_LOCALES = [
+  'ar',
+  'en',
+  'de',
+  'es',
+  'fa',
+  'fr',
+  'hi',
+  'it',
+  'ja',
+  'ko',
+  'nl',
+  'pl',
+  'pt',
+  'ru',
+  'tr',
+  'vi',
+  'zh',
+  'no'
+]

@@ -9,12 +9,14 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import LinearProgress from '@mui/material/LinearProgress'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import './representative-delegators.styl'
 
 const ITEMS_LIMIT = 10
 
 export default function RepresentativeDelegators({ account }) {
+  const { t } = useTranslation()
   const [expanded, setExpanded] = useState(false)
 
   const handleClick = () => {
@@ -30,8 +32,12 @@ export default function RepresentativeDelegators({ account }) {
       <Table size='small'>
         <TableHead>
           <TableRow>
-            <TableCell>Delegator</TableCell>
-            <TableCell align='right'>Balance</TableCell>
+            <TableCell>
+              {t('common.delegator', { count: 1, defaultValue: 'Delegator' })}
+            </TableCell>
+            <TableCell align='right'>
+              {t('common.balance', 'Balance')}
+            </TableCell>
             <TableCell align='right'>% of Total</TableCell>
           </TableRow>
         </TableHead>
@@ -61,8 +67,12 @@ export default function RepresentativeDelegators({ account }) {
             <TableRow className='table__expand' onClick={handleClick}>
               <TableCell colSpan={3}>
                 {expanded
-                  ? 'Collapse'
-                  : `Show ${account.delegators.length - ITEMS_LIMIT} more`}
+                  ? t('common.collapse', 'Collapse')
+                  : t(
+                      'common.show_more',
+                      { count: account.delegators.length - ITEMS_LIMIT },
+                      `Show ${account.delegators.length - ITEMS_LIMIT} more`
+                    )}
               </TableCell>
             </TableRow>
           )}
@@ -75,7 +85,10 @@ export default function RepresentativeDelegators({ account }) {
       </Table>
       {!is_loading && (
         <div className='representative__delegators-footer'>
-          Showing top 100 delegators with a minimum balance of 1 Nano.
+          {t(
+            'representative_delegators.showing_top_delegators',
+            'Showing top 100 delegators with a minimum balance of 1 Nano.'
+          )}
         </div>
       )}
     </TableContainer>

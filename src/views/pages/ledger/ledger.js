@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
+import { useTranslation } from 'react-i18next'
 
 import LedgerChartBlocks from '@components/ledger-chart-blocks'
 import LedgerChartAddresses from '@components/ledger-chart-addresses'
@@ -29,82 +30,78 @@ TabPanel.propTypes = {
   index: PropTypes.number
 }
 
-export default class LedgerPage extends React.Component {
-  constructor(props) {
-    super(props)
+export default function LedgerPage({ load, data, isLoading }) {
+  const { t } = useTranslation()
+  const [value, setValue] = useState(0)
 
-    this.state = {
-      value: 0
-    }
+  useEffect(() => {
+    load()
+  }, [])
+
+  const handleChange = (event, value) => {
+    setValue(value)
   }
 
-  handleChange = (event, value) => {
-    this.setState({ value })
-  }
-
-  componentDidMount() {
-    this.props.load()
-  }
-
-  render() {
-    const { data, isLoading } = this.props
-
-    return (
-      <>
-        <Seo
-          title='Nano Ledger Analysis'
-          description='On-chain metrics and analytics of the Nano ledger'
-          tags={[
-            'nano',
-            'ledger',
-            'analytics',
-            'chain',
-            'on-chain',
-            'analysis',
-            'crypto',
-            'blockchain',
-            'data',
-            'insights',
-            'addresses',
-            'active',
-            'transactions'
-          ]}
-        />
-        <div className='ledger__body'>
-          <Tabs
-            orientation={'horizontal'}
-            className='ledger__body-menu'
-            variant='scrollable'
-            value={this.state.value}
-            onChange={this.handleChange}>
-            <Tab label='Addresses' />
-            <Tab label='Blocks' />
-            <Tab label='Volume' />
-            <Tab label='Value Transferred' />
-            <Tab label='Amounts' />
-          </Tabs>
-          <TabPanel value={this.state.value} index={0}>
-            <LedgerChartAddresses data={data} isLoading={isLoading} />
-          </TabPanel>
-          <TabPanel value={this.state.value} index={1}>
-            <LedgerChartBlocks data={data} isLoading={isLoading} />
-          </TabPanel>
-          <TabPanel value={this.state.value} index={2}>
-            <LedgerChartVolume data={data} isLoading={isLoading} />
-          </TabPanel>
-          <TabPanel value={this.state.value} index={3}>
-            <LedgerChartUSDTransferred data={data} isLoading={isLoading} />
-          </TabPanel>
-          <TabPanel value={this.state.value} index={4}>
-            <LedgerChartAmounts data={data} isLoading={isLoading} />
-          </TabPanel>
-        </div>
-        <div className='ledger__footer'>
-          <Menu />
-        </div>
-      </>
-    )
-  }
+  return (
+    <>
+      <Seo
+        title={t('ledger_page.seo_title', 'Nano Ledger Analysis')}
+        description={t(
+          'ledger_page.seo_description',
+          'On-chain metrics and analytics of the Nano ledger'
+        )}
+        tags={[
+          'nano',
+          'ledger',
+          'analytics',
+          'chain',
+          'on-chain',
+          'analysis',
+          'crypto',
+          'blockchain',
+          'data',
+          'insights',
+          'addresses',
+          'active',
+          'transactions'
+        ]}
+      />
+      <div className='ledger__body'>
+        <Tabs
+          orientation={'horizontal'}
+          className='ledger__body-menu'
+          variant='scrollable'
+          value={value}
+          onChange={handleChange}>
+          <Tab label={t('ledger_page.addresses_tab', 'Addresses')} />
+          <Tab label={t('ledger_page.blocks_tab', 'Blocks')} />
+          <Tab label={t('ledger_page.volume_tab', 'Volume')} />
+          <Tab
+            label={t('ledger_page.value_transferred_tab', 'Value Transferred')}
+          />
+          <Tab label={t('ledger_page.amounts_tab', 'Amounts')} />
+        </Tabs>
+        <TabPanel value={value} index={0}>
+          <LedgerChartAddresses data={data} isLoading={isLoading} />
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <LedgerChartBlocks data={data} isLoading={isLoading} />
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+          <LedgerChartVolume data={data} isLoading={isLoading} />
+        </TabPanel>
+        <TabPanel value={value} index={3}>
+          <LedgerChartUSDTransferred data={data} isLoading={isLoading} />
+        </TabPanel>
+        <TabPanel value={value} index={4}>
+          <LedgerChartAmounts data={data} isLoading={isLoading} />
+        </TabPanel>
+      </div>
+      <div className='ledger__footer'>
+        <Menu />
+      </div>
+    </>
+  )
 }
 
 LedgerPage.propTypes = {

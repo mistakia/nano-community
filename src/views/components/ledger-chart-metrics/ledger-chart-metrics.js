@@ -2,6 +2,7 @@ import React from 'react'
 import dayjs from 'dayjs'
 import PropTypes from 'prop-types'
 import BigNumber from 'bignumber.js'
+import { useTranslation } from 'react-i18next'
 
 import './ledger-chart-metrics.styl'
 
@@ -10,6 +11,7 @@ export default function LedgerChartMetrics({
   label,
   show_total = false
 }) {
+  const { t } = useTranslation()
   const values = data.map((d) => d[1])
   const max = values.length ? Math.max(...values) : null
   const min = values.length ? Math.min(...values.filter(Boolean)) : null
@@ -28,7 +30,9 @@ export default function LedgerChartMetrics({
       </div>
       <div className='ledger__chart-section-body'>
         <div className='leger__chart-row'>
-          <div className='ledger__chart-row-label'>Min</div>
+          <div className='ledger__chart-row-label'>
+            {t('common.min', 'Min')}
+          </div>
           <div className='ledger__chart-row-value'>
             {min ? BigNumber(min).toFormat(0) : '-'}
           </div>
@@ -37,7 +41,9 @@ export default function LedgerChartMetrics({
           </div>
         </div>
         <div className='leger__chart-row'>
-          <div className='ledger__chart-row-label'>Max</div>
+          <div className='ledger__chart-row-label'>
+            {t('common.max', 'Max')}
+          </div>
           <div className='ledger__chart-row-value'>
             {max ? BigNumber(max).toFormat(0) : '-'}
           </div>
@@ -47,7 +53,9 @@ export default function LedgerChartMetrics({
         </div>
         {show_total && (
           <div className='leger__chart-row'>
-            <div className='ledger__chart-row-label'>Total</div>
+            <div className='ledger__chart-row-label'>
+              {t('common.total', 'Total')}
+            </div>
             <div className='ledger__chart-row-value'>
               {total ? BigNumber(total).toFormat(0) : '-'}
             </div>

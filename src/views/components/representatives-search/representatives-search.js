@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import ClearIcon from '@mui/icons-material/Clear'
 import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey'
+import { useTranslation } from 'react-i18next'
 
 import { debounce } from '@core/utils'
 
@@ -12,6 +13,7 @@ const RepresentativesSearch = ({
   search,
   align = 'center'
 }) => {
+  const { t } = useTranslation()
   const [value, setValue] = useState(initialValue || '')
   const inputRef = useRef(null)
 
@@ -59,7 +61,10 @@ const RepresentativesSearch = ({
         ref={inputRef}
         className='search__input'
         type='text'
-        placeholder='Filter by account, alias, ip'
+        placeholder={t(
+          'representatives_search.placeholder',
+          'Filter by account, alias, ip'
+        )}
         value={value}
         onChange={handleChange}
       />

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey'
 import ClearIcon from '@mui/icons-material/Clear'
 import SearchIcon from '@mui/icons-material/Search'
+import { useTranslation } from 'react-i18next'
 
 import history from '@core/history'
 
@@ -11,6 +12,7 @@ const ACCOUNT_REGEX = /((nano|xrb)_)?[13][13-9a-km-uw-z]{59}/
 const BLOCK_REGEX = /[0-9A-F]{64}/
 
 const SearchBar = () => {
+  const { t } = useTranslation()
   const [value, setValue] = useState('')
   const [invalid, setInvalid] = useState(false)
   const input_ref = useRef(null)
@@ -52,7 +54,10 @@ const SearchBar = () => {
         ref={input_ref}
         className={`search__input ${is_filled ? 'filled' : ''}`}
         type='text'
-        placeholder='Search by Address / Block Hash'
+        placeholder={t(
+          'search_bar.placeholder',
+          'Search by Address / Block Hash'
+        )}
         value={value}
         onChange={handle_change}
       />

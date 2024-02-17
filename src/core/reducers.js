@@ -15,6 +15,7 @@ import { postsReducer } from './posts'
 import { postlistsReducer } from './postlists'
 import { nanodb_reducer } from './nanodb'
 import { api_reducer } from './api'
+import { i18nReducer } from './i18n'
 
 const rootReducer = (history) =>
   combineReducers({
@@ -32,7 +33,8 @@ const rootReducer = (history) =>
     posts: postsReducer,
     postlists: postlistsReducer,
     nanodb: nanodb_reducer,
-    api: api_reducer
+    api: api_reducer,
+    i18n: i18nReducer
   })
 
 export default rootReducer
