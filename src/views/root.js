@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import { withRouter } from 'react-router'
 import { ConnectedRouter } from 'connected-react-router/immutable'
 import {
-  createMuiTheme,
+  createTheme,
   createGenerateClassName,
   StylesProvider,
   ThemeProvider,
@@ -37,7 +37,7 @@ import App from '@components/app'
  * });
  *  */
 
-const theme = createMuiTheme({
+const theme = createTheme({
   overrides: {
     MuiButton: {
       root: {
