@@ -163,6 +163,7 @@ function MenuSections() {
 
 export default function Menu({ hide, hideSearch, hide_speed_dial }) {
   const [open, setOpen] = useState(false)
+  const { t } = useTranslation()
 
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
@@ -204,7 +205,7 @@ export default function Menu({ hide, hideSearch, hide_speed_dial }) {
           {!isHome && (
             <SpeedDialAction
               icon={<HomeIcon />}
-              tooltipTitle='Home'
+              tooltipTitle={t('menu.home', 'Home')}
               tooltipPlacement={isMobile ? 'left' : 'right'}
               onClick={handleHomeClick}
             />
