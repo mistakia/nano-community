@@ -124,9 +124,19 @@ api.get('/api/docs/:locale/*', speedLimiter, async (req, res) => {
   }
 
   try {
-    if (fs.existsSync(localized_doc_path)) {
+    if (
+      await fs.promises
+        .access(localized_doc_path, fs.constants.F_OK)
+        .then(() => true)
+        .catch(() => false)
+    ) {
       return res.sendFile(localized_doc_path)
-    } else if (fs.existsSync(default_doc_path)) {
+    } else if (
+      await fs.promises
+        .access(default_doc_path, fs.constants.F_OK)
+        .then(() => true)
+        .catch(() => false)
+    ) {
       return res.redirect(`/api/docs/en/${doc_id}`)
     } else {
       return res.status(404).send('Document not found')
