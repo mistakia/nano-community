@@ -1,0 +1,387 @@
+{
+  "account_page": {
+    "address": "Accountadres",
+    "change_summary": "Samenvatting wijzigen",
+    "copy_notification": "Accountadres gekopieerd",
+    "seo_description": "Informatie voor nano vertegenwoordiger",
+    "seo_title": "Nano Account",
+    "telemetry_charts": "Telemetrie Grafieken",
+    "unopened_description": "Hoewel het accountadres geldig is, zijn er geen blokken waargenomen. Als NANO naar dit account is verzonden, moet het nog een overeenkomstig blok publiceren om de fondsen te ontvangen en een openingsbalans vast te stellen. Het saldo van een account kan alleen worden bijgewerkt door de accounthouder, omdat zij de enigen zijn die blokken op hun keten kunnen publiceren.",
+    "unopened_note": "Als er al een openingsblok is gepubliceerd, kan het even duren voordat het zich door het netwerk verspreidt en wordt waargenomen door de nano.community nodes.",
+    "unopened_title": "Dit account is nog niet geopend"
+  },
+  "account_blocks_summary": {
+    "first_timestamp": "Eerste Tijdstempel",
+    "last_timestamp": "Laatste Tijdstempel",
+    "max_amount": "Max Bedrag",
+    "min_amount": "Min Bedrag",
+    "no_records": "Geen Records",
+    "receiving_account": "Ontvangend Account",
+    "representative_account": "Vertegenwoordigend Account",
+    "sending_account": "Verzendend Account",
+    "showing_top_10": "Toont top 10 accounts op totaal aflopend",
+    "transactions": "Transacties"
+  },
+  "account_meta": {
+    "account_info": "Accountinformatie",
+    "funding_account": "Financieringsaccount",
+    "funding_timestamp": "Financieringstijdstempel",
+    "height": "Hoogte",
+    "last_modified": "Laatst Gewijzigd",
+    "open_timestamp": "Open Tijdstempel",
+    "opening_balance": "Openingsbalans",
+    "receivable_balance": "Te Ontvangen Balans"
+  },
+  "block_page": {
+    "amount": "Bedrag",
+    "copy_notification": "Blokhash gekopieerd",
+    "delegated_representative": "Gedelegeerde Vertegenwoordiger",
+    "description": "Beschrijving",
+    "epoch_v1": "Epoch v1 — Geüpgrade accountketens van legacy blokken (open, ontvang, verzend, wijzig) naar staat blokken.",
+    "epoch_v2": "Epoch v2 - Geüpgrade accountketens om hogere Proof-of-Work moeilijkheid te gebruiken.",
+    "receiving_account": "Ontvangend Account",
+    "section_label": "Blok Hash",
+    "sending_account": "Verzendend Account",
+    "seo_description": "Informatie gerelateerd aan een Nano Blok",
+    "seo_title": "Nano Blok",
+    "voting_weight": "Stemgewicht"
+  },
+  "block_info": {
+    "block_account": "Blok Account",
+    "operation": "Operatie",
+    "status": "Status",
+    "timestamp": "Tijdstempel"
+  },
+  "block_status": {
+    "confirmed": "Bevestigd",
+    "unconfirmed": "Onbevestigd"
+  },
+  "block_type": {
+    "change": "Wijzig",
+    "epoch": "Epoch",
+    "open": "Open",
+    "receive": "Ontvang",
+    "send": "Verzend"
+  },
+  "common": {
+    "account_one": "Account",
+    "account_other": "Accounts",
+    "address": "Adres",
+    "balance": "Balans",
+    "bandwidth_limit": "Bandbreedtelimiet",
+    "bandwidth_limit_short": "BW Limiet",
+    "blocks": "Blokken",
+    "blocks_behind": "Blokken Achter",
+    "blocks_diff_short": "Blokken Versch.",
+    "by_online_weight": "Door Online Gewicht",
+    "clear_filters": "Filters Wissen",
+    "click_to_copy": "Klik om te kopiëren",
+    "collapse": "Inklappen",
+    "conf_short": "Bevest.",
+    "conf_diff_short": "Bevest. Versch.",
+    "confirmations_behind": "Bevestigingen Achter",
+    "country": "Land",
+    "delegator_one": "Delegator",
+    "delegator_other": "Delegators",
+    "max": "Max",
+    "min": "Min",
+    "offline": "Offline",
+    "online": "Online",
+    "peers": "Peers",
+    "percent_of_total": "% van Totaal",
+    "port": "Poort",
+    "quorum_delta": "Quorum Delta",
+    "representative_one": "Vertegenwoordiger",
+    "representative_other": "Vertegenwoordigers",
+    "show_more": "Toon {{count}} meer",
+    "total": "Totaal",
+    "unchecked": "Ongecontroleerd",
+    "unchecked_count": "Ongecontroleerd Aantal",
+    "unlimited": "Onbeperkt",
+    "uptime": "Uptime",
+    "version": "Versie",
+    "weight": "Gewicht"
+  },
+  "delegators": {
+    "showing_top_delegators": "Toont de top 100 delegators met een minimum saldo van 1 Nano."
+  },
+  "doc": {
+    "contributors": "Bijdragers",
+    "document_not_found": "Document (of Account) niet gevonden",
+    "edit_page": "Pagina bewerken",
+    "help_out": "Helpen",
+    "not_found_404": "404",
+    "section_link_copied": "Sectielink gekopieerd",
+    "updated_by": "bijgewerkt door"
+  },
+  "github_events": {
+    "action": {
+      "added_member": "lid toegevoegd",
+      "commented_on_commit": "gereageerd op commit",
+      "commented_on_issue": "gereageerd op issue",
+      "commented_on_pr_review": "gereageerd op pr review",
+      "created": "aangemaakt {{action}}",
+      "deleted": "verwijderd {{action}}",
+      "forked": "geforkt",
+      "issue_action": "{{action}} issue",
+      "made_public": "openbaar gemaakt",
+      "pr_action": "{{action}} pr",
+      "pr_review": "pr review {{title}}",
+      "published_release": "publicatie uitgebracht",
+      "pushed_commit": "commit gepusht naar {{ref}}",
+      "sponsorship_started": "sponsoring gestart",
+      "watching_repo": "repo volgen"
+    },
+    "events_title": "Ontwikkelingsevenementen"
+  },
+  "ledger": {
+    "addresses": {
+      "active_detail": "Actief toont het aantal unieke adressen dat gebruikt is. Nieuw toont het aantal adressen dat gecreëerd is. Hergebruikt toont het aantal adressen dat gebruikt is dat op een eerdere dag gecreëerd werd.",
+      "active_stats": "Actieve Adresstatistieken",
+      "new_stats": "Nieuwe Adresstatistieken",
+      "total_number": "Het totale aantal actieve, nieuwe en hergebruikte adressen dat per dag gebruikt wordt."
+    },
+    "amounts": {
+      "total_number": "Het aantal bevestigde verzend-type blokken per dag waarbij het bedrag in het blok binnen een bepaald bereik valt (in Nano)"
+    },
+    "blocks": {
+      "change": "Wijzigingsblok Statistieken",
+      "description": "Het aantal blokken bevestigd per dag.",
+      "open": "Openingsblok Statistieken",
+      "receive": "Ontvangstblok Statistieken",
+      "send": "Verzendblok Statistieken",
+      "total": "Totale Blokstatistieken"
+    },
+    "description": "Beschrijving",
+    "usd_transferred": {
+      "desc_1": "Het totale bedrag aan waarde overgedragen (in USD) per dag.",
+      "desc_2": "Gebaseerd op de dagelijkse slotkoers van Nano/USD en het totale bedrag aan Nano overgedragen die dag.",
+      "usd_transferred": "USD Overgedragen",
+      "usd_transferred_stats": "USD Overgedragen Statistieken"
+    },
+    "volume": {
+      "change_stats": "Wijzigingsstatistieken",
+      "description": "Het totale verzonden bedrag (in Nano) en het totale bedrag aan stemgewicht gewijzigd per dag.",
+      "send_stats": "Verzendstatistieken"
+    }
+  },
+  "ledger_page": {
+    "addresses_tab": "Adressen",
+    "amounts_tab": "Bedragen",
+    "blocks_tab": "Blokken",
+    "seo_description": "On-chain metrieken en analyses van het Nano grootboek",
+    "seo_title": "Nano Grootboek Analyse",
+    "value_transferred_tab": "Overgedragen Waarde",
+    "volume_tab": "Volume"
+  },
+  "menu": {
+    "account_setup": "Account Instellen",
+    "acquiring": "Verkrijgen",
+    "advantages": "Voordelen",
+    "attack_vectors": "Aanvalsvectoren",
+    "basics": "Basis",
+    "best_practices": "Beste Praktijken",
+    "choosing_a_rep": "Een vertegenwoordiger kiezen",
+    "challenges": "Uitdagingen",
+    "communities": "Gemeenschappen",
+    "contribution_guide": "Bijdragegids",
+    "design": "Ontwerp",
+    "developer_discussions": "Ontwikkelaarsdiscussies",
+    "developers": "Ontwikkelaars",
+    "documentation": "Documentatie",
+    "faqs": "FAQs",
+    "get_involved": "Doe mee",
+    "get_support": "Ondersteuning krijgen",
+    "getting_started": "Beginnen",
+    "glossary": "Woordenlijst",
+    "guides": "Gidsen",
+    "history": "Geschiedenis",
+    "home": "Home",
+    "how_it_works": "Hoe het werkt",
+    "integrations": "Integraties",
+    "introduction": "Introductie",
+    "investment_thesis": "Investeringsthese",
+    "learn": "Leren",
+    "ledger": "Grootboek",
+    "misconceptions": "Misvattingen",
+    "overview": "Overzicht",
+    "planning": "Planning 👾",
+    "privacy": "Privacy",
+    "protocol": "Protocol",
+    "running_a_node": "Een node uitvoeren",
+    "security": "Beveiliging",
+    "stats": "Statistieken",
+    "storing": "Opslaan",
+    "telemetry": "Telemetrie",
+    "topics": "Onderwerpen",
+    "using": "Gebruiken",
+    "why_it_matters": "Waarom het belangrijk is"
+  },
+  "network": {
+    "backlog_text": "Mediaan aantal transacties wachtend op bevestiging $(network.pr_text)",
+    "censor_text": "Het minimum aantal vertegenwoordigers nodig om transacties te censureren of het netwerk te stagneren",
+    "confirm_text": "Het minimum aantal vertegenwoordigers nodig om transacties te bevestigen",
+    "confirmations": "Bevestigingen (24u)",
+    "confirmations_text": "Totaal aantal transacties bevestigd door het netwerk in de laatste 24 uur",
+    "energy_text": "Geschat live netwerk CPU energieverbruik van Principiële Vertegenwoordigers gebaseerd op verzamelde CPU model info. De schatting is gebaseerd op CPU TDP, wat het gemiddelde vermogen, in watt, is dat de processor afgeeft bij bedrijf op basisfrequentie met alle kernen actief onder door de fabrikant gedefinieerde, hoog-complexiteit werklast",
+    "energy_usage": "Energieverbruik (TDP) (24u)",
+    "fee_text": "Het Nano netwerk werkt zonder kosten",
+    "nano_ticker": "NanoTicker",
+    "online_stake": "Online Inzet",
+    "principal_reps": "Principiële Vertegenwoordigers",
+    "pr_text": "zoals waargenomen over de netwerken principiële vertegenwoordigers: stemmende nodes met meer dan 0.1% van het online stemgewicht aan hen gedelegeerd",
+    "reps_to_censor": "Vertegenwoordigers om te Censureren of Stagneren",
+    "reps_to_confirm": "Vertegenwoordigers om te Bevestigen",
+    "settlement": "Afhandeling (24u)",
+    "settlement_text": "Totaal bedrag aan waarde afgewikkeld door het netwerk over de laatste 24 uur",
+    "speed_text": "Tijd in milliseconden voor een testtransactie om bevestigd te worden",
+    "stake_text": "Percentage van gedelegeerd Nano gewicht actief deelnemend in stemmen",
+    "stats_title": "Netwerkstatistieken",
+    "total_reps": "Totaal Vertegenwoordigers (24u)",
+    "tx_backlog": "Tx Achterstand",
+    "tx_fees": "Tx Kosten (24u)",
+    "tx_speed": "Tx Snelheid",
+    "tx_throughput": "Tx Doorvoer",
+    "throughput_text": "Mediaan aantal transacties bevestigd per seconde in de laatste minuut $(network.pr_text)"
+  },
+  "posts": {
+    "nano_foundation": "Nano Stichting",
+    "top": "Top",
+    "trending": "Trending"
+  },
+  "representative_alerts": {
+    "table_header": {
+      "behind": "Achter",
+      "issue": "Probleem",
+      "last_online": "Laatst Online",
+      "percent_online_weight": "% Online Gewicht",
+      "representative": "Vertegenwoordiger"
+    },
+    "tooltip": {
+      "behind": "Vertegenwoordiger is achtergebleven of is aan het opstarten. De afkap is een gecementeerd aantal voorbij de 95e percentiel. (via telemetrie)",
+      "low_uptime": "Vertegenwoordiger is meer dan 25% offline geweest in de laatste 28 dagen.",
+      "offline": "Vertegenwoordiger is gestopt met stemmen en lijkt offline.",
+      "overweight": "Vertegenwoordiger heeft meer dan 3M Nano stemgewicht. Delegators zouden moeten overwegen het gewicht te verdelen om de veerkracht en waarde van het netwerk te verbeteren."
+    },
+    "type": {
+      "behind": "Achter",
+      "low_uptime": "Lage Uptime",
+      "offline": "Offline",
+      "overweight": "Overgewicht"
+    }
+  },
+  "representatives_cemented_by_weight": {
+    "title": "Bevestigingsverschil",
+    "tooltip": "Toont de hoeveelheid stemgewicht die binnen X aantal bevestigingen van de leidende node is. Handig om te weten hoe goed gesynchroniseerd en uitgelijnd nodes zijn over het netwerk"
+  },
+  "representatives_checked_by_weight": {
+    "title": "Blokverschil",
+    "tooltip": "Toont de hoeveelheid stemgewicht die binnen X aantal blokken van de leidende node is. Nuttig om een gevoel te krijgen van hoe goed blokpropagatie is gesynchroniseerd binnen het netwerk"
+  },
+  "representative_delegators": {
+    "showing_top_delegators": "Toont top 100 delegators met een minimum saldo van 1 Nano."
+  },
+  "representative_info": {
+    "first_seen": "Eerst Gezien",
+    "last_seen": "Laatst Gezien",
+    "weight_represented": "Gewicht Vertegenwoordigd"
+  },
+  "representative_network": {
+    "city": "Stad",
+    "isp": "ISP",
+    "network": "Netwerk",
+    "provider": "Provider"
+  },
+  "representative_telemetry": {
+    "telemetry": "Telemetrie",
+    "telemetry_timestamp": "Telemetrie Tijdstempel"
+  },
+  "representative_uptime": {
+    "2m_uptime": "2M Uptime",
+    "2w_uptime": "2W Uptime",
+    "3m_uptime": "3M Uptime",
+    "current_status": "Huidige Status",
+    "down": "Omlaag",
+    "down_for": "Omlaag Voor",
+    "operational": "Operationeel",
+    "up_for": "Omhoog Voor",
+    "warning": "Waarschuwing"
+  },
+  "representatives": {
+    "alias": "Alias",
+    "cpu_cores": "CPU Kernen",
+    "cpu_model": "CPU Model",
+    "tdp": "TDP (wH)",
+    "protocol_version": "Protocol",
+    "last_seen": "Laatst Gezien",
+    "host_asn": "Host ASN"
+  },
+  "representatives_bandwidth_by_weight": {
+    "tooltip": "Toont de hoeveelheid stemgewicht gebaseerd op de bandbreedtelimiet die lokaal door elke node is ingesteld"
+  },
+  "representatives_country_by_weight": {
+    "title": "Land"
+  },
+  "representatives_offline": {
+    "account": "Offline Account",
+    "last_online": "Laatst Online"
+  },
+  "representatives_page": {
+    "seo_description": "Verken en analyseer Nano netwerkvertegenwoordigers",
+    "seo_title": "Nano Verteegenwoordigers Verkenner",
+    "telemetry_tab": "Telemetrie",
+    "weight_distribution_tab": "Gewichtsverdeling",
+    "weight_history_tab": "Gewichtsgeschiedenis",
+    "offline_reps_tab": "Offline Vertegenwoordigers"
+  },
+  "representatives_provider_by_weight": {
+    "title": "Hosting Provider"
+  },
+  "representatives_quorum_charts": {
+    "peers_weight": "Peers Gewicht",
+    "quorum_delta": "Quorum Delta",
+    "title": "Quorum Grafieken",
+    "trended_weight": "Getrend Gewicht"
+  },
+  "representatives_search": {
+    "placeholder": "Filter op account, alias, ip"
+  },
+  "representatives_weight": {
+    "trended": "Getrend"
+  },
+  "representatives_weight_chart": {
+    "title": "Gewichtsverdeling per Vertegenwoordiger"
+  },
+  "representatives_version_by_weight": {
+    "title": "Versies"
+  },
+  "roadmap": {
+    "header": {
+      "subtitle": "Gemeenschapsdoelstellingen",
+      "title": "Planning"
+    },
+    "seo": {
+      "description": "Nano ontwikkeling & gemeenschapsroadmap",
+      "tags": [
+        "roadmap",
+        "nano",
+        "toekomst",
+        "release",
+        "ontwerp",
+        "taken",
+        "discussies",
+        "gemeenschap",
+        "ambassadeurs",
+        "managers"
+      ],
+      "title": "Roadmap"
+    }
+  },
+  "search_bar": {
+    "placeholder": "Zoeken op Adres / Blok Hash"
+  },
+  "uptime": {
+    "now": "Nu",
+    "days_ago": "dagen geleden"
+  }
+}
