@@ -69,7 +69,9 @@
     "address": "Address",
     "balance": "Balance",
     "bandwidth_limit": "Bandwidth Limit",
+    "bandwidth_limit_short": "BW Limit",
     "blocks": "Blocks",
+    "blocks_behind": "Blocks Behind",
     "blocks_diff_short": "Blocks Diff",
     "by_online_weight": "By Online Weight",
     "clear_filters": "Clear Filters",
@@ -77,6 +79,7 @@
     "collapse": "Collapse",
     "conf_short": "Conf.",
     "conf_diff_short": "Conf. Diff",
+    "confirmations_behind": "Confirmations Behind",
     "country": "Country",
     "delegator_one": "Delegator",
     "delegator_other": "Delegators",
@@ -93,7 +96,9 @@
     "show_more": "Show {{count}} more",
     "total": "Total",
     "unchecked": "Unchecked",
+    "unchecked_count": "Unchecked Count",
     "unlimited": "Unlimited",
+    "uptime": "Uptime",
     "version": "Version",
     "weight": "Weight"
   },
@@ -194,6 +199,7 @@
     "home": "Home",
     "how_it_works": "How it works",
     "integrations": "Integrations",
+    "introduction": "Introduction",
     "investment_thesis": "Investment thesis",
     "learn": "Learn",
     "ledger": "Ledger",
@@ -219,6 +225,7 @@
     "confirmations_text": "Total number of transactions confirmed by the network over the last 24 hours",
     "energy_text": "Estimated live network CPU energy usage of Principle Representatives based on collected CPU model info. The estimate is based on CPU TDP, which is the average power, in watts, the processor dissipates when operating at base frequency with all cores active under manufacture-defined, high-complexity workload",
     "energy_usage": "Energy Usage (TDP) (24h)",
+    "fee_text": "The Nano network operates without fees",
     "nano_ticker": "NanoTicker",
     "online_stake": "Online Stake",
     "principal_reps": "Principal Reps",
@@ -228,6 +235,7 @@
     "settlement": "Settlement (24h)",
     "settlement_text": "Total amount of value settled by the network over the last 24 hours (only send blocks)",
     "speed_text": "Median time in milliseconds for a block to get confirmed (across all buckets)",
+    "stake_text": "Percentage of delegated Nano weight actively participating in voting",
     "stats_title": "Network Stats",
     "total_reps": "Total Reps (24h)",
     "tx_backlog": "Tx Backlog",
@@ -285,9 +293,6 @@
     "provider": "Provider"
   },
   "representative_telemetry": {
-    "blocks_diff": "Blocks Diff",
-    "conf": "Conf.",
-    "conf_diff": "Conf. Diff",
     "telemetry": "Telemetry",
     "telemetry_timestamp": "Telemetry Timestamp"
   },
@@ -313,11 +318,6 @@
   },
   "representatives_bandwidth_by_weight": {
     "tooltip": "Displays the amount of voting weight based on the bandwidth limit set locally by each node"
-  },
-  "representatives_cluster": {
-    "blocks_diff": "Blocks Behind",
-    "conf_diff": "Confirmations Behind",
-    "unchecked": "Unchecked Count"
   },
   "representatives_country_by_weight": {
     "title": "Country"
