@@ -212,13 +212,11 @@ export default function RepresentativesClusterCharts({
   }
 
   return (
-    <>
-      <ReactEChartsCore
-        echarts={echarts}
-        option={option}
-        style={{ height: '620px' }}
-      />
-    </>
+    <ReactEChartsCore
+      echarts={echarts}
+      option={option}
+      style={{ height: '620px' }}
+    />
   )
 }
 
