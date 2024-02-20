@@ -71,13 +71,11 @@ export default function RepresentativesWeightChart({
   }
 
   return (
-    <>
-      <ReactEChartsCore
-        echarts={echarts}
-        option={option}
-        style={{ width: '100%', height: '400px' }}
-      />
-    </>
+    <ReactEChartsCore
+      echarts={echarts}
+      option={option}
+      style={{ width: '100%', height: '400px' }}
+    />
   )
 }
 
