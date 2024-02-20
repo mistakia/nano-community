@@ -46,15 +46,15 @@ export default function RepresentativeTelemetry({ account }) {
       value: block_count ? BigNumber(block_count).toFormat() : '-'
     },
     {
-      label: t('representative_telemetry.blocks_diff', 'Blocks Diff'),
+      label: t('common.blocks_behind', 'Blocks Behind'),
       value: block_behind ? BigNumber(block_behind).toFormat() : '-'
     },
     {
-      label: t('representative_telemetry.conf', 'Conf.'),
+      label: t('common.conf_short', 'Conf.'),
       value: cemented_count ? BigNumber(cemented_count).toFormat() : '-'
     },
     {
-      label: t('representative_telemetry.conf_diff', 'Conf. Diff'),
+      label: t('common.conf_diff_short', 'Conf. Diff'),
       value: cemented_behind ? BigNumber(cemented_behind).toFormat() : '-'
     },
     {

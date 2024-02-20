@@ -90,17 +90,17 @@ export default function RepresentativesClusterCharts({
     },
     title: [
       {
-        text: t('representatives_cluster.conf_diff', 'Confirmations Behind'),
+        text: t('common.confirmations_behind', 'Confirmations Behind'),
         top: 20,
         ...title_common
       },
       {
-        text: t('representatives_cluster.blocks_diff', 'Blocks Behind'),
+        text: t('common.blocks_behind', 'Blocks Behind'),
         top: 140,
         ...title_common
       },
       {
-        text: t('representatives_cluster.unchecked', 'Unchecked Count'),
+        text: t('common.unchecked_count', 'Unchecked Count'),
         top: 260,
         ...title_common
       },
