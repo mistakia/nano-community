@@ -1,7 +1,7 @@
 /* global REPO */
 
 import React, { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import { renderToString } from 'react-dom/server'
 import PropTypes from 'prop-types'
 import * as timeago from 'timeago.js'
@@ -65,24 +65,31 @@ md.renderer.rules.heading_open = (tokens, idx) => {
   const nextToken = tokens[idx + 1]
   const text = nextToken.content
   const tag = token.tag
-  const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-')
+  const escaped_text = text.toLowerCase().replace(/[^\w]+/g, '-')
 
-  return `<${tag} class="doc__header" id=${escapedText}>`
+  return `<${tag} class="doc__header" id=${escaped_text}>`
 }
 
 export default function DocPage({ getDoc, showNotification, doc, location }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const history = useHistory()
+
+  let { locale } = useParams()
+
   const path = location.pathname.endsWith('/')
-    ? location.pathname.slice(0, -1)
-    : location.pathname
-
-  const { locale } = useParams()
-
+    ? location.pathname.slice(0, -1).replace(`/${locale}`, '')
+    : location.pathname.replace(`/${locale}`, '')
   useEffect(() => {
+    if (!locale) {
+      locale = i18n.language
+      history.push(`/${locale}${path}`)
+    } else {
+      i18n.changeLanguage(locale)
+    }
     getDoc({ id: path, locale })
-  }, [getDoc, path, locale])
+  }, [getDoc, path, locale, i18n])
 
-  const handleClick = (e) => {
+  const handle_click = (e) => {
     const event_path = e.composedPath()
     const element = event_path.find((p) => p.className === 'doc__header-link')
     const anchor = element ? element.dataset.anchor : ''
@@ -102,18 +109,18 @@ export default function DocPage({ getDoc, showNotification, doc, location }) {
 
     const headers = document.querySelectorAll('.doc__header-link')
     headers.forEach((header) => {
-      header.addEventListener('click', handleClick)
+      header.addEventListener('click', handle_click)
     })
 
     return () =>
       headers.forEach((header) => {
-        header.removeEventListener('click', handleClick)
+        header.removeEventListener('click', handle_click)
       })
-  }, [location, handleClick])
+  }, [location, handle_click])
 
   const author = doc.getIn(['commit', 'commit', 'author', 'name'])
-  const lastUpdated = doc.getIn(['commit', 'commit', 'author', 'date'])
-  const commitHref = doc.getIn(['commit', 'html_url'])
+  const last_updated = doc.getIn(['commit', 'commit', 'author', 'date'])
+  const commit_href = doc.getIn(['commit', 'html_url'])
 
   const authors = []
   doc.get('authors', []).forEach((author, index) => {
@@ -208,15 +215,15 @@ export default function DocPage({ getDoc, showNotification, doc, location }) {
             {Boolean(author) && (
               <div className='doc__content-author'>
                 {t('doc.updated_by', 'updated by')}{' '}
-                <a href={commitHref} target='_blank' rel='noreferrer'>
-                  {author} {timeago.format(lastUpdated)}
+                <a href={commit_href} target='_blank' rel='noreferrer'>
+                  {author} {timeago.format(last_updated)}
                 </a>
               </div>
             )}
           </div>
           <Button
             variant='outlined'
-            href={`https://github.com/${REPO}/tree/main/docs${path}.md`}
+            href={`https://github.com/${REPO}/tree/main/docs/${locale}${path}.md`}
             target='_blank'
             className='doc__content-edit'>
             {t('doc.edit_page', 'Edit Page')}

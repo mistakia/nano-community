@@ -37,7 +37,7 @@ export const api = {
       const url = `${API_URL}/docs${id}.md`
       return { url }
     } else {
-      const url = `${API_URL}/docs/${locale}/${id}.md`
+      const url = `${API_URL}/docs/${locale}${id}.md`
       return { url }
     }
   },

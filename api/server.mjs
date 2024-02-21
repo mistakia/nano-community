@@ -107,8 +107,8 @@ const speedLimiter = slowDown({
   maxDelayMs: 20000 // maximum delay of 20 seconds
 })
 
-api.use('/api/docs', speedLimiter, serveStatic(docsPath))
-api.use('/api/docs/en', speedLimiter, serveStatic(docsPath))
+api.use('/api/docs', speedLimiter, serveStatic(path.join(docsPath, 'en')))
+api.use('/api/docs/en', speedLimiter, serveStatic(path.join(docsPath, 'en')))
 api.get('/api/docs/:locale/*', speedLimiter, async (req, res) => {
   const { locale } = req.params
   const doc_id = req.params[0] // Capture the rest of the path as doc_id
