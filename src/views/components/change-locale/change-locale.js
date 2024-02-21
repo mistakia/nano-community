@@ -23,6 +23,7 @@ export default function ChangeLocale({ change_locale, locale }) {
     es: 'Español',
     fa: 'فارسی',
     fr: 'Français',
+    hi: 'हिन्दी',
     it: 'Italiano',
     de: 'Deutsch',
     nl: 'Nederlands',
