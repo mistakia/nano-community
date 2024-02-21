@@ -18,6 +18,7 @@ function TranslateIcon(props) {
 
 export default function ChangeLocale({ change_locale, locale }) {
   const locale_texts = {
+    ar: 'العربية',
     en: 'English',
     es: 'Español',
     fr: 'Français',
