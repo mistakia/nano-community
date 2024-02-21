@@ -25,6 +25,7 @@ export default function ChangeLocale({ change_locale, locale }) {
     fr: 'Français',
     hi: 'हिन्दी',
     it: 'Italiano',
+    ja: '日本語',
     de: 'Deutsch',
     nl: 'Nederlands',
     ru: 'Русский'
