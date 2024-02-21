@@ -17,7 +17,8 @@ import './menu.styl'
 const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
 
 function MenuSections() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const locale = i18n.language
   return (
     <div className='menu__sections'>
       <div className='menu__section'>
@@ -25,55 +26,56 @@ function MenuSections() {
           {t('menu.introduction', 'Introduction')}
         </div>
         <div className='menu__links'>
-          <NavLink to='/introduction/basics'>
+          <NavLink to={`/${locale}/introduction/basics`}>
             {t('menu.overview', 'Overview')}
           </NavLink>
-          <NavLink to='/introduction/advantages'>
+          <NavLink to={`/${locale}/introduction/advantages`}>
             {t('menu.advantages', 'Advantages')}
           </NavLink>
-          <NavLink to='/introduction/how-it-works'>
+          <NavLink to={`/${locale}/introduction/how-it-works`}>
             {t('menu.how_it_works', 'How it works')}
           </NavLink>
-          <NavLink to='/introduction/why-it-matters'>
+          <NavLink to={`/${locale}/introduction/why-it-matters`}>
             {t('menu.why_it_matters', 'Why it matters')}
           </NavLink>
-          <NavLink to='/introduction/misconceptions'>
+          <NavLink to={`/${locale}/introduction/misconceptions`}>
             {t('menu.misconceptions', 'Misconceptions')}
           </NavLink>
-          <NavLink to='/introduction/investment-thesis'>
+          <NavLink to={`/${locale}/introduction/investment-thesis`}>
             {t('menu.investment_thesis', 'Investment thesis')}
           </NavLink>
-          <NavLink to='/history/overview'>
+          <NavLink to={`/${locale}/history/overview`}>
             {t('menu.history', 'History')}
           </NavLink>
-          <NavLink to='/faqs'>{t('menu.faqs', 'FAQs')}</NavLink>
+          <NavLink to={`/${locale}/faqs`}>{t('menu.faqs', 'FAQs')}</NavLink>
         </div>
       </div>
       <div className='menu__section'>
         <div className='menu__heading'>{t('menu.guides', 'Guides')}</div>
         <div className='menu__links'>
-          <NavLink to='/getting-started-users/basics'>
+          <NavLink to={`/${locale}/getting-started-users/basics`}>
             {t('menu.basics', 'Basics')}
           </NavLink>
-          <NavLink to='/getting-started-users/storing/basics'>
+          <NavLink to={`/${locale}/getting-started-users/storing/basics`}>
             {t('menu.storing', 'Storing')}
           </NavLink>
-          <NavLink to='/getting-started-users/acquiring'>
+          <NavLink to={`/${locale}/getting-started-users/acquiring`}>
             {t('menu.acquiring', 'Acquiring')}
           </NavLink>
-          <NavLink to='/getting-started-users/choosing-a-representative'>
+          <NavLink
+            to={`/${locale}/getting-started-users/choosing-a-representative`}>
             {t('menu.choosing_a_rep', 'Choosing a Rep')}
           </NavLink>
-          <NavLink to='/getting-started-users/using'>
+          <NavLink to={`/${locale}/getting-started-users/using`}>
             {t('menu.using', 'Using')}
           </NavLink>
-          <NavLink to='/getting-started-users/storing/setup'>
+          <NavLink to={`/${locale}/getting-started-users/storing/setup`}>
             {t('menu.account_setup', 'Account Setup')}
           </NavLink>
-          <NavLink to='/getting-started-users/privacy'>
+          <NavLink to={`/${locale}/getting-started-users/privacy`}>
             {t('menu.privacy', 'Privacy')}
           </NavLink>
-          <NavLink to='/getting-started-users/best-practices'>
+          <NavLink to={`/${locale}/getting-started-users/best-practices`}>
             {t('menu.best_practices', 'Best Practices')}
           </NavLink>
         </div>
@@ -81,20 +83,22 @@ function MenuSections() {
       <div className='menu__section'>
         <div className='menu__heading'>{t('menu.learn', 'Learn')}</div>
         <div className='menu__links'>
-          <NavLink to='/design/basics'>{t('menu.design', 'Design')}</NavLink>
-          <NavLink to='/design/security'>
+          <NavLink to={`/${locale}/design/basics`}>
+            {t('menu.design', 'Design')}
+          </NavLink>
+          <NavLink to={`/${locale}/design/security`}>
             {t('menu.security', 'Security')}
           </NavLink>
-          <NavLink to='/design/attack-vectors'>
+          <NavLink to={`/${locale}/design/attack-vectors`}>
             {t('menu.attack_vectors', 'Attack Vectors')}
           </NavLink>
-          <NavLink to='/design/challenges'>
+          <NavLink to={`/${locale}/design/challenges`}>
             {t('menu.challenges', 'Challenges')}
           </NavLink>
-          <NavLink to='/design/glossary'>
+          <NavLink to={`/${locale}/design/glossary`}>
             {t('menu.glossary', 'Glossary')}
           </NavLink>
-          <NavLink to='/support'>
+          <NavLink to={`/${locale}/support`}>
             {t('menu.get_support', 'Get Support')}
           </NavLink>
         </div>
@@ -104,22 +108,22 @@ function MenuSections() {
           {t('menu.developers', 'Developers')}
         </div>
         <div className='menu__links'>
-          <NavLink to='/getting-started-devs/getting-started'>
+          <NavLink to={`/${locale}/getting-started-devs/getting-started`}>
             {t('menu.getting_started', 'Getting Started')}
           </NavLink>
-          <NavLink to='/getting-started-devs/integrations'>
+          <NavLink to={`/${locale}/getting-started-devs/integrations`}>
             {t('menu.integrations', 'Integrations')}
           </NavLink>
-          <NavLink to='/getting-started-devs/running-a-node'>
+          <NavLink to={`/${locale}/getting-started-devs/running-a-node`}>
             {t('menu.running_a_node', 'Running a node')}
           </NavLink>
-          <NavLink to='/getting-started-devs/documentation'>
+          <NavLink to={`/${locale}/getting-started-devs/documentation`}>
             {t('menu.documentation', 'Documentation')}
           </NavLink>
-          <NavLink to='/getting-started-devs/protocol-reference'>
+          <NavLink to={`/${locale}/getting-started-devs/protocol-reference`}>
             {t('menu.protocol', 'Protocol')}
           </NavLink>
-          <NavLink to='/getting-started-devs/developer-discussions'>
+          <NavLink to={`/${locale}/getting-started-devs/developer-discussions`}>
             {t('menu.developer_discussions', 'Developer Discussions')}
           </NavLink>
         </div>
@@ -130,10 +134,10 @@ function MenuSections() {
         </div>
         <div className='menu__links'>
           <NavLink to='/roadmap'>{t('menu.planning', 'Planning 👾')}</NavLink>
-          <NavLink to='/contributing'>
+          <NavLink to={`/${locale}/contributing`}>
             {t('menu.contribution_guide', 'Contribution Guide')}
           </NavLink>
-          <NavLink to='/community'>
+          <NavLink to={`/${locale}/community`}>
             {t('menu.communities', 'Communities')}
           </NavLink>
         </div>
@@ -154,7 +158,9 @@ function MenuSections() {
       <div className='menu__section'>
         <div className='menu__heading'>{t('menu.topics', 'Topics')}</div>
         <div className='menu__links'>
-          <NavLink to='/labels/privacy'>{t('menu.privacy', 'Privacy')}</NavLink>
+          <NavLink to={`/${locale}/labels/privacy`}>
+            {t('menu.privacy', 'Privacy')}
+          </NavLink>
         </div>
       </div>
     </div>
