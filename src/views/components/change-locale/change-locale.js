@@ -21,6 +21,7 @@ export default function ChangeLocale({ change_locale, locale }) {
     ar: 'العربية',
     en: 'English',
     es: 'Español',
+    fa: 'فارسی',
     fr: 'Français',
     it: 'Italiano',
     de: 'Deutsch',
