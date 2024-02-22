@@ -28,7 +28,8 @@ export default function ChangeLocale({ change_locale, locale }) {
     ja: '日本語',
     de: 'Deutsch',
     nl: 'Nederlands',
-    ru: 'Русский'
+    ru: 'Русский',
+    ko: '한국어'
   }
 
   return (
