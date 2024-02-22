@@ -30,7 +30,8 @@ export default function ChangeLocale({ change_locale, locale }) {
     nl: 'Nederlands',
     ru: 'Русский',
     ko: '한국어',
-    pl: 'Polski'
+    pl: 'Polski',
+    pt: 'Português'
   }
 
   return (
