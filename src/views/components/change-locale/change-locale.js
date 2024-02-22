@@ -29,7 +29,8 @@ export default function ChangeLocale({ change_locale, locale }) {
     de: 'Deutsch',
     nl: 'Nederlands',
     ru: 'Русский',
-    ko: '한국어'
+    ko: '한국어',
+    pl: 'Polski'
   }
 
   return (
