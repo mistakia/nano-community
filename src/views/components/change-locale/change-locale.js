@@ -34,7 +34,8 @@ export default function ChangeLocale({ change_locale, locale }) {
     pt: 'Português',
     tr: 'Türkçe',
     vi: 'Tiếng Việt',
-    zh: '中文'
+    zh: '中文',
+    no: 'Norsk'
   }
 
   return (
