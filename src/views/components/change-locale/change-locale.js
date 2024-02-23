@@ -31,7 +31,8 @@ export default function ChangeLocale({ change_locale, locale }) {
     ru: 'Русский',
     ko: '한국어',
     pl: 'Polski',
-    pt: 'Português'
+    pt: 'Português',
+    tr: 'Türkçe'
   }
 
   return (
