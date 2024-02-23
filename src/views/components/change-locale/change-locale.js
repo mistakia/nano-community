@@ -33,7 +33,8 @@ export default function ChangeLocale({ change_locale, locale }) {
     pl: 'Polski',
     pt: 'Português',
     tr: 'Türkçe',
-    vi: 'Tiếng Việt'
+    vi: 'Tiếng Việt',
+    zh: '中文'
   }
 
   return (
