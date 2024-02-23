@@ -1,0 +1,387 @@
+{
+  "account_page": {
+    "address": "Hesap Adresi",
+    "change_summary": "Özet Değiştir",
+    "copy_notification": "Hesap adresi kopyalandı",
+    "seo_description": "Nano temsilci için bilgiler",
+    "seo_title": "Nano Hesabı",
+    "telemetry_charts": "Telemetri Grafikleri",
+    "unopened_description": "Hesap adresi geçerli olsa da, herhangi bir blok gözlemlenmemiştir. Bu hesaba NANO gönderildiyse, fonları almak ve açılış bakiyesi oluşturmak için ilgili bir blok yayınlamak gerekmektedir. Bir hesabın bakiyesi yalnızca hesap sahibi tarafından güncellenebilir çünkü blokları kendi zincirlerine yayınlama yetkileri vardır.",
+    "unopened_note": "Açılış bloğu zaten yayınlanmışsa, ağ üzerinden yayılması ve nano.community düğümleri tarafından gözlemlenmesi birkaç an alabilir.",
+    "unopened_title": "Bu hesap henüz açılmadı"
+  },
+  "account_blocks_summary": {
+    "first_timestamp": "İlk Zaman Damgası",
+    "last_timestamp": "Son Zaman Damgası",
+    "max_amount": "Maksimum Miktar",
+    "min_amount": "Minimum Miktar",
+    "no_records": "Kayıt Yok",
+    "receiving_account": "Alıcı Hesap",
+    "representative_account": "Temsilci Hesabı",
+    "sending_account": "Gönderen Hesap",
+    "showing_top_10": "Toplamı azalan sırayla ilk 10 hesap gösteriliyor",
+    "transactions": "İşlemler"
+  },
+  "account_meta": {
+    "account_info": "Hesap Bilgisi",
+    "funding_account": "Finansman Hesabı",
+    "funding_timestamp": "Finansman Zaman Damgası",
+    "height": "Yükseklik",
+    "last_modified": "Son Değiştirilme",
+    "open_timestamp": "Açılış Zaman Damgası",
+    "opening_balance": "Açılış Bakiyesi",
+    "receivable_balance": "Alınabilir Bakiye"
+  },
+  "block_page": {
+    "amount": "Miktar",
+    "copy_notification": "Blok hash'i kopyalandı",
+    "delegated_representative": "Delege Edilmiş Temsilci",
+    "description": "Açıklama",
+    "epoch_v1": "Epoch v1 — Hesap zincirlerini eski bloklardan (açık, al, gönder, değiştir) durum bloklarına yükseltildi.",
+    "epoch_v2": "Epoch v2 - Hesap zincirlerini daha yüksek İş Kanıtı zorluğunu kullanacak şekilde yükseltildi.",
+    "receiving_account": "Alıcı Hesap",
+    "section_label": "Blok Hash'i",
+    "sending_account": "Gönderen Hesap",
+    "seo_description": "Nano Bloğu ile ilgili bilgiler",
+    "seo_title": "Nano Blok",
+    "voting_weight": "Oylama Ağırlığı"
+  },
+  "block_info": {
+    "block_account": "Blok Hesabı",
+    "operation": "Operasyon",
+    "status": "Durum",
+    "timestamp": "Zaman Damgası"
+  },
+  "block_status": {
+    "confirmed": "Onaylandı",
+    "unconfirmed": "Onaylanmadı"
+  },
+  "block_type": {
+    "change": "Değiştir",
+    "epoch": "Epoch",
+    "open": "Aç",
+    "receive": "Al",
+    "send": "Gönder"
+  },
+  "common": {
+    "account_one": "Hesap",
+    "account_other": "Hesaplar",
+    "address": "Adres",
+    "balance": "Bakiye",
+    "bandwidth_limit": "Bant Genişliği Limiti",
+    "bandwidth_limit_short": "BG Limiti",
+    "blocks": "Bloklar",
+    "blocks_behind": "Geriye Kalan Bloklar",
+    "blocks_diff_short": "Bloklar Farkı",
+    "by_online_weight": "Çevrimiçi Ağırlığa Göre",
+    "clear_filters": "Filtreleri Temizle",
+    "click_to_copy": "Kopyalamak için tıklayın",
+    "collapse": "Daralt",
+    "conf_short": "Onay.",
+    "conf_diff_short": "Onay Farkı",
+    "confirmations_behind": "Geriye Kalan Onaylar",
+    "country": "Ülke",
+    "delegator_one": "Delege",
+    "delegator_other": "Delegeler",
+    "max": "Maks",
+    "min": "Min",
+    "offline": "Çevrimdışı",
+    "online": "Çevrimiçi",
+    "peers": "Eşler",
+    "percent_of_total": "Toplamın Yüzdesi",
+    "port": "Port",
+    "quorum_delta": "Korum Delta",
+    "representative_one": "Temsilci",
+    "representative_other": "Temsilciler",
+    "show_more": "{{count}} daha fazla göster",
+    "total": "Toplam",
+    "unchecked": "Kontrol Edilmemiş",
+    "unchecked_count": "Kontrol Edilmemiş Sayısı",
+    "unlimited": "Sınırsız",
+    "uptime": "Çalışma Süresi",
+    "version": "Versiyon",
+    "weight": "Ağırlık"
+  },
+  "delegators": {
+    "showing_top_delegators": "En üstteki 100 delegatör gösteriliyor, minimum bakiye 1 Nano."
+  },
+  "doc": {
+    "contributors": "Katkıda Bulunanlar",
+    "document_not_found": "Belge (veya Hesap) bulunamadı",
+    "edit_page": "Sayfayı Düzenle",
+    "help_out": "Yardım Et",
+    "not_found_404": "404",
+    "section_link_copied": "Bölüm bağlantısı kopyalandı",
+    "updated_by": "güncelleyen"
+  },
+  "github_events": {
+    "action": {
+      "added_member": "üye eklendi",
+      "commented_on_commit": "commit üzerine yorum yapıldı",
+      "commented_on_issue": "sorun üzerine yorum yapıldı",
+      "commented_on_pr_review": "pr incelemesi üzerine yorum yapıldı",
+      "created": "{{action}} oluşturuldu",
+      "deleted": "{{action}} silindi",
+      "forked": "forklandı",
+      "issue_action": "{{action}} sorunu",
+      "made_public": "halka açık yapıldı",
+      "pr_action": "{{action}} pr",
+      "pr_review": "pr incelemesi {{title}}",
+      "published_release": "yayınlandı",
+      "pushed_commit": "{{ref}}'e commit gönderildi",
+      "sponsorship_started": "sponsorluk başladı",
+      "watching_repo": "repo izleniyor"
+    },
+    "events_title": "Geliştirme Olayları"
+  },
+  "ledger": {
+    "addresses": {
+      "active_detail": "Aktif, kullanılan benzersiz adreslerin sayısını gösterir. Yeni, oluşturulan adreslerin sayısını gösterir. Yeniden kullanılan, önceki bir günde oluşturulmuş adreslerin kullanıldığını gösterir.",
+      "active_stats": "Aktif Adres İstatistikleri",
+      "new_stats": "Yeni Adres İstatistikleri",
+      "total_number": "Günde kullanılan aktif, yeni ve yeniden kullanılan adreslerin toplam sayısı."
+    },
+    "amounts": {
+      "total_number": "Blokta belirli bir aralıkta (Nano cinsinden) olan miktarla doğrulanmış gönderi tipi blokların sayısı."
+    },
+    "blocks": {
+      "change": "Değişiklik Blok İstatistikleri",
+      "description": "Günde onaylanan blokların sayısı.",
+      "open": "Açık Blok İstatistikleri",
+      "receive": "Alma Blok İstatistikleri",
+      "send": "Gönderme Blok İstatistikleri",
+      "total": "Toplam Blok İstatistikleri"
+    },
+    "description": "Açıklama",
+    "usd_transferred": {
+      "desc_1": "Günde aktarılan toplam değer miktarı (USD cinsinden).",
+      "desc_2": "Nano/USD'nin günlük kapanış fiyatına ve o gün aktarılan toplam Nano miktarına dayanmaktadır.",
+      "usd_transferred": "USD Aktarıldı",
+      "usd_transferred_stats": "USD Aktarılan İstatistikler"
+    },
+    "volume": {
+      "change_stats": "Değişim İstatistikleri",
+      "description": "Günde gönderilen toplam miktar (Nano cinsinden) ve günlük toplam oy ağırlığı değişimi.",
+      "send_stats": "Gönderim İstatistikleri"
+    }
+  },
+  "ledger_page": {
+    "addresses_tab": "Adresler",
+    "amounts_tab": "Miktarlar",
+    "blocks_tab": "Bloklar",
+    "seo_description": "Nano defterinin zincir içi metrikleri ve analizleri",
+    "seo_title": "Nano Defter Analizi",
+    "value_transferred_tab": "Aktarılan Değer",
+    "volume_tab": "Hacim"
+  },
+  "menu": {
+    "account_setup": "Hesap Kurulumu",
+    "acquiring": "Edinme",
+    "advantages": "Avantajlar",
+    "attack_vectors": "Saldırı Vektörleri",
+    "basics": "Temeller",
+    "best_practices": "En İyi Uygulamalar",
+    "choosing_a_rep": "Temsilci Seçimi",
+    "challenges": "Zorluklar",
+    "communities": "Topluluklar",
+    "contribution_guide": "Katkı Rehberi",
+    "design": "Tasarım",
+    "developer_discussions": "Geliştirici Tartışmaları",
+    "developers": "Geliştiriciler",
+    "documentation": "Dokümantasyon",
+    "faqs": "SSS",
+    "get_involved": "Katıl",
+    "get_support": "Destek Al",
+    "getting_started": "Başlarken",
+    "glossary": "Sözlük",
+    "guides": "Rehberler",
+    "history": "Tarih",
+    "home": "Ana Sayfa",
+    "how_it_works": "Nasıl Çalışır",
+    "integrations": "Entegrasyonlar",
+    "introduction": "Giriş",
+    "investment_thesis": "Yatırım Tezi",
+    "learn": "Öğren",
+    "ledger": "Defter",
+    "misconceptions": "Yanlış Anlamalar",
+    "overview": "Genel Bakış",
+    "planning": "Planlama 👾",
+    "privacy": "Gizlilik",
+    "protocol": "Protokol",
+    "running_a_node": "Bir Düğüm Çalıştırmak",
+    "security": "Güvenlik",
+    "stats": "İstatistikler",
+    "storing": "Saklama",
+    "telemetry": "Telemetri",
+    "topics": "Konular",
+    "using": "Kullanım",
+    "why_it_matters": "Neden Önemli"
+  },
+  "network": {
+    "backlog_text": "Onaylanmayı bekleyen işlemlerin medyan sayısı $(network.pr_text)",
+    "censor_text": "İşlemleri sansürlemek veya ağı durdurmak için gereken minimum temsilci sayısı",
+    "confirm_text": "İşlemleri onaylamak için gereken minimum temsilci sayısı",
+    "confirmations": "Onaylar (24s)",
+    "confirmations_text": "Son 24 saatte ağ tarafından onaylanan toplam işlem sayısı",
+    "energy_text": "Toplanan CPU model bilgilerine dayanarak canlı ağın CPU enerji kullanımının tahmini. Tahmin, tüm çekirdekler aktifken ve üretici tarafından tanımlanan yüksek karmaşıklıktaki iş yükü altında işlemcinin ortalama olarak dağıttığı watt cinsinden ortalama güç olan CPU TDP'sine dayanmaktadır",
+    "energy_usage": "Enerji Kullanımı (TDP) (24s)",
+    "fee_text": "Nano ağı ücretsiz olarak işlemektedir",
+    "nano_ticker": "NanoTicker",
+    "online_stake": "Çevrimiçi Hisse",
+    "principal_reps": "Başlıca Temsilciler",
+    "pr_text": "ağın başlıca temsilcileri arasında gözlemlenen: çevrimiçi oy ağırlığının %0.1'inden fazlasına sahip olan oy verme düğümleri",
+    "reps_to_censor": "Sansür veya Duraklatma için Temsilciler",
+    "reps_to_confirm": "Onay için Temsilciler",
+    "settlement": "Yerleşim (24s)",
+    "settlement_text": "Son 24 saatte ağ tarafından yerleştirilen toplam değer miktarı",
+    "speed_text": "Bir test işleminin onaylanması için gereken süre milisaniye cinsinden",
+    "stake_text": "Oy kullanmada aktif olarak yer alan delegasyonun Nano ağırlık yüzdesi",
+    "stats_title": "Ağ İstatistikleri",
+    "total_reps": "Toplam Temsilciler (24s)",
+    "tx_backlog": "Tx Bekleme Listesi",
+    "tx_fees": "Tx Ücretleri (24s)",
+    "tx_speed": "Tx Hızı",
+    "tx_throughput": "Tx İşlem Kapasitesi",
+    "throughput_text": "Son dakikada saniye başına onaylanan işlemlerin medyan sayısı $(network.pr_text)"
+  },
+  "posts": {
+    "nano_foundation": "Nano Vakfı",
+    "top": "En İyi",
+    "trending": "Trend"
+  },
+  "representative_alerts": {
+    "table_header": {
+      "behind": "Geri Kalan",
+      "issue": "Sorun",
+      "last_online": "Son Çevrimiçi",
+      "percent_online_weight": "% Çevrimiçi Ağırlık",
+      "representative": "Temsilci"
+    },
+    "tooltip": {
+      "behind": "Temsilci geride kaldı veya önyükleme yapıyor. Kesim noktası, 95. persentilin ötesinde bir çimento sayısıdır. (telemetri aracılığıyla)",
+      "low_uptime": "Temsilci son 28 günde %25'ten fazla çevrimdışıydı.",
+      "offline": "Temsilci oy kullanmayı durdurdu ve çevrimdışı görünüyor.",
+      "overweight": "Temsilcinin 3M Nano oy ağırlığından fazlası var. Delegelerin ağın direncini ve değerini artırmak için ağırlığı dağıtmayı düşünmeleri gerekir."
+    },
+    "type": {
+      "behind": "Geri Kalan",
+      "low_uptime": "Düşük Çalışma Süresi",
+      "offline": "Çevrimdışı",
+      "overweight": "Aşırı Ağırlık"
+    }
+  },
+  "representatives_cemented_by_weight": {
+    "title": "Onay Farkı",
+    "tooltip": "Lider düğümden X sayıda onay içinde olan oy ağırlığının miktarını gösterir. Ağın ne kadar iyi senkronize edildiğini ve düğümler arasında ne kadar hizalandığını bilmek için yararlıdır"
+  },
+  "representatives_checked_by_weight": {
+    "title": "Blok Farkı",
+    "tooltip": "Lider düğümden X sayıda blok içinde olan oy ağırlığının miktarını gösterir. Ağ içinde blok yayılımının ne kadar senkronize olduğunu anlamak için yararlıdır"
+  },
+  "representative_delegators": {
+    "showing_top_delegators": "Minimum 1 Nano bakiyesi olan en iyi 100 delegatör gösteriliyor."
+  },
+  "representative_info": {
+    "first_seen": "İlk Görülme",
+    "last_seen": "Son Görülme",
+    "weight_represented": "Temsil Edilen Ağırlık"
+  },
+  "representative_network": {
+    "city": "Şehir",
+    "isp": "ISS",
+    "network": "Ağ",
+    "provider": "Sağlayıcı"
+  },
+  "representative_telemetry": {
+    "telemetry": "Telemetri",
+    "telemetry_timestamp": "Telemetri Zaman Damgası"
+  },
+  "representative_uptime": {
+    "2m_uptime": "2A Çalışma Süresi",
+    "2w_uptime": "2H Çalışma Süresi",
+    "3m_uptime": "3A Çalışma Süresi",
+    "current_status": "Mevcut Durum",
+    "down": "Çalışmıyor",
+    "down_for": "İçin Çalışmıyor",
+    "operational": "Operasyonel",
+    "up_for": "İçin Çalışıyor",
+    "warning": "Uyarı"
+  },
+  "representatives": {
+    "alias": "Takma Ad",
+    "cpu_cores": "CPU Çekirdekleri",
+    "cpu_model": "CPU Modeli",
+    "tdp": "TDP (wH)",
+    "protocol_version": "Protokol",
+    "last_seen": "Son Görülme",
+    "host_asn": "Host ASN"
+  },
+  "representatives_bandwidth_by_weight": {
+    "tooltip": "Her düğüm tarafından yerel olarak ayarlanan bant genişliği limitine göre oy ağırlığının miktarını gösterir"
+  },
+  "representatives_country_by_weight": {
+    "title": "Ülke"
+  },
+  "representatives_offline": {
+    "account": "Çevrimdışı Hesap",
+    "last_online": "Son Çevrimiçi"
+  },
+  "representatives_page": {
+    "seo_description": "Nano ağ temsilcilerini keşfedin ve analiz edin",
+    "seo_title": "Nano Temsilcileri Gezgini",
+    "telemetry_tab": "Telemetri",
+    "weight_distribution_tab": "Ağırlık Dağılımı",
+    "weight_history_tab": "Ağırlık Geçmişi",
+    "offline_reps_tab": "Çevrimdışı Temsilciler"
+  },
+  "representatives_provider_by_weight": {
+    "title": "Barındırma Sağlayıcısı"
+  },
+  "representatives_quorum_charts": {
+    "peers_weight": "Eşlerin Ağırlığı",
+    "quorum_delta": "Korum Farkı",
+    "title": "Korum Grafikleri",
+    "trended_weight": "Trend Olan Ağırlık"
+  },
+  "representatives_search": {
+    "placeholder": "Hesap, takma ad, ip ile filtrele"
+  },
+  "representatives_weight": {
+    "trended": "Trend Olan"
+  },
+  "representatives_weight_chart": {
+    "title": "Temsilciye Göre Ağırlık Dağılımı"
+  },
+  "representatives_version_by_weight": {
+    "title": "Versiyonlar"
+  },
+  "roadmap": {
+    "header": {
+      "subtitle": "Topluluk hedefleri",
+      "title": "Planlama"
+    },
+    "seo": {
+      "description": "Nano geliştirme & topluluk yol haritası",
+      "tags": [
+        "yol haritası",
+        "nano",
+        "gelecek",
+        "sürüm",
+        "tasarım",
+        "görevler",
+        "tartışmalar",
+        "topluluk",
+        "elçiler",
+        "yöneticiler"
+      ],
+      "title": "Yol Haritası"
+    }
+  },
+  "search_bar": {
+    "placeholder": "Adres / Blok Hash ile Ara"
+  },
+  "uptime": {
+    "now": "Şimdi",
+    "days_ago": "gün önce"
+  }
+}
