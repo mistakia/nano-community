@@ -1,0 +1,387 @@
+{
+  "account_page": {
+    "address": "Địa chỉ tài khoản",
+    "change_summary": "Thay đổi tóm tắt",
+    "copy_notification": "Đã sao chép địa chỉ tài khoản",
+    "seo_description": "Thông tin cho đại diện nano",
+    "seo_title": "Tài khoản Nano",
+    "telemetry_charts": "Biểu đồ Telemetry",
+    "unopened_description": "Mặc dù địa chỉ tài khoản là hợp lệ, không có khối nào được quan sát. Nếu NANO đã được gửi đến tài khoản này, nó vẫn cần phải xuất bản một khối tương ứng để nhận tiền và thiết lập một số dư mở. Số dư của một tài khoản chỉ có thể được cập nhật bởi chủ sở hữu tài khoản vì họ là người duy nhất có thể xuất bản các khối vào chuỗi của họ.",
+    "unopened_note": "Nếu một khối mở đã được xuất bản, có thể mất một vài phút để lan truyền qua mạng và được các nút nano.community quan sát.",
+    "unopened_title": "Tài khoản này chưa được mở"
+  },
+  "account_blocks_summary": {
+    "first_timestamp": "Dấu thời gian đầu tiên",
+    "last_timestamp": "Dấu thời gian cuối cùng",
+    "max_amount": "Số lượng tối đa",
+    "min_amount": "Số lượng tối thiểu",
+    "no_records": "Không có bản ghi",
+    "receiving_account": "Tài khoản nhận",
+    "representative_account": "Tài khoản đại diện",
+    "sending_account": "Tài khoản gửi",
+    "showing_top_10": "Hiển thị 10 tài khoản hàng đầu theo tổng giảm dần",
+    "transactions": "Giao dịch"
+  },
+  "account_meta": {
+    "account_info": "Thông tin tài khoản",
+    "funding_account": "Tài khoản tài trợ",
+    "funding_timestamp": "Dấu thời gian tài trợ",
+    "height": "Chiều cao",
+    "last_modified": "Lần chỉnh sửa cuối",
+    "open_timestamp": "Mở dấu thời gian",
+    "opening_balance": "Số dư mở",
+    "receivable_balance": "Số dư có thể nhận"
+  },
+  "block_page": {
+    "amount": "Số lượng",
+    "copy_notification": "Đã sao chép hash khối",
+    "delegated_representative": "Đại diện được ủy quyền",
+    "description": "Mô tả",
+    "epoch_v1": "Kỷ nguyên v1 — Nâng cấp chuỗi tài khoản từ các khối di sản (mở, nhận, gửi, thay đổi) sang các khối trạng thái.",
+    "epoch_v2": "Kỷ nguyên v2 - Nâng cấp chuỗi tài khoản để sử dụng độ khó Proof-of-Work cao hơn.",
+    "receiving_account": "Tài khoản nhận",
+    "section_label": "Hash khối",
+    "sending_account": "Tài khoản gửi",
+    "seo_description": "Thông tin liên quan đến một khối Nano",
+    "seo_title": "Khối Nano",
+    "voting_weight": "Trọng số bỏ phiếu"
+  },
+  "block_info": {
+    "block_account": "Tài khoản khối",
+    "operation": "Hoạt động",
+    "status": "Trạng thái",
+    "timestamp": "Dấu thời gian"
+  },
+  "block_status": {
+    "confirmed": "Đã xác nhận",
+    "unconfirmed": "Chưa xác nhận"
+  },
+  "block_type": {
+    "change": "Thay đổi",
+    "epoch": "Kỷ nguyên",
+    "open": "Mở",
+    "receive": "Nhận",
+    "send": "Gửi"
+  },
+  "common": {
+    "account_one": "Tài khoản",
+    "account_other": "Các tài khoản",
+    "address": "Địa chỉ",
+    "balance": "Số dư",
+    "bandwidth_limit": "Giới hạn băng thông",
+    "bandwidth_limit_short": "Giới hạn BW",
+    "blocks": "Khối",
+    "blocks_behind": "Khối phía sau",
+    "blocks_diff_short": "Khác biệt khối",
+    "by_online_weight": "Theo trọng số trực tuyến",
+    "clear_filters": "Xóa bộ lọc",
+    "click_to_copy": "Nhấn để sao chép",
+    "collapse": "Thu gọn",
+    "conf_short": "Xác nhận.",
+    "conf_diff_short": "Khác biệt xác nhận",
+    "confirmations_behind": "Xác nhận phía sau",
+    "country": "Quốc gia",
+    "delegator_one": "Người ủy quyền",
+    "delegator_other": "Người ủy quyền",
+    "max": "Tối đa",
+    "min": "Tối thiểu",
+    "offline": "Ngoại tuyến",
+    "online": "Trực tuyến",
+    "peers": "Đối tác",
+    "percent_of_total": "% của tổng",
+    "port": "Cổng",
+    "quorum_delta": "Delta quorum",
+    "representative_one": "Đại diện",
+    "representative_other": "Các đại diện",
+    "show_more": "Hiển thị thêm {{count}}",
+    "total": "Tổng",
+    "unchecked": "Chưa kiểm tra",
+    "unchecked_count": "Số lượng chưa kiểm tra",
+    "unlimited": "Không giới hạn",
+    "uptime": "Thời gian hoạt động",
+    "version": "Phiên bản",
+    "weight": "Trọng lượng"
+  },
+  "delegators": {
+    "showing_top_delegators": "Hiển thị 100 người ủy quyền hàng đầu với số dư tối thiểu là 1 Nano."
+  },
+  "doc": {
+    "contributors": "Người đóng góp",
+    "document_not_found": "Tài liệu (hoặc Tài khoản) không tìm thấy",
+    "edit_page": "Chỉnh sửa trang",
+    "help_out": "Giúp đỡ",
+    "not_found_404": "404",
+    "section_link_copied": "Liên kết mục đã được sao chép",
+    "updated_by": "cập nhật bởi"
+  },
+  "github_events": {
+    "action": {
+      "added_member": "đã thêm thành viên",
+      "commented_on_commit": "đã bình luận về commit",
+      "commented_on_issue": "đã bình luận về vấn đề",
+      "commented_on_pr_review": "đã bình luận về đánh giá pr",
+      "created": "đã tạo {{action}}",
+      "deleted": "đã xóa {{action}}",
+      "forked": "đã fork",
+      "issue_action": "{{action}} vấn đề",
+      "made_public": "đã công khai",
+      "pr_action": "{{action}} pr",
+      "pr_review": "đánh giá pr {{title}}",
+      "published_release": "đã xuất bản phát hành",
+      "pushed_commit": "đã đẩy commit vào {{ref}}",
+      "sponsorship_started": "tài trợ bắt đầu",
+      "watching_repo": "đang theo dõi repo"
+    },
+    "events_title": "Sự kiện Phát triển"
+  },
+  "ledger": {
+    "addresses": {
+      "active_detail": "Hoạt động hiển thị số lượng địa chỉ duy nhất được sử dụng. Mới hiển thị số lượng địa chỉ được tạo. Tái sử dụng hiển thị số lượng địa chỉ được sử dụng đã được tạo vào ngày trước đó.",
+      "active_stats": "Thống kê Địa chỉ Hoạt động",
+      "new_stats": "Thống kê Địa chỉ Mới",
+      "total_number": "Tổng số lượng địa chỉ hoạt động, mới và tái sử dụng được sử dụng mỗi ngày."
+    },
+    "amounts": {
+      "total_number": "Số lượng các khối loại gửi được xác nhận mỗi ngày mà số lượng trong khối nằm trong phạm vi cho trước (tính bằng Nano)"
+    },
+    "blocks": {
+      "change": "Thống kê Khối Thay đổi",
+      "description": "Số lượng khối được xác nhận mỗi ngày.",
+      "open": "Thống kê Khối Mở",
+      "receive": "Thống kê Khối Nhận",
+      "send": "Thống kê Khối Gửi",
+      "total": "Thống kê Tổng Khối"
+    },
+    "description": "Mô tả",
+    "usd_transferred": {
+      "desc_1": "Tổng số lượng giá trị được chuyển (tính bằng USD) mỗi ngày.",
+      "desc_2": "Dựa trên giá đóng cửa hàng ngày của Nano/USD và tổng số lượng Nano được chuyển trong ngày đó.",
+      "usd_transferred": "USD Đã Chuyển",
+      "usd_transferred_stats": "Thống kê USD Đã Chuyển"
+    },
+    "volume": {
+      "change_stats": "Thống kê Thay đổi",
+      "description": "Tổng số lượng gửi (tính bằng Nano) và tổng số lượng trọng lượng bỏ phiếu thay đổi mỗi ngày.",
+      "send_stats": "Thống kê Gửi"
+    }
+  },
+  "ledger_page": {
+    "addresses_tab": "Địa chỉ",
+    "amounts_tab": "Số lượng",
+    "blocks_tab": "Khối",
+    "seo_description": "Các chỉ số và phân tích trên chuỗi của sổ cái Nano",
+    "seo_title": "Phân tích Sổ cái Nano",
+    "value_transferred_tab": "Giá trị Chuyển nhượng",
+    "volume_tab": "Khối lượng"
+  },
+  "menu": {
+    "account_setup": "Thiết lập Tài khoản",
+    "acquiring": "Đang Thu thập",
+    "advantages": "Ưu điểm",
+    "attack_vectors": "Vector Tấn công",
+    "basics": "Cơ bản",
+    "best_practices": "Phương pháp Tốt nhất",
+    "choosing_a_rep": "Chọn một Đại diện",
+    "challenges": "Thách thức",
+    "communities": "Cộng đồng",
+    "contribution_guide": "Hướng dẫn Đóng góp",
+    "design": "Thiết kế",
+    "developer_discussions": "Thảo luận của Nhà phát triển",
+    "developers": "Nhà phát triển",
+    "documentation": "Tài liệu",
+    "faqs": "Câu hỏi thường gặp",
+    "get_involved": "Tham gia",
+    "get_support": "Nhận Hỗ trợ",
+    "getting_started": "Bắt đầu",
+    "glossary": "Thuật ngữ",
+    "guides": "Hướng dẫn",
+    "history": "Lịch sử",
+    "home": "Trang chủ",
+    "how_it_works": "Cách nó hoạt động",
+    "integrations": "Tích hợp",
+    "introduction": "Giới thiệu",
+    "investment_thesis": "Luận án Đầu tư",
+    "learn": "Học",
+    "ledger": "Sổ cái",
+    "misconceptions": "Hiểu lầm",
+    "overview": "Tổng quan",
+    "planning": "Lập kế hoạch 👾",
+    "privacy": "Riêng tư",
+    "protocol": "Giao thức",
+    "running_a_node": "Chạy một nút",
+    "security": "Bảo mật",
+    "stats": "Thống kê",
+    "storing": "Lưu trữ",
+    "telemetry": "Telemetry",
+    "topics": "Chủ đề",
+    "using": "Sử dụng",
+    "why_it_matters": "Tại sao nó quan trọng"
+  },
+  "network": {
+    "backlog_text": "Số trung bình giao dịch chờ được xác nhận $(network.pr_text)",
+    "censor_text": "Số lượng đại diện tối thiểu cần thiết để kiểm duyệt giao dịch hoặc làm chậm mạng",
+    "confirm_text": "Số lượng đại diện tối thiểu cần thiết để xác nhận giao dịch",
+    "confirmations": "Xác nhận (24h)",
+    "confirmations_text": "Tổng số giao dịch được mạng xác nhận trong 24 giờ qua",
+    "energy_text": "Ước lượng sử dụng năng lượng CPU của mạng trực tiếp của các Đại diện Chính dựa trên thông tin mô hình CPU đã thu thập. Ước lượng dựa trên TDP CPU, là công suất trung bình, tính bằng watt, mà bộ xử lý tản nhiệt khi hoạt động ở tần số cơ bản với tất cả các lõi hoạt động dưới tải công việc phức tạp được định nghĩa bởi nhà sản xuất",
+    "energy_usage": "Sử dụng Năng lượng (TDP) (24h)",
+    "fee_text": "Mạng Nano hoạt động không mất phí",
+    "nano_ticker": "NanoTicker",
+    "online_stake": "Cổ phần Trực tuyến",
+    "principal_reps": "Đại diện Chính",
+    "pr_text": "như quan sát trên các đại diện chính của mạng: các nút bỏ phiếu với hơn 0.1% trọng số bỏ phiếu trực tuyến được ủy quyền cho họ",
+    "reps_to_censor": "Đại diện để Kiểm duyệt hoặc Làm chậm",
+    "reps_to_confirm": "Đại diện để Xác nhận",
+    "settlement": "Giải quyết (24h)",
+    "settlement_text": "Tổng số giá trị được mạng giải quyết trong 24 giờ qua",
+    "speed_text": "Thời gian tính bằng mili giây để một giao dịch thử nghiệm được xác nhận",
+    "stake_text": "Phần trăm trọng số Nano được ủy quyền tham gia tích cực trong việc bỏ phiếu",
+    "stats_title": "Thống kê Mạng",
+    "total_reps": "Tổng số Đại diện (24h)",
+    "tx_backlog": "Tx Backlog",
+    "tx_fees": "Phí Tx (24h)",
+    "tx_speed": "Tốc độ Tx",
+    "tx_throughput": "Lượng xử lý Tx",
+    "throughput_text": "Số lượng giao dịch trung bình được xác nhận mỗi giây trong phút cuối cùng $(network.pr_text)"
+  },
+  "posts": {
+    "nano_foundation": "Quỹ Nano",
+    "top": "Hàng đầu",
+    "trending": "Xu hướng"
+  },
+  "representative_alerts": {
+    "table_header": {
+      "behind": "Phía sau",
+      "issue": "Vấn đề",
+      "last_online": "Lần trực tuyến cuối",
+      "percent_online_weight": "% Trọng số trực tuyến",
+      "representative": "Đại diện"
+    },
+    "tooltip": {
+      "behind": "Đại diện đã tụt hậu hoặc đang khởi động. Ngưỡng là số lượng đã củng cố vượt qua phần trăm thứ 95. (qua telemetry)",
+      "low_uptime": "Đại diện đã ngoại tuyến hơn 25% trong 28 ngày qua.",
+      "offline": "Đại diện đã ngừng bỏ phiếu và dường như ngoại tuyến.",
+      "overweight": "Đại diện có trọng số bỏ phiếu vượt quá 3M Nano. Người ủy quyền nên xem xét phân phối trọng số để cải thiện sự kiên cường và giá trị của mạng."
+    },
+    "type": {
+      "behind": "Phía sau",
+      "low_uptime": "Thời gian hoạt động thấp",
+      "offline": "Ngoại tuyến",
+      "overweight": "Quá tải"
+    }
+  },
+  "representatives_cemented_by_weight": {
+    "title": "Chênh lệch Xác nhận",
+    "tooltip": "Hiển thị số lượng trọng số bỏ phiếu nằm trong X số lượng xác nhận từ nút dẫn đầu. Hữu ích trong việc biết các nút trên mạng đồng bộ và căn chỉnh như thế nào"
+  },
+  "representatives_checked_by_weight": {
+    "title": "Chênh lệch Khối",
+    "tooltip": "Hiển thị số lượng trọng số bỏ phiếu nằm trong X số lượng khối từ nút dẫn đầu. Hữu ích để nhận biết sự đồng bộ phát tán khối trong mạng như thế nào"
+  },
+  "representative_delegators": {
+    "showing_top_delegators": "Hiển thị 100 người ủy quyền hàng đầu với số dư tối thiểu là 1 Nano."
+  },
+  "representative_info": {
+    "first_seen": "Nhìn thấy lần đầu",
+    "last_seen": "Nhìn thấy lần cuối",
+    "weight_represented": "Trọng số đại diện"
+  },
+  "representative_network": {
+    "city": "Thành phố",
+    "isp": "ISP",
+    "network": "Mạng",
+    "provider": "Nhà cung cấp"
+  },
+  "representative_telemetry": {
+    "telemetry": "Telemetry",
+    "telemetry_timestamp": "Dấu thời gian Telemetry"
+  },
+  "representative_uptime": {
+    "2m_uptime": "Thời gian hoạt động 2M",
+    "2w_uptime": "Thời gian hoạt động 2W",
+    "3m_uptime": "Thời gian hoạt động 3M",
+    "current_status": "Trạng thái hiện tại",
+    "down": "Hỏng",
+    "down_for": "Hỏng trong",
+    "operational": "Hoạt động",
+    "up_for": "Hoạt động trong",
+    "warning": "Cảnh báo"
+  },
+  "representatives": {
+    "alias": "Bí danh",
+    "cpu_cores": "Lõi CPU",
+    "cpu_model": "Mô hình CPU",
+    "tdp": "TDP (wH)",
+    "protocol_version": "Giao thức",
+    "last_seen": "Nhìn thấy lần cuối",
+    "host_asn": "Host ASN"
+  },
+  "representatives_bandwidth_by_weight": {
+    "tooltip": "Hiển thị số lượng trọng số bỏ phiếu dựa trên giới hạn băng thông được thiết lập cục bộ bởi mỗi nút"
+  },
+  "representatives_country_by_weight": {
+    "title": "Quốc gia"
+  },
+  "representatives_offline": {
+    "account": "Tài khoản Ngoại tuyến",
+    "last_online": "Lần trực tuyến cuối"
+  },
+  "representatives_page": {
+    "seo_description": "Khám phá và phân tích các đại diện mạng Nano",
+    "seo_title": "Trình khám phá Đại diện Nano",
+    "telemetry_tab": "Telemetry",
+    "weight_distribution_tab": "Phân phối Trọng số",
+    "weight_history_tab": "Lịch sử Trọng số",
+    "offline_reps_tab": "Đại diện Ngoại tuyến"
+  },
+  "representatives_provider_by_weight": {
+    "title": "Nhà cung cấp Hosting"
+  },
+  "representatives_quorum_charts": {
+    "peers_weight": "Trọng số Peers",
+    "quorum_delta": "Quorum Delta",
+    "title": "Biểu đồ Quorum",
+    "trended_weight": "Trọng số Xu hướng"
+  },
+  "representatives_search": {
+    "placeholder": "Lọc theo tài khoản, bí danh, ip"
+  },
+  "representatives_weight": {
+    "trended": "Xu hướng"
+  },
+  "representatives_weight_chart": {
+    "title": "Phân phối Trọng số theo Đại diện"
+  },
+  "representatives_version_by_weight": {
+    "title": "Phiên bản"
+  },
+  "roadmap": {
+    "header": {
+      "subtitle": "Mục tiêu cộng đồng",
+      "title": "Kế hoạch"
+    },
+    "seo": {
+      "description": "Lộ trình phát triển & cộng đồng Nano",
+      "tags": [
+        "lộ trình",
+        "nano",
+        "tương lai",
+        "phát hành",
+        "thiết kế",
+        "nhiệm vụ",
+        "thảo luận",
+        "cộng đồng",
+        "đại sứ",
+        "quản lý"
+      ],
+      "title": "Lộ trình"
+    }
+  },
+  "search_bar": {
+    "placeholder": "Tìm kiếm theo Địa chỉ / Hash Khối"
+  },
+  "uptime": {
+    "now": "Bây giờ",
+    "days_ago": "ngày trước"
+  }
+}

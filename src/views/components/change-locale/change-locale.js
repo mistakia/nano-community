@@ -32,7 +32,8 @@ export default function ChangeLocale({ change_locale, locale }) {
     ko: '한국어',
     pl: 'Polski',
     pt: 'Português',
-    tr: 'Türkçe'
+    tr: 'Türkçe',
+    vi: 'Tiếng Việt'
   }
 
   return (
