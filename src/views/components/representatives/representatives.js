@@ -250,6 +250,7 @@ export default class Representatives extends React.Component {
       {
         field: 'address',
         headerName: 'Address',
+        width: 320,
         valueGetter: (p) => p.row.telemetry.address
       }
     ]
