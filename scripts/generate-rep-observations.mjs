@@ -12,9 +12,22 @@ const generateRepObseravtions = async () => {
 
   // get reps seen in the last month
   const representatives = await db('accounts')
-    .select('account', 'alias', 'last_seen')
+    .select('accounts.account', 'accounts.alias', 'accounts.last_seen')
+    .leftJoin(
+      'accounts_meta_index',
+      'accounts.account',
+      '=',
+      'accounts_meta_index.account'
+    )
     .where({ representative: true })
     .where('last_seen', '>', dayjs().subtract('1', 'month').unix())
+    .where(
+      'accounts_meta_index.weight',
+      '>',
+      1000000000000000000000000000000000
+    ) // minimum 100 nano voting weight
+    .orderBy('accounts_meta_index.weight', 'desc')
+    .limit(1000) // TODO - remove limit at some point
 
   let count = 0
   for (const representative of representatives) {
