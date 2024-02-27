@@ -78,8 +78,7 @@ const importGithubIssues = async ({ repo }) => {
       labels.find((name) => name.includes('priority/'))
     )
     const hasKind = Boolean(labels.find((name) => name.includes('kind/')))
-    const hasNeed = Boolean(labels.find((name) => name.includes('need/')))
-    const needsTriage = !hasPriority || !hasKind || !hasNeed
+    const needsTriage = !hasPriority || !hasKind
     const hasTriage = Boolean(
       labels.find((name) => name.includes('need/triage'))
     )
