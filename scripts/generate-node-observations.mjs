@@ -36,7 +36,8 @@ const generateNodeObservations = async () => {
     })
   }
 
-  await saveData('node-observations', nodes)
+  const timestamp = new Date().toISOString()
+  await saveData('node-observations', { timestamp, nodes })
   const end = process.hrtime.bigint()
   log(
     `Generated observations for ${nodes.length} nodes in ${Number(
