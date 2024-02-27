@@ -112,8 +112,8 @@ const generateRepObseravtions = async () => {
     }
   }
 
-  await saveData('representative-observations', representatives)
-
+  const timestamp = new Date().toISOString()
+  await saveData('representative-observations', { timestamp, representatives })
   const end = process.hrtime.bigint()
   log(
     `Generated observations for ${representatives.length} reps in ${Number(
