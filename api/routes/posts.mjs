@@ -103,9 +103,9 @@ const load_trending_posts = async ({
   query.whereNotNull('posts.text')
   query.whereNot('posts.text', '')
   query.where('posts.score', '>', 4)
-  query.whereNot('posts.pid', 'like', 'discord:370266023905198085:%') // exclude posts from general channel
+  query.whereNot('posts.pid', 'like', 'discord:370266023905198085:%') // Nano #general
   query.whereNot('posts.sid', 'discord:403628195548495882') // NanoTrade Server
-  query.whereNot('posts.sid', 'discord:431804330853662721') // Nano rep-support
+  query.whereNot('posts.pid', 'like', 'discord:431804330853662721:%') // Nano #rep-support
 
   // if (excludedIds.length) query.whereNotIn('posts.id', excludedIds)
   query.groupBy('main_url')
@@ -168,7 +168,7 @@ router.get('/announcements', async (req, res) => {
     query.where(function () {
       this.where('posts.pid', 'like', 'discord:844618231553720330:%') // network status
       this.orWhere('posts.pid', 'like', 'discord:370285586894028811:%') // announcements
-      // this.orWhere('posts.pid', 'like', 'discord:572793415138410517:%') // beta-announcements
+      this.orWhere('posts.pid', 'like', 'discord:572793415138410517:%') // beta-announcements
       this.orWhere('posts.pid', 'like', 'discord:644987172935565335:%') // rep-announcements
     })
     query.whereRaw('posts.created_at > (UNIX_TIMESTAMP() - ?)', age * 60 * 60)
@@ -213,7 +213,7 @@ const load_top_posts = async ({ offset = 0, age = 168, limit = 5 } = {}) => {
   query.whereNot('posts.pid', 'like', 'discord:572793415138410517:%') // beta-announcements
   query.whereNot('posts.pid', 'like', 'discord:644987172935565335:%') // rep-announcements
   query.whereNot('posts.sid', 'discord:403628195548495882') // NanoTrade Server
-  query.whereNot('posts.sid', 'discord:431804330853662721') // Nano rep-support
+  query.whereNot('posts.pid', 'like', 'discord:431804330853662721:%') // Nano #rep-support
 
   query.orderBy('strength', 'desc')
   query.groupBy('main_url')
