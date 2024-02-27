@@ -7,7 +7,7 @@ debug.enable('update-cloudflare-dns-nodes')
 
 const updateCloudflareDNS = async () => {
   const url = 'https://nano.community/data/node-observations.json'
-  const nodes = await request({ url })
+  const { nodes } = await request({ url })
   const mappings = (await getData('representative-mappings')) || []
   const rep_addresses = mappings.map((p) => p.address)
 
