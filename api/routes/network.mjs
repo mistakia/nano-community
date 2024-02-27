@@ -13,9 +13,9 @@ router.get('/', async (req, res) => {
     }
 
     const requests = [
-      request({ url: 'https://json.nanoticker.info/?file=stats' }),
+      request({ url: 'https://stats.nanobrowse.com/json/stats.json' }), // TODO remove dependency
       request({ url: 'https://nanolooker.com/api/market-statistics' }),
-      request({ url: 'https://json.nanoticker.info/?file=monitors' })
+      request({ url: 'https://stats.nanobrowse.com/json/monitors.json' }) // TODO remove dependency
     ]
 
     const responses = await Promise.allSettled(requests)
