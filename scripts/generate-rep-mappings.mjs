@@ -7,7 +7,7 @@ debug.enable('generate-rep-mappings')
 
 const generateRepMappings = async () => {
   const url = 'https://nano.community/data/representative-observations.json'
-  const representatives = await request({ url })
+  const { representatives } = await request({ url })
 
   const current_mappings = (await getData('representative-mappings')) || []
   const mapping_results = []
