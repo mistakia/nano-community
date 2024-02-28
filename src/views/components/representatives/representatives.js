@@ -69,7 +69,7 @@ export default class Representatives extends React.Component {
       {
         field: 'alias',
         headerName: 'Alias',
-        width: 130
+        width: 200
       },
       {
         field: 'account',
