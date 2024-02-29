@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Collapse from '@material-ui/core/Collapse'
-import Button from '@material-ui/core/Button'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import ExpandLessIcon from '@material-ui/icons/ExpandLess'
+import Collapse from '@mui/material/Collapse'
+import Button from '@mui/material/Button'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 
 import './collapsible.styl'
 

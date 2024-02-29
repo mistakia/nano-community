@@ -1,6 +1,6 @@
 import React from 'react'
-import Snackbar from '@material-ui/core/Snackbar'
-import MuiAlert from '@material-ui/lab/Alert'
+import Snackbar from '@mui/material/Snackbar'
+import MuiAlert from '@mui/material/Alert'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 
 function Alert(props) {

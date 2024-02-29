@@ -1,7 +1,7 @@
 import React from 'react'
 import * as timeago from 'timeago.js'
 import ImmutablePropTypes from 'react-immutable-proptypes'
-import Skeleton from '@material-ui/lab/Skeleton'
+import Skeleton from '@mui/material/Skeleton'
 
 import GithubLabels from '@components/github-labels'
 

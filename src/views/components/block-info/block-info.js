@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import dayjs from 'dayjs'
 import { Link } from 'react-router-dom'
-import LoopIcon from '@material-ui/icons/Loop'
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
+import LoopIcon from '@mui/icons-material/Loop'
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 
 import { timeago } from '@core/utils'
 

@@ -3,13 +3,8 @@ import { create } from 'jss'
 import { Provider } from 'react-redux'
 import { withRouter } from 'react-router'
 import { ConnectedRouter } from 'connected-react-router/immutable'
-import {
-  createTheme,
-  createGenerateClassName,
-  StylesProvider,
-  ThemeProvider,
-  jssPreset
-} from '@material-ui/core/styles'
+import { createGenerateClassName, StylesProvider, jssPreset } from '@mui/styles'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 import createStore from '@core/store'
 import history from '@core/history'
@@ -38,24 +33,39 @@ import App from '@components/app'
  *  */
 
 const theme = createTheme({
-  overrides: {
+  components: {
     MuiButton: {
-      root: {
-        fontFamily: "'IBM Plex Mono', monospace",
-        '&:hover': {
-          color: '#4A90E2',
-          backgroundColor: '#ffffff',
-          boxShadow: '#D0D0D0 4px 4px 0px 0px'
+      styleOverrides: {
+        root: {
+          fontFamily: "'IBM Plex Mono', monospace",
+          border: '1px solid rgba(0, 0, 0, 0.23)',
+          color: 'rgba(0, 0, 0, 0.87)',
+          '&:hover': {
+            color: '#4A90E2',
+            backgroundColor: '#ffffff',
+            border: '1px solid rgba(0, 0, 0, 0.23)',
+            boxShadow: '#D0D0D0 4px 4px 0px 0px'
+          }
         }
       }
     },
     MuiTooltip: {
-      tooltip: {
-        color: 'black',
-        backgroundColor: '#ffffff',
-        fontSize: 12,
-        border: '1px solid rgba(0, 0, 0, 0.23)',
-        boxShadow: '#D0D0D0 4px 4px 0px 0px'
+      styleOverrides: {
+        tooltip: {
+          color: 'black',
+          backgroundColor: '#ffffff',
+          fontSize: 12,
+          lineHeight: '18px',
+          border: '1px solid rgba(0, 0, 0, 0.23)',
+          boxShadow: '#D0D0D0 4px 4px 0px 0px'
+        }
+      }
+    },
+    MuiAvatarGroup: {
+      styleOverrides: {
+        root: {
+          flexDirection: 'row'
+        }
       }
     }
   }
@@ -71,7 +81,7 @@ const generateClassName = createGenerateClassName({
 
 const Root = () => (
   <Provider store={store}>
-    <StylesProvider jss={jss} generateClassName={generateClassName}>
+    <StylesProvider jss={jss} generateClassName={generateClassName} injectFirst>
       <ThemeProvider theme={theme}>
         <ConnectedRouter history={history}>
           <ConnectedApp />

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 
-import Chip from '@material-ui/core/Chip'
+import Chip from '@mui/material/Chip'
 
 import './github-labels.styl'
 

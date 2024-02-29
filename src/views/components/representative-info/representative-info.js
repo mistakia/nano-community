@@ -1,7 +1,7 @@
 import React from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import BigNumber from 'bignumber.js'
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 
 import { timeago } from '@core/utils'
 
