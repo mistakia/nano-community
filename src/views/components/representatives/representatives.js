@@ -2,25 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import ImmutablePropTypes from 'react-immutable-proptypes'
-import LinearProgress from '@material-ui/core/LinearProgress'
-import { DataGrid, GridOverlay } from '@material-ui/data-grid'
+import LinearProgress from '@mui/material/LinearProgress'
+import { DataGrid } from '@mui/x-data-grid'
 import BigNumber from 'bignumber.js'
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 
 import Uptime from '@components/uptime'
 import { timeago } from '@core/utils'
 
 import './representatives.styl'
-
-function LoadingOverlay() {
-  return (
-    <GridOverlay>
-      <div style={{ position: 'absolute', top: 0, width: '100%' }}>
-        <LinearProgress color='secondary' />
-      </div>
-    </GridOverlay>
-  )
-}
 
 function bytesToSize(bytes) {
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
@@ -61,7 +51,7 @@ export default class Representatives extends React.Component {
     const columns = [
       {
         field: 'status',
-        headerName: 'On',
+        headerName: '',
         width: 20,
         renderCell: (p) => <Uptime data={p.row.uptime} length={1} />,
         valueGetter: (p) => p.row.is_online
@@ -84,24 +74,14 @@ export default class Representatives extends React.Component {
         headerName: 'Weight',
         width: 140,
         valueFormatter: (p) =>
-          p.row.account_meta.weight
-            ? `${BigNumber(p.row.account_meta.weight)
-                .shiftedBy(-30)
-                .toFormat(0)}`
-            : null,
+          p.value ? `${BigNumber(p.value).shiftedBy(-30).toFormat(0)}` : null,
         valueGetter: (p) => p.row.account_meta.weight
       },
       {
         field: 'weight_pct',
         headerName: '%',
         width: 80,
-        valueFormatter: (p) =>
-          p.row.account_meta.weight
-            ? `${BigNumber(p.row.account_meta.weight)
-                .dividedBy(denominator)
-                .multipliedBy(100)
-                .toFixed(2)}%`
-            : null,
+        valueFormatter: (p) => (p.value ? `${p.value.toFixed(2)}%` : null),
         valueGetter: (p) =>
           p.row.account_meta.weight
             ? BigNumber(p.row.account_meta.weight)
@@ -113,17 +93,16 @@ export default class Representatives extends React.Component {
         field: 'confs_behind',
         headerName: 'Confs Behind',
         width: 145,
-        valueFormatter: (p) =>
-          p.row.telemetry.cemented_behind
-            ? BigNumber(p.row.telemetry.cemented_behind).toFormat()
-            : null,
+        valueFormatter: (p) => (p.value ? BigNumber(p.value).toFormat() : null),
         valueGetter: (p) => p.row.telemetry.cemented_behind
       },
       {
         field: 'uptime',
         headerName: 'Uptime',
         width: 150,
-        renderCell: (p) => <Uptime data={p.row.uptime} length={25} />,
+        renderCell: (p) => (
+          <Uptime data={p.api.getRow(p.id).uptime} length={25} />
+        ),
         valueGetter: (p) => (p.row.last_online || 0) - (p.row.last_offline || 0)
       },
       {
@@ -137,9 +116,10 @@ export default class Representatives extends React.Component {
         headerName: 'BW Limit',
         width: 120,
         valueFormatter: (p) => {
-          if (p.row.telemetry.bandwidth_cap === 0) return 'Unlimited'
-          return p.row.telemetry.bandwidth_cap
-            ? bytesToSize(p.row.telemetry.bandwidth_cap).label
+          if (p.api.getRow(p.id).telemetry.bandwidth_cap === 0)
+            return 'Unlimited'
+          return p.api.getRow(p.id).telemetry.bandwidth_cap
+            ? bytesToSize(p.api.getRow(p.id).telemetry.bandwidth_cap).label
             : null
         },
         valueGetter: (p) => {
@@ -164,40 +144,28 @@ export default class Representatives extends React.Component {
         field: 'blocks_behind',
         headerName: 'Blocks Behind',
         width: 145,
-        valueFormatter: (p) =>
-          p.row.telemetry.block_behind
-            ? BigNumber(p.row.telemetry.block_behind).toFormat()
-            : null,
+        valueFormatter: (p) => (p.value ? BigNumber(p.value).toFormat() : null),
         valueGetter: (p) => p.row.telemetry.block_behind
       },
       {
         field: 'cemented_count',
         headerName: 'Confs.',
         width: 140,
-        valueFormatter: (p) =>
-          p.row.telemetry.cemented_count
-            ? BigNumber(p.row.telemetry.cemented_count).toFormat()
-            : null,
+        valueFormatter: (p) => (p.value ? BigNumber(p.value).toFormat() : null),
         valueGetter: (p) => p.row.telemetry.cemented_count
       },
       {
         field: 'block_count',
         headerName: 'Blocks',
         width: 140,
-        valueFormatter: (p) =>
-          p.row.telemetry.block_count
-            ? BigNumber(p.row.telemetry.block_count).toFormat()
-            : null,
+        valueFormatter: (p) => (p.value ? BigNumber(p.value).toFormat() : null),
         valueGetter: (p) => p.row.telemetry.block_count
       },
       {
         field: 'unchecked_count',
         headerName: 'Unchecked',
         width: 140,
-        valueFormatter: (p) =>
-          p.row.telemetry.unchecked_count
-            ? BigNumber(p.row.telemetry.unchecked_count).toFormat()
-            : null,
+        valueFormatter: (p) => (p.value ? BigNumber(p.value).toFormat() : null),
         valueGetter: (p) => p.row.telemetry.unchecked_count
       },
       {
@@ -257,7 +225,7 @@ export default class Representatives extends React.Component {
     return (
       <div className='representatives' style={{ height: table_height }}>
         <DataGrid
-          components={{ LoadingOverlay }}
+          slots={{ loadingOverlay: LinearProgress }}
           disableColumnMenu={true}
           loading={isLoading}
           rowHeight={36}
@@ -266,7 +234,11 @@ export default class Representatives extends React.Component {
           columnBuffer={columns.length}
           getRowId={(row) => row.account}
           rows={accounts.toJS()}
-          sortModel={[{ field: 'weight', sort: 'desc' }]}
+          initialState={{
+            sorting: {
+              sortModel: [{ field: 'weight', sort: 'desc' }]
+            }
+          }}
         />
       </div>
     )

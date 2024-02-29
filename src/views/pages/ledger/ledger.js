@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Tabs from '@material-ui/core/Tabs'
-import Tab from '@material-ui/core/Tab'
+import Tabs from '@mui/material/Tabs'
+import Tab from '@mui/material/Tab'
 
 import LedgerChartBlocks from '@components/ledger-chart-blocks'
 import LedgerChartAddresses from '@components/ledger-chart-addresses'

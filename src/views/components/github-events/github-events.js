@@ -1,6 +1,6 @@
 import React from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes'
-import Skeleton from '@material-ui/lab/Skeleton'
+import Skeleton from '@mui/material/Skeleton'
 
 import { timeago } from '@core/utils'
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
-import Tooltip from '@material-ui/core/Tooltip'
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
+import Tooltip from '@mui/material/Tooltip'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 
 import './network.styl'
