@@ -20,7 +20,7 @@ const log = debug('generate-nano-reps')
 debug.enable('generate-nano-reps')
 
 const generate_nano_reps = async () => {
-  // get `data/nano-reps` from github
+  // Fetch nano representatives data from GitHub and save to temp file
   const current_date = new Date().toISOString().split('T')[0]
   const filename = `nano-reps-${current_date}.csv`
   const csv_download_path = `${os.tmpdir()}/${filename}`
@@ -32,11 +32,12 @@ const generate_nano_reps = async () => {
     nano_reps_resp.body,
     fs.createWriteStream(`${csv_download_path}`)
   )
+  // Read the downloaded CSV data
   const csv_reps = await read_csv(csv_download_path, {
     mapValues: ({ header, index, value }) => (value === '' ? null : value)
   })
 
-  // get reps data from db
+  // Fetch representatives data from the database
   const db_reps = await db('representatives_meta_index')
     .leftJoin(
       'accounts',
@@ -62,18 +63,19 @@ const generate_nano_reps = async () => {
 
   const results_index = {}
 
-  // index by account
+  // Index database representatives by account
   const db_reps_index = db_reps.reduce((acc, cur) => {
     acc[cur.account] = cur
     return acc
   }, {})
 
+  // Index CSV representatives by account
   const csv_reps_index = csv_reps.reduce((acc, cur) => {
     acc[cur.account] = cur
     return acc
   }, {})
 
-  // merge, skip accounts with conflicts
+  // Merge csv and database data, skip accounts with conflicts
   for (const account in csv_reps_index) {
     const nano_rep = csv_reps_index[account]
     const db_rep = db_reps_index[account]
@@ -81,6 +83,7 @@ const generate_nano_reps = async () => {
     delete db_rep_without_weight_field.weight
     const differences = diff(nano_rep, db_rep_without_weight_field)
 
+    // Filter for conflicting edits
     const edits = differences.filter((diff) => diff.kind === 'E')
     const conflicting_edits = edits.filter(
       (edit) => Boolean(edit.lhs) && Boolean(edit.rhs)
@@ -92,7 +95,7 @@ const generate_nano_reps = async () => {
       continue
     }
 
-    // merge values, give precedence to truthy values
+    // Merge values, preferring truthy values
     const merged_rep = { ...db_rep_without_weight_field, ...nano_rep }
     for (const key in merged_rep) {
       if (merged_rep[key] === null) {
@@ -103,7 +106,7 @@ const generate_nano_reps = async () => {
     results_index[account] = merged_rep
   }
 
-  // add any missing representatives with at least 1000 Nano voting weight
+  // Add missing representatives with sufficient voting weight
   for (const account in db_reps_index) {
     if (
       !results_index[account] &&
@@ -114,14 +117,14 @@ const generate_nano_reps = async () => {
     }
   }
 
-  // sort by alias
+  // Sort results by alias
   const results = Object.values(results_index).sort((a, b) => {
     const alias_a = a.alias || ''
     const alias_b = b.alias || ''
     return alias_a.localeCompare(alias_b)
   })
 
-  // save as csv
+  // Convert results to CSV and save
   const csv_headers = {}
   for (const field of Object.keys(results[0])) {
     csv_headers[field] = field
