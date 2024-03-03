@@ -56,7 +56,11 @@ const generateRepMappings = async () => {
         account,
         alias,
         weight,
-        ...rep.current_observation
+        current_observation: rep.current_observation,
+        most_observed: {
+          node_id: most_observed.node_id,
+          address: most_observed_address.address
+        }
       })
 
       const current_mapping = current_mappings.find(
@@ -75,7 +79,10 @@ const generateRepMappings = async () => {
     }
   }
 
-  await saveData('representative-mappings', mapping_results)
+  // sort by nano account address
+  const sorted_results = mapping_results.sort((a, b) => a.account - b.account)
+
+  await saveData('representative-mappings', sorted_results)
 }
 
 if (isMain(import.meta.url)) {
