@@ -106,7 +106,7 @@ const generate_nano_reps = async () => {
     results_index[account] = merged_rep
   }
 
-  // Add missing representatives with sufficient voting weight
+  // Add missing representatives with sufficient voting weight (1000 Nano)
   for (const account in db_reps_index) {
     if (
       !results_index[account] &&
