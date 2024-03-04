@@ -13,6 +13,7 @@ import path, { dirname } from 'path'
 /* eslint-disable no-unused-vars */
 import db from '#db'
 import { isMain, read_csv, convertToCSV } from '#common'
+import { REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT } from '#constants'
 /* eslint-enable no-unused-vars */
 
 // const argv = yargs(hideBin(process.argv)).argv
@@ -49,7 +50,10 @@ const generate_nano_reps = async () => {
       'accounts.account',
       'accounts_meta_index.account'
     )
-    .whereNot('representatives_meta_index.account', 'nano_1111111111111111111111111111111111111111111111111111hifc8npp')
+    .whereNot(
+      'representatives_meta_index.account',
+      'nano_1111111111111111111111111111111111111111111111111111hifc8npp'
+    )
     .select(
       'accounts.alias',
       'accounts_meta_index.weight',
@@ -111,10 +115,17 @@ const generate_nano_reps = async () => {
   for (const account in db_reps_index) {
     if (
       !results_index[account] &&
-      db_reps_index[account].weight > 10000000000000000000000000000000000
+      db_reps_index[account].weight >
+        REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT
     ) {
-      const { weight, account: db_rep_account, ...db_rep_without_weight_field } = db_reps_index[account]
-      const has_non_null_field = Object.values(db_rep_without_weight_field).some(value => value !== null)
+      const {
+        weight,
+        account: db_rep_account,
+        ...db_rep_without_weight_field
+      } = db_reps_index[account]
+      const has_non_null_field = Object.values(
+        db_rep_without_weight_field
+      ).some((value) => value !== null)
       if (has_non_null_field) {
         results_index[account] = { account, ...db_rep_without_weight_field }
       }
