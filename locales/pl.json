@@ -1,0 +1,387 @@
+{
+  "account_page": {
+    "address": "Adres konta",
+    "change_summary": "Podsumowanie zmian",
+    "copy_notification": "Skopiowano adres konta",
+    "seo_description": "Informacje dla przedstawiciela nano",
+    "seo_title": "Konto Nano",
+    "telemetry_charts": "Wykresy telemetrii",
+    "unopened_description": "Chociaż adres konta jest prawidłowy, nie zaobserwowano żadnych bloków. Jeśli NANO zostało wysłane na to konto, nadal musi opublikować odpowiadający blok, aby otrzymać środki i ustalić saldo otwarcia. Saldo konta może być aktualizowane tylko przez posiadacza konta, ponieważ tylko oni mogą publikować bloki na swoim łańcuchu.",
+    "unopened_note": "Jeśli blok otwierający został już opublikowany, może upłynąć kilka chwil, zanim rozprzestrzeni się on po sieci i zostanie zaobserwowany przez węzły nano.community.",
+    "unopened_title": "To konto nie zostało jeszcze otwarte"
+  },
+  "account_blocks_summary": {
+    "first_timestamp": "Pierwszy znacznik czasu",
+    "last_timestamp": "Ostatni znacznik czasu",
+    "max_amount": "Maksymalna kwota",
+    "min_amount": "Minimalna kwota",
+    "no_records": "Brak rekordów",
+    "receiving_account": "Konto odbiorcze",
+    "representative_account": "Konto przedstawiciela",
+    "sending_account": "Konto nadawcze",
+    "showing_top_10": "Pokazuje 10 najlepszych kont według łącznej kwoty malejąco",
+    "transactions": "Transakcje"
+  },
+  "account_meta": {
+    "account_info": "Informacje o koncie",
+    "funding_account": "Konto finansujące",
+    "funding_timestamp": "Znacznik czasu finansowania",
+    "height": "Wysokość",
+    "last_modified": "Ostatnia modyfikacja",
+    "open_timestamp": "Znacznik czasu otwarcia",
+    "opening_balance": "Saldo otwarcia",
+    "receivable_balance": "Saldo do odbioru"
+  },
+  "block_page": {
+    "amount": "Kwota",
+    "copy_notification": "Skopiowano hash bloku",
+    "delegated_representative": "Delegowany przedstawiciel",
+    "description": "Opis",
+    "epoch_v1": "Epoka v1 — Ulepszenie łańcuchów kont z bloków dziedzicznych (otwarcie, odbiór, wysyłka, zmiana) do bloków stanu.",
+    "epoch_v2": "Epoka v2 - Ulepszenie łańcuchów kont do wykorzystania wyższej trudności Proof-of-Work.",
+    "receiving_account": "Konto odbiorcze",
+    "section_label": "Hash bloku",
+    "sending_account": "Konto nadawcze",
+    "seo_description": "Informacje związane z blokiem Nano",
+    "seo_title": "Blok Nano",
+    "voting_weight": "Waga głosowania"
+  },
+  "block_info": {
+    "block_account": "Konto bloku",
+    "operation": "Operacja",
+    "status": "Status",
+    "timestamp": "Znacznik czasu"
+  },
+  "block_status": {
+    "confirmed": "Potwierdzony",
+    "unconfirmed": "Niepotwierdzony"
+  },
+  "block_type": {
+    "change": "Zmiana",
+    "epoch": "Epoka",
+    "open": "Otwarcie",
+    "receive": "Odbiór",
+    "send": "Wysyłka"
+  },
+  "common": {
+    "account_one": "Konto",
+    "account_other": "Konta",
+    "address": "Adres",
+    "balance": "Saldo",
+    "bandwidth_limit": "Limit przepustowości",
+    "bandwidth_limit_short": "Limit BW",
+    "blocks": "Bloki",
+    "blocks_behind": "Bloki zaległe",
+    "blocks_diff_short": "Różnica bloków",
+    "by_online_weight": "Według wagi online",
+    "clear_filters": "Wyczyść filtry",
+    "click_to_copy": "Kliknij, aby skopiować",
+    "collapse": "Zwiń",
+    "conf_short": "Potw.",
+    "conf_diff_short": "Różn. Potw.",
+    "confirmations_behind": "Potwierdzeń w tyle",
+    "country": "Kraj",
+    "delegator_one": "Delegujący",
+    "delegator_other": "Delegujący",
+    "max": "Maks",
+    "min": "Min",
+    "offline": "Offline",
+    "online": "Online",
+    "peers": "Rówieśnicy",
+    "percent_of_total": "% całości",
+    "port": "Port",
+    "quorum_delta": "Delta kworum",
+    "representative_one": "Przedstawiciel",
+    "representative_other": "Przedstawiciele",
+    "show_more": "Pokaż więcej {{count}}",
+    "total": "Całkowity",
+    "unchecked": "Niezweryfikowane",
+    "unchecked_count": "Liczba niezweryfikowanych",
+    "unlimited": "Nieograniczony",
+    "uptime": "Czas działania",
+    "version": "Wersja",
+    "weight": "Waga"
+  },
+  "delegators": {
+    "showing_top_delegators": "Pokazuje 100 najlepszych delegujących z minimalnym saldem 1 Nano."
+  },
+  "doc": {
+    "contributors": "Współtwórca",
+    "document_not_found": "Dokument (lub konto) nie znaleziony",
+    "edit_page": "Edytuj stronę",
+    "help_out": "Pomóż",
+    "not_found_404": "404",
+    "section_link_copied": "Link do sekcji skopiowany",
+    "updated_by": "zaktualizowane przez"
+  },
+  "github_events": {
+    "action": {
+      "added_member": "dodano członka",
+      "commented_on_commit": "skomentowano commit",
+      "commented_on_issue": "skomentowano problem",
+      "commented_on_pr_review": "skomentowano recenzję pr",
+      "created": "utworzono {{action}}",
+      "deleted": "usunięto {{action}}",
+      "forked": "zforkowano",
+      "issue_action": "{{action}} problem",
+      "made_public": "udostępniono publicznie",
+      "pr_action": "{{action}} pr",
+      "pr_review": "recenzja pr {{title}}",
+      "published_release": "opublikowano wydanie",
+      "pushed_commit": "wysłano commit do {{ref}}",
+      "sponsorship_started": "rozpoczęto sponsoring",
+      "watching_repo": "obserwowanie repo"
+    },
+    "events_title": "Wydarzenia rozwojowe"
+  },
+  "ledger": {
+    "addresses": {
+      "active_detail": "Aktywne pokazuje liczbę unikalnych adresów użytych. Nowe pokazuje liczbę utworzonych adresów. Ponownie użyte pokazuje liczbę adresów użytych, które zostały utworzone w poprzednim dniu.",
+      "active_stats": "Statystyki aktywnych adresów",
+      "new_stats": "Statystyki nowych adresów",
+      "total_number": "Całkowita liczba aktywnych, nowych i ponownie użytych adresów użytych każdego dnia."
+    },
+    "amounts": {
+      "total_number": "Liczba potwierdzonych bloków typu wysyłka na dzień, gdzie kwota w bloku mieści się w danym zakresie (w Nano)"
+    },
+    "blocks": {
+      "change": "Statystyki bloków zmian",
+      "description": "Liczba bloków potwierdzonych każdego dnia.",
+      "open": "Statystyki bloków otwarcia",
+      "receive": "Statystyki bloków odbioru",
+      "send": "Statystyki bloków wysyłki",
+      "total": "Statystyki całkowitych bloków"
+    },
+    "description": "Opis",
+    "usd_transferred": {
+      "desc_1": "Całkowita wartość przesłana (w USD) na dzień.",
+      "desc_2": "Na podstawie dziennej ceny zamknięcia Nano/USD i całkowitej ilości Nano przesłanej tego dnia.",
+      "usd_transferred": "Przesłane USD",
+      "usd_transferred_stats": "Statystyki przesłanych USD"
+    },
+    "volume": {
+      "change_stats": "Statystyki zmian",
+      "description": "Całkowita wysłana kwota (w Nano) i całkowita zmiana wagi głosowania na dzień.",
+      "send_stats": "Statystyki wysyłki"
+    }
+  },
+  "ledger_page": {
+    "addresses_tab": "Adresy",
+    "amounts_tab": "Kwoty",
+    "blocks_tab": "Bloki",
+    "seo_description": "Metryki i analizy łańcucha Nano",
+    "seo_title": "Analiza łańcucha Nano",
+    "value_transferred_tab": "Przesłana wartość",
+    "volume_tab": "Wolumen"
+  },
+  "menu": {
+    "account_setup": "Konfiguracja konta",
+    "acquiring": "Nabycie",
+    "advantages": "Zalety",
+    "attack_vectors": "Weektory ataku",
+    "basics": "Podstawy",
+    "best_practices": "Najlepsze praktyki",
+    "choosing_a_rep": "Wybór reprezentanta",
+    "challenges": "Wyzwania",
+    "communities": "Społeczności",
+    "contribution_guide": "Przewodnik po wkładach",
+    "design": "Projekt",
+    "developer_discussions": "Dyskusje deweloperów",
+    "developers": "Deweloperzy",
+    "documentation": "Dokumentacja",
+    "faqs": "FAQ",
+    "get_involved": "Zaangażuj się",
+    "get_support": "Uzyskaj wsparcie",
+    "getting_started": "Rozpoczynanie",
+    "glossary": "Słownik",
+    "guides": "Przewodniki",
+    "history": "Historia",
+    "home": "Strona główna",
+    "how_it_works": "Jak to działa",
+    "integrations": "Integracje",
+    "introduction": "Wprowadzenie",
+    "investment_thesis": "Teza inwestycyjna",
+    "learn": "Ucz się",
+    "ledger": "Księga",
+    "misconceptions": "Nieporozumienia",
+    "overview": "Przegląd",
+    "planning": "Planowanie",
+    "privacy": "Prywatność",
+    "protocol": "Protokół",
+    "running_a_node": "Uruchamianie węzła",
+    "security": "Bezpieczeństwo",
+    "stats": "Statystyki",
+    "storing": "Przechowywanie",
+    "telemetry": "Telemetria",
+    "topics": "Tematy",
+    "using": "Używanie",
+    "why_it_matters": "Dlaczego ma to znaczenie"
+  },
+  "network": {
+    "backlog_text": "Średnia liczba transakcji oczekujących na potwierdzenie $(network.pr_text)",
+    "censor_text": "Minimalna liczba reprezentantów potrzebnych do cenzurowania transakcji lub zatrzymania sieci",
+    "confirm_text": "Minimalna liczba reprezentantów potrzebnych do potwierdzenia transakcji",
+    "confirmations": "Potwierdzenia (24h)",
+    "confirmations_text": "Całkowita liczba transakcji potwierdzonych przez sieć w ciągu ostatnich 24 godzin",
+    "energy_text": "Szacowane zużycie energii CPU przez głównych reprezentantów na żywo w sieci na podstawie zebranych informacji o modelu CPU. Szacunek opiera się na TDP CPU, czyli średniej mocy, w watach, którą procesor rozprasza podczas pracy z podstawową częstotliwością z wszystkimi aktywnymi rdzeniami pod obciążeniem o wysokiej złożoności zdefiniowanym przez producenta",
+    "energy_usage": "Zużycie energii (TDP) (24h)",
+    "fee_text": "Sieć Nano działa bez opłat",
+    "nano_ticker": "NanoTicker",
+    "online_stake": "Stawka online",
+    "principal_reps": "Główni Reprezentanci",
+    "pr_text": "jak zaobserwowano w sieci głównych reprezentantów: węzłów głosujących z więcej niż 0,1% delegowanej wagi głosowania online",
+    "reps_to_censor": "Reprezentanci do cenzury lub zatrzymania",
+    "reps_to_confirm": "Reprezentanci do potwierdzenia",
+    "settlement": "Rozliczenie (24h)",
+    "settlement_text": "Całkowita wartość rozliczona przez sieć w ciągu ostatnich 24 godzin",
+    "speed_text": "Czas w milisekundach potrzebny na potwierdzenie testowej transakcji",
+    "stake_text": "Procent delegowanej wagi Nano aktywnie uczestniczącej w głosowaniu",
+    "stats_title": "Statystyki sieci",
+    "total_reps": "Łączni Reprezentanci (24h)",
+    "tx_backlog": "Zaległości transakcji",
+    "tx_fees": "Opłaty transakcyjne (24h)",
+    "tx_speed": "Prędkość transakcji",
+    "tx_throughput": "Przepustowość transakcji",
+    "throughput_text": "Średnia liczba transakcji potwierdzonych na sekundę w ostatniej minucie $(network.pr_text)"
+  },
+  "posts": {
+    "nano_foundation": "Fundacja Nano",
+    "top": "Top",
+    "trending": "Trendy"
+  },
+  "representative_alerts": {
+    "table_header": {
+      "behind": "Zaległości",
+      "issue": "Problem",
+      "last_online": "Ostatnio online",
+      "percent_online_weight": "% Wagi online",
+      "representative": "Reprezentant"
+    },
+    "tooltip": {
+      "behind": "Reprezentant ma zaległości lub jest w trakcie bootstrappingu. Granica to liczba zacementowanych poza 95. percentylem. (poprzez telemetrię)",
+      "low_uptime": "Reprezentant był offline więcej niż 25% w ciągu ostatnich 28 dni.",
+      "offline": "Reprezentant przestał głosować i wydaje się być offline.",
+      "overweight": "Reprezentant ma więcej niż 3M wagi głosowania Nano. Delegaci powinni rozważyć dystrybucję wagi, aby poprawić odporność sieci i wartość."
+    },
+    "type": {
+      "behind": "Zaległości",
+      "low_uptime": "Niska dostępność",
+      "offline": "Offline",
+      "overweight": "Nadwaga"
+    }
+  },
+  "representatives_cemented_by_weight": {
+    "title": "Różnica potwierdzeń",
+    "tooltip": "Wyświetla ilość wagi głosowania, która znajduje się w X liczbie potwierdzeń od wiodącego węzła. Pomocne w wiedzy, jak dobrze węzły są zsynchronizowane i wyrównane w całej sieci"
+  },
+  "representatives_checked_by_weight": {
+    "title": "Różnica bloków",
+    "tooltip": "Wyświetla ilość wagi głosowania, która znajduje się w X liczbie bloków od wiodącego węzła. Przydatne do uzyskania poczucia, jak dobrze propagacja bloków jest zsynchronizowana w sieci"
+  },
+  "representative_delegators": {
+    "showing_top_delegators": "Pokazuje 100 najlepszych delegatów z minimalnym saldem 1 Nano."
+  },
+  "representative_info": {
+    "first_seen": "Pierwszy raz widziany",
+    "last_seen": "Ostatnio widziany",
+    "weight_represented": "Waga reprezentowana"
+  },
+  "representative_network": {
+    "city": "Miasto",
+    "isp": "Dostawca Internetu",
+    "network": "Sieć",
+    "provider": "Dostawca"
+  },
+  "representative_telemetry": {
+    "telemetry": "Telemetria",
+    "telemetry_timestamp": "Znacznik czasu telemetrii"
+  },
+  "representative_uptime": {
+    "2m_uptime": "Czas pracy 2M",
+    "2w_uptime": "Czas pracy 2W",
+    "3m_uptime": "Czas pracy 3M",
+    "current_status": "Aktualny status",
+    "down": "Nieaktywny",
+    "down_for": "Nieaktywny przez",
+    "operational": "Operacyjny",
+    "up_for": "Aktywny przez",
+    "warning": "Ostrzeżenie"
+  },
+  "representatives": {
+    "alias": "Alias",
+    "cpu_cores": "Rdzenie CPU",
+    "cpu_model": "Model CPU",
+    "tdp": "TDP (wH)",
+    "protocol_version": "Protokół",
+    "last_seen": "Ostatnio widziany",
+    "host_asn": "ASN hosta"
+  },
+  "representatives_bandwidth_by_weight": {
+    "tooltip": "Wyświetla ilość wagi głosowania na podstawie limitu przepustowości ustawionego lokalnie przez każdy węzeł"
+  },
+  "representatives_country_by_weight": {
+    "title": "Kraj"
+  },
+  "representatives_offline": {
+    "account": "Konto offline",
+    "last_online": "Ostatnio online"
+  },
+  "representatives_page": {
+    "seo_description": "Eksploruj i analizuj reprezentantów sieci Nano",
+    "seo_title": "Eksplorator Reprezentantów Nano",
+    "telemetry_tab": "Telemetria",
+    "weight_distribution_tab": "Dystrybucja wagi",
+    "weight_history_tab": "Historia wagi",
+    "offline_reps_tab": "Reprezentanci offline"
+  },
+  "representatives_provider_by_weight": {
+    "title": "Dostawca hostingu"
+  },
+  "representatives_quorum_charts": {
+    "peers_weight": "Waga rówieśników",
+    "quorum_delta": "Delta kworum",
+    "title": "Wykresy kworum",
+    "trended_weight": "Waga trendu"
+  },
+  "representatives_search": {
+    "placeholder": "Filtruj po koncie, aliasie, ip"
+  },
+  "representatives_weight": {
+    "trended": "Trendowana"
+  },
+  "representatives_weight_chart": {
+    "title": "Dystrybucja wagi według reprezentanta"
+  },
+  "representatives_version_by_weight": {
+    "title": "Wersje"
+  },
+  "roadmap": {
+    "header": {
+      "subtitle": "Cele społeczności",
+      "title": "Planowanie"
+    },
+    "seo": {
+      "description": "Droga rozwoju i mapa społeczności Nano",
+      "tags": [
+        "mapa drogowa",
+        "nano",
+        "przyszłość",
+        "wydanie",
+        "projekt",
+        "zadania",
+        "dyskusje",
+        "społeczność",
+        "ambasadorzy",
+        "menedżerowie"
+      ],
+      "title": "Mapa drogowa"
+    }
+  },
+  "search_bar": {
+    "placeholder": "Szukaj po adresie / Hashu bloku"
+  },
+  "uptime": {
+    "now": "Teraz",
+    "days_ago": "dni temu"
+  }
+}

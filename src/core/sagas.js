@@ -10,6 +10,7 @@ import { githubIssuesSagas } from './github-issues'
 import { ledgerSagas } from './ledger'
 import { networkSagas } from './network'
 import { postlistSagas } from './postlists'
+import { i18nSagas } from './i18n'
 
 export default function* rootSage() {
   yield all([
@@ -22,6 +23,7 @@ export default function* rootSage() {
     ...githubIssuesSagas,
     ...ledgerSagas,
     ...networkSagas,
-    ...postlistSagas
+    ...postlistSagas,
+    ...i18nSagas
   ])
 }

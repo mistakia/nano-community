@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import BigNumber from 'bignumber.js'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import Table from '@mui/material/Table'
@@ -8,78 +8,79 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import './representative-delegators.styl'
 
 const ITEMS_LIMIT = 10
 
-export default class RepresentativeDelegators extends React.Component {
-  constructor(props) {
-    super(props)
+export default function RepresentativeDelegators({ account }) {
+  const [expanded, setExpanded] = useState(false)
+  const { t } = useTranslation()
 
-    this.state = {
-      expanded: false
-    }
-  }
+  const handleClick = () => setExpanded(!expanded)
 
-  handleClick = () => {
-    this.setState({ expanded: !this.state.expanded })
-  }
+  const weight = account.getIn(['account_meta', 'weight'], 0)
 
-  render() {
-    const { account } = this.props
-
-    const weight = account.getIn(['account_meta', 'weight'], 0)
-
-    return (
-      <TableContainer className='representative__delegators'>
-        <Table size='small'>
-          <TableHead>
-            <TableRow>
-              <TableCell>Delegator</TableCell>
-              <TableCell align='right'>Balance</TableCell>
-              <TableCell align='right'>% of Total</TableCell>
+  return (
+    <TableContainer className='representative__delegators'>
+      <Table size='small'>
+        <TableHead>
+          <TableRow>
+            <TableCell>
+              {t('common.delegator', { count: 1, defaultValue: 'Delegator' })}
+            </TableCell>
+            <TableCell align='right'>
+              {t('common.balance', 'Balance')}
+            </TableCell>
+            <TableCell align='right'>%</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {(expanded
+            ? account.delegators
+            : account.delegators.slice(0, ITEMS_LIMIT)
+          ).map((row) => (
+            <TableRow key={row.account}>
+              <TableCell component='th' scope='row'>
+                <Link to={`/${row.account}`}>
+                  {row.alias || `${row.account.slice(0, 15)}...`}
+                </Link>
+              </TableCell>
+              <TableCell align='right'>
+                {BigNumber(row.balance).shiftedBy(-30).toFormat(0)}
+              </TableCell>
+              <TableCell align='right'>
+                {BigNumber(row.balance)
+                  .dividedBy(weight)
+                  .multipliedBy(100)
+                  .toFormat(2)}
+              </TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {(this.state.expanded
-              ? account.delegators
-              : account.delegators.slice(0, ITEMS_LIMIT)
-            ).map((row) => (
-              <TableRow key={row.account}>
-                <TableCell component='th' scope='row'>
-                  <Link to={`/${row.account}`}>
-                    {row.alias || `${row.account.slice(0, 15)}...`}
-                  </Link>
-                </TableCell>
-                <TableCell align='right'>
-                  {BigNumber(row.balance).shiftedBy(-30).toFormat(0)}
-                </TableCell>
-                <TableCell align='right'>
-                  {BigNumber(row.balance)
-                    .dividedBy(weight)
-                    .multipliedBy(100)
-                    .toFormat(2)}
-                </TableCell>
-              </TableRow>
-            ))}
-            {account.delegators.length > ITEMS_LIMIT && (
-              <TableRow className='table__expand' onClick={this.handleClick}>
-                <TableCell colSpan={3}>
-                  {this.state.expanded
-                    ? 'Collapse'
-                    : `Show ${account.delegators.length - ITEMS_LIMIT} more`}
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-        <div className='representative__delegators-footer'>
-          Showing top 100 delegators with a minimum balance of 1 Nano.
-        </div>
-      </TableContainer>
-    )
-  }
+          ))}
+          {account.delegators.length > ITEMS_LIMIT && (
+            <TableRow className='table__expand' onClick={handleClick}>
+              <TableCell colSpan={3}>
+                {expanded
+                  ? t('common.collapse', 'Collapse')
+                  : t(
+                      'common.show_more',
+                      { count: account.delegators.length - ITEMS_LIMIT },
+                      `Show ${account.delegators.length - ITEMS_LIMIT} more`
+                    )}
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+      <div className='representative__delegators-footer'>
+        {t(
+          'representative_delegators.showing_top_delegators',
+          'Showing top 100 delegators with a minimum balance of 1 Nano.'
+        )}
+      </div>
+    </TableContainer>
+  )
 }
 
 RepresentativeDelegators.propTypes = {

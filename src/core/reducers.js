@@ -13,6 +13,7 @@ import { networkReducer } from './network'
 import { notificationReducer } from './notifications'
 import { postsReducer } from './posts'
 import { postlistsReducer } from './postlists'
+import { i18nReducer } from './i18n'
 
 const rootReducer = (history) =>
   combineReducers({
@@ -28,7 +29,8 @@ const rootReducer = (history) =>
     network: networkReducer,
     notification: notificationReducer,
     posts: postsReducer,
-    postlists: postlistsReducer
+    postlists: postlistsReducer,
+    i18n: i18nReducer
   })
 
 export default rootReducer

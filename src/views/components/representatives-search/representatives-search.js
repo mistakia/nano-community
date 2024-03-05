@@ -1,54 +1,52 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import ClearIcon from '@mui/icons-material/Clear'
+import { useTranslation } from 'react-i18next'
 
 import { debounce } from '@core/utils'
 
 import './representatives-search.styl'
 
-export default class RepresentativesSearch extends React.Component {
-  constructor(props) {
-    super(props)
+export default function RepresentativesSearch({ value, search }) {
+  const { t } = useTranslation()
+  const [search_value, set_search_value] = React.useState(value)
 
-    this.state = {
-      value: this.props.value || ''
-    }
-
-    this.search = debounce((value) => {
-      this.props.search(value)
+  const debounce_search = React.useRef(
+    debounce((value) => {
+      search(value)
     }, 300)
+  )
+
+  const handleClick = () => {
+    set_search_value('')
+    search('')
   }
 
-  handleClick = () => {
-    const value = ''
-    this.setState({ value })
-    this.props.search(value)
-  }
-
-  handleChange = (event) => {
+  const handleChange = (event) => {
     const { value } = event.target
-    this.setState({ value })
-    this.search(value)
+    set_search_value(value)
+    debounce_search.current(value)
   }
 
-  render = () => {
-    return (
-      <div className='representatives__search'>
-        <input
-          className='search__input'
-          type='text'
-          placeholder='Filter by account, alias, ip'
-          value={this.state.value}
-          onChange={this.handleChange}
-        />
-        {this.state.value && (
-          <div className='search__input-clear' onClick={this.handleClick}>
-            <ClearIcon />
-          </div>
+  return (
+    <div className='representatives__search'>
+      <input
+        className='search__input'
+        type='text'
+        placeholder={t(
+          'representatives_search.placeholder',
+          'Filter by account, alias, ip'
         )}
-      </div>
-    )
-  }
+        value={search_value}
+        onChange={handleChange}
+      />
+      {search_value && (
+        <div className='search__input-clear' onClick={handleClick}>
+          <ClearIcon />
+        </div>
+      )}
+    </div>
+  )
 }
 
 RepresentativesSearch.propTypes = {

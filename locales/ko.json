@@ -1,0 +1,387 @@
+{
+  "account_page": {
+    "address": "계정 주소",
+    "change_summary": "요약 변경",
+    "copy_notification": "계정 주소가 복사되었습니다",
+    "seo_description": "나노 대표 정보",
+    "seo_title": "나노 계정",
+    "telemetry_charts": "텔레메트리 차트",
+    "unopened_description": "계정 주소가 유효하지만, 아직 블록이 관찰되지 않았습니다. 이 계정으로 NANO가 전송된 경우, 해당 블록을 게시하여 자금을 받고 개시 잔액을 설정해야 합니다. 계정의 잔액은 계정 소유자만이 자신의 체인에 블록을 게시할 수 있으므로 계정 소유자만 업데이트할 수 있습니다.",
+    "unopened_note": "개시 블록이 이미 게시된 경우, 네트워크를 통해 퍼지고 nano.community 노드에 의해 관찰되기까지 몇 분 정도 걸릴 수 있습니다.",
+    "unopened_title": "이 계정은 아직 열리지 않았습니다"
+  },
+  "account_blocks_summary": {
+    "first_timestamp": "첫 타임스탬프",
+    "last_timestamp": "마지막 타임스탬프",
+    "max_amount": "최대 금액",
+    "min_amount": "최소 금액",
+    "no_records": "기록 없음",
+    "receiving_account": "수신 계정",
+    "representative_account": "대표 계정",
+    "sending_account": "송신 계정",
+    "showing_top_10": "총 내림차순으로 상위 10개 계정 표시",
+    "transactions": "TXs"
+  },
+  "account_meta": {
+    "account_info": "계정 정보",
+    "funding_account": "자금 계정",
+    "funding_timestamp": "자금 타임스탬프",
+    "height": "높이",
+    "last_modified": "마지막 수정",
+    "open_timestamp": "개시 타임스탬프",
+    "opening_balance": "개시 잔액",
+    "receivable_balance": "수령 가능 잔액"
+  },
+  "block_page": {
+    "amount": "금액",
+    "copy_notification": "블록 해시가 복사되었습니다",
+    "delegated_representative": "위임된 대표",
+    "description": "설명",
+    "epoch_v1": "에포크 v1 - 레거시 블록(오픈, 수신, 송신, 변경)에서 상태 블록으로 계정 체인을 업그레이드했습니다.",
+    "epoch_v2": "에포크 v2 - 더 높은 작업 증명 난이도를 사용하도록 계정 체인을 업그레이드했습니다.",
+    "receiving_account": "수신 계정",
+    "section_label": "블록 해시",
+    "sending_account": "송신 계정",
+    "seo_description": "나노 블록 관련 정보",
+    "seo_title": "나노 블록",
+    "voting_weight": "투표 무게"
+  },
+  "block_info": {
+    "block_account": "블록 계정",
+    "operation": "작업",
+    "status": "상태",
+    "timestamp": "타임스탬프"
+  },
+  "block_status": {
+    "confirmed": "확인됨",
+    "unconfirmed": "미확인"
+  },
+  "block_type": {
+    "change": "변경",
+    "epoch": "에포크",
+    "open": "오픈",
+    "receive": "수신",
+    "send": "송신"
+  },
+  "common": {
+    "account_one": "계정",
+    "account_other": "계정들",
+    "address": "주소",
+    "balance": "잔액",
+    "bandwidth_limit": "대역폭 제한",
+    "bandwidth_limit_short": "BW 제한",
+    "blocks": "블록",
+    "blocks_behind": "블록 뒤",
+    "blocks_diff_short": "블록 차이",
+    "by_online_weight": "온라인 무게로",
+    "clear_filters": "필터 지우기",
+    "click_to_copy": "복사하려면 클릭",
+    "collapse": "접기",
+    "conf_short": "확인.",
+    "conf_diff_short": "확인 차이",
+    "confirmations_behind": "확인 뒤",
+    "country": "국가",
+    "delegator_one": "위임자",
+    "delegator_other": "위임자들",
+    "max": "최대",
+    "min": "최소",
+    "offline": "오프라인",
+    "online": "온라인",
+    "peers": "피어",
+    "percent_of_total": "총 %",
+    "port": "포트",
+    "quorum_delta": "쿼럼 델타",
+    "representative_one": "대표",
+    "representative_other": "대표들",
+    "show_more": "{{count}}개 더 보기",
+    "total": "총계",
+    "unchecked": "미확인",
+    "unchecked_count": "미확인 수",
+    "unlimited": "무제한",
+    "uptime": "가동 시간",
+    "version": "버전",
+    "weight": "무게"
+  },
+  "delegators": {
+    "showing_top_delegators": "최소 1 나노의 최소 잔액을 가진 상위 100명의 위임자 표시."
+  },
+  "doc": {
+    "contributors": "기여자",
+    "document_not_found": "문서(또는 계정)을 찾을 수 없습니다",
+    "edit_page": "페이지 편집",
+    "help_out": "도움말",
+    "not_found_404": "404",
+    "section_link_copied": "섹션 링크가 복사되었습니다",
+    "updated_by": "업데이트됨"
+  },
+  "github_events": {
+    "action": {
+      "added_member": "멤버 추가됨",
+      "commented_on_commit": "커밋에 대한 코멘트",
+      "commented_on_issue": "이슈에 대한 코멘트",
+      "commented_on_pr_review": "PR 리뷰에 대한 코멘트",
+      "created": "{{action}} 생성됨",
+      "deleted": "{{action}} 삭제됨",
+      "forked": "포크됨",
+      "issue_action": "{{action}} 이슈",
+      "made_public": "공개됨",
+      "pr_action": "{{action}} PR",
+      "pr_review": "PR 리뷰 {{title}}",
+      "published_release": "릴리스 게시됨",
+      "pushed_commit": "{{ref}}에 커밋 푸시됨",
+      "sponsorship_started": "후원 시작됨",
+      "watching_repo": "저장소를 보고 있음"
+    },
+    "events_title": "개발 이벤트"
+  },
+  "ledger": {
+    "addresses": {
+      "active_detail": "활성은 사용된 고유 주소의 수를 보여줍니다. 새로운 것은 생성된 주소의 수를 보여줍니다. 재사용된 것은 이전 날에 생성된 주소가 사용된 수를 보여줍니다.",
+      "active_stats": "활성 주소 통계",
+      "new_stats": "새 주소 통계",
+      "total_number": "일일 활성, 새로운, 재사용된 주소의 총 수."
+    },
+    "amounts": {
+      "total_number": "블록의 금액이 주어진 범위(나노 단위)에 있는 하루에 확인된 송신 유형 블록의 수"
+    },
+    "blocks": {
+      "change": "변경 블록 통계",
+      "description": "하루에 확인된 블록의 수.",
+      "open": "오픈 블록 통계",
+      "receive": "수신 블록 통계",
+      "send": "송신 블록 통계",
+      "total": "총 블록 통계"
+    },
+    "description": "설명",
+    "usd_transferred": {
+      "desc_1": "하루에 전송된 총 가치(USD 단위).",
+      "desc_2": "Nano/USD의 일일 종가와 그날 전송된 총 나노 양을 기준으로 합니다.",
+      "usd_transferred": "USD로 전송됨",
+      "usd_transferred_stats": "USD 전송 통계"
+    },
+    "volume": {
+      "change_stats": "변경 통계",
+      "description": "하루에 전송된 총 금액(나노 단위)과 투표 무게가 변경된 총 금액.",
+      "send_stats": "송신 통계"
+    }
+  },
+  "ledger_page": {
+    "addresses_tab": "주소",
+    "amounts_tab": "금액",
+    "blocks_tab": "블록",
+    "seo_description": "나노 원장의 온체인 메트릭스 및 분석",
+    "seo_title": "나노 원장 분석",
+    "value_transferred_tab": "전송된 가치",
+    "volume_tab": "볼륨"
+  },
+  "menu": {
+    "account_setup": "계정 설정",
+    "acquiring": "획득",
+    "advantages": "장점",
+    "attack_vectors": "공격 벡터",
+    "basics": "기본",
+    "best_practices": "최고의 관행",
+    "choosing_a_rep": "대표 선택",
+    "challenges": "도전",
+    "communities": "커뮤니티",
+    "contribution_guide": "기여 가이드",
+    "design": "디자인",
+    "developer_discussions": "개발자 토론",
+    "developers": "개발자",
+    "documentation": "문서",
+    "faqs": "FAQs",
+    "get_involved": "참여하기",
+    "get_support": "지원 받기",
+    "getting_started": "시작하기",
+    "glossary": "용어집",
+    "guides": "가이드",
+    "history": "역사",
+    "home": "홈",
+    "how_it_works": "작동 원리",
+    "integrations": "통합",
+    "introduction": "소개",
+    "investment_thesis": "투자 논문",
+    "learn": "배우기",
+    "ledger": "원장",
+    "misconceptions": "오해",
+    "overview": "개요",
+    "planning": "계획",
+    "privacy": "개인 정보 보호",
+    "protocol": "프로토콜",
+    "running_a_node": "노드 운영",
+    "security": "보안",
+    "stats": "통계",
+    "storing": "저장",
+    "telemetry": "텔레메트리",
+    "topics": "주제",
+    "using": "사용",
+    "why_it_matters": "중요한 이유"
+  },
+  "network": {
+    "backlog_text": "확인을 기다리는 트랜잭션의 중간 수 $(network.pr_text)",
+    "censor_text": "트랜잭션을 검열하거나 네트워크를 정지시키기 위해 필요한 대표의 최소 수",
+    "confirm_text": "트랜잭션을 확인하기 위해 필요한 대표의 최소 수",
+    "confirmations": "확인 (24시간)",
+    "confirmations_text": "지난 24시간 동안 네트워크가 확인한 트랜잭션의 총 수",
+    "energy_text": "수집된 CPU 모델 정보를 기반으로 한 주요 대표의 추정 실시간 네트워크 CPU 에너지 사용량입니다. 이 추정치는 모든 코어가 제조업체가 정의한 고복잡도 작업 부하에서 기본 주파수로 작동할 때 프로세서가 발산하는 평균 전력(와트)인 CPU TDP를 기반으로 합니다.",
+    "energy_usage": "에너지 사용량 (TDP) (24시간)",
+    "fee_text": "나노 네트워크는 수수료 없이 운영됩니다",
+    "nano_ticker": "나노티커",
+    "online_stake": "온라인 스테이크",
+    "principal_reps": "주요 대표",
+    "pr_text": "온라인 투표 무게의 0.1% 이상이 위임된 투표 노드인 네트워크의 주요 대표를 통해 관찰됩니다",
+    "reps_to_censor": "검열 또는 정지를 위한 대표",
+    "reps_to_confirm": "확인을 위한 대표",
+    "settlement": "결제 (24시간)",
+    "settlement_text": "지난 24시간 동안 네트워크가 결제한 총 가치",
+    "speed_text": "테스트 트랜잭션이 확인될 때까지의 밀리초 시간",
+    "stake_text": "투표에 적극적으로 참여하는 위임된 나노 무게의 백분율",
+    "stats_title": "네트워크 통계",
+    "total_reps": "총 대표 (24시간)",
+    "tx_backlog": "트랜잭션 백로그",
+    "tx_fees": "트랜잭션 수수료 (24시간)",
+    "tx_speed": "트랜잭션 속도",
+    "tx_throughput": "트랜잭션 처리량",
+    "throughput_text": "지난 분 동안 초당 확인된 트랜잭션의 중앙값 $(network.pr_text)"
+  },
+  "posts": {
+    "nano_foundation": "나노 재단",
+    "top": "상위",
+    "trending": "인기"
+  },
+  "representative_alerts": {
+    "table_header": {
+      "behind": "지연",
+      "issue": "문제",
+      "last_online": "마지막 온라인",
+      "percent_online_weight": "% 온라인 무게",
+      "representative": "대표"
+    },
+    "tooltip": {
+      "behind": "대표가 지연되었거나 부트스트래핑 중입니다. 기준은 95번째 백분위수를 넘는 시멘트 수입니다. (텔레메트리를 통해)",
+      "low_uptime": "대표가 지난 28일 동안 25% 이상 오프라인 상태였습니다.",
+      "offline": "대표가 투표를 중단하고 오프라인으로 보입니다.",
+      "overweight": "대표가 3M 나노 이상의 투표 무게를 가지고 있습니다. 위임자는 네트워크의 회복력과 가치를 향상시키기 위해 무게를 분배하는 것을 고려해야 합니다."
+    },
+    "type": {
+      "behind": "지연",
+      "low_uptime": "낮은 가동 시간",
+      "offline": "오프라인",
+      "overweight": "과중"
+    }
+  },
+  "representatives_cemented_by_weight": {
+    "title": "확인 차이",
+    "tooltip": "선두 노드로부터 X 번호의 확인 내에 있는 투표 무게의 양을 표시합니다. 네트워크 전반에 걸쳐 노드가 얼마나 잘 동기화되고 정렬되어 있는지 알 수 있습니다."
+  },
+  "representatives_checked_by_weight": {
+    "title": "블록 차이",
+    "tooltip": "선두 노드로부터 X 번호의 블록 내에 있는 투표 무게의 양을 표시합니다. 네트워크 내에서 블록 전파가 얼마나 동기화되어 있는지 감을 얻는 데 유용합니다."
+  },
+  "representative_delegators": {
+    "showing_top_delegators": "최소 잔액 1 나노를 가진 상위 100명의 위임자를 표시합니다."
+  },
+  "representative_info": {
+    "first_seen": "처음 발견됨",
+    "last_seen": "마지막으로 발견됨",
+    "weight_represented": "대표 무게"
+  },
+  "representative_network": {
+    "city": "도시",
+    "isp": "ISP",
+    "network": "네트워크",
+    "provider": "제공자"
+  },
+  "representative_telemetry": {
+    "telemetry": "텔레메트리",
+    "telemetry_timestamp": "텔레메트리 타임스탬프"
+  },
+  "representative_uptime": {
+    "2m_uptime": "2M 가동 시간",
+    "2w_uptime": "2주 가동 시간",
+    "3m_uptime": "3M 가동 시간",
+    "current_status": "현재 상태",
+    "down": "다운",
+    "down_for": "다운 시간",
+    "operational": "운영 중",
+    "up_for": "가동 시간",
+    "warning": "경고"
+  },
+  "representatives": {
+    "alias": "별칭",
+    "cpu_cores": "CPU 코어",
+    "cpu_model": "CPU 모델",
+    "tdp": "TDP (wH)",
+    "protocol_version": "프로토콜",
+    "last_seen": "마지막으로 발견됨",
+    "host_asn": "호스트 ASN"
+  },
+  "representatives_bandwidth_by_weight": {
+    "tooltip": "각 노드가 로컬에서 설정한 대역폭 제한을 기반으로 한 투표 무게의 양을 표시합니다."
+  },
+  "representatives_country_by_weight": {
+    "title": "국가"
+  },
+  "representatives_offline": {
+    "account": "오프라인 계정",
+    "last_online": "마지막 온라인"
+  },
+  "representatives_page": {
+    "seo_description": "나노 네트워크 대표를 탐색하고 분석합니다",
+    "seo_title": "나노 대표 탐색기",
+    "telemetry_tab": "텔레메트리",
+    "weight_distribution_tab": "무게 분포",
+    "weight_history_tab": "무게 역사",
+    "offline_reps_tab": "오프라인 대표"
+  },
+  "representatives_provider_by_weight": {
+    "title": "호스팅 제공자"
+  },
+  "representatives_quorum_charts": {
+    "peers_weight": "동료 무게",
+    "quorum_delta": "쿼럼 델타",
+    "title": "쿼럼 차트",
+    "trended_weight": "추세 무게"
+  },
+  "representatives_search": {
+    "placeholder": "계정, 별칭, IP로 필터링"
+  },
+  "representatives_weight": {
+    "trended": "추세"
+  },
+  "representatives_weight_chart": {
+    "title": "대표별 무게 분포"
+  },
+  "representatives_version_by_weight": {
+    "title": "버전"
+  },
+  "roadmap": {
+    "header": {
+      "subtitle": "커뮤니티 목표",
+      "title": "계획"
+    },
+    "seo": {
+      "description": "나노 개발 및 커뮤니티 로드맵",
+      "tags": [
+        "로드맵",
+        "나노",
+        "미래",
+        "릴리스",
+        "디자인",
+        "작업",
+        "토론",
+        "커뮤니티",
+        "대사",
+        "매니저"
+      ],
+      "title": "로드맵"
+    }
+  },
+  "search_bar": {
+    "placeholder": "주소 / 블록 해시로 검색"
+  },
+  "uptime": {
+    "now": "지금",
+    "days_ago": "일 전"
+  }
+}

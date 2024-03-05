@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import { List } from 'immutable'
+import { useTranslation } from 'react-i18next'
 
 import Seo from '@components/seo'
 import Menu from '@components/menu'
@@ -27,66 +28,68 @@ MenuCard.propTypes = {
   url: PropTypes.string
 }
 
-export default class RoadmapPage extends React.Component {
-  componentDidMount() {
-    this.props.load()
-  }
+export default function RoadmapPage({ load, discussions, is_pending }) {
+  const { t } = useTranslation()
+  useEffect(() => {
+    load()
+  }, [])
 
-  render() {
-    const { discussions, isPending } = this.props
-
-    let skeletons = new List()
-    if (isPending) {
+  let skeletons = new List()
+  if (is_pending) {
+    for (let i = 0; i < 3; i++) {
       skeletons = skeletons.push(new GithubDiscussion())
-      skeletons = skeletons.push(new GithubDiscussion())
-      skeletons = skeletons.push(new GithubDiscussion())
-    } else if (!discussions.size) {
-      return null
     }
-
-    const items = (discussions.size ? discussions : skeletons).map(
-      (item, key) => <Discussion key={key} discussion={item} />
-    )
-
-    return (
-      <>
-        <Seo
-          title='Roadmap'
-          description='Nano development & community roadmap'
-          tags={[
-            'roadmap',
-            'nano',
-            'future',
-            'release',
-            'design',
-            'tasks',
-            'discussions',
-            'community',
-            'ambassadors',
-            'managers'
-          ]}
-        />
-        <div className='roadmap__container'>
-          <div className='roadmap__main'>
-            <div className='header__container'>
-              <div className='header__title'>
-                <h1>Planning</h1>
-                <span>Community objectives</span>
-              </div>
-            </div>
-            <div className='roadmap__body'>{items}</div>
-          </div>
-          <div className='roadmap__side'>
-            <Menu hideSearch />
-          </div>
-        </div>
-      </>
-    )
+  } else if (!discussions.size) {
+    return null
   }
+
+  const items = (discussions.size ? discussions : skeletons).map(
+    (item, key) => <Discussion key={key} discussion={item} />
+  )
+
+  return (
+    <>
+      <Seo
+        title={t('roadmap.seo.title', 'Roadmap')}
+        description={t(
+          'roadmap.seo.description',
+          'Nano development & community roadmap'
+        )}
+        tags={t('roadmap.seo.tags', [
+          'roadmap',
+          'nano',
+          'future',
+          'release',
+          'design',
+          'tasks',
+          'discussions',
+          'community',
+          'ambassadors',
+          'managers'
+        ])}
+      />
+      <div className='roadmap__container'>
+        <div className='roadmap__main'>
+          <div className='header__container'>
+            <div className='header__title'>
+              <h1>{t('roadmap.header.title', 'Planning')}</h1>
+              <span>
+                {t('roadmap.header.subtitle', 'Community objectives')}
+              </span>
+            </div>
+          </div>
+          <div className='roadmap__body'>{items}</div>
+        </div>
+        <div className='roadmap__side'>
+          <Menu hideSearch />
+        </div>
+      </div>
+    </>
+  )
 }
 
 RoadmapPage.propTypes = {
   load: PropTypes.func,
   discussions: ImmutablePropTypes.list,
-  isPending: PropTypes.bool
+  is_pending: PropTypes.bool
 }

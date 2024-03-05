@@ -1,6 +1,7 @@
 import React from 'react'
 import ClearIcon from '@mui/icons-material/Clear'
 import SearchIcon from '@mui/icons-material/Search'
+import { useTranslation } from 'react-i18next'
 
 import history from '@core/history'
 
@@ -9,49 +10,44 @@ import './search-bar.styl'
 const ACCOUNT_REGEX = /((nano|xrb)_)?[13][13-9a-km-uw-z]{59}/
 const BLOCK_REGEX = /[0-9A-F]{64}/
 
-export default class SearchBar extends React.Component {
-  constructor(props) {
-    super(props)
+export default function SearchBar() {
+  const { t } = useTranslation()
+  const [value, set_value] = React.useState('')
+  const [invalid, set_invalid] = React.useState(false)
 
-    this.state = {
-      value: '',
-      invalid: false
-    }
+  const handleClick = () => {
+    set_value('')
   }
 
-  handleClick = () => {
-    const value = ''
-    this.setState({ value })
-  }
-
-  handleChange = (event) => {
+  const handleChange = (event) => {
     const { value } = event.target
-    this.setState({ value })
+    set_value(value)
     if (ACCOUNT_REGEX.test(value) || BLOCK_REGEX.test(value)) {
       history.push(`/${value}`)
     } else {
-      this.setState({ invalid: true })
+      set_invalid(true)
     }
   }
 
-  render() {
-    const isFilled = Boolean(this.state.value)
-    return (
-      <div className={`search__bar ${this.state.invalid && 'invalid'}`}>
-        <SearchIcon className='search__icon' />
-        <input
-          className={`search__input ${isFilled ? 'filled' : ''}`}
-          type='text'
-          placeholder='Search by Address / Block Hash'
-          value={this.state.value}
-          onChange={this.handleChange}
-        />
-        {this.state.value && (
-          <div className='search__input-clear' onClick={this.handleClick}>
-            <ClearIcon />
-          </div>
+  const isFilled = Boolean(value)
+  return (
+    <div className={`search__bar ${invalid && 'invalid'}`}>
+      <SearchIcon className='search__icon' />
+      <input
+        className={`search__input ${isFilled ? 'filled' : ''}`}
+        type='text'
+        placeholder={t(
+          'search_bar.placeholder',
+          'Search by Address / Block Hash'
         )}
-      </div>
-    )
-  }
+        value={value}
+        onChange={handleChange}
+      />
+      {value && (
+        <div className='search__input-clear' onClick={handleClick}>
+          <ClearIcon />
+        </div>
+      )}
+    </div>
+  )
 }

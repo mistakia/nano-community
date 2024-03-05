@@ -1,0 +1,387 @@
+{
+  "account_page": {
+    "address": "Kontoadresse",
+    "change_summary": "Endringssammendrag",
+    "copy_notification": "Kontoadresse kopiert",
+    "seo_description": "Informasjon for nano-representant",
+    "seo_title": "Nano-konto",
+    "telemetry_charts": "Telemetridiagrammer",
+    "unopened_description": "Selv om kontoadressen er gyldig, har ingen blokker blitt observert. Hvis NANO er sendt til denne kontoen, må det fortsatt publiseres en tilsvarende blokk for å motta midlene og etablere en åpningsbalanse. En kontos saldo kan kun oppdateres av kontoinnehaveren, da de er de eneste som kan publisere blokker til sin kjede.",
+    "unopened_note": "Hvis en åpningsblokk allerede er publisert, kan det ta noen øyeblikk å spre seg gjennom nettverket og bli observert av nano.community-nodene.",
+    "unopened_title": "Denne kontoen har ikke blitt åpnet ennå"
+  },
+  "account_blocks_summary": {
+    "first_timestamp": "Første tidsstempel",
+    "last_timestamp": "Siste tidsstempel",
+    "max_amount": "Maks beløp",
+    "min_amount": "Min beløp",
+    "no_records": "Ingen poster",
+    "receiving_account": "Mottakende konto",
+    "representative_account": "Representantkonto",
+    "sending_account": "Senderkonto",
+    "showing_top_10": "Viser topp 10 kontoer etter totalt synkende",
+    "transactions": "Transaksjoner"
+  },
+  "account_meta": {
+    "account_info": "Kontoinformasjon",
+    "funding_account": "Finansieringskonto",
+    "funding_timestamp": "Finansieringstidsstempel",
+    "height": "Høyde",
+    "last_modified": "Sist endret",
+    "open_timestamp": "Åpningstidsstempel",
+    "opening_balance": "Åpningsbalanse",
+    "receivable_balance": "Mottakelig saldo"
+  },
+  "block_page": {
+    "amount": "Beløp",
+    "copy_notification": "Blokkhash kopiert",
+    "delegated_representative": "Delegert representant",
+    "description": "Beskrivelse",
+    "epoch_v1": "Epoche v1 - Oppgraderte konto-kjeder fra legacy blokker (åpen, motta, sende, endre) til tilstands blokker.",
+    "epoch_v2": "Epoche v2 - Oppgraderte konto-kjeder for å bruke høyere Proof-of-Work vanskelighetsgrad.",
+    "receiving_account": "Mottakende konto",
+    "section_label": "Blokkhash",
+    "sending_account": "Senderkonto",
+    "seo_description": "Informasjon relatert til en Nano-blokk",
+    "seo_title": "Nano-blokk",
+    "voting_weight": "Stemmevekt"
+  },
+  "block_info": {
+    "block_account": "Blokkkonto",
+    "operation": "Operasjon",
+    "status": "Status",
+    "timestamp": "Tidsstempel"
+  },
+  "block_status": {
+    "confirmed": "Bekreftet",
+    "unconfirmed": "Ubekreftet"
+  },
+  "block_type": {
+    "change": "Endre",
+    "epoch": "Epoche",
+    "open": "Åpen",
+    "receive": "Motta",
+    "send": "Sende"
+  },
+  "common": {
+    "account_one": "Konto",
+    "account_other": "Kontoer",
+    "address": "Adresse",
+    "balance": "Saldo",
+    "bandwidth_limit": "Båndbreddegrense",
+    "bandwidth_limit_short": "BW-grense",
+    "blocks": "Blokker",
+    "blocks_behind": "Blokker bak",
+    "blocks_diff_short": "Blokker Diff",
+    "by_online_weight": "Etter online vekt",
+    "clear_filters": "Fjern filtre",
+    "click_to_copy": "Klikk for å kopiere",
+    "collapse": "Kollaps",
+    "conf_short": "Bekr.",
+    "conf_diff_short": "Bekr. Diff",
+    "confirmations_behind": "Bekreftelser bak",
+    "country": "Land",
+    "delegator_one": "Delegator",
+    "delegator_other": "Delegatorer",
+    "max": "Maks",
+    "min": "Min",
+    "offline": "Frakoblet",
+    "online": "På nett",
+    "peers": "Likemenn",
+    "percent_of_total": "% av total",
+    "port": "Port",
+    "quorum_delta": "Kvorum Delta",
+    "representative_one": "Representant",
+    "representative_other": "Representanter",
+    "show_more": "Vis {{count}} mer",
+    "total": "Total",
+    "unchecked": "Ukontrollert",
+    "unchecked_count": "Ukontrollert Antall",
+    "unlimited": "Ubegrenset",
+    "uptime": "Oppetid",
+    "version": "Versjon",
+    "weight": "Vekt"
+  },
+  "delegators": {
+    "showing_top_delegators": "Viser topp 100 delegatorer med en minimumssaldo på 1 Nano."
+  },
+  "doc": {
+    "contributors": "Bidragsytere",
+    "document_not_found": "Dokument (eller konto) ikke funnet",
+    "edit_page": "Rediger side",
+    "help_out": "Hjelp til",
+    "not_found_404": "404",
+    "section_link_copied": "Seksjonslenke kopiert",
+    "updated_by": "oppdatert av"
+  },
+  "github_events": {
+    "action": {
+      "added_member": "la til medlem",
+      "commented_on_commit": "kommenterte på commit",
+      "commented_on_issue": "kommenterte på problem",
+      "commented_on_pr_review": "kommenterte på PR-gjennomgang",
+      "created": "opprettet {{action}}",
+      "deleted": "slettet {{action}}",
+      "forked": "forket",
+      "issue_action": "{{action}} problem",
+      "made_public": "gjort offentlig",
+      "pr_action": "{{action}} PR",
+      "pr_review": "PR-gjennomgang {{title}}",
+      "published_release": "publisert utgivelse",
+      "pushed_commit": "pushet commit til {{ref}}",
+      "sponsorship_started": "sponsorat startet",
+      "watching_repo": "ser på repo"
+    },
+    "events_title": "Utviklingshendelser"
+  },
+  "ledger": {
+    "addresses": {
+      "active_detail": "Aktiv viser antall unike adresser brukt. Ny viser antall adresser opprettet. Gjenbrukt viser antall adresser brukt som ble opprettet på en tidligere dag.",
+      "active_stats": "Aktive adresser statistikk",
+      "new_stats": "Nye adresser statistikk",
+      "total_number": "Det totale antallet aktive, nye og gjenbrukte adresser brukt per dag."
+    },
+    "amounts": {
+      "total_number": "Antall bekreftede sende-type blokker per dag der beløpet i blokken er innenfor et gitt område (i Nano)"
+    },
+    "blocks": {
+      "change": "Endre blokkstatistikk",
+      "description": "Antall blokker bekreftet per dag.",
+      "open": "Åpne blokkstatistikk",
+      "receive": "Motta blokkstatistikk",
+      "send": "Sende blokkstatistikk",
+      "total": "Total blokkstatistikk"
+    },
+    "description": "Beskrivelse",
+    "usd_transferred": {
+      "desc_1": "Det totale beløpet av verdi overført (i USD) per dag.",
+      "desc_2": "Basert på den daglige sluttkursen av Nano/USD og det totale beløpet av Nano overført den dagen.",
+      "usd_transferred": "USD Overført",
+      "usd_transferred_stats": "USD Overført Statistikk"
+    },
+    "volume": {
+      "change_stats": "Endre statistikk",
+      "description": "Det totale beløpet sendt (i Nano) og det totale beløpet av stemmevekt endret per dag.",
+      "send_stats": "Sende statistikk"
+    }
+  },
+  "ledger_page": {
+    "addresses_tab": "Adresser",
+    "amounts_tab": "Beløp",
+    "blocks_tab": "Blokker",
+    "seo_description": "Kjede-metrikker og analyser av Nano-ledgeren",
+    "seo_title": "Nano Ledger Analyse",
+    "value_transferred_tab": "Verdi Overført",
+    "volume_tab": "Volum"
+  },
+  "menu": {
+    "account_setup": "Kontooppsett",
+    "acquiring": "Anskaffelse",
+    "advantages": "Fordeler",
+    "attack_vectors": "Angrepsvektorer",
+    "basics": "Grunnleggende",
+    "best_practices": "Beste praksiser",
+    "choosing_a_rep": "Velge en representant",
+    "challenges": "Utfordringer",
+    "communities": "Samfunn",
+    "contribution_guide": "Bidragsveiledning",
+    "design": "Design",
+    "developer_discussions": "Utviklerdiskusjoner",
+    "developers": "Utviklere",
+    "documentation": "Dokumentasjon",
+    "faqs": "FAQs",
+    "get_involved": "Bli involvert",
+    "get_support": "Få støtte",
+    "getting_started": "Komme i gang",
+    "glossary": "Glossar",
+    "guides": "Guider",
+    "history": "Historie",
+    "home": "Hjem",
+    "how_it_works": "Hvordan det fungerer",
+    "integrations": "Integrasjoner",
+    "introduction": "Introduksjon",
+    "investment_thesis": "Investeringsoppgave",
+    "learn": "Lær",
+    "ledger": "Hovedbok",
+    "misconceptions": "Misforståelser",
+    "overview": "Oversikt",
+    "planning": "Planlegging 👾",
+    "privacy": "Personvern",
+    "protocol": "Protokoll",
+    "running_a_node": "Kjøre en node",
+    "security": "Sikkerhet",
+    "stats": "Statistikk",
+    "storing": "Lagring",
+    "telemetry": "Telemetri",
+    "topics": "Temaer",
+    "using": "Bruke",
+    "why_it_matters": "Hvorfor det betyr noe"
+  },
+  "network": {
+    "backlog_text": "Median antall transaksjoner som venter på å bli bekreftet $(network.pr_text)",
+    "censor_text": "Minimum antall representanter som trengs for å sensurere transaksjoner eller stoppe nettverket",
+    "confirm_text": "Minimum antall representanter som trengs for å bekrefte transaksjoner",
+    "confirmations": "Bekreftelser (24t)",
+    "confirmations_text": "Totalt antall transaksjoner bekreftet av nettverket i løpet av de siste 24 timene",
+    "energy_text": "Estimert live nettverks CPU energibruk av hovedrepresentanter basert på samlet CPU modellinfo. Estimatet er basert på CPU TDP, som er gjennomsnittlig kraft, i watt, prosessoren avgir når den opererer ved basisfrekvens med alle kjerner aktive under produsentdefinert, høykompleks arbeidsbelastning",
+    "energy_usage": "Energiforbruk (TDP) (24t)",
+    "fee_text": "Nano-nettverket opererer uten gebyrer",
+    "nano_ticker": "NanoTicker",
+    "online_stake": "Online Innsats",
+    "principal_reps": "Hovedrepresentanter",
+    "pr_text": "som observert på tvers av nettverkets hovedrepresentanter: stemmegivende noder med mer enn 0,1% av den online stemmevekten delegert til dem",
+    "reps_to_censor": "Reps for å sensurere eller stoppe",
+    "reps_to_confirm": "Reps for å bekrefte",
+    "settlement": "Oppgjør (24t)",
+    "settlement_text": "Total mengde verdi avgjort av nettverket i løpet av de siste 24 timene",
+    "speed_text": "Tid i millisekunder for en testtransaksjon for å bli bekreftet",
+    "stake_text": "Prosentandel av delegert Nano-vekt som aktivt deltar i avstemming",
+    "stats_title": "Nettverksstatistikk",
+    "total_reps": "Totalt Reps (24t)",
+    "tx_backlog": "Tx Venteliste",
+    "tx_fees": "Tx Gebyrer (24t)",
+    "tx_speed": "Tx Hastighet",
+    "tx_throughput": "Tx Gjennomstrømning",
+    "throughput_text": "Median antall transaksjoner bekreftet per sekund i det siste minuttet $(network.pr_text)"
+  },
+  "posts": {
+    "nano_foundation": "Nano Foundation",
+    "top": "Topp",
+    "trending": "Trender"
+  },
+  "representative_alerts": {
+    "table_header": {
+      "behind": "Bak",
+      "issue": "Problem",
+      "last_online": "Sist Online",
+      "percent_online_weight": "% Online Vekt",
+      "representative": "Representant"
+    },
+    "tooltip": {
+      "behind": "Representanten har falt bak eller er i oppstart. Grensen er en sementert telling utover det 95. persentil. (via telemetri)",
+      "low_uptime": "Representanten har vært offline mer enn 25% i løpet av de siste 28 dagene.",
+      "offline": "Representanten har sluttet å stemme og ser ut til å være offline.",
+      "overweight": "Representanten har utover 3M Nano stemmevekt. Delegatorer bør vurdere å distribuere vekten for å forbedre nettverkets motstandsdyktighet og verdi."
+    },
+    "type": {
+      "behind": "Bak",
+      "low_uptime": "Lav Oppetid",
+      "offline": "Offline",
+      "overweight": "Overvektig"
+    }
+  },
+  "representatives_cemented_by_weight": {
+    "title": "Bekreftelsesdifferensial",
+    "tooltip": "Viser mengden av stemmevekt som er innenfor X antall bekreftelser fra den ledende noden. Nyttig for å vite hvor godt synkroniserte og justerte nodene er på tvers av nettverket"
+  },
+  "representatives_checked_by_weight": {
+    "title": "Blokker Differensial",
+    "tooltip": "Viser mengden av stemmevekt som er innenfor X antall blokker fra den ledende noden. Nyttig for å få en følelse av hvor synkronisert blokkpropagering er innen nettverket"
+  },
+  "representative_delegators": {
+    "showing_top_delegators": "Viser topp 100 delegatorer med en minimumssaldo på 1 Nano."
+  },
+  "representative_info": {
+    "first_seen": "Først Sett",
+    "last_seen": "Sist Sett",
+    "weight_represented": "Vekt Representert"
+  },
+  "representative_network": {
+    "city": "By",
+    "isp": "ISP",
+    "network": "Nettverk",
+    "provider": "Leverandør"
+  },
+  "representative_telemetry": {
+    "telemetry": "Telemetri",
+    "telemetry_timestamp": "Telemetri Tidsstempel"
+  },
+  "representative_uptime": {
+    "2m_uptime": "2M Oppetid",
+    "2w_uptime": "2U Oppetid",
+    "3m_uptime": "3M Oppetid",
+    "current_status": "Nåværende Status",
+    "down": "Nede",
+    "down_for": "Nede For",
+    "operational": "Operativ",
+    "up_for": "Oppe For",
+    "warning": "Advarsel"
+  },
+  "representatives": {
+    "alias": "Alias",
+    "cpu_cores": "CPU Kjerner",
+    "cpu_model": "CPU Modell",
+    "tdp": "TDP (wH)",
+    "protocol_version": "Protokoll",
+    "last_seen": "Sist Sett",
+    "host_asn": "Vert ASN"
+  },
+  "representatives_bandwidth_by_weight": {
+    "tooltip": "Viser mengden av stemmevekt basert på båndbreddegrensen satt lokalt av hver node"
+  },
+  "representatives_country_by_weight": {
+    "title": "Land"
+  },
+  "representatives_offline": {
+    "account": "Offline Konto",
+    "last_online": "Sist Online"
+  },
+  "representatives_page": {
+    "seo_description": "Utforsk og analyser Nano-nettverkets representanter",
+    "seo_title": "Nano Representanter Utforsker",
+    "telemetry_tab": "Telemetri",
+    "weight_distribution_tab": "Vektfordeling",
+    "weight_history_tab": "Vekthistorikk",
+    "offline_reps_tab": "Offline Reps"
+  },
+  "representatives_provider_by_weight": {
+    "title": "Hosting Leverandør"
+  },
+  "representatives_quorum_charts": {
+    "peers_weight": "Jevevekt",
+    "quorum_delta": "Kvorum Delta",
+    "title": "Kvorum Diagrammer",
+    "trended_weight": "Trendet Vekt"
+  },
+  "representatives_search": {
+    "placeholder": "Filtrer etter konto, alias, ip"
+  },
+  "representatives_weight": {
+    "trended": "Trendet"
+  },
+  "representatives_weight_chart": {
+    "title": "Vektfordeling etter Representant"
+  },
+  "representatives_version_by_weight": {
+    "title": "Versjoner"
+  },
+  "roadmap": {
+    "header": {
+      "subtitle": "Samfunnets mål",
+      "title": "Planlegging"
+    },
+    "seo": {
+      "description": "Nano utvikling & samfunnsveikart",
+      "tags": [
+        "veikart",
+        "nano",
+        "fremtid",
+        "utgivelse",
+        "design",
+        "oppgaver",
+        "diskusjoner",
+        "samfunn",
+        "ambassadører",
+        "ledere"
+      ],
+      "title": "Veikart"
+    }
+  },
+  "search_bar": {
+    "placeholder": "Søk etter Adresse / Blokk Hash"
+  },
+  "uptime": {
+    "now": "Nå",
+    "days_ago": "dager siden"
+  }
+}

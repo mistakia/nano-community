@@ -43,11 +43,7 @@ export default class RepresentativeTelemetryChart extends React.Component {
       ]
     }
 
-    return (
-      <>
-        <ReactEChartsCore echarts={echarts} option={option} />
-      </>
-    )
+    return <ReactEChartsCore echarts={echarts} option={option} />
   }
 }
 

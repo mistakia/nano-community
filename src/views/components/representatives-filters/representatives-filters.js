@@ -1,27 +1,27 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import ClearIcon from '@mui/icons-material/Clear'
+import { useTranslation } from 'react-i18next'
 
 import './representatives-filters.styl'
 
-export default class RepresentativesFilters extends React.Component {
-  handleClick = () => {
+export default function RepresentativesFilters({ filter, field }) {
+  const { t } = useTranslation()
+  const handleClick = () => {
     // clear filters
-    this.props.filter()
+    filter()
   }
 
-  render() {
-    if (!this.props.field) {
-      return null
-    }
-
-    return (
-      <div className='representatives__filters' onClick={this.handleClick}>
-        <ClearIcon />
-        <div>Clear filters</div>
-      </div>
-    )
+  if (!field) {
+    return null
   }
+
+  return (
+    <div className='representatives__filters' onClick={handleClick}>
+      <ClearIcon />
+      <div>{t('common.clear_filters', 'Clear Filters')}</div>
+    </div>
+  )
 }
 
 RepresentativesFilters.propTypes = {

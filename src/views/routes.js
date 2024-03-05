@@ -12,6 +12,7 @@ import NotFoundPage from '@pages/not-found'
 import RepresentativesPage from '@pages/representatives'
 import TelemetryPage from '@pages/telemetry'
 import LabelPage from '@pages/label'
+import { SUPPORTED_LOCALES } from '@core/constants'
 
 const Routes = () => (
   <Switch>
@@ -31,6 +32,10 @@ const Routes = () => (
       component={AccountPage}
     />
     <Route exact path={'/:hash([0-9A-F]{64})'} component={BlockPage} />
+    <Route
+      path={`/:locale(${SUPPORTED_LOCALES.join('|')})/*`}
+      component={DocPage}
+    />
     <Route path='/*' component={DocPage} />
   </Switch>
 )

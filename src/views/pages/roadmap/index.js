@@ -10,7 +10,7 @@ import RoadmapPage from './roadmap'
 
 const mapStateToProps = createSelector(getGithubDiscussions, (state) => ({
   discussions: state.get('discussions'),
-  isPending: state.get('isPending')
+  is_pending: state.get('isPending')
 }))
 
 const mapDispatchToProps = {

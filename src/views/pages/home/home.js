@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import RepresentativeAlerts from '@components/representative-alerts'
 import Posts from '@components/posts'
@@ -9,42 +10,45 @@ import Seo from '@components/seo'
 
 import './home.styl'
 
-export default class HomePage extends React.Component {
-  render() {
-    return (
-      <div className='home__container'>
-        <Seo
-          title='Nano Community'
-          description='Community gateway and knowledge hub for Nano: digital money (cryptocurrency) that is peer-to-peer, feeless, instant, and environmentally sustainable'
-          tags={[
-            'nano',
-            'wiki',
-            'crypto',
-            'currency',
-            'cryptocurrency',
-            'digital',
-            'money',
-            'feeless',
-            'guide',
-            'docs',
-            'energy',
-            'environmental',
-            'green',
-            'sustainable'
-          ]}
+export default function HomePage() {
+  const { t } = useTranslation()
+  return (
+    <div className='home__container'>
+      <Seo
+        title='Nano Community'
+        description='Community gateway and knowledge hub for Nano: digital money (cryptocurrency) that is peer-to-peer, feeless, instant, and environmentally sustainable'
+        tags={[
+          'nano',
+          'wiki',
+          'crypto',
+          'currency',
+          'cryptocurrency',
+          'digital',
+          'money',
+          'feeless',
+          'guide',
+          'docs',
+          'energy',
+          'environmental',
+          'green',
+          'sustainable'
+        ]}
+      />
+      <Menu hide />
+      <div className='home__body'>
+        <Posts title={t('posts.top', 'Top')} id='top' age={168} />
+        <Posts
+          title={t('posts.nano_foundation', 'Nano Foundation')}
+          id='announcements'
+          age={36}
         />
-        <Menu hide />
-        <div className='home__body'>
-          <Posts title='Top' id='top' age={168} />
-          <Posts title='Nano Foundation' id='announcements' age={36} />
-          <div className='home__sections'>
-            <Network />
-            <GithubEvents />
-          </div>
-          <RepresentativeAlerts />
-          <Posts title='Trending' id='trending' age={72} />
+        <div className='home__sections'>
+          <Network />
+          <GithubEvents />
         </div>
+        <RepresentativeAlerts />
+        <Posts title={t('posts.trending', 'Trending')} id='trending' age={72} />
       </div>
-    )
-  }
+    </div>
+  )
 }
