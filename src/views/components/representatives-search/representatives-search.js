@@ -1,57 +1,83 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import ClearIcon from '@mui/icons-material/Clear'
+import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey'
+import hotkeys from 'hotkeys-js'
 
 import { debounce } from '@core/utils'
 
 import './representatives-search.styl'
 
-export default class RepresentativesSearch extends React.Component {
-  constructor(props) {
-    super(props)
+const RepresentativesSearch = ({
+  value: initialValue,
+  search,
+  align = 'center'
+}) => {
+  const [value, setValue] = useState(initialValue || '')
+  const inputRef = useRef(null)
 
-    this.state = {
-      value: this.props.value || ''
+  const debouncedSearch = debounce((value) => {
+    search(value)
+  }, 300)
+
+  useEffect(() => {
+    const handleHotkeys = (event, handler) => {
+      event.preventDefault()
+      inputRef.current.focus()
     }
 
-    this.search = debounce((value) => {
-      this.props.search(value)
-    }, 300)
+    hotkeys('command+k,ctrl+k', handleHotkeys)
+
+    return () => {
+      hotkeys.unbind('command+k,ctrl+k')
+    }
+  }, [])
+
+  const handleClick = () => {
+    setValue('')
+    search('')
   }
 
-  handleClick = () => {
-    const value = ''
-    this.setState({ value })
-    this.props.search(value)
-  }
-
-  handleChange = (event) => {
+  const handleChange = (event) => {
     const { value } = event.target
-    this.setState({ value })
-    this.search(value)
+    setValue(value)
+    debouncedSearch(value)
   }
 
-  render = () => {
-    return (
-      <div className='representatives__search'>
-        <input
-          className='search__input'
-          type='text'
-          placeholder='Filter by account, alias, ip'
-          value={this.state.value}
-          onChange={this.handleChange}
-        />
-        {this.state.value && (
-          <div className='search__input-clear' onClick={this.handleClick}>
-            <ClearIcon />
-          </div>
-        )}
-      </div>
-    )
+  const classNames = ['representatives__search']
+
+  if (align === 'left') {
+    classNames.push('left')
+  } else {
+    classNames.push('center')
   }
+
+  return (
+    <div className={classNames.join(' ')}>
+      <input
+        ref={inputRef}
+        className='search__input'
+        type='text'
+        placeholder='Filter by account, alias, ip'
+        value={value}
+        onChange={handleChange}
+      />
+      <div className='search__shortcut-icon'>
+        <KeyboardCommandKeyIcon fontSize='small' />K
+      </div>
+      {value && (
+        <div className='search__input-clear' onClick={handleClick}>
+          <ClearIcon />
+        </div>
+      )}
+    </div>
+  )
 }
 
 RepresentativesSearch.propTypes = {
   value: PropTypes.string,
-  search: PropTypes.func
+  search: PropTypes.func,
+  align: PropTypes.oneOf(['left', 'center'])
 }
+
+export default RepresentativesSearch

@@ -156,6 +156,7 @@
     "eslint-plugin-react": "7.33.0",
     "file-loader": "^6.2.0",
     "highlight.js": "^11.8.0",
+    "hotkeys-js": "^3.13.7",
     "html-inline-script-webpack-plugin": "^2.0.3",
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.5.3",

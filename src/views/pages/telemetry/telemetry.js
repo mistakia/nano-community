@@ -52,11 +52,13 @@ export default function TelemetryPage() {
         ]}
       />
       <div className='representatives__body'>
-        <RepresentativesSearch />
+        <div className='representatives__body-header'>
+          <RepresentativesSearch />
+        </div>
         <Representatives table_height={table_height} />
       </div>
       <div className='representatives__footer'>
-        <Menu hide_speed_dial={true} />
+        <Menu />
       </div>
     </>
   )
