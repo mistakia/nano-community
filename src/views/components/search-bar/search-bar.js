@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey'
 import ClearIcon from '@mui/icons-material/Clear'
 import SearchIcon from '@mui/icons-material/Search'
+import hotkeys from 'hotkeys-js'
 
 import history from '@core/history'
 
@@ -9,49 +11,60 @@ import './search-bar.styl'
 const ACCOUNT_REGEX = /((nano|xrb)_)?[13][13-9a-km-uw-z]{59}/
 const BLOCK_REGEX = /[0-9A-F]{64}/
 
-export default class SearchBar extends React.Component {
-  constructor(props) {
-    super(props)
+const SearchBar = () => {
+  const [value, setValue] = useState('')
+  const [invalid, setInvalid] = useState(false)
+  const input_ref = useRef(null)
 
-    this.state = {
-      value: '',
-      invalid: false
+  useEffect(() => {
+    const handle_hotkeys = (event, handler) => {
+      event.preventDefault()
+      input_ref.current.focus()
     }
+
+    hotkeys('command+l,ctrl+l', handle_hotkeys)
+
+    return () => {
+      hotkeys.unbind('command+l,ctrl+l')
+    }
+  }, [])
+
+  const handle_click = () => {
+    setValue('')
   }
 
-  handleClick = () => {
-    const value = ''
-    this.setState({ value })
-  }
-
-  handleChange = (event) => {
+  const handle_change = (event) => {
     const { value } = event.target
-    this.setState({ value })
+    setValue(value)
     if (ACCOUNT_REGEX.test(value) || BLOCK_REGEX.test(value)) {
       history.push(`/${value}`)
     } else {
-      this.setState({ invalid: true })
+      setInvalid(true)
     }
   }
 
-  render() {
-    const isFilled = Boolean(this.state.value)
-    return (
-      <div className={`search__bar ${this.state.invalid && 'invalid'}`}>
-        <SearchIcon className='search__icon' />
-        <input
-          className={`search__input ${isFilled ? 'filled' : ''}`}
-          type='text'
-          placeholder='Search by Address / Block Hash'
-          value={this.state.value}
-          onChange={this.handleChange}
-        />
-        {this.state.value && (
-          <div className='search__input-clear' onClick={this.handleClick}>
-            <ClearIcon />
-          </div>
-        )}
+  const is_filled = Boolean(value)
+  return (
+    <div className={`search__bar ${invalid && 'invalid'}`}>
+      <SearchIcon className='search__icon' />
+      <input
+        ref={input_ref}
+        className={`search__input ${is_filled ? 'filled' : ''}`}
+        type='text'
+        placeholder='Search by Address / Block Hash'
+        value={value}
+        onChange={handle_change}
+      />
+      <div className='search__shortcut-icon'>
+        <KeyboardCommandKeyIcon fontSize='small' />L
       </div>
-    )
-  }
+      {value && (
+        <div className='search__input-clear' onClick={handle_click}>
+          <ClearIcon />
+        </div>
+      )}
+    </div>
+  )
 }
+
+export default SearchBar
