@@ -85,8 +85,10 @@ export default class RepresentativesPage extends React.Component {
           <RepresentativesCountryByWeight />
         </div>
         <div className='representatives__body'>
-          <RepresentativesSearch />
-          <RepresentativesFilters />
+          <div className='representatives__body-header'>
+            <RepresentativesSearch align='left' />
+            <RepresentativesFilters />
+          </div>
           <Representatives />
           <div className='representatives__metrics'>
             <Tabs

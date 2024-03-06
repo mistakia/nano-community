@@ -9841,6 +9841,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"hotkeys-js@npm:^3.13.7":
+  version: 3.13.7
+  resolution: "hotkeys-js@npm:3.13.7"
+  checksum: 8c1da52704c1c2a97810d0d2c9d0917b87a7edd250aae79cd4b185b9374b2ddc7ba24eeec8491018ba51726b72faecf89042fede2b3a05d0599f334355bb968c
+  languageName: node
+  linkType: hard
+
 "hpack.js@npm:^2.1.6":
   version: 2.1.6
   resolution: "hpack.js@npm:2.1.6"
@@ -15711,6 +15718,7 @@ __metadata:
     front-matter: ^4.0.2
     fs-extra: ^11.1.1
     highlight.js: ^11.8.0
+    hotkeys-js: ^3.13.7
     html-inline-script-webpack-plugin: ^2.0.3
     html-loader: ^2.1.2
     html-webpack-plugin: ^5.5.3
