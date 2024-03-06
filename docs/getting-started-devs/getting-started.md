@@ -141,7 +141,7 @@ The first transaction on an account-chain, which is always a receive, is referre
 
 | Field          | Description                                                              |
 | -------------- | ------------------------------------------------------------------------ |
-| previous       | will be 0 since its the first block                                      |
+| previous       | will be 0 since it's the first block                                     |
 | representative | address of the representative, must match the previous block             |
 | account        | account the block belongs to                                             |
 | balance        | previous balance plus the amount being sent in the linked block (in raw) |

@@ -178,11 +178,11 @@ The account if the block is the first block on the account, otherwise it is the 
 
 ### seed
 
-A 256-bit random value usually represented to the user as a 64 character hexidecimal (0-9 and A-F) value. Private keys are deterministically derived from a seed.
+A 256-bit random value usually represented to the user as a 64 character hexadecimal (0-9 and A-F) value. Private keys are deterministically derived from a seed.
 
 ### time-as-a-currency (TaaC)
 
-The idea that time is a resource that can be gained and used. It is applied in transaction prioritization such that you gain priortiy as time passes. Thus, accumulated time can be spent to gain priority over other transactions that have "less time".
+The idea that time is a resource that can be gained and used. It is applied in transaction prioritization such that you gain priority as time passes. Thus, accumulated time can be spent to gain priority over other transactions that have "less time".
 
 ### transactions per second (TPS)
 
