@@ -28,7 +28,7 @@ Nano was distributed in a manner that has allowed it to avoid being treated excl
 
 ### Adoption, Acceptance
 
-One of the key properties for money is acceptability. This is mostly an issue that will be faced by early adopters. Given Nano's ability to have a positive feedback loop that strengthens its network effects, the problem of acceptability will naturally resolve itself once the network effects exceed a tipping point.
+One of the key properties of money is acceptability. This is mostly an issue that will be faced by early adopters. Given Nano's ability to have a positive feedback loop that strengthens its network effects, the problem of acceptability will naturally resolve itself once the network effects exceed a tipping point.
 
 ## Technical
 
