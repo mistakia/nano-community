@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import ClearIcon from '@mui/icons-material/Clear'
 import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey'
-import hotkeys from 'hotkeys-js'
 
 import { debounce } from '@core/utils'
 
@@ -21,15 +20,17 @@ const RepresentativesSearch = ({
   }, 300)
 
   useEffect(() => {
-    const handleHotkeys = (event, handler) => {
-      event.preventDefault()
-      inputRef.current.focus()
+    const handleKeyDown = (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+        event.preventDefault()
+        inputRef.current.focus()
+      }
     }
 
-    hotkeys('command+k,ctrl+k', handleHotkeys)
+    document.addEventListener('keydown', handleKeyDown)
 
     return () => {
-      hotkeys.unbind('command+k,ctrl+k')
+      document.removeEventListener('keydown', handleKeyDown)
     }
   }, [])
 

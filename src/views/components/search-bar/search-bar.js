@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react'
 import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey'
 import ClearIcon from '@mui/icons-material/Clear'
 import SearchIcon from '@mui/icons-material/Search'
-import hotkeys from 'hotkeys-js'
 
 import history from '@core/history'
 
@@ -17,15 +16,17 @@ const SearchBar = () => {
   const input_ref = useRef(null)
 
   useEffect(() => {
-    const handle_hotkeys = (event, handler) => {
-      event.preventDefault()
-      input_ref.current.focus()
+    const handle_key_down = (event) => {
+      if ((event.metaKey || event.ctrlKey) && event.key === 'l') {
+        event.preventDefault()
+        input_ref.current.focus()
+      }
     }
 
-    hotkeys('command+l,ctrl+l', handle_hotkeys)
+    document.addEventListener('keydown', handle_key_down)
 
     return () => {
-      hotkeys.unbind('command+l,ctrl+l')
+      document.removeEventListener('keydown', handle_key_down)
     }
   }, [])
 
