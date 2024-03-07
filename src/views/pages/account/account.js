@@ -125,7 +125,7 @@ export default class AccountPage extends React.Component {
           </div>
           {isLoading && (
             <LinearProgress
-              color='secondary'
+              color='error'
               style={{ width: '100%', margin: '32px' }}
             />
           )}
