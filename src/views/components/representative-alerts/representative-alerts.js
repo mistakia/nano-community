@@ -111,11 +111,13 @@ export default class RepresentativeAlerts extends React.Component {
                       align='right'>
                       {row.account.is_online ? (
                         <FiberManualRecordIcon className='green' />
-                      ) : (
+                      ) : row.account.last_online ? (
                         timeago.format(
                           row.account.last_online * 1000,
                           'nano_short'
                         )
+                      ) : (
+                        ''
                       )}
                     </TableCell>
                     <TableCell className='rep__alert-metric' align='right'>
