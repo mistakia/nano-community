@@ -45,7 +45,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
   - **manual:** local confirmation requests (via rpc)
 - handles adding a block to the priority queue
   - dependents must be confirmed
-- every 5m the scheduler is populated using the backlog
+- every 5m the scheduler is populated using the pool of unconfirmed blocks
 - when there is a vacancy in the active election container it will check both queues (manual & priority) and add the top block (will be changed in v22.1)
   - a block starts of with a passive election state, unless it is added from the priority queue and previously had an election
 - upon starting an election, a node will generate & broadcast votes for that election (see [broadcasting a vote](#broadcasting-a-vote))
@@ -54,7 +54,7 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 
 - <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/election_scheduler.cpp#L90-L129" target="_blank">election_scheduler::run</a> — main loop waiting for vacancy
 - <a href="https://github.com/nanocurrency/nano-node/blob/33a974155ddf4b10fc3d2c72e4c20a8abe514aef/nano/node/election_scheduler.cpp#L24-L46" target="_blank">election_scheduler::activate</a> — adding a block to the scheduler
-- <a href="https://github.com/nanocurrency/nano-node/blob/3135095da26738ba1a08cf2fdba02bdce3fe7abe/nano/node/node.cpp#L1738-L1756" target="_blank">node::populate_backlog</a> — populates scheduler from backlog
+- <a href="https://github.com/nanocurrency/nano-node/blob/3135095da26738ba1a08cf2fdba02bdce3fe7abe/nano/node/node.cpp#L1738-L1756" target="_blank">node::populate_backlog</a> — populates scheduler from pool of unconfirmed blocks
 
 ---
 

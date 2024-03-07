@@ -9,11 +9,12 @@ export function networkReducer(state = new Map(), { payload, type }) {
   switch (type) {
     case networkActions.GET_NETWORK_STATS_FULFILLED: {
       const { data } = payload
-      const backlogMedianPr = data.blockCountMedian_pr - data.cementedMedian_pr
+      const unconfirmed_transactions_pool_median =
+        data.blockCountMedian_pr - data.cementedMedian_pr
 
       return state.set('stats', {
         ...data,
-        backlogMedianPr
+        unconfirmed_transactions_pool_median
       })
     }
 

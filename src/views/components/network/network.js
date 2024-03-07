@@ -23,7 +23,7 @@ export default class Network extends React.Component {
     const throughputText = `Median number of transactions confirmed per second in the last minute ${prText}`
     const speedText =
       'Time in milliseconds for a test transaction to get confirmed'
-    const backlogText = `Median number of transactions waiting to be confirmed ${prText}`
+    const unconfirmed_pool_text = `Median number of transactions waiting to be confirmed ${prText}`
     const stakeText =
       'Percentage of delegated Nano weight actively participating in voting'
     const confirmText =
@@ -98,13 +98,18 @@ export default class Network extends React.Component {
         </div>
         <div className='network__stat'>
           <div>
-            Tx Backlog
-            <Tooltip title={backlogText}>
+            Unconfirmed Blocks
+            <Tooltip title={unconfirmed_pool_text}>
               <HelpOutlineIcon fontSize='inherit' />
             </Tooltip>
           </div>
           <div>
-            {formatNumber(network.getIn(['stats', 'backlogMedianPr'], 0))}
+            {formatNumber(
+              network.getIn(
+                ['stats', 'unconfirmed_transactions_pool_median'],
+                0
+              )
+            )}
           </div>
         </div>
         <div className='network__stat'>
