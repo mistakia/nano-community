@@ -48,6 +48,7 @@ export const storage_mysql = {
 }
 
 export const nanodbAPI = ''
+export const nanodbAPI_experimental = ''
 export const trustedAddresses = []
 export const rpcAddresses = []
 

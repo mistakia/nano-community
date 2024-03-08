@@ -84,6 +84,7 @@ api.use('/api/*', expressjwt(config.jwt), (err, req, res, next) => {
 // unprotected api routes
 api.use('/api/node', routes.node)
 api.use('/api/nanodb', routes.nanodb)
+api.use('/api/nanodb-experimental', routes.nanodb_experimental)
 api.use('/api/posts', routes.posts)
 api.use('/api/network', routes.network)
 api.use('/api/github', routes.github)
