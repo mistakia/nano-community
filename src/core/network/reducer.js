@@ -9,13 +9,8 @@ export function networkReducer(state = new Map(), { payload, type }) {
   switch (type) {
     case networkActions.GET_NETWORK_STATS_FULFILLED: {
       const { data } = payload
-      const unconfirmed_transactions_pool_median =
-        data.blockCountMedian_pr - data.cementedMedian_pr
 
-      return state.set('stats', {
-        ...data,
-        unconfirmed_transactions_pool_median
-      })
+      return state.set('stats', data)
     }
 
     case accountsActions.GET_REPRESENTATIVES_FULFILLED: {
