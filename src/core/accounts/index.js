@@ -15,5 +15,6 @@ export {
   getOnlineRepresentatives,
   getFilteredRepresentatives,
   getRepresentativesTotalWeight,
-  getOnlineRepresentativesTotalWeight
+  getOnlineRepresentativesTotalWeight,
+  getNetworkUnconfirmedBlockCount
 } from './selectors'

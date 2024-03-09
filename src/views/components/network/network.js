@@ -11,7 +11,8 @@ const formatNumber = (x) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
 export default class Network extends React.Component {
   render() {
-    const { network, wattHour, stats } = this.props
+    const { network, wattHour, stats, unconfirmed_block_pool_count } =
+      this.props
 
     const prText =
       'as observed across the networks principal representatives: voting nodes with more than 0.1% of the online voting weight delegated to them'
@@ -23,7 +24,7 @@ export default class Network extends React.Component {
     const throughputText = `Median number of transactions confirmed per second in the last minute ${prText}`
     const speedText =
       'Time in milliseconds for a test transaction to get confirmed'
-    const unconfirmed_pool_text = `Median number of transactions waiting to be confirmed ${prText}`
+    const unconfirmed_pool_text = `Number of blocks waiting to be confirmed ${prText}`
     const stakeText =
       'Percentage of delegated Nano weight actively participating in voting'
     const confirmText =
@@ -103,14 +104,7 @@ export default class Network extends React.Component {
               <HelpOutlineIcon fontSize='inherit' />
             </Tooltip>
           </div>
-          <div>
-            {formatNumber(
-              network.getIn(
-                ['stats', 'unconfirmed_transactions_pool_median'],
-                0
-              )
-            )}
-          </div>
+          <div>{formatNumber(unconfirmed_block_pool_count || 0)}</div>
         </div>
         <div className='network__stat'>
           <div>
@@ -179,5 +173,6 @@ export default class Network extends React.Component {
 Network.propTypes = {
   network: ImmutablePropTypes.map,
   stats: PropTypes.object,
-  wattHour: PropTypes.number
+  wattHour: PropTypes.number,
+  unconfirmed_block_pool_count: PropTypes.number
 }
