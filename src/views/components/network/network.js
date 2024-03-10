@@ -25,7 +25,7 @@ export default class Network extends React.Component {
     const confirmationsText =
       'Total number of transactions confirmed by the network over the last 24 hours'
     const settlementText =
-      'Total amount of value settled by the network over the last 24 hours'
+      'Total amount of value settled by the network over the last 24 hours (only send blocks)'
     const throughputText = `Median number of transactions confirmed per second in the last minute ${prText}`
     const speedText =
       'Median time in seconds for a block to get confirmed (across all buckets)'
@@ -51,12 +51,15 @@ export default class Network extends React.Component {
             </Tooltip>
           </div>
           <div>
-            {formatNumber(
-              network.getIn(
-                ['stats', 'nanodb', 'confirmations_last_24_hours'],
-                0
-              )
-            )}
+            {network.getIn(['stats', 'nanodb', 'confirmations_last_24_hours'])
+              ? formatNumber(
+                  network.getIn([
+                    'stats',
+                    'nanodb',
+                    'confirmations_last_24_hours'
+                  ])
+                )
+              : '-'}
           </div>
         </div>
         <div className='network__stat'>
@@ -67,13 +70,14 @@ export default class Network extends React.Component {
             </Tooltip>
           </div>
           <div>
-            $
-            {formatNumber(
-              (
-                send_volume_nano *
-                network.getIn(['stats', 'current_price_usd'], 0)
-              ).toFixed(0)
-            )}
+            {network.getIn(['stats', 'current_price_usd'])
+              ? `$${formatNumber(
+                  (
+                    send_volume_nano *
+                    network.getIn(['stats', 'current_price_usd'])
+                  ).toFixed(0)
+                )}`
+              : '-'}
           </div>
         </div>
         <div className='network__stat'>
@@ -94,7 +98,11 @@ export default class Network extends React.Component {
           </div>
           <div>
             {/* TODO remove this nanoticker dependency */}
-            {network.getIn(['stats', 'CPSMedian_pr'], 0).toFixed(1)} CPS
+            {network.getIn(['stats', 'nanobrowse', 'CPSMedian_pr'])
+              ? `${network
+                  .getIn(['stats', 'nanobrowse', 'CPSMedian_pr'])
+                  .toFixed(1)} CPS`
+              : '-'}
           </div>
         </div>
         <div className='network__stat'>
@@ -104,15 +112,18 @@ export default class Network extends React.Component {
               <HelpOutlineIcon fontSize='inherit' />
             </Tooltip>
           </div>
-          {/* TODO remove this nanoticker dependency */}
           <div>
-            {Math.round(
-              network.getIn(
-                ['stats', 'nanodb', 'median_latency_ms_last_24_hours'],
-                0
-              ) / 1000
-            )}{' '}
-            s
+            {network.getIn(
+              ['stats', 'nanodb', 'median_latency_ms_last_24_hours'],
+              0
+            )
+              ? `${Math.round(
+                  network.getIn(
+                    ['stats', 'nanodb', 'median_latency_ms_last_24_hours'],
+                    0
+                  ) / 1000
+                )} s`
+              : '-'}
           </div>
         </div>
         <div className='network__stat'>
@@ -122,15 +133,18 @@ export default class Network extends React.Component {
               <HelpOutlineIcon fontSize='inherit' />
             </Tooltip>
           </div>
-          {/* TODO remove this nanoticker dependency */}
           <div>
-            {Math.round(
-              network.getIn(
-                ['stats', 'nanodb', 'median_latency_ms_last_hour'],
-                0
-              ) / 1000
-            )}{' '}
-            s
+            {network.getIn(
+              ['stats', 'nanodb', 'median_latency_ms_last_hour'],
+              0
+            )
+              ? `${Math.round(
+                  network.getIn(
+                    ['stats', 'nanodb', 'median_latency_ms_last_hour'],
+                    0
+                  ) / 1000
+                )} s`
+              : '-'}
           </div>
         </div>
         <div className='network__stat'>
@@ -140,15 +154,18 @@ export default class Network extends React.Component {
               <HelpOutlineIcon fontSize='inherit' />
             </Tooltip>
           </div>
-          {/* TODO remove this nanoticker dependency */}
           <div>
-            {Math.round(
-              network.getIn(
-                ['stats', 'nanodb', 'median_latency_ms_last_10_mins'],
-                0
-              ) / 1000
-            )}{' '}
-            s
+            {network.getIn(
+              ['stats', 'nanodb', 'median_latency_ms_last_10_mins'],
+              0
+            )
+              ? `${Math.round(
+                  network.getIn(
+                    ['stats', 'nanodb', 'median_latency_ms_last_10_mins'],
+                    0
+                  ) / 1000
+                )} s`
+              : '-'}
           </div>
         </div>
         <div className='network__stat'>
@@ -159,7 +176,11 @@ export default class Network extends React.Component {
             </Tooltip>
           </div>
           {/* TODO remove this nanoticker dependency */}
-          <div>{formatNumber(unconfirmed_block_pool_count || 0)}</div>
+          <div>
+            {unconfirmed_block_pool_count != null
+              ? formatNumber(unconfirmed_block_pool_count)
+              : '-'}
+          </div>
         </div>
         <div className='network__stat'>
           <div>
@@ -170,7 +191,11 @@ export default class Network extends React.Component {
           </div>
           <div>
             {/* TODO remove this nanoticker dependency */}
-            {network.getIn(['stats', 'pStakeTotalStat'], 0).toFixed(1)}%
+            {network.getIn(['stats', 'nanobrowse', 'pStakeTotalStat'])
+              ? `${network
+                  .getIn(['stats', 'nanobrowse', 'pStakeTotalStat'])
+                  .toFixed(1)}%`
+              : '-'}
           </div>
         </div>
         <div className='network__stat'>
@@ -183,7 +208,7 @@ export default class Network extends React.Component {
         </div>
         <div className='network__stat'>
           <div>Peers</div>
-          <div>{network.getIn(['stats', 'peersMax'], '-')}</div>
+          <div>{network.getIn(['stats', 'nanobrowse', 'peersMax'], '-')}</div>
         </div>
         <div className='network__stat'>
           <div>

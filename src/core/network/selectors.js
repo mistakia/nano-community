@@ -9,7 +9,7 @@ export function getNetworkWattHour(state) {
   const network = getNetwork(state)
   const accounts = getAccountItems(state)
 
-  const peers = network.getIn(['stats', 'peers'], [])
+  const peers = network.getIn(['stats', 'nanobrowse_monitors'], [])
   const prs = peers.filter((p) => p.PR)
   let sum = 0
   for (const pr of prs) {
@@ -24,15 +24,15 @@ export function getNetworkWattHour(state) {
 
 export function getNetworkStats(state) {
   const network = getNetwork(state)
-  const quorumTotal = BigNumber(network.getIn(['weight', 'quorumTotal'], 0))
+  const quorum_total = BigNumber(network.getIn(['weight', 'quorumTotal'], 0))
     .shiftedBy(-30)
     .toNumber()
-  const onlineWeight = BigNumber(
+  const online_weight = BigNumber(
     network.getIn(['weight', 'onlineWeight', 'median'], 0)
   )
     .shiftedBy(-30)
     .toNumber()
-  const trendedWeight = BigNumber(
+  const trended_weight = BigNumber(
     network.getIn(['weight', 'trendedWeight', 'median'], 0)
   )
     .shiftedBy(-30)
@@ -40,19 +40,28 @@ export function getNetworkStats(state) {
 
   const stats = network.get('stats', {})
   const prs = network
-    .getIn(['stats', 'peers'], [])
+    .getIn(['stats', 'nanobrowse_monitors'], [])
     .filter((p) => p.PR)
     .sort((a, b) => b.weight - a.weight)
 
-  const confirmLimit = quorumTotal * 0.67
-  const censorLimit =
-    quorumTotal * 0.33 - Math.max(0, trendedWeight - onlineWeight)
+  if (prs.length === 0) {
+    return {
+      ...stats,
+      prCount: 0,
+      censorReps: 0,
+      confirmReps: 0
+    }
+  }
+
+  const confirm_limit = quorum_total * 0.67
+  const censor_limit =
+    quorum_total * 0.33 - Math.max(0, trended_weight - online_weight)
 
   let sum = 0
   let c = 0
   let i = 0
-  for (; c < prs.length && sum < confirmLimit; c++) {
-    if (sum < censorLimit) {
+  for (; c < prs.length && sum < confirm_limit; c++) {
+    if (sum < censor_limit) {
       i = c
     }
     sum += prs[c].weight
