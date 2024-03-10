@@ -32,6 +32,7 @@ const load_network = async () => {
     nanobrowse_monitors_request,
     coingecko_request
   ])
+
   const fulfilled_responses = [
     nanodb_response,
     nanobrowse_stats_response,

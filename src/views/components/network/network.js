@@ -11,8 +11,13 @@ const formatNumber = (x) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
 export default class Network extends React.Component {
   render() {
-    const { network, wattHour, stats, unconfirmed_block_pool_count } =
-      this.props
+    const {
+      network,
+      wattHour,
+      stats,
+      unconfirmed_block_pool_count,
+      send_volume_nano
+    } = this.props
 
     const prText =
       'as observed across the networks principal representatives: voting nodes with more than 0.1% of the online voting weight delegated to them'
@@ -23,7 +28,7 @@ export default class Network extends React.Component {
       'Total amount of value settled by the network over the last 24 hours'
     const throughputText = `Median number of transactions confirmed per second in the last minute ${prText}`
     const speedText =
-      'Time in milliseconds for a test transaction to get confirmed'
+      'Median time in seconds for a block to get confirmed (across all buckets)'
     const unconfirmed_pool_text = `Number of blocks waiting to be confirmed ${prText}`
     const stakeText =
       'Percentage of delegated Nano weight actively participating in voting'
@@ -47,7 +52,10 @@ export default class Network extends React.Component {
           </div>
           <div>
             {formatNumber(
-              network.getIn(['stats', 'TOTAL_CONFIRMATIONS_24H'], 0)
+              network.getIn(
+                ['stats', 'nanodb', 'confirmations_last_24_hours'],
+                0
+              )
             )}
           </div>
         </div>
@@ -62,8 +70,8 @@ export default class Network extends React.Component {
             $
             {formatNumber(
               (
-                network.getIn(['stats', 'TOTAL_VOLUME_24H'], 0) *
-                network.getIn(['stats', 'currentPrice'], 0)
+                send_volume_nano *
+                network.getIn(['stats', 'current_price_usd'], 0)
               ).toFixed(0)
             )}
           </div>
@@ -85,17 +93,63 @@ export default class Network extends React.Component {
             </Tooltip>
           </div>
           <div>
+            {/* TODO remove this nanoticker dependency */}
             {network.getIn(['stats', 'CPSMedian_pr'], 0).toFixed(1)} CPS
           </div>
         </div>
         <div className='network__stat'>
           <div>
-            Tx Speed
+            Tx Speed (24h)
             <Tooltip title={speedText}>
               <HelpOutlineIcon fontSize='inherit' />
             </Tooltip>
           </div>
-          <div>{network.getIn(['stats', 'speedTest'])} ms</div>
+          {/* TODO remove this nanoticker dependency */}
+          <div>
+            {Math.round(
+              network.getIn(
+                ['stats', 'nanodb', 'median_latency_ms_last_24_hours'],
+                0
+              ) / 1000
+            )}{' '}
+            s
+          </div>
+        </div>
+        <div className='network__stat'>
+          <div>
+            Tx Speed (1h)
+            <Tooltip title={speedText}>
+              <HelpOutlineIcon fontSize='inherit' />
+            </Tooltip>
+          </div>
+          {/* TODO remove this nanoticker dependency */}
+          <div>
+            {Math.round(
+              network.getIn(
+                ['stats', 'nanodb', 'median_latency_ms_last_hour'],
+                0
+              ) / 1000
+            )}{' '}
+            s
+          </div>
+        </div>
+        <div className='network__stat'>
+          <div>
+            Tx Speed (10m)
+            <Tooltip title={speedText}>
+              <HelpOutlineIcon fontSize='inherit' />
+            </Tooltip>
+          </div>
+          {/* TODO remove this nanoticker dependency */}
+          <div>
+            {Math.round(
+              network.getIn(
+                ['stats', 'nanodb', 'median_latency_ms_last_10_mins'],
+                0
+              ) / 1000
+            )}{' '}
+            s
+          </div>
         </div>
         <div className='network__stat'>
           <div>
@@ -104,6 +158,7 @@ export default class Network extends React.Component {
               <HelpOutlineIcon fontSize='inherit' />
             </Tooltip>
           </div>
+          {/* TODO remove this nanoticker dependency */}
           <div>{formatNumber(unconfirmed_block_pool_count || 0)}</div>
         </div>
         <div className='network__stat'>
@@ -114,6 +169,7 @@ export default class Network extends React.Component {
             </Tooltip>
           </div>
           <div>
+            {/* TODO remove this nanoticker dependency */}
             {network.getIn(['stats', 'pStakeTotalStat'], 0).toFixed(1)}%
           </div>
         </div>
@@ -174,5 +230,6 @@ Network.propTypes = {
   network: ImmutablePropTypes.map,
   stats: PropTypes.object,
   wattHour: PropTypes.number,
-  unconfirmed_block_pool_count: PropTypes.number
+  unconfirmed_block_pool_count: PropTypes.number,
+  send_volume_nano: PropTypes.number
 }
