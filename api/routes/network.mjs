@@ -47,11 +47,7 @@ const load_network = async () => {
     nanodb: nanodb_response.value,
     nanobrowse: nanobrowse_stats_response.value,
     nanobrowse_monitors: nanobrowse_monitors_response.value,
-    current_price_usd: coingecko_response.value.market_data.current_price.usd,
-
-    ...nanodb_response.value, // TODO remove
-    ...nanobrowse_stats_response.value, // TODO remove
-    peers: nanobrowse_monitors_response.value // TODO remove
+    current_price_usd: coingecko_response.value.market_data.current_price.usd
   }
 
   cache.set('stats', response_data, 300)
