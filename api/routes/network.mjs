@@ -3,33 +3,58 @@ import cron from 'node-cron'
 
 import { request } from '#common'
 import cache from '#api/cache.mjs'
+import { nanodbAPI } from '#config'
 
 const router = express.Router()
 
 const load_network = async () => {
-  const requests = [
-    request({ url: 'https://stats.nanobrowse.com/json/stats.json' }), // TODO remove dependency
-    request({ url: 'https://nanolooker.com/api/market-statistics' }),
-    request({ url: 'https://stats.nanobrowse.com/json/monitors.json' }) // TODO remove dependency
-  ]
+  const nanodb_stats_request = request({ url: `${nanodbAPI}/stats` })
+  // TODO remove dependency
+  const nanobrowse_stats_request = request({
+    url: 'https://stats.nanobrowse.com/json/stats.json'
+  })
+  // TODO remove dependency
+  const nanobrowse_monitors_request = request({
+    url: 'https://stats.nanobrowse.com/json/monitors.json'
+  })
+  const coingecko_request = request({
+    url: 'https://api.coingecko.com/api/v3/coins/nano?localization=false&tickers=false&market_data=true&community_data=true&developer_data=true&sparkline=true'
+  })
 
-  const responses = await Promise.allSettled(requests)
-  const fulfilled = responses.filter((r) => r.status === 'fulfilled')
-  if (!fulfilled.length) {
+  const [
+    nanodb_response,
+    nanobrowse_stats_response,
+    nanobrowse_monitors_response,
+    coingecko_response
+  ] = await Promise.allSettled([
+    nanodb_stats_request,
+    nanobrowse_stats_request,
+    nanobrowse_monitors_request,
+    coingecko_request
+  ])
+  const fulfilled_responses = [
+    nanodb_response,
+    nanobrowse_stats_response,
+    nanobrowse_monitors_response,
+    coingecko_response
+  ].filter(({ status }) => status === 'fulfilled')
+  if (!fulfilled_responses.length) {
     throw new Error('requests failed')
   }
 
-  const stats = fulfilled.reduce((obj, v) => {
-    if (Array.isArray(v.value)) {
-      return { peers: v.value, ...obj }
-    }
+  const response_data = {
+    nanodb: nanodb_response.value,
+    nanobrowse: nanobrowse_stats_response.value,
+    nanobrowse_monitors: nanobrowse_monitors_response.value,
+    current_price_usd: coingecko_response.value.market_data.current_price.usd,
 
-    // exclude priceStats
-    const { priceStats, ...rest } = v.value
-    return { ...rest, ...obj }
-  }, {})
-  cache.set('stats', stats, 300)
-  return stats
+    ...nanodb_response.value, // TODO remove
+    ...nanobrowse_stats_response.value, // TODO remove
+    peers: nanobrowse_monitors_response.value // TODO remove
+  }
+
+  cache.set('stats', response_data, 300)
+  return response_data
 }
 
 cron.schedule('*/5 * * * *', async () => {
