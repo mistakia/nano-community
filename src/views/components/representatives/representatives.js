@@ -36,6 +36,33 @@ function bytesToSize(bytes) {
   }
 }
 
+function sort_comparator(a, b, cell_params_a) {
+  if (a === null || a === undefined || b === null || b === undefined) {
+    if (a === b) return 0
+    else {
+      const sort_model = cell_params_a.api.getSortModel()
+      const sort_column = sort_model.find(
+        (sm) => sm.field === cell_params_a.field
+      )
+
+      if (sort_column && sort_column.sort === 'desc') {
+        if (a === null || a === undefined) return -1
+        else return 1
+      } else {
+        if (a === null || a === undefined) return 1
+        else return -1
+      }
+    }
+  } else {
+    // Ensure both a and b are strings before comparing
+    if (typeof a === 'string' && typeof b === 'string') {
+      return a.localeCompare(b)
+    }
+
+    return a - b
+  }
+}
+
 export default class Representatives extends React.Component {
   render() {
     const {
@@ -54,12 +81,14 @@ export default class Representatives extends React.Component {
         headerName: '',
         width: 20,
         renderCell: (p) => <Uptime data={p.row.uptime} length={1} />,
-        valueGetter: (p) => p.row.is_online
+        valueGetter: (p) => p.row.is_online,
+        sortComparator: sort_comparator
       },
       {
         field: 'alias',
         headerName: 'Alias',
-        width: 200
+        width: 200,
+        sortComparator: sort_comparator
       },
       {
         field: 'account',
@@ -67,7 +96,8 @@ export default class Representatives extends React.Component {
         renderCell: (p) => (
           <Link to={`/${p.row.account}`}>{p.row.account}</Link>
         ),
-        width: 160
+        width: 160,
+        sortComparator: sort_comparator
       },
       {
         field: 'weight',
@@ -75,7 +105,8 @@ export default class Representatives extends React.Component {
         width: 140,
         valueFormatter: (p) =>
           p.value ? `${BigNumber(p.value).shiftedBy(-30).toFormat(0)}` : null,
-        valueGetter: (p) => p.row.account_meta.weight
+        valueGetter: (p) => p.row.account_meta.weight,
+        sortComparator: sort_comparator
       },
       {
         field: 'weight_pct',
@@ -87,14 +118,16 @@ export default class Representatives extends React.Component {
             ? BigNumber(p.row.account_meta.weight)
                 .dividedBy(denominator)
                 .multipliedBy(100)
-            : null
+            : null,
+        sortComparator: sort_comparator
       },
       {
         field: 'confs_behind',
         headerName: 'Confs Behind',
         width: 145,
         valueFormatter: (p) => (p.value ? BigNumber(p.value).toFormat() : null),
-        valueGetter: (p) => p.row.telemetry.cemented_behind
+        valueGetter: (p) => p.row.telemetry.cemented_behind,
+        sortComparator: sort_comparator
       },
       {
         field: 'uptime',
@@ -103,13 +136,16 @@ export default class Representatives extends React.Component {
         renderCell: (p) => (
           <Uptime data={p.api.getRow(p.id).uptime} length={25} />
         ),
-        valueGetter: (p) => (p.row.last_online || 0) - (p.row.last_offline || 0)
+        valueGetter: (p) =>
+          (p.row.last_online || 0) - (p.row.last_offline || 0),
+        sortComparator: sort_comparator
       },
       {
         field: 'version',
         headerName: 'Version',
         width: 110,
-        valueGetter: (p) => p.row.version
+        valueGetter: (p) => p.row.version,
+        sortComparator: sort_comparator
       },
       {
         field: 'bandwidth_cap',
@@ -127,69 +163,80 @@ export default class Representatives extends React.Component {
           return p.row.telemetry.bandwidth_cap
             ? bytesToSize(p.row.telemetry.bandwidth_cap).value
             : null
-        }
+        },
+        sortComparator: sort_comparator
       },
       {
         field: 'peer_count',
         headerName: 'Peers',
         width: 100,
-        valueGetter: (p) => p.row.telemetry.peer_count
+        valueGetter: (p) => p.row.telemetry.peer_count,
+        sortComparator: sort_comparator
       },
       {
         field: 'port',
         headerName: 'Port',
-        valueGetter: (p) => p.row.telemetry.port
+        valueGetter: (p) => p.row.telemetry.port,
+        sortComparator: sort_comparator
       },
       {
         field: 'blocks_behind',
         headerName: 'Blocks Behind',
         width: 145,
         valueFormatter: (p) => (p.value ? BigNumber(p.value).toFormat() : null),
-        valueGetter: (p) => p.row.telemetry.block_behind
+        valueGetter: (p) => p.row.telemetry.block_behind,
+        sortComparator: sort_comparator
       },
       {
         field: 'cemented_count',
         headerName: 'Confs.',
         width: 140,
         valueFormatter: (p) => (p.value ? BigNumber(p.value).toFormat() : null),
-        valueGetter: (p) => p.row.telemetry.cemented_count
+        valueGetter: (p) => p.row.telemetry.cemented_count,
+        sortComparator: sort_comparator
       },
       {
         field: 'block_count',
         headerName: 'Blocks',
         width: 140,
         valueFormatter: (p) => (p.value ? BigNumber(p.value).toFormat() : null),
-        valueGetter: (p) => p.row.telemetry.block_count
+        valueGetter: (p) => p.row.telemetry.block_count,
+        sortComparator: sort_comparator
       },
       {
         field: 'unchecked_count',
         headerName: 'Unchecked',
         width: 140,
         valueFormatter: (p) => (p.value ? BigNumber(p.value).toFormat() : null),
-        valueGetter: (p) => p.row.telemetry.unchecked_count
+        valueGetter: (p) => p.row.telemetry.unchecked_count,
+        sortComparator: sort_comparator
       },
       {
         field: 'cpu_cores',
         headerName: 'CPU Cores',
         width: 130,
-        valueGetter: (p) => p.row.representative_meta.cpu_cores
+        valueGetter: (p) => p.row.representative_meta.cpu_cores,
+        sortComparator: sort_comparator
       },
       {
         field: 'cpu_model',
         hide: true,
         headerName: 'CPU Model',
-        valueGetter: (p) => p.row.representative_meta.cpu_model
+        valueGetter: (p) => p.row.representative_meta.cpu_model,
+        sortComparator: sort_comparator
       },
       {
         field: 'watt_hour',
         width: 120,
-        headerName: 'TDP (wH)'
+        headerName: 'TDP (wH)',
+        sortComparator: sort_comparator
       },
       {
         field: 'protocol_version',
         headerName: 'Protocol',
         width: 110,
-        valueGetter: (p) => p.row.telemetry.protocol_version
+        valueGetter: (p) => p.row.telemetry.protocol_version,
+        sortComparator: sort_comparator
       },
       {
         field: 'last_seen',
@@ -201,25 +248,29 @@ export default class Representatives extends React.Component {
           ) : (
             timeago.format(p.row.last_seen * 1000, 'nano_short')
           ),
-        valueGetter: (p) => Math.floor(Date.now() / 1000) - p.row.last_seen
+        valueGetter: (p) => Math.floor(Date.now() / 1000) - p.row.last_seen,
+        sortComparator: sort_comparator
       },
       {
         field: 'asname',
         headerName: 'Host ASN',
         width: 130,
-        valueGetter: (p) => p.row.network.asname
+        valueGetter: (p) => p.row.network.asname,
+        sortComparator: sort_comparator
       },
       {
         field: 'country',
         headerName: 'Country',
         width: 130,
-        valueGetter: (p) => p.row.network.country
+        valueGetter: (p) => p.row.network.country,
+        sortComparator: sort_comparator
       },
       {
         field: 'address',
         headerName: 'Address',
         width: 320,
-        valueGetter: (p) => p.row.telemetry.address
+        valueGetter: (p) => p.row.telemetry.address,
+        sortComparator: sort_comparator
       }
     ]
     return (
