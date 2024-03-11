@@ -12,11 +12,10 @@ export function getNetworkWattHour(state) {
   const peers = network.getIn(['stats', 'nanobrowse_monitors'], [])
   const prs = peers.filter((p) => p.PR)
   let sum = 0
+  const average_watt_hour = network.get('averageWattHour') || 0
   for (const pr of prs) {
-    sum += accounts.getIn(
-      [pr.nanoNodeAccount, 'watt_hour'],
-      network.get('averageWattHour')
-    )
+    sum +=
+      accounts.getIn([pr.nanoNodeAccount, 'watt_hour']) || average_watt_hour
   }
 
   return sum
