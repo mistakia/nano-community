@@ -1,0 +1,57 @@
+.live-lead
+  position relative
+  display flex
+  flex-wrap wrap
+  max-width 1000px
+  margin 8px auto 0
+  padding 48px 0 16px
+
+  .metric__card
+    flex 1
+
+.confirmations-period
+  position absolute
+  right 8px
+  top 8px
+
+.buckets-container
+  padding 16px
+  display flex
+  overflow auto
+  flex-wrap wrap
+
+.buckets-body
+  display flex
+  margin-left 100px
+
+.buckets-head
+  position absolute
+  left 18px
+  width 100px
+  margin-bottom 32px
+  z-index 1
+  .bucket-row
+    background darken($backgroundColor, 7%)
+    display flex
+    justify-content center
+    color lighten($textColor, 30%)
+    padding 0 4px
+    width 100px
+
+
+.bucket-item
+  width 64px
+
+.bucket-row
+  display flex
+  align-items center
+  border-bottom 1px solid $borderColor
+  height 30px
+  padding 0 8px
+
+.bucket-title
+  font-family 'IBM Plex Mono', monospace
+  background-color lighten($backgroundColor, 70%)
+  font-size 14px
+  font-weight 600
+

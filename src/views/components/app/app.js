@@ -10,6 +10,7 @@ import '@styles/typography.styl'
 import '@styles/doc.styl'
 import '@styles/header.styl'
 import '@styles/markdown.styl'
+import '@styles/toggle-button-group.styl'
 
 export default class App extends React.Component {
   async componentDidMount() {

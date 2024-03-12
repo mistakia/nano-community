@@ -19,7 +19,7 @@ export default class MetricCard extends React.Component {
 
   render() {
     const {
-      metrics,
+      metrics = [],
       title,
       subtitle,
       max,
@@ -27,7 +27,8 @@ export default class MetricCard extends React.Component {
       tooltip,
       field,
       selectedField,
-      selectedLabel
+      selectedLabel,
+      body
     } = this.props
     const isSelectedField = field === selectedField
     const rows = metrics.map((p, i) => {
@@ -66,7 +67,7 @@ export default class MetricCard extends React.Component {
             </Tooltip>
           )}
         </div>
-        <div className='metric__card-body'>{rows}</div>
+        <div className='metric__card-body'>{body || rows}</div>
       </div>
     )
   }
@@ -82,5 +83,6 @@ MetricCard.propTypes = {
   field: PropTypes.string,
   filter: PropTypes.func,
   selectedField: PropTypes.string,
-  selectedLabel: PropTypes.string
+  selectedLabel: PropTypes.string,
+  body: PropTypes.node
 }
