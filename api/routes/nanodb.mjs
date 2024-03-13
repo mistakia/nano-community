@@ -9,7 +9,11 @@ router.get(/^(.*)$/, async (req, res) => {
   const { logger } = req.app.locals
   try {
     const path = req.params[0]
-    const url = `${nanodbAPI}${path}`
+    const query_string =
+      Object.keys(req.query).length > 0
+        ? `?${new URLSearchParams(req.query).toString()}`
+        : ''
+    const url = `${nanodbAPI}${path}${query_string}`
     const data = await request({ url })
     res.status(200).send(data)
   } catch (error) {
