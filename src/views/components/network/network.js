@@ -7,7 +7,20 @@ import ImmutablePropTypes from 'react-immutable-proptypes'
 import './network.styl'
 
 // add commas to large number
-const formatNumber = (x) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+const format_number = (x) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+
+// convert milliseconds to a more readable format
+const convert_ms_to_readable_time = (ms) => {
+  if (ms > 600000) {
+    // more than 10 minutes
+    return `${(ms / 60000).toFixed(2)} mins`
+  } else if (ms > 2500) {
+    // more than 2500 ms
+    return `${(ms / 1000).toFixed(2)} secs`
+  } else {
+    return `${ms} ms`
+  }
+}
 
 export default class Network extends React.Component {
   render() {
@@ -52,7 +65,7 @@ export default class Network extends React.Component {
           </div>
           <div>
             {network.getIn(['stats', 'nanodb', 'confirmations_last_24_hours'])
-              ? formatNumber(
+              ? format_number(
                   network.getIn([
                     'stats',
                     'nanodb',
@@ -71,7 +84,7 @@ export default class Network extends React.Component {
           </div>
           <div>
             {network.getIn(['stats', 'current_price_usd'])
-              ? `$${formatNumber(
+              ? `$${format_number(
                   (
                     send_volume_nano *
                     network.getIn(['stats', 'current_price_usd'])
@@ -117,12 +130,12 @@ export default class Network extends React.Component {
               ['stats', 'nanodb', 'median_latency_ms_last_24_hours'],
               0
             )
-              ? `${Math.round(
+              ? convert_ms_to_readable_time(
                   network.getIn(
                     ['stats', 'nanodb', 'median_latency_ms_last_24_hours'],
                     0
-                  ) / 1000
-                )} s`
+                  )
+                )
               : '-'}
           </div>
         </div>
@@ -138,12 +151,12 @@ export default class Network extends React.Component {
               ['stats', 'nanodb', 'median_latency_ms_last_hour'],
               0
             )
-              ? `${Math.round(
+              ? convert_ms_to_readable_time(
                   network.getIn(
                     ['stats', 'nanodb', 'median_latency_ms_last_hour'],
                     0
-                  ) / 1000
-                )} s`
+                  )
+                )
               : '-'}
           </div>
         </div>
@@ -159,12 +172,12 @@ export default class Network extends React.Component {
               ['stats', 'nanodb', 'median_latency_ms_last_10_mins'],
               0
             )
-              ? `${Math.round(
+              ? convert_ms_to_readable_time(
                   network.getIn(
                     ['stats', 'nanodb', 'median_latency_ms_last_10_mins'],
                     0
-                  ) / 1000
-                )} s`
+                  )
+                )
               : '-'}
           </div>
         </div>
@@ -178,7 +191,7 @@ export default class Network extends React.Component {
           {/* TODO remove this nanoticker dependency */}
           <div>
             {unconfirmed_block_pool_count != null
-              ? formatNumber(unconfirmed_block_pool_count)
+              ? format_number(unconfirmed_block_pool_count)
               : '-'}
           </div>
         </div>
