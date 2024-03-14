@@ -13,6 +13,8 @@ import { networkReducer } from './network'
 import { notificationReducer } from './notifications'
 import { postsReducer } from './posts'
 import { postlistsReducer } from './postlists'
+import { nanodb_reducer } from './nanodb'
+import { api_reducer } from './api'
 
 const rootReducer = (history) =>
   combineReducers({
@@ -28,7 +30,9 @@ const rootReducer = (history) =>
     network: networkReducer,
     notification: notificationReducer,
     posts: postsReducer,
-    postlists: postlistsReducer
+    postlists: postlistsReducer,
+    nanodb: nanodb_reducer,
+    api: api_reducer
   })
 
 export default rootReducer

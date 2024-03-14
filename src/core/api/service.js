@@ -81,6 +81,18 @@ export const api = {
   getWeightHistory() {
     const url = `${API_URL}/weight/history`
     return { url }
+  },
+  get_blocks_confirmed_summary({ period = '10m' }) {
+    const url = `${API_URL}/nanodb/blocks/confirmed/summary?period=${period}`
+    return { url }
+  },
+  get_accounts_unconfirmed_summary() {
+    const url = `${API_URL}/nanodb/accounts/unconfirmed/summary`
+    return { url }
+  },
+  get_blocks_unconfirmed_summary() {
+    const url = `${API_URL}/nanodb/blocks/unconfirmed/summary`
+    return { url }
   }
 }
 
