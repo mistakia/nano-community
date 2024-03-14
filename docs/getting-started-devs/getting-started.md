@@ -77,7 +77,8 @@ Once the send block is confirmed by the network, the transaction is irreversible
 The most common way to access the network is through RPC commands to either a local or public node.
 
 - <a href="https://docs.nano.org/commands/rpc-protocol/" target="_blank">RPC Documentation</a>
-- <a href="https://publicnodes.somenano.com/" target="_target">Public Nodes</a>
+- <a href="https://nano.casa/public-nodes" target="_target">Public Nodes Tracker (nano.casa)</a>
+- <a href="https://publicnodes.somenano.com/" target="_target">Public Nodes Tracker (somenano.com)</a>
 - [Running a node](/getting-started-devs/running-a-node)
 
 ## Basics
