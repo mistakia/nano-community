@@ -12,10 +12,12 @@ import NotFoundPage from '@pages/not-found'
 import RepresentativesPage from '@pages/representatives'
 import TelemetryPage from '@pages/telemetry'
 import LabelPage from '@pages/label'
+import LivePage from '@pages/live'
 
 const Routes = () => (
   <Switch>
     <Route exact path='/' component={HomePage} />
+    <Route exact path='/live' component={LivePage} />
     <Route exact path='/roadmap' component={RoadmapPage} />
     <Route exact path='/ledger' component={LedgerPage} />
     <Route exact path='/network' component={NetworkPage} />

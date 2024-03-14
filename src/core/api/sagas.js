@@ -26,6 +26,11 @@ import {
 } from '@core/accounts/actions'
 import { blockRequestActions } from '@core/blocks/actions'
 import { dailyRequestActions } from '@core/ledger/actions'
+import {
+  block_confirmed_summary_request_actions,
+  accounts_unconfirmed_summary_request_actions,
+  blocks_unconfirmed_summary_request_actions
+} from '@core/nanodb/actions'
 
 function* fetchAPI(apiFunction, actions, opts = {}) {
   const { token } = yield select(getApp)
@@ -120,3 +125,21 @@ export const getWeightHistory = fetch.bind(
   weightHistoryRequestActions
 )
 export const getDaily = fetch.bind(null, api.getDaily, dailyRequestActions)
+
+export const get_blocks_confirmed_summary = fetch.bind(
+  null,
+  api.get_blocks_confirmed_summary,
+  block_confirmed_summary_request_actions
+)
+
+export const get_accounts_unconfirmed_summary = fetch.bind(
+  null,
+  api.get_accounts_unconfirmed_summary,
+  accounts_unconfirmed_summary_request_actions
+)
+
+export const get_blocks_unconfirmed_summary = fetch.bind(
+  null,
+  api.get_blocks_unconfirmed_summary,
+  blocks_unconfirmed_summary_request_actions
+)
