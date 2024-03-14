@@ -41,7 +41,7 @@ export default class Network extends React.Component {
       'Total amount of value settled by the network over the last 24 hours (only send blocks)'
     const throughputText = `Median number of transactions confirmed per second in the last minute ${prText}`
     const speedText =
-      'Median time in seconds for a block to get confirmed (across all buckets)'
+      'Median time in milliseconds for a block to get confirmed (across all buckets)'
     const unconfirmed_pool_text = `Number of blocks waiting to be confirmed ${prText}`
     const stakeText =
       'Percentage of delegated Nano weight actively participating in voting'
