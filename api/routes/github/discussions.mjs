@@ -12,6 +12,7 @@ router.get('/nano-community', async (req, res) => {
 
     const discussions = await db('github_discussions')
       .where('category_id', 'MDE4OkRpc2N1c3Npb25DYXRlZ29yeTMyOTA1MTIz') // proposals category
+      .where('closed', '!=', 1)
       .orderBy('created_at', 'desc')
       .limit(20)
     const ids = discussions.map((i) => i.id)
