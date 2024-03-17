@@ -30,6 +30,9 @@ const getDiscussions = async ({ repo, query }) => {
         id
         title
         url
+        stateReason
+        closed
+        closedAt
         category {
           id
           name
@@ -88,7 +91,10 @@ const formatDiscussion = ({ item, repo }) => ({
   category_id: item.category.id,
   category_name: item.category.name,
   created_at: dayjs(item.publishedAt).unix(),
-  updated_at: item.updatedAt ? dayjs(item.updatedAt).unix() : null
+  updated_at: item.updatedAt ? dayjs(item.updatedAt).unix() : null,
+  closed: item.closed,
+  closed_at: item.closedAt ? dayjs(item.closedAt).unix() : null,
+  state_reason: item.stateReason
 })
 
 const formatLabels = ({ id, item }) => ({
