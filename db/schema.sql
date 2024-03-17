@@ -548,9 +548,12 @@ CREATE TABLE `github_discussions` (
   `body` text CHARACTER SET utf8mb4 DEFAULT NULL,
   `upvotes` int(11) NOT NULL,
   `category_name` varchar(100) NOT NULL,
+  `closed` tinyint(1) NOT NULL,
+  `state_reason` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `category_id` varchar(100) NOT NULL,
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) DEFAULT NULL,
+  `closed_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
