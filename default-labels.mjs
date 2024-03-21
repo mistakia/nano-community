@@ -1,4 +1,4 @@
-module.exports = [
+export default [
   {
     name: 'priority/critical',
     color: 'b60205',
@@ -18,6 +18,16 @@ module.exports = [
     name: 'priority/low',
     color: 'f9d0c4',
     description: 'Low: Not priority right now'
+  },
+  {
+    name: 'kind/docs',
+    color: 'c7def8',
+    description: 'Documentation related to the nano.community project or repo'
+  },
+  {
+    name: 'kind/content',
+    color: 'c7def8',
+    description: 'Information displayed on the site'
   },
   {
     name: 'kind/architecture',
