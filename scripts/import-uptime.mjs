@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import { rpc, groupBy, isMain } from '#common'
 import * as config from '#config'
 import db from '#db'
+import { REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT } from '#constants'
 
 const logger = debug('import-uptime')
 debug.enable('import-uptime')
@@ -53,9 +54,27 @@ const importUptime = async () => {
 
   // insert into uptime
   const onlineReps = accountInserts.map((p) => p.account)
+
+  // limit to reps with a minimum voting weight
+  // hard limit to 10k, sort by voting weight
   const offlineReps = await db('accounts')
+    .select('accounts.account')
     .whereNotIn('account', onlineReps)
     .where({ representative: true })
+    .leftJoin(
+      'accounts_meta_index',
+      'accounts.account',
+      '=',
+      'accounts_meta_index.account'
+    )
+    .orderBy('accounts_meta_index.weight', 'desc')
+    .where(
+      'accounts_meta_index.weight',
+      '>=',
+      REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT
+    )
+    .limit(10000)
+
   const uptimeInserts = []
   for (const rep of onlineReps) {
     uptimeInserts.push({
