@@ -404,7 +404,7 @@ CREATE TABLE `representatives_uptime_index` (
 
   `timestamp` int(11) NOT NULL,
   INDEX `online` (`online`),
-  UNIQUE KEY `account` (`account`)
+  UNIQUE KEY `account_online` (`account`,`online`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
