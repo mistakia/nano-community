@@ -34,8 +34,6 @@
 */15 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-github-events.mjs &>> /var/log/nano-community/import-github-events.log
 
 ## representatives
-## 0 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-representatives.mjs &>> /var/log/nano-community/import-representatives.log
-## 0 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-representatives-meta.mjs &>> /var/log/nano-community/import-representatives-meta.log
 */5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-telemetry.mjs &>> /var/log/nano-community/import-telemetry.log
 */5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-uptime.mjs &>> /var/log/nano-community/import-uptime.log
 */5 * * * * NODE_ENV=production /root/.nvm/versions/node/v14.17.0/bin/node /root/nano-community/scripts/import-accounts-meta.mjs &>> /var/log/nano-community/import-accounts-meta.log
