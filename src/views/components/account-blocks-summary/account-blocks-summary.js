@@ -8,6 +8,7 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
+import LinearProgress from '@mui/material/LinearProgress'
 import { Link } from 'react-router-dom'
 import dayjs from 'dayjs'
 
@@ -20,9 +21,15 @@ export default class AccountBlocksSummary extends React.Component {
     const items = account.getIn(['blocks_summary', type], [])
     const isChange = type === 'change'
 
+    const is_loading = account.get(
+      `account_is_loading_blocks_${type}_summary`,
+      true
+    )
+
     return (
       <div className='blocks__summary'>
         <TableContainer>
+          {is_loading && <LinearProgress />}
           <Table size='small'>
             <TableHead>
               <TableRow>
@@ -40,7 +47,12 @@ export default class AccountBlocksSummary extends React.Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {!items.length && (
+              {is_loading && (
+                <TableRow>
+                  <TableCell colSpan={7}>Loading...</TableCell>
+                </TableRow>
+              )}
+              {!items.length && !is_loading && (
                 <TableRow>
                   <TableCell colSpan={7}>No Records</TableCell>
                 </TableRow>
