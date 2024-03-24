@@ -50,21 +50,53 @@ export function accountsReducer(state = initialState, { payload, type }) {
       })
 
     case accountsActions.GET_ACCOUNT_FULFILLED:
-      return state.setIn(['items', payload.params], createAccount(payload.data))
+      return state.setIn(
+        ['items', payload.params],
+        createAccount({ ...payload.data, account_is_loading: false })
+      )
+
+    case accountsActions.GET_ACCOUNT_OPEN_PENDING:
+      return state.setIn(
+        ['items', payload.params, 'account_is_loading_open'],
+        true
+      )
 
     case accountsActions.GET_ACCOUNT_OPEN_FULFILLED:
-      return state.mergeIn(['items', payload.params, 'open'], payload.data)
+      return state.withMutations((state) => {
+        state.mergeIn(['items', payload.params, 'open'], payload.data)
+        state.setIn(['items', payload.params, 'account_is_loading_open'], false)
+      })
 
-    case accountsActions.GET_ACCOUNT_BLOCKS_SUMMARY_FULFILLED:
+    case accountsActions.GET_ACCOUNT_BLOCKS_SUMMARY_PENDING:
       return state.setIn(
         [
           'items',
           payload.params.account,
-          'blocks_summary',
-          payload.params.type
+          `account_is_loading_blocks_${payload.params.type}_summary`
         ],
-        payload.data
+        true
       )
+
+    case accountsActions.GET_ACCOUNT_BLOCKS_SUMMARY_FULFILLED:
+      return state.withMutations((state) => {
+        state.setIn(
+          [
+            'items',
+            payload.params.account,
+            'blocks_summary',
+            payload.params.type
+          ],
+          payload.data
+        )
+        state.setIn(
+          [
+            'items',
+            payload.params.account,
+            `account_is_loading_blocks_${payload.params.type}_summary`
+          ],
+          false
+        )
+      })
 
     default:
       return state

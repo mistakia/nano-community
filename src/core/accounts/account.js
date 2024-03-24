@@ -1,7 +1,12 @@
 import { Record, Map, List } from 'immutable'
 
 export const Account = new Record({
-  is_loading: true,
+  account_is_loaded: false,
+  account_is_loading: true,
+
+  account_is_loading_open: true,
+  account_is_loading_blocks_change_summary: true,
+  account_is_loading_blocks_send_summary: true,
 
   account: null,
   alias: null,
@@ -41,6 +46,6 @@ export function createAccount(data) {
     ...data,
     is_online,
     version,
-    is_loading: false
+    account_is_loaded: true
   })
 }
