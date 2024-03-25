@@ -101,14 +101,23 @@ const generate_nano_reps = async () => {
     }
 
     // Merge values, preferring truthy values
-    const merged_rep = { ...db_rep_without_weight_field, ...nano_rep }
+    const merged_rep = {}
     for (const key in merged_rep) {
       if (merged_rep[key] === null) {
         merged_rep[key] = nano_rep[key] || db_rep_without_weight_field[key]
       }
     }
 
-    results_index[account] = merged_rep
+    results_index[account] = {
+      alias: nano_rep.alias || db_rep_without_weight_field.alias,
+      account: nano_rep.account || db_rep_without_weight_field.account,
+      discord: nano_rep.discord || db_rep_without_weight_field.discord,
+      reddit: nano_rep.reddit || db_rep_without_weight_field.reddit,
+      twitter: nano_rep.twitter || db_rep_without_weight_field.twitter,
+      website: nano_rep.website || db_rep_without_weight_field.website,
+      email: nano_rep.email || db_rep_without_weight_field.email,
+      github: nano_rep.github || db_rep_without_weight_field.github
+    }
   }
 
   // Add missing representatives with sufficient voting weight (10,000 Nano) and at least one non-null field
@@ -127,7 +136,16 @@ const generate_nano_reps = async () => {
         db_rep_without_weight_field
       ).some((value) => value !== null)
       if (has_non_null_field) {
-        results_index[account] = { account, ...db_rep_without_weight_field }
+        results_index[account] = {
+          alias: db_rep_without_weight_field.alias,
+          account: db_rep_without_weight_field.account,
+          discord: db_rep_without_weight_field.discord,
+          reddit: db_rep_without_weight_field.reddit,
+          twitter: db_rep_without_weight_field.twitter,
+          website: db_rep_without_weight_field.website,
+          email: db_rep_without_weight_field.email,
+          github: db_rep_without_weight_field.github
+        }
       }
     }
   }
