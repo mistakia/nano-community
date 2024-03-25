@@ -35,7 +35,17 @@ const generate_nano_reps = async () => {
   )
   // Read the downloaded CSV data
   const csv_reps = await read_csv(csv_download_path, {
-    mapValues: ({ header, index, value }) => (value === '' ? null : value)
+    mapValues: ({ header, index, value }) => {
+      if (value === '') {
+        return null
+      }
+
+      if (header === 'alias') {
+        return value.replace(/"/g, '')
+      }
+
+      return value
+    }
   })
 
   // Fetch representatives data from the database
@@ -156,6 +166,14 @@ const generate_nano_reps = async () => {
     const alias_b = b.alias || ''
     return alias_a.localeCompare(alias_b)
   })
+
+  // escape any commas in alias
+  for (const rep of results) {
+    // check if alias contains a comma
+    if (rep.alias.includes(',')) {
+      rep.alias = `"${rep.alias}"`
+    }
+  }
 
   // Convert results to CSV and save
   const csv_headers = {}
