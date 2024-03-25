@@ -121,12 +121,12 @@ const generate_nano_reps = async () => {
     results_index[account] = {
       alias: nano_rep.alias || db_rep_without_weight_field.alias,
       account: nano_rep.account || db_rep_without_weight_field.account,
-      discord: nano_rep.discord || db_rep_without_weight_field.discord || null,
-      reddit: nano_rep.reddit || db_rep_without_weight_field.reddit || null,
-      twitter: nano_rep.twitter || db_rep_without_weight_field.twitter || null,
-      website: nano_rep.website || db_rep_without_weight_field.website || null,
-      email: nano_rep.email || db_rep_without_weight_field.email || null,
-      github: nano_rep.github || db_rep_without_weight_field.github || null
+      discord: nano_rep.discord || db_rep_without_weight_field.discord || '',
+      reddit: nano_rep.reddit || db_rep_without_weight_field.reddit || '',
+      twitter: nano_rep.twitter || db_rep_without_weight_field.twitter || '',
+      website: nano_rep.website || db_rep_without_weight_field.website || '',
+      email: nano_rep.email || db_rep_without_weight_field.email || '',
+      github: nano_rep.github || db_rep_without_weight_field.github || ''
     }
   }
 
@@ -149,12 +149,12 @@ const generate_nano_reps = async () => {
         results_index[account] = {
           alias: db_rep_without_weight_field.alias,
           account: db_rep_account,
-          discord: db_rep_without_weight_field.discord || null,
-          reddit: db_rep_without_weight_field.reddit || null,
-          twitter: db_rep_without_weight_field.twitter || null,
-          website: db_rep_without_weight_field.website || null,
-          email: db_rep_without_weight_field.email || null,
-          github: db_rep_without_weight_field.github || null
+          discord: db_rep_without_weight_field.discord || '',
+          reddit: db_rep_without_weight_field.reddit || '',
+          twitter: db_rep_without_weight_field.twitter || '',
+          website: db_rep_without_weight_field.website || '',
+          email: db_rep_without_weight_field.email || '',
+          github: db_rep_without_weight_field.github || ''
         }
       }
     }
