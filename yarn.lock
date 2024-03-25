@@ -6997,6 +6997,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"csv-parser@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "csv-parser@npm:3.0.0"
+  dependencies:
+    minimist: ^1.2.0
+  bin:
+    csv-parser: bin/csv-parser
+  checksum: adc9d67d9f185249825570778c24d13004625301655330f6b735a052b9fdfbe1a239a014afb1f89939e0626ee573718f71f9f14164db7c17e4bcb2f38d6a162b
+  languageName: node
+  linkType: hard
+
 "csv-writer@npm:^1.6.0":
   version: 1.6.0
   resolution: "csv-writer@npm:1.6.0"
@@ -7240,6 +7251,13 @@ __metadata:
     pify: ^2.3.0
     strip-dirs: ^2.0.0
   checksum: 8247a31c6db7178413715fdfb35a482f019c81dfcd6e8e623d9f0382c9889ce797ce0144de016b256ed03298907a620ce81387cca0e69067a933470081436cb8
+  languageName: node
+  linkType: hard
+
+"deep-diff@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "deep-diff@npm:1.0.2"
+  checksum: 9de8b5eedc1957116e1b47e4c3c4e3dbe23cb741abefc5ec8829a12e77958c689ac46888a3c35320f976cf42fb6de2b016e158facdb24d894ab5b5fdabad9b34
   languageName: node
   linkType: hard
 
@@ -15687,9 +15705,11 @@ __metadata:
     cors: ^2.8.5
     cross-env: ^7.0.3
     css-loader: 6.8.1
+    csv-parser: ^3.0.0
     csv-writer: ^1.6.0
     dayjs: ^1.11.9
     debug: ^4.3.4
+    deep-diff: ^1.0.2
     deep-extend: ^0.6.0
     deepmerge: 4.3.1
     echarts: ^5.4.3
