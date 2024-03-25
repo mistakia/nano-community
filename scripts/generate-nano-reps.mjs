@@ -138,7 +138,7 @@ const generate_nano_reps = async () => {
       if (has_non_null_field) {
         results_index[account] = {
           alias: db_rep_without_weight_field.alias,
-          account: db_rep_without_weight_field.account,
+          account: db_rep_account,
           discord: db_rep_without_weight_field.discord,
           reddit: db_rep_without_weight_field.reddit,
           twitter: db_rep_without_weight_field.twitter,
