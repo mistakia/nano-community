@@ -190,6 +190,8 @@ CREATE TABLE `representatives_meta` (
   `twitter` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `discord` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `github` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `website` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `email` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
 
   `timestamp` int(11) NOT NULL,
   UNIQUE KEY `account` (`account`, `timestamp`)
@@ -230,6 +232,8 @@ CREATE TABLE `representatives_meta_index` (
   `twitter` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `discord` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `github` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `website` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `email` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
 
   `timestamp` int(11) NOT NULL,
   UNIQUE KEY `account` (`account`)
