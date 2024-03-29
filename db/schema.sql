@@ -193,6 +193,8 @@ CREATE TABLE `representatives_meta` (
   `website` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `email` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
 
+  `nano_node_monitor_url` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+
   `timestamp` int(11) NOT NULL,
   UNIQUE KEY `account` (`account`, `timestamp`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -234,6 +236,8 @@ CREATE TABLE `representatives_meta_index` (
   `github` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `website` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `email` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+
+  `nano_node_monitor_url` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
 
   `timestamp` int(11) NOT NULL,
   UNIQUE KEY `account` (`account`)
