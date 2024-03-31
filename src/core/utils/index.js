@@ -3,6 +3,8 @@ export { localStorageAdapter } from './local-storage'
 export { timeago } from './timeago'
 export { debounce } from './debounce'
 export { fuzzySearch } from './fuzzy-search'
+export { download_csv } from './download-csv'
+export { download_json } from './download-json'
 
 /* eslint-disable no-extra-semi */
 export const groupBy = (xs, key) =>
