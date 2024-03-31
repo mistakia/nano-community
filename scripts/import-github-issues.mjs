@@ -42,7 +42,9 @@ const importGithubIssues = async ({ repo }) => {
   const issues = []
   const issueLabels = []
 
-  const since = last_updated_at ? dayjs.unix(last_updated_at).toISOString() : null
+  const since = last_updated_at
+    ? dayjs.unix(last_updated_at).toISOString()
+    : null
 
   log(`Getting issues from ${repo} since ${since}`)
 
