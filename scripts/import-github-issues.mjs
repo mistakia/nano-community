@@ -28,65 +28,97 @@ const setIssueLabel = async ({ repo, issue_number, labels }) => {
 }
 
 const importGithubIssues = async ({ repo }) => {
-  const params = {
-    state: 'open'
-  }
-  const url = `https://api.github.com/repos/${repo}/issues?${queryString.stringify(
-    params
-  )}`
+  // get most recent updated_at for repo
+  const { updated_at: last_updated_at } = await db('github_issues')
+    .select('updated_at')
+    .where('repo', repo)
+    .orderBy('updated_at', 'desc')
+    .limit(1)
+    .first()
 
+  const per_page = 100
+  let page = 1
   let res
-  try {
-    res = await request({ url })
-  } catch (err) {
-    log(err)
-  }
-
-  if (!res) {
-    return
-  }
-
   const issues = []
   const issueLabels = []
-  for (const item of res) {
-    const issue = {}
 
-    // populate issue with various properties
-    issue.repo = repo
-    issue.id = item.id
-    issue.actor_id = item.user.id
-    issue.actor_name = item.user.login
-    issue.actor_avatar = item.user.avatar_url
-    issue.ref = item.number
-    issue.title = item.title
-    issue.body = item.body
-    issue.url = item.html_url
-    issue.created_at = dayjs(item.created_at).unix()
-    issues.push(issue)
-    item.labels.forEach((label) =>
-      issueLabels.push({
-        issue_id: issue.id,
-        label_id: label.id,
-        label_name: label.name,
-        label_color: label.color
-      })
-    )
+  const since = last_updated_at ? dayjs.unix(last_updated_at).toISOString() : null
 
-    // check if issue needs triage
-    const labels = issueLabels.map((i) => i.label_name)
-    const hasPriority = Boolean(
-      labels.find((name) => name.includes('priority/'))
-    )
-    const hasKind = Boolean(labels.find((name) => name.includes('kind/')))
-    const needsTriage = !hasPriority || !hasKind
-    const hasTriage = Boolean(
-      labels.find((name) => name.includes('need/triage'))
-    )
-    if (needsTriage && !hasTriage) {
-      labels.push('need/triage')
-      await setIssueLabel({ repo, issue_number: item.number, labels })
+  log(`Getting issues from ${repo} since ${since}`)
+
+  do {
+    const params = {
+      since,
+      per_page,
+      page,
+      state: 'all'
     }
-  }
+    const url = `https://api.github.com/repos/${repo}/issues?${queryString.stringify(
+      params
+    )}`
+
+    log(url)
+
+    try {
+      res = await request({ url })
+    } catch (err) {
+      log(err)
+    }
+
+    if (!res) {
+      return
+    }
+
+    log(`Got ${res.length} issues from ${repo}`)
+
+    for (const item of res) {
+      const issue = {}
+
+      // populate issue with various properties
+      issue.repo = repo
+      issue.state = item.state
+      issue.id = item.id
+      issue.actor_id = item.user.id
+      issue.actor_name = item.user.login
+      issue.actor_avatar = item.user.avatar_url
+      issue.ref = item.number
+      issue.title = item.title
+      issue.body = item.body
+      issue.url = item.html_url
+      issue.created_at = dayjs(item.created_at).unix()
+      issue.updated_at = dayjs(item.updated_at).unix()
+      issues.push(issue)
+      item.labels.forEach((label) =>
+        issueLabels.push({
+          issue_id: issue.id,
+          label_id: label.id,
+          label_name: label.name,
+          label_color: label.color
+        })
+      )
+
+      issue.assignee_id = item.assignee?.id
+      issue.assignee_name = item.assignee?.login
+      issue.assignee_avatar = item.assignee?.avatar_url
+
+      // check if issue needs triage
+      const labels = issueLabels.map((i) => i.label_name)
+      const hasPriority = Boolean(
+        labels.find((name) => name.includes('priority/'))
+      )
+      const hasKind = Boolean(labels.find((name) => name.includes('kind/')))
+      const needsTriage = !hasPriority || !hasKind
+      const hasTriage = Boolean(
+        labels.find((name) => name.includes('need/triage'))
+      )
+      if (needsTriage && !hasTriage) {
+        labels.push('need/triage')
+        await setIssueLabel({ repo, issue_number: item.number, labels })
+      }
+    }
+
+    page++
+  } while (res.length === per_page)
 
   if (issues.length) {
     log(`saving ${issues.length} issues from github`)
