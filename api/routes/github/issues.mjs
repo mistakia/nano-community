@@ -8,12 +8,10 @@ router.get('/nano-community', async (req, res) => {
 
   const allowed_repos = ['mistakia/nano-community']
   if (!allowed_repos.includes(repos)) {
-    return res
-      .status(400)
-      .send({
-        error:
-          'Invalid repository. Allowed repository is mistakia/nano-community.'
-      })
+    return res.status(400).send({
+      error:
+        'Invalid repository. Allowed repository is mistakia/nano-community.'
+    })
   }
 
   const allowed_states = ['open', 'closed']
