@@ -21,19 +21,37 @@ GithubLabel.propTypes = {
   label: PropTypes.object
 }
 
-export default class GithubLabels extends React.Component {
-  render() {
-    const { labels } = this.props
-
-    if (!labels.size) {
-      return null
-    }
-
-    const items = labels.map((item, key) => (
-      <GithubLabel key={key} label={item} />
-    ))
-    return <div className='github__labels'>{items}</div>
+const sort_labels = (a, b) => {
+  const order = ['status/', 'priority/', 'bounty', 'kind/', 'topic/']
+  const get_order_index = (label) => {
+    const index = order.findIndex((prefix) =>
+      label.label_name.startsWith(prefix)
+    )
+    return index === -1 ? order.length : index // put labels that don't match at the end
   }
+
+  const a_index = get_order_index(a)
+  const b_index = get_order_index(b)
+
+  if (a_index !== b_index) {
+    return a_index - b_index
+  }
+
+  // If the same category, sort alphabetically
+  return a.label_name.localeCompare(b.label_name)
+}
+
+export default function GithubLabels({ labels }) {
+  if (!labels.size) {
+    return null
+  }
+
+  const sorted_labels = labels.sort(sort_labels)
+
+  const items = sorted_labels.map((item, key) => (
+    <GithubLabel key={key} label={item} />
+  ))
+  return <div className='github__labels'>{items}</div>
 }
 
 GithubLabels.propTypes = {
