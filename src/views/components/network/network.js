@@ -188,7 +188,6 @@ export default class Network extends React.Component {
               <HelpOutlineIcon fontSize='inherit' />
             </Tooltip>
           </div>
-          {/* TODO remove this nanoticker dependency */}
           <div>
             {unconfirmed_block_pool_count != null
               ? format_number(unconfirmed_block_pool_count)
