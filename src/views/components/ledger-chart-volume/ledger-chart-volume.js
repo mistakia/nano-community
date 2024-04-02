@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import BigNumber from 'bignumber.js'
 import ReactEChartsCore from 'echarts-for-react/lib/core'
@@ -26,6 +26,21 @@ echarts.use([
 export default function LedgerChartVolume({ data, isLoading }) {
   const span_style =
     'float:right;margin-left:20px;font-size:14px;color:#666;font-weight:900'
+
+  const convert_volumes_to_big_number = (volumes) =>
+    volumes.map((volume) => [
+      volume[0],
+      new BigNumber(volume[1]).shiftedBy(-30).toNumber()
+    ])
+
+  const send_volume_big_number = useMemo(() => {
+    return convert_volumes_to_big_number(data.send_volume)
+  }, [data.send_volume])
+
+  const change_volume_big_number = useMemo(() => {
+    return convert_volumes_to_big_number(data.change_volume)
+  }, [data.change_volume])
+
   const option = {
     grid: {
       containLabel: true
@@ -42,9 +57,9 @@ export default function LedgerChartVolume({ data, isLoading }) {
           (s) =>
             `${s.marker} ${
               s.seriesName
-            } <span style="${span_style}">${BigNumber(s.data[1])
-              .shiftedBy(-30)
-              .toFormat(0)}</span>`
+            } <span style="${span_style}">${BigNumber(s.data[1]).toFormat(
+              0
+            )}</span>`
         )
 
         values.unshift(series[0].axisValueLabel)
@@ -56,11 +71,13 @@ export default function LedgerChartVolume({ data, isLoading }) {
       type: 'time'
     },
     yAxis: {
-      type: 'value',
+      type: 'log',
       name: 'Nano',
       axisLabel: {
-        formatter: (value) => `${BigNumber(value).shiftedBy(-30).toFormat(0)}`
-      }
+        formatter: (value) => `${BigNumber(value).toFormat(0)}`
+      },
+      min: 1,
+      max: 80000000
     },
     series: [
       {
@@ -70,7 +87,7 @@ export default function LedgerChartVolume({ data, isLoading }) {
         lineStyle: {
           width: 1
         },
-        data: data.send_volume
+        data: send_volume_big_number
       },
       {
         type: 'line',
@@ -79,18 +96,18 @@ export default function LedgerChartVolume({ data, isLoading }) {
         lineStyle: {
           width: 1
         },
-        data: data.change_volume
+        data: change_volume_big_number
       }
     ]
   }
 
   const handle_download_csv = () => {
     const download_data = []
-    data.send_volume.forEach((item, index) => {
+    send_volume_big_number.forEach((item, index) => {
       download_data.push({
         date: item[0],
-        send_volume: item[1],
-        change_volume: data.change_volume[index][1]
+        send_volume: item[1].toString(),
+        change_volume: change_volume_big_number[index][1].toString()
       })
     })
 
@@ -103,11 +120,11 @@ export default function LedgerChartVolume({ data, isLoading }) {
 
   const handle_download_json = () => {
     const download_data = []
-    data.send_volume.forEach((item, index) => {
+    send_volume_big_number.forEach((item, index) => {
       download_data.push({
         date: item[0],
-        send_volume: item[1],
-        change_volume: data.change_volume[index][1]
+        send_volume: item[1].toString(),
+        change_volume: change_volume_big_number[index][1].toString()
       })
     })
 
@@ -151,18 +168,12 @@ export default function LedgerChartVolume({ data, isLoading }) {
           )}
         </div>
         <LedgerChartMetrics
-          data={data.send_volume.map((d) => [
-            d[0],
-            BigNumber(d[1]).shiftedBy(-30).toNumber()
-          ])}
+          data={send_volume_big_number}
           label='Send Stats'
           show_total
         />
         <LedgerChartMetrics
-          data={data.change_volume.map((d) => [
-            d[0],
-            BigNumber(d[1]).shiftedBy(-30).toNumber()
-          ])}
+          data={change_volume_big_number}
           label='Change Stats'
           show_total
         />
