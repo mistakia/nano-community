@@ -28,8 +28,13 @@ export const githubIssuesActions = {
     }
   }),
 
-  getGithubIssues: () => ({
-    type: githubIssuesActions.GET_GITHUB_ISSUES
+  getGithubIssues: ({ repos, state, labels }) => ({
+    type: githubIssuesActions.GET_GITHUB_ISSUES,
+    payload: {
+      repos,
+      state,
+      labels
+    }
   })
 }
 

@@ -1,3 +1,3 @@
-export function getGithubDiscussions(state) {
+export function getGithubDiscussionsState(state) {
   return state.get('githubDiscussions')
 }
