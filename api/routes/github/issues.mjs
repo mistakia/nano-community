@@ -7,7 +7,7 @@ router.get('/nano-community', async (req, res) => {
   const { repos, state, labels: query_labels, offset = 0 } = req.query
 
   const allowed_repos = ['mistakia/nano-community']
-  if (!allowed_repos.includes(repos)) {
+  if (repos && !allowed_repos.includes(repos)) {
     return res.status(400).send({
       error:
         'Invalid repository. Allowed repository is mistakia/nano-community.'
@@ -15,7 +15,7 @@ router.get('/nano-community', async (req, res) => {
   }
 
   const allowed_states = ['open', 'closed']
-  if (!allowed_states.includes(state)) {
+  if (state && !allowed_states.includes(state)) {
     return res
       .status(400)
       .send({ error: 'Invalid state. Allowed states are open and closed.' })
