@@ -208,6 +208,14 @@ const rpcBlocksInfo = ({
   return rpcRequest(data, { url })
 }
 
+const rpcAccountWeight = ({ url, account }) => {
+  const data = {
+    action: 'account_weight',
+    account
+  }
+  return rpcRequest(data, { url })
+}
+
 export const rpc = {
   telemetry: rpcTelemetry,
   confirmationQuorum: rpcConfirmationQuorum,
@@ -216,7 +224,8 @@ export const rpc = {
   blockInfo: rpcBlockInfo,
   blocksInfo: rpcBlocksInfo,
   representatives: rpcRepresentatives,
-  ledger: rpcLedger
+  ledger: rpcLedger,
+  accountWeight: rpcAccountWeight
 }
 
 /* eslint-disable no-extra-semi */
