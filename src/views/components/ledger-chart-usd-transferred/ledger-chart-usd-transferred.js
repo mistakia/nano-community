@@ -26,6 +26,7 @@ echarts.use([
 export default function LedgerUSDTransferred({ data, isLoading }) {
   const span_style =
     'float:right;margin-left:20px;font-size:14px;color:#666;font-weight:900'
+
   const option = {
     grid: {
       containLabel: true
@@ -56,10 +57,25 @@ export default function LedgerUSDTransferred({ data, isLoading }) {
       type: 'time'
     },
     yAxis: {
-      type: 'value',
+      type: 'log',
+      min: 1,
       name: 'Nano',
       axisLabel: {
-        formatter: (value) => `$${value}`
+        formatter: (value) => {
+          const format_value = (number, divisor, suffix) => {
+            const result = number / divisor
+            return `$${result.toFixed(result % 1 !== 0 ? 1 : 0)}${suffix}`
+          }
+          if (value >= 1000000000) {
+            return format_value(value, 1000000000, 'B')
+          } else if (value >= 1000000) {
+            return format_value(value, 1000000, 'M')
+          } else if (value >= 1000) {
+            return format_value(value, 1000, 'K')
+          } else {
+            return `$${value}`
+          }
+        }
       }
     },
     series: [
