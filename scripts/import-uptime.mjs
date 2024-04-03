@@ -59,7 +59,7 @@ const importUptime = async () => {
   // hard limit to 10k, sort by voting weight
   const offlineReps = await db('accounts')
     .select('accounts.account')
-    .whereNotIn('account', onlineReps)
+    .whereNotIn('accounts.account', onlineReps)
     .where({ representative: true })
     .leftJoin(
       'accounts_meta_index',
