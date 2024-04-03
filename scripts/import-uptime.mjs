@@ -152,6 +152,18 @@ const importUptime = async () => {
       })
     }
 
+    // fill in missing intervals
+    for (let i = 0; i < 355; i++) {
+      const interval = String(i)
+      if (!rollup[interval]) {
+        inserts.push({
+          account,
+          interval,
+          online: false
+        })
+      }
+    }
+
     if (inserts.length) {
       logger(`saving ${inserts.length} rollups for ${account}`)
       await db('representatives_uptime_rollup_2hour')
