@@ -101,11 +101,24 @@ const importUptime = async () => {
   }
 
   // calculate rollup
-  const uptime = await db('representatives_uptime').where(
-    'timestamp',
-    '>',
-    dayjs().subtract('14', 'days').unix()
-  )
+  const uptime = await db('representatives_uptime')
+    .select('representatives_uptime.*')
+    .leftJoin(
+      'accounts_meta_index',
+      'representatives_uptime.account',
+      '=',
+      'accounts_meta_index.account'
+    )
+    .where(
+      'representatives_uptime.timestamp',
+      '>',
+      dayjs().subtract('14', 'days').unix()
+    )
+    .where(
+      'accounts_meta_index.weight',
+      '>=',
+      REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT
+    )
 
   // group by account
   const grouped = groupBy(uptime, 'account')
@@ -149,9 +162,13 @@ const importUptime = async () => {
   }
 
   // remove rows for representatives without uptime in the last 14 days
-  await db('representatives_uptime_rollup_2hour')
+  const res = await db('representatives_uptime_rollup_2hour')
     .whereNotIn('account', Object.keys(grouped))
     .delete()
+
+  logger(
+    `removed ${res} outdated rollup rows for representatives without uptime in the last 14 days`
+  )
 }
 
 if (isMain(import.meta.url)) {
