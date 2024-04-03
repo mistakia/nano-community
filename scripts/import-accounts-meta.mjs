@@ -41,6 +41,21 @@ const importAccountsMeta = async () => {
     if (!accountInfo || accountInfo.error) {
       logger(`unable to get account info for ${account}`)
 
+      const account_weight_response = await rpc.accountWeight({
+        account
+      })
+
+      if (!account_weight_response || account_weight_response.error) {
+        logger(`unable to get account weight for ${account}`)
+        continue
+      }
+
+      inserts.push({
+        account,
+        weight: account_weight_response.weight,
+        timestamp
+      })
+
       continue
     }
 
