@@ -137,11 +137,12 @@ const rpcAccountInfo = ({
   representative = false,
   pending = false,
   include_confirmed = false,
-  timeout = 20000
+  timeout = 20000,
+  weight = true
 } = {}) => {
   const data = {
     action: 'account_info',
-    weight: true,
+    weight,
     representative,
     include_confirmed,
     pending,

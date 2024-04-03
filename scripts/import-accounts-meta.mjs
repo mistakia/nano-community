@@ -10,7 +10,6 @@ debug.enable('import-accounts-meta')
 const timestamp = Math.round(Date.now() / 1000)
 
 const importAccountsMeta = async () => {
-  const { representatives } = await rpc.representatives()
   const rows = await db('accounts')
     .join(
       'accounts_meta_index',
@@ -34,17 +33,14 @@ const importAccountsMeta = async () => {
       break
     }
 
-    const accountInfo = await rpc.accountInfo({ account, timeout: 5000 })
+    const accountInfo = await rpc.accountInfo({
+      account,
+      timeout: 5000,
+      weight: true
+    })
     if (!accountInfo || accountInfo.error) {
       logger(`unable to get account info for ${account}`)
 
-      if (representatives && representatives[account]) {
-        inserts.push({
-          account,
-          timestamp,
-          weight: representatives[account]
-        })
-      }
       continue
     }
 
