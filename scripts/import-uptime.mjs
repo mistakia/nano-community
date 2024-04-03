@@ -147,6 +147,11 @@ const importUptime = async () => {
         .merge()
     }
   }
+
+  // remove rows for representatives without uptime in the last 14 days
+  await db('representatives_uptime_rollup_2hour')
+    .whereNotIn('account', Object.keys(grouped))
+    .delete()
 }
 
 if (isMain(import.meta.url)) {
