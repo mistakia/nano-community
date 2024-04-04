@@ -91,7 +91,7 @@ export default function DocPage({
       history.push(`/${locale}${path}`)
     } else {
       if (SUPPORTED_LOCALES.includes(locale)) {
-        change_locale(locale)
+        change_locale({ locale, save: false })
       } else {
         locale = i18n.language
       }

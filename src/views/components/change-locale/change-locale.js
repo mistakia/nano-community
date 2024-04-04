@@ -45,7 +45,9 @@ export default function ChangeLocale({ change_locale, locale }) {
         id='change-locale'
         value={locale}
         variant='outlined'
-        onChange={(event) => change_locale(event.target.value)}
+        onChange={(event) =>
+          change_locale({ locale: event.target.value, save: true })
+        }
         native={false}
         renderValue={(selected) => (
           <>
