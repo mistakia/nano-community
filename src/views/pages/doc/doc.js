@@ -27,7 +27,7 @@ import { useTranslation } from 'react-i18next'
 
 import 'highlight.js/styles/github.css'
 
-import { BASE_URL } from '@core/constants'
+import { BASE_URL, SUPPORTED_LOCALES } from '@core/constants'
 import Menu from '@components/menu'
 import Seo from '@components/seo'
 
@@ -70,7 +70,13 @@ md.renderer.rules.heading_open = (tokens, idx) => {
   return `<${tag} class="doc__header" id=${escaped_text}>`
 }
 
-export default function DocPage({ getDoc, showNotification, doc, location }) {
+export default function DocPage({
+  getDoc,
+  showNotification,
+  doc,
+  location,
+  change_locale
+}) {
   const { t, i18n } = useTranslation()
   const history = useHistory()
 
@@ -84,7 +90,11 @@ export default function DocPage({ getDoc, showNotification, doc, location }) {
       locale = i18n.language
       history.push(`/${locale}${path}`)
     } else {
-      i18n.changeLanguage(locale)
+      if (SUPPORTED_LOCALES.includes(locale)) {
+        change_locale(locale)
+      } else {
+        locale = i18n.language
+      }
     }
     getDoc({ id: path, locale })
   }, [getDoc, path, locale, i18n])
@@ -239,5 +249,6 @@ DocPage.propTypes = {
   getDoc: PropTypes.func,
   showNotification: PropTypes.func,
   location: PropTypes.object,
-  doc: ImmutablePropTypes.record
+  doc: ImmutablePropTypes.record,
+  change_locale: PropTypes.func
 }
