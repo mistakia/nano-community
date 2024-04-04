@@ -1,11 +1,12 @@
 export const appActions = {
   INIT_APP: 'INIT_APP',
 
-  init: ({ token, key }) => ({
+  init: ({ token, key, locale }) => ({
     type: appActions.INIT_APP,
     payload: {
       token,
-      key
+      key,
+      locale
     }
   })
 }

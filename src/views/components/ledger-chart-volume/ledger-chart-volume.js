@@ -11,6 +11,7 @@ import {
 } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import Button from '@mui/material/Button'
+import { useTranslation } from 'react-i18next'
 
 import LedgerChartMetrics from '@components/ledger-chart-metrics'
 import { download_csv, download_json } from '@core/utils'
@@ -24,6 +25,7 @@ echarts.use([
 ])
 
 export default function LedgerChartVolume({ data, isLoading }) {
+  const { t } = useTranslation()
   const span_style =
     'float:right;margin-left:20px;font-size:14px;color:#666;font-weight:900'
 
@@ -82,7 +84,7 @@ export default function LedgerChartVolume({ data, isLoading }) {
     series: [
       {
         type: 'line',
-        name: 'Send',
+        name: t('block_type.send', 'Send'),
         showSymbol: false,
         lineStyle: {
           width: 1
@@ -91,7 +93,7 @@ export default function LedgerChartVolume({ data, isLoading }) {
       },
       {
         type: 'line',
-        name: 'Change',
+        name: t('block_type.change', 'Change'),
         showSymbol: false,
         lineStyle: {
           width: 1
@@ -150,11 +152,13 @@ export default function LedgerChartVolume({ data, isLoading }) {
       <div className='ledger__chart-sections'>
         <div className='ledger__chart-section'>
           <div className='section__heading'>
-            <span>Description</span>
+            <span>{t('ledger.description', 'Description')}</span>
           </div>
           <div className='ledger__chart-section-body description'>
-            The total amount sent (in Nano) and total amount of voting weight
-            changed per day.
+            {t(
+              'ledger.volume.description',
+              'The total amount sent (in Nano) and total amount of voting weight changed per day.'
+            )}
           </div>
           {!isLoading && (
             <div className='ledger__chart-section-body download'>
@@ -169,12 +173,12 @@ export default function LedgerChartVolume({ data, isLoading }) {
         </div>
         <LedgerChartMetrics
           data={send_volume_big_number}
-          label='Send Stats'
+          label={t('ledger.volume.send_stats', 'Send Stats')}
           show_total
         />
         <LedgerChartMetrics
           data={change_volume_big_number}
-          label='Change Stats'
+          label={t('ledger.volume.change_stats', 'Change Stats')}
           show_total
         />
       </div>

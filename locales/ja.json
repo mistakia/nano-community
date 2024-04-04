@@ -1,0 +1,387 @@
+{
+  "account_page": {
+    "address": "アカウントアドレス",
+    "change_summary": "変更概要",
+    "copy_notification": "アカウントアドレスをコピーしました",
+    "seo_description": "ナノ代表のための情報",
+    "seo_title": "ナノアカウント",
+    "telemetry_charts": "テレメトリチャート",
+    "unopened_description": "アカウントアドレスは有効ですが、ブロックは観測されていません。NANOがこのアカウントに送信された場合、資金を受け取り、開始残高を確立するために、対応するブロックを公開する必要があります。アカウントの残高は、アカウント保持者のみが自分のチェーンにブロックを公開できるため、アカウント保持者によってのみ更新できます。",
+    "unopened_note": "開始ブロックが既に公開されている場合、ネットワークを通じて広がり、nano.communityノードによって観測されるまでに数分かかる場合があります。",
+    "unopened_title": "このアカウントはまだ開設されていません"
+  },
+  "account_blocks_summary": {
+    "first_timestamp": "最初のタイムスタンプ",
+    "last_timestamp": "最後のタイムスタンプ",
+    "max_amount": "最大金額",
+    "min_amount": "最小金額",
+    "no_records": "記録なし",
+    "receiving_account": "受取アカウント",
+    "representative_account": "代表アカウント",
+    "sending_account": "送信アカウント",
+    "showing_top_10": "合計降順でトップ10アカウントを表示",
+    "transactions": "トランザクション"
+  },
+  "account_meta": {
+    "account_info": "アカウント情報",
+    "funding_account": "資金提供アカウント",
+    "funding_timestamp": "資金提供タイムスタンプ",
+    "height": "高さ",
+    "last_modified": "最終更新",
+    "open_timestamp": "オープンタイムスタンプ",
+    "opening_balance": "開始残高",
+    "receivable_balance": "受取可能残高"
+  },
+  "block_page": {
+    "amount": "金額",
+    "copy_notification": "ブロックハッシュをコピーしました",
+    "delegated_representative": "委任された代表",
+    "description": "説明",
+    "epoch_v1": "エポックv1 - レガシーブロック（オープン、受信、送信、変更）からステートブロックへのアカウントチェーンのアップグレード。",
+    "epoch_v2": "エポックv2 - 高いProof-of-Work難易度を使用するためのアカウントチェーンのアップグレード。",
+    "receiving_account": "受取アカウント",
+    "section_label": "ブロックハッシュ",
+    "sending_account": "送信アカウント",
+    "seo_description": "ナノブロックに関連する情報",
+    "seo_title": "ナノブロック",
+    "voting_weight": "投票重み"
+  },
+  "block_info": {
+    "block_account": "ブロックアカウント",
+    "operation": "操作",
+    "status": "ステータス",
+    "timestamp": "タイムスタンプ"
+  },
+  "block_status": {
+    "confirmed": "確認済み",
+    "unconfirmed": "未確認"
+  },
+  "block_type": {
+    "change": "変更",
+    "epoch": "エポック",
+    "open": "オープン",
+    "receive": "受け取る",
+    "send": "送る"
+  },
+  "common": {
+    "account_one": "アカウント",
+    "account_other": "アカウント",
+    "address": "アドレス",
+    "balance": "残高",
+    "bandwidth_limit": "帯域幅制限",
+    "bandwidth_limit_short": "BW制限",
+    "blocks": "ブロック",
+    "blocks_behind": "ブロック遅延",
+    "blocks_diff_short": "ブロック差",
+    "by_online_weight": "オンライン重みによる",
+    "clear_filters": "フィルターをクリア",
+    "click_to_copy": "クリックしてコピー",
+    "collapse": "折りたたむ",
+    "conf_short": "確認",
+    "conf_diff_short": "確認差",
+    "confirmations_behind": "確認遅延",
+    "country": "国",
+    "delegator_one": "委任者",
+    "delegator_other": "委任者",
+    "max": "最大",
+    "min": "最小",
+    "offline": "オフライン",
+    "online": "オンライン",
+    "peers": "ピア",
+    "percent_of_total": "総数の%",
+    "port": "ポート",
+    "quorum_delta": "クォーラムデルタ",
+    "representative_one": "代表",
+    "representative_other": "代表",
+    "show_more": "{{count}} さらに表示",
+    "total": "合計",
+    "unchecked": "未チェック",
+    "unchecked_count": "未チェック数",
+    "unlimited": "無制限",
+    "uptime": "稼働時間",
+    "version": "バージョン",
+    "weight": "重み"
+  },
+  "delegators": {
+    "showing_top_delegators": "最小残高1ナノを持つトップ100委任者を表示"
+  },
+  "doc": {
+    "contributors": "貢献者",
+    "document_not_found": "ドキュメント（またはアカウント）が見つかりません",
+    "edit_page": "ページを編集",
+    "help_out": "助ける",
+    "not_found_404": "404",
+    "section_link_copied": "セクションリンクをコピーしました",
+    "updated_by": "更新者"
+  },
+  "github_events": {
+    "action": {
+      "added_member": "メンバーを追加しました",
+      "commented_on_commit": "コミットにコメントしました",
+      "commented_on_issue": "イシューにコメントしました",
+      "commented_on_pr_review": "PRレビューにコメントしました",
+      "created": "{{action}}を作成しました",
+      "deleted": "{{action}}を削除しました",
+      "forked": "フォークしました",
+      "issue_action": "{{action}}イシュー",
+      "made_public": "公開しました",
+      "pr_action": "{{action}}PR",
+      "pr_review": "PRレビュー{{title}}",
+      "published_release": "リリースを公開しました",
+      "pushed_commit": "{{ref}}にコミットをプッシュしました",
+      "sponsorship_started": "スポンサーシップを開始しました",
+      "watching_repo": "リポジトリをウォッチしています"
+    },
+    "events_title": "開発イベント"
+  },
+  "ledger": {
+    "addresses": {
+      "active_detail": "アクティブは使用されたユニークアドレスの数を示します。新規は作成されたアドレスの数を示します。再利用は以前の日に作成されたアドレスが使用された数を示します。",
+      "active_stats": "アクティブアドレス統計",
+      "new_stats": "新規アドレス統計",
+      "total_number": "日ごとに使用されるアクティブ、新規、再利用アドレスの総数。"
+    },
+    "amounts": {
+      "total_number": "指定された範囲内のブロックの金額で、1日に確認された送信タイプのブロックの数"
+    },
+    "blocks": {
+      "change": "変更ブロック統計",
+      "description": "1日あたりの確認されたブロック数。",
+      "open": "オープンブロック統計",
+      "receive": "受信ブロック統計",
+      "send": "送信ブロック統計",
+      "total": "総ブロック統計"
+    },
+    "description": "説明",
+    "usd_transferred": {
+      "desc_1": "1日あたりに転送された総価値（USD）。",
+      "desc_2": "Nano/USDの日次終値とその日に転送されたNanoの総量に基づく。",
+      "usd_transferred": "転送されたUSD",
+      "usd_transferred_stats": "転送されたUSDの統計"
+    },
+    "volume": {
+      "change_stats": "変更統計",
+      "description": "1日あたりに送信された総量（Nano）と総投票重量の変更。",
+      "send_stats": "送信統計"
+    }
+  },
+  "ledger_page": {
+    "addresses_tab": "アドレス",
+    "amounts_tab": "金額",
+    "blocks_tab": "ブロック",
+    "seo_description": "Nanoレジャーのオンチェーンメトリクスと分析",
+    "seo_title": "Nanoレジャー分析",
+    "value_transferred_tab": "送金額",
+    "volume_tab": "ボリューム"
+  },
+  "menu": {
+    "account_setup": "アカウント設定",
+    "acquiring": "取得",
+    "advantages": "利点",
+    "attack_vectors": "攻撃ベクトル",
+    "basics": "基本",
+    "best_practices": "ベストプラクティス",
+    "choosing_a_rep": "代表選び",
+    "challenges": "課題",
+    "communities": "コミュニティ",
+    "contribution_guide": "貢献ガイド",
+    "design": "デザイン",
+    "developer_discussions": "開発者ディスカッション",
+    "developers": "開発者",
+    "documentation": "ドキュメンテーション",
+    "faqs": "FAQ",
+    "get_involved": "参加する",
+    "get_support": "サポートを受ける",
+    "getting_started": "はじめに",
+    "glossary": "用語集",
+    "guides": "ガイド",
+    "history": "歴史",
+    "home": "ホーム",
+    "how_it_works": "仕組み",
+    "integrations": "統合",
+    "introduction": "イントロダクション",
+    "investment_thesis": "投資テーゼ",
+    "learn": "学ぶ",
+    "ledger": "レジャー",
+    "misconceptions": "誤解",
+    "overview": "概要",
+    "planning": "計画",
+    "privacy": "プライバシー",
+    "protocol": "プロトコル",
+    "running_a_node": "ノードの運用",
+    "security": "セキュリティ",
+    "stats": "統計",
+    "storing": "保管",
+    "telemetry": "テレメトリ",
+    "topics": "トピック",
+    "using": "使用方法",
+    "why_it_matters": "その重要性"
+  },
+  "network": {
+    "backlog_text": "確認待ちトランザクションの中央値 $(network.pr_text)",
+    "censor_text": "トランザクションを検閲またはネットワークを停止させるために必要な代表者の最小数",
+    "confirm_text": "トランザクションを確認するために必要な代表者の最小数",
+    "confirmations": "確認数 (24h)",
+    "confirmations_text": "過去24時間にネットワークによって確認されたトランザクションの総数",
+    "energy_text": "収集されたCPUモデル情報に基づく、プリンシパル代表者のライブネットワークCPUエネルギー使用量の推定値。推定値はCPU TDP（製造定義の高複雑性ワークロードで全コアがアクティブな基本周波数で動作しているときにプロセッサが放散する平均電力（ワット））に基づいています",
+    "energy_usage": "エネルギー使用量 (TDP) (24h)",
+    "fee_text": "Nanoネットワークは手数料なしで運用されます",
+    "nano_ticker": "Nanoティッカー",
+    "online_stake": "オンラインステーク",
+    "principal_reps": "プリンシパル代表者",
+    "pr_text": "オンライン投票重量の0.1%以上が委任されている投票ノード：ネットワークのプリンシパル代表者を通じて観測されます",
+    "reps_to_censor": "検閲または停止するための代表者",
+    "reps_to_confirm": "トランザクションを確認するための代表者",
+    "settlement": "決済 (24h)",
+    "settlement_text": "過去24時間にネットワークによって決済された総額",
+    "speed_text": "テストトランザクションが確認されるまでのミリ秒",
+    "stake_text": "投票に積極的に参加しているNano重量の割合",
+    "stats_title": "ネットワーク統計",
+    "total_reps": "総代表者数 (24h)",
+    "tx_backlog": "トランザクションバックログ",
+    "tx_fees": "トランザクション手数料 (24h)",
+    "tx_speed": "トランザクション速度",
+    "tx_throughput": "トランザクションスループット",
+    "throughput_text": "過去1分間に秒間に確認されたトランザクションの中央値 $(network.pr_text)"
+  },
+  "posts": {
+    "nano_foundation": "ナノ財団",
+    "top": "トップ",
+    "trending": "トレンド"
+  },
+  "representative_alerts": {
+    "table_header": {
+      "behind": "遅れ",
+      "issue": "問題",
+      "last_online": "最終オンライン",
+      "percent_online_weight": "オンライン重量の%",
+      "representative": "代表者"
+    },
+    "tooltip": {
+      "behind": "代表者が遅れているか、ブートストラッピングしています。カットオフは95パーセンタイルを超えるセメントカウントです。（テレメトリ経由）",
+      "low_uptime": "代表者が過去28日間で25%以上オフラインでした。",
+      "offline": "代表者が投票を停止し、オフラインのようです。",
+      "overweight": "代表者が3Mナノ以上の投票重量を持っています。委任者は重量を分散してネットワークの回復力と価値を向上させることを検討する必要があります。"
+    },
+    "type": {
+      "behind": "遅れ",
+      "low_uptime": "低稼働時間",
+      "offline": "オフライン",
+      "overweight": "過重"
+    }
+  },
+  "representatives_cemented_by_weight": {
+    "title": "確認差異",
+    "tooltip": "リーディングノードからの確認数X以内にある投票重量の量を表示します。ネットワーク全体でノードがどれだけ同期していて整列しているかを知るのに役立ちます"
+  },
+  "representatives_checked_by_weight": {
+    "title": "ブロック差異",
+    "tooltip": "リーディングノードからのブロック数X以内にある投票重量の量を表示します。ネットワーク内でブロック伝播がどれだけ同期しているかを感じるのに役立ちます"
+  },
+  "representative_delegators": {
+    "showing_top_delegators": "最小残高1ナノを持つトップ100の委任者を表示しています。"
+  },
+  "representative_info": {
+    "first_seen": "最初に見た",
+    "last_seen": "最後に見た",
+    "weight_represented": "表される重量"
+  },
+  "representative_network": {
+    "city": "市",
+    "isp": "ISP",
+    "network": "ネットワーク",
+    "provider": "プロバイダー"
+  },
+  "representative_telemetry": {
+    "telemetry": "テレメトリ",
+    "telemetry_timestamp": "テレメトリタイムスタンプ"
+  },
+  "representative_uptime": {
+    "2m_uptime": "2ヶ月稼働時間",
+    "2w_uptime": "2週間稼働時間",
+    "3m_uptime": "3ヶ月稼働時間",
+    "current_status": "現在のステータス",
+    "down": "ダウン",
+    "down_for": "ダウン期間",
+    "operational": "運用中",
+    "up_for": "アップ期間",
+    "warning": "警告"
+  },
+  "representatives": {
+    "alias": "エイリアス",
+    "cpu_cores": "CPUコア",
+    "cpu_model": "CPUモデル",
+    "tdp": "TDP (wH)",
+    "protocol_version": "プロトコル",
+    "last_seen": "最後に見た",
+    "host_asn": "ホストASN"
+  },
+  "representatives_bandwidth_by_weight": {
+    "tooltip": "各ノードによってローカルで設定された帯域幅制限に基づいた投票重量の量を表示します"
+  },
+  "representatives_country_by_weight": {
+    "title": "国"
+  },
+  "representatives_offline": {
+    "account": "オフラインアカウント",
+    "last_online": "最後のオンライン"
+  },
+  "representatives_page": {
+    "seo_description": "Nanoネットワークの代表者を探索し分析する",
+    "seo_title": "Nano代表者エクスプローラー",
+    "telemetry_tab": "テレメトリ",
+    "weight_distribution_tab": "重量分布",
+    "weight_history_tab": "重量履歴",
+    "offline_reps_tab": "オフライン代表者"
+  },
+  "representatives_provider_by_weight": {
+    "title": "ホスティングプロバイダー"
+  },
+  "representatives_quorum_charts": {
+    "peers_weight": "ピアの重量",
+    "quorum_delta": "クォーラムデルタ",
+    "title": "クォーラムチャート",
+    "trended_weight": "トレンド重量"
+  },
+  "representatives_search": {
+    "placeholder": "アカウント、エイリアス、IPでフィルター"
+  },
+  "representatives_weight": {
+    "trended": "トレンド"
+  },
+  "representatives_weight_chart": {
+    "title": "代表者による重量分布"
+  },
+  "representatives_version_by_weight": {
+    "title": "バージョン"
+  },
+  "roadmap": {
+    "header": {
+      "subtitle": "コミュニティの目標",
+      "title": "計画"
+    },
+    "seo": {
+      "description": "Nanoの開発とコミュニティのロードマップ",
+      "tags": [
+        "ロードマップ",
+        "ナノ",
+        "未来",
+        "リリース",
+        "デザイン",
+        "タスク",
+        "議論",
+        "コミュニティ",
+        "大使",
+        "マネージャー"
+      ],
+      "title": "ロードマップ"
+    }
+  },
+  "search_bar": {
+    "placeholder": "アドレス/ブロックハッシュで検索"
+  },
+  "uptime": {
+    "now": "現在",
+    "days_ago": "日前"
+  }
+}

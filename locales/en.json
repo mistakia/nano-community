@@ -1,0 +1,387 @@
+{
+  "account_page": {
+    "address": "Account Address",
+    "change_summary": "Change Summary",
+    "copy_notification": "Account address copied",
+    "seo_description": "Information for nano representative",
+    "seo_title": "Nano Account",
+    "telemetry_charts": "Telemetry Charts",
+    "unopened_description": "While the account address is valid, no blocks have been observed. If NANO has been sent to this account, it still needs to publish a corresponding block to receive the funds and establish an opening balance. An account's balance can only be updated by the account holder as they are the only ones who can publish blocks to their chain.",
+    "unopened_note": "If an opening block has already been published, it may take a few moments to spread through the network and be observed by the nano.community nodes.",
+    "unopened_title": "This account hasn't been opened yet"
+  },
+  "account_blocks_summary": {
+    "first_timestamp": "First Timestamp",
+    "last_timestamp": "Last Timestamp",
+    "max_amount": "Max Amount",
+    "min_amount": "Min Amount",
+    "no_records": "No Records",
+    "receiving_account": "Receiving Account",
+    "representative_account": "Representative Account",
+    "sending_account": "Sending Account",
+    "showing_top_10": "Showing top 10 accounts by total descending",
+    "transactions": "TXs"
+  },
+  "account_meta": {
+    "account_info": "Account Info",
+    "funding_account": "Funding Account",
+    "funding_timestamp": "Funding Timestamp",
+    "height": "Height",
+    "last_modified": "Last Modified",
+    "open_timestamp": "Open Timestamp",
+    "opening_balance": "Opening Balance",
+    "receivable_balance": "Receivable Balance"
+  },
+  "block_page": {
+    "amount": "Amount",
+    "copy_notification": "Block hash copied",
+    "delegated_representative": "Delegated Representative",
+    "description": "Description",
+    "epoch_v1": "Epoch v1 — Upgraded account-chains from legacy blocks (open, receive, send, change) to state blocks.",
+    "epoch_v2": "Epoch v2 - Upgraded account-chains to use higher Proof-of-Work difficulty.",
+    "receiving_account": "Receiving Account",
+    "section_label": "Block Hash",
+    "sending_account": "Sending Account",
+    "seo_description": "Information related to a Nano Block",
+    "seo_title": "Nano Block",
+    "voting_weight": "Voting Weight"
+  },
+  "block_info": {
+    "block_account": "Block Account",
+    "operation": "Operation",
+    "status": "Status",
+    "timestamp": "Timestamp"
+  },
+  "block_status": {
+    "confirmed": "Confirmed",
+    "unconfirmed": "Unconfirmed"
+  },
+  "block_type": {
+    "change": "Change",
+    "epoch": "Epoch",
+    "open": "Open",
+    "receive": "Receive",
+    "send": "Send"
+  },
+  "common": {
+    "account_one": "Account",
+    "account_other": "Accounts",
+    "address": "Address",
+    "balance": "Balance",
+    "bandwidth_limit": "Bandwidth Limit",
+    "bandwidth_limit_short": "BW Limit",
+    "blocks": "Blocks",
+    "blocks_behind": "Blocks Behind",
+    "blocks_diff_short": "Blocks Diff",
+    "by_online_weight": "By Online Weight",
+    "clear_filters": "Clear Filters",
+    "click_to_copy": "Click to copy",
+    "collapse": "Collapse",
+    "conf_short": "Conf.",
+    "conf_diff_short": "Conf. Diff",
+    "confirmations_behind": "Confirmations Behind",
+    "country": "Country",
+    "delegator_one": "Delegator",
+    "delegator_other": "Delegators",
+    "max": "Max",
+    "min": "Min",
+    "offline": "Offline",
+    "online": "Online",
+    "peers": "Peers",
+    "percent_of_total": "% of Total",
+    "port": "Port",
+    "quorum_delta": "Quorum Delta",
+    "representative_one": "Representative",
+    "representative_other": "Representatives",
+    "show_more": "Show {{count}} more",
+    "total": "Total",
+    "unchecked": "Unchecked",
+    "unchecked_count": "Unchecked Count",
+    "unlimited": "Unlimited",
+    "uptime": "Uptime",
+    "version": "Version",
+    "weight": "Weight"
+  },
+  "delegators": {
+    "showing_top_delegators": "Showing top 100 delegators with a minimum balance of 1 Nano."
+  },
+  "doc": {
+    "contributors": "Contributor",
+    "document_not_found": "Document (or Account) not found",
+    "edit_page": "Edit Page",
+    "help_out": "Help out",
+    "not_found_404": "404",
+    "section_link_copied": "Section link copied",
+    "updated_by": "updated by"
+  },
+  "github_events": {
+    "action": {
+      "added_member": "added member",
+      "commented_on_commit": "commented on commit",
+      "commented_on_issue": "commented on issue",
+      "commented_on_pr_review": "commented on pr review",
+      "created": "created {{action}}",
+      "deleted": "deleted {{action}}",
+      "forked": "forked",
+      "issue_action": "{{action}} issue",
+      "made_public": "made public",
+      "pr_action": "{{action}} pr",
+      "pr_review": "pr review {{title}}",
+      "published_release": "published release",
+      "pushed_commit": "pushed commit to {{ref}}",
+      "sponsorship_started": "sponsorship started",
+      "watching_repo": "watching repo"
+    },
+    "events_title": "Development Events"
+  },
+  "ledger": {
+    "addresses": {
+      "active_detail": "Active shows the number of unique addresses used. New shows the number of addresses created. Reused shows the number of addresses used that were created on a previous day.",
+      "active_stats": "Active Address Stats",
+      "new_stats": "New Address Stats",
+      "total_number": "The total number of active, new, and reused addresses used per day."
+    },
+    "amounts": {
+      "total_number": "The number of confirmed send-type blocks per day where the amount in the block is in a given range (in Nano)"
+    },
+    "blocks": {
+      "change": "Change Block Stats",
+      "description": "The number of blocks confirmed per day.",
+      "open": "Open Block Stats",
+      "receive": "Receive Block Stats",
+      "send": "Send Block Stats",
+      "total": "Total Block Stats"
+    },
+    "description": "Description",
+    "usd_transferred": {
+      "desc_1": "The total amount of value transferred (in USD) per day.",
+      "desc_2": "Based on the daily closing price of Nano/USD and the total amount of Nano transferred that day.",
+      "usd_transferred": "USD Transferred",
+      "usd_transferred_stats": "USD Transferred Stats"
+    },
+    "volume": {
+      "change_stats": "Change Stats",
+      "description": "The total amount sent (in Nano) and total amount of voting weight changed per day.",
+      "send_stats": "Send Stats"
+    }
+  },
+  "ledger_page": {
+    "addresses_tab": "Addresses",
+    "amounts_tab": "Amounts",
+    "blocks_tab": "Blocks",
+    "seo_description": "On-chain metrics and analytics of the Nano ledger",
+    "seo_title": "Nano Ledger Analysis",
+    "value_transferred_tab": "Value Transferred",
+    "volume_tab": "Volume"
+  },
+  "menu": {
+    "account_setup": "Account Setup",
+    "acquiring": "Acquiring",
+    "advantages": "Advantages",
+    "attack_vectors": "Attack Vectors",
+    "basics": "Basics",
+    "best_practices": "Best Practices",
+    "choosing_a_rep": "Choosing a Rep",
+    "challenges": "Challenges",
+    "communities": "Communities",
+    "contribution_guide": "Contribution Guide",
+    "design": "Design",
+    "developer_discussions": "Developer Discussions",
+    "developers": "Developers",
+    "documentation": "Documentation",
+    "faqs": "FAQs",
+    "get_involved": "Get Involved",
+    "get_support": "Get Support",
+    "getting_started": "Getting Started",
+    "glossary": "Glossary",
+    "guides": "Guides",
+    "history": "History",
+    "home": "Home",
+    "how_it_works": "How it works",
+    "integrations": "Integrations",
+    "introduction": "Introduction",
+    "investment_thesis": "Investment thesis",
+    "learn": "Learn",
+    "ledger": "Ledger",
+    "misconceptions": "Misconceptions",
+    "overview": "Overview",
+    "planning": "Planning 👾",
+    "privacy": "Privacy",
+    "protocol": "Protocol",
+    "running_a_node": "Running a node",
+    "security": "Security",
+    "stats": "Stats",
+    "storing": "Storing",
+    "telemetry": "Telemetry",
+    "topics": "Topics",
+    "using": "Using",
+    "why_it_matters": "Why it matters"
+  },
+  "network": {
+    "unconfirmed_pool_text": "Number of blocks waiting to be confirmed $(network.pr_text)",
+    "censor_text": "The minimum number of representatives needed to censor transactions or stall the network",
+    "confirm_text": "The minimum number of representatives needed to confirm transactions",
+    "confirmations": "Confirmations (24h)",
+    "confirmations_text": "Total number of transactions confirmed by the network over the last 24 hours",
+    "energy_text": "Estimated live network CPU energy usage of Principle Representatives based on collected CPU model info. The estimate is based on CPU TDP, which is the average power, in watts, the processor dissipates when operating at base frequency with all cores active under manufacture-defined, high-complexity workload",
+    "energy_usage": "Energy Usage (TDP) (24h)",
+    "fee_text": "The Nano network operates without fees",
+    "nano_ticker": "NanoTicker",
+    "online_stake": "Online Stake",
+    "principal_reps": "Principal Reps",
+    "pr_text": "as observed across the networks principal representatives: voting nodes with more than 0.1% of the online voting weight delegated to them",
+    "reps_to_censor": "Reps to Censor or Stall",
+    "reps_to_confirm": "Reps to Confirm",
+    "settlement": "Settlement (24h)",
+    "settlement_text": "Total amount of value settled by the network over the last 24 hours (only send blocks)",
+    "speed_text": "Median time in milliseconds for a block to get confirmed (across all buckets)",
+    "stake_text": "Percentage of delegated Nano weight actively participating in voting",
+    "stats_title": "Network Stats",
+    "total_reps": "Total Reps (24h)",
+    "tx_backlog": "Tx Backlog",
+    "tx_fees": "Tx Fees (24h)",
+    "tx_speed": "Tx Speed ({{time_range}})",
+    "tx_throughput": "Tx Throughput",
+    "throughput_text": "Median number of transactions confirmed per second in the last minute $(network.pr_text)"
+  },
+  "posts": {
+    "nano_foundation": "Nano Foundation",
+    "top": "Top",
+    "trending": "Trending"
+  },
+  "representative_alerts": {
+    "table_header": {
+      "behind": "Behind",
+      "issue": "Issue",
+      "last_online": "Last Online",
+      "percent_online_weight": "% Online Weight",
+      "representative": "Representative"
+    },
+    "tooltip": {
+      "behind": "Representative has fallen behind or is bootstrapping. The cutoff is a cemented count beyond the 95th percentile. (via telemetry)",
+      "low_uptime": "Representative has been offline more than 25% in the last 28 days.",
+      "offline": "Representative has stopped voting and appears offline.",
+      "overweight": "Representative has beyond 3M Nano voting weight. Delegators should consider distributing the weight to improve the network's resilience and value."
+    },
+    "type": {
+      "behind": "Behind",
+      "low_uptime": "Low Uptime",
+      "offline": "Offline",
+      "overweight": "Overweight"
+    }
+  },
+  "representatives_cemented_by_weight": {
+    "title": "Confirmation Differential",
+    "tooltip": "Displays the amount of voting weight that is within X number of confirmations from the leading node. Helpful in knowing how well in-sync and aligned nodes are across the network"
+  },
+  "representatives_checked_by_weight": {
+    "title": "Blocks Differential",
+    "tooltip": "Displays the amount of voting weight that is within X number of blocks from the leading node. Useful for getting a sense of how in-sync block propagation is within the network"
+  },
+  "representative_delegators": {
+    "showing_top_delegators": "Showing top 100 delegators with a minimum balance of 1 Nano."
+  },
+  "representative_info": {
+    "first_seen": "First Seen",
+    "last_seen": "Last Seen",
+    "weight_represented": "Weight Represented"
+  },
+  "representative_network": {
+    "city": "City",
+    "isp": "ISP",
+    "network": "Network",
+    "provider": "Provider"
+  },
+  "representative_telemetry": {
+    "telemetry": "Telemetry",
+    "telemetry_timestamp": "Telemetry Timestamp"
+  },
+  "representative_uptime": {
+    "2m_uptime": "2M Uptime",
+    "2w_uptime": "2W Uptime",
+    "3m_uptime": "3M Uptime",
+    "current_status": "Current Status",
+    "down": "Down",
+    "down_for": "Down for",
+    "operational": "Operational",
+    "up_for": "Up for",
+    "warning": "Warning"
+  },
+  "representatives": {
+    "alias": "Alias",
+    "cpu_cores": "CPU Cores",
+    "cpu_model": "CPU Model",
+    "tdp": "TDP (wH)",
+    "protocol_version": "Protocol",
+    "last_seen": "Last Seen",
+    "host_asn": "Host ASN"
+  },
+  "representatives_bandwidth_by_weight": {
+    "tooltip": "Displays the amount of voting weight based on the bandwidth limit set locally by each node"
+  },
+  "representatives_country_by_weight": {
+    "title": "Country"
+  },
+  "representatives_offline": {
+    "account": "Offline Account",
+    "last_online": "Last Online"
+  },
+  "representatives_page": {
+    "seo_description": "Explore and analyze Nano network representatives",
+    "seo_title": "Nano Representatives Explorer",
+    "telemetry_tab": "Telemetry",
+    "weight_distribution_tab": "Weight Distribution",
+    "weight_history_tab": "Weight History",
+    "offline_reps_tab": "Offline Reps"
+  },
+  "representatives_provider_by_weight": {
+    "title": "Hosting Provider"
+  },
+  "representatives_quorum_charts": {
+    "peers_weight": "Peers Weight",
+    "quorum_delta": "Quorum Delta",
+    "title": "Quorum Charts",
+    "trended_weight": "Trended Weight"
+  },
+  "representatives_search": {
+    "placeholder": "Filter by account, alias, ip"
+  },
+  "representatives_weight": {
+    "trended": "Trended"
+  },
+  "representatives_weight_chart": {
+    "title": "Weight Distribution by Representative"
+  },
+  "representatives_version_by_weight": {
+    "title": "Versions"
+  },
+  "roadmap": {
+    "header": {
+      "subtitle": "Community objectives",
+      "title": "Planning"
+    },
+    "seo": {
+      "description": "Nano development & community roadmap",
+      "tags": [
+        "roadmap",
+        "nano",
+        "future",
+        "release",
+        "design",
+        "tasks",
+        "discussions",
+        "community",
+        "ambassadors",
+        "managers"
+      ],
+      "title": "Roadmap"
+    }
+  },
+  "search_bar": {
+    "placeholder": "Search by Address / Block Hash"
+  },
+  "uptime": {
+    "now": "Now",
+    "days_ago": "days ago"
+  }
+}

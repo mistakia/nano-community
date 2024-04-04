@@ -19,10 +19,11 @@ export const docActions = {
   GET_LABEL_DOC_COMMIT_PENDING: 'GET_LABEL_DOC_COMMIT_PENDING',
   GET_LABEL_DOC_COMMIT_FULFILLED: 'GET_LABEL_DOC_COMMIT_FULFILLED',
 
-  getDoc: (id) => ({
+  getDoc: ({ id, locale = 'en' }) => ({
     type: docActions.GET_DOC,
     payload: {
-      id
+      id,
+      locale
     }
   }),
 

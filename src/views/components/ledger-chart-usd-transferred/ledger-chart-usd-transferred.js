@@ -11,6 +11,7 @@ import {
 } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import Button from '@mui/material/Button'
+import { useTranslation } from 'react-i18next'
 
 import LedgerChartMetrics from '@components/ledger-chart-metrics'
 import { download_csv, download_json } from '@core/utils'
@@ -24,6 +25,7 @@ echarts.use([
 ])
 
 export default function LedgerUSDTransferred({ data, isLoading }) {
+  const { t } = useTranslation()
   const span_style =
     'float:right;margin-left:20px;font-size:14px;color:#666;font-weight:900'
 
@@ -81,7 +83,7 @@ export default function LedgerUSDTransferred({ data, isLoading }) {
     series: [
       {
         type: 'line',
-        name: 'USD Transferred',
+        name: t('ledger.usd_transferred.usd_transferred', 'USD Transferred'),
         showSymbol: false,
         lineStyle: {
           width: 1
@@ -132,13 +134,20 @@ export default function LedgerUSDTransferred({ data, isLoading }) {
       <div className='ledger__chart-sections'>
         <div className='ledger__chart-section'>
           <div className='section__heading'>
-            <span>Description</span>
+            <span>{t('ledger.description', 'Description')}</span>
           </div>
           <div className='ledger__chart-section-body description'>
-            <p>The total amount of value transferred (in USD) per day.</p>
             <p>
-              Based on the daily closing price of Nano/USD and the total amount
-              of Nano transferred that day.
+              {t(
+                'ledger.usd_transferred.desc_1',
+                'The total amount of value transferred (in USD) per day.'
+              )}
+            </p>
+            <p>
+              {t(
+                'ledger.usd_transferred.desc_2',
+                'Based on the daily closing price of Nano/USD and the total amount of Nano transferred that day.'
+              )}
             </p>
           </div>
           {!isLoading && (
@@ -154,7 +163,10 @@ export default function LedgerUSDTransferred({ data, isLoading }) {
         </div>
         <LedgerChartMetrics
           data={data.total_usd_send_value.map((d) => [d[0], d[1]])}
-          label='USD Transferred Stats'
+          label={t(
+            'ledger.usd_transferred.usd_transferred_stats',
+            'USD Transferred Stats'
+          )}
           show_total
         />
       </div>

@@ -1,0 +1,387 @@
+{
+  "account_page": {
+    "address": "账户地址",
+    "change_summary": "更改摘要",
+    "copy_notification": "账户地址已复制",
+    "seo_description": "纳米代表的信息",
+    "seo_title": "纳米账户",
+    "telemetry_charts": "遥测图表",
+    "unopened_description": "尽管账户地址有效，但尚未观察到任何区块。如果已向此账户发送了NANO，则仍需发布相应的区块以接收资金并建立开户余额。账户余额只能由账户持有者更新，因为只有他们才能向其链发布区块。",
+    "unopened_note": "如果已经发布了开户区块，可能需要一些时间才能通过网络传播并被nano.community节点观察到。",
+    "unopened_title": "此账户尚未开通"
+  },
+  "account_blocks_summary": {
+    "first_timestamp": "首次时间戳",
+    "last_timestamp": "最后时间戳",
+    "max_amount": "最大金额",
+    "min_amount": "最小金额",
+    "no_records": "无记录",
+    "receiving_account": "接收账户",
+    "representative_account": "代表账户",
+    "sending_account": "发送账户",
+    "showing_top_10": "按总额降序显示前10个账户",
+    "transactions": "交易次数"
+  },
+  "account_meta": {
+    "account_info": "账户信息",
+    "funding_account": "资金账户",
+    "funding_timestamp": "资金时间戳",
+    "height": "高度",
+    "last_modified": "最后修改",
+    "open_timestamp": "开户时间戳",
+    "opening_balance": "开户余额",
+    "receivable_balance": "应收余额"
+  },
+  "block_page": {
+    "amount": "金额",
+    "copy_notification": "区块哈希已复制",
+    "delegated_representative": "委托代表",
+    "description": "描述",
+    "epoch_v1": "纪元v1 - 将账户链从传统区块（开户、接收、发送、更改）升级到状态区块。",
+    "epoch_v2": "纪元v2 - 将账户链升级以使用更高的工作量证明难度。",
+    "receiving_account": "接收账户",
+    "section_label": "区块哈希",
+    "sending_account": "发送账户",
+    "seo_description": "与纳米区块相关的信息",
+    "seo_title": "纳米区块",
+    "voting_weight": "投票权重"
+  },
+  "block_info": {
+    "block_account": "区块账户",
+    "operation": "操作",
+    "status": "状态",
+    "timestamp": "时间戳"
+  },
+  "block_status": {
+    "confirmed": "已确认",
+    "unconfirmed": "未确认"
+  },
+  "block_type": {
+    "change": "更改",
+    "epoch": "纪元",
+    "open": "开户",
+    "receive": "接收",
+    "send": "发送"
+  },
+  "common": {
+    "account_one": "账户",
+    "account_other": "账户",
+    "address": "地址",
+    "balance": "余额",
+    "bandwidth_limit": "带宽限制",
+    "bandwidth_limit_short": "带宽限制",
+    "blocks": "区块",
+    "blocks_behind": "区块落后",
+    "blocks_diff_short": "区块差异",
+    "by_online_weight": "按在线权重",
+    "clear_filters": "清除过滤器",
+    "click_to_copy": "点击复制",
+    "collapse": "折叠",
+    "conf_short": "确认",
+    "conf_diff_short": "确认差异",
+    "confirmations_behind": "确认落后",
+    "country": "国家",
+    "delegator_one": "委托人",
+    "delegator_other": "委托人",
+    "max": "最大",
+    "min": "最小",
+    "offline": "离线",
+    "online": "在线",
+    "peers": "节点",
+    "percent_of_total": "总百分比",
+    "port": "端口",
+    "quorum_delta": "法定人数差",
+    "representative_one": "代表",
+    "representative_other": "代表们",
+    "show_more": "显示更多 {{count}}",
+    "total": "总计",
+    "unchecked": "未检查",
+    "unchecked_count": "未检查计数",
+    "unlimited": "无限",
+    "uptime": "运行时间",
+    "version": "版本",
+    "weight": "权重"
+  },
+  "delegators": {
+    "showing_top_delegators": "显示前100名代理人，最低余额为1 Nano。"
+  },
+  "doc": {
+    "contributors": "贡献者",
+    "document_not_found": "未找到文档（或账户）",
+    "edit_page": "编辑页面",
+    "help_out": "提供帮助",
+    "not_found_404": "404",
+    "section_link_copied": "已复制章节链接",
+    "updated_by": "更新者"
+  },
+  "github_events": {
+    "action": {
+      "added_member": "已添加成员",
+      "commented_on_commit": "对提交进行了评论",
+      "commented_on_issue": "对问题进行了评论",
+      "commented_on_pr_review": "对PR审查进行了评论",
+      "created": "已创建 {{action}}",
+      "deleted": "已删除 {{action}}",
+      "forked": "已分叉",
+      "issue_action": "{{action}} 问题",
+      "made_public": "已公开",
+      "pr_action": "{{action}} PR",
+      "pr_review": "PR审查 {{title}}",
+      "published_release": "已发布发布",
+      "pushed_commit": "推送提交到 {{ref}}",
+      "sponsorship_started": "赞助已开始",
+      "watching_repo": "正在观看仓库"
+    },
+    "events_title": "开发事件"
+  },
+  "ledger": {
+    "addresses": {
+      "active_detail": "活跃显示每天使用的唯一地址数量。新显示创建的地址数量。重用显示在前一天创建并使用的地址数量。",
+      "active_stats": "活跃地址统计",
+      "new_stats": "新地址统计",
+      "total_number": "每天使用的活跃、新建和重用地址的总数。"
+    },
+    "amounts": {
+      "total_number": "每天确认的发送类型区块的数量，其中区块中的金额在给定范围内（以Nano为单位）"
+    },
+    "blocks": {
+      "change": "更改区块统计",
+      "description": "每天确认的区块数量。",
+      "open": "开户区块统计",
+      "receive": "接收区块统计",
+      "send": "发送区块统计",
+      "total": "总区块统计"
+    },
+    "description": "描述",
+    "usd_transferred": {
+      "desc_1": "每天转移的价值总额（以USD计）。",
+      "desc_2": "基于Nano/USD的每日收盘价和当天转移的Nano总量。",
+      "usd_transferred": "转移的USD",
+      "usd_transferred_stats": "转移的USD统计"
+    },
+    "volume": {
+      "change_stats": "更改统计",
+      "description": "每天发送的总金额（以Nano为单位）和总投票权重变化量。",
+      "send_stats": "发送统计"
+    }
+  },
+  "ledger_page": {
+    "addresses_tab": "地址",
+    "amounts_tab": "金额",
+    "blocks_tab": "区块",
+    "seo_description": "Nano账本的链上指标和分析",
+    "seo_title": "Nano账本分析",
+    "value_transferred_tab": "转移的价值",
+    "volume_tab": "体积"
+  },
+  "menu": {
+    "account_setup": "账户设置",
+    "acquiring": "获取",
+    "advantages": "优势",
+    "attack_vectors": "攻击向量",
+    "basics": "基础",
+    "best_practices": "最佳实践",
+    "choosing_a_rep": "选择代表",
+    "challenges": "挑战",
+    "communities": "社区",
+    "contribution_guide": "贡献指南",
+    "design": "设计",
+    "developer_discussions": "开发者讨论",
+    "developers": "开发者",
+    "documentation": "文档",
+    "faqs": "常见问题",
+    "get_involved": "参与",
+    "get_support": "获取支持",
+    "getting_started": "入门",
+    "glossary": "词汇表",
+    "guides": "指南",
+    "history": "历史",
+    "home": "首页",
+    "how_it_works": "它是如何工作的",
+    "integrations": "集成",
+    "introduction": "介绍",
+    "investment_thesis": "投资论文",
+    "learn": "学习",
+    "ledger": "账本",
+    "misconceptions": "误解",
+    "overview": "概览",
+    "planning": "规划 👾",
+    "privacy": "隐私",
+    "protocol": "协议",
+    "running_a_node": "运行一个节点",
+    "security": "安全",
+    "stats": "统计",
+    "storing": "存储",
+    "telemetry": "遥测",
+    "topics": "主题",
+    "using": "使用",
+    "why_it_matters": "为什么这很重要"
+  },
+  "network": {
+    "backlog_text": "等待确认的交易中位数 $(network.pr_text)",
+    "censor_text": "需要最少的代表数量来审查交易或阻塞网络",
+    "confirm_text": "需要最少的代表数量来确认交易",
+    "confirmations": "确认（24小时）",
+    "confirmations_text": "网络在过去24小时内确认的交易总数",
+    "energy_text": "根据收集的CPU型号信息估算的主要代表的实时网络CPU能耗。该估算基于CPU TDP，即处理器在制造商定义的高复杂度工作负载下，所有核心在基础频率下运行时的平均功率（瓦特）",
+    "energy_usage": "能源使用（TDP）（24小时）",
+    "fee_text": "Nano网络无需费用运作",
+    "nano_ticker": "Nano行情",
+    "online_stake": "在线股份",
+    "principal_reps": "主要代表",
+    "pr_text": "在网络的主要代表中观察到：被委托超过0.1%在线投票权的投票节点",
+    "reps_to_censor": "审查或阻塞的代表",
+    "reps_to_confirm": "确认的代表",
+    "settlement": "结算（24小时）",
+    "settlement_text": "网络在过去24小时内结算的总价值",
+    "speed_text": "测试交易被确认的毫秒数",
+    "stake_text": "积极参与投票的委托Nano权重的百分比",
+    "stats_title": "网络统计",
+    "total_reps": "总代表（24小时）",
+    "tx_backlog": "交易积压",
+    "tx_fees": "交易费（24小时）",
+    "tx_speed": "交易速度",
+    "tx_throughput": "交易吞吐量",
+    "throughput_text": "在最后一分钟内每秒确认的交易中位数 $(network.pr_text)"
+  },
+  "posts": {
+    "nano_foundation": "Nano基金会",
+    "top": "顶部",
+    "trending": "趋势"
+  },
+  "representative_alerts": {
+    "table_header": {
+      "behind": "落后",
+      "issue": "问题",
+      "last_online": "最后在线",
+      "percent_online_weight": "% 在线权重",
+      "representative": "代表"
+    },
+    "tooltip": {
+      "behind": "代表已落后或正在引导。截止点是超过第95百分位的固化计数。（通过遥测）",
+      "low_uptime": "代表在过去28天内超过25%的时间离线。",
+      "offline": "代表已停止投票并似乎离线。",
+      "overweight": "代表拥有超过3M Nano的投票权重。委托人应考虑分散权重以提高网络的弹性和价值。"
+    },
+    "type": {
+      "behind": "落后",
+      "low_uptime": "低正常运行时间",
+      "offline": "离线",
+      "overweight": "超重"
+    }
+  },
+  "representatives_cemented_by_weight": {
+    "title": "确认差异",
+    "tooltip": "显示距离领先节点X个确认内的投票权重量。有助于了解网络各节点的同步程度和一致性"
+  },
+  "representatives_checked_by_weight": {
+    "title": "区块差异",
+    "tooltip": "显示距离领先节点X个区块内的投票权重量。用于了解网络内区块传播的同步程度"
+  },
+  "representative_delegators": {
+    "showing_top_delegators": "显示前100个委托人，最低余额为1 Nano。"
+  },
+  "representative_info": {
+    "first_seen": "首次出现",
+    "last_seen": "最后出现",
+    "weight_represented": "代表的权重"
+  },
+  "representative_network": {
+    "city": "城市",
+    "isp": "ISP",
+    "network": "网络",
+    "provider": "提供者"
+  },
+  "representative_telemetry": {
+    "telemetry": "遥测",
+    "telemetry_timestamp": "遥测时间戳"
+  },
+  "representative_uptime": {
+    "2m_uptime": "2M正常运行时间",
+    "2w_uptime": "2W正常运行时间",
+    "3m_uptime": "3M正常运行时间",
+    "current_status": "当前状态",
+    "down": "下线",
+    "down_for": "下线时间",
+    "operational": "运行中",
+    "up_for": "上线时间",
+    "warning": "警告"
+  },
+  "representatives": {
+    "alias": "别名",
+    "cpu_cores": "CPU核心",
+    "cpu_model": "CPU型号",
+    "tdp": "TDP (wH)",
+    "protocol_version": "协议",
+    "last_seen": "最后出现",
+    "host_asn": "主机ASN"
+  },
+  "representatives_bandwidth_by_weight": {
+    "tooltip": "根据每个节点本地设置的带宽限制显示投票权重量"
+  },
+  "representatives_country_by_weight": {
+    "title": "国家"
+  },
+  "representatives_offline": {
+    "account": "离线账户",
+    "last_online": "最后在线"
+  },
+  "representatives_page": {
+    "seo_description": "探索和分析Nano网络代表",
+    "seo_title": "Nano代表浏览器",
+    "telemetry_tab": "遥测",
+    "weight_distribution_tab": "权重分布",
+    "weight_history_tab": "权重历史",
+    "offline_reps_tab": "离线代表"
+  },
+  "representatives_provider_by_weight": {
+    "title": "托管提供者"
+  },
+  "representatives_quorum_charts": {
+    "peers_weight": "同伴权重",
+    "quorum_delta": "法定人数差",
+    "title": "法定人数图表",
+    "trended_weight": "趋势权重"
+  },
+  "representatives_search": {
+    "placeholder": "按账户、别名、ip过滤"
+  },
+  "representatives_weight": {
+    "trended": "趋势"
+  },
+  "representatives_weight_chart": {
+    "title": "按代表的权重分布"
+  },
+  "representatives_version_by_weight": {
+    "title": "版本"
+  },
+  "roadmap": {
+    "header": {
+      "subtitle": "社区目标",
+      "title": "规划"
+    },
+    "seo": {
+      "description": "Nano发展与社区路线图",
+      "tags": [
+        "路线图",
+        "nano",
+        "未来",
+        "发布",
+        "设计",
+        "任务",
+        "讨论",
+        "社区",
+        "大使",
+        "管理者"
+      ],
+      "title": "路线图"
+    }
+  },
+  "search_bar": {
+    "placeholder": "按地址/区块哈希搜索"
+  },
+  "uptime": {
+    "now": "现在",
+    "days_ago": "天前"
+  }
+}

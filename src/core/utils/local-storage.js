@@ -1,11 +1,15 @@
 /* global localStorage */
 
+const LOCAL_STORAGE_PREFIX = '/nano.community/'
+
 export const localStorageAdapter = {
   getItem(key) {
     // return promise to match AsyncStorage usage on mobile
     return new Promise((resolve, reject) => {
       try {
-        const d = JSON.parse(localStorage.getItem(key))
+        const d = JSON.parse(
+          localStorage.getItem(`${LOCAL_STORAGE_PREFIX}${key}`)
+        )
         resolve(d)
       } catch (e) {
         reject(e)
@@ -14,10 +18,10 @@ export const localStorageAdapter = {
   },
 
   removeItem(key) {
-    localStorage.removeItem(key)
+    localStorage.removeItem(`${LOCAL_STORAGE_PREFIX}${key}`)
   },
 
   setItem(key, value) {
-    localStorage.setItem(key, JSON.stringify(value))
+    localStorage.setItem(`${LOCAL_STORAGE_PREFIX}${key}`, JSON.stringify(value))
   }
 }

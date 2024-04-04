@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
+import { useTranslation } from 'react-i18next'
 
 import Seo from '@components/seo'
 import Menu from '@components/menu'
@@ -22,9 +23,7 @@ import RepresentativesQuorumCharts from '@components/representatives-quorum-char
 
 import './representatives.styl'
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props
-
+function TabPanel({ children, value, index, ...other }) {
   return (
     <div
       className='representatives__metric'
@@ -41,85 +40,93 @@ TabPanel.propTypes = {
   index: PropTypes.number
 }
 
-export default class RepresentativesPage extends React.Component {
-  constructor(props) {
-    super(props)
+export default function RepresentativesPage() {
+  const { t } = useTranslation()
+  const [value, setValue] = useState(0)
 
-    this.state = {
-      value: 0
-    }
+  const handleChange = (event, value) => {
+    setValue(value)
   }
 
-  handleChange = (event, value) => {
-    this.setState({ value })
-  }
-
-  render() {
-    return (
-      <>
-        <Seo
-          title='Nano Representatives'
-          description='Nano representative explorer'
-          tags={[
-            'nano',
-            'representatives',
-            'network',
-            'crypto',
-            'currency',
-            'cryptocurrency',
-            'digital',
-            'money',
-            'feeless',
-            'energy',
-            'green',
-            'sustainable'
-          ]}
-        />
-        <RepresentativesWeight />
-        <div className='representatives__header'>
-          <RepresentativesCementedByWeight />
-          <RepresentativesCheckedByWeight />
-          <RepresentativesBandwidthByWeight />
-          <RepresentativesProviderByWeight />
-          <RepresentativesVersionByWeight />
-          <RepresentativesCountryByWeight />
+  return (
+    <>
+      <Seo
+        title={t('representatives_page.seo_title', 'Nano Representatives')}
+        description={t(
+          'representatives_page.seo_description',
+          'Nano representative explorer'
+        )}
+        tags={[
+          'nano',
+          'representatives',
+          'network',
+          'crypto',
+          'currency',
+          'cryptocurrency',
+          'digital',
+          'money',
+          'feeless',
+          'energy',
+          'green',
+          'sustainable'
+        ]}
+      />
+      <RepresentativesWeight />
+      <div className='representatives__header'>
+        <RepresentativesCementedByWeight />
+        <RepresentativesCheckedByWeight />
+        <RepresentativesBandwidthByWeight />
+        <RepresentativesProviderByWeight />
+        <RepresentativesVersionByWeight />
+        <RepresentativesCountryByWeight />
+      </div>
+      <div className='representatives__body'>
+        <div className='representatives__body-header'>
+          <RepresentativesSearch align='left' />
+          <RepresentativesFilters />
         </div>
-        <div className='representatives__body'>
-          <div className='representatives__body-header'>
-            <RepresentativesSearch align='left' />
-            <RepresentativesFilters />
-          </div>
-          <Representatives />
-          <div className='representatives__metrics'>
-            <Tabs
-              orientation={window.innerWidth < 600 ? 'horizontal' : 'vertical'}
-              variant='scrollable'
-              value={this.state.value}
-              className='representatives__metrics-menu'
-              onChange={this.handleChange}>
-              <Tab label='Telemetry' />
-              <Tab label='Weight Distribution' />
-              <Tab label='Weight History' />
-              <Tab label='Offline Reps' />
-            </Tabs>
-            <TabPanel value={this.state.value} index={0}>
-              <RepresentativesClusterCharts />
-            </TabPanel>
-            <TabPanel value={this.state.value} index={1}>
-              <RepresentativesWeightChart />
-            </TabPanel>
-            <TabPanel value={this.state.value} index={2}>
-              <RepresentativesQuorumCharts />
-            </TabPanel>
-            <TabPanel value={this.state.value} index={3}>
-              <RepresentativesOffline />
-            </TabPanel>
-          </div>
+        <Representatives />
+        <div className='representatives__metrics'>
+          <Tabs
+            orientation={window.innerWidth < 600 ? 'horizontal' : 'vertical'}
+            variant='scrollable'
+            value={value}
+            className='representatives__metrics-menu'
+            onChange={handleChange}>
+            <Tab label={t('representatives_page.telemetry_tab', 'Telemetry')} />
+            <Tab
+              label={t(
+                'representatives_page.weight_distribution_tab',
+                'Weight Distribution'
+              )}
+            />
+            <Tab
+              label={t(
+                'representatives_page.weight_history_tab',
+                'Weight History'
+              )}
+            />
+            <Tab
+              label={t('representatives_page.offline_reps_tab', 'Offline Reps')}
+            />
+          </Tabs>
+          <TabPanel value={value} index={0}>
+            <RepresentativesClusterCharts />
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <RepresentativesWeightChart />
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            <RepresentativesQuorumCharts />
+          </TabPanel>
+          <TabPanel value={value} index={3}>
+            <RepresentativesOffline />
+          </TabPanel>
         </div>
-        <div className='representatives__footer'>
-          <Menu />
-        </div>
-      </>
-    )
-  }
+      </div>
+      <div className='representatives__footer'>
+        <Menu />
+      </div>
+    </>
+  )
 }

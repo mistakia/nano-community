@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import PropTypes from 'prop-types'
 
 import { localStorageAdapter } from '@core/utils'
@@ -16,7 +16,8 @@ export default class App extends React.Component {
   async componentDidMount() {
     const token = await localStorageAdapter.getItem('token')
     const key = await localStorageAdapter.getItem('key')
-    this.props.init({ token, key })
+    const locale = await localStorageAdapter.getItem('locale')
+    this.props.init({ token, key, locale })
     this.props.getRepresentatives()
     this.props.getNetworkStats()
     this.props.getGithubEvents()
@@ -24,11 +25,12 @@ export default class App extends React.Component {
   }
 
   render() {
+    // TODO improve loading UX
     return (
-      <>
+      <Suspense fallback={<></>}>
         <Routes />
         <Notification />
-      </>
+      </Suspense>
     )
   }
 }

@@ -6,6 +6,7 @@ import path from 'path'
 import webpack from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import CircularDependencyPlugin from 'circular-dependency-plugin'
+import CopyWebpackPlugin from 'copy-webpack-plugin'
 
 import base from './webpack.base.babel.mjs'
 
@@ -44,6 +45,12 @@ export default base({
     new CircularDependencyPlugin({
       exclude: /a\.js|node_modules/, // exclude node_modules
       failOnError: false // show a warning when there is a circular dependency
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'locales', to: 'locales' },
+        { from: 'resources', to: 'resources' }
+      ]
     })
   ],
 

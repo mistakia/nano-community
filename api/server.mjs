@@ -18,6 +18,7 @@ import serveStatic from 'serve-static'
 import cors from 'cors'
 import favicon from 'express-favicon'
 import robots from 'express-robots-txt'
+import { slowDown } from 'express-slow-down'
 
 import * as config from '#config'
 import * as routes from '#api/routes/index.mjs'
@@ -70,6 +71,9 @@ api.use((req, res, next) => {
 const resourcesPath = path.join(__dirname, '..', 'resources')
 api.use('/resources', serveStatic(resourcesPath))
 
+const localesPath = path.join(__dirname, '..', 'locales')
+api.use('/locales', serveStatic(localesPath))
+
 const dataPath = path.join(__dirname, '..', 'data')
 api.use('/data', serveStatic(dataPath))
 
@@ -95,9 +99,52 @@ api.use('/api/representatives', routes.representatives)
 api.use('/api/weight', routes.weight)
 
 const docsPath = path.join(__dirname, '..', 'docs')
-api.use('/api/docs', serveStatic(docsPath))
-api.get('/api/docs/*', (req, res) => {
-  res.status(404).send('Not found')
+
+const speedLimiter = slowDown({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  delayAfter: 50, // allow 50 requests per 10 minutes, then...
+  delayMs: 500, // begin adding 500ms of delay per request above 50:
+  maxDelayMs: 20000 // maximum delay of 20 seconds
+})
+
+api.use('/api/docs', speedLimiter, serveStatic(path.join(docsPath, 'en')))
+api.use('/api/docs/en', speedLimiter, serveStatic(path.join(docsPath, 'en')))
+api.get('/api/docs/:locale/*', speedLimiter, async (req, res) => {
+  const { locale } = req.params
+  const doc_id = req.params[0] // Capture the rest of the path as doc_id
+  const localized_doc_path = path.join(docsPath, locale, `${doc_id}.md`)
+  const default_doc_path = path.join(docsPath, 'en', `${doc_id}.md`)
+
+  // check if paths are under the docs directory
+  if (
+    !localized_doc_path.startsWith(docsPath) ||
+    !default_doc_path.startsWith(docsPath)
+  ) {
+    return res.status(403).send('Forbidden')
+  }
+
+  try {
+    if (
+      await fs.promises
+        .access(localized_doc_path, fs.constants.F_OK)
+        .then(() => true)
+        .catch(() => false)
+    ) {
+      return res.sendFile(localized_doc_path)
+    } else if (
+      await fs.promises
+        .access(default_doc_path, fs.constants.F_OK)
+        .then(() => true)
+        .catch(() => false)
+    ) {
+      return res.redirect(`/api/docs/en/${doc_id}`)
+    } else {
+      return res.status(404).send('Document not found')
+    }
+  } catch (error) {
+    console.error(error)
+    return res.status(500).send('Internal Server Error')
+  }
 })
 
 api.use('/api/*', (err, req, res, next) => {
