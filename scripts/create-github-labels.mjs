@@ -3,9 +3,10 @@ import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 
 import { request, wait, isMain } from '#common'
-import { github_access_token } from '#config'
+import config from '#config'
 import labels from '#root/default-labels.mjs'
 
+const { github_access_token } = config
 const argv = yargs(hideBin(process.argv)).argv
 const logger = debug('create-github-labels')
 debug.enable('create-github-labels')

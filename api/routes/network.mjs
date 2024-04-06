@@ -3,8 +3,9 @@ import cron from 'node-cron'
 
 import { request } from '#common'
 import cache from '#api/cache.mjs'
-import { nanodbAPI } from '#config'
+import config from '#config'
 
+const { nanodbAPI } = config
 const router = express.Router()
 
 const load_network = async () => {

@@ -1,7 +1,7 @@
 import debug from 'debug'
 import dayjs from 'dayjs'
 
-import * as config from '#config'
+import config from '#config'
 import { rpc, getNetworkInfo, wait, median, isMain, getData } from '#common'
 import db from '#db'
 

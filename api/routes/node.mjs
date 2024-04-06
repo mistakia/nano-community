@@ -1,8 +1,9 @@
 import express from 'express'
 
 import { rpc } from '#common'
-import { rpcAddresses } from '#config'
+import config from '#config'
 
+const { rpcAddresses } = config
 const router = express.Router()
 
 router.get('/telemetry', async (req, res) => {

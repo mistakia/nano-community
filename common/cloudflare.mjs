@@ -1,11 +1,11 @@
 import queryString from 'query-string'
 
-import { cloudflare } from '#config'
+import config from '#config'
 
 import request from './request.mjs'
 
 export const getRecords = async ({ name, per_page = 300 }) => {
-  let url = `https://api.cloudflare.com/client/v4/zones/${cloudflare.zone_id}/dns_records`
+  let url = `https://api.cloudflare.com/client/v4/zones/${config.cloudflare.zone_id}/dns_records`
 
   const qs = queryString.stringify(
     {
@@ -25,8 +25,8 @@ export const getRecords = async ({ name, per_page = 300 }) => {
     method: 'GET',
     url,
     headers: {
-      'X-Auth-Email': cloudflare.user_email,
-      Authorization: `Bearer ${cloudflare.token}`,
+      'X-Auth-Email': config.cloudflare.user_email,
+      Authorization: `Bearer ${config.cloudflare.token}`,
       'Content-Type': 'application/json'
     }
   }
@@ -43,10 +43,10 @@ export const createRecord = async ({
 }) => {
   const options = {
     method: 'POST',
-    url: `https://api.cloudflare.com/client/v4/zones/${cloudflare.zone_id}/dns_records`,
+    url: `https://api.cloudflare.com/client/v4/zones/${config.cloudflare.zone_id}/dns_records`,
     headers: {
-      'X-Auth-Email': cloudflare.user_email,
-      Authorization: `Bearer ${cloudflare.token}`,
+      'X-Auth-Email': config.cloudflare.user_email,
+      Authorization: `Bearer ${config.cloudflare.token}`,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
@@ -64,10 +64,10 @@ export const createRecord = async ({
 export const deleteRecord = async ({ id }) => {
   const options = {
     method: 'DELETE',
-    url: `https://api.cloudflare.com/client/v4/zones/${cloudflare.zone_id}/dns_records/${id}`,
+    url: `https://api.cloudflare.com/client/v4/zones/${config.cloudflare.zone_id}/dns_records/${id}`,
     headers: {
-      'X-Auth-Email': cloudflare.user_email,
-      Authorization: `Bearer ${cloudflare.token}`,
+      'X-Auth-Email': config.cloudflare.user_email,
+      Authorization: `Bearer ${config.cloudflare.token}`,
       'Content-Type': 'application/json'
     }
   }
@@ -85,10 +85,10 @@ export const updateRecord = async ({
 }) => {
   const options = {
     method: 'PUT',
-    url: `https://api.cloudflare.com/client/v4/zones/${cloudflare.zone_id}/dns_records/${id}`,
+    url: `https://api.cloudflare.com/client/v4/zones/${config.cloudflare.zone_id}/dns_records/${id}`,
     headers: {
-      'X-Auth-Email': cloudflare.user_email,
-      Authorization: `Bearer ${cloudflare.token}`,
+      'X-Auth-Email': config.cloudflare.user_email,
+      Authorization: `Bearer ${config.cloudflare.token}`,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({

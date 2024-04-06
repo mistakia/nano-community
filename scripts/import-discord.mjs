@@ -4,9 +4,10 @@ import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 
 import db from '#db'
-import { discordAuthorization } from '#config'
+import config from '#config'
 import { request, wait, isMain } from '#common'
 
+const { discordAuthorization } = config
 const argv = yargs(hideBin(process.argv)).argv
 const logger = debug('import-discord')
 debug.enable('import-discord')

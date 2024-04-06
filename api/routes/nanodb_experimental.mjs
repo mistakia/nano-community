@@ -1,8 +1,9 @@
 import express from 'express'
 
 import { request } from '#common'
-import { nanodbAPI_experimental } from '#config'
+import config from '#config'
 
+const { nanodbAPI_experimental } = config
 const router = express.Router()
 
 router.get(/^(.*)$/, async (req, res) => {

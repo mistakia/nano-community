@@ -5,9 +5,10 @@ import { hideBin } from 'yargs/helpers'
 import { graphql } from '@octokit/graphql'
 
 import { isMain } from '#common'
-import { github_access_token } from '#config'
+import config from '#config'
 import db from '#db'
 
+const { github_access_token } = config
 const argv = yargs(hideBin(process.argv)).argv
 const log = debug('import-github-discussions')
 debug.enable('import-github-discussions')

@@ -24,4 +24,4 @@ build/favicon.ico
 !build/*.html
 !build/sitemap.xml
 !build/**/*.html
-config.mjs
+config.production.js
