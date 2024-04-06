@@ -2,7 +2,7 @@ import debug from 'debug'
 import dayjs from 'dayjs'
 
 import { rpc, groupBy, isMain } from '#common'
-import * as config from '#config'
+import config from '#config'
 import db from '#db'
 import { REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT } from '#constants'
 

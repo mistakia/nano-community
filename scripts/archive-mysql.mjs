@@ -10,7 +10,7 @@ import { hideBin } from 'yargs/helpers'
 
 import db from '#db'
 import { isMain } from '#common'
-import * as config from '#config'
+import config from '#config'
 
 const argv = yargs(hideBin(process.argv)).argv
 const storage_mysql = Knex(config.storage_mysql)

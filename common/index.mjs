@@ -2,7 +2,7 @@ import { fileURLToPath } from 'url'
 import fs from 'fs-extra'
 import path, { dirname } from 'path'
 
-import * as config from '#config'
+import config from '#config'
 import { BURN_ACCOUNT } from '#constants'
 import request from './request.mjs'
 

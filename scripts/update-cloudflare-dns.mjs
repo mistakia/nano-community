@@ -1,8 +1,9 @@
 import debug from 'debug'
 
-import { rpcAddresses } from '#config'
+import config from '#config'
 import { rpc, cloudflare, isMain, getData } from '#common'
 
+const { rpcAddresses } = config
 const log = debug('update-cloudflare-dns')
 debug.enable('update-cloudflare-dns')
 

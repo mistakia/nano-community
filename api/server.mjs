@@ -19,7 +19,7 @@ import cors from 'cors'
 import favicon from 'express-favicon'
 import robots from 'express-robots-txt'
 
-import * as config from '#config'
+import config from '#config'
 import * as routes from '#api/routes/index.mjs'
 import cache from '#api/cache.mjs'
 import db from '#db'

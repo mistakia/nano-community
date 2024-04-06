@@ -1,5 +1,5 @@
 import Knex from 'knex'
-import * as config from '#config'
+import config from '#config'
 
 const mysql = Knex(config.mysql)
 

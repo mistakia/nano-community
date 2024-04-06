@@ -1,8 +1,9 @@
 import debug from 'debug'
 
 import server from '#api/server.mjs'
-import { port } from '#config'
+import config from '#config'
 
+const { port } = config
 const logger = debug('server')
 const IS_PROD = process.env.NODE_ENV === 'production'
 

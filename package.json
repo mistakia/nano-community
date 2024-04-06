@@ -4,7 +4,7 @@
     "#root/*": "./*",
     "#common": "./common/index.mjs",
     "#constants": "./constants.mjs",
-    "#config": "./config.mjs",
+    "#config": "./config.js",
     "#db": "./db/index.mjs"
   },
   "scripts": {
