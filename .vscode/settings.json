@@ -1,6 +1,8 @@
 {
   "search.exclude": {
     "**/build": true,
-    "**/.yarn": true
+    "**/.yarn": true,
+    "data/forum_posts.csv": true,
+    "data/forum_posts.json": true
   }
 }
