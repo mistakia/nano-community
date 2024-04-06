@@ -92,8 +92,9 @@ router.get('/:address', async (req, res) => {
       .where({ account: address })
       .orderBy('interval', 'asc')
 
-    const repMeta = await db('representatives_meta_index')
-      .where({ account: address })
+    const repMeta = await db('representatives_meta_index').where({
+      account: address
+    })
 
     const network = await db('representatives_network')
       .where({ account: address })
