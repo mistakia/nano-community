@@ -246,6 +246,23 @@ CREATE TABLE `representatives_meta_index` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `representatives_meta_index_changelog`
+--
+
+DROP TABLE IF EXISTS `representatives_meta_index_changelog`;
+
+CREATE TABLE `representatives_meta_index_changelog` (
+  `account` char(65) NOT NULL,
+  `column` varchar(65) NOT NULL,
+  `previous_value` text CHARACTER SET utf8mb4 DEFAULT '',
+  `new_value` text CHARACTER SET utf8mb4 DEFAULT '',
+  `timestamp` int(11) NOT NULL,
+  UNIQUE `change` (`account`, `column`, `previous_value`(60), `new_value`(60))
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `representatives_telemetry`
 --
 
