@@ -172,7 +172,7 @@ CREATE TABLE `representatives_meta` (
   `ram` int(3) DEFAULT NULL,
   `ram_description` varchar(255) DEFAULT NULL,
 
-  `description` text CHARACTER SET utf8mb4 DEFAULT NULL,
+  `description` varchar(1000) CHARACTER SET utf8mb4 DEFAULT NULL,
   `dedicated` tinyint(1) DEFAULT NULL,
   `type` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `provider` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
@@ -181,7 +181,7 @@ CREATE TABLE `representatives_meta` (
   `mynano_ninja` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `ninja_ram_description` varchar(255) DEFAULT NULL,
   `ninja_cpu_description` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  `ninja_description` text CHARACTER SET utf8mb4 DEFAULT NULL,
+  `ninja_description` varchar(1000) CHARACTER SET utf8mb4 DEFAULT NULL,
   `ninja_type` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `ninja_created_at` int(11) DEFAULT NULL,
   `ninja_provider` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
@@ -216,7 +216,7 @@ CREATE TABLE `representatives_meta_index` (
   `ram` int(3) DEFAULT NULL,
   `ram_description` varchar(255) DEFAULT NULL,
 
-  `description` text CHARACTER SET utf8mb4 DEFAULT NULL,
+  `description` varchar(1000) CHARACTER SET utf8mb4 DEFAULT NULL,
   `dedicated` tinyint(1) DEFAULT NULL,
   `type` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT 'server type description: Home, Dedicated, VPS, etc',
   `provider` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
@@ -225,7 +225,7 @@ CREATE TABLE `representatives_meta_index` (
   `mynano_ninja` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `ninja_ram_description` varchar(255) DEFAULT NULL,
   `ninja_cpu_description` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  `ninja_description` text CHARACTER SET utf8mb4 DEFAULT NULL,
+  `ninja_description` varchar(1000) CHARACTER SET utf8mb4 DEFAULT NULL,
   `ninja_type` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `ninja_created_at` int(11) DEFAULT NULL,
   `ninja_provider` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
@@ -254,8 +254,8 @@ DROP TABLE IF EXISTS `representatives_meta_index_changelog`;
 CREATE TABLE `representatives_meta_index_changelog` (
   `account` char(65) NOT NULL,
   `column` varchar(65) NOT NULL,
-  `previous_value` text CHARACTER SET utf8mb4 DEFAULT '',
-  `new_value` text CHARACTER SET utf8mb4 DEFAULT '',
+  `previous_value` varchar(1000) CHARACTER SET utf8mb4 DEFAULT '',
+  `new_value` varchar(1000) CHARACTER SET utf8mb4 DEFAULT '',
   `timestamp` int(11) NOT NULL,
   UNIQUE `change` (`account`, `column`, `previous_value`(60), `new_value`(60))
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
