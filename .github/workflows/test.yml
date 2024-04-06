@@ -33,6 +33,10 @@ jobs:
         with:
           node-version: current
 
+      - name: Clear Yarn Cache
+        run: |
+          yarn cache clean
+
       - name: yarn install
         run: |
           yarn install
