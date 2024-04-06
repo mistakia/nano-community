@@ -511,10 +511,10 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(32) NOT NULL,
-  `pub` varchar(64) NOT NULL,
+  `public_key` varchar(64) NOT NULL,
   `last_visit` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `pub` (`pub`)
+  UNIQUE KEY `public_key` (`public_key`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------

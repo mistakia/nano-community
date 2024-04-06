@@ -2,25 +2,24 @@ import express from 'express'
 import nano from 'nanocurrency'
 import { tools } from 'nanocurrency-web'
 
-import { USERNAME_RE } from '#constants'
-
 const router = express.Router()
+const USERNAME_RE = /^[A-Za-z][a-zA-Z0-9_]+$/
 
 router.post('/register', async (req, res) => {
   const { logger, db } = req.app.locals
   try {
-    const required = ['pub', 'address', 'signature', 'username']
+    const required = ['public_key', 'address', 'signature', 'username']
     for (const prop of required) {
       if (!req.body[prop]) {
         return res.status(400).send({ error: `missing ${prop} param` })
       }
     }
 
-    const { pub, signature, username } = req.body
+    const { public_key, signature, username } = req.body
     let { address } = req.body
 
-    if (!nano.checkKey(pub)) {
-      return res.status(401).send({ error: 'invalid pub param' })
+    if (!nano.checkKey(public_key)) {
+      return res.status(401).send({ error: 'invalid public_key param' })
     }
 
     if (!nano.checkAddress(address)) {
@@ -32,14 +31,14 @@ router.post('/register', async (req, res) => {
     }
 
     const publicKey = tools.addressToPublicKey(address)
-    const validSignature = tools.verify(publicKey, signature, pub)
-    if (!validSignature) {
+    const valid_signature = tools.verify(publicKey, signature, public_key)
+    if (!valid_signature) {
       return res.status(401).send({ error: 'invalid signature' })
     }
 
     const usernameExists = await db('users')
       .where({ username })
-      .whereNot({ pub })
+      .whereNot({ public_key })
     if (usernameExists.length) {
       return res.status(401).send({ error: 'username exists' })
     }
@@ -54,7 +53,7 @@ router.post('/register', async (req, res) => {
     if (!accountId) {
       const result = await db('users')
         .insert({
-          pub,
+          public_key,
           username,
           last_visit: Math.round(Date.now() / 1000)
         })
