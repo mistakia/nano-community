@@ -15348,9 +15348,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-snap@mistakia/react-snap#473f74609ec80a4ea6d66a07a9330bda644b0310":
+"react-snap@mistakia/react-snap#359df6598700375a79b98746402b819d433366fc":
   version: 1.23.0
-  resolution: "react-snap@https://github.com/mistakia/react-snap.git#commit=473f74609ec80a4ea6d66a07a9330bda644b0310"
+  resolution: "react-snap@https://github.com/mistakia/react-snap.git#commit=359df6598700375a79b98746402b819d433366fc"
   dependencies:
     clean-css: 4.2.1
     express: 4.17.1
@@ -15365,7 +15365,7 @@ __metadata:
     sourcemapped-stacktrace-node: 2.1.8
   bin:
     react-snap: ./run.js
-  checksum: bc26f8625ee92ededdf3f35e9b42ad69545eacce41dd5ca5ac279241caa06695893d03417feccf1bdfc6c6b79d14c0652ba149cb5d490408d17bdf2e3f07ee95
+  checksum: cb586a3969482c5ee7bcdaf3a044c6d5a94b60b1aa114fe51b3d84846f47922a3f124a3f0fd435de8e6c71becffb208dbf96dc8c0d732e2a0b1c35e686054fcb
   languageName: node
   linkType: hard
 
@@ -16096,7 +16096,7 @@ __metadata:
     react-redux: ^7.2.9
     react-router: ^5.3.4
     react-router-dom: ^5.3.4
-    react-snap: "mistakia/react-snap#473f74609ec80a4ea6d66a07a9330bda644b0310"
+    react-snap: "mistakia/react-snap#359df6598700375a79b98746402b819d433366fc"
     redux-immutable: ^4.0.0
     redux-saga: ^1.2.3
     serve-static: ^1.15.0
