@@ -44,6 +44,9 @@ export default class HomePage extends React.Component {
           <RepresentativeAlerts />
           <Posts title='Trending' id='trending' age={72} />
         </div>
+        <div className='home__footer'>
+          <Menu />
+        </div>
       </div>
     )
   }
