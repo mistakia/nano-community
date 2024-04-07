@@ -174,7 +174,7 @@
     "prettier": "2.8.8",
     "react-immutable-proptypes": "^2.2.0",
     "react-router-dom": "^5.3.4",
-    "react-snap": "mistakia/react-snap#473f74609ec80a4ea6d66a07a9330bda644b0310",
+    "react-snap": "mistakia/react-snap#359df6598700375a79b98746402b819d433366fc",
     "redux-immutable": "^4.0.0",
     "style-loader": "^2.0.0",
     "stylus": "^0.54.8",
