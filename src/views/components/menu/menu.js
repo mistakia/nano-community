@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import SwipeableDrawer from '@mui/material/SwipeableDrawer'
@@ -115,74 +115,66 @@ function MenuSections() {
   )
 }
 
-export default class Menu extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      open: false
-    }
-  }
+export default function Menu({ hide, hideSearch, hide_speed_dial }) {
+  const [open, setOpen] = useState(false)
 
-  handleOpen = () => this.setState({ open: true })
-  handleClose = () => this.setState({ open: false })
-  handleClick = () => this.setState({ open: !this.state.open })
-  handleHomeClick = () => history.push('/')
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
+  const handleClick = () => setOpen(!open)
+  const handleHomeClick = () => history.push('/')
 
-  render() {
-    const { hide, hideSearch, hide_speed_dial } = this.props
-    const isHome = history.location.pathname === '/'
-    const isMobile = window.innerWidth < 750
+  const isHome = history.location.pathname === '/'
+  const isMobile = window.innerWidth < 750
 
-    return (
-      <div className='menu__container'>
-        <SwipeableDrawer
-          open={this.state.open}
-          onOpen={this.handleOpen}
-          onClose={this.handleClose}
-          disableBackdropTransition={!iOS}
-          disableDiscovery={iOS}
-          anchor='top'>
-          <MenuSections />
-        </SwipeableDrawer>
-        {!hide_speed_dial && (
-          <SpeedDial
-            className='menu__dial'
-            ariaLabel='menu dial'
-            transitionDuration={0}
-            direction={isMobile ? 'up' : 'down'}
-            onClick={this.handleClick}
-            open={this.state.open}
-            icon={
-              <img
-                alt='Nano is feeless, instant, and green / energy efficient digital money (cryptocurrency)'
-                src='/resources/symbol-white.svg'
-              />
-            }
-            openIcon={<CloseIcon />}>
-            {!isHome && (
-              <SpeedDialAction
-                icon={<HomeIcon />}
-                tooltipTitle='Home'
-                tooltipPlacement={isMobile ? 'left' : 'right'}
-                onClick={this.handleHomeClick}
-              />
-            )}
-          </SpeedDial>
-        )}
-        <div className='menu__body'>
-          {isHome ? (
-            <div className='menu__text'>NANO</div>
-          ) : (
-            <NavLink to='/' className='menu__text'>
-              NANO
-            </NavLink>
+  return (
+    <div className='menu__container'>
+      <SwipeableDrawer
+        open={open}
+        onOpen={handleOpen}
+        onClose={handleClose}
+        disableBackdropTransition={!iOS}
+        disableDiscovery={iOS}
+        anchor='top'>
+        <MenuSections />
+      </SwipeableDrawer>
+      {!hide_speed_dial && (
+        <SpeedDial
+          className='menu__dial'
+          ariaLabel='menu dial'
+          transitionDuration={0}
+          direction={isMobile ? 'up' : 'down'}
+          onClick={handleClick}
+          open={open}
+          icon={
+            <img
+              alt='Nano is feeless, instant, and green / energy efficient digital money (cryptocurrency)'
+              src='/resources/symbol-white.svg'
+            />
+          }
+          openIcon={<CloseIcon />}>
+          {!isHome && (
+            <SpeedDialAction
+              icon={<HomeIcon />}
+              tooltipTitle='Home'
+              tooltipPlacement={isMobile ? 'left' : 'right'}
+              onClick={handleHomeClick}
+            />
           )}
-          {!hideSearch && <SearchBar />}
-          {!hide && <MenuSections />}
-        </div>
+        </SpeedDial>
+      )}
+      <div className='menu__body'>
+        {isHome ? (
+          <div className='menu__text'>NANO</div>
+        ) : (
+          <NavLink to='/' className='menu__text'>
+            NANO
+          </NavLink>
+        )}
+        {!hideSearch && <SearchBar />}
+        {!hide && <MenuSections />}
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 Menu.propTypes = {
