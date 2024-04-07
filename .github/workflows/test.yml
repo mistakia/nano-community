@@ -33,13 +33,17 @@ jobs:
         with:
           node-version: current
 
+      # TODO: Fix checksum issue and remove env variable
       - name: yarn install
         run: |
           YARN_CHECKSUM_BEHAVIOR=update yarn install
 
+      - name: yarn lint
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: yarn lint
+
       - name: yarn test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          yarn lint
-          yarn test
+        run: yarn test
