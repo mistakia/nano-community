@@ -526,10 +526,10 @@ CREATE TABLE `users` (
 DROP TABLE IF EXISTS `user_addresses`;
 
 CREATE TABLE `user_addresses` (
-  `account_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `address` char(65) NOT NULL,
   `signature` varchar(255) NOT NULL,
-  KEY (`account_id`),
+  KEY (`user_id`),
   UNIQUE KEY `address` (`address`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 

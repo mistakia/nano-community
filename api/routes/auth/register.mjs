@@ -5,9 +5,10 @@ import { tools } from 'nanocurrency-web'
 const router = express.Router()
 const USERNAME_RE = /^[A-Za-z][a-zA-Z0-9_]+$/
 
-router.post('/register', async (req, res) => {
+router.post('/?', async (req, res) => {
   const { logger, db } = req.app.locals
   try {
+    // public_key is a linked keypair for the given address
     const required = ['public_key', 'address', 'signature', 'username']
     for (const prop of required) {
       if (!req.body[prop]) {
@@ -48,9 +49,9 @@ router.post('/register', async (req, res) => {
     address = address.replace('xrb_', 'nano_')
 
     const exists = await db('user_addresses').where({ address })
-    let accountId = exists.length ? exists[0].account_id : null
+    let user_id = exists.length ? exists[0].user_id : null
 
-    if (!accountId) {
+    if (!user_id) {
       const result = await db('users')
         .insert({
           public_key,
@@ -59,16 +60,16 @@ router.post('/register', async (req, res) => {
         })
         .onConflict()
         .merge()
-      accountId = result[0]
+      user_id = result[0]
     } else {
       await db('users')
         .update({ last_visit: Math.round(Date.now() / 1000), username })
-        .where({ id: accountId })
+        .where({ id: user_id })
     }
 
     await db('user_addresses')
       .insert({
-        account_id: accountId,
+        user_id,
         address,
         signature
       })
@@ -76,14 +77,14 @@ router.post('/register', async (req, res) => {
       .merge()
 
     return res.send({
-      accountId,
+      user_id,
       address,
       username,
       signature
     })
   } catch (error) {
     logger(error)
-    res.status(500).send({ error: error.toString() })
+    res.status(500).send('Internal server error')
   }
 })
 

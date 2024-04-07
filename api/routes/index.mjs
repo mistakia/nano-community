@@ -1,4 +1,4 @@
-export { default as auth } from './auth.mjs'
+export { default as auth } from './auth/index.mjs'
 export { default as accounts } from './accounts/index.mjs'
 export { default as blocks } from './blocks.mjs'
 export { default as posts } from './posts.mjs'
