@@ -4107,6 +4107,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@trashman/ed25519-blake2b@npm:^0.0.6":
+  version: 0.0.6
+  resolution: "@trashman/ed25519-blake2b@npm:0.0.6"
+  dependencies:
+    napi-macros: 2.0.0
+    node-gyp: latest
+    node-gyp-build: 4.4.0
+  checksum: 8ad5da41d1581f3502127727aa8f1c94259380a52de1b974567f0df785186f9b7355f2cb9ad45affc072e361aa8ce090d2c522e5383d4bb6fe4de7d9eacd603a
+  languageName: node
+  linkType: hard
+
 "@types/body-parser@npm:*":
   version: 1.19.5
   resolution: "@types/body-parser@npm:1.19.5"
@@ -8683,12 +8694,32 @@ __metadata:
   languageName: node
   linkType: hard
 
+"express-rate-limit@npm:7":
+  version: 7.2.0
+  resolution: "express-rate-limit@npm:7.2.0"
+  peerDependencies:
+    express: 4 || 5 || ^5.0.0-beta.1
+  checksum: 6adc3e06d430e91cf8ef8da23107466ffd9193b5680b03bc12702894cab0adcbb980634602b839b3a1444620f2379707098af3a4dcc38c909e89214abaf6c1bf
+  languageName: node
+  linkType: hard
+
 "express-robots-txt@npm:^1.0.0":
   version: 1.0.0
   resolution: "express-robots-txt@npm:1.0.0"
   peerDependencies:
     express: ^4.12.1
   checksum: 8ee6e2a076bb7c06e59c01201ce3a789e31b1d1e938792d835538bf89337f3957baaab62ed5d045bb22724edebaaabcd2cf8974afb5fe3d056555a79da83846b
+  languageName: node
+  linkType: hard
+
+"express-slow-down@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "express-slow-down@npm:2.0.1"
+  dependencies:
+    express-rate-limit: 7
+  peerDependencies:
+    express: ">= 4"
+  checksum: bb59970b6321ef45affb5d1ba0331d065f8430ccae7e36fd67d3a8696634fe20a878420cd5659e210255cea0b6b1b502eca02f8d7a195695fa00c36cd258799e
   languageName: node
   linkType: hard
 
@@ -12045,6 +12076,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"json-stringify-safe@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "json-stringify-safe@npm:5.0.1"
+  checksum: 48ec0adad5280b8a96bb93f4563aa1667fd7a36334f79149abd42446d0989f2ddc58274b479f4819f1f00617957e6344c886c55d05a4e15ebb4ab931e4a6a8ee
+  languageName: node
+  linkType: hard
+
 "json-text-sequence@npm:~0.3.0":
   version: 0.3.0
   resolution: "json-text-sequence@npm:0.3.0"
@@ -13601,6 +13639,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"napi-macros@npm:2.0.0":
+  version: 2.0.0
+  resolution: "napi-macros@npm:2.0.0"
+  checksum: 30384819386977c1f82034757014163fa60ab3c5a538094f778d38788bebb52534966279956f796a92ea771c7f8ae072b975df65de910d051ffbdc927f62320c
+  languageName: node
+  linkType: hard
+
 "native-abort-controller@npm:^1.0.3":
   version: 1.0.4
   resolution: "native-abort-controller@npm:1.0.4"
@@ -13682,6 +13727,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nock@npm:^13.5.4":
+  version: 13.5.4
+  resolution: "nock@npm:13.5.4"
+  dependencies:
+    debug: ^4.1.0
+    json-stringify-safe: ^5.0.1
+    propagate: ^2.0.0
+  checksum: d31f924e34c87ae985edfb7b5a56e8a4dcfc3a072334ceb6d686326581f93090b3e23492663a64ce61b8df4f365b113231d926bc300bcfe9e5eb309c3e4b8628
+  languageName: node
+  linkType: hard
+
 "node-cache@npm:^5.1.2":
   version: 5.1.2
   resolution: "node-cache@npm:5.1.2"
@@ -13756,6 +13812,17 @@ __metadata:
   version: 1.3.1
   resolution: "node-forge@npm:1.3.1"
   checksum: 08fb072d3d670599c89a1704b3e9c649ff1b998256737f0e06fbd1a5bf41cae4457ccaee32d95052d80bbafd9ffe01284e078c8071f0267dc9744e51c5ed42a9
+  languageName: node
+  linkType: hard
+
+"node-gyp-build@npm:4.4.0":
+  version: 4.4.0
+  resolution: "node-gyp-build@npm:4.4.0"
+  bin:
+    node-gyp-build: bin.js
+    node-gyp-build-optional: optional.js
+    node-gyp-build-test: build-test.js
+  checksum: 972a059f960253d254e0b23ce10f54c8982236fc0edcab85166d0b7f87443b2ce98391c877cfb2f6eeafcf03c538c5f4dd3e0bfff03828eb48634f58f4c64343
   languageName: node
   linkType: hard
 
@@ -14936,6 +15003,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"propagate@npm:^2.0.0":
+  version: 2.0.1
+  resolution: "propagate@npm:2.0.1"
+  checksum: c4febaee2be0979e82fb6b3727878fd122a98d64a7fa3c9d09b0576751b88514a9e9275b1b92e76b364d488f508e223bd7e1dcdc616be4cdda876072fbc2a96c
+  languageName: node
+  linkType: hard
+
 "proto-list@npm:~1.2.1":
   version: 1.2.4
   resolution: "proto-list@npm:1.2.4"
@@ -16022,6 +16096,7 @@ __metadata:
     "@mui/styles": ^5.15.11
     "@mui/x-data-grid": ^6.19.5
     "@octokit/graphql": ^4.8.0
+    "@trashman/ed25519-blake2b": ^0.0.6
     babel-loader: 9.1.3
     babel-plugin-module-resolver: ^5.0.0
     bignumber.js: ^9.1.1
@@ -16058,6 +16133,7 @@ __metadata:
     express-favicon: ^2.0.4
     express-jwt: ^8.4.1
     express-robots-txt: ^1.0.0
+    express-slow-down: ^2.0.1
     fetch-cheerio-object: ^1.3.0
     file-loader: ^6.2.0
     front-matter: ^4.0.2
@@ -16082,6 +16158,7 @@ __metadata:
     nanocurrency: ^2.5.0
     nanocurrency-web: ^1.4.3
     nib: ^1.2.0
+    nock: ^13.5.4
     node-cache: ^5.1.2
     node-cron: ^3.0.2
     node-fetch: 2.6.1

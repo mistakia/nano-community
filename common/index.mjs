@@ -10,6 +10,8 @@ export * as cloudflare from './cloudflare.mjs'
 export { request }
 export { default as convertToCSV } from './convert-to-csv.mjs'
 export { default as read_csv } from './read-csv.mjs'
+export { default as verify_nano_community_message_signature } from './verify-nano-community-message-signature.mjs'
+export { default as sign_nano_community_message } from './sign-nano-community-message.mjs'
 
 const POST = (data) => ({
   method: 'POST',
@@ -83,6 +85,9 @@ const rpcRequest = async (
   { url, trusted = false, timeout = 20000 } = {}
 ) => {
   if (url) {
+    console.log({
+      url
+    })
     const options = { url, timeout, ...POST(data) }
     return request(options)
   }
