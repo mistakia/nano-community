@@ -86,6 +86,50 @@ CREATE TABLE `accounts_tags` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `github_discussions`
+--
+
+DROP TABLE IF EXISTS `github_discussions`;
+
+CREATE TABLE `github_discussions` (
+  `id` varchar(100) NOT NULL,
+  `author_id` varchar(100) NOT NULL,
+  `author_name` varchar(100) CHARACTER SET utf8 NOT NULL,
+  `author_avatar` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `ref` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  `repo` varchar(255)  NOT NULL,
+  `body` text CHARACTER SET utf8mb4 DEFAULT NULL,
+  `upvotes` int(11) NOT NULL,
+  `category_name` varchar(100) NOT NULL,
+  `closed` tinyint(1) NOT NULL,
+  `state_reason` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `category_id` varchar(100) NOT NULL,
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) DEFAULT NULL,
+  `closed_at` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `github_discussion_labels`
+--
+
+DROP TABLE IF EXISTS `github_discussion_labels`;
+
+CREATE TABLE `github_discussion_labels` (
+  `discussion_id` varchar(100) NOT NULL,
+  `label_id` varchar(100) CHARACTER SET utf8 NOT NULL,
+  `label_name` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `label_color` varchar(255) CHARACTER SET utf8 NOT NULL,
+  PRIMARY KEY (`discussion_id`, `label_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `github_events`
 --
 
@@ -108,6 +152,68 @@ CREATE TABLE `github_events` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- --------------------------------------------------------
+--
+-- Table structure for table `github_issues`
+--
+
+DROP TABLE IF EXISTS `github_issues`;
+
+CREATE TABLE `github_issues` (
+  `id` varchar(15) NOT NULL,
+  `state` varchar(10) NOT NULL,
+  `actor_id` varchar(15) NOT NULL,
+  `actor_name` varchar(100) CHARACTER SET utf8 NOT NULL,
+  `actor_avatar` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `assignee_id` varchar(15) DEFAULT NULL,
+  `assignee_name` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
+  `assignee_avatar` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `ref` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  `repo` varchar(255)  NOT NULL,
+  `body` text CHARACTER SET utf8mb4 DEFAULT NULL,
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `github_issue_labels`
+--
+
+DROP TABLE IF EXISTS `github_issue_labels`;
+
+CREATE TABLE `github_issue_labels` (
+  `issue_id` varchar(15) NOT NULL,
+  `label_id` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `label_name` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `label_color` varchar(255) CHARACTER SET utf8 NOT NULL,
+  PRIMARY KEY (`issue_id`, `label_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `nano_community_messages`
+--
+
+DROP TABLE IF EXISTS `nano_community_messages`;
+
+CREATE TABLE `nano_community_messages` (
+  `version` tinyint(1) NOT NULL,
+  `entry_id` varchar(64) DEFAULT NULL,
+  `chain_id` varchar(64) DEFAULT NULL,
+  `entry_clock` int(10) unsigned DEFAULT NULL,
+  `chain_clock` int(10) unsigned DEFAULT NULL,
+  `public_key` varchar(64) NOT NULL,
+  `operation` varchar(10) NOT NULL,
+  `content` text CHARACTER SET utf8mb4 DEFAULT NULL,
+  `tags` text CHARACTER SET utf8mb4 DEFAULT NULL,
+  `references` text CHARACTER SET utf8mb4 DEFAULT NULL,
+  `created_at` int(11) unsigned NOT NULL,
+  `signature` varchar(128) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -551,111 +657,4 @@ CREATE TABLE `voting_weight` (
   `peers_stake_total` decimal(39,0) NOT NULL,
   `timestamp` int(11) NOT NULL,
   UNIQUE KEY `timestamp` (`address`, `timestamp`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `github_discussions`
---
-
-DROP TABLE IF EXISTS `github_discussions`;
-
-CREATE TABLE `github_discussions` (
-  `id` varchar(100) NOT NULL,
-  `author_id` varchar(100) NOT NULL,
-  `author_name` varchar(100) CHARACTER SET utf8 NOT NULL,
-  `author_avatar` varchar(255) CHARACTER SET utf8 NOT NULL,
-  `ref` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `url` varchar(255) DEFAULT NULL,
-  `repo` varchar(255)  NOT NULL,
-  `body` text CHARACTER SET utf8mb4 DEFAULT NULL,
-  `upvotes` int(11) NOT NULL,
-  `category_name` varchar(100) NOT NULL,
-  `closed` tinyint(1) NOT NULL,
-  `state_reason` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  `category_id` varchar(100) NOT NULL,
-  `created_at` int(11) NOT NULL,
-  `updated_at` int(11) DEFAULT NULL,
-  `closed_at` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
---
--- Table structure for table `github_discussion_labels`
---
-
-DROP TABLE IF EXISTS `github_discussion_labels`;
-
-CREATE TABLE `github_discussion_labels` (
-  `discussion_id` varchar(100) NOT NULL,
-  `label_id` varchar(100) CHARACTER SET utf8 NOT NULL,
-  `label_name` varchar(255) CHARACTER SET utf8 NOT NULL,
-  `label_color` varchar(255) CHARACTER SET utf8 NOT NULL,
-  PRIMARY KEY (`discussion_id`, `label_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
---
--- Table structure for table `github_issues`
---
-
-DROP TABLE IF EXISTS `github_issues`;
-
-CREATE TABLE `github_issues` (
-  `id` varchar(15) NOT NULL,
-  `state` varchar(10) NOT NULL,
-  `actor_id` varchar(15) NOT NULL,
-  `actor_name` varchar(100) CHARACTER SET utf8 NOT NULL,
-  `actor_avatar` varchar(255) CHARACTER SET utf8 NOT NULL,
-  `assignee_id` varchar(15) DEFAULT NULL,
-  `assignee_name` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
-  `assignee_avatar` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  `ref` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `url` varchar(255) DEFAULT NULL,
-  `repo` varchar(255)  NOT NULL,
-  `body` text CHARACTER SET utf8mb4 DEFAULT NULL,
-  `created_at` int(11) NOT NULL,
-  `updated_at` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
---
--- Table structure for table `github_issue_labels`
---
-
-DROP TABLE IF EXISTS `github_issue_labels`;
-
-CREATE TABLE `github_issue_labels` (
-  `issue_id` varchar(15) NOT NULL,
-  `label_id` varchar(255) CHARACTER SET utf8 NOT NULL,
-  `label_name` varchar(255) CHARACTER SET utf8 NOT NULL,
-  `label_color` varchar(255) CHARACTER SET utf8 NOT NULL,
-  PRIMARY KEY (`issue_id`, `label_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
---
--- Table structure for table `nano_community_messages`
---
-
-DROP TABLE IF EXISTS `nano_community_messages`;
-
-CREATE TABLE `nano_community_messages` (
-  `version` tinyint(1) NOT NULL,
-  `entry_id` varchar(64) DEFAULT NULL,
-  `chain_id` varchar(64) DEFAULT NULL,
-  `entry_clock` int(10) unsigned DEFAULT NULL,
-  `chain_clock` int(10) unsigned DEFAULT NULL,
-  `public_key` varchar(64) NOT NULL,
-  `operation` varchar(10) NOT NULL,
-  `content` text CHARACTER SET utf8mb4 DEFAULT NULL,
-  `tags` text CHARACTER SET utf8mb4 DEFAULT NULL,
-  `references` text CHARACTER SET utf8mb4 DEFAULT NULL,
-  `created_at` int(11) unsigned NOT NULL,
-  `signature` varchar(128) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
