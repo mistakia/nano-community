@@ -1,12 +1,17 @@
 /* global describe before it */
 import chai from 'chai'
-import crypto from 'crypto'
 import chaiHTTP from 'chai-http'
 import ed25519 from '@trashman/ed25519-blake2b'
+import nock from 'nock'
 
 import server from '#api/server.mjs'
 import { sign_nano_community_message } from '#common'
 import { mochaGlobalSetup } from './global.mjs'
+import db from '#db'
+import {
+  REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT,
+  ACCOUNT_TRACKING_MINIMUM_BALANCE
+} from '#constants'
 
 process.env.NODE_ENV = 'test'
 // chai.should()
@@ -14,24 +19,36 @@ chai.use(chaiHTTP)
 const expect = chai.expect
 
 describe('API /auth/message', function () {
+  this.timeout(10000)
   before(mochaGlobalSetup)
 
   describe('POST /api/auth/message', () => {
-    it('should return 200 for valid message', async () => {
-      const private_key = crypto.randomBytes(32)
+    it('should save message to database for nano account above balance threshold', async () => {
+      const private_key = Buffer.from(
+        '0000000000000000000000000000000000000000000000000000000000000000',
+        'hex'
+      )
       const public_key = ed25519.publicKey(private_key)
 
       const message = {
         version: 1,
         public_key: public_key.toString('hex'),
         operation: 'SET',
-        content: 'SET_TEST_CONTENT',
+        content:
+          'should save message to database for nano account above balance threshold',
         tags: [],
         references: [],
         created_at: Math.floor(Date.now() / 1000)
       }
 
       const signature = sign_nano_community_message(message, private_key)
+
+      // Mocking the rpc request to simulate an account above the balance threshold
+      nock('http://nano:7076')
+        .post('/', (body) => body.action === 'account_info')
+        .reply(200, {
+          balance: String(ACCOUNT_TRACKING_MINIMUM_BALANCE)
+        })
 
       const response = await chai
         .request(server)
@@ -44,6 +61,80 @@ describe('API /auth/message', function () {
         })
 
       expect(response).to.have.status(200)
+
+      const saved_message = await db('nano_community_messages')
+        .where({
+          public_key: message.public_key,
+          created_at: message.created_at,
+          content: message.content
+        })
+        .first()
+
+      // eslint-disable-next-line no-unused-expressions
+      expect(saved_message).to.exist
+      expect(saved_message.content).to.equal(message.content)
+      expect(saved_message.operation).to.equal(message.operation)
+      expect(saved_message.version).to.equal(message.version)
+      expect(saved_message.public_key).to.equal(message.public_key)
+      expect(saved_message.signature).to.equal(signature.toString('hex'))
+      expect(saved_message.created_at).to.equal(message.created_at)
+    })
+
+    it('should save message to database for nano representative above weight threshold', async () => {
+      const private_key = Buffer.from(
+        '0000000000000000000000000000000000000000000000000000000000000000',
+        'hex'
+      )
+      const public_key = ed25519.publicKey(private_key)
+
+      const message = {
+        version: 1,
+        public_key: public_key.toString('hex'),
+        operation: 'SET',
+        content:
+          'should save message to database for nano representative above weight threshold',
+        tags: [],
+        references: [],
+        created_at: Math.floor(Date.now() / 1000)
+      }
+
+      const signature = sign_nano_community_message(message, private_key)
+
+      // Mocking the rpc request to simulate a representative above the weight threshold
+      nock('http://nano:7076')
+        .post('/', (body) => body.action === 'account_info')
+        .reply(200, {
+          weight: String(REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT)
+        })
+
+      const response = await chai
+        .request(server)
+        .post('/api/auth/message')
+        .send({
+          message: {
+            ...message,
+            signature: signature.toString('hex')
+          }
+        })
+
+      expect(response).to.have.status(200)
+
+      const saved_message = await db('nano_community_messages')
+        .where({
+          public_key: message.public_key,
+          created_at: message.created_at,
+          content: message.content
+        })
+        .first()
+
+      // eslint-disable-next-line no-unused-expressions
+      expect(saved_message).to.exist
+      expect(saved_message.content).to.equal(message.content)
+      expect(saved_message.operation).to.equal(message.operation)
+      expect(saved_message.version).to.equal(message.version)
+      expect(saved_message.public_key).to.equal(message.public_key)
+      expect(saved_message.signature).to.equal(signature.toString('hex'))
+      expect(saved_message.created_at).to.equal(message.created_at)
     })
   })
 
@@ -257,6 +348,108 @@ describe('API /auth/message', function () {
         })
       expect(response).to.have.status(400)
       expect(response.text).to.include('Invalid signature')
+    })
+
+    it('should not save message to database for nano account below balance threshold', async () => {
+      const private_key = Buffer.from(
+        '0000000000000000000000000000000000000000000000000000000000000000',
+        'hex'
+      )
+      const public_key = ed25519.publicKey(private_key)
+
+      const message = {
+        version: 1,
+        public_key: public_key.toString('hex'),
+        operation: 'SET',
+        content:
+          'should not save message to database for nano account below balance threshold',
+        tags: [],
+        references: [],
+        created_at: Math.floor(Date.now() / 1000)
+      }
+
+      const signature = sign_nano_community_message(message, private_key)
+
+      // Mocking the rpc request to simulate an account below the balance threshold
+      nock('http://nano:7076')
+        .post('/', (body) => body.action === 'account_info')
+        .reply(200, {
+          balance: String(ACCOUNT_TRACKING_MINIMUM_BALANCE - 1n)
+        })
+
+      const response = await chai
+        .request(server)
+        .post('/api/auth/message')
+        .send({
+          message: {
+            ...message,
+            signature: signature.toString('hex')
+          }
+        })
+
+      expect(response).to.have.status(200)
+
+      const saved_message = await db('nano_community_messages')
+        .where({
+          public_key: message.public_key,
+          created_at: message.created_at,
+          content: message.content
+        })
+        .first()
+
+      // eslint-disable-next-line no-unused-expressions
+      expect(saved_message).to.be.undefined
+    })
+
+    it('should not save message to database for nano representative below weight threshold', async () => {
+      const private_key = Buffer.from(
+        '0000000000000000000000000000000000000000000000000000000000000000',
+        'hex'
+      )
+      const public_key = ed25519.publicKey(private_key)
+
+      const message = {
+        version: 1,
+        public_key: public_key.toString('hex'),
+        operation: 'SET',
+        content:
+          'should not save message to database for nano representative below weight threshold',
+        tags: [],
+        references: [],
+        created_at: Math.floor(Date.now() / 1000)
+      }
+
+      const signature = sign_nano_community_message(message, private_key)
+
+      // Mocking the rpc request to simulate a representative below the weight threshold
+      nock('http://nano:7076')
+        .post('/', (body) => body.action === 'account_info')
+        .reply(200, {
+          weight: String(REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT - 1n)
+        })
+
+      const response = await chai
+        .request(server)
+        .post('/api/auth/message')
+        .send({
+          message: {
+            ...message,
+            signature: signature.toString('hex')
+          }
+        })
+
+      expect(response).to.have.status(200)
+
+      const saved_message = await db('nano_community_messages')
+        .where({
+          public_key: message.public_key,
+          created_at: message.created_at,
+          content: message.content
+        })
+        .first()
+
+      // eslint-disable-next-line no-unused-expressions
+      expect(saved_message).to.be.undefined
     })
   })
 })

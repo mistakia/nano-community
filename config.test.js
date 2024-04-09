@@ -23,11 +23,9 @@ module.exports = {
       host: '127.0.0.1',
       user: 'root',
       database: 'nano_test',
-      multipleStatements: true
-    },
-    pool: {
-      min: 2,
-      max: 20
+      multipleStatements: true,
+      decimalNumbers: true,
+      charset: 'utf8mb4'
     }
   },
 
@@ -37,7 +35,9 @@ module.exports = {
       host: '127.0.0.1',
       user: 'root',
       database: 'nano_storage_test',
-      multipleStatements: true
+      multipleStatements: true,
+      decimalNumbers: true,
+      charset: 'utf8mb4'
     },
     pool: {
       min: 2,
@@ -47,8 +47,8 @@ module.exports = {
 
   nanodbAPI: '',
   nanodbAPI_experimental: '',
-  trustedAddresses: [],
-  rpcAddresses: [],
+  trustedAddresses: ['http://nano:7076'],
+  rpcAddresses: ['http://nano:7076'],
 
   cloudflare: {
     zone_id: '',

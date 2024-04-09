@@ -637,3 +637,25 @@ CREATE TABLE `github_issue_labels` (
   `label_color` varchar(255) CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`issue_id`, `label_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `nano_community_messages`
+--
+
+DROP TABLE IF EXISTS `nano_community_messages`;
+
+CREATE TABLE `nano_community_messages` (
+  `version` tinyint(1) NOT NULL,
+  `entry_id` varchar(64) DEFAULT NULL,
+  `chain_id` varchar(64) DEFAULT NULL,
+  `entry_clock` int(10) unsigned DEFAULT NULL,
+  `chain_clock` int(10) unsigned DEFAULT NULL,
+  `public_key` varchar(64) NOT NULL,
+  `operation` varchar(10) NOT NULL,
+  `content` text CHARACTER SET utf8mb4 DEFAULT NULL,
+  `tags` text CHARACTER SET utf8mb4 DEFAULT NULL,
+  `references` text CHARACTER SET utf8mb4 DEFAULT NULL,
+  `created_at` int(11) unsigned NOT NULL,
+  `signature` varchar(128) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;

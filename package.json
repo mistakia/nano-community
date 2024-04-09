@@ -172,6 +172,7 @@
     "markdown-it-anchor": "^8.6.7",
     "mocha": "^10.4.0",
     "nib": "^1.2.0",
+    "nock": "^13.5.4",
     "percentile": "^1.6.0",
     "prettier": "2.8.8",
     "react-immutable-proptypes": "^2.2.0",
