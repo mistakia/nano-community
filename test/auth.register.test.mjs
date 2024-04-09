@@ -13,7 +13,7 @@ process.env.NODE_ENV = 'test'
 chai.use(chaiHTTP)
 const expect = chai.expect
 
-describe('API /auth', () => {
+describe('API /auth/register', () => {
   before(mochaGlobalSetup)
 
   describe('errors', () => {

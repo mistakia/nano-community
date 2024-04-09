@@ -1,4 +1,5 @@
 import debug from 'debug'
+import BigNumber from 'bignumber.js'
 // import yargs from 'yargs'
 // import { hideBin } from 'yargs/helpers'
 import diff from 'deep-diff'
@@ -134,8 +135,9 @@ const generate_nano_reps = async () => {
   for (const account in db_reps_index) {
     if (
       !results_index[account] &&
-      db_reps_index[account].weight >
+      new BigNumber(db_reps_index[account].weight).gte(
         REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT
+      )
     ) {
       const {
         weight,

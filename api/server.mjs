@@ -18,6 +18,7 @@ import serveStatic from 'serve-static'
 import cors from 'cors'
 import favicon from 'express-favicon'
 import robots from 'express-robots-txt'
+import { slowDown } from 'express-slow-down'
 
 import config from '#config'
 import * as routes from '#api/routes/index.mjs'
@@ -33,6 +34,12 @@ const logger = debug('api')
 const defaults = {}
 const options = extend(defaults, config)
 const IS_DEV = process.env.NODE_ENV === 'development'
+const speedLimiter = slowDown({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  delayAfter: 50, // allow 50 requests per 10 minutes, then...
+  delayMs: (hits, req) => (hits - req.slowDown.limit) * 500, // begin adding 500ms of delay per request above 50:
+  maxDelayMs: 20000 // maximum delay of 20 seconds
+})
 
 const api = express()
 
@@ -88,13 +95,14 @@ api.use('/api/nanodb-experimental', routes.nanodb_experimental)
 api.use('/api/posts', routes.posts)
 api.use('/api/network', routes.network)
 api.use('/api/github', routes.github)
-api.use('/api/auth', routes.auth)
+api.use('/api/auth', speedLimiter, routes.auth)
 api.use('/api/accounts', routes.accounts)
 api.use('/api/blocks', routes.blocks)
 api.use('/api/representatives', routes.representatives)
 api.use('/api/weight', routes.weight)
 
 const docsPath = path.join(__dirname, '..', 'docs')
+
 api.use('/api/docs', serveStatic(docsPath))
 api.get('/api/docs/*', (req, res) => {
   res.status(404).send('Not found')
