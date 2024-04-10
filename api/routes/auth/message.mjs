@@ -113,7 +113,7 @@ router.post('/?', async (req, res) => {
     }
 
     // public_key can be a linked keypair or an existing nano account
-    const linked_accounts = await db('accounts_keys')
+    const linked_accounts = await db('account_keys')
       .select('account')
       .where({ public_key })
     const nano_account = tools.publicKeyToAddress(public_key)
