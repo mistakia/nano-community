@@ -25,6 +25,8 @@ echarts.use([
 export default function LedgerChartAddresses({ data, isLoading }) {
   const option = {
     grid: {
+      left: '3%',
+      right: '4%',
       containLabel: true
     },
     legend: {
@@ -120,8 +122,13 @@ export default function LedgerChartAddresses({ data, isLoading }) {
         echarts={echarts}
         option={option}
         showLoading={isLoading}
-        loadingOption={{ maskColor: 'rgba(255, 255, 255, 0)', text: '' }}
-        style={{ width: '100%', height: '400px' }}
+        loadingOption={{
+          maskColor: 'rgba(255, 255, 255, 0)',
+          text: '',
+          spinnerRadius: 24,
+          lineWidth: 2
+        }}
+        style={{ width: '100%', height: '600px' }}
       />
       <div className='ledger__chart-sections'>
         <div className='ledger__chart-section'>

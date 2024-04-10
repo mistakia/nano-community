@@ -164,7 +164,12 @@ export default function LedgerChartAmounts({ data, isLoading }) {
         echarts={echarts}
         option={option}
         showLoading={isLoading}
-        loadingOption={{ maskColor: 'rgba(255, 255, 255, 0)', text: '' }}
+        loadingOption={{
+          maskColor: 'rgba(255, 255, 255, 0)',
+          text: '',
+          spinnerRadius: 24,
+          lineWidth: 2
+        }}
         style={{ width: '100%', height: '600px' }}
       />
       <div className='ledger__chart-sections'>
