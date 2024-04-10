@@ -113,16 +113,13 @@ router.post('/?', async (req, res) => {
     }
 
     // public_key can be a linked keypair or an existing nano account
-
-    const linked_accounts = await db('user_addresses')
-      .select('user_addresses.address')
-      .leftJoin('users', 'users.id', '=', 'user_addresses.user_id')
+    const linked_accounts = await db('accounts_keys')
+      .select('account')
       .where({ public_key })
-
     const nano_account = tools.publicKeyToAddress(public_key)
 
     const all_accounts = [
-      ...linked_accounts.map((row) => row.address),
+      ...linked_accounts.map((row) => row.account),
       nano_account
     ]
 
