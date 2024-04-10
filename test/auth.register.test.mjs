@@ -1,8 +1,7 @@
 /* global describe before it */
 import chai from 'chai'
-import crypto from 'crypto'
 import chaiHTTP from 'chai-http'
-import { tools, wallet } from 'nanocurrency-web'
+import ed25519 from '@trashman/ed25519-blake2b'
 
 import server from '#api/server.mjs'
 import knex from '#db'
@@ -22,25 +21,11 @@ describe('API /auth/register', () => {
         .request(server)
         .post('/api/auth/register')
         .send({
-          address: 'someaddress',
           signature: 'somesignature',
           username: 'test_username'
         }) // missing public_key
       expect(response).to.have.status(400)
       expect(response.body.error).to.include('missing public_key param')
-    })
-
-    it('should return 400 if address field is missing', async () => {
-      const response = await chai
-        .request(server)
-        .post('/api/auth/register')
-        .send({
-          public_key: 'somepub',
-          signature: 'somesignature',
-          username: 'test_username'
-        }) // missing address
-      expect(response).to.have.status(400)
-      expect(response.body.error).to.include('missing address param')
     })
 
     it('should return 400 if signature field is missing', async () => {
@@ -49,7 +34,6 @@ describe('API /auth/register', () => {
         .post('/api/auth/register')
         .send({
           public_key: 'somepub',
-          address: 'someaddress',
           username: 'test_username'
         }) // missing signature
       expect(response).to.have.status(400)
@@ -62,7 +46,6 @@ describe('API /auth/register', () => {
         .post('/api/auth/register')
         .send({
           public_key: 'somepub',
-          address: 'someaddress',
           signature: 'somesignature'
         }) // missing username
       expect(response).to.have.status(400)
@@ -70,37 +53,16 @@ describe('API /auth/register', () => {
     })
 
     it('should return 401 if pub param is invalid', async () => {
-      const w = wallet.generate()
-      const account = w.accounts[0]
-
       const response = await chai
         .request(server)
         .post('/api/auth/register')
         .send({
           public_key: 'invalidpub',
-          address: account.address,
           signature: 'somesignature',
           username: 'test_username'
         })
       expect(response).to.have.status(401)
       expect(response.body.error).to.equal('invalid public_key param')
-    })
-
-    it('should return 401 if address param is invalid', async () => {
-      const w = wallet.generate()
-      const account = w.accounts[0]
-
-      const response = await chai
-        .request(server)
-        .post('/api/auth/register')
-        .send({
-          public_key: account.publicKey,
-          address: 'invalidaddress',
-          signature: 'somesignature',
-          username: 'test_username'
-        })
-      expect(response).to.have.status(401)
-      expect(response.body.error).to.equal('invalid address param')
     })
 
     const invalid_usernames = [
@@ -116,15 +78,17 @@ describe('API /auth/register', () => {
 
     invalid_usernames.forEach((username) => {
       it(`should return 401 if username param is invalid: ${username}`, async () => {
-        const w = wallet.generate()
-        const account = w.accounts[0]
+        const private_key = Buffer.from(
+          '0000000000000000000000000000000000000000000000000000000000000000',
+          'hex'
+        )
+        const public_key = ed25519.publicKey(private_key)
 
         const response = await chai
           .request(server)
           .post('/api/auth/register')
           .send({
-            public_key: account.publicKey,
-            address: account.address,
+            public_key: public_key.toString('hex'),
             signature: 'somesignature',
             username
           })
@@ -134,18 +98,19 @@ describe('API /auth/register', () => {
     })
 
     it('should return 401 if signature is invalid', async () => {
-      const w = wallet.generate()
-      const account = w.accounts[0]
-
-      const signature = tools.sign(account.privateKey, 'some message')
+      const private_key = Buffer.from(
+        '0000000000000000000000000000000000000000000000000000000000000000',
+        'hex'
+      )
+      const public_key = ed25519.publicKey(private_key)
+      const signature = ed25519.sign(public_key, private_key, public_key)
 
       const response = await chai
         .request(server)
         .post('/api/auth/register')
         .send({
-          public_key: account.publicKey,
-          address: account.address,
-          signature,
+          public_key: public_key.toString('hex'),
+          signature: signature.toString('hex'),
           username: 'test_username'
         })
       expect(response).to.have.status(401)
@@ -153,27 +118,42 @@ describe('API /auth/register', () => {
     })
 
     it('should return 401 if username already exists', async () => {
-      const seed = crypto.randomBytes(64).toString('hex')
-      const accounts = wallet.accounts(seed, 0, 1)
-      const account_0 = accounts[0]
-      const account_1 = accounts[1]
+      const private_key_0 = Buffer.from(
+        '0000000000000000000000000000000000000000000000000000000000000000',
+        'hex'
+      )
+      const public_key_0 = ed25519.publicKey(private_key_0)
+      const signature_0 = ed25519.sign(
+        public_key_0.toString('hex'),
+        private_key_0,
+        public_key_0
+      )
+
+      const private_key_1 = Buffer.from(
+        '0000000000000000000000000000000000000000000000000000000000000001',
+        'hex'
+      )
+      const public_key_1 = ed25519.publicKey(private_key_1)
+      const signature_1 = ed25519.sign(
+        public_key_1.toString('hex'),
+        private_key_1,
+        public_key_1
+      )
 
       await knex('users').insert({
         id: 1,
         username: 'existing_username',
-        public_key: account_0.publicKey,
+        public_key: public_key_0.toString('hex'),
+        signature: signature_0.toString('hex'),
         last_visit: Math.floor(Date.now() / 1000)
       })
-
-      const signature = tools.sign(account_1.privateKey, account_1.publicKey)
 
       const response = await chai
         .request(server)
         .post('/api/auth/register')
         .send({
-          public_key: account_1.publicKey,
-          address: account_1.address,
-          signature,
+          public_key: public_key_1.toString('hex'),
+          signature: signature_1.toString('hex'),
           username: 'existing_username'
         })
       expect(response).to.have.status(401)

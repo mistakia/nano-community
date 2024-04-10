@@ -19,6 +19,21 @@ CREATE TABLE `accounts` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `accounts_keys`
+--
+
+DROP TABLE IF EXISTS `accounts_keys`;
+
+CREATE TABLE `accounts_keys` (
+  `account` char(65) CHARACTER SET utf8 NOT NULL,
+  `public_key` varchar(255) DEFAULT NULL,
+  `signature` varchar(255) DEFAULT NULL,
+  `created_at` int(11) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `accounts_delegators`
 --
 
@@ -618,25 +633,10 @@ CREATE TABLE `users` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(32) NOT NULL,
   `public_key` varchar(64) NOT NULL,
+  `signature` varchar(255) NOT NULL,
   `last_visit` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `public_key` (`public_key`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `user_addresses`
---
-
-DROP TABLE IF EXISTS `user_addresses`;
-
-CREATE TABLE `user_addresses` (
-  `user_id` int(11) NOT NULL,
-  `address` char(65) NOT NULL,
-  `signature` varchar(255) NOT NULL,
-  KEY (`user_id`),
-  UNIQUE KEY `address` (`address`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
