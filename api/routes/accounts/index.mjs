@@ -28,11 +28,15 @@ router.get('/:address', async (req, res) => {
       return res.status(200).send(cachedAccount)
     }
 
-    const accountInfo = await rpc.accountInfo({
-      account: address,
-      pending: true,
-      representative: true
-    })
+    const [account_weight, accountInfo] = await Promise.all([
+      rpc.accountWeight({ account: address }),
+      rpc.accountInfo({
+        account: address,
+        pending: true,
+        representative: true,
+        weight: true
+      })
+    ])
 
     const data = {
       account: address,
@@ -46,7 +50,7 @@ router.get('/:address', async (req, res) => {
         pending: BigNumber(accountInfo.pending).toNumber(),
         balance: BigNumber(accountInfo.balance).toNumber(),
         block_count: BigNumber(accountInfo.block_count).toNumber(),
-        weight: BigNumber(accountInfo.weight).toNumber(),
+        weight: BigNumber(account_weight.weight).toNumber(),
         confirmation_height: BigNumber(
           accountInfo.confirmation_height
         ).toNumber()

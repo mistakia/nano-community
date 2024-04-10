@@ -39,9 +39,11 @@ export default class RepresentativeNetwork extends React.Component {
             Weight Represented
           </div>
           <div className='account__section-metric-body'>
-            {BigNumber(account.getIn(['account_meta', 'weight']))
-              .shiftedBy(-30)
-              .toFormat(0)}
+            {account.getIn(['account_meta', 'weight'])
+              ? BigNumber(account.getIn(['account_meta', 'weight']))
+                  .shiftedBy(-30)
+                  .toFormat(0)
+              : '-'}
           </div>
         </div>
         {rows}
