@@ -96,11 +96,13 @@ const loadRepresentatives = async () => {
   return representatives
 }
 
-loadRepresentatives()
+if (process.env.NODE_ENV !== 'test') {
+  loadRepresentatives()
 
-cron.schedule('*/5 * * * *', async () => {
-  await loadRepresentatives()
-})
+  cron.schedule('*/5 * * * *', async () => {
+    await loadRepresentatives()
+  })
+}
 
 router.get('/', async (req, res) => {
   const { logger } = req.app.locals

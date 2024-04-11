@@ -255,12 +255,14 @@ router.get('/top', async (req, res) => {
   }
 })
 
-cron.schedule('*/7 * * * *', async () => {
-  const ages = [72, 168, 720]
-  for (const age of ages) {
-    await load_top_posts({ age })
-  }
-  await load_trending_posts()
-})
+if (process.env.NODE_ENV !== 'test') {
+  cron.schedule('*/7 * * * *', async () => {
+    const ages = [72, 168, 720]
+    for (const age of ages) {
+      await load_top_posts({ age })
+    }
+    await load_trending_posts()
+  })
+}
 
 export default router
