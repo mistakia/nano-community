@@ -116,6 +116,7 @@ router.post('/?', async (req, res) => {
     const linked_accounts = await db('account_keys')
       .select('account')
       .where({ public_key })
+      .whereNull('revoked_at')
     const nano_account = tools.publicKeyToAddress(public_key)
 
     const all_accounts = [

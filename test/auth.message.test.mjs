@@ -451,5 +451,9 @@ describe('API /auth/message', function () {
       // eslint-disable-next-line no-unused-expressions
       expect(saved_message).to.be.undefined
     })
+
+    it('should not save message if linked public key is already revoked', async () => {
+      // TODO
+    })
   })
 })

@@ -27,8 +27,10 @@ DROP TABLE IF EXISTS `account_keys`;
 CREATE TABLE `account_keys` (
   `account` char(65) CHARACTER SET utf8 NOT NULL,
   `public_key` varchar(64) NOT NULL,
-  `signature` varchar(128) NOT NULL,
+  `link_signature` varchar(128) NOT NULL,
+  `revoke_signature` varchar(128) DEFAULT NULL,
   `created_at` int(11) NOT NULL,
+  `revoked_at` int(11) DEFAULT NULL,
   UNIQUE `account_key` (`account`, `public_key`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
