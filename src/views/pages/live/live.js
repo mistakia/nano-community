@@ -129,11 +129,6 @@ export default function LivePage({
     max: unconfirmed_percentile_values[3]
   }
 
-  console.log({
-    confirmed_percentile,
-    unconfirmed_percentile
-  })
-
   return (
     <>
       <Seo

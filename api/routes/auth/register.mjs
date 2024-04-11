@@ -2,6 +2,8 @@ import express from 'express'
 import nano from 'nanocurrency'
 import ed25519 from '@trashman/ed25519-blake2b'
 
+import { verify_nano_community_link_key_signature } from '#common'
+
 const router = express.Router()
 const USERNAME_RE = /^[A-Za-z][a-zA-Z0-9_]+$/
 
@@ -89,11 +91,12 @@ router.post('/key/?', async (req, res) => {
     }
 
     const account_public_key = nano.derivePublicKey(account)
-    const valid_signature = ed25519.verify(
-      signature,
-      public_key,
-      account_public_key
-    )
+    const valid_signature = verify_nano_community_link_key_signature({
+      linked_public_key: public_key,
+      nano_account: account,
+      nano_account_public_key: account_public_key,
+      signature
+    })
     if (!valid_signature) {
       return res.status(401).send({ error: 'invalid signature' })
     }
@@ -103,7 +106,7 @@ router.post('/key/?', async (req, res) => {
       .insert({
         account,
         public_key,
-        signature,
+        link_signature: signature,
         created_at
       })
       .onConflict()

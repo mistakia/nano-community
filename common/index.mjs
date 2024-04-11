@@ -12,6 +12,10 @@ export { default as convertToCSV } from './convert-to-csv.mjs'
 export { default as read_csv } from './read-csv.mjs'
 export { default as verify_nano_community_message_signature } from './verify-nano-community-message-signature.mjs'
 export { default as sign_nano_community_message } from './sign-nano-community-message.mjs'
+export { default as sign_nano_community_revoke_key } from './sign-nano-community-revoke-key.mjs'
+export { default as verify_nano_community_revoke_key_signature } from './verify-nano-community-revoke-key-signature.mjs'
+export { default as sign_nano_community_link_key } from './sign-nano-community-link-key.mjs'
+export { default as verify_nano_community_link_key_signature } from './verify-nano-community-link-key-signature.mjs'
 
 const POST = (data) => ({
   method: 'POST',

@@ -1,4 +1,4 @@
-/* global describe before it */
+/* global describe, before, it */
 import chai from 'chai'
 import chaiHTTP from 'chai-http'
 import ed25519 from '@trashman/ed25519-blake2b'
@@ -6,7 +6,10 @@ import nano from 'nanocurrency'
 
 import server from '#api/server.mjs'
 import knex from '#db'
-import { sign_nano_community_link_key } from '#common'
+import {
+  sign_nano_community_link_key,
+  sign_nano_community_revoke_key
+} from '#common'
 import { mochaGlobalSetup } from './global.mjs'
 
 process.env.NODE_ENV = 'test'
@@ -14,11 +17,11 @@ process.env.NODE_ENV = 'test'
 chai.use(chaiHTTP)
 const expect = chai.expect
 
-describe('API /auth/register/key', () => {
+describe('API /auth/revoke/key', () => {
   before(mochaGlobalSetup)
 
-  describe('POST /api/auth/register/key', () => {
-    it('should save the supplied public_key', async () => {
+  describe('POST /api/auth/revoke/key', () => {
+    it('should register and then revoke an existing linked public key', async () => {
       const private_key = Buffer.from(
         '00000000000000000000000000000000000000000000000000000000000000000',
         'hex'
@@ -36,7 +39,25 @@ describe('API /auth/register/key', () => {
         nano_account_public_key.toString('hex')
       )
 
-      const signature = sign_nano_community_link_key({
+      // Register/Link the key
+      const link_signature = sign_nano_community_link_key({
+        linked_public_key: public_key.toString('hex'),
+        nano_account,
+        nano_account_private_key,
+        nano_account_public_key
+      })
+
+      await chai
+        .request(server)
+        .post('/api/auth/register/key')
+        .send({
+          public_key: public_key.toString('hex'),
+          signature: link_signature.toString('hex'),
+          account: nano_account
+        })
+
+      // Revoke the key
+      const revoke_signature = sign_nano_community_revoke_key({
         linked_public_key: public_key.toString('hex'),
         nano_account,
         nano_account_private_key,
@@ -45,26 +66,27 @@ describe('API /auth/register/key', () => {
 
       const response = await chai
         .request(server)
-        .post('/api/auth/register/key')
+        .post('/api/auth/revoke/key')
         .send({
           public_key: public_key.toString('hex'),
-          signature: signature.toString('hex'),
+          signature: revoke_signature.toString('hex'),
           account: nano_account
         })
 
       expect(response).to.have.status(200)
 
-      const saved_row = await knex('account_keys')
+      const revoked_row = await knex('account_keys')
         .where({ public_key: public_key.toString('hex') })
         .first()
 
       // eslint-disable-next-line no-unused-expressions
-      expect(saved_row).to.exist
-      expect(saved_row.account).to.equal(nano_account)
-      expect(saved_row.public_key).to.equal(public_key.toString('hex'))
-      expect(saved_row.link_signature).to.equal(signature.toString('hex'))
-      expect(saved_row.created_at).to.be.a('number')
-      expect(saved_row.created_at).to.equal(response.body.created_at)
+      expect(revoked_row).to.exist
+      expect(revoked_row.account).to.equal(nano_account)
+      expect(revoked_row.public_key).to.equal(public_key.toString('hex'))
+      expect(revoked_row.revoke_signature).to.equal(
+        revoke_signature.toString('hex')
+      )
+      expect(revoked_row.revoked_at).to.be.a('number')
     })
   })
 
@@ -72,7 +94,7 @@ describe('API /auth/register/key', () => {
     it('should return 400 if public_key field is missing', async () => {
       const response = await chai
         .request(server)
-        .post('/api/auth/register/key')
+        .post('/api/auth/revoke/key')
         .send({
           signature: 'somesignature',
           account: 'someaccount'
@@ -84,7 +106,7 @@ describe('API /auth/register/key', () => {
     it('should return 400 if signature field is missing', async () => {
       const response = await chai
         .request(server)
-        .post('/api/auth/register/key')
+        .post('/api/auth/revoke/key')
         .send({
           public_key: 'somepub',
           account: 'someaccount'
@@ -96,7 +118,7 @@ describe('API /auth/register/key', () => {
     it('should return 400 if account field is missing', async () => {
       const response = await chai
         .request(server)
-        .post('/api/auth/register/key')
+        .post('/api/auth/revoke/key')
         .send({
           public_key: 'somepub',
           signature: 'somesignature'
@@ -106,13 +128,16 @@ describe('API /auth/register/key', () => {
     })
 
     it('should return 401 if public_key param is invalid', async () => {
+      const nano_account = nano.deriveAddress(
+        '0000000000000000000000000000000000000000000000000000000000000001'
+      )
       const response = await chai
         .request(server)
-        .post('/api/auth/register/key')
+        .post('/api/auth/revoke/key')
         .send({
           public_key: 'invalidpub',
           signature: 'somesignature',
-          account: 'someaccount'
+          account: nano_account
         })
       expect(response).to.have.status(401)
       expect(response.body.error).to.equal('invalid public_key param')
@@ -120,24 +145,17 @@ describe('API /auth/register/key', () => {
 
     it('should return 401 if account param is invalid', async () => {
       const private_key = Buffer.from(
-        '0000000000000000000000000000000000000000000000000000000000000000',
+        '00000000000000000000000000000000000000000000000000000000000000000',
         'hex'
       )
       const public_key = ed25519.publicKey(private_key)
-      const account = 'someaccount'
-      const signature = sign_nano_community_link_key({
-        linked_public_key: public_key.toString('hex'),
-        nano_account: account,
-        nano_account_private_key: private_key,
-        nano_account_public_key: public_key
-      })
       const response = await chai
         .request(server)
-        .post('/api/auth/register/key')
+        .post('/api/auth/revoke/key')
         .send({
           public_key: public_key.toString('hex'),
-          signature: signature.toString('hex'),
-          account
+          signature: 'somesignature',
+          account: 'invalidaccount'
         })
       expect(response).to.have.status(401)
       expect(response.body.error).to.equal('invalid account param')
@@ -145,33 +163,31 @@ describe('API /auth/register/key', () => {
 
     it('should return 401 if signature is invalid', async () => {
       const private_key = Buffer.from(
-        '0000000000000000000000000000000000000000000000000000000000000000',
+        '00000000000000000000000000000000000000000000000000000000000000000',
         'hex'
       )
       const public_key = ed25519.publicKey(private_key)
 
       const nano_account = nano.deriveAddress(
-        '0000000000000000000000000000000000000000000000000000000000000001'
+        '0000000000000000000000000000000000000000000000000000000000000000'
       )
 
-      // private key used is different from the stated nano account
-      const nano_account_private_key = Buffer.from(
-        '0000000000000000000000000000000000000000000000000000000000000002',
+      const nano_account_different_private_key = Buffer.from(
+        '00000000000000000000000000000000000000000000000000000000000000001',
         'hex'
       )
-      const nano_account_public_key = ed25519.publicKey(
-        nano_account_private_key
+      const nano_account_different_public_key = ed25519.publicKey(
+        nano_account_different_private_key
       )
-      const signature = sign_nano_community_link_key({
+      const signature = sign_nano_community_revoke_key({
         linked_public_key: public_key.toString('hex'),
         nano_account,
-        nano_account_private_key,
-        nano_account_public_key
+        nano_account_private_key: nano_account_different_private_key,
+        nano_account_public_key: nano_account_different_public_key
       })
-
       const response = await chai
         .request(server)
-        .post('/api/auth/register/key')
+        .post('/api/auth/revoke/key')
         .send({
           public_key: public_key.toString('hex'),
           signature: signature.toString('hex'),
@@ -179,6 +195,14 @@ describe('API /auth/register/key', () => {
         })
       expect(response).to.have.status(401)
       expect(response.body.error).to.equal('invalid signature')
+    })
+
+    it('should return 401 if linked public key is not registered', async () => {
+      // TODO
+    })
+
+    it('should return 401 if linked public key is already revoked', async () => {
+      // TODO
     })
   })
 })
