@@ -127,7 +127,7 @@ export default function Network({
       <div className='network__stat'>
         <div>
           Tx Speed (24h)
-          <Tooltip title={speedText}>
+          <Tooltip title={speedText_24h}>
             <HelpOutlineIcon fontSize='inherit' />
           </Tooltip>
         </div>
@@ -142,7 +142,7 @@ export default function Network({
       <div className='network__stat'>
         <div>
           Tx Speed (1h)
-          <Tooltip title={speedText_24h}>
+          <Tooltip title={speedText}>
             <HelpOutlineIcon fontSize='inherit' />
           </Tooltip>
         </div>
