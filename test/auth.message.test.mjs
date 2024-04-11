@@ -19,8 +19,9 @@ chai.use(chaiHTTP)
 const expect = chai.expect
 
 describe('API /auth/message', function () {
-  this.timeout(10000)
   before(mochaGlobalSetup)
+
+  this.timeout(10000)
 
   describe('POST /api/auth/message', () => {
     it('should save message to database for nano account above balance threshold', async () => {
