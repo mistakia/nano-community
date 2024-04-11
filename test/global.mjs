@@ -1,3 +1,4 @@
+/* global before */
 import knex from '#db'
 import path, { dirname } from 'path'
 import fs from 'fs/promises'
@@ -10,3 +11,5 @@ export async function mochaGlobalSetup() {
   const sql = await fs.readFile(sqlFile, 'utf8')
   await knex.raw(sql)
 }
+
+before(mochaGlobalSetup)

@@ -55,9 +55,11 @@ const load_network = async () => {
   return response_data
 }
 
-cron.schedule('*/5 * * * *', async () => {
-  await load_network()
-})
+if (process.env.NODE_ENV !== 'test') {
+  cron.schedule('*/5 * * * *', async () => {
+    await load_network()
+  })
+}
 
 router.get('/', async (req, res) => {
   const { logger, cache } = req.app.locals
