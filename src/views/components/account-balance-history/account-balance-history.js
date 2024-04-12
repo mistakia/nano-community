@@ -33,7 +33,7 @@ export default function AccountBalanceHistory({
     ])
 
     let balance_data_usd = []
-    let balance_data_usd_price = []
+    const balance_data_usd_price = []
     if (balance_history.length > 0) {
       const min_date_entry = balance_history[0]
       const max_date_entry = balance_history[balance_history.length - 1]
@@ -120,7 +120,7 @@ export default function AccountBalanceHistory({
       },
       formatter: (params) => {
         // The datetime where the axisPointer is
-        var x_time = new Date(params[0].axisValue)
+        const x_time = new Date(params[0].axisValue)
 
         let tooltip = `<p>${x_time.toDateString()}</p> `
         series.forEach((serie) => {
