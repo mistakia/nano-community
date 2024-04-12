@@ -21,3 +21,19 @@ export const median = (arr) => {
 }
 
 export const average = (arr) => arr.reduce((p, c) => p + c, 0) / arr.length
+
+export const format_value = ({ prefix = '', value }) => {
+  const format_value = (number, divisor, suffix) => {
+    const result = number / divisor
+    return `${prefix}${result.toFixed(result % 1 !== 0 ? 1 : 0)}${suffix}`
+  }
+  if (value >= 1000000000) {
+    return format_value(value, 1000000000, 'B')
+  } else if (value >= 1000000) {
+    return format_value(value, 1000000, 'M')
+  } else if (value >= 1000) {
+    return format_value(value, 1000, 'K')
+  } else {
+    return `${prefix}${value}`
+  }
+}

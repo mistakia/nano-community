@@ -2,7 +2,11 @@ import { Map } from 'immutable'
 
 import { nanodb_actions } from './actions'
 
-export function nanodb_reducer(state = Map(), action) {
+const initial_state = new Map({
+  price_history: []
+})
+
+export function nanodb_reducer(state = initial_state, action) {
   switch (action.type) {
     case nanodb_actions.GET_BLOCKS_CONFIRMED_SUMMARY_FULFILLED:
       return state.set(
@@ -15,6 +19,9 @@ export function nanodb_reducer(state = Map(), action) {
 
     case nanodb_actions.GET_BLOCKS_UNCONFIRMED_SUMMARY_FULFILLED:
       return state.set('blocks_unconfirmed_summary', action.payload.data)
+
+    case nanodb_actions.GET_PRICE_HISTORY_FULFILLED:
+      return state.set('price_history', action.payload.data)
 
     default:
       return state

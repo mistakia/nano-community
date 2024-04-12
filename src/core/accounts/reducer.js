@@ -1,4 +1,4 @@
-import { Map } from 'immutable'
+import { Map, List } from 'immutable'
 
 import { accountsActions } from './actions'
 import { createAccount } from './account'
@@ -93,6 +93,34 @@ export function accountsReducer(state = initialState, { payload, type }) {
             'items',
             payload.params.account,
             `account_is_loading_blocks_${payload.params.type}_summary`
+          ],
+          false
+        )
+      })
+
+    case accountsActions.GET_ACCOUNT_BALANCE_HISTORY_PENDING:
+      return state.setIn(
+        ['items', payload.params.account, 'account_is_loading_balance_history'],
+        true
+      )
+
+    case accountsActions.GET_ACCOUNT_BALANCE_HISTORY_FAILED:
+      return state.setIn(
+        ['items', payload.params.account, 'account_is_loading_balance_history'],
+        false
+      )
+
+    case accountsActions.GET_ACCOUNT_BALANCE_HISTORY_FULFILLED:
+      return state.withMutations((state) => {
+        state.setIn(
+          ['items', payload.params.account, 'balance_history'],
+          List(payload.data)
+        )
+        state.setIn(
+          [
+            'items',
+            payload.params.account,
+            'account_is_loading_balance_history'
           ],
           false
         )

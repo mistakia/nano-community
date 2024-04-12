@@ -19,7 +19,7 @@ import RepresentativeNetwork from '@components/representative-network'
 import RepresentativeTelemetry from '@components/representative-telemetry'
 import DisplayNano from '@components/display-nano'
 import Collapsible from '@components/collapsible'
-
+import AccountBalanceHistory from '@components/account-balance-history'
 import AccountMeta from '@components/account-meta'
 import AccountBlocksSummary from '@components/account-blocks-summary'
 
@@ -231,6 +231,9 @@ export default function AccountPage({
               {Boolean(!account.representative) && (
                 <AccountMeta account={account} />
               )}
+              <Collapsible title='Balance History' only_render_when_visible>
+                <AccountBalanceHistory account={account} />
+              </Collapsible>
               <Collapsible title='Send Summary'>
                 <AccountBlocksSummary
                   type='send'
