@@ -95,6 +95,14 @@ export const api = {
   get_blocks_unconfirmed_summary() {
     const url = `${API_URL}/nanodb/blocks/unconfirmed/summary`
     return { url }
+  },
+  get_account_balance_history({ account }) {
+    const url = `${API_URL}/nanodb/accounts/${account}/balance_history`
+    return { url }
+  },
+  get_price_history() {
+    const url = `${API_URL}/nanodb/price_history`
+    return { url }
   }
 }
 

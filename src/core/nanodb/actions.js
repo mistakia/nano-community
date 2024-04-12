@@ -24,6 +24,11 @@ export const nanodb_actions = {
   GET_BLOCKS_UNCONFIRMED_SUMMARY_FULFILLED:
     'GET_BLOCKS_UNCONFIRMED_SUMMARY_FULFILLED',
 
+  GET_PRICE_HISTORY: 'GET_PRICE_HISTORY',
+  GET_PRICE_HISTORY_FAILED: 'GET_PRICE_HISTORY_FAILED',
+  GET_PRICE_HISTORY_PENDING: 'GET_PRICE_HISTORY_PENDING',
+  GET_PRICE_HISTORY_FULFILLED: 'GET_PRICE_HISTORY_FULFILLED',
+
   get_blocks_confirmed_summary: (period = '10m') => ({
     type: nanodb_actions.GET_BLOCKS_CONFIRMED_SUMMARY,
     payload: {
@@ -103,6 +108,33 @@ export const nanodb_actions = {
       params,
       data
     }
+  }),
+
+  get_price_history: () => ({
+    type: nanodb_actions.GET_PRICE_HISTORY
+  }),
+
+  get_price_history_failed: (params, error) => ({
+    type: nanodb_actions.GET_PRICE_HISTORY_FAILED,
+    payload: {
+      params,
+      error
+    }
+  }),
+
+  get_price_history_pending: (params) => ({
+    type: nanodb_actions.GET_PRICE_HISTORY_PENDING,
+    payload: {
+      params
+    }
+  }),
+
+  get_price_history_fulfilled: (params, data) => ({
+    type: nanodb_actions.GET_PRICE_HISTORY_FULFILLED,
+    payload: {
+      params,
+      data
+    }
   })
 }
 
@@ -122,4 +154,10 @@ export const blocks_unconfirmed_summary_request_actions = {
   failed: nanodb_actions.get_blocks_unconfirmed_summary_failed,
   fulfilled: nanodb_actions.get_blocks_unconfirmed_summary_fulfilled,
   pending: nanodb_actions.get_blocks_unconfirmed_summary_pending
+}
+
+export const price_history_request_actions = {
+  failed: nanodb_actions.get_price_history_failed,
+  fulfilled: nanodb_actions.get_price_history_fulfilled,
+  pending: nanodb_actions.get_price_history_pending
 }

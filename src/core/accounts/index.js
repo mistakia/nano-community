@@ -3,7 +3,8 @@ export {
   representativesRequestActions,
   accountRequestActions,
   accountOpenRequestActions,
-  accountBlocksSummaryRequestActions
+  accountBlocksSummaryRequestActions,
+  accountBalanceHistoryRequestActions
 } from './actions'
 export { accountsReducer } from './reducer'
 export { accountSagas } from './sagas'

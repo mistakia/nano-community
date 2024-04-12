@@ -22,14 +22,16 @@ import {
   representativesRequestActions,
   accountRequestActions,
   accountOpenRequestActions,
-  accountBlocksSummaryRequestActions
+  accountBlocksSummaryRequestActions,
+  accountBalanceHistoryRequestActions
 } from '@core/accounts/actions'
 import { blockRequestActions } from '@core/blocks/actions'
 import { dailyRequestActions } from '@core/ledger/actions'
 import {
   block_confirmed_summary_request_actions,
   accounts_unconfirmed_summary_request_actions,
-  blocks_unconfirmed_summary_request_actions
+  blocks_unconfirmed_summary_request_actions,
+  price_history_request_actions
 } from '@core/nanodb/actions'
 
 function* fetchAPI(apiFunction, actions, opts = {}) {
@@ -142,4 +144,16 @@ export const get_blocks_unconfirmed_summary = fetch.bind(
   null,
   api.get_blocks_unconfirmed_summary,
   blocks_unconfirmed_summary_request_actions
+)
+
+export const get_account_balance_history = fetch.bind(
+  null,
+  api.get_account_balance_history,
+  accountBalanceHistoryRequestActions
+)
+
+export const get_price_history = fetch.bind(
+  null,
+  api.get_price_history,
+  price_history_request_actions
 )

@@ -1,10 +1,12 @@
-import { takeEvery, fork, call, takeLatest } from 'redux-saga/effects'
+import { takeEvery, fork, call, takeLatest, select } from 'redux-saga/effects'
 
 import {
   getRepresentatives,
   getAccount,
   getAccountOpen,
-  getAccountBlocksSummary
+  getAccountBlocksSummary,
+  get_account_balance_history,
+  get_request_history
 } from '@core/api'
 import { accountsActions } from './actions'
 
@@ -21,6 +23,15 @@ export function* loadAccount({ payload }) {
   yield fork(getAccountBlocksSummary, { account, type: 'change', limit: 10 })
 }
 
+export function* loadAccountBalanceHistory({ payload }) {
+  const { account } = payload
+  const request_history = yield select(get_request_history)
+  if (request_history.has(`GET_ACCOUNT_BALANCE_HISTORY_${account}`)) {
+    return
+  }
+  yield call(get_account_balance_history, { account })
+}
+
 //= ====================================
 //  WATCHERS
 // -------------------------------------
@@ -33,11 +44,19 @@ export function* watchGetAccount() {
   yield takeLatest(accountsActions.GET_ACCOUNT, loadAccount)
 }
 
+export function* watchGetAccountBalanceHistory() {
+  yield takeLatest(
+    accountsActions.GET_ACCOUNT_BALANCE_HISTORY,
+    loadAccountBalanceHistory
+  )
+}
+
 //= ====================================
 //  ROOT
 // -------------------------------------
 
 export const accountSagas = [
   fork(watchGetRepresentatives),
-  fork(watchGetAccount)
+  fork(watchGetAccount),
+  fork(watchGetAccountBalanceHistory)
 ]

@@ -19,7 +19,7 @@ export default class Collapsible extends React.Component {
   handleClick = () => this.setState({ expanded: !this.state.expanded })
 
   render() {
-    const { title, children } = this.props
+    const { title, children, only_render_when_visible = false } = this.props
     return (
       <div className='collapsible'>
         <div className='collapsible__head'>
@@ -31,7 +31,13 @@ export default class Collapsible extends React.Component {
             {title}
           </Button>
         </div>
-        <Collapse in={this.state.expanded}>{children}</Collapse>
+        <Collapse in={this.state.expanded}>
+          {only_render_when_visible
+            ? this.state.expanded
+              ? children
+              : null
+            : children}
+        </Collapse>
       </div>
     )
   }
@@ -42,5 +48,6 @@ Collapsible.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
-  ]).isRequired
+  ]).isRequired,
+  only_render_when_visible: PropTypes.bool
 }

@@ -7,6 +7,7 @@ export const Account = new Record({
   account_is_loading_open: true,
   account_is_loading_blocks_change_summary: true,
   account_is_loading_blocks_send_summary: true,
+  account_is_loading_balance_history: false,
 
   account: null,
   alias: null,
@@ -22,6 +23,7 @@ export const Account = new Record({
   telemetry: new Map(),
   delegators: new List(),
   open: new Map(),
+  balance_history: new List(),
 
   blocks_summary: new Map(),
 

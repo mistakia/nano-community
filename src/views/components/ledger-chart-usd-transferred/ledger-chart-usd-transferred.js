@@ -13,7 +13,7 @@ import { CanvasRenderer } from 'echarts/renderers'
 import Button from '@mui/material/Button'
 
 import LedgerChartMetrics from '@components/ledger-chart-metrics'
-import { download_csv, download_json } from '@core/utils'
+import { download_csv, download_json, format_value } from '@core/utils'
 
 echarts.use([
   TooltipComponent,
@@ -63,21 +63,7 @@ export default function LedgerUSDTransferred({ data, isLoading }) {
       min: 1,
       name: 'Nano',
       axisLabel: {
-        formatter: (value) => {
-          const format_value = (number, divisor, suffix) => {
-            const result = number / divisor
-            return `$${result.toFixed(result % 1 !== 0 ? 1 : 0)}${suffix}`
-          }
-          if (value >= 1000000000) {
-            return format_value(value, 1000000000, 'B')
-          } else if (value >= 1000000) {
-            return format_value(value, 1000000, 'M')
-          } else if (value >= 1000) {
-            return format_value(value, 1000, 'K')
-          } else {
-            return `$${value}`
-          }
-        }
+        formatter: (value) => format_value({ prefix: '$', value })
       }
     },
     series: [

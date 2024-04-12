@@ -21,6 +21,12 @@ export const accountsActions = {
   GET_ACCOUNT_BLOCKS_SUMMARY_PENDING: 'GET_ACCOUNT_BLOCKS_SUMMARY_PENDING',
   GET_ACCOUNT_BLOCKS_SUMMARY_FULFILLED: 'GET_ACCOUNT_BLOCKS_SUMMARY_FULFILLED',
 
+  GET_ACCOUNT_BALANCE_HISTORY: 'GET_ACCOUNT_BALANCE_HISTORY',
+  GET_ACCOUNT_BALANCE_HISTORY_FAILED: 'GET_ACCOUNT_BALANCE_HISTORY_FAILED',
+  GET_ACCOUNT_BALANCE_HISTORY_PENDING: 'GET_ACCOUNT_BALANCE_HISTORY_PENDING',
+  GET_ACCOUNT_BALANCE_HISTORY_FULFILLED:
+    'GET_ACCOUNT_BALANCE_HISTORY_FULFILLED',
+
   filter: ({ field, value, label } = {}) => ({
     type: accountsActions.FILTER_REPRESENTATIVES,
     payload: {
@@ -138,6 +144,36 @@ export const accountsActions = {
       params,
       data
     }
+  }),
+
+  getAccountBalanceHistory: (account) => ({
+    type: accountsActions.GET_ACCOUNT_BALANCE_HISTORY,
+    payload: {
+      account
+    }
+  }),
+
+  getAccountBalanceHistoryFailed: (params, error) => ({
+    type: accountsActions.GET_ACCOUNT_BALANCE_HISTORY_FAILED,
+    payload: {
+      params,
+      error
+    }
+  }),
+
+  getAccountBalanceHistoryPending: (params) => ({
+    type: accountsActions.GET_ACCOUNT_BALANCE_HISTORY_PENDING,
+    payload: {
+      params
+    }
+  }),
+
+  getAccountBalanceHistoryFulfilled: (params, data) => ({
+    type: accountsActions.GET_ACCOUNT_BALANCE_HISTORY_FULFILLED,
+    payload: {
+      params,
+      data
+    }
   })
 }
 
@@ -163,4 +199,10 @@ export const accountOpenRequestActions = {
   failed: accountsActions.getAccountOpenFailed,
   pending: accountsActions.getAccountOpenPending,
   fulfilled: accountsActions.getAccountOpenFulfilled
+}
+
+export const accountBalanceHistoryRequestActions = {
+  failed: accountsActions.getAccountBalanceHistoryFailed,
+  pending: accountsActions.getAccountBalanceHistoryPending,
+  fulfilled: accountsActions.getAccountBalanceHistoryFulfilled
 }
