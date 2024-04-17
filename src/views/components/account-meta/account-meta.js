@@ -20,6 +20,31 @@ export default class AccountMeta extends React.Component {
       'account_meta',
       'modified_timestamp'
     ])
+    const last_send_timestamp = account.getIn([
+      'stats',
+      'last_send_block_timestamp'
+    ])
+    const last_change_timestamp = account.getIn([
+      'stats',
+      'last_change_block_timestamp'
+    ])
+    const last_modified_non_epoch = account.getIn([
+      'stats',
+      'last_non_epoch_block_timestamp'
+    ])
+
+    const max_balance = account.getIn(['stats', 'max_balance'])
+    const max_balance_timestamp = account.getIn([
+      'stats',
+      'max_balance_timestamp'
+    ])
+
+    const min_balance = account.getIn(['stats', 'min_balance'])
+    const min_balance_timestamp = account.getIn([
+      'stats',
+      'min_balance_timestamp'
+    ])
+
     const items = [
       {
         label: 'Funding Account',
@@ -55,6 +80,22 @@ export default class AccountMeta extends React.Component {
           : '-'
       },
       {
+        label: 'Maximum Balance',
+        value: max_balance
+          ? `${BigNumber(max_balance).shiftedBy(-30).toFormat()} (${dayjs(
+              max_balance_timestamp * 1000
+            ).format('MMM D, YY h:mm a')})`
+          : '-'
+      },
+      {
+        label: 'Minimum Balance',
+        value: min_balance
+          ? `${BigNumber(min_balance).shiftedBy(-30).toFormat()} (${dayjs(
+              min_balance_timestamp * 1000
+            ).format('MMM D, YY h:mm a')})`
+          : '-'
+      },
+      {
         label: 'Receivable Balance',
         value: pendingBalance
           ? BigNumber(pendingBalance).shiftedBy(-30).toFormat()
@@ -74,6 +115,39 @@ export default class AccountMeta extends React.Component {
           ? `${dayjs(modifiedTimestamp * 1000).format(
               'MMM D, YYYY h:mm a'
             )} (${timeago.format(modifiedTimestamp * 1000, 'nano_short')} ago)`
+          : '-'
+      },
+      {
+        label: 'Last Modified (non-epoch)',
+        value: last_modified_non_epoch
+          ? `${dayjs(last_modified_non_epoch * 1000).format(
+              'MMM D, YYYY h:mm a'
+            )} (${timeago.format(
+              last_modified_non_epoch * 1000,
+              'nano_short'
+            )} ago)`
+          : '-'
+      },
+      {
+        label: 'Last Send',
+        value: last_send_timestamp
+          ? `${dayjs(last_send_timestamp * 1000).format(
+              'MMM D, YYYY h:mm a'
+            )} (${timeago.format(
+              last_send_timestamp * 1000,
+              'nano_short'
+            )} ago)`
+          : '-'
+      },
+      {
+        label: 'Last Representative Change',
+        value: last_change_timestamp
+          ? `${dayjs(last_change_timestamp * 1000).format(
+              'MMM D, YYYY h:mm a'
+            )} (${timeago.format(
+              last_change_timestamp * 1000,
+              'nano_short'
+            )} ago)`
           : '-'
       }
     ]

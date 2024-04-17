@@ -48,6 +48,7 @@ export default function AccountPage({
   match,
   showNotification,
   getAccount,
+  get_account_stats,
   account
 }) {
   const [value, setValue] = useState(0)
@@ -68,6 +69,7 @@ export default function AccountPage({
   useEffect(() => {
     const { address } = match.params
     getAccount(`nano_${address}`)
+    get_account_stats(`nano_${address}`)
   }, [match.params.address])
 
   const is_loaded = account.get('account_is_loaded')
@@ -266,6 +268,7 @@ export default function AccountPage({
 AccountPage.propTypes = {
   match: PropTypes.object,
   getAccount: PropTypes.func,
+  get_account_stats: PropTypes.func,
   account: ImmutablePropTypes.record,
   showNotification: PropTypes.func
 }

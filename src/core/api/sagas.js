@@ -23,7 +23,8 @@ import {
   accountRequestActions,
   accountOpenRequestActions,
   accountBlocksSummaryRequestActions,
-  accountBalanceHistoryRequestActions
+  accountBalanceHistoryRequestActions,
+  accountStatsRequestActions
 } from '@core/accounts/actions'
 import { blockRequestActions } from '@core/blocks/actions'
 import { dailyRequestActions } from '@core/ledger/actions'
@@ -156,4 +157,10 @@ export const get_price_history = fetch.bind(
   null,
   api.get_price_history,
   price_history_request_actions
+)
+
+export const get_account_stats = fetch.bind(
+  null,
+  api.get_account_stats,
+  accountStatsRequestActions
 )

@@ -20,7 +20,8 @@ export {
   get_accounts_unconfirmed_summary,
   get_blocks_unconfirmed_summary,
   get_account_balance_history,
-  get_price_history
+  get_price_history,
+  get_account_stats
 } from './sagas'
 
 export { api_reducer } from './reducer'

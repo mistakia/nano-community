@@ -13,6 +13,11 @@ export const accountsActions = {
   GET_ACCOUNT_PENDING: 'GET_ACCOUNT_PENDING',
   GET_ACCOUNT_FULFILLED: 'GET_ACCOUNT_FULFILLED',
 
+  GET_ACCOUNT_STATS: 'GET_ACCOUNT_STATS',
+  GET_ACCOUNT_STATS_FAILED: 'GET_ACCOUNT_STATS_FAILED',
+  GET_ACCOUNT_STATS_PENDING: 'GET_ACCOUNT_STATS_PENDING',
+  GET_ACCOUNT_STATS_FULFILLED: 'GET_ACCOUNT_STATS_FULFILLED',
+
   GET_ACCOUNT_OPEN_FAILED: 'GET_ACCOUNT_OPEN_FAILED',
   GET_ACCOUNT_OPEN_PENDING: 'GET_ACCOUNT_OPEN_PENDING',
   GET_ACCOUNT_OPEN_FULFILLED: 'GET_ACCOUNT_OPEN_FULFILLED',
@@ -174,6 +179,36 @@ export const accountsActions = {
       params,
       data
     }
+  }),
+
+  getAccountStats: (account) => ({
+    type: accountsActions.GET_ACCOUNT_STATS,
+    payload: {
+      account
+    }
+  }),
+
+  getAccountStatsFailed: (params, error) => ({
+    type: accountsActions.GET_ACCOUNT_STATS_FAILED,
+    payload: {
+      params,
+      error
+    }
+  }),
+
+  getAccountStatsPending: (params) => ({
+    type: accountsActions.GET_ACCOUNT_STATS_PENDING,
+    payload: {
+      params
+    }
+  }),
+
+  getAccountStatsFulfilled: (params, data) => ({
+    type: accountsActions.GET_ACCOUNT_STATS_FULFILLED,
+    payload: {
+      params,
+      data
+    }
   })
 }
 
@@ -205,4 +240,10 @@ export const accountBalanceHistoryRequestActions = {
   failed: accountsActions.getAccountBalanceHistoryFailed,
   pending: accountsActions.getAccountBalanceHistoryPending,
   fulfilled: accountsActions.getAccountBalanceHistoryFulfilled
+}
+
+export const accountStatsRequestActions = {
+  failed: accountsActions.getAccountStatsFailed,
+  pending: accountsActions.getAccountStatsPending,
+  fulfilled: accountsActions.getAccountStatsFulfilled
 }

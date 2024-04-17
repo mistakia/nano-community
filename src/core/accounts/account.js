@@ -15,6 +15,7 @@ export const Account = new Record({
   representative: false,
   last_seen: null,
   account_meta: new Map(),
+  stats: new Map(),
   representative_meta: new Map(),
   telemetry_history: new List(),
   uptime: new List(),

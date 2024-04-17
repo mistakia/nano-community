@@ -103,6 +103,10 @@ export const api = {
   get_price_history() {
     const url = `${API_URL}/nanodb/price_history`
     return { url }
+  },
+  get_account_stats({ account }) {
+    const url = `${API_URL}/nanodb/accounts/${account}/stats`
+    return { url }
   }
 }
 

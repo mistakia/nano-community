@@ -6,7 +6,8 @@ import {
   getAccountOpen,
   getAccountBlocksSummary,
   get_account_balance_history,
-  get_request_history
+  get_request_history,
+  get_account_stats
 } from '@core/api'
 import { accountsActions } from './actions'
 
@@ -32,6 +33,15 @@ export function* loadAccountBalanceHistory({ payload }) {
   yield call(get_account_balance_history, { account })
 }
 
+export function* loadAccountStats({ payload }) {
+  const { account } = payload
+  const request_history = yield select(get_request_history)
+  if (request_history.has(`GET_ACCOUNT_STATS_${account}`)) {
+    return
+  }
+  yield call(get_account_stats, { account })
+}
+
 //= ====================================
 //  WATCHERS
 // -------------------------------------
@@ -51,6 +61,10 @@ export function* watchGetAccountBalanceHistory() {
   )
 }
 
+export function* watchGetAccountStats() {
+  yield takeLatest(accountsActions.GET_ACCOUNT_STATS, loadAccountStats)
+}
+
 //= ====================================
 //  ROOT
 // -------------------------------------
@@ -58,5 +72,6 @@ export function* watchGetAccountBalanceHistory() {
 export const accountSagas = [
   fork(watchGetRepresentatives),
   fork(watchGetAccount),
-  fork(watchGetAccountBalanceHistory)
+  fork(watchGetAccountBalanceHistory),
+  fork(watchGetAccountStats)
 ]

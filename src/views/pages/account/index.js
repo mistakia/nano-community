@@ -12,6 +12,7 @@ const mapStateToProps = createSelector(getAccountById, (account) => ({
 
 const mapDispatchToProps = {
   getAccount: accountsActions.getAccount,
+  get_account_stats: accountsActions.getAccountStats,
   showNotification: notificationActions.show
 }
 

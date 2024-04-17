@@ -1,7 +1,7 @@
 import { Map, List } from 'immutable'
 
 import { accountsActions } from './actions'
-import { createAccount } from './account'
+import { createAccount, Account } from './account'
 
 const initialState = new Map({
   isLoading: false,
@@ -50,10 +50,17 @@ export function accountsReducer(state = initialState, { payload, type }) {
       })
 
     case accountsActions.GET_ACCOUNT_FULFILLED:
-      return state.setIn(
-        ['items', payload.params],
-        createAccount({ ...payload.data, account_is_loading: false })
-      )
+      return state.withMutations((state) => {
+        const existing_account = state
+          .getIn(['items', payload.params], new Account())
+          .toJS()
+        const updated_account = createAccount({
+          ...existing_account,
+          ...payload.data,
+          account_is_loading: false
+        })
+        state.setIn(['items', payload.params], updated_account)
+      })
 
     case accountsActions.GET_ACCOUNT_OPEN_PENDING:
       return state.setIn(
@@ -125,6 +132,12 @@ export function accountsReducer(state = initialState, { payload, type }) {
           false
         )
       })
+
+    case accountsActions.GET_ACCOUNT_STATS_FULFILLED:
+      return state.setIn(
+        ['items', payload.params.account, 'stats'],
+        new Map(payload.data)
+      )
 
     default:
       return state

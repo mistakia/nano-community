@@ -57,6 +57,18 @@ export function api_reducer(state = initialState, { payload, type }) {
     case nanodb_actions.GET_PRICE_HISTORY_FAILED:
       return state.deleteIn(['request_history', 'GET_PRICE_HISTORY'])
 
+    case accountsActions.GET_ACCOUNT_STATS_PENDING:
+      return state.setIn(
+        ['request_history', `GET_ACCOUNT_STATS_${payload.params.account}`],
+        true
+      )
+
+    case accountsActions.GET_ACCOUNT_STATS_FAILED:
+      return state.deleteIn([
+        'request_history',
+        `GET_ACCOUNT_STATS_${payload.params.account}`
+      ])
+
     default:
       return state
   }
