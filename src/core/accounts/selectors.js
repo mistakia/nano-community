@@ -110,15 +110,18 @@ export function getNetworkUnconfirmedBlockCount(state) {
 
   // get reps with the highest confirmed block count
   const filtered_reps = accounts.filter(
-    (r) => r.telemetry?.cemented_behind === 0
+    (r) => r.getIn(['telemetry', 'cemented_behind']) === 0
   )
 
   // sort reps by highest block_count
   const sorted = filtered_reps.sort((a, b) => {
-    return a.telemetry?.block_count - b.telemetry?.block_count
+    return (
+      a.getIn(['telemetry', 'block_count']) -
+      b.getIn(['telemetry', 'block_count'])
+    )
   })
 
   const rep = sorted.first()
 
-  return rep.telemetry?.block_count - rep.telemetry?.cemented_count
+  return rep.getIn(['telemetry', 'block_count']) - rep.getIn(['telemetry', 'cemented_count'])
 }
