@@ -7,7 +7,7 @@ export {
   accountBalanceHistoryRequestActions,
   accountStatsRequestActions
 } from './actions'
-export { accountsReducer } from './reducer'
+export { accounts_reducer } from './reducer'
 export { accountSagas } from './sagas'
 export {
   getAccounts,

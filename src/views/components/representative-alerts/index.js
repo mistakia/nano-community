@@ -70,7 +70,7 @@ const mapStateToProps = createSelector(
 
     return {
       items: sorted,
-      isLoading: accounts.get('isLoading'),
+      representatives_is_loading: accounts.get('representatives_is_loading'),
       onlineWeight: network.getIn(['weight', 'onlineWeight', 'median'], 0)
     }
   }

@@ -18,7 +18,7 @@ const mapStateToProps = createSelector(
   (accounts, totalWeight, accountsState, network) => ({
     accounts,
     totalWeight,
-    isLoading: accountsState.get('isLoading'),
+    representatives_is_loading: accountsState.get('representatives_is_loading'),
     quorumTotal: network.getIn(['weight', 'quorumTotal'], 0)
   })
 )

@@ -68,7 +68,7 @@ export default class Representatives extends React.Component {
     const {
       accounts,
       totalWeight,
-      isLoading,
+      representatives_is_loading,
       quorumTotal,
       table_height = 600
     } = this.props
@@ -278,7 +278,7 @@ export default class Representatives extends React.Component {
         <DataGrid
           slots={{ loadingOverlay: LinearProgress }}
           disableColumnMenu={true}
-          loading={isLoading}
+          loading={representatives_is_loading}
           rowHeight={36}
           pageSize={100}
           columns={columns}
@@ -300,6 +300,6 @@ Representatives.propTypes = {
   accounts: ImmutablePropTypes.list,
   totalWeight: PropTypes.number,
   quorumTotal: PropTypes.number,
-  isLoading: PropTypes.bool,
+  representatives_is_loading: PropTypes.bool,
   table_height: PropTypes.number
 }

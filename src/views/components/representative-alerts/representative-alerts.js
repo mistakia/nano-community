@@ -49,7 +49,7 @@ export default class RepresentativeAlerts extends React.Component {
   }
 
   render() {
-    const { items, isLoading, onlineWeight } = this.props
+    const { items, representatives_is_loading, onlineWeight } = this.props
 
     return (
       <>
@@ -66,7 +66,7 @@ export default class RepresentativeAlerts extends React.Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {isLoading && (
+              {representatives_is_loading && (
                 <TableRow>
                   <TableCell>
                     <Skeleton height={30} />
@@ -162,6 +162,6 @@ export default class RepresentativeAlerts extends React.Component {
 
 RepresentativeAlerts.propTypes = {
   items: PropTypes.array,
-  isLoading: PropTypes.bool,
+  representatives_is_loading: PropTypes.bool,
   onlineWeight: PropTypes.number
 }

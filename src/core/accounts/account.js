@@ -37,9 +37,24 @@ export const Account = new Record({
   version: null
 })
 
-export function createAccount(data) {
+export function createAccount({
+  account_meta,
+  stats,
+  representative_meta,
+  telemetry_history,
+  uptime,
+  uptime_summary,
+  network,
+  telemetry,
+  delegators,
+  open,
+  balance_history,
+  blocks_per_day,
+  blocks_summary,
+  ...data
+}) {
   const { major_version, minor_version, patch_version, pre_release_version } =
-    data.telemetry
+    telemetry
   const { last_online, last_offline } = data
 
   const is_online = last_online && last_online > last_offline
@@ -49,6 +64,19 @@ export function createAccount(data) {
 
   return new Account({
     ...data,
+    account_meta: new Map(account_meta),
+    stats: new Map(stats),
+    representative_meta: new Map(representative_meta),
+    telemetry_history: new List(telemetry_history),
+    uptime: new List(uptime),
+    uptime_summary: new Map(uptime_summary),
+    network: new Map(network),
+    telemetry: new Map(telemetry),
+    delegators: new List(delegators),
+    open: new Map(open),
+    balance_history: new List(balance_history),
+    blocks_per_day: new List(blocks_per_day),
+    blocks_summary: new Map(blocks_summary),
     is_online,
     version,
     account_is_loaded: true

@@ -3,8 +3,8 @@ import { Map, List } from 'immutable'
 import { accountsActions } from './actions'
 import { createAccount, Account } from './account'
 
-const initialState = new Map({
-  isLoading: false,
+const initial_state = new Map({
+  representatives_is_loading: false,
   field: null,
   value: null,
   label: null,
@@ -12,26 +12,28 @@ const initialState = new Map({
   items: new Map()
 })
 
-export function accountsReducer(state = initialState, { payload, type }) {
+export function accounts_reducer(state = initial_state, { payload, type }) {
   switch (type) {
     case accountsActions.GET_REPRESENTATIVES_PENDING:
-      return state.set('isLoading', true)
+      return state.set('representatives_is_loading', true)
 
     case accountsActions.GET_REPRESENTATIVES_FAILED:
-      return state.set('isLoading', false)
+      return state.set('representatives_is_loading', false)
 
     case accountsActions.GET_REPRESENTATIVES_FULFILLED:
       return state.withMutations((accounts) => {
-        accounts.set('isLoading', false)
-        payload.data.forEach((accountData) => {
+        accounts.set('representatives_is_loading', false)
+        payload.data.forEach((account_data) => {
           // do not overwrite GET_REPRESENTATIVE_FULFILLED
-          const account = accounts.getIn(['items', accountData.account])
-          if (!account) {
-            accounts.setIn(
-              ['items', accountData.account],
-              createAccount(accountData)
-            )
-          }
+          let account = accounts.getIn(
+            ['items', account_data.account],
+            new Account()
+          )
+          account = createAccount({
+            ...account.toJS(),
+            ...account_data
+          })
+          accounts.setIn(['items', account_data.account], account)
         })
       })
 
@@ -51,16 +53,16 @@ export function accountsReducer(state = initialState, { payload, type }) {
 
     case accountsActions.GET_ACCOUNT_FULFILLED:
       return state.withMutations((state) => {
-        const existing_account = state.getIn(
+        let existing_account = state.getIn(
           ['items', payload.params],
           new Account()
         )
-        const updated_account = createAccount({
-          ...existing_account,
+        existing_account = createAccount({
+          ...existing_account.toJS(),
           ...payload.data,
           account_is_loading: false
         })
-        state.setIn(['items', payload.params], updated_account)
+        state.setIn(['items', payload.params], existing_account)
       })
 
     case accountsActions.GET_ACCOUNT_OPEN_PENDING:
@@ -71,8 +73,13 @@ export function accountsReducer(state = initialState, { payload, type }) {
 
     case accountsActions.GET_ACCOUNT_OPEN_FULFILLED:
       return state.withMutations((state) => {
-        state.mergeIn(['items', payload.params, 'open'], payload.data)
-        state.setIn(['items', payload.params, 'account_is_loading_open'], false)
+        let account = state.getIn(['items', payload.params], new Account())
+        account = createAccount({
+          ...account.toJS(),
+          open: payload.data,
+          account_is_loading_open: false
+        })
+        state.setIn(['items', payload.params], account)
       })
 
     case accountsActions.GET_ACCOUNT_BLOCKS_SUMMARY_PENDING:
@@ -87,23 +94,19 @@ export function accountsReducer(state = initialState, { payload, type }) {
 
     case accountsActions.GET_ACCOUNT_BLOCKS_SUMMARY_FULFILLED:
       return state.withMutations((state) => {
-        state.setIn(
-          [
-            'items',
-            payload.params.account,
-            'blocks_summary',
-            payload.params.type
-          ],
-          payload.data
+        let account = state.getIn(
+          ['items', payload.params.account],
+          new Account()
         )
-        state.setIn(
-          [
-            'items',
-            payload.params.account,
-            `account_is_loading_blocks_${payload.params.type}_summary`
-          ],
-          false
-        )
+        account = createAccount({
+          ...account.toJS(),
+          blocks_summary: {
+            ...account.blocks_summary,
+            [payload.params.type]: payload.data
+          },
+          [`account_is_loading_blocks_${payload.params.type}_summary`]: false
+        })
+        state.setIn(['items', payload.params.account], account)
       })
 
     case accountsActions.GET_ACCOUNT_BALANCE_HISTORY_PENDING:
@@ -120,18 +123,16 @@ export function accountsReducer(state = initialState, { payload, type }) {
 
     case accountsActions.GET_ACCOUNT_BALANCE_HISTORY_FULFILLED:
       return state.withMutations((state) => {
-        state.setIn(
-          ['items', payload.params.account, 'balance_history'],
-          List(payload.data)
+        let account = state.getIn(
+          ['items', payload.params.account],
+          new Account()
         )
-        state.setIn(
-          [
-            'items',
-            payload.params.account,
-            'account_is_loading_balance_history'
-          ],
-          false
-        )
+        account = createAccount({
+          ...account.toJS(),
+          balance_history: List(payload.data),
+          account_is_loading_balance_history: false
+        })
+        state.setIn(['items', payload.params.account], account)
       })
 
     case accountsActions.GET_ACCOUNT_STATS_FULFILLED:
@@ -142,18 +143,16 @@ export function accountsReducer(state = initialState, { payload, type }) {
 
     case accountsActions.GET_ACCOUNT_BLOCKS_PER_DAY_FULFILLED:
       return state.withMutations((state) => {
-        state.setIn(
-          ['items', payload.params.account, 'blocks_per_day'],
-          List(payload.data)
+        let account = state.getIn(
+          ['items', payload.params.account],
+          new Account()
         )
-        state.setIn(
-          [
-            'items',
-            payload.params.account,
-            'account_is_loading_blocks_per_day'
-          ],
-          false
-        )
+        account = createAccount({
+          ...account.toJS(),
+          blocks_per_day: List(payload.data),
+          account_is_loading_blocks_per_day: false
+        })
+        state.setIn(['items', payload.params.account], account)
       })
 
     case accountsActions.GET_ACCOUNT_BLOCKS_PER_DAY_PENDING:

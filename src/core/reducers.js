@@ -2,7 +2,7 @@ import { combineReducers } from 'redux-immutable'
 import { connectRouter } from 'connected-react-router/immutable'
 
 import { appReducer } from './app'
-import { accountsReducer } from './accounts'
+import { accounts_reducer } from './accounts'
 import { blocksReducer } from './blocks'
 import { docsReducer } from './docs'
 import { githubDiscussionsReducer } from './github-discussions'
@@ -21,7 +21,7 @@ const rootReducer = (history) =>
     router: connectRouter(history),
     app: appReducer,
     blocks: blocksReducer,
-    accounts: accountsReducer,
+    accounts: accounts_reducer,
     docs: docsReducer,
     githubDiscussions: githubDiscussionsReducer,
     githubEvents: githubEventsReducer,
