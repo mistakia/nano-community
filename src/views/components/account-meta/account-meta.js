@@ -84,7 +84,7 @@ export default class AccountMeta extends React.Component {
         value: max_balance
           ? `${BigNumber(max_balance).shiftedBy(-30).toFormat()} (${dayjs(
               max_balance_timestamp * 1000
-            ).format('MMM D, YY h:mm a')})`
+            ).format('MMM D, YYYY h:mm a')})`
           : '-'
       },
       {
@@ -92,7 +92,7 @@ export default class AccountMeta extends React.Component {
         value: min_balance
           ? `${BigNumber(min_balance).shiftedBy(-30).toFormat()} (${dayjs(
               min_balance_timestamp * 1000
-            ).format('MMM D, YY h:mm a')})`
+            ).format('MMM D, YYYY h:mm a')})`
           : '-'
       },
       {
