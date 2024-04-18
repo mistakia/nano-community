@@ -32,6 +32,11 @@ export const accountsActions = {
   GET_ACCOUNT_BALANCE_HISTORY_FULFILLED:
     'GET_ACCOUNT_BALANCE_HISTORY_FULFILLED',
 
+  GET_ACCOUNT_BLOCKS_PER_DAY: 'GET_ACCOUNT_BLOCKS_PER_DAY',
+  GET_ACCOUNT_BLOCKS_PER_DAY_FAILED: 'GET_ACCOUNT_BLOCKS_PER_DAY_FAILED',
+  GET_ACCOUNT_BLOCKS_PER_DAY_PENDING: 'GET_ACCOUNT_BLOCKS_PER_DAY_PENDING',
+  GET_ACCOUNT_BLOCKS_PER_DAY_FULFILLED: 'GET_ACCOUNT_BLOCKS_PER_DAY_FULFILLED',
+
   filter: ({ field, value, label } = {}) => ({
     type: accountsActions.FILTER_REPRESENTATIVES,
     payload: {
@@ -209,6 +214,36 @@ export const accountsActions = {
       params,
       data
     }
+  }),
+
+  get_account_blocks_per_day: (account) => ({
+    type: accountsActions.GET_ACCOUNT_BLOCKS_PER_DAY,
+    payload: {
+      account
+    }
+  }),
+
+  getAccountBlocksPerDayFailed: (params, error) => ({
+    type: accountsActions.GET_ACCOUNT_BLOCKS_PER_DAY_FAILED,
+    payload: {
+      params,
+      error
+    }
+  }),
+
+  getAccountBlocksPerDayPending: (params) => ({
+    type: accountsActions.GET_ACCOUNT_BLOCKS_PER_DAY_PENDING,
+    payload: {
+      params
+    }
+  }),
+
+  getAccountBlocksPerDayFulfilled: (params, data) => ({
+    type: accountsActions.GET_ACCOUNT_BLOCKS_PER_DAY_FULFILLED,
+    payload: {
+      params,
+      data
+    }
   })
 }
 
@@ -246,4 +281,10 @@ export const accountStatsRequestActions = {
   failed: accountsActions.getAccountStatsFailed,
   pending: accountsActions.getAccountStatsPending,
   fulfilled: accountsActions.getAccountStatsFulfilled
+}
+
+export const accountBlocksPerDayRequestActions = {
+  failed: accountsActions.getAccountBlocksPerDayFailed,
+  pending: accountsActions.getAccountBlocksPerDayPending,
+  fulfilled: accountsActions.getAccountBlocksPerDayFulfilled
 }

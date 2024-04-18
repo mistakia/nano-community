@@ -178,8 +178,6 @@ export default function AccountBalanceHistory({
     <ReactEChartsCore
       echarts={echarts}
       option={option}
-      notMerge={true}
-      lazyUpdate={true}
       showLoading={is_loading}
       loadingOption={{
         maskColor: 'rgba(255, 255, 255, 0)',

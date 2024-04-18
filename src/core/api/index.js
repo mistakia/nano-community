@@ -21,7 +21,8 @@ export {
   get_blocks_unconfirmed_summary,
   get_account_balance_history,
   get_price_history,
-  get_account_stats
+  get_account_stats,
+  get_account_blocks_per_day
 } from './sagas'
 
 export { api_reducer } from './reducer'

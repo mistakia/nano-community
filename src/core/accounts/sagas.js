@@ -7,7 +7,8 @@ import {
   getAccountBlocksSummary,
   get_account_balance_history,
   get_request_history,
-  get_account_stats
+  get_account_stats,
+  get_account_blocks_per_day
 } from '@core/api'
 import { accountsActions } from './actions'
 
@@ -42,6 +43,15 @@ export function* loadAccountStats({ payload }) {
   yield call(get_account_stats, { account })
 }
 
+export function* loadAccountBlocksPerDay({ payload }) {
+  const { account } = payload
+  const request_history = yield select(get_request_history)
+  if (request_history.has(`GET_ACCOUNT_BLOCKS_PER_DAY_${account}`)) {
+    return
+  }
+  yield call(get_account_blocks_per_day, { account })
+}
+
 //= ====================================
 //  WATCHERS
 // -------------------------------------
@@ -65,6 +75,13 @@ export function* watchGetAccountStats() {
   yield takeLatest(accountsActions.GET_ACCOUNT_STATS, loadAccountStats)
 }
 
+export function* watchGetAccountBlocksPerDay() {
+  yield takeLatest(
+    accountsActions.GET_ACCOUNT_BLOCKS_PER_DAY,
+    loadAccountBlocksPerDay
+  )
+}
+
 //= ====================================
 //  ROOT
 // -------------------------------------
@@ -73,5 +90,6 @@ export const accountSagas = [
   fork(watchGetRepresentatives),
   fork(watchGetAccount),
   fork(watchGetAccountBalanceHistory),
-  fork(watchGetAccountStats)
+  fork(watchGetAccountStats),
+  fork(watchGetAccountBlocksPerDay)
 ]

@@ -51,9 +51,10 @@ export function accountsReducer(state = initialState, { payload, type }) {
 
     case accountsActions.GET_ACCOUNT_FULFILLED:
       return state.withMutations((state) => {
-        const existing_account = state
-          .getIn(['items', payload.params], new Account())
-          .toJS()
+        const existing_account = state.getIn(
+          ['items', payload.params],
+          new Account()
+        )
         const updated_account = createAccount({
           ...existing_account,
           ...payload.data,
@@ -137,6 +138,28 @@ export function accountsReducer(state = initialState, { payload, type }) {
       return state.setIn(
         ['items', payload.params.account, 'stats'],
         new Map(payload.data)
+      )
+
+    case accountsActions.GET_ACCOUNT_BLOCKS_PER_DAY_FULFILLED:
+      return state.withMutations((state) => {
+        state.setIn(
+          ['items', payload.params.account, 'blocks_per_day'],
+          List(payload.data)
+        )
+        state.setIn(
+          [
+            'items',
+            payload.params.account,
+            'account_is_loading_blocks_per_day'
+          ],
+          false
+        )
+      })
+
+    case accountsActions.GET_ACCOUNT_BLOCKS_PER_DAY_PENDING:
+      return state.setIn(
+        ['items', payload.params.account, 'account_is_loading_blocks_per_day'],
+        true
       )
 
     default:

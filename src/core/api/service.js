@@ -107,6 +107,10 @@ export const api = {
   get_account_stats({ account }) {
     const url = `${API_URL}/nanodb/accounts/${account}/stats`
     return { url }
+  },
+  get_account_blocks_per_day({ account }) {
+    const url = `${API_URL}/nanodb/accounts/${account}/blocks_per_day`
+    return { url }
   }
 }
 

@@ -22,6 +22,7 @@ import Collapsible from '@components/collapsible'
 import AccountBalanceHistory from '@components/account-balance-history'
 import AccountMeta from '@components/account-meta'
 import AccountBlocksSummary from '@components/account-blocks-summary'
+import AccountActivityCalendar from '@components/account-activity-calendar'
 
 import Seo from '@components/seo'
 import Menu from '@components/menu'
@@ -235,6 +236,9 @@ export default function AccountPage({
               )}
               <Collapsible title='Balance History' only_render_when_visible>
                 <AccountBalanceHistory account={account} />
+              </Collapsible>
+              <Collapsible title='Activity Calendar' only_render_when_visible>
+                <AccountActivityCalendar account={account} />
               </Collapsible>
               <Collapsible title='Send Summary'>
                 <AccountBlocksSummary
