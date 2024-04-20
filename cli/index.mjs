@@ -27,7 +27,9 @@ const load_private_key = async () => {
   if (private_key) {
     console.log('Private key found in environment variable.')
   } else {
-    console.log('No private key found in environment variable or stdin.')
+    console.log(
+      'No private key found in environment variable (NANO_PRIVATE_KEY).'
+    )
     // Restore stdin for inquirer
     const answers = await inquirer.prompt([
       {
@@ -297,4 +299,5 @@ yargs(hideBin(process.argv))
   .command(update_account_meta)
   .command(update_block_meta)
   .help('h')
+  .wrap(100)
   .alias('h', 'help').argv
