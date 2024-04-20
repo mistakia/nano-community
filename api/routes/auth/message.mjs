@@ -36,62 +36,63 @@ router.post('/?', async (req, res) => {
     } = message
 
     if (version !== 1) {
-      return res.status(400).send('Invalid message version')
+      return res.status(400).json({ error: 'Invalid message version' })
     }
 
     // entry_id must be null or 32 byte hash
     if (entry_id && entry_id.length !== 64) {
-      return res.status(400).send('Invalid entry_id')
+      return res.status(400).json({ error: 'Invalid entry_id' })
     }
 
     // chain_id must be null or 32 byte hash
     if (chain_id && chain_id.length !== 64) {
-      return res.status(400).send('Invalid chain_id')
+      return res.status(400).json({ error: 'Invalid chain_id' })
     }
 
     // entry_clock must be null or positive integer
     if (entry_clock && entry_clock < 0) {
-      return res.status(400).send('Invalid entry_clock')
+      return res.status(400).json({ error: 'Invalid entry_clock' })
     }
 
     // chain_clock must be null or positive integer
     if (chain_clock && chain_clock < 0) {
-      return res.status(400).send('Invalid chain_clock')
+      return res.status(400).json({ error: 'Invalid chain_clock' })
     }
 
     // public_key must be 32 byte hash
     if (public_key.length !== 64) {
-      return res.status(400).send('Invalid public_key')
+      return res.status(400).json({ error: 'Invalid public_key' })
     }
 
     // operation must be SET or DELETE
-    if (operation !== 'SET' && operation !== 'DELETE') {
-      return res.status(400).send('Invalid operation')
+    const allowed_operations = ['SET', 'SET_ACCOUNT_META', 'SET_BLOCK_META']
+    if (!allowed_operations.includes(operation)) {
+      return res.status(400).json({ error: 'Invalid operation' })
     }
 
     // content must be null or string
     if (content && typeof content !== 'string') {
-      return res.status(400).send('Invalid content')
+      return res.status(400).json({ error: 'Invalid content' })
     }
 
     // tags must be null or array of strings
     if (tags && !Array.isArray(tags)) {
-      return res.status(400).send('Invalid tags')
+      return res.status(400).json({ error: 'Invalid tags' })
     }
 
     // references must be null or array of strings
     if (references && !Array.isArray(references)) {
-      return res.status(400).send('Invalid references')
+      return res.status(400).json({ error: 'Invalid references' })
     }
 
     // created_at must be null or positive integer
     if (created_at && created_at < 0) {
-      return res.status(400).send('Invalid created_at')
+      return res.status(400).json({ error: 'Invalid created_at' })
     }
 
     // signature must be 64 byte hash
     if (signature.length !== 128) {
-      return res.status(400).send('Invalid signature')
+      return res.status(400).json({ error: 'Invalid signature' })
     }
 
     // validate signature
@@ -109,7 +110,7 @@ router.post('/?', async (req, res) => {
       signature
     })
     if (!is_valid_signature) {
-      return res.status(400).send('Invalid signature')
+      return res.status(400).json({ error: 'Invalid signature' })
     }
 
     // public_key can be a linked keypair or an existing nano account
@@ -189,7 +190,7 @@ router.post('/?', async (req, res) => {
   } catch (error) {
     console.log(error)
     logger(error)
-    res.status(500).send('Internal server error')
+    res.status(500).json({ error: 'Internal server error' })
   }
 })
 

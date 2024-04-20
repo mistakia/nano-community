@@ -10,9 +10,17 @@ import nano from 'nanocurrency'
 import {
   sign_nano_community_link_key,
   sign_nano_community_revoke_key,
-  sign_nano_community_message
+  sign_nano_community_message,
+  request
 } from '#common'
+import config from '#config'
 import ed25519 from '@trashman/ed25519-blake2b'
+
+const is_test = process.env.NODE_ENV === 'test'
+
+const base_url = is_test
+  ? `http://localhost:${config.port}`
+  : 'https://nano.community'
 
 const load_private_key = async () => {
   let private_key = process.env.NANO_PRIVATE_KEY
@@ -57,17 +65,30 @@ const add_signing_key = {
       nano_account_public_key: public_key
     })
 
-    console.log({
-      private_key,
-      public_key,
-      nano_account_address,
-      signature,
-      linked_public_key,
-      linked_private_key
-    })
+    const payload = {
+      public_key: linked_public_key.toString('hex'),
+      signature: signature.toString('hex'),
+      account: nano_account_address
+    }
 
-    // TODO send signed message to API
-    // TODO print out the linked public key and private key
+    try {
+      const response = await request({
+        url: `${base_url}/api/auth/register/key`,
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      console.log('Key registration successful:', response)
+    } catch (error) {
+      console.error(`Failed to register key: ${error.message || error}`)
+    }
+
+    console.log({
+      linked_public_key: linked_public_key.toString('hex'),
+      linked_private_key: linked_private_key.toString('hex')
+    })
   }
 }
 
@@ -110,117 +131,167 @@ const revoke_signing_key = {
         public_key
       })
 
-      // TODO send signed message to API
+      const payload = {
+        account: nano_account_address,
+        public_key: linked_public_key.toString('hex'),
+        signature: signature.toString('hex')
+      }
+
+      try {
+        const response = await request({
+          url: `${base_url}/api/auth/revoke/key`,
+          method: 'POST',
+          body: JSON.stringify(payload),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        console.log('Key revocation successful:', response)
+      } catch (error) {
+        console.error(`Failed to revoke key: ${error.message || error}`)
+      }
     } else {
       console.log('Signing key revocation cancelled.')
     }
   }
 }
 
-const send_message = {
-  command: 'send-message <type> [block_hash]',
-  describe: 'Send a message',
+const update_rep_meta = {
+  command: 'update-rep-meta',
+  describe: 'Update representative metadata',
+  handler: async () => await sendMessageHandler('update-rep-meta')
+}
+
+const update_account_meta = {
+  command: 'update-account-meta',
+  describe: 'Update account metadata',
+  handler: async () => await sendMessageHandler('update-account-meta')
+}
+
+const update_block_meta = {
+  command: 'update-block-meta <block_hash>',
+  describe: 'Update block metadata',
   builder: (yargs) =>
-    yargs
-      .positional('type', {
-        describe: 'Type of message to send',
-        choices: ['update-rep-meta', 'update-account-meta', 'update-block-meta']
-      })
-      .positional('block_hash', {
-        describe: 'Block hash for update-block-meta type',
-        type: 'string'
-      }),
-  handler: async (argv) => {
-    const { private_key, public_key } = await load_private_key()
+    yargs.positional('block_hash', {
+      describe: 'Block hash for update-block-meta type',
+      type: 'string'
+    }),
+  handler: async ({ block_hash }) =>
+    await sendMessageHandler('update-block-meta', block_hash)
+}
 
-    // TODO fetch current values from API
+const sendMessageHandler = async (type, block_hash = null) => {
+  const { private_key, public_key } = await load_private_key()
 
-    let message_content_prompts = []
-    console.log(`Sending message of type: ${argv.type}`)
-    switch (argv.type) {
-      case 'update-rep-meta':
-        message_content_prompts = [
-          { name: 'alias', message: 'Alias:' },
-          { name: 'description', message: 'Description:' },
-          { name: 'donation_address', message: 'Donation Address:' },
-          { name: 'cpu_model', message: 'CPU Model:' },
-          { name: 'cpu_cores', message: 'CPU Cores:' },
-          { name: 'ram_amount', message: 'RAM Amount:' },
-          { name: 'reddit_username', message: 'Reddit Username:' },
-          { name: 'twitter_username', message: 'Twitter Username:' },
-          { name: 'discord_username', message: 'Discord Username:' },
-          { name: 'github_username', message: 'GitHub Username:' },
-          { name: 'email', message: 'Email:' },
-          { name: 'website_url', message: 'Website URL:' }
-        ]
-        break
-      case 'update-account-meta':
-        message_content_prompts = [{ name: 'alias', message: 'Alias:' }]
-        break
-      case 'update-block-meta':
-        if (!argv.block_hash) {
-          console.error('Block hash is required for update-block-meta type')
-          return
-        }
-        message_content_prompts = [{ name: 'note', message: 'Note:' }]
-        break
-      default:
-        console.error('Unknown message type')
+  let message_content_prompts = []
+  console.log(`Sending message of type: ${type}`)
+  switch (type) {
+    case 'update-rep-meta':
+      message_content_prompts = [
+        { name: 'alias', message: 'Alias:' },
+        { name: 'description', message: 'Description:' },
+        { name: 'donation_address', message: 'Donation Address:' },
+        { name: 'cpu_model', message: 'CPU Model:' },
+        { name: 'cpu_cores', message: 'CPU Cores:' },
+        { name: 'ram_amount', message: 'RAM Amount:' },
+        { name: 'reddit_username', message: 'Reddit Username:' },
+        { name: 'twitter_username', message: 'Twitter Username:' },
+        { name: 'discord_username', message: 'Discord Username:' },
+        { name: 'github_username', message: 'GitHub Username:' },
+        { name: 'email', message: 'Email:' },
+        { name: 'website_url', message: 'Website URL:' }
+      ]
+      break
+    case 'update-account-meta':
+      message_content_prompts = [{ name: 'alias', message: 'Alias:' }]
+      break
+    case 'update-block-meta':
+      if (!block_hash) {
+        console.error('Block hash is required for update-block-meta type')
         return
-    }
+      }
+      message_content_prompts = [{ name: 'note', message: 'Note:' }]
+      break
+    default:
+      console.error('Unknown message type')
+      return
+  }
 
-    const message_content = await inquirer.prompt(message_content_prompts)
-    let confirm_edit = false
-    do {
-      console.log('Please review your message content:', message_content)
-      confirm_edit = await inquirer.prompt([
+  const message_content = await inquirer.prompt(message_content_prompts)
+  let confirm_edit = false
+  do {
+    console.log('Please review your message content:', message_content)
+    confirm_edit = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'edit',
+        message: 'Would you like to edit any field?',
+        default: false
+      }
+    ])
+    confirm_edit = confirm_edit.edit
+    if (confirm_edit) {
+      const field_to_edit = await inquirer.prompt([
         {
-          type: 'confirm',
-          name: 'edit',
-          message: 'Would you like to edit any field?',
-          default: false
+          type: 'list',
+          name: 'field',
+          message: 'Which field would you like to edit?',
+          choices: message_content_prompts.map((prompt) => prompt.name)
         }
       ])
-      confirm_edit = confirm_edit.edit
-      if (confirm_edit) {
-        const field_to_edit = await inquirer.prompt([
-          {
-            type: 'list',
-            name: 'field',
-            message: 'Which field would you like to edit?',
-            choices: message_content_prompts.map((prompt) => prompt.name)
-          }
-        ])
-        const new_value = await inquirer.prompt([
-          {
-            name: 'new_value',
-            message: `Enter new value for ${field_to_edit.field}:`
-          }
-        ])
-        message_content[field_to_edit.field] = new_value.new_value
+      const new_value = await inquirer.prompt([
+        {
+          name: 'new_value',
+          message: `Enter new value for ${field_to_edit.field}:`
+        }
+      ])
+      message_content[field_to_edit.field] = new_value.new_value
+    }
+  } while (confirm_edit)
+
+  // Include block_hash in message for update-block-meta type
+  if (type === 'update-block-meta') {
+    message_content.block_hash = block_hash
+  }
+
+  // Adjust operation to match allowed operations
+  let operation = ''
+  switch (type) {
+    case 'update-rep-meta':
+    case 'update-account-meta':
+      operation = 'SET_ACCOUNT_META'
+      break
+    case 'update-block-meta':
+      operation = 'SET_BLOCK_META'
+      break
+  }
+
+  const message = {
+    version: 1,
+    created_at: Math.floor(Date.now() / 1000),
+    public_key, // public key of signing key
+    operation,
+    content: JSON.stringify(message_content)
+  }
+
+  const signature = sign_nano_community_message(message, private_key)
+  const payload = {
+    ...message,
+    signature: signature.toString('hex')
+  }
+
+  try {
+    const response = await request({
+      url: `${base_url}/api/auth/message`,
+      method: 'POST',
+      body: JSON.stringify({ message: payload }),
+      headers: {
+        'Content-Type': 'application/json'
       }
-    } while (confirm_edit)
-
-    // Include block_hash in message for update-block-meta type
-    if (argv.type === 'update-block-meta') {
-      message_content.block_hash = argv.block_hash
-    }
-
-    const message = {
-      created_at: Math.floor(Date.now() / 1000),
-      public_key, // public key of signing key
-      operation: argv.type.replace('-', '_'),
-      content: message_content
-    }
-
-    const signature = sign_nano_community_message(message, private_key)
-
-    console.log({
-      message,
-      signature
     })
-
-    // TODO send signed message to API
+    console.log('Message sent successful:', response)
+  } catch (error) {
+    console.error(`Failed to send message: ${error.message || error}`)
   }
 }
 
@@ -230,6 +301,8 @@ yargs(hideBin(process.argv))
   .usage('$0 <cmd> [args]')
   .command(add_signing_key)
   .command(revoke_signing_key)
-  .command(send_message)
+  .command(update_rep_meta)
+  .command(update_account_meta)
+  .command(update_block_meta)
   .help('h')
   .alias('h', 'help').argv
