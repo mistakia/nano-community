@@ -15,8 +15,10 @@ export default class RepresentativeNetwork extends React.Component {
         label: 'Last Seen',
         value: account.get('is_online') ? (
           <FiberManualRecordIcon className='green' />
-        ) : (
+        ) : account.getIn(['last_seen']) ? (
           timeago.format(account.getIn(['last_seen']) * 1000, 'nano_short')
+        ) : (
+          '-'
         )
       },
       {
