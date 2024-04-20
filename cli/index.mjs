@@ -123,14 +123,6 @@ const revoke_signing_key = {
         nano_account_public_key: public_key
       })
 
-      console.log({
-        signature,
-        linked_public_key,
-        nano_account_address,
-        private_key,
-        public_key
-      })
-
       const payload = {
         account: nano_account_address,
         public_key: linked_public_key.toString('hex'),

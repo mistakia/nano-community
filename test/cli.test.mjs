@@ -51,7 +51,7 @@ describe('CLI', function () {
       // eslint-disable-next-line no-unused-expressions
       expect(stderr).to.be.empty
       expect(stdout).to.include('Key registration successful')
-      
+
       // Extract the new signing key from stdout
       const match = stdout.match(/linked_public_key: '([a-f0-9]+)'/)
       if (match) {
