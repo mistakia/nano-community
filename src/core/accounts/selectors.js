@@ -29,7 +29,7 @@ export function getFilteredRepresentatives(state) {
       (r) =>
         fuzzySearch(search, r.account || '') ||
         fuzzySearch(search, r.alias || '') ||
-        (r.telemetry.address || '').includes(search)
+        r.getIn(['telemetry', 'address'], '').includes(search)
     )
   }
 
@@ -83,8 +83,9 @@ export function getRepresentativesTotalWeight(state) {
   const accounts = getRepresentatives(state)
   let weight = BigNumber(0)
   for (const rep of accounts.valueSeq()) {
-    if (!rep.account_meta.weight) continue
-    weight = BigNumber(rep.account_meta.weight).plus(weight)
+    const rep_weight = rep.getIn(['account_meta', 'weight'])
+    if (!rep_weight) continue
+    weight = BigNumber(rep_weight).plus(weight)
   }
 
   return weight.toNumber()
@@ -94,8 +95,9 @@ export function getOnlineRepresentativesTotalWeight(state) {
   const accounts = getOnlineRepresentatives(state)
   let weight = BigNumber(0)
   for (const rep of accounts.valueSeq()) {
-    if (!rep.account_meta.weight) continue
-    weight = BigNumber(rep.account_meta.weight).plus(weight)
+    const rep_weight = rep.getIn(['account_meta', 'weight'])
+    if (!rep_weight) continue
+    weight = BigNumber(rep_weight).plus(weight)
   }
 
   return weight.toNumber()
@@ -123,5 +125,8 @@ export function getNetworkUnconfirmedBlockCount(state) {
 
   const rep = sorted.first()
 
-  return rep.getIn(['telemetry', 'block_count']) - rep.getIn(['telemetry', 'cemented_count'])
+  return (
+    rep.getIn(['telemetry', 'block_count']) -
+    rep.getIn(['telemetry', 'cemented_count'])
+  )
 }

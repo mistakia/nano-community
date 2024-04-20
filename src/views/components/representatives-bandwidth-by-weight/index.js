@@ -66,19 +66,20 @@ const mapStateToProps = createSelector(
     ]
     const metrics = thresholds.map((p) => ({ ...p, total: 0 }))
     for (const rep of accounts.valueSeq()) {
-      if (!rep.account_meta.weight) continue
+      const rep_weight = rep.getIn(['account_meta', 'weight'], 0)
+      if (!rep_weight) continue
 
       // add to unknown
-      if (rep.telemetry.bandwidth_cap === undefined) {
-        metrics[0].total = BigNumber(rep.account_meta.weight)
+      if (rep.getIn(['telemetry', 'bandwidth_cap']) === undefined) {
+        metrics[0].total = BigNumber(rep_weight)
           .plus(metrics[0].total)
           .toFixed()
         continue
       }
 
       // add to unlimited
-      if (rep.telemetry.bandwidth_cap === 0) {
-        metrics[1].total = BigNumber(rep.account_meta.weight)
+      if (rep.getIn(['telemetry', 'bandwidth_cap']) === 0) {
+        metrics[1].total = BigNumber(rep_weight)
           .plus(metrics[1].total)
           .toFixed()
         continue
@@ -88,8 +89,8 @@ const mapStateToProps = createSelector(
       const lastIdx = Math.max(metrics.length - 1, 0)
       let i = 2
       for (; i < lastIdx; i++) {
-        if (rep.telemetry.bandwidth_cap <= metrics[i].threshold) {
-          metrics[i].total = BigNumber(rep.account_meta.weight)
+        if (rep.getIn(['telemetry', 'bandwidth_cap']) <= metrics[i].threshold) {
+          metrics[i].total = BigNumber(rep_weight)
             .plus(metrics[i].total)
             .toFixed()
           break
@@ -98,7 +99,7 @@ const mapStateToProps = createSelector(
 
       // add to catch all
       if (i === lastIdx) {
-        metrics[i].total = BigNumber(rep.account_meta.weight)
+        metrics[i].total = BigNumber(rep_weight)
           .plus(metrics[i].total)
           .toFixed()
       }

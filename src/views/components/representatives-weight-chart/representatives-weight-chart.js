@@ -22,7 +22,7 @@ export default class RepresentativesWeightChart extends React.Component {
 
     const weightData = []
     accounts.forEach((a) => {
-      const bn = BigNumber(a.account_meta.weight)
+      const bn = BigNumber(a.getIn(['account_meta', 'weight']))
       const weight = bn.shiftedBy(-30).toFixed(0)
       const pct = bn.dividedBy(denominator).multipliedBy(100).toFixed(1)
 

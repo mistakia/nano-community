@@ -121,22 +121,30 @@ export default class RepresentativeAlerts extends React.Component {
                       )}
                     </TableCell>
                     <TableCell className='rep__alert-metric' align='right'>
-                      {BigNumber(row.account.account_meta.weight)
+                      {BigNumber(
+                        row.account.getIn(['account_meta', 'weight'], 0)
+                      )
                         .shiftedBy(-30)
                         .toFormat(0)}
                     </TableCell>
                     <TableCell className='rep__alert-metric' align='right'>
-                      {row.account.account_meta.weight && onlineWeight
-                        ? `${BigNumber(row.account.account_meta.weight)
+                      {row.account.getIn(['account_meta', 'weight'], 0) &&
+                      onlineWeight
+                        ? `${BigNumber(
+                            row.account.getIn(['account_meta', 'weight'], 0)
+                          )
                             .dividedBy(onlineWeight)
                             .multipliedBy(100)
                             .toFormat(2)} %`
                         : '-'}
                     </TableCell>
                     <TableCell className='rep__alert-metric' align='right'>
-                      {row.account.telemetry.cemented_behind >= 0
+                      {row.account.getIn(
+                        ['telemetry', 'cemented_behind'],
+                        -1
+                      ) >= 0
                         ? BigNumber(
-                            row.account.telemetry.cemented_behind
+                            row.account.getIn(['telemetry', 'cemented_behind'])
                           ).toFormat(0)
                         : '-'}
                     </TableCell>

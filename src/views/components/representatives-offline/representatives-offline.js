@@ -25,7 +25,7 @@ export default class RepresentativesOffline extends React.Component {
           account: p.account,
           alias: p.alias,
           is_online: p.is_online,
-          weight: p.account_meta.weight || 0,
+          weight: p.getIn(['account_meta', 'weight'], 0),
           last_online: p.last_online,
           diff: (p.last_online || 0) - (p.last_offline || 0)
         }

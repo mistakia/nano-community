@@ -19,17 +19,16 @@ const mapStateToProps = createSelector(
     }
 
     for (const rep of accounts.valueSeq()) {
-      if (!rep.account_meta.weight) continue
+      const weight = rep.getIn(['account_meta', 'weight'])
+      if (!weight) continue
 
-      const country = rep.network.country
+      const country = rep.getIn(['network', 'country'])
       if (!country) {
-        countries.unknown = BigNumber(rep.account_meta.weight)
-          .plus(countries.unknown)
-          .toFixed()
+        countries.unknown = BigNumber(weight).plus(countries.unknown).toFixed()
         continue
       }
 
-      countries[country] = BigNumber(rep.account_meta.weight)
+      countries[country] = BigNumber(weight)
         .plus(countries[country] || 0)
         .toFixed()
     }

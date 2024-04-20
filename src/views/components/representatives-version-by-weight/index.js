@@ -17,10 +17,11 @@ const mapStateToProps = createSelector(
     const versions = {}
 
     for (const rep of accounts.valueSeq()) {
-      if (!rep.account_meta.weight) continue
+      const weight = rep.getIn(['account_meta', 'weight'])
+      if (!weight) continue
 
       const version = rep.version
-      versions[version] = BigNumber(rep.account_meta.weight)
+      versions[version] = BigNumber(weight)
         .plus(versions[version] || 0)
         .toFixed()
     }

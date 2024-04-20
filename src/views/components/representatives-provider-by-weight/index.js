@@ -19,17 +19,16 @@ const mapStateToProps = createSelector(
     }
 
     for (const rep of accounts.valueSeq()) {
-      if (!rep.account_meta.weight) continue
+      const weight = rep.getIn(['account_meta', 'weight'])
+      if (!weight) continue
 
-      const provider = rep.network.asname
+      const provider = rep.getIn(['network', 'asname'])
       if (!provider) {
-        providers.unknown = BigNumber(rep.account_meta.weight)
-          .plus(providers.unknown)
-          .toFixed()
+        providers.unknown = BigNumber(weight).plus(providers.unknown).toFixed()
         continue
       }
 
-      providers[provider] = BigNumber(rep.account_meta.weight)
+      providers[provider] = BigNumber(weight)
         .plus(providers[provider] || 0)
         .toFixed()
     }

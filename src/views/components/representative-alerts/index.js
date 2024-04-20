@@ -33,7 +33,7 @@ const mapStateToProps = createSelector(
     const lowUptime = reps.filter((a) => {
       const uptime = a.get('uptime')
       const online = uptime.filter((u) => u.online)
-      const total = uptime.length
+      const total = uptime.size
       const pct = online / total
       return pct < 0.75
     })

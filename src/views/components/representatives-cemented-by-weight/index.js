@@ -59,22 +59,23 @@ const mapStateToProps = createSelector(
     ]
     const metrics = thresholds.map((p) => ({ ...p, total: 0 }))
     for (const rep of accounts.valueSeq()) {
-      if (!rep.account_meta.weight) continue
+      const rep_weight = rep.getIn(['account_meta', 'weight'])
+      if (!rep_weight) continue
 
-      const blocksBehind = rep.telemetry.cemented_behind
-      if (blocksBehind == null) {
-        metrics[0].total = BigNumber(rep.account_meta.weight)
+      const blocks_behind = rep.getIn(['telemetry', 'cemented_behind'])
+      if (blocks_behind == null) {
+        metrics[0].total = BigNumber(rep_weight)
           .plus(metrics[0].total)
           .toFixed()
         continue
       }
 
       // stop before the last one (catch-all)
-      const lastIdx = Math.max(metrics.length - 1, 0)
+      const last_idx = Math.max(metrics.length - 1, 0)
       let i = 1
-      for (; i < lastIdx; i++) {
-        if (blocksBehind <= metrics[i].threshold) {
-          metrics[i].total = BigNumber(rep.account_meta.weight)
+      for (; i < last_idx; i++) {
+        if (blocks_behind <= metrics[i].threshold) {
+          metrics[i].total = BigNumber(rep_weight)
             .plus(metrics[i].total)
             .toFixed()
           break
@@ -82,8 +83,8 @@ const mapStateToProps = createSelector(
       }
 
       // add to catch all
-      if (i === lastIdx) {
-        metrics[i].total = BigNumber(rep.account_meta.weight)
+      if (i === last_idx) {
+        metrics[i].total = BigNumber(rep_weight)
           .plus(metrics[i].total)
           .toFixed()
       }

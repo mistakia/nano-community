@@ -31,21 +31,29 @@ export default class RepresentativesClusterCharts extends React.Component {
     const bandwidthData = []
     const uncheckedData = []
     accounts.forEach((a) => {
-      if (a.telemetry.cemented_behind > 1000) return
-      const weight = BigNumber(a.account_meta.weight)
+      if (a.getIn(['telemetry', 'cemented_behind']) > 1000) return
+      const weight = BigNumber(a.getIn(['account_meta', 'weight']))
         .dividedBy(totalWeight)
         .multipliedBy(100)
         .toFixed()
-      const label = a.alias || a.account
-      confirmationsData.push([a.telemetry.cemented_behind, weight, label])
-      blocksData.push([a.telemetry.block_behind, weight, label])
-      peersData.push([a.telemetry.peer_count, weight, label])
-      uncheckedData.push([a.telemetry.unchecked_count, weight, label])
+      const label = a.getIn(['alias'], a.getIn(['account']))
+      confirmationsData.push([
+        a.getIn(['telemetry', 'cemented_behind']),
+        weight,
+        label
+      ])
+      blocksData.push([a.getIn(['telemetry', 'block_behind']), weight, label])
+      peersData.push([a.getIn(['telemetry', 'peer_count']), weight, label])
+      uncheckedData.push([
+        a.getIn(['telemetry', 'unchecked_count']),
+        weight,
+        label
+      ])
 
       // exclude 0 (unlimited)
-      if (a.telemetry.bandwidth_cap)
+      if (a.getIn(['telemetry', 'bandwidth_cap']))
         bandwidthData.push([
-          a.telemetry.bandwidth_cap / (1024 * 1024),
+          a.getIn(['telemetry', 'bandwidth_cap']) / (1024 * 1024),
           weight,
           label
         ])
