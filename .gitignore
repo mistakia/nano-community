@@ -20,8 +20,5 @@ yarn-error.log
 
 # App specific
 #
-build/favicon.ico
-!build/*.html
-!build/sitemap.xml
-!build/**/*.html
+build/
 config.production.js

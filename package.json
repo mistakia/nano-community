@@ -12,7 +12,8 @@
     "dev:live": "NC_DEV_LIVE=true yarn start",
     "start": "webpack serve --mode=development --config webpack/webpack.dev.babel.mjs --port 8081 --history-api-fallback --static-directory resources --static-public-path /resources --open",
     "start:api": "NODE_ENV=development node server.mjs",
-    "deploy": "ipfs-deploy build/index.html",
+    "deploy:ipfs": "ipfs-deploy build/index.html",
+    "deploy": "scp -r build/* nano.community:/root/nano-community/build",
     "build": "cross-env NODE_ENV=production webpack --config webpack/webpack.prod.babel.mjs --color --progress && react-snap",
     "lint": "eslint . --ext js,mjs",
     "prettier": "prettier --write .",
@@ -21,6 +22,7 @@
   "homepage": "https://nano.community/",
   "reactSnap": {
     "homepage": "https://nano.community/",
+    "puppeteer_executable_path": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
     "inlineCss": true,
     "sitemap": true,
     "include": [
