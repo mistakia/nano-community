@@ -78,7 +78,6 @@ export function createAccount({
     blocks_per_day: new List(blocks_per_day),
     blocks_summary: new Map(blocks_summary),
     is_online,
-    version,
-    account_is_loaded: true
+    version
   })
 }

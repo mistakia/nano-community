@@ -25,15 +25,14 @@ export function accounts_reducer(state = initial_state, { payload, type }) {
         accounts.set('representatives_is_loading', false)
         payload.data.forEach((account_data) => {
           // do not overwrite GET_REPRESENTATIVE_FULFILLED
-          let account = accounts.getIn(
-            ['items', account_data.account],
-            new Account()
-          )
-          account = createAccount({
-            ...account.toJS(),
-            ...account_data
+          const account_key = ['items', account_data.account]
+          const existing_account = accounts.getIn(account_key, new Account())
+          const updated_account = createAccount({
+            ...existing_account.toJS(),
+            ...account_data,
+            account_is_loaded: true
           })
-          accounts.setIn(['items', account_data.account], account)
+          accounts.setIn(account_key, updated_account)
         })
       })
 
@@ -53,33 +52,38 @@ export function accounts_reducer(state = initial_state, { payload, type }) {
 
     case accountsActions.GET_ACCOUNT_FULFILLED:
       return state.withMutations((state) => {
-        let existing_account = state.getIn(
-          ['items', payload.params],
-          new Account()
-        )
-        existing_account = createAccount({
+        const account_key = ['items', payload.params]
+        const existing_account = state.getIn(account_key, new Account())
+        const updated_account = createAccount({
           ...existing_account.toJS(),
           ...payload.data,
-          account_is_loading: false
+          account_is_loading: false,
+          account_is_loaded: true
         })
-        state.setIn(['items', payload.params], existing_account)
+        state.setIn(account_key, updated_account)
       })
 
     case accountsActions.GET_ACCOUNT_OPEN_PENDING:
-      return state.setIn(
-        ['items', payload.params, 'account_is_loading_open'],
-        true
-      )
+      return state.withMutations((state) => {
+        const account_key = ['items', payload.params]
+        const existing_account = state.getIn(account_key, new Account())
+        const updated_account = createAccount({
+          ...existing_account.toJS(),
+          account_is_loading_open: true
+        })
+        state.setIn(account_key, updated_account)
+      })
 
     case accountsActions.GET_ACCOUNT_OPEN_FULFILLED:
       return state.withMutations((state) => {
-        let account = state.getIn(['items', payload.params], new Account())
-        account = createAccount({
-          ...account.toJS(),
+        const account_key = ['items', payload.params]
+        const existing_account = state.getIn(account_key, new Account())
+        const updated_account = createAccount({
+          ...existing_account.toJS(),
           open: payload.data,
           account_is_loading_open: false
         })
-        state.setIn(['items', payload.params], account)
+        state.setIn(account_key, updated_account)
       })
 
     case accountsActions.GET_ACCOUNT_BLOCKS_SUMMARY_PENDING:
@@ -94,72 +98,87 @@ export function accounts_reducer(state = initial_state, { payload, type }) {
 
     case accountsActions.GET_ACCOUNT_BLOCKS_SUMMARY_FULFILLED:
       return state.withMutations((state) => {
-        let account = state.getIn(
-          ['items', payload.params.account],
-          new Account()
-        )
-        account = createAccount({
-          ...account.toJS(),
+        const account_key = ['items', payload.params.account]
+        const existing_account = state.getIn(account_key, new Account())
+        const updated_account = createAccount({
+          ...existing_account.toJS(),
           blocks_summary: {
-            ...account.blocks_summary,
+            ...existing_account.blocks_summary,
             [payload.params.type]: payload.data
           },
           [`account_is_loading_blocks_${payload.params.type}_summary`]: false
         })
-        state.setIn(['items', payload.params.account], account)
+        state.setIn(account_key, updated_account)
       })
 
     case accountsActions.GET_ACCOUNT_BALANCE_HISTORY_PENDING:
-      return state.setIn(
-        ['items', payload.params.account, 'account_is_loading_balance_history'],
-        true
-      )
+      return state.withMutations((state) => {
+        const account_key = ['items', payload.params.account]
+        const existing_account = state.getIn(account_key, new Account())
+        const updated_account = createAccount({
+          ...existing_account.toJS(),
+          account_is_loading_balance_history: true
+        })
+        state.setIn(account_key, updated_account)
+      })
 
     case accountsActions.GET_ACCOUNT_BALANCE_HISTORY_FAILED:
-      return state.setIn(
-        ['items', payload.params.account, 'account_is_loading_balance_history'],
-        false
-      )
+      return state.withMutations((state) => {
+        const account_key = ['items', payload.params.account]
+        const existing_account = state.getIn(account_key, new Account())
+        const updated_account = createAccount({
+          ...existing_account.toJS(),
+          account_is_loading_balance_history: false
+        })
+        state.setIn(account_key, updated_account)
+      })
 
     case accountsActions.GET_ACCOUNT_BALANCE_HISTORY_FULFILLED:
       return state.withMutations((state) => {
-        let account = state.getIn(
-          ['items', payload.params.account],
-          new Account()
-        )
-        account = createAccount({
-          ...account.toJS(),
+        const account_key = ['items', payload.params.account]
+        const existing_account = state.getIn(account_key, new Account())
+        const updated_account = createAccount({
+          ...existing_account.toJS(),
           balance_history: List(payload.data),
           account_is_loading_balance_history: false
         })
-        state.setIn(['items', payload.params.account], account)
+        state.setIn(account_key, updated_account)
       })
 
     case accountsActions.GET_ACCOUNT_STATS_FULFILLED:
-      return state.setIn(
-        ['items', payload.params.account, 'stats'],
-        new Map(payload.data)
-      )
+      return state.withMutations((state) => {
+        const account_key = ['items', payload.params.account]
+        const existing_account = state.getIn(account_key, new Account())
+        const updated_account = createAccount({
+          ...existing_account.toJS(),
+          stats: Map(payload.data),
+          account_is_loading_stats: false
+        })
+        state.setIn(account_key, updated_account)
+      })
 
     case accountsActions.GET_ACCOUNT_BLOCKS_PER_DAY_FULFILLED:
       return state.withMutations((state) => {
-        let account = state.getIn(
-          ['items', payload.params.account],
-          new Account()
-        )
-        account = createAccount({
-          ...account.toJS(),
+        const account_key = ['items', payload.params.account]
+        const existing_account = state.getIn(account_key, new Account())
+        const updated_account = createAccount({
+          ...existing_account.toJS(),
           blocks_per_day: List(payload.data),
           account_is_loading_blocks_per_day: false
         })
-        state.setIn(['items', payload.params.account], account)
+        state.setIn(account_key, updated_account)
       })
 
     case accountsActions.GET_ACCOUNT_BLOCKS_PER_DAY_PENDING:
-      return state.setIn(
-        ['items', payload.params.account, 'account_is_loading_blocks_per_day'],
-        true
-      )
+      return state.withMutations((state) => {
+        const account_key = ['items', payload.params.account]
+        const existing_account = state.getIn(account_key, new Account())
+        const updated_account = createAccount({
+          ...existing_account.toJS(),
+          account_is_loading_blocks_per_day: true
+        })
+        state.setIn(account_key, updated_account)
+      })
 
     default:
       return state
