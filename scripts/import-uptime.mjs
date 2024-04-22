@@ -125,12 +125,12 @@ const importUptime = async () => {
 
   // process each account
   for (const [account, values] of Object.entries(grouped)) {
-    // rollup into groups of every two hours
+    // rollup into groups of every hour
     const rollup = {}
     for (const d of values) {
       const diff = dayjs.unix(d.timestamp).diff(now, 'hour')
       const hour = Math.abs(diff)
-      const interval = hour && hour % 2 === 0 ? hour - 1 : hour
+      const interval = hour
       if (!rollup[interval]) rollup[interval] = [d]
       else rollup[interval].push(d)
     }
