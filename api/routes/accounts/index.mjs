@@ -92,7 +92,7 @@ router.get('/:address', async (req, res) => {
       .orderBy('timestamp', 'desc')
       .limit(1)
 
-    const uptime = await db('representatives_uptime_rollup_2hour')
+    const uptime = await db('representatives_uptime_rollup_hour')
       .where({ account: address })
       .orderBy('interval', 'asc')
 

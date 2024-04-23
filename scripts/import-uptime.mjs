@@ -166,7 +166,7 @@ const importUptime = async () => {
 
     if (inserts.length) {
       logger(`saving ${inserts.length} rollups for ${account}`)
-      await db('representatives_uptime_rollup_2hour')
+      await db('representatives_uptime_rollup_hour')
         .insert(inserts)
         .onConflict()
         .merge()
@@ -174,7 +174,7 @@ const importUptime = async () => {
   }
 
   // remove rows for representatives without uptime in the last 14 days
-  const res = await db('representatives_uptime_rollup_2hour')
+  const res = await db('representatives_uptime_rollup_hour')
     .whereNotIn('account', Object.keys(grouped))
     .delete()
 

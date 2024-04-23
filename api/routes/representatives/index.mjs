@@ -30,7 +30,7 @@ const loadRepresentatives = async () => {
     accounts
   )
 
-  const uptime = db('representatives_uptime_rollup_2hour')
+  const uptime = db('representatives_uptime_rollup_hour')
     .whereIn('account', accounts)
     .orderBy('interval', 'asc')
 

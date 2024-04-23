@@ -534,9 +534,9 @@ CREATE TABLE `representatives_uptime_summary` (
 -- Table structure for table `representatives_uptime`
 --
 
-DROP TABLE IF EXISTS `representatives_uptime_rollup_2hour`;
+DROP TABLE IF EXISTS `representatives_uptime_rollup_hour`;
 
-CREATE TABLE `representatives_uptime_rollup_2hour` (
+CREATE TABLE `representatives_uptime_rollup_hour` (
   `account` char(65) NOT NULL,
   `online` tinyint(1) NOT NULL,
 
