@@ -26,7 +26,7 @@ If you are interested in directly contributing to nano development or its ecosys
 
 ### Block-lattice
 
-The source of Nano's advantages comes from the structure of its ledger, a block-lattice. Every account has a blockchain (account-chain), where a "block" is a single operation that contains the entire state for that account (balance & representative). Thus, the latest block for each account (called a frontier) is all you need to know the current state for a given account.
+Nano's unique ledger structure, known as block-lattice, underpins its functionality. Each account has its own blockchain (account-chain), where each block is a single operation that contains the entire state for that account (balance & representative). Thus, the latest block for each account (called a frontier) is all you need to know the current state for a given account. Blocks belong to an account, thus only the private key holder can produce a valid block for that account.
 
 ### Account
 
@@ -61,7 +61,7 @@ A string that starts with `nano_` (previously `xrb_`), then has 52 characters wh
 
 ### Wallet ID
 
-Is just a local UUID that references a specific wallet (set of seed/private keys/info about them) in your node's local database file. Do not confuse this with a seed or private key.
+Is just a local UUID that references a specific wallet (set of seed/private keys/info about them) in the node's local database file (pertaining to the reference C++ node implementation). Do not confuse this with a seed or private key.
 
 ### Transactions
 
@@ -70,15 +70,15 @@ Given that an account's state can only be updated by the corresponding secret ke
 1. **Send block**: the sender broadcasts an operation that deducts the balance of their account by the amount they are sending
 2. **Receive block**: the receiver broadcasts an operation that references the sender's operation and increases the balance of their account by the amount sent to them
 
-Once the send block is confirmed by the network, the transaction is irreversible and the receiver can broadcast a receive block at any point in the future to update their balance and use the funds sent to them.
+Once the send block is confirmed by the network, the transaction is irreversible and the receiver can broadcast a receive block at any point in the future to update their balance and use the funds sent to them. Thus, the total amount of nano across send blocks without a corresponding receive block is referred to as a "Receivable Balance".
 
 ## Accessing the Network
 
 The most common way to access the network is through RPC commands to either a local or public node.
 
 - <a href="https://docs.nano.org/commands/rpc-protocol/" target="_blank">RPC Documentation</a>
-- <a href="https://nano.casa/public-nodes" target="_target">Public Nodes Tracker (nano.casa)</a>
-- <a href="https://publicnodes.somenano.com/" target="_target">Public Nodes Tracker (somenano.com)</a>
+- <a href="https://nano.casa/public-nodes" target="_blank">Public Nodes Tracker (nano.casa)</a>
+- <a href="https://publicnodes.somenano.com/" target="_blank">Public Nodes Tracker (somenano.com)</a>
 - [Running a node](/getting-started-devs/running-a-node)
 
 ## Basics
@@ -88,8 +88,8 @@ The most common way to access the network is through RPC commands to either a lo
 In most situations, you'll want to derive an account from a seed and it's best to use an existing library. For a more comprehensive guide, view the <a href="https://docs.nano.org/integration-guides/key-management/" target="_blank">key management</a> section of the Official Integration Guides.
 
 ```js [g1:JavaScript]
-import { wallet } from 'nanocurrency-web'
-const wallet = wallet.generate()
+import { wallet as walletLib } from 'nanocurrency-web'
+const wallet = walletLib.generate()
 ```
 
 ```python [g1:Python]
@@ -100,12 +100,72 @@ account_id = nanolib.generate_account_id(seed, 0)
 
 #### Libraries
 
-- <a href="https://github.com/Matoking/nanolib" target="_blank">nanolib</a> — python
-- <a href="https://github.com/npy0/nanopy" target="_blank">nanopy</a> — python
-- <a href="https://github.com/lukes/nanook" target="_blank">nanook</a> — ruby
-- <a href="https://github.com/numsu/nanocurrency-web-js" target="_blank">nanocurrency-web</a> — node.js / js
-- <a href="https://github.com/marvinroger/nanocurrency-js" target="_blank">nanocurency-js</a> — node.js / js
-- <a href="https://github.com/appditto/pippin_nano_wallet" target="_blank">pippin</a> — python (production wallet)
+##### Node.js / JavaScript
+
+| Name                                                              | Description                                                                                                                           |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| [nanocurrency-web](https://github.com/numsu/nanocurrency-web-js)  | Toolkit for Nano cryptocurrency client side offline integrations without requiring NodeJS functions                                   |
+| [nanocurrency-js](https://github.com/marvinroger/nanocurrency-js) | 🔗 A toolkit for the Nano cryptocurrency, allowing you to derive keys, generate seeds, hashes, signatures, proofs of work and blocks. |
+| [Nano.js](https://github.com/WriteNaN/Nano.js)                    | Library to interact with the nano blockchain through javascript                                                                       |
+
+##### Typescript
+
+| Name                                             | Description                                                              |
+| ------------------------------------------------ | ------------------------------------------------------------------------ |
+| [nona-lib](https://github.com/tgerboui/nona-lib) | TypeScript library to simplify interactions with the Nano currency node. |
+
+##### Dart
+
+| Name                                               | Description                                                                                                     |
+| -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| [nanodart](https://github.com/nano-dart/nano-dart) | Dart library for the NANO and BANANO cryptocurrencies - supports key generation, signing, encryption, and more. |
+| [nanoutil](https://github.com/perishllc/nanoutil)  | A Nano and Banano cryptocurrency library for the Dart programming language                                      |
+
+##### Python
+
+| Name                                                      | Description                                                                                                                                    |
+| --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| [nanolib](https://github.com/Matoking/nanolib)            | Python library for working with the NANO cryptocurrency protocol                                                                               |
+| [nanopy](https://github.com/npy0/nanopy)                  | Python implementation of NANO related functions                                                                                                |
+| [pippin](https://github.com/appditto/pippin_nano_wallet)  | A high performance, lightweight alternative to the NANO Node developer wallet (includes production wallet)                                     |
+| [nanohakase](https://github.com/stjet/nanohakase)         | Nanohakase is a python library for the Nano cryptocurrency. It aims to be the simplest Nano library out there, and is a self fork of Bananopie |
+| [nano-rpc-py](https://github.com/gr0vity-dev/nano-rpc-py) | python library that dynamically generates methods based on a commands dictionary                                                               |
+
+##### Rust
+
+| Name                                                  | Description                               |
+| ----------------------------------------------------- | ----------------------------------------- |
+| [nanopyrs](https://github.com/expiredhotdog/nanopyrs) | Rust rewrite of the Python nanopy library |
+
+##### Ruby
+
+| Name                                      | Description                                                                      |
+| ----------------------------------------- | -------------------------------------------------------------------------------- |
+| [nanook](https://github.com/lukes/nanook) | Ruby library for making and receiving payments and managing a nano currency node |
+
+##### .NET
+
+| Name                                               | Description             |
+| -------------------------------------------------- | ----------------------- |
+| [Nano.NET](https://github.com/miguel1117/Nano.Net) | A .NET library for Nano |
+
+##### Java
+
+| Name                                            | Description                                               |
+| ----------------------------------------------- | --------------------------------------------------------- |
+| [jNano](https://github.com/nano-java/nano-java) | A comprehensive Java library for the Nano cryptocurrency. |
+
+##### Go
+
+| Name                                          | Description                                      |
+| --------------------------------------------- | ------------------------------------------------ |
+| [gonano](https://github.com/hectorchu/gonano) | Go language support for Nano, a digital currency |
+
+##### Swift
+
+| Name                                              | Description                                  |
+| ------------------------------------------------- | -------------------------------------------- |
+| [NanoSwift](https://github.com/Priva28/NanoSwift) | A Swift library for the Nano cryptocurrency. |
 
 #### Notable RPC Commands
 
@@ -212,7 +272,7 @@ Once you have a node up and running the ledger should bootstrap from the network
 
 ## What to build
 
-- tip bots (<a href="https://github.com/mitche50/NanoTipBot" target="_blank">NanoTipBot</a> / <a href="https://github.com/danhitchcock/nano_tipper_z" target="_blank">nano_tipper_z</a> / <a href="https://github.com/danhitchcock/RedditTipBot" target="_blank">RedditTipBot</a> / <a href="https://github.com/bbedward/graham_discord_bot" target="_target">discord tip bot</a>)
+- tip bots (<a href="https://github.com/mitche50/NanoTipBot" target="_blank">NanoTipBot</a> / <a href="https://github.com/danhitchcock/nano_tipper_z" target="_blank">nano_tipper_z</a> / <a href="https://github.com/danhitchcock/RedditTipBot" target="_blank">RedditTipBot</a> / <a href="https://github.com/bbedward/graham_discord_bot" target="_blank">discord tip bot</a>)
 - integrate with gaming (<a href="https://github.com/wezrule/UE4NanoPlugin" target="_blank">Nano Plugin Unreal Engine 4</a>)
 - wallets (<a href="https://github.com/Nault/Nault" target="_blank">Nault</a> / <a href="https://github.com/appditto/natrium_wallet_flutter" target="_blank">Natrium</a>)
 - merchant payment services
