@@ -26,7 +26,7 @@ const base = (options) => ({
     rules: [
       {
         test: /\.jsx?$/, // Transform all .js and .jsx files required somewhere with Babel
-        exclude: /node_modules/,
+        exclude: /node_modules\/(?!react-table)/,
         use: {
           loader: 'babel-loader',
           options: options.babelQuery
@@ -150,7 +150,15 @@ const base = (options) => ({
   resolve: {
     modules: ['node_modules', 'app'],
     extensions: ['.js', '.jsx', '.react.js'],
-    mainFields: ['browser', 'jsnext:main', 'main']
+    mainFields: ['browser', 'jsnext:main', 'main'],
+    alias: {
+      react: path.resolve(__dirname, '../node_modules/react'),
+      'react-dom': path.resolve(__dirname, '../node_modules/react-dom'),
+      '@emotion/react': path.resolve(
+        __dirname,
+        '../node_modules/@emotion/react'
+      )
+    }
   },
   devtool: options.devtool,
   target: 'web', // Make web variables accessible to webpack, e.g. window

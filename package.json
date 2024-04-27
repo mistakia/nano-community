@@ -77,7 +77,8 @@
     ]
   },
   "resolutions": {
-    "nib/stylus": "0.56.0"
+    "nib/stylus": "0.56.0",
+    "react-table": "portal:/Users/trashman/Projects/react-table"
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
@@ -143,6 +144,7 @@
     "@mui/material": "^5.15.11",
     "@mui/styles": "^5.15.11",
     "@mui/x-data-grid": "^6.19.5",
+    "@mui/x-tree-view": "^7.3.1",
     "babel-loader": "9.1.3",
     "babel-plugin-module-resolver": "^5.0.0",
     "chai": "4.3.7",
@@ -180,6 +182,7 @@
     "react-immutable-proptypes": "^2.2.0",
     "react-router-dom": "^5.3.4",
     "react-snap": "mistakia/react-snap#359df6598700375a79b98746402b819d433366fc",
+    "react-table": "portal:/Users/trashman/Projects/react-table",
     "redux-immutable": "^4.0.0",
     "style-loader": "^2.0.0",
     "stylus": "^0.54.8",
