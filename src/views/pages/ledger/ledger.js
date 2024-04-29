@@ -8,6 +8,7 @@ import LedgerChartAddresses from '@components/ledger-chart-addresses'
 import LedgerChartVolume from '@components/ledger-chart-volume'
 import LedgerChartAmounts from '@components/ledger-chart-amounts'
 import LedgerChartUSDTransferred from '@components/ledger-chart-usd-transferred'
+import LedgerChartDistribution from '@components/ledger-chart-distribution'
 import Seo from '@components/seo'
 import Menu from '@components/menu'
 
@@ -73,6 +74,7 @@ export default function LedgerPage({ load, data, isLoading }) {
           <Tab label='Volume' />
           <Tab label='Value Transferred' />
           <Tab label='Amounts' />
+          <Tab label='Distribution' />
         </Tabs>
         <TabPanel value={value} index={0}>
           <LedgerChartAddresses data={data} isLoading={isLoading} />
@@ -88,6 +90,9 @@ export default function LedgerPage({ load, data, isLoading }) {
         </TabPanel>
         <TabPanel value={value} index={4}>
           <LedgerChartAmounts data={data} isLoading={isLoading} />
+        </TabPanel>
+        <TabPanel value={value} index={5}>
+          <LedgerChartDistribution data={data} isLoading={isLoading} />
         </TabPanel>
       </div>
       <div className='ledger__footer'>
