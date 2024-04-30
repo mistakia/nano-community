@@ -212,11 +212,6 @@ export default function LedgerPage({ load, data, isLoading }) {
         <Collapse in={is_open} timeout='auto' unmountOnExit>
           <List component='div' disablePadding>
             {Object.entries(children).map(([key, value]) => {
-              console.log({
-                path,
-                parent_category,
-                key
-              })
               const current_path = [...path, parent_category]
               const is_selected =
                 selected_chart.join(' > ') ===
