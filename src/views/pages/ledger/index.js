@@ -3,6 +3,7 @@ import { createSelector } from 'reselect'
 import BigNumber from 'bignumber.js'
 
 import { getLedger, ledgerActions } from '@core/ledger'
+import { base_ranges } from '@core/constants'
 
 import LedgerPage from './ledger'
 
@@ -11,21 +12,6 @@ const mapStateToProps = createSelector(getLedger, (ledger) => {
   const data = {
     reused_addresses: []
   }
-  const base_ranges = [
-    '_1000000',
-    '_100000',
-    '_10000',
-    '_1000',
-    '_100',
-    '_10',
-    '_1',
-    '_01',
-    '_001',
-    '_0001',
-    '_00001',
-    '_000001',
-    '_000001_below'
-  ]
 
   const metrics = [
     'active_addresses',
@@ -44,7 +30,8 @@ const mapStateToProps = createSelector(getLedger, (ledger) => {
     // TODO open_volume
     // TODO receive_volume
 
-    ...base_ranges.map((r) => `${r}_count`)
+    ...base_ranges.map((r) => `${r}_count`),
+    ...base_ranges.map((r) => `${r}_account_count`)
   ]
 
   for (let i = 0; i < metrics.length; i++) {

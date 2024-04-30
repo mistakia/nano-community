@@ -53,10 +53,20 @@
     background hsl(210, 100%, 60%)
 
 .ledger__category-depth-2
-  padding-left 49px
+  padding-left 72px
+  &:before
+    content: ""
+    display block
+    position: absolute
+    z-index 1
+    left 44px
+    height 100%
+    width 1px
+    opacity 1
+    background #E5EAF2
 
 .ledger__category-depth-3
-  padding-left 62px
+  padding-left 90px
 
 .ledger__footer
   margin 32px auto

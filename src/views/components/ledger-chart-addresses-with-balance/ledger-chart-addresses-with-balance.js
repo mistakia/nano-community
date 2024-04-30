@@ -7,45 +7,57 @@ import { LineChart } from 'echarts/charts'
 import { TooltipComponent, GridComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 
-import { base_ranges, base_range_labels } from '@core/constants'
 import { download_csv, download_json } from '@core/utils'
+import { base_range_labels } from '@core/constants'
 
 echarts.use([LineChart, TooltipComponent, GridComponent, CanvasRenderer])
 
-const color_map = {
-  // high
-  _1000000: '#ffd700', // Gold
-  _100000: '#f9c74f', // Maize Crayola
-  _10000: '#f4a261', // Sandy Brown
-  _1000: '#e63946', // Red
-
-  // medium
-  _100: '#0077b6', // Star Command Blue
-  _10: '#023e8a', // Royal Blue Dark
-  _1: '#0096c7', // Pacific Blue
-
-  // low
-  _01: '#6DB65B', // Apple Green
-  _001: '#57A55A', // Medium Sea Green
-  _0001: '#3D8B57', // Jungle Green
-  _00001: '#2C6E49', // Bottle Green
-
-  // micro
-  _000001: '#911eb4', // Purple
-  _000001_below: '#dcbeff' // Lavender Blush
-}
-
-export default function LedgerChartDistribution({
+export default function LedgerChartAddressesWithBalance({
   data,
   isLoading,
   price_history,
-  get_price_history
+  get_price_history,
+  range
 }) {
   useEffect(() => {
     if (price_history.length === 0) {
       get_price_history()
     }
   }, [])
+
+  const handle_download_csv = () => {
+    const download_data = []
+    data[`${range}_account_count`].forEach((item) => {
+      download_data.push({
+        range: base_range_labels[range],
+        date: item[0],
+        account_count: item[1]
+      })
+    })
+    download_csv({
+      headers: ['Range', 'Date', 'Account Count'],
+      data: download_data,
+      file_name: `nano-community-ledger-daily-addresses-with-balance-${base_range_labels[
+        range
+      ].toLowerCase()}`
+    })
+  }
+
+  const handle_download_json = () => {
+    const download_data = {
+      title: `Nano Community Ledger Daily Addresses With Balance - ${base_range_labels[range]}`,
+      data: data[`${range}_account_count`].map((item) => ({
+        date: item[0],
+        account_count: item[1]
+      }))
+    }
+    download_json({
+      data: download_data,
+      file_name: `nano-community-ledger-daily-addresses-with-balance-${base_range_labels[
+        range
+      ].toLowerCase()}`
+    })
+  }
 
   const series_data_usd_price = useMemo(() => {
     const data = []
@@ -55,28 +67,17 @@ export default function LedgerChartDistribution({
     return data
   }, [price_history])
 
-  const series_data = base_ranges.map((key) => {
-    const color = color_map[key]
-
+  const series_data = useMemo(() => {
     return {
-      name: base_range_labels[key],
+      name: base_range_labels[range],
       type: 'line',
-      stack: 'total',
-      color,
       lineStyle: {
-        width: 0
+        width: 2
       },
       showSymbol: false,
-      areaStyle: {
-        color,
-        opacity: 0.6
-      },
-      emphasis: {
-        focus: 'series'
-      },
-      data: data[`${key}_relative_supply`].map((item) => [item[0], item[1]])
+      data: data[`${range}_account_count`].map((item) => [item[0], item[1]])
     }
-  })
+  }, [data, range])
 
   const option = {
     tooltip: {
@@ -99,12 +100,7 @@ export default function LedgerChartDistribution({
     ],
     yAxis: [
       {
-        type: 'value',
-        min: 0,
-        max: 100,
-        axisLabel: {
-          formatter: '{value} %'
-        }
+        type: 'value'
       },
       {
         type: 'log',
@@ -115,7 +111,7 @@ export default function LedgerChartDistribution({
       }
     ],
     series: [
-      ...series_data,
+      series_data,
       {
         name: 'USD Price',
         type: 'line',
@@ -128,45 +124,6 @@ export default function LedgerChartDistribution({
         }
       }
     ]
-  }
-
-  const handle_download_csv = () => {
-    const download_data = []
-    base_ranges.forEach((key) => {
-      data[`${key}_relative_supply`].forEach((item) => {
-        download_data.push({
-          range: base_range_labels[key],
-          date: item[0],
-          relative_supply: item[1]
-        })
-      })
-    })
-
-    download_csv({
-      headers: ['Range', 'Date', 'Relative Supply'],
-      data: download_data,
-      file_name: 'nano-community-ledger-daily-relative-balance-distribution'
-    })
-  }
-
-  const handle_download_json = () => {
-    const download_data = {
-      title: 'Nano Community Ledger Daily Relative Balance Distribution',
-      data: {}
-    }
-
-    base_ranges.forEach((key) => {
-      download_data.data[base_range_labels[key]] = data[
-        `${key}_relative_supply`
-      ].map((item) => ({
-        date: item[0],
-        relative_supply: item[1]
-      }))
-    })
-    download_json({
-      data: download_data,
-      file_name: 'nano-community-ledger-daily-relative-balance-distribution'
-    })
   }
 
   return (
@@ -189,8 +146,8 @@ export default function LedgerChartDistribution({
         </div>
         <div className='ledger__chart-section-body description'>
           <p>
-            The relative distribution of the supply held by addresses within
-            specific balance ranges.
+            The number of unique addresses holding {base_range_labels[range]}{' '}
+            Nano.
           </p>
         </div>
         {!isLoading && (
@@ -208,9 +165,10 @@ export default function LedgerChartDistribution({
   )
 }
 
-LedgerChartDistribution.propTypes = {
+LedgerChartAddressesWithBalance.propTypes = {
   data: PropTypes.object.isRequired,
   isLoading: PropTypes.bool.isRequired,
   price_history: PropTypes.array.isRequired,
-  get_price_history: PropTypes.func.isRequired
+  get_price_history: PropTypes.func.isRequired,
+  range: PropTypes.string
 }

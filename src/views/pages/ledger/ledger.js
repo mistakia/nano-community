@@ -16,8 +16,10 @@ import LedgerChartVolume from '@components/ledger-chart-volume'
 import LedgerChartAmounts from '@components/ledger-chart-amounts'
 import LedgerChartUSDTransferred from '@components/ledger-chart-usd-transferred'
 import LedgerChartDistribution from '@components/ledger-chart-distribution'
+import LedgerChartAddressesWithBalance from '@components/ledger-chart-addresses-with-balance'
 import Seo from '@components/seo'
 import Menu from '@components/menu'
+import { base_ranges, base_range_labels } from '@core/constants'
 
 import './ledger.styl'
 
@@ -35,6 +37,48 @@ export default function LedgerPage({ load, data, isLoading }) {
   const [filtered_categories, set_filtered_categories] = useState({})
   const [menu_open, set_menu_open] = useState(false)
   const filter_input_ref = useRef(null)
+
+  const categories = {
+    Addresses: {
+      'Address Counts': (
+        <LedgerChartAddresses data={data} isLoading={isLoading} />
+      )
+    },
+    Blocks: {
+      'Block Counts': <LedgerChartBlocks data={data} isLoading={isLoading} />
+    },
+    Transactions: {
+      'Value Transferred': (
+        <LedgerChartUSDTransferred data={data} isLoading={isLoading} />
+      ),
+      'Transfer Volume': (
+        <LedgerChartVolume data={data} isLoading={isLoading} />
+      ),
+      'Transfer Amounts': (
+        <LedgerChartAmounts data={data} isLoading={isLoading} />
+      )
+    },
+    Distribution: {
+      'Address Supply Distribution': (
+        <LedgerChartDistribution data={data} isLoading={isLoading} />
+      ),
+      'Address Balances (Nano)': {
+        ...base_ranges.reduce(
+          (acc, range) => ({
+            ...acc,
+            [`Addresses with Balance ${base_range_labels[range]}`]: (
+              <LedgerChartAddressesWithBalance
+                data={data}
+                isLoading={isLoading}
+                range={range}
+              />
+            )
+          }),
+          {}
+        )
+      }
+    }
+  }
 
   useEffect(() => {
     load()
@@ -78,15 +122,21 @@ export default function LedgerPage({ load, data, isLoading }) {
 
   useEffect(() => {
     if (filter_text.length > 0) {
-      // Uncollapse all categories when filtering
-      set_open_categories(
-        Object.keys(filtered_categories).reduce(
-          (acc, key) => ({ ...acc, [key]: true }),
-          {}
-        )
-      )
+      // Uncollapse all categories and their children when filtering
+      const all_open_categories = Object.keys(categories).reduce((acc, key) => {
+        const category = categories[key]
+        if (typeof category === 'object') {
+          const sub_keys = Object.keys(category)
+          sub_keys.forEach((sub_key) => {
+            acc[sub_key] = true
+          })
+        }
+        acc[key] = true
+        return acc
+      }, {})
+      set_open_categories(all_open_categories)
     }
-  }, [filtered_categories])
+  }, [filtered_categories, categories, filter_text])
 
   useEffect(() => {
     if (menu_open) {
@@ -135,57 +185,48 @@ export default function LedgerPage({ load, data, isLoading }) {
     set_open_categories((prev) => ({ ...prev, [category]: !prev[category] }))
   }
 
-  const categories = {
-    Addresses: {
-      'Address Counts': (
-        <LedgerChartAddresses data={data} isLoading={isLoading} />
-      )
-    },
-    Blocks: {
-      'Block Counts': <LedgerChartBlocks data={data} isLoading={isLoading} />
-    },
-    Transactions: {
-      'Value Transferred': (
-        <LedgerChartUSDTransferred data={data} isLoading={isLoading} />
-      ),
-      'Transfer Volume': (
-        <LedgerChartVolume data={data} isLoading={isLoading} />
-      ),
-      'Transfer Amounts': (
-        <LedgerChartAmounts data={data} isLoading={isLoading} />
-      )
-    },
-    Distribution: {
-      'Address Supply Distribution': (
-        <LedgerChartDistribution data={data} isLoading={isLoading} />
-      )
-    }
+  const count_children = (children) => {
+    return Object.values(children).reduce((acc, child) => {
+      if (React.isValidElement(child)) {
+        return acc + 1
+      } else {
+        return acc + count_children(child)
+      }
+    }, 0)
   }
 
-  const render_category = (category, charts, depth) => {
-    const is_open = open_categories[category] || false
+  const render_category = (parent_category, children, depth, path = []) => {
+    const is_open = open_categories[parent_category] || false
+    const total_children_count = count_children(children)
     return (
       <>
         <ListItem
-          onClick={() => toggle_category(category)}
+          onClick={() => toggle_category(parent_category)}
           className={`ledger__category ledger__category-depth-${depth}`}>
           <KeyboardArrowRightIcon
             style={{ transform: is_open ? 'rotate(90deg)' : 'none' }}
           />
-          <ListItemText primary={category} />
-          <Badge badgeContent={Object.keys(charts).length} color='primary' />
+          <ListItemText primary={parent_category} />
+          <Badge badgeContent={total_children_count} color='primary' />
         </ListItem>
         <Collapse in={is_open} timeout='auto' unmountOnExit>
           <List component='div' disablePadding>
-            {Object.entries(charts).map(([key, value]) => {
+            {Object.entries(children).map(([key, value]) => {
+              console.log({
+                path,
+                parent_category,
+                key
+              })
+              const current_path = [...path, parent_category]
               const is_selected =
-                selected_chart[0] === category && selected_chart[1] === key
+                selected_chart.join(' > ') ===
+                [...current_path, key].join(' > ')
               const item_class = is_selected ? 'ledger__chart--selected' : ''
               if (React.isValidElement(value)) {
                 return (
                   <ListItem
                     key={key}
-                    onClick={() => set_selected_chart([category, key])}
+                    onClick={() => set_selected_chart([...current_path, key])}
                     className={`ledger__chart ledger__category-depth-${
                       depth + 1
                     } ${item_class}`}>
@@ -193,7 +234,7 @@ export default function LedgerPage({ load, data, isLoading }) {
                   </ListItem>
                 )
               } else {
-                return render_category(key, value, depth + 1)
+                return render_category(key, value, depth + 1, current_path)
               }
             })}
           </List>
@@ -255,8 +296,8 @@ export default function LedgerPage({ load, data, isLoading }) {
             <List>
               {Object.entries(
                 filter_text.length > 0 ? filtered_categories : categories
-              ).map(([category, charts]) =>
-                render_category(category, charts, 0)
+              ).map(([parent_category, children]) =>
+                render_category(parent_category, children, 0)
               )}
             </List>
           </div>

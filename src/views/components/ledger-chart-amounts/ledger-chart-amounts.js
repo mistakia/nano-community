@@ -13,6 +13,7 @@ import { CanvasRenderer } from 'echarts/renderers'
 import Button from '@mui/material/Button'
 
 import { download_csv, download_json } from '@core/utils'
+import { base_ranges, base_range_labels } from '@core/constants'
 
 echarts.use([
   TooltipComponent,
@@ -26,49 +27,33 @@ echarts.use([
 
 const color_map = {
   // high
-  _1000000_count: '#ffd700', // Gold
-  _100000_count: '#f9c74f', // Maize Crayola
-  _10000_count: '#f4a261', // Sandy Brown
-  _1000_count: '#e63946', // Red
+  _1000000: '#ffd700', // Gold
+  _100000: '#f9c74f', // Maize Crayola
+  _10000: '#f4a261', // Sandy Brown
+  _1000: '#e63946', // Red
 
   // medium
-  _100_count: '#0077b6', // Star Command Blue
-  _10_count: '#023e8a', // Royal Blue Dark
-  _1_count: '#0096c7', // Pacific Blue
+  _100: '#0077b6', // Star Command Blue
+  _10: '#023e8a', // Royal Blue Dark
+  _1: '#0096c7', // Pacific Blue
 
   // low
-  _01_count: '#6DB65B', // Apple Green
-  _001_count: '#57A55A', // Medium Sea Green
-  _0001_count: '#3D8B57', // Jungle Green
-  _00001_count: '#2C6E49', // Bottle Green
+  _01: '#6DB65B', // Apple Green
+  _001: '#57A55A', // Medium Sea Green
+  _0001: '#3D8B57', // Jungle Green
+  _00001: '#2C6E49', // Bottle Green
 
   // micro
-  _000001_count: '#911eb4', // Purple
-  _000001_below_count: '#dcbeff' // Lavender Blush
+  _000001: '#911eb4', // Purple
+  _000001_below: '#dcbeff' // Lavender Blush
 }
 
 export default function LedgerChartAmounts({ data, isLoading }) {
-  const ranges = {
-    _1000000_count: '>1M',
-    _100000_count: '100k to 1M',
-    _10000_count: '10k to 100k',
-    _1000_count: '1k to 10k',
-    _100_count: '100 to 1k',
-    _10_count: '10 to 100',
-    _1_count: '1 to 10',
-    _01_count: '0.1 to 1',
-    _001_count: '0.01 to 0.1',
-    _0001_count: '0.001 to 0.01',
-    _00001_count: '0.0001 to 0.001',
-    _000001_count: '0.00001 to 0.0001',
-    _000001_below_count: '<0.00001'
-  }
-
-  const series_data = Object.entries(ranges).map(([key, value], index) => {
+  const series_data = base_ranges.map((key) => {
     const color = color_map[key]
 
     return {
-      name: value,
+      name: base_range_labels[key],
       type: 'line',
       stack: 'total',
       color,
@@ -82,7 +67,7 @@ export default function LedgerChartAmounts({ data, isLoading }) {
       emphasis: {
         focus: 'series'
       },
-      data: data[key].map((item) => [item[0], item[1]])
+      data: data[`${key}_count`].map((item) => [item[0], item[1]])
     }
   })
 
@@ -122,10 +107,10 @@ export default function LedgerChartAmounts({ data, isLoading }) {
 
   const handle_download_csv = () => {
     const download_data = []
-    Object.entries(ranges).forEach(([key, value]) => {
-      data[key].forEach((item) => {
+    base_ranges.forEach((key) => {
+      data[`${key}_count`].forEach((item) => {
         download_data.push({
-          range: value,
+          range: base_range_labels[key],
           date: item[0],
           count: item[1]
         })
@@ -145,11 +130,13 @@ export default function LedgerChartAmounts({ data, isLoading }) {
       data: {}
     }
 
-    Object.entries(ranges).forEach(([key, value]) => {
-      download_data.data[value] = data[key].map((item) => ({
-        date: item[0],
-        count: item[1]
-      }))
+    base_ranges.forEach((key) => {
+      download_data.data[base_range_labels[key]] = data[`${key}_count`].map(
+        (item) => ({
+          date: item[0],
+          count: item[1]
+        })
+      )
     })
 
     download_json({

@@ -12,3 +12,35 @@ export const WS_URL = IS_DEV ? 'ws://localhost:8080' : 'wss://nano.community'
 
 // 3 Million Nano (3e36)
 export const REP_MAX_WEIGHT = BigNumber(3).shiftedBy(36)
+
+export const base_ranges = [
+  '_1000000',
+  '_100000',
+  '_10000',
+  '_1000',
+  '_100',
+  '_10',
+  '_1',
+  '_01',
+  '_001',
+  '_0001',
+  '_00001',
+  '_000001',
+  '_000001_below'
+]
+
+export const base_range_labels = {
+  _1000000: '>1M',
+  _100000: '100k to 1M',
+  _10000: '10k to 100k',
+  _1000: '1k to 10k',
+  _100: '100 to 1k',
+  _10: '10 to 100',
+  _1: '1 to 10',
+  _01: '0.1 to 1',
+  _001: '0.01 to 0.1',
+  _0001: '0.001 to 0.01',
+  _00001: '0.0001 to 0.001',
+  _000001: '0.00001 to 0.0001',
+  _000001_below: '<0.00001'
+}
