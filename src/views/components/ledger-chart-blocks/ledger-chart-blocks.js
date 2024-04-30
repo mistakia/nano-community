@@ -152,25 +152,25 @@ export default function LedgerChartBlocks({ data, isLoading }) {
         }}
         style={{ width: '100%', height: '600px' }}
       />
-      <div className='ledger__chart-sections'>
-        <div className='ledger__chart-section'>
-          <div className='section__heading'>
-            <span>Description</span>
-          </div>
-          <div className='ledger__chart-section-body description'>
-            The number of confirmed blocks (by type) per day.
-          </div>
-          {!isLoading && (
-            <div className='ledger__chart-section-body download'>
-              <Button size='small' onClick={handle_download_csv}>
-                Download CSV
-              </Button>
-              <Button size='small' onClick={handle_download_json}>
-                Download JSON
-              </Button>
-            </div>
-          )}
+      <div className='ledger__chart-description'>
+        <div className='section__heading'>
+          <span>Description</span>
         </div>
+        <div className='ledger__chart-section-body description'>
+          <p>The number of confirmed blocks (by type) per day.</p>
+        </div>
+        {!isLoading && (
+          <div className='ledger__chart-section-body download'>
+            <Button size='small' onClick={handle_download_csv}>
+              Download CSV
+            </Button>
+            <Button size='small' onClick={handle_download_json}>
+              Download JSON
+            </Button>
+          </div>
+        )}
+      </div>
+      <div className='ledger__chart-sections'>
         <LedgerChartMetrics
           data={data.blocks}
           label='Total Block Stats'

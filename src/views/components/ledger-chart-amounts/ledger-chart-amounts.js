@@ -172,26 +172,26 @@ export default function LedgerChartAmounts({ data, isLoading }) {
         }}
         style={{ width: '100%', height: '600px' }}
       />
-      <div className='ledger__chart-sections'>
-        <div className='ledger__chart-section'>
-          <div className='section__heading'>
-            <span>Description</span>
-          </div>
-          <div className='ledger__chart-section-body description'>
-            The number of confirmed send-type blocks per day where the amount in
-            the block is in a given range (in Nano)
-          </div>
-          {!isLoading && (
-            <div className='ledger__chart-section-body download'>
-              <Button size='small' onClick={handle_download_csv}>
-                Download CSV
-              </Button>
-              <Button size='small' onClick={handle_download_json}>
-                Download JSON
-              </Button>
-            </div>
-          )}
+      <div className='ledger__chart-description'>
+        <div className='section__heading'>
+          <span>Description</span>
         </div>
+        <div className='ledger__chart-section-body description'>
+          <p>
+            The number of confirmed send-type blocks per day where the amount in
+            the block is in a given range (in Nano).
+          </p>
+        </div>
+        {!isLoading && (
+          <div className='ledger__chart-section-body download'>
+            <Button size='small' onClick={handle_download_csv}>
+              Download CSV
+            </Button>
+            <Button size='small' onClick={handle_download_json}>
+              Download JSON
+            </Button>
+          </div>
+        )}
       </div>
     </>
   )

@@ -130,6 +130,7 @@ export default function Menu({ hide, hideSearch, hide_speed_dial }) {
     <div className='menu__container'>
       <SwipeableDrawer
         open={open}
+        className='menu__drawer'
         onOpen={handleOpen}
         onClose={handleClose}
         disableBackdropTransition={!iOS}

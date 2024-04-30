@@ -1,7 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import Tabs from '@mui/material/Tabs'
-import Tab from '@mui/material/Tab'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemText from '@mui/material/ListItemText'
+import TextField from '@mui/material/TextField'
+import Collapse from '@mui/material/Collapse'
+import Badge from '@mui/material/Badge'
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
+import ClickAwayListener from '@mui/material/ClickAwayListener'
+import { fuzzySearch } from '@core/utils'
 
 import LedgerChartBlocks from '@components/ledger-chart-blocks'
 import LedgerChartAddresses from '@components/ledger-chart-addresses'
@@ -14,31 +21,185 @@ import Menu from '@components/menu'
 
 import './ledger.styl'
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props
-
-  return (
-    <div className='ledger__metric' hidden={value !== index} {...other}>
-      {value === index && children}
-    </div>
-  )
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.element,
-  value: PropTypes.number,
-  index: PropTypes.number
-}
-
 export default function LedgerPage({ load, data, isLoading }) {
-  const [value, setValue] = useState(0)
+  const previous_filter_text = useRef('')
+  const [cached_open_categories, set_cached_open_categories] = useState({
+    Addresses: true
+  })
+  const [selected_chart, set_selected_chart] = useState([
+    'Addresses',
+    'Address Counts'
+  ])
+  const [filter_text, set_filter_text] = useState('')
+  const [open_categories, set_open_categories] = useState({ Addresses: true })
+  const [filtered_categories, set_filtered_categories] = useState({})
+  const [menu_open, set_menu_open] = useState(false)
+  const filter_input_ref = useRef(null)
 
   useEffect(() => {
     load()
   }, [])
 
-  const handleChange = (event, value) => {
-    setValue(value)
+  useEffect(() => {
+    if (filter_text.length > 0) {
+      const result = {}
+
+      for (const key of Object.keys(categories)) {
+        const item = categories[key]
+
+        if (React.isValidElement(item) && fuzzySearch(filter_text, key)) {
+          result[key] = item
+        } else {
+          const charts = {}
+          for (const chart_key of Object.keys(item)) {
+            if (fuzzySearch(filter_text, chart_key)) {
+              charts[chart_key] = item[chart_key]
+            }
+          }
+          if (Object.keys(charts).length > 0) {
+            result[key] = charts
+          }
+        }
+      }
+
+      set_filtered_categories(result)
+    }
+
+    if (filter_text.length && !previous_filter_text.current.length) {
+      set_cached_open_categories({ ...open_categories })
+    }
+
+    if (filter_text.length === 0 && previous_filter_text.current.length) {
+      set_open_categories(cached_open_categories)
+    }
+
+    previous_filter_text.current = filter_text
+  }, [filter_text])
+
+  useEffect(() => {
+    if (filter_text.length > 0) {
+      // Uncollapse all categories when filtering
+      set_open_categories(
+        Object.keys(filtered_categories).reduce(
+          (acc, key) => ({ ...acc, [key]: true }),
+          {}
+        )
+      )
+    }
+  }, [filtered_categories])
+
+  useEffect(() => {
+    if (menu_open) {
+      setTimeout(() => {
+        filter_input_ref.current.focus()
+      }, 300) // Delay to allow for transition effects
+    } else {
+      filter_input_ref.current.blur()
+      set_filter_text('')
+    }
+  }, [menu_open])
+
+  useEffect(() => {
+    const updateMenuHeight = () => {
+      const menuElement = document.querySelector('.ledger__menu-button')
+      const toggleButtonElement = document.querySelector(
+        '.ledger__toggle-button'
+      )
+      if (menuElement && toggleButtonElement) {
+        if (menu_open) {
+          menuElement.style.height = ''
+        } else {
+          menuElement.style.height = `${toggleButtonElement.scrollHeight}px`
+        }
+      }
+    }
+
+    window.addEventListener('resize', updateMenuHeight)
+    updateMenuHeight()
+
+    return () => {
+      window.removeEventListener('resize', updateMenuHeight)
+    }
+  }, [menu_open, selected_chart])
+
+  const handle_menu_toggle = () => {
+    set_menu_open(!menu_open)
+  }
+
+  const handle_click_away = () => {
+    set_menu_open(false)
+    set_filter_text('')
+  }
+
+  const toggle_category = (category) => {
+    set_open_categories((prev) => ({ ...prev, [category]: !prev[category] }))
+  }
+
+  const categories = {
+    Addresses: {
+      'Address Counts': (
+        <LedgerChartAddresses data={data} isLoading={isLoading} />
+      )
+    },
+    Blocks: {
+      'Block Counts': <LedgerChartBlocks data={data} isLoading={isLoading} />
+    },
+    Transactions: {
+      'Value Transferred': (
+        <LedgerChartUSDTransferred data={data} isLoading={isLoading} />
+      ),
+      'Transfer Volume': (
+        <LedgerChartVolume data={data} isLoading={isLoading} />
+      ),
+      'Transfer Amounts': (
+        <LedgerChartAmounts data={data} isLoading={isLoading} />
+      )
+    },
+    Distribution: {
+      'Address Supply Distribution': (
+        <LedgerChartDistribution data={data} isLoading={isLoading} />
+      )
+    }
+  }
+
+  const render_category = (category, charts, depth) => {
+    const is_open = open_categories[category] || false
+    return (
+      <>
+        <ListItem
+          onClick={() => toggle_category(category)}
+          className={`ledger__category ledger__category-depth-${depth}`}>
+          <KeyboardArrowRightIcon
+            style={{ transform: is_open ? 'rotate(90deg)' : 'none' }}
+          />
+          <ListItemText primary={category} />
+          <Badge badgeContent={Object.keys(charts).length} color='primary' />
+        </ListItem>
+        <Collapse in={is_open} timeout='auto' unmountOnExit>
+          <List component='div' disablePadding>
+            {Object.entries(charts).map(([key, value]) => {
+              const is_selected =
+                selected_chart[0] === category && selected_chart[1] === key
+              const item_class = is_selected ? 'ledger__chart--selected' : ''
+              if (React.isValidElement(value)) {
+                return (
+                  <ListItem
+                    key={key}
+                    onClick={() => set_selected_chart([category, key])}
+                    className={`ledger__chart ledger__category-depth-${
+                      depth + 1
+                    } ${item_class}`}>
+                    <ListItemText primary={key} />
+                  </ListItem>
+                )
+              } else {
+                return render_category(key, value, depth + 1)
+              }
+            })}
+          </List>
+        </Collapse>
+      </>
+    )
   }
 
   return (
@@ -62,38 +223,49 @@ export default function LedgerPage({ load, data, isLoading }) {
           'transactions'
         ]}
       />
+      <ClickAwayListener onClickAway={handle_click_away}>
+        <div
+          className={`ledger__menu-button ${
+            menu_open ? 'ledger__menu--open' : ''
+          }`}
+          tabIndex={0} // Make it focusable
+        >
+          <div onClick={handle_menu_toggle} className='ledger__toggle-button'>
+            <KeyboardArrowRightIcon
+              style={{ transform: menu_open ? 'rotate(90deg)' : 'none' }}
+            />
+            {selected_chart.join(' > ')}
+          </div>
+          <div className='ledger__filter-container'>
+            <TextField
+              variant='outlined'
+              margin='normal'
+              fullWidth
+              id='filter'
+              label='Filter Charts'
+              name='filter'
+              size='small'
+              autoComplete='off'
+              value={filter_text}
+              onChange={(e) => set_filter_text(e.target.value)}
+              inputRef={filter_input_ref}
+            />
+          </div>
+          <div className='ledger__category-container'>
+            <List>
+              {Object.entries(
+                filter_text.length > 0 ? filtered_categories : categories
+              ).map(([category, charts]) =>
+                render_category(category, charts, 0)
+              )}
+            </List>
+          </div>
+        </div>
+      </ClickAwayListener>
       <div className='ledger__body'>
-        <Tabs
-          orientation={'horizontal'}
-          className='ledger__body-menu'
-          variant='scrollable'
-          value={value}
-          onChange={handleChange}>
-          <Tab label='Addresses' />
-          <Tab label='Blocks' />
-          <Tab label='Volume' />
-          <Tab label='Value Transferred' />
-          <Tab label='Amounts' />
-          <Tab label='Distribution' />
-        </Tabs>
-        <TabPanel value={value} index={0}>
-          <LedgerChartAddresses data={data} isLoading={isLoading} />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <LedgerChartBlocks data={data} isLoading={isLoading} />
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <LedgerChartVolume data={data} isLoading={isLoading} />
-        </TabPanel>
-        <TabPanel value={value} index={3}>
-          <LedgerChartUSDTransferred data={data} isLoading={isLoading} />
-        </TabPanel>
-        <TabPanel value={value} index={4}>
-          <LedgerChartAmounts data={data} isLoading={isLoading} />
-        </TabPanel>
-        <TabPanel value={value} index={5}>
-          <LedgerChartDistribution data={data} isLoading={isLoading} />
-        </TabPanel>
+        <div className='ledger__metric'>
+          {selected_chart.reduce((acc, key) => acc[key], categories)}
+        </div>
       </div>
       <div className='ledger__footer'>
         <Menu />

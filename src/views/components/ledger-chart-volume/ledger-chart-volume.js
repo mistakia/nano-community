@@ -154,26 +154,28 @@ export default function LedgerChartVolume({ data, isLoading }) {
         }}
         style={{ width: '100%', height: '600px' }}
       />
-      <div className='ledger__chart-sections'>
-        <div className='ledger__chart-section'>
-          <div className='section__heading'>
-            <span>Description</span>
-          </div>
-          <div className='ledger__chart-section-body description'>
+      <div className='ledger__chart-description'>
+        <div className='section__heading'>
+          <span>Description</span>
+        </div>
+        <div className='ledger__chart-section-body description'>
+          <p>
             The total amount sent (in Nano) and total amount of voting weight
             changed per day.
-          </div>
-          {!isLoading && (
-            <div className='ledger__chart-section-body download'>
-              <Button size='small' onClick={handle_download_csv}>
-                Download CSV
-              </Button>
-              <Button size='small' onClick={handle_download_json}>
-                Download JSON
-              </Button>
-            </div>
-          )}
+          </p>
         </div>
+        {!isLoading && (
+          <div className='ledger__chart-section-body download'>
+            <Button size='small' onClick={handle_download_csv}>
+              Download CSV
+            </Button>
+            <Button size='small' onClick={handle_download_json}>
+              Download JSON
+            </Button>
+          </div>
+        )}
+      </div>
+      <div className='ledger__chart-sections'>
         <LedgerChartMetrics
           data={send_volume_big_number}
           label='Send Stats'

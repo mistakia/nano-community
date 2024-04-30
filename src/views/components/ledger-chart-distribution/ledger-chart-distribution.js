@@ -34,7 +34,12 @@ const color_map = {
   _000001_below_relative_supply: '#dcbeff' // Lavender Blush
 }
 
-export default function LedgerChartDistribution({ data, isLoading, price_history, get_price_history }) {
+export default function LedgerChartDistribution({
+  data,
+  isLoading,
+  price_history,
+  get_price_history
+}) {
   useEffect(() => {
     if (price_history.length === 0) {
       get_price_history()
@@ -191,25 +196,26 @@ export default function LedgerChartDistribution({ data, isLoading, price_history
         }}
         style={{ width: '100%', height: '600px' }}
       />
-      <div className='ledger__chart-sections'>
-        <div className='ledger__chart-section'>
-          <div className='section__heading'>
-            <span>Description</span>
-          </div>
-          <div className='ledger__chart-section-body description'>
-            The relative distribution of the supply held by addresses within specific balance ranges.
-          </div>
-          {!isLoading && (
-            <div className='ledger__chart-section-body download'>
-              <Button size='small' onClick={handle_download_csv}>
-                Download CSV
-              </Button>
-              <Button size='small' onClick={handle_download_json}>
-                Download JSON
-              </Button>
-            </div>
-          )}
+      <div className='ledger__chart-description'>
+        <div className='section__heading'>
+          <span>Description</span>
         </div>
+        <div className='ledger__chart-section-body description'>
+          <p>
+            The relative distribution of the supply held by addresses within
+            specific balance ranges.
+          </p>
+        </div>
+        {!isLoading && (
+          <div className='ledger__chart-section-body download'>
+            <Button size='small' onClick={handle_download_csv}>
+              Download CSV
+            </Button>
+            <Button size='small' onClick={handle_download_json}>
+              Download JSON
+            </Button>
+          </div>
+        )}
       </div>
     </>
   )

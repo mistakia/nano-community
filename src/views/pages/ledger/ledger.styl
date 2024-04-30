@@ -1,17 +1,62 @@
 .ledger__body
   display flex
-  flex-direction column
+  flex-direction row
   padding 24px 32px
-  max-width 1300px
-  width 100%
-  margin 0 auto
+  align-items flex-start
 
 .ledger__metric
+  display flex
+  flex-direction column
+  flex 1
   width 100%
 
-.ledger__body-menu
-  background white
-  border-radius 4px
+.ledger__category
+  padding-top 4px
+  padding-bottom 4px
+  border-radius 6px
+  .MuiTypography-root
+    font-size 0.875rem
+    line-height 1.5
+    color #1C2025
+    font-weight 600
+
+.ledger__chart
+  padding-top 4px
+  padding-bottom 4px
+  border-radius 6px
+  .MuiTypography-root
+    font-size 0.875rem
+    line-height 1.5
+    color #1C2025
+    font-weight 500
+  &.ledger__chart--selected
+    background-color hsl(210, 100%, 96%)
+    color hsl(210, 100%, 42%)
+
+.ledger__category-depth-0
+  padding-left 2px
+
+.ledger__category-depth-1
+  padding-left 36px
+  &:before
+    content: "";
+    display: block;
+    position: absolute;
+    z-index: 1;
+    left: 9.5px;
+    height: 100%;
+    width: 1px;
+    opacity: 1;
+    background: #E5EAF2
+
+  &.ledger__chart--selected:before
+    background hsl(210, 100%, 60%)
+
+.ledger__category-depth-2
+  padding-left 49px
+
+.ledger__category-depth-3
+  padding-left 62px
 
 .ledger__footer
   margin 32px auto
@@ -21,11 +66,12 @@
 .ledger__chart-sections
   display flex
   flex-wrap wrap
+  justify-content center
 
 .ledger__chart-section
-  max-width 500px
+  max-width 300px
   margin 16px
-  flex 1 0 300px
+  flex 1 0 250px
 
 .ledger__chart-section-body
   padding 0 12px
@@ -46,6 +92,78 @@
   p
     margin-bottom 16px
 
+.ledger__chart-description
+  background white
+  padding 16px
+  border-radius 4px
+  max-width 800px
+  margin 16px auto 0
+  width 100%
+
+  .section__heading span
+    background white
+
+.ledger__menu-button
+  opacity 1
+  pointer-events all
+  position fixed
+  top 10px
+  left 50%
+  transform translateX(-50%) scale(1)
+  z-index 101
+  background-color white
+  border-radius 8px
+  width 30%
+  display flex
+  flex-direction column
+  align-items stretch
+  cursor pointer
+  height 40px
+  transition transform 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, width 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, height 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms
+  overflow hidden
+  border 1px solid rgba(0, 0, 0, 0.23)
+  &:hover
+    border 1px solid rgba(0, 0, 0, 0.23)
+    box-shadow #D0D0D0 4px 4px 0px 0px
+
+  &.ledger__menu--open
+    border 1px solid rgba(0, 0, 0, 0.23)
+    box-shadow #D0D0D0 4px 4px 0px 0px
+    width 60%
+    height 80vh // Adjust height as needed for full visibility
+
+.ledger__toggle-button
+  padding 8px 16px
+  border none
+  border-radius 4px
+  cursor pointer
+  display flex
+  align-items center
+  justify-content flex-start
+  &:hover
+    color #4A90E2
+    font-weight 600
+
+.ledger__filter-container
+  padding 0 16px
+  border-top 1px solid rgba(0, 0, 0, 0.23)
+
+.ledger__category-container
+  padding 0 8px
+  display flex
+  flex-direction column
+  overflow-y auto
+  border-top 1px solid rgba(0, 0, 0, 0.23)
+
+@media (max-width 750px)
+  .ledger__body
+    flex-direction column
+  .ledger__menu-button
+    width 60%
+
 @media (min-width 750px)
-  .ledger__body-menu
-    margin 0 64px
+  .ledger__menu-button
+    width 30%
+    max-width 500px
+    &.ledger__menu--open
+      max-width 500px

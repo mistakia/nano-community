@@ -130,33 +130,32 @@ export default function LedgerChartAddresses({ data, isLoading }) {
         }}
         style={{ width: '100%', height: '600px' }}
       />
-      <div className='ledger__chart-sections'>
-        <div className='ledger__chart-section'>
-          <div className='section__heading'>
-            <span>Description</span>
-          </div>
-          <div className='ledger__chart-section-body description'>
-            <p>
-              The total number of active, new, and reused addresses used per
-              day.
-            </p>
-            <p>
-              Active shows the number of unique addresses used. New shows the
-              number of addresses created. Reused shows the number of addresses
-              used that were created on a previous day.
-            </p>
-          </div>
-          {!isLoading && (
-            <div className='ledger__chart-section-body download'>
-              <Button size='small' onClick={handle_download_csv}>
-                Download CSV
-              </Button>
-              <Button size='small' onClick={handle_download_json}>
-                Download JSON
-              </Button>
-            </div>
-          )}
+      <div className='ledger__chart-description'>
+        <div className='section__heading'>
+          <span>Description</span>
         </div>
+        <div className='ledger__chart-section-body description'>
+          <p>
+            The total number of active, new, and reused addresses used per day.
+          </p>
+          <p>
+            Active shows the number of unique addresses used. New shows the
+            number of addresses created. Reused shows the number of addresses
+            used that were created on a previous day.
+          </p>
+        </div>
+        {!isLoading && (
+          <div className='ledger__chart-section-body download'>
+            <Button size='small' onClick={handle_download_csv}>
+              Download CSV
+            </Button>
+            <Button size='small' onClick={handle_download_json}>
+              Download JSON
+            </Button>
+          </div>
+        )}
+      </div>
+      <div className='ledger__chart-sections'>
         <LedgerChartMetrics
           data={data.active_addresses}
           label='Active Address Stats'

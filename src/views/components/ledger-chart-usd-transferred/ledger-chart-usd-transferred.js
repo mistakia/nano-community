@@ -122,29 +122,29 @@ export default function LedgerUSDTransferred({ data, isLoading }) {
         }}
         style={{ width: '100%', height: '600px' }}
       />
-      <div className='ledger__chart-sections'>
-        <div className='ledger__chart-section'>
-          <div className='section__heading'>
-            <span>Description</span>
-          </div>
-          <div className='ledger__chart-section-body description'>
-            <p>The total amount of value transferred (in USD) per day.</p>
-            <p>
-              Based on the daily closing price of Nano/USD and the total amount
-              of Nano transferred that day.
-            </p>
-          </div>
-          {!isLoading && (
-            <div className='ledger__chart-section-body download'>
-              <Button size='small' onClick={handle_download_csv}>
-                Download CSV
-              </Button>
-              <Button size='small' onClick={handle_download_json}>
-                Download JSON
-              </Button>
-            </div>
-          )}
+      <div className='ledger__chart-description'>
+        <div className='section__heading'>
+          <span>Description</span>
         </div>
+        <div className='ledger__chart-section-body description'>
+          <p>The total amount of value transferred (in USD) per day.</p>
+          <p>
+            Based on the daily closing price of Nano/USD and the total amount of
+            Nano transferred that day.
+          </p>
+        </div>
+        {!isLoading && (
+          <div className='ledger__chart-section-body download'>
+            <Button size='small' onClick={handle_download_csv}>
+              Download CSV
+            </Button>
+            <Button size='small' onClick={handle_download_json}>
+              Download JSON
+            </Button>
+          </div>
+        )}
+      </div>
+      <div className='ledger__chart-sections'>
         <LedgerChartMetrics
           data={data.total_usd_send_value.map((d) => [d[0], d[1]])}
           label='USD Transferred Stats'
