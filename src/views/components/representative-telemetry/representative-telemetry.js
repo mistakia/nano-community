@@ -12,8 +12,8 @@ export default class RepresentativeTelemetry extends React.Component {
     const bandwidthValue = bandwidth
       ? `${(bandwidth / (1024 * 1024)).toFixed(1)}Mb`
       : typeof bandwidth !== 'undefined'
-      ? 'Unlimited'
-      : '-'
+        ? 'Unlimited'
+        : '-'
 
     const blockCount = account.getIn(['telemetry', 'block_count'], 0)
     const blockBehind = account.getIn(['telemetry', 'block_behind'], 0)

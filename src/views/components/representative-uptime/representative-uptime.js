@@ -23,10 +23,10 @@ export default function RepresentativeUptime({ account }) {
     last_60_pct > 95
       ? 'online'
       : last_60_pct < 70
-      ? 'offline'
-      : last_60_pct < 80
-      ? 'warning'
-      : ''
+        ? 'offline'
+        : last_60_pct < 80
+          ? 'warning'
+          : ''
 
   const last_90 = account.getIn(['uptime_summary', 'days_90'], {})
   const last_90_pct =
@@ -72,10 +72,10 @@ export default function RepresentativeUptime({ account }) {
       uptime_pct > 90
         ? 'online'
         : uptime_pct < 50
-        ? 'offline'
-        : uptime_pct < 75
-        ? 'warning'
-        : ''
+          ? 'offline'
+          : uptime_pct < 75
+            ? 'warning'
+            : ''
   }
   return (
     <div className='representative__section representative__uptime'>
