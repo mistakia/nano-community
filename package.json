@@ -176,7 +176,7 @@
     "nib": "^1.2.0",
     "nock": "^13.5.4",
     "percentile": "^1.6.0",
-    "prettier": "2.8.8",
+    "prettier": "3.2.5",
     "react-immutable-proptypes": "^2.2.0",
     "react-router-dom": "^5.3.4",
     "react-snap": "mistakia/react-snap#359df6598700375a79b98746402b819d433366fc",
