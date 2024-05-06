@@ -118,7 +118,7 @@ account_id = nanolib.generate_account_id(seed, 0)
 
 | Name                                               | Description                                                                                                     |
 | -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| [nanodart](https://github.com/nano-dart/nano-dart) | Dart library for the NANO and BANANO cryptocurrencies - supports key generation, signing, encryption, and more. |
+| [nanodart](https://github.com/appditto/nanodart) | Dart library for the NANO and BANANO cryptocurrencies - supports key generation, signing, encryption, and more. |
 | [nanoutil](https://github.com/perishllc/nanoutil)  | A Nano and Banano cryptocurrency library for the Dart programming language                                      |
 
 ##### Python
@@ -277,4 +277,4 @@ Once you have a node up and running the ledger should bootstrap from the network
 - wallets (<a href="https://github.com/Nault/Nault" target="_blank">Nault</a> / <a href="https://github.com/appditto/natrium_wallet_flutter" target="_blank">Natrium</a>)
 - merchant payment services
 - streaming plugins for payments, tips, donations
-- pay per use intergation (articles)
+- pay per use integration (articles)

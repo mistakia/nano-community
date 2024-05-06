@@ -28,7 +28,7 @@ At this moment, the value comes mostly from speculation rather than actual payme
 
 Like with any new technology, it is not worth very much until it is worth a lot.
 
-In the meantime, critics will continually reference its lack of use by ordinary consumers and merchants, while overlooking its potential use. Over time, more and more consumers and merchants will adopt it as developers rapidly improve its useability to make it more accessible. The Internet was at first hard to use and now everyone is using it.
+In the meantime, critics will continually reference its lack of use by ordinary consumers and merchants, while overlooking its potential use. Over time, more and more consumers and merchants will adopt it as developers rapidly improve its usability to make it more accessible. The Internet was at first hard to use and now everyone is using it.
 
 ### Notable Quotes
 
