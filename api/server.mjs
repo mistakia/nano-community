@@ -37,7 +37,7 @@ const IS_DEV = process.env.NODE_ENV === 'development'
 const speedLimiter = slowDown({
   windowMs: 10 * 60 * 1000, // 10 minutes
   delayAfter: 50, // allow 50 requests per 10 minutes, then...
-  delayMs: (hits, req) => (hits - req.slowDown.limit) * 500, // begin adding 500ms of delay per request above 50:
+  delayMs: (hits, req) => (hits - req.slowDown.limit) * 500, // begin adding 500ms of delay per request above 50
   maxDelayMs: 20000 // maximum delay of 20 seconds
 })
 
