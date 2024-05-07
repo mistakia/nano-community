@@ -72,7 +72,6 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 
 | Exchange                                                                            | Maker Fee | Taker Fee | Withdrawal Fee |
 | ----------------------------------------------------------------------------------- | --------- | --------- | -------------- |
-| <a href="https://www.probit.kr/app/exchange/NANO-KRW" target="_blank">Probit.kr</a> | 0.2%      | 0.2%      | Unknown        |
 | <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>              | 0.4%      | 0.4%      | Ӿ 0.008        |
 
 #### United Kingdom
