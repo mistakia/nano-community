@@ -70,9 +70,9 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 
 #### South Korea
 
-| Exchange                                                                            | Maker Fee | Taker Fee | Withdrawal Fee |
-| ----------------------------------------------------------------------------------- | --------- | --------- | -------------- |
-| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>              | 0.4%      | 0.4%      | Ӿ 0.008        |
+| Exchange                                                               | Maker Fee | Taker Fee | Withdrawal Fee |
+| ---------------------------------------------------------------------- | --------- | --------- | -------------- |
+| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a> | 0.4%      | 0.4%      | Ӿ 0.008        |
 
 #### United Kingdom
 
