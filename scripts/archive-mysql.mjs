@@ -311,7 +311,10 @@ const archive_posts = async ({ batch_size = 20000 }) => {
   const hours = 6 * 7 * 24 // 6 weeks
 
   const stale_timestamps = await db.raw(
-    `SELECT created_at as timestamp, COUNT(*) as count FROM posts WHERE created_at < UNIX_TIMESTAMP(NOW() - INTERVAL ${hours} HOUR) GROUP BY created_at ORDER BY created_at ASC`
+    `SELECT created_at as timestamp, COUNT(*) as count FROM posts
+    WHERE created_at < UNIX_TIMESTAMP(NOW() - INTERVAL ${hours} HOUR)
+    AND id NOT IN (SELECT post_id FROM post_labels)
+    GROUP BY created_at ORDER BY created_at ASC`
   )
 
   let current_batch_size = 0
@@ -338,7 +341,14 @@ const archive_posts = async ({ batch_size = 20000 }) => {
         .unix(timestamps[0])
         .format('YYYY-MM-DD HH:mm:ss')}`
     )
-    const posts = await db('posts').whereIn('created_at', timestamps).select()
+    const posts = await db('posts')
+      .whereIn('created_at', timestamps)
+      .andWhereNotExists(function () {
+        this.select('*')
+          .from('post_labels')
+          .whereRaw('posts.id = post_labels.post_id')
+      })
+      .select()
 
     if (!posts.length) {
       logger('no posts to archive')
