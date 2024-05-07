@@ -10,14 +10,15 @@
   "scripts": {
     "dev": "concurrently \"yarn start\" \"yarn start:api\"",
     "dev:live": "NC_DEV_LIVE=true yarn start",
-    "start": "webpack serve --mode=development --config webpack/webpack.dev.babel.mjs --port 8081 --history-api-fallback --static-directory resources --static-public-path /resources --open",
+    "start": "webpack serve --mode=development --config webpack/webpack.dev.babel.mjs --port 8081 --history-api-fallback --static-directory static --static-public-path /static --open",
     "start:api": "NODE_ENV=development node server.mjs",
     "deploy:ipfs": "ipfs-deploy build/index.html",
     "deploy": "scp -r build/* nano.community:/root/nano-community/build",
     "build": "cross-env NODE_ENV=production webpack --config webpack/webpack.prod.babel.mjs --color --progress && react-snap",
     "lint": "eslint . --ext js,mjs",
     "prettier": "prettier --write .",
-    "test": "TZ=America/New_York NODE_ENV=test TEST=all mocha --exit"
+    "test": "TZ=America/New_York NODE_ENV=test TEST=all mocha --exit",
+    "scan:links": "npx linkinator https://nano.community --recurse --timeout 10000"
   },
   "homepage": "https://nano.community/",
   "reactSnap": {
@@ -72,7 +73,7 @@
       "https://www.googletagmanager.com"
     ],
     "exclude": [
-      "/resources/**",
+      "/static/**",
       "/nano_*"
     ]
   },

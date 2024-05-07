@@ -69,7 +69,7 @@ Distribution began in 2015 and ended in October 2017, at which point the faucet 
 
 Ӿ 7,000,000 (~5%) was set aside as a <a href="https://www.nanolooker.com/developer-fund" target="_blank">developer fund</a>, of which about Ӿ 300,000 Nano remain as of November 2021.
 
-Because the distribution process was conducted on-chain, it is publicly available to be reviewed and audited by looking at the <a href="https://nanex.cc/accountstats?account=nano_13ezf4od79h1tgj9aiu4djzcmmguendtjfuhwfukhuucboua8cpoihmh8byo" target="_blank">Landing Account</a>.
+Because the distribution process was conducted on-chain, it is publicly available to be reviewed and audited by looking at the <a href="https://nano.community/nano_13ezf4od79h1tgj9aiu4djzcmmguendtjfuhwfukhuucboua8cpoihmh8byo" target="_blank">Landing Account</a>.
 
 A few notable statistics compiled by <a href="https://www.reddit.com/r/nanocurrency/comments/h7fmge/the_nano_faucet_distribution_visualized_and/" target="_blank">u/hanzyfranzy</a>:
 
@@ -89,10 +89,6 @@ On 11 February 2018, the Core Team <a href="https://medium.com/nanocurrency/bitg
 nano_1fioob7u6ia76rfo1medtrwwdobey1ua8qe7z55qyjimir5b9d95hkdabbjn
 ```
 
-<a href="https://nanex.cc/accountstats?account=nano_1fioob7u6ia76rfo1medtrwwdobey1ua8qe7z55qyjimir5b9d95hkdabbjn" target="_blank">Account History</a>
-
-<a href="https://nanex.cc/findaccount?searchstring=Bitgrail+Hacker" target="_blank">Potential Accounts</a>
-
 ## Nano
 
 On 31 January 2018, RaiBlocks rebranded to Nano because it is easier to pronounce and sounds similar in whatever tongue spoken.
@@ -100,7 +96,7 @@ On 31 January 2018, RaiBlocks rebranded to Nano because it is easier to pronounc
 ## Timeline
 
 <figure>
-<img alt='History of notable digital money advances & innovations' src="/resources/bitcoin-academic-pedigree.jpg" />
+<img alt='History of notable digital money advances & innovations' src="/static/bitcoin-academic-pedigree.jpg" />
 </figure>
 
 <a href="https://nakamotoinstitute.org/literature/" target="_blank">Notable Publications</a>

@@ -55,7 +55,7 @@ A 32-byte value, usually represented as a 64 character, uppercase hexadecimal st
 A string that starts with `nano_` (previously `xrb_`), then has 52 characters which are the account public key but encoded with a specific base32 encoding algorithm to prevent human transcription errors by limiting ambiguity between different characters (no O and 0 for example). Then the final 8 characters are Blake2b-40 checksum of the account public key to aid in discovering typos, also encoded with the same base32 scheme (5 bytes).
 
 <figure>
-    <img alt='Nano account address encoding' src='/resources/account-address.png' />
+    <img alt='Nano account address encoding' src='/static/account-address.png' />
     <figcaption>Ex. nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs</figcaption>
 </figure>
 
@@ -116,10 +116,10 @@ account_id = nanolib.generate_account_id(seed, 0)
 
 ##### Dart
 
-| Name                                               | Description                                                                                                     |
-| -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| [nanodart](https://github.com/appditto/nanodart) | Dart library for the NANO and BANANO cryptocurrencies - supports key generation, signing, encryption, and more. |
-| [nanoutil](https://github.com/perishllc/nanoutil)  | A Nano and Banano cryptocurrency library for the Dart programming language                                      |
+| Name                                              | Description                                                                                                     |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| [nanodart](https://github.com/appditto/nanodart)  | Dart library for the NANO and BANANO cryptocurrencies - supports key generation, signing, encryption, and more. |
+| [nanoutil](https://github.com/perishllc/nanoutil) | A Nano and Banano cryptocurrency library for the Dart programming language                                      |
 
 ##### Python
 
@@ -151,9 +151,9 @@ account_id = nanolib.generate_account_id(seed, 0)
 
 ##### Java
 
-| Name                                            | Description                                               |
-| ----------------------------------------------- | --------------------------------------------------------- |
-| [jNano](https://github.com/nano-java/nano-java) | A comprehensive Java library for the Nano cryptocurrency. |
+| Name                                       | Description                                               |
+| ------------------------------------------ | --------------------------------------------------------- |
+| [jNano](https://github.com/koczadly/jNano) | A comprehensive Java library for the Nano cryptocurrency. |
 
 ##### Go
 

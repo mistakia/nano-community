@@ -67,15 +67,15 @@ api.use(
   })
 )
 
-api.use(robots(path.join(__dirname, '..', 'resources', 'robots.txt')))
-api.use(favicon(path.join(__dirname, '..', 'resources', 'favicon.ico')))
+api.use(robots(path.join(__dirname, '..', 'static', 'robots.txt')))
+api.use(favicon(path.join(__dirname, '..', 'static', 'favicon.ico')))
 api.use((req, res, next) => {
   res.set('Cache-Control', 'no-cache, must-revalidate, proxy-revalidate')
   next()
 })
 
-const resourcesPath = path.join(__dirname, '..', 'resources')
-api.use('/resources', serveStatic(resourcesPath))
+const static_path = path.join(__dirname, '..', 'static')
+api.use('/static', serveStatic(static_path))
 
 const dataPath = path.join(__dirname, '..', 'data')
 api.use('/data', serveStatic(dataPath))

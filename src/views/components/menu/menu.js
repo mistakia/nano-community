@@ -149,7 +149,7 @@ export default function Menu({ hide, hideSearch, hide_speed_dial }) {
           icon={
             <img
               alt='Nano is feeless, instant, and green / energy efficient digital money (cryptocurrency)'
-              src='/resources/symbol-white.svg'
+              src='/static/symbol-white.svg'
             />
           }
           openIcon={<CloseIcon />}>

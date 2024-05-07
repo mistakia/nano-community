@@ -124,7 +124,7 @@ Nano's distribution was widely accessible as it had only two requirements: knowl
 
 Ӿ 7,000,000 (~5%) was set aside as a <a href="https://www.nanolooker.com/developer-fund" target="_blank">developer fund</a>, of which about Ӿ 300,000 remain as of November 2021.
 
-Because the distribution process was conducted on-chain, it is publicly available to be reviewed and audited by looking at the <a href="https://nanex.cc/accountstats?account=nano_35jjmmmh81kydepzeuf9oec8hzkay7msr6yxagzxpcht7thwa5bus5tomgz9" target="_blank">Core Faucet</a> and <a href="https://nanex.cc/accountstats?account=nano_13ezf4od79h1tgj9aiu4djzcmmguendtjfuhwfukhuucboua8cpoihmh8byo" target="_blank">Landing</a> account.
+Because the distribution process was conducted on-chain, it is publicly available to be reviewed and audited by looking at the <a href="https://nano.community/nano_35jjmmmh81kydepzeuf9oec8hzkay7msr6yxagzxpcht7thwa5bus5tomgz9" target="_blank">Core Faucet</a> and <a href="https://nano.community/nano_13ezf4od79h1tgj9aiu4djzcmmguendtjfuhwfukhuucboua8cpoihmh8byo" target="_blank">Landing</a> account.
 
 A few notable statistics compiled by <a href="https://www.reddit.com/r/nanocurrency/comments/h7fmge/the_nano_faucet_distribution_visualized_and/" target="_blank">u/hanzyfranzy</a>:
 
@@ -142,7 +142,7 @@ Transactions achieve irreversible finality. Once a transaction achieves a quorum
 
 Typically, Nano transactions settle in under one second, oftentimes around 300ms. Prior to final votes (v22), it was able to settle in around 100ms.
 
-It takes Bitcoin transactions about one hour to reach a <a href="https://bitcoil.co.il/Doublespend.pdf" target="_blank">0.1% chance</a> of potentially being reversed.
+It takes Bitcoin transactions about one hour to reach a <a href="/static/doublespend.pdf" target="_blank">0.1% chance</a> of potentially being reversed.
 
 Traditional bank transfers, using ACH and Swift, can take anywhere from 1-3 days to settle. Real-Time Gross Settlement (RTGS) systems are available only for banks and can only be used domestically as they are operated by central banks.
 

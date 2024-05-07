@@ -48,7 +48,7 @@ export default base({
     // Minify and optimize the index.html
     new HtmlWebpackPlugin({
       template: 'src/index.html',
-      favicon: 'resources/favicon.ico',
+      favicon: 'static/favicon.ico',
       minify: {
         removeComments: true,
         collapseWhitespace: true,

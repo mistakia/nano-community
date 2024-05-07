@@ -49,7 +49,7 @@ JavaScript & markdown are used to make the project as accessible as possible.
 |-- data        data output folder
 |-- db          schema for mysql
 |-- docs        community markdown documents
-|-- resources   static assets (png, svg, jpg, pdf, html)
+|-- static      static assets (png, svg, jpg, pdf, html)
 |-- scripts     data aggregation or processing
 |-- server      server configs
 |-- src         single page react & redux app (deployed to IPFS)

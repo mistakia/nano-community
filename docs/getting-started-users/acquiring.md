@@ -10,13 +10,8 @@ tags: nano, xno, buy, how, where, get, purchase, crypto, exchange, faucets, earn
 
 Get some free Nano (XNO) from community maintained and donated faucets to test it out.
 
-- <a href="https://nano-faucet.org/" target="_blank">nano-faucet.org</a>
 - <a href="https://nanodrop.io/" target="_blank">NanoDrop.io</a>
 - <a href="https://www.freenanofaucet.com/" target="_blank">freenanofaucet.com</a>
-- <a href="https://www.trynano.io/" target="_blank">trynano.io</a>
-- <a href="http://nendlyy5734pdfflygapdayez6dcorodcio72jwfvaux4fsrzyh7rzqd.onion/faucet/" target="_blank">nendlyy5734...yh7rzqd.onion</a> (TOR)
-- <a href="https://apollonano.com/" target="_blank">apollonano.com</a>
-- <a href="https://nanocafe.cc/faucet" target="_blank">nanocafe.cc</a>
 
 ## Purchasing
 
@@ -40,21 +35,21 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 
 #### Australia
 
-| Exchange                                                                                                                | Maker Fee | Taker Fee | Withdrawal Fee |
-| ----------------------------------------------------------------------------------------------------------------------- | --------- | --------- | -------------- |
-| <a href="https://www.binance.com/en/trade/NANO_USDT?layout=pro" target="_blank">Binance.com</a>                         | 0.1%      | 0.1%      | Ӿ 0.01         |
-| <a href="https://www.kraken.com/en-us/prices/nano-price-chart/usd-us-dollar?interval=1m" target="_blank">Kraken.com</a> | 0.16%     | 0.26%     | Ӿ 0.05         |
-| <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>                                                 | 0.1%      | 0.1%      | Ӿ 0.01         |
-| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                                                  | 0.4%      | 0.4%      | Ӿ 0.008        |
+| Exchange                                                                                        | Maker Fee | Taker Fee | Withdrawal Fee |
+| ----------------------------------------------------------------------------------------------- | --------- | --------- | -------------- |
+| <a href="https://www.binance.com/en/trade/NANO_USDT?layout=pro" target="_blank">Binance.com</a> | 0.1%      | 0.1%      | Ӿ 0.01         |
+| <a href="https://www.kraken.com/prices/nano" target="_blank">Kraken.com</a>                     | 0.16%     | 0.26%     | Ӿ 0.05         |
+| <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>                         | 0.1%      | 0.1%      | Ӿ 0.01         |
+| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                          | 0.4%      | 0.4%      | Ӿ 0.008        |
 
 #### Canada
 
-| Exchange                                                                                                                | Maker Fee | Taker Fee | Withdrawal Fee |
-| ----------------------------------------------------------------------------------------------------------------------- | --------- | --------- | -------------- |
-| <a href="https://www.binance.com/en/trade/NANO_USDT?layout=pro" target="_blank">Binance.com</a>                         | 0.1%      | 0.1%      | Ӿ 0.01         |
-| <a href="https://www.kraken.com/en-us/prices/nano-price-chart/usd-us-dollar?interval=1m" target="_blank">Kraken.com</a> | 0.16%     | 0.26%     | Ӿ 0.05         |
-| <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>                                                 | 0.1%      | 0.1%      | Ӿ 0.01         |
-| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                                                  | 0.4%      | 0.4%      | Ӿ 0.008        |
+| Exchange                                                                                        | Maker Fee | Taker Fee | Withdrawal Fee |
+| ----------------------------------------------------------------------------------------------- | --------- | --------- | -------------- |
+| <a href="https://www.binance.com/en/trade/NANO_USDT?layout=pro" target="_blank">Binance.com</a> | 0.1%      | 0.1%      | Ӿ 0.01         |
+| <a href="https://www.kraken.com/prices/nano" target="_blank">Kraken.com</a>                     | 0.16%     | 0.26%     | Ӿ 0.05         |
+| <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>                         | 0.1%      | 0.1%      | Ӿ 0.01         |
+| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                          | 0.4%      | 0.4%      | Ӿ 0.008        |
 
 #### Europe
 
@@ -75,11 +70,10 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 
 #### South Korea
 
-| Exchange                                                                                    | Maker Fee | Taker Fee | Withdrawal Fee |
-| ------------------------------------------------------------------------------------------- | --------- | --------- | -------------- |
-| <a href="https://www.probit.kr/app/exchange/NANO-KRW" target="_blank">Probit.kr</a>         | 0.2%      | 0.2%      | Unknown        |
-| <a href="https://www.huobi.co.kr/en-us/exchange/nano_usdt/" target="_blank">Huobi.co.kr</a> | 0.1%      | 0.1%      | Unknown        |
-| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                      | 0.4%      | 0.4%      | Ӿ 0.008        |
+| Exchange                                                                            | Maker Fee | Taker Fee | Withdrawal Fee |
+| ----------------------------------------------------------------------------------- | --------- | --------- | -------------- |
+| <a href="https://www.probit.kr/app/exchange/NANO-KRW" target="_blank">Probit.kr</a> | 0.2%      | 0.2%      | Unknown        |
+| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>              | 0.4%      | 0.4%      | Ӿ 0.008        |
 
 #### United Kingdom
 
@@ -93,12 +87,12 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 
 #### United States
 
-| Exchange                                                                                                                | Maker Fee | Taker Fee | Withdrawal Fee |
-| ----------------------------------------------------------------------------------------------------------------------- | --------- | --------- | -------------- |
-| <a href="https://www.binance.us/en/trade/NANO_USD" target="_blank">Binance.US</a>                                       | 0.1%      | 0.1%      | Ӿ 0.01         |
-| <a href="https://www.kraken.com/en-us/prices/nano-price-chart/usd-us-dollar?interval=1m" target="_blank">Kraken.com</a> | 0.16%     | 0.26%     | Ӿ 0.05         |
-| <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>                                                 | 0.1%      | 0.1%      | Ӿ 0.01         |
-| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                                                  | 0.4%      | 0.4%      | Ӿ 0.008        |
+| Exchange                                                                          | Maker Fee | Taker Fee | Withdrawal Fee |
+| --------------------------------------------------------------------------------- | --------- | --------- | -------------- |
+| <a href="https://www.binance.us/en/trade/NANO_USD" target="_blank">Binance.US</a> | 0.1%      | 0.1%      | Ӿ 0.01         |
+| <a href="https://www.kraken.com/prices/nano" target="_blank">Kraken.com</a>       | 0.16%     | 0.26%     | Ӿ 0.05         |
+| <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>           | 0.1%      | 0.1%      | Ӿ 0.01         |
+| <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>            | 0.4%      | 0.4%      | Ӿ 0.008        |
 
 ### Services
 
@@ -361,20 +355,19 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 
 ## Earning
 
-Visit <a href="https://earn-nano.com/" target="_blank">earn-nano.com</a> for some ways to earn nano.
-
 #### General
 
 - <a href="https://wenano.net/" target="_blank">Wenano</a>: travel around to spots around the world to collect free Nano
 - <a href="https://playnano.online/" target="_blank">PlayNANO</a>: Earn, play, bet with Nano, no account or login required
 - <a href="https://www.quicrypto.com/" target="_blank">quicrypto.com</a>
-- <a href="https://www.bitfortip.com/" target="_blank">bitfortip.com</a>
 - <a href="https://unmineable.com/coins/NANO" target="_blank">unmineable.com</a>
+- <a href="https://cryptovision.live/" target="_blank">cryptovision.live</a> is a live video sharing platform where viewers are rewarded with nano.
+- <a href="https://www.perseeve.app/" target="_blank">perseeve.app</a>
 
 #### Games
 
 - <a href="https://nanogames.io/" target="_blank">nanogames.io</a>
-- <a href="https://playerkillers.exchange/" target="_blank">playerkillers.exchange</a>
+- <a href="https://nanolooker.com/nanobrowserquest/" target="_blank">NanoBrowserQuest</a> is a remake of the popular BrowserQuest web-based MMORPG mini-game that gives small nano reward after completion
 - <a href="https://www.luckynano.com/" target="_blank">luckynano.com</a>
 - <a href="https://nanoquakejs.com/" target="_blank">nanoquakejs.com</a>
 

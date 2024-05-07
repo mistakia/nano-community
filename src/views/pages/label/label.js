@@ -133,7 +133,7 @@ export default class LabelPage extends React.Component {
             </div>
             <Button
               variant='outlined'
-              href={`https://github.com/${REPO}/tree/main/${this.path}.md`}
+              href={`https://github.com/${REPO}/tree/main/docs${this.path}.md`}
               target='_blank'
               className='doc__content-edit'>
               Edit Page

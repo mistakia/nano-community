@@ -39,7 +39,7 @@ The internet era has been dominated by companies and products based on the conce
 
 The utility of digital money in aggregate is a function of how many merchants want to accept payment for goods and services in digital money. The more people who accept payment using digital money, the more merchants existing users can do business with.
 
-<img alt='Digital Money, like Nano, has an S-curve Network Effects' src='/resources/s-curve.jpg' />
+<img alt='Digital Money, like Nano, has an S-curve Network Effects' src='/static/s-curve.jpg' />
 
 In practice, network effects resemble an <a href="https://spectrum.ieee.org/computing/networks/metcalfes-law-is-wrong" target="_blank">S-curve</a> more than an exponential curve. The first 50% of merchants that accept digital cash for payment make it exponentially more useful than the second 50%.
 
@@ -89,7 +89,7 @@ It will not become any less useful if the developer fund runs out; those who rec
 
 For a competitor to replace Nano, it will need to materially improve upon Nano's fundamental properties. There is not much room for improvement, given Nano is instant, feeless, energy-efficient, scalable, and irreversible. Based on those qualities and how <a href="/history/overview">few advances there have been over the last 30 years</a>, it may be more likely that Nano is not viable than there being an improvement discovered that is incompatible.
 
-Since its release, Bitcoin has been forked and cloned countless times. None of these clones have been able to gain much traction because they lack <a href="https://vitalik.ca/general/2021/03/23/legitimacy.html" target="_blank">legitimacy</a>, a quality that can not be forged in decentralized networks.
+Since its release, Bitcoin has been forked and cloned countless times. None of these clones have been able to gain much traction because they lack <a href="https://vitalik.eth.limo/general/2021/03/23/legitimacy.html" target="_blank">legitimacy</a>, a quality that can not be forged in decentralized networks.
 
 ### The best technology does not always win
 
