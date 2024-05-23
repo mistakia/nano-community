@@ -54,11 +54,11 @@ const mapStateToProps = createSelector(getLedger, (ledger) => {
 
     // calculate relative supply distribution
     const total_supply = base_ranges.reduce((acc, r) => {
-      return acc + BigInt(d[`${r}_total_balance`])
+      return acc + BigInt(d[`${r}_total_balance`] || 0)
     }, BigInt(0))
 
     base_ranges.forEach((r) => {
-      const total_balance = BigInt(d[`${r}_total_balance`])
+      const total_balance = BigInt(d[`${r}_total_balance`] || 0)
       const relative_supply = BigNumber(total_balance)
         .div(total_supply)
         .times(100)
