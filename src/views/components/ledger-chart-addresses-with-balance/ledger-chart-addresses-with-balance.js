@@ -9,6 +9,7 @@ import { CanvasRenderer } from 'echarts/renderers'
 
 import { download_csv, download_json } from '@core/utils'
 import { base_range_labels } from '@core/constants'
+import LedgerDescriptionNotice from '@components/ledger-description-notice'
 
 echarts.use([LineChart, TooltipComponent, GridComponent, CanvasRenderer])
 
@@ -150,6 +151,7 @@ export default function LedgerChartAddressesWithBalance({
             Nano.
           </p>
         </div>
+        <LedgerDescriptionNotice />
         {!isLoading && (
           <div className='ledger__chart-section-body download'>
             <Button size='small' onClick={handle_download_csv}>

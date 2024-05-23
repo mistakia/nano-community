@@ -14,6 +14,7 @@ import Button from '@mui/material/Button'
 
 import { download_csv, download_json } from '@core/utils'
 import { base_ranges, base_range_labels } from '@core/constants'
+import LedgerDescriptionNotice from '@components/ledger-description-notice'
 
 echarts.use([
   TooltipComponent,
@@ -169,6 +170,7 @@ export default function LedgerChartAmounts({ data, isLoading }) {
             the block is in a given range (in Nano).
           </p>
         </div>
+        <LedgerDescriptionNotice />
         {!isLoading && (
           <div className='ledger__chart-section-body download'>
             <Button size='small' onClick={handle_download_csv}>

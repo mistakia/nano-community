@@ -9,6 +9,7 @@ import { CanvasRenderer } from 'echarts/renderers'
 
 import { base_ranges, base_range_labels } from '@core/constants'
 import { download_csv, download_json } from '@core/utils'
+import LedgerDescriptionNotice from '@components/ledger-description-notice'
 
 echarts.use([LineChart, TooltipComponent, GridComponent, CanvasRenderer])
 
@@ -193,6 +194,7 @@ export default function LedgerChartDistribution({
             specific balance ranges.
           </p>
         </div>
+        <LedgerDescriptionNotice />
         {!isLoading && (
           <div className='ledger__chart-section-body download'>
             <Button size='small' onClick={handle_download_csv}>

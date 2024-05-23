@@ -13,6 +13,7 @@ import { CanvasRenderer } from 'echarts/renderers'
 import Button from '@mui/material/Button'
 
 import LedgerChartMetrics from '@components/ledger-chart-metrics'
+import LedgerDescriptionNotice from '@components/ledger-description-notice'
 import { download_csv, download_json } from '@core/utils'
 
 echarts.use([
@@ -164,6 +165,7 @@ export default function LedgerChartVolume({ data, isLoading }) {
             changed per day.
           </p>
         </div>
+        <LedgerDescriptionNotice />
         {!isLoading && (
           <div className='ledger__chart-section-body download'>
             <Button size='small' onClick={handle_download_csv}>

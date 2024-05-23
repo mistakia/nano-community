@@ -14,6 +14,7 @@ import Button from '@mui/material/Button'
 
 import LedgerChartMetrics from '@components/ledger-chart-metrics'
 import { download_csv, download_json, format_value } from '@core/utils'
+import LedgerDescriptionNotice from '@components/ledger-description-notice'
 
 echarts.use([
   TooltipComponent,
@@ -133,6 +134,7 @@ export default function LedgerUSDTransferred({ data, isLoading }) {
             Nano transferred that day.
           </p>
         </div>
+        <LedgerDescriptionNotice />
         {!isLoading && (
           <div className='ledger__chart-section-body download'>
             <Button size='small' onClick={handle_download_csv}>

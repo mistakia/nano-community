@@ -13,6 +13,7 @@ import Button from '@mui/material/Button'
 
 import { download_csv, download_json } from '@core/utils'
 import LedgerChartMetrics from '@components/ledger-chart-metrics'
+import LedgerDescriptionNotice from '@components/ledger-description-notice'
 
 echarts.use([
   TooltipComponent,
@@ -143,6 +144,7 @@ export default function LedgerChartAddresses({ data, isLoading }) {
             number of addresses created. Reused shows the number of addresses
             used that were created on a previous day.
           </p>
+          <LedgerDescriptionNotice />
         </div>
         {!isLoading && (
           <div className='ledger__chart-section-body download'>
