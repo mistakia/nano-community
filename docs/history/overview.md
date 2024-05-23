@@ -67,7 +67,7 @@ Nano was given away for free to anyone willing to manually complete captcha puzz
 
 Distribution began in 2015 and ended in October 2017, at which point the faucet had distributed Ӿ 126,248,289.
 
-Ӿ 7,000,000 (~5%) was set aside as a <a href="https://www.nanolooker.com/developer-fund" target="_blank">developer fund</a>, of which about Ӿ 300,000 Nano remain as of November 2021.
+Ӿ 7,000,000 (~5%) was set aside as an initial <a href="https://nano.community/nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est" target="_blank">developer fund</a>. In 2023, the Nano Foundation <a href="https://nano.org/en/blog/the-nano-foundation-takes-a-step-forward-on-its-open-source-journey--420eae42" target="_blank">transitioned to a volunteer-led model</a>, continuing its mission to build the most efficient digital currency possible.
 
 Because the distribution process was conducted on-chain, it is publicly available to be reviewed and audited by looking at the <a href="https://nano.community/nano_13ezf4od79h1tgj9aiu4djzcmmguendtjfuhwfukhuucboua8cpoihmh8byo" target="_blank">Landing Account</a>.
 

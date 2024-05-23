@@ -366,7 +366,6 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 #### Games
 
 - <a href="https://nanogames.io/" target="_blank">nanogames.io</a>
-- <a href="https://nanolooker.com/nanobrowserquest/" target="_blank">NanoBrowserQuest</a> is a remake of the popular BrowserQuest web-based MMORPG mini-game that gives small nano reward after completion
 - <a href="https://www.luckynano.com/" target="_blank">luckynano.com</a>
 - <a href="https://nanoquakejs.com/" target="_blank">nanoquakejs.com</a>
 

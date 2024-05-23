@@ -122,7 +122,7 @@ Nano was given away for free, proportional to time spent completing a captcha. D
 
 Nano's distribution was widely accessible as it had only two requirements: knowledge of its existence and a device capable of connecting to the internet. Most other distribution methods (ICO, mining, etc) have additional barriers (wealth, hardware, etc).
 
-Ӿ 7,000,000 (~5%) was set aside as a <a href="https://www.nanolooker.com/developer-fund" target="_blank">developer fund</a>, of which about Ӿ 300,000 remain as of November 2021.
+Ӿ 7,000,000 (~5%) was set aside as an initial <a href="https://nano.community/nano_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est" target="_blank">developer fund</a>. This fund has since been exhausted. The Nano Foundation has transitioned to a <a href="https://nano.org/en/blog/the-nano-foundation-takes-a-step-forward-on-its-open-source-journey--420eae42" target="_blank">volunteer-led model</a>, continuing its mission to build the most efficient digital currency possible.
 
 Because the distribution process was conducted on-chain, it is publicly available to be reviewed and audited by looking at the <a href="https://nano.community/nano_35jjmmmh81kydepzeuf9oec8hzkay7msr6yxagzxpcht7thwa5bus5tomgz9" target="_blank">Core Faucet</a> and <a href="https://nano.community/nano_13ezf4od79h1tgj9aiu4djzcmmguendtjfuhwfukhuucboua8cpoihmh8byo" target="_blank">Landing</a> account.
 
