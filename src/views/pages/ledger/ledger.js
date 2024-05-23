@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
@@ -38,47 +38,50 @@ export default function LedgerPage({ load, data, isLoading }) {
   const [menu_open, set_menu_open] = useState(false)
   const filter_input_ref = useRef(null)
 
-  const categories = {
-    Addresses: {
-      'Address Counts': (
-        <LedgerChartAddresses data={data} isLoading={isLoading} />
-      )
-    },
-    Blocks: {
-      'Block Counts': <LedgerChartBlocks data={data} isLoading={isLoading} />
-    },
-    Transactions: {
-      'Value Transferred': (
-        <LedgerChartUSDTransferred data={data} isLoading={isLoading} />
-      ),
-      'Transfer Volume': (
-        <LedgerChartVolume data={data} isLoading={isLoading} />
-      ),
-      'Transfer Amounts': (
-        <LedgerChartAmounts data={data} isLoading={isLoading} />
-      )
-    },
-    Distribution: {
-      'Address Supply Distribution': (
-        <LedgerChartDistribution data={data} isLoading={isLoading} />
-      ),
-      'Address Balances (Nano)': {
-        ...base_ranges.reduce(
-          (acc, range) => ({
-            ...acc,
-            [`Addresses with Balance ${base_range_labels[range]}`]: (
-              <LedgerChartAddressesWithBalance
-                data={data}
-                isLoading={isLoading}
-                range={range}
-              />
-            )
-          }),
-          {}
+  const categories = useMemo(
+    () => ({
+      Addresses: {
+        'Address Counts': (
+          <LedgerChartAddresses data={data} isLoading={isLoading} />
         )
+      },
+      Blocks: {
+        'Block Counts': <LedgerChartBlocks data={data} isLoading={isLoading} />
+      },
+      Transactions: {
+        'Value Transferred': (
+          <LedgerChartUSDTransferred data={data} isLoading={isLoading} />
+        ),
+        'Transfer Volume': (
+          <LedgerChartVolume data={data} isLoading={isLoading} />
+        ),
+        'Transfer Amounts': (
+          <LedgerChartAmounts data={data} isLoading={isLoading} />
+        )
+      },
+      Distribution: {
+        'Address Supply Distribution': (
+          <LedgerChartDistribution data={data} isLoading={isLoading} />
+        ),
+        'Address Balances (Nano)': {
+          ...base_ranges.reduce(
+            (acc, range) => ({
+              ...acc,
+              [`Addresses with Balance ${base_range_labels[range]}`]: (
+                <LedgerChartAddressesWithBalance
+                  data={data}
+                  isLoading={isLoading}
+                  range={range}
+                />
+              )
+            }),
+            {}
+          )
+        }
       }
-    }
-  }
+    }),
+    [data, isLoading]
+  )
 
   useEffect(() => {
     load()
@@ -107,21 +110,7 @@ export default function LedgerPage({ load, data, isLoading }) {
       }
 
       set_filtered_categories(result)
-    }
 
-    if (filter_text.length && !previous_filter_text.current.length) {
-      set_cached_open_categories({ ...open_categories })
-    }
-
-    if (filter_text.length === 0 && previous_filter_text.current.length) {
-      set_open_categories(cached_open_categories)
-    }
-
-    previous_filter_text.current = filter_text
-  }, [filter_text])
-
-  useEffect(() => {
-    if (filter_text.length > 0) {
       // Uncollapse all categories and their children when filtering
       const all_open_categories = Object.keys(categories).reduce((acc, key) => {
         const category = categories[key]
@@ -136,7 +125,17 @@ export default function LedgerPage({ load, data, isLoading }) {
       }, {})
       set_open_categories(all_open_categories)
     }
-  }, [filtered_categories, categories, filter_text])
+
+    if (filter_text.length && !previous_filter_text.current.length) {
+      set_cached_open_categories({ ...open_categories })
+    }
+
+    if (filter_text.length === 0 && previous_filter_text.current.length) {
+      set_open_categories(cached_open_categories)
+    }
+
+    previous_filter_text.current = filter_text
+  }, [filter_text, categories])
 
   useEffect(() => {
     if (menu_open) {
