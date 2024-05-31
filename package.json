@@ -68,9 +68,7 @@
     "excludedThirdPartyRequests": [
       "https://fonts.googleapis.com",
       "https://fonts.gstatic.com",
-      "https://api.github.com",
-      "https://www.google-analytics.com",
-      "https://www.googletagmanager.com"
+      "https://api.github.com"
     ],
     "exclude": [
       "/static/**",
@@ -139,7 +137,6 @@
     "@babel/register": "^7.23.7",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
-    "@fingerprintjs/fingerprintjs": "^3.4.2",
     "@mui/icons-material": "^5.15.16",
     "@mui/material": "^5.15.16",
     "@mui/styles": "^5.15.16",
