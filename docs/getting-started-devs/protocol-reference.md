@@ -38,6 +38,12 @@ For a high-level overview of the protocol, review its [design](/design/basics). 
 - [Handshake](#handshake)
 - [Telemetry](#telemetry)
 
+## Principal Representative
+
+- minimum weight required to be a principal representative is `trended_weight / 1000`
+  - <a href="https://github.com/nanocurrency/nano-node/blob/51430f15e270473f205006051cd222ea8779780d/nano/node/node.cpp#L816-L819" target="_blank">nano::uint128_t nano::node::minimum_principal_weight ()</a>
+- votes produced by principal representative will be rebroadcasted by other nodes
+
 ## Election Scheduler
 
 - manages two queues:
