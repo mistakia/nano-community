@@ -2,7 +2,12 @@ import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
 import BigNumber from 'bignumber.js'
 
-import { getNetwork, getNetworkStats, getNetworkWattHour } from '@core/network'
+import {
+  getNetwork,
+  getNetworkStats,
+  getNetworkWattHour,
+  get_principal_representative_minimum_weight
+} from '@core/network'
 import { getNetworkUnconfirmedBlockCount } from '@core/accounts'
 import { nanodb_actions } from '@core/nanodb'
 
@@ -14,7 +19,15 @@ const mapStateToProps = createSelector(
   getNetworkWattHour,
   getNetworkUnconfirmedBlockCount,
   (state) => state.get('nanodb'),
-  (network, stats, wattHour, unconfirmed_block_pool_count, nanodb) => {
+  get_principal_representative_minimum_weight,
+  (
+    network,
+    stats,
+    wattHour,
+    unconfirmed_block_pool_count,
+    nanodb,
+    principal_representative_minimum_weight
+  ) => {
     const send_volume_raw = network.getIn(
       ['stats', 'nanodb', 'send_volume_last_24_hours'],
       0
@@ -51,7 +64,8 @@ const mapStateToProps = createSelector(
       wattHour,
       unconfirmed_block_pool_count,
       send_volume_nano,
-      median_latency_of_median_bucket_by_confirmed_blocks_24h
+      median_latency_of_median_bucket_by_confirmed_blocks_24h,
+      principal_representative_minimum_weight
     }
   }
 )

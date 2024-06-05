@@ -1,10 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import Tooltip from '@mui/material/Tooltip'
 import ImmutablePropTypes from 'react-immutable-proptypes'
+import BigNumber from 'bignumber.js'
 
 import './network.styl'
+
+import { format_value } from '@core/utils'
 
 // add commas to large number
 const format_number = (x) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
@@ -29,7 +32,8 @@ export default function Network({
   unconfirmed_block_pool_count,
   send_volume_nano,
   get_blocks_confirmed_summary,
-  median_latency_of_median_bucket_by_confirmed_blocks_24h
+  median_latency_of_median_bucket_by_confirmed_blocks_24h,
+  principal_representative_minimum_weight
 }) {
   useEffect(() => {
     // get confirmed blocks summary for 24h period for `Tx Speed (24h)`
@@ -58,6 +62,18 @@ export default function Network({
   const feeText = 'The Nano network operates without fees'
   const energyText =
     'Estimated live network CPU energy usage of Principle Representatives based on collected CPU model info. The estimate is based on CPU TDP, which is the average power, in watts, the processor dissipates when operating at base frequency with all cores active under manufacture-defined, high-complexity workload'
+
+  const pr_min_weight_text = `The minimum weight required to be a principal representative is the trended weight / 1000. Current threshold: \n${principal_representative_minimum_weight} Raw\n${BigNumber(principal_representative_minimum_weight).shiftedBy(-30).toNumber()} Nano`
+
+  const pr_min_weight = useMemo(() => {
+    return principal_representative_minimum_weight
+      ? format_value({
+          value: BigNumber(principal_representative_minimum_weight)
+            .shiftedBy(-30)
+            .toNumber()
+        })
+      : '-'
+  }, [principal_representative_minimum_weight])
 
   return (
     <div className='network__container'>
@@ -212,6 +228,15 @@ export default function Network({
         <div>{stats.prCount || '-'}</div>
       </div>
       <div className='network__stat'>
+        <div>
+          Principal Rep Minimum Weight
+          <Tooltip title={pr_min_weight_text}>
+            <HelpOutlineIcon fontSize='inherit' />
+          </Tooltip>
+        </div>
+        <div>{pr_min_weight || '-'}</div>
+      </div>
+      <div className='network__stat'>
         <div>Total Reps (24h)</div>
         <div>{network.getIn(['totalReps'], '-')}</div>
       </div>
@@ -266,5 +291,6 @@ Network.propTypes = {
   unconfirmed_block_pool_count: PropTypes.number,
   send_volume_nano: PropTypes.number,
   get_blocks_confirmed_summary: PropTypes.func,
-  median_latency_of_median_bucket_by_confirmed_blocks_24h: PropTypes.number
+  median_latency_of_median_bucket_by_confirmed_blocks_24h: PropTypes.number,
+  principal_representative_minimum_weight: PropTypes.number
 }

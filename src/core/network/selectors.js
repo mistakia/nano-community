@@ -21,6 +21,15 @@ export function getNetworkWattHour(state) {
   return sum
 }
 
+export function get_principal_representative_minimum_weight(state) {
+  const network = getNetwork(state)
+  const trended_weight = network.getIn(['weight', 'trendedWeight', 'median'])
+  if (!trended_weight) {
+    return null
+  }
+  return BigInt(trended_weight) / BigInt(1000)
+}
+
 export function getNetworkStats(state) {
   const network = getNetwork(state)
   const quorum_total = BigNumber(network.getIn(['weight', 'quorumTotal'], 0))
