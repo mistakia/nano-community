@@ -18,12 +18,12 @@ const is_test = process.env.NODE_ENV === 'test'
 const base_url = is_test ? 'http://localhost:8080' : 'https://nano.community'
 
 const load_private_key = async () => {
-  let private_key = process.env.NANO_PRIVATE_KEY
+  let private_key = process.env.NC_CLI_NANO_PRIVATE_KEY
   if (private_key) {
     console.log('Private key found in environment variable.')
   } else {
     console.log(
-      'No private key found in environment variable (NANO_PRIVATE_KEY).'
+      'No private key found in environment variable (NC_CLI_NANO_PRIVATE_KEY).'
     )
     // Restore stdin for inquirer
     const answers = await inquirer.prompt([
@@ -98,8 +98,7 @@ const revoke_signing_key = {
       type: 'string'
     }),
   handler: async ({ linked_public_key }) => {
-    const { private_key, public_key, nano_account_address } =
-      await load_private_key()
+    const { private_key, public_key } = await load_private_key()
 
     // Confirm revocation
     const answers = await inquirer.prompt([
@@ -115,13 +114,11 @@ const revoke_signing_key = {
       console.log('Revoking signing key...')
       const signature = sign_nano_community_revoke_key({
         linked_public_key,
-        nano_account: nano_account_address,
-        nano_account_private_key: private_key,
-        nano_account_public_key: public_key
+        either_private_key: private_key,
+        either_public_key: public_key
       })
 
       const payload = {
-        account: nano_account_address,
         public_key: linked_public_key.toString('hex'),
         signature: signature.toString('hex')
       }

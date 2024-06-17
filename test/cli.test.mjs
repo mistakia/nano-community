@@ -32,7 +32,7 @@ describe('CLI', function () {
   let new_signing_key
 
   before(() => {
-    process.env.NANO_PRIVATE_KEY =
+    process.env.NC_CLI_NANO_PRIVATE_KEY =
       '1111111111111111111111111111111111111111111111111111111111111111'
 
     server.listen(port, () => console.log(`API listening on port ${port}`))
