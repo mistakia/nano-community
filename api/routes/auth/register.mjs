@@ -1,11 +1,16 @@
 import express from 'express'
-import nano from 'nanocurrency'
 import ed25519 from '@trashman/ed25519-blake2b'
 
-import { verify_nano_community_link_key_signature } from '#common'
+import {
+  verify_nano_community_link_key_signature,
+  is_nano_address_valid,
+  decode_nano_address
+} from '#common'
 
 const router = express.Router()
 const USERNAME_RE = /^[A-Za-z][a-zA-Z0-9_]+$/
+const PUBLIC_KEY_RE = /^[0-9a-fA-F]{64}$/
+const SIGNATURE_RE = /^[0-9a-fA-F]{128}$/
 
 router.post('/?', async (req, res) => {
   const { logger, db } = req.app.locals
@@ -19,7 +24,7 @@ router.post('/?', async (req, res) => {
 
     const { public_key, signature, username } = req.body
 
-    if (!nano.checkKey(public_key)) {
+    if (typeof public_key !== 'string' || !PUBLIC_KEY_RE.test(public_key)) {
       return res.status(401).send({ error: 'invalid public_key param' })
     }
 
@@ -27,7 +32,7 @@ router.post('/?', async (req, res) => {
       return res.status(401).send({ error: 'invalid username param' })
     }
 
-    if (!nano.checkSignature(signature)) {
+    if (typeof signature !== 'string' || !SIGNATURE_RE.test(signature)) {
       return res.status(401).send({ error: 'invalid signature' })
     }
 
@@ -78,19 +83,21 @@ router.post('/key/?', async (req, res) => {
 
     const { public_key, signature, account } = req.body
 
-    if (!nano.checkKey(public_key)) {
+    if (typeof public_key !== 'string' || !PUBLIC_KEY_RE.test(public_key)) {
       return res.status(401).send({ error: 'invalid public_key param' })
     }
 
-    if (!nano.checkAddress(account)) {
+    if (!is_nano_address_valid(account)) {
       return res.status(401).send({ error: 'invalid account param' })
     }
 
-    if (!nano.checkSignature(signature)) {
+    if (typeof signature !== 'string' || !SIGNATURE_RE.test(signature)) {
       return res.status(401).send({ error: 'invalid signature' })
     }
 
-    const account_public_key = nano.derivePublicKey(account)
+    const { public_key: account_public_key } = decode_nano_address({
+      address: account
+    })
     const valid_signature = verify_nano_community_link_key_signature({
       linked_public_key: public_key,
       nano_account: account,

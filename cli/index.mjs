@@ -5,22 +5,17 @@ import crypto from 'crypto'
 import { hideBin } from 'yargs/helpers'
 import inquirer from 'inquirer'
 import process from 'process'
-import nano from 'nanocurrency'
 
-import {
-  sign_nano_community_link_key,
-  sign_nano_community_revoke_key,
-  sign_nano_community_message,
-  request
-} from '#common'
-import config from '#config'
+import sign_nano_community_link_key from '#common/sign-nano-community-link-key.mjs'
+import sign_nano_community_revoke_key from '#common/sign-nano-community-revoke-key.mjs'
+import sign_nano_community_message from '#common/sign-nano-community-message.mjs'
+import encode_nano_address from '#common/encode-nano-address.mjs'
+import request from '#common/request.mjs'
 import ed25519 from '@trashman/ed25519-blake2b'
 
 const is_test = process.env.NODE_ENV === 'test'
 
-const base_url = is_test
-  ? `http://localhost:${config.port}`
-  : 'https://nano.community'
+const base_url = is_test ? 'http://localhost:8080' : 'https://nano.community'
 
 const load_private_key = async () => {
   let private_key = process.env.NANO_PRIVATE_KEY
@@ -41,11 +36,11 @@ const load_private_key = async () => {
     private_key = answers.private_key
   }
 
-  const public_key = nano.derivePublicKey(private_key)
-  const nano_account_address = nano.deriveAddress(public_key)
+  const public_key_buf = ed25519.publicKey(Buffer.from(private_key, 'hex'))
+  const nano_account_address = encode_nano_address({ public_key_buf })
   return {
     private_key,
-    public_key,
+    public_key: public_key_buf.toString('hex'),
     nano_account_address
   }
 }
@@ -153,13 +148,13 @@ const revoke_signing_key = {
 const update_rep_meta = {
   command: 'update-rep-meta',
   describe: 'Update representative metadata',
-  handler: async () => await sendMessageHandler('update-rep-meta')
+  handler: async () => await send_message_handler('update-rep-meta')
 }
 
 const update_account_meta = {
   command: 'update-account-meta',
   describe: 'Update account metadata',
-  handler: async () => await sendMessageHandler('update-account-meta')
+  handler: async () => await send_message_handler('update-account-meta')
 }
 
 const update_block_meta = {
@@ -171,10 +166,10 @@ const update_block_meta = {
       type: 'string'
     }),
   handler: async ({ block_hash }) =>
-    await sendMessageHandler('update-block-meta', block_hash)
+    await send_message_handler('update-block-meta', block_hash)
 }
 
-const sendMessageHandler = async (type, block_hash = null) => {
+const send_message_handler = async (type, block_hash = null) => {
   const { private_key, public_key } = await load_private_key()
 
   let message_content_prompts = []

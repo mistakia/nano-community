@@ -5832,13 +5832,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bignumber.js@npm:9.0.2":
-  version: 9.0.2
-  resolution: "bignumber.js@npm:9.0.2"
-  checksum: 8637b71d0a99104b20413c47578953970006fec6b4df796b9dcfd9835ea9c402ea0e727eba9a5ca9f9a393c1d88b6168c5bbe0887598b708d4f8b4870ad62e1f
-  languageName: node
-  linkType: hard
-
 "bignumber.js@npm:^9.0.0":
   version: 9.0.1
   resolution: "bignumber.js@npm:9.0.1"
@@ -5947,13 +5940,6 @@ __metadata:
     inherits: ^2.0.4
     readable-stream: ^3.4.0
   checksum: a7a438ee0bc540e80b8eb68cc1ad759a9c87df06874a99411d701d01cc0b36f30cd20050512ac3e77090138890960e07bfee724f3ee6619bb39a569f5cc3b1bc
-  languageName: node
-  linkType: hard
-
-"blakejs@npm:1.2.1":
-  version: 1.2.1
-  resolution: "blakejs@npm:1.2.1"
-  checksum: d699ba116cfa21d0b01d12014a03e484dd76d483133e6dc9eb415aa70a119f08beb3bcefb8c71840106a00b542cba77383f8be60cd1f0d4589cb8afb922eefbe
   languageName: node
   linkType: hard
 
@@ -6288,13 +6274,6 @@ __metadata:
   dependencies:
     run-applescript: ^7.0.0
   checksum: 1d966c8d2dbf4d9d394e53b724ac756c2414c45c01340b37743621f59cc565a435024b394ddcb62b9b335d1c9a31f4640eb648c3fec7f97ee74dc0694c9beb6c
-  languageName: node
-  linkType: hard
-
-"byte-base64@npm:1.1.0":
-  version: 1.1.0
-  resolution: "byte-base64@npm:1.1.0"
-  checksum: 95851fc758882ba6b28422d70c685f86257eb635be10eb37528765f39fc1c8766972f9bb39e0684539fafc7d9625145d26e5ab310a52c9eb9df3506952586e0c
   languageName: node
   linkType: hard
 
@@ -7381,13 +7360,6 @@ __metadata:
     shebang-command: ^2.0.0
     which: ^2.0.1
   checksum: 671cc7c7288c3a8406f3c69a3ae2fc85555c04169e9d611def9a675635472614f1c0ed0ef80955d5b6d4e724f6ced67f0ad1bb006c2ea643488fcfef994d7f52
-  languageName: node
-  linkType: hard
-
-"crypto-js@npm:3.1.9-1":
-  version: 3.1.9-1
-  resolution: "crypto-js@npm:3.1.9-1"
-  checksum: 2dc7a7024fd02a88ef3f673e949c7a98d0d61da8b57c95a8207e22d8dd2135b29124bc28dfb2770d8a5f3cf8a46d81e68b3a4bde982a71bae479a9ce666f4cd8
   languageName: node
   linkType: hard
 
@@ -14652,28 +14624,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanocurrency-web@npm:^1.4.3":
-  version: 1.4.3
-  resolution: "nanocurrency-web@npm:1.4.3"
-  dependencies:
-    bignumber.js: 9.0.2
-    blakejs: 1.2.1
-    byte-base64: 1.1.0
-    crypto-js: 3.1.9-1
-  checksum: 62cb82d651259a137e03e27d6a4be3910dd21f7b41fc36b2e7957dd9320534c7cbafed392d4285ff37a944296b7d5cabb261fe13c7fdcdee72285d3cc9019330
-  languageName: node
-  linkType: hard
-
-"nanocurrency@npm:^2.5.0":
-  version: 2.5.0
-  resolution: "nanocurrency@npm:2.5.0"
-  dependencies:
-    bignumber.js: ^9.0.0
-    blakejs: ^1.1.0
-  checksum: 5db534bc725438dcaec2c858ff93c6c730d959a1feaa8cbc0cfe8dabb562477723655d982692cfeaca7ce7e3f7635afb10aac55344319635b2061979e133ba8d
-  languageName: node
-  linkType: hard
-
 "nanoid@npm:^3.0.2":
   version: 3.1.22
   resolution: "nanoid@npm:3.1.22"
@@ -17257,8 +17207,6 @@ __metadata:
     morgan: ^1.10.0
     morgan-debug: ^2.0.0
     mysql2: ^3.9.7
-    nanocurrency: ^2.5.0
-    nanocurrency-web: ^1.4.3
     nib: ^1.2.0
     nock: ^13.5.4
     node-cache: ^5.1.2

@@ -2,13 +2,13 @@
 import chai from 'chai'
 import chaiHTTP from 'chai-http'
 import ed25519 from '@trashman/ed25519-blake2b'
-import nano from 'nanocurrency'
 
 import server from '#api/server.mjs'
 import knex from '#db'
 import {
   sign_nano_community_link_key,
-  sign_nano_community_revoke_key
+  sign_nano_community_revoke_key,
+  encode_nano_address
 } from '#common'
 import { mochaGlobalSetup } from './global.mjs'
 
@@ -35,9 +35,9 @@ describe('API /auth/revoke/key', () => {
       const nano_account_public_key = ed25519.publicKey(
         nano_account_private_key
       )
-      const nano_account = nano.deriveAddress(
-        nano_account_public_key.toString('hex')
-      )
+      const nano_account = encode_nano_address({
+        public_key_buf: nano_account_public_key
+      })
 
       // Register/Link the key
       const link_signature = sign_nano_community_link_key({
@@ -128,9 +128,12 @@ describe('API /auth/revoke/key', () => {
     })
 
     it('should return 401 if public_key param is invalid', async () => {
-      const nano_account = nano.deriveAddress(
-        '0000000000000000000000000000000000000000000000000000000000000001'
-      )
+      const nano_account = encode_nano_address({
+        public_key_buf: Buffer.from(
+          '0000000000000000000000000000000000000000000000000000000000000001',
+          'hex'
+        )
+      })
       const response = await chai
         .request(server)
         .post('/api/auth/revoke/key')
@@ -168,9 +171,12 @@ describe('API /auth/revoke/key', () => {
       )
       const public_key = ed25519.publicKey(private_key)
 
-      const nano_account = nano.deriveAddress(
-        '0000000000000000000000000000000000000000000000000000000000000000'
-      )
+      const nano_account = encode_nano_address({
+        public_key_buf: Buffer.from(
+          '0000000000000000000000000000000000000000000000000000000000000000',
+          'hex'
+        )
+      })
 
       const nano_account_different_private_key = Buffer.from(
         '00000000000000000000000000000000000000000000000000000000000000001',

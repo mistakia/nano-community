@@ -3,6 +3,7 @@
     "#api/*": "./api/*",
     "#root/*": "./*",
     "#common": "./common/index.mjs",
+    "#common/*": "./common/*",
     "#constants": "./constants.mjs",
     "#config": "./config.js",
     "#db": "./db/index.mjs"
@@ -111,8 +112,6 @@
     "morgan": "^1.10.0",
     "morgan-debug": "^2.0.0",
     "mysql2": "^3.9.7",
-    "nanocurrency": "^2.5.0",
-    "nanocurrency-web": "^1.4.3",
     "node-cache": "^5.1.2",
     "node-cron": "^3.0.3",
     "node-fetch": "2.7.0",

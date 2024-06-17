@@ -1,8 +1,11 @@
 import express from 'express'
-import { tools } from 'nanocurrency-web'
 import BigNumber from 'bignumber.js'
 
-import { rpc, verify_nano_community_message_signature } from '#common'
+import {
+  rpc,
+  verify_nano_community_message_signature,
+  encode_nano_address
+} from '#common'
 import {
   ACCOUNT_TRACKING_MINIMUM_BALANCE,
   REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT
@@ -118,7 +121,9 @@ router.post('/?', async (req, res) => {
       .select('account')
       .where({ public_key })
       .whereNull('revoked_at')
-    const nano_account = tools.publicKeyToAddress(public_key)
+    const nano_account = encode_nano_address({
+      public_key_buf: Buffer.from(public_key, 'hex')
+    })
 
     const all_accounts = [
       ...linked_accounts.map((row) => row.account),
