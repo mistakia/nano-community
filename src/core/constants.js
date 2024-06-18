@@ -56,5 +56,6 @@ export const base_range_and_above_labels = {
   _01: '0.1 and above',
   _001: '0.01 and above',
   _0001: '0.001 and above',
-  _00001: '0.0001 and above'
+  _00001: '0.0001 and above',
+  _000001: '0.00001 and above'
 }
