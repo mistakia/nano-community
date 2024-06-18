@@ -17,6 +17,13 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+cli/.pnp.*
+cli/.yarn/*
+!cli/.yarn/patches
+!cli/.yarn/plugins
+!cli/.yarn/releases
+!cli/.yarn/sdks
+!cli/.yarn/versions
 
 # App specific
 #

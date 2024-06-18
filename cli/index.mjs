@@ -1,23 +1,159 @@
 #!/usr/bin/env node
 
-import yargs from 'yargs'
 import crypto from 'crypto'
-import { hideBin } from 'yargs/helpers'
-import inquirer from 'inquirer'
 import process from 'process'
 
-import sign_nano_community_link_key from '#common/sign-nano-community-link-key.mjs'
-import sign_nano_community_revoke_key from '#common/sign-nano-community-revoke-key.mjs'
-import sign_nano_community_message from '#common/sign-nano-community-message.mjs'
-import encode_nano_address from '#common/encode-nano-address.mjs'
-import request from '#common/request.mjs'
+import yargs from 'yargs'
+import { hideBin } from 'yargs/helpers'
+import inquirer from 'inquirer'
+import fetch, { Request } from 'node-fetch'
 import ed25519 from '@trashman/ed25519-blake2b'
 
 const is_test = process.env.NODE_ENV === 'test'
 
 const base_url = is_test ? 'http://localhost:8080' : 'https://nano.community'
 
-const load_private_key = async () => {
+function sign_nano_community_link_key({
+  linked_public_key,
+  nano_account,
+  nano_account_private_key,
+  nano_account_public_key
+}) {
+  if (!linked_public_key) {
+    throw new Error('linked_public_key is required')
+  }
+
+  if (!nano_account) {
+    throw new Error('nano_account is required')
+  }
+
+  if (!nano_account_private_key) {
+    throw new Error('nano_account_private_key is required')
+  }
+
+  if (!nano_account_public_key) {
+    throw new Error('nano_account_public_key is required')
+  }
+
+  const data = Buffer.from(['LINK', nano_account, linked_public_key])
+
+  const message_hash = ed25519.hash(data)
+
+  return ed25519.sign(
+    message_hash,
+    nano_account_private_key,
+    nano_account_public_key
+  )
+}
+
+function sign_nano_community_revoke_key({
+  linked_public_key,
+  either_private_key,
+  either_public_key
+}) {
+  if (!linked_public_key) {
+    throw new Error('linked_public_key is required')
+  }
+
+  if (!either_private_key) {
+    throw new Error('either_private_key is required')
+  }
+
+  if (!either_public_key) {
+    throw new Error('either_public_key is required')
+  }
+
+  const data = Buffer.from(['REVOKE', linked_public_key])
+
+  const message_hash = ed25519.hash(data)
+
+  return ed25519.sign(message_hash, either_private_key, either_public_key)
+}
+
+function sign_nano_community_message(message, private_key) {
+  const {
+    entry_id,
+    chain_id,
+    entry_clock,
+    chain_clock,
+    public_key,
+    operation,
+    content,
+    tags,
+    references,
+    created_at
+  } = message
+
+  const data = Buffer.from([
+    entry_id,
+    chain_id,
+    entry_clock,
+    chain_clock,
+    public_key,
+    operation,
+    content,
+    tags,
+    references,
+    created_at
+  ])
+
+  const message_hash = ed25519.hash(data)
+
+  return ed25519.sign(message_hash, private_key, public_key)
+}
+
+function encode_nano_base32(view) {
+  const length = view.length
+  const leftover = (length * 8) % 5
+  const offset = leftover === 0 ? 0 : 5 - leftover
+  const alphabet = '13456789abcdefghijkmnopqrstuwxyz'
+
+  let value = 0
+  let output = ''
+  let bits = 0
+
+  for (let i = 0; i < length; i++) {
+    value = (value << 8) | view[i]
+    bits += 8
+
+    while (bits >= 5) {
+      output += alphabet[(value >>> (bits + offset - 5)) & 31]
+      bits -= 5
+    }
+  }
+
+  if (bits > 0) {
+    output += alphabet[(value << (5 - (bits + offset))) & 31]
+  }
+
+  return output
+}
+
+function encode_nano_address({ public_key_buf, prefix = 'nano_' }) {
+  const encoded_public_key = encode_nano_base32(public_key_buf)
+  const checksum = ed25519.hash(public_key_buf, 5).reverse()
+  const encoded_checksum = encode_nano_base32(checksum)
+  return prefix + encoded_public_key + encoded_checksum
+}
+
+async function request(options) {
+  const request = new Request(options.url, {
+    timeout: 20000,
+    ...options
+  })
+  const response = await fetch(request)
+
+  if (response.status >= 200 && response.status < 300) {
+    return response.json()
+  } else {
+    const res = await response.json()
+    const error = new Error(res.error || response.statusText)
+    error.response = response
+    throw error
+  }
+}
+
+async function load_private_key() {
   let private_key = process.env.NC_CLI_NANO_PRIVATE_KEY
   if (private_key) {
     console.log('Private key found in environment variable.')
@@ -166,7 +302,7 @@ const update_block_meta = {
     await send_message_handler('update-block-meta', block_hash)
 }
 
-const send_message_handler = async (type, block_hash = null) => {
+async function send_message_handler(type, block_hash = null) {
   const { private_key, public_key } = await load_private_key()
 
   let message_content_prompts = []

@@ -1,0 +1,28 @@
+{
+  "name": "nano-community-cli",
+  "version": "0.0.1",
+  "description": "CLI for Nano.Community Messages",
+  "main": "index.mjs",
+  "bin": {
+    "nano-community": "./index.mjs"
+  },
+  "keywords": [
+    "nano.community",
+    "nano",
+    "crypto",
+    "blockchain",
+    "cli"
+  ],
+  "author": "Nano Community",
+  "license": "MIT",
+  "dependencies": {
+    "@trashman/ed25519-blake2b": "0.0.6",
+    "inquirer": "9.2.23",
+    "node-fetch": "3.3.2",
+    "yargs": "17.7.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "packageManager": "yarn@3.2.1"
+}
