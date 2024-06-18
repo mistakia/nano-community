@@ -8,7 +8,11 @@ import { TooltipComponent, GridComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 
 import { download_csv, download_json } from '@core/utils'
-import { base_range_labels } from '@core/constants'
+import {
+  base_ranges,
+  base_range_labels,
+  base_range_and_above_labels
+} from '@core/constants'
 import LedgerDescriptionNotice from '@components/ledger-description-notice'
 
 echarts.use([LineChart, TooltipComponent, GridComponent, CanvasRenderer])
@@ -18,8 +22,12 @@ export default function LedgerChartAddressesWithBalance({
   isLoading,
   price_history,
   get_price_history,
-  range
+  range,
+  is_range_and_above
 }) {
+  const labels = is_range_and_above
+    ? base_range_and_above_labels
+    : base_range_labels
   useEffect(() => {
     if (price_history.length === 0) {
       get_price_history()
@@ -28,33 +36,74 @@ export default function LedgerChartAddressesWithBalance({
 
   const handle_download_csv = () => {
     const download_data = []
-    data[`${range}_account_count`].forEach((item) => {
-      download_data.push({
-        range: base_range_labels[range],
-        date: item[0],
-        account_count: item[1]
+    if (is_range_and_above) {
+      const index = base_ranges.indexOf(range)
+      const combined_ranges = base_ranges.slice(0, index + 1)
+      const single_range_data = data[`${range}_account_count`]
+      for (let i = 0; i < single_range_data.length; i++) {
+        const single_range_item = single_range_data[i]
+        let combined_value = 0
+        for (let j = 0; j < combined_ranges.length; j++) {
+          combined_value +=
+            data[`${combined_ranges[j]}_account_count`][i][1] || 0
+        }
+        download_data.push({
+          range: labels[range],
+          date: single_range_item[0],
+          account_count: combined_value
+        })
+      }
+    } else {
+      data[`${range}_account_count`].forEach((item) => {
+        download_data.push({
+          range: labels[range],
+          date: item[0],
+          account_count: item[1]
+        })
       })
-    })
+    }
     download_csv({
       headers: ['Range', 'Date', 'Account Count'],
       data: download_data,
-      file_name: `nano-community-ledger-daily-addresses-with-balance-${base_range_labels[
+      file_name: `nano-community-ledger-daily-addresses-with-balance-${labels[
         range
       ].toLowerCase()}`
     })
   }
 
   const handle_download_json = () => {
-    const download_data = {
-      title: `Nano Community Ledger Daily Addresses With Balance - ${base_range_labels[range]}`,
-      data: data[`${range}_account_count`].map((item) => ({
-        date: item[0],
-        account_count: item[1]
-      }))
+    let download_data
+    if (is_range_and_above) {
+      const index = base_ranges.indexOf(range)
+      const combined_ranges = base_ranges.slice(0, index + 1)
+      const single_range_data = data[`${range}_account_count`]
+      const combined_data = single_range_data.map((single_range_item, i) => {
+        let combined_value = 0
+        for (let j = 0; j < combined_ranges.length; j++) {
+          combined_value +=
+            data[`${combined_ranges[j]}_account_count`][i][1] || 0
+        }
+        return {
+          date: single_range_item[0],
+          account_count: combined_value
+        }
+      })
+      download_data = {
+        title: `Nano Community Ledger Daily Addresses With Balance - ${labels[range]}`,
+        data: combined_data
+      }
+    } else {
+      download_data = {
+        title: `Nano Community Ledger Daily Addresses With Balance - ${labels[range]}`,
+        data: data[`${range}_account_count`].map((item) => ({
+          date: item[0],
+          account_count: item[1]
+        }))
+      }
     }
     download_json({
       data: download_data,
-      file_name: `nano-community-ledger-daily-addresses-with-balance-${base_range_labels[
+      file_name: `nano-community-ledger-daily-addresses-with-balance-${labels[
         range
       ].toLowerCase()}`
     })
@@ -69,16 +118,35 @@ export default function LedgerChartAddressesWithBalance({
   }, [price_history])
 
   const series_data = useMemo(() => {
+    const combined_data = is_range_and_above
+      ? []
+      : data[`${range}_account_count`].map((item) => [item[0], item[1] || null])
+
+    if (is_range_and_above) {
+      const index = base_ranges.indexOf(range)
+      const combined_ranges = base_ranges.slice(0, index + 1)
+      const single_range_data = data[`${range}_account_count`]
+      for (let i = 0; i < single_range_data.length; i++) {
+        const single_range_item = single_range_data[i]
+        let combined_value = 0
+        for (let j = 0; j < combined_ranges.length; j++) {
+          combined_value +=
+            data[`${combined_ranges[j]}_account_count`][i][1] || 0
+        }
+        combined_data.push([single_range_item[0], combined_value || null])
+      }
+    }
+
     return {
-      name: base_range_labels[range],
+      name: labels[range],
       type: 'line',
       lineStyle: {
         width: 2
       },
       showSymbol: false,
-      data: data[`${range}_account_count`].map((item) => [item[0], item[1]])
+      data: combined_data
     }
-  }, [data, range])
+  }, [data, range, is_range_and_above])
 
   const option = {
     tooltip: {
@@ -146,10 +214,7 @@ export default function LedgerChartAddressesWithBalance({
           <span>Description</span>
         </div>
         <div className='ledger__chart-section-body description'>
-          <p>
-            The number of unique addresses holding {base_range_labels[range]}{' '}
-            Nano.
-          </p>
+          <p>The number of unique addresses holding {labels[range]} Nano.</p>
         </div>
         <LedgerDescriptionNotice />
         {!isLoading && (
@@ -172,5 +237,6 @@ LedgerChartAddressesWithBalance.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   price_history: PropTypes.array.isRequired,
   get_price_history: PropTypes.func.isRequired,
-  range: PropTypes.string
+  range: PropTypes.string,
+  is_range_and_above: PropTypes.bool
 }

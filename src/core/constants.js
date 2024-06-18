@@ -44,3 +44,17 @@ export const base_range_labels = {
   _000001: '0.00001 to 0.0001',
   _000001_below: '<0.00001'
 }
+
+export const base_range_and_above_labels = {
+  _1000000: '1M and above',
+  _100000: '100k and above',
+  _10000: '10k and above',
+  _1000: '1k and above',
+  _100: '100 and above',
+  _10: '10 and above',
+  _1: '1 and above',
+  _01: '0.1 and above',
+  _001: '0.01 and above',
+  _0001: '0.001 and above',
+  _00001: '0.0001 and above'
+}

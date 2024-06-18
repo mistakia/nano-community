@@ -19,7 +19,11 @@ import LedgerChartDistribution from '@components/ledger-chart-distribution'
 import LedgerChartAddressesWithBalance from '@components/ledger-chart-addresses-with-balance'
 import Seo from '@components/seo'
 import Menu from '@components/menu'
-import { base_ranges, base_range_labels } from '@core/constants'
+import {
+  base_ranges,
+  base_range_labels,
+  base_range_and_above_labels
+} from '@core/constants'
 
 import './ledger.styl'
 
@@ -64,8 +68,8 @@ export default function LedgerPage({ load, data, isLoading }) {
           <LedgerChartDistribution data={data} isLoading={isLoading} />
         ),
         'Address Balances (Nano)': {
-          ...base_ranges.reduce(
-            (acc, range) => ({
+          ...base_ranges.reduce((acc, range) => {
+            const new_acc = {
               ...acc,
               [`Addresses with Balance ${base_range_labels[range]}`]: (
                 <LedgerChartAddressesWithBalance
@@ -74,9 +78,21 @@ export default function LedgerPage({ load, data, isLoading }) {
                   range={range}
                 />
               )
-            }),
-            {}
-          )
+            }
+            if (range !== '_000001_below' && range !== '_1000000') {
+              new_acc[
+                `Addresses with Balance ${base_range_and_above_labels[range]}`
+              ] = (
+                <LedgerChartAddressesWithBalance
+                  data={data}
+                  isLoading={isLoading}
+                  range={range}
+                  is_range_and_above
+                />
+              )
+            }
+            return new_acc
+          }, {})
         }
       }
     }),
