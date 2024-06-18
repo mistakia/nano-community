@@ -421,13 +421,14 @@ async function send_message_handler(type, block_hash = null) {
 
 // eslint-disable-next-line no-unused-expressions
 yargs(hideBin(process.argv))
-  .scriptName('nano-cli')
+  .scriptName('nano-community')
   .usage('$0 <cmd> [args]')
   .command(add_signing_key)
   .command(revoke_signing_key)
   .command(update_rep_meta)
   .command(update_account_meta)
   .command(update_block_meta)
+  .demandCommand(1, 'You must provide at least one command.')
   .help('h')
   .wrap(100)
   .alias('h', 'help').argv
