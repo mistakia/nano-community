@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "CLI for Nano.Community Messages",
   "main": "index.mjs",
+  "scripts": {
+    "test": "echo 'No operation'"
+  },
   "bin": {
     "nano-community": "index.mjs"
   },
