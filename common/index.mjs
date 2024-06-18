@@ -5,6 +5,7 @@ import path, { dirname } from 'path'
 import config from '#config'
 import { BURN_ACCOUNT } from '#constants'
 import request from './request.mjs'
+import { encode_nano_base32, decode_nano_base32 } from './nano-base-32.mjs'
 
 export * as cloudflare from './cloudflare.mjs'
 export { request }
@@ -16,6 +17,11 @@ export { default as sign_nano_community_revoke_key } from './sign-nano-community
 export { default as verify_nano_community_revoke_key_signature } from './verify-nano-community-revoke-key-signature.mjs'
 export { default as sign_nano_community_link_key } from './sign-nano-community-link-key.mjs'
 export { default as verify_nano_community_link_key_signature } from './verify-nano-community-link-key-signature.mjs'
+export { default as encode_nano_address } from './encode-nano-address.mjs'
+export { default as decode_nano_address } from './decode-nano-address.mjs'
+export { default as binary_to_hex } from './binary-to-hex.mjs'
+export { default as is_nano_address_valid } from './is-nano-address-valid.mjs'
+export { encode_nano_base32, decode_nano_base32 }
 
 const POST = (data) => ({
   method: 'POST',

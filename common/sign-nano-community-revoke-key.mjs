@@ -2,33 +2,24 @@ import ed25519 from '@trashman/ed25519-blake2b'
 
 export default function sign_nano_community_revoke_key({
   linked_public_key,
-  nano_account,
-  nano_account_private_key,
-  nano_account_public_key
+  either_private_key,
+  either_public_key
 }) {
   if (!linked_public_key) {
     throw new Error('linked_public_key is required')
   }
 
-  if (!nano_account) {
-    throw new Error('nano_account is required')
+  if (!either_private_key) {
+    throw new Error('either_private_key is required')
   }
 
-  if (!nano_account_private_key) {
-    throw new Error('nano_account_private_key is required')
+  if (!either_public_key) {
+    throw new Error('either_public_key is required')
   }
 
-  if (!nano_account_public_key) {
-    throw new Error('nano_account_public_key is required')
-  }
-
-  const data = Buffer.from(['REVOKE', nano_account, linked_public_key])
+  const data = Buffer.from(['REVOKE', linked_public_key])
 
   const message_hash = ed25519.hash(data)
 
-  return ed25519.sign(
-    message_hash,
-    nano_account_private_key,
-    nano_account_public_key
-  )
+  return ed25519.sign(message_hash, either_private_key, either_public_key)
 }

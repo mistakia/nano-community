@@ -3,9 +3,12 @@
     "#api/*": "./api/*",
     "#root/*": "./*",
     "#common": "./common/index.mjs",
+    "#common/*": "./common/*",
     "#constants": "./constants.mjs",
     "#config": "./config.js",
-    "#db": "./db/index.mjs"
+    "#db": "./db/index.mjs",
+    "#libs-server": "./libs-server/index.mjs",
+    "#libs-server/*": "./libs-server/*"
   },
   "scripts": {
     "dev": "concurrently \"yarn start\" \"yarn start:api\"",
@@ -102,6 +105,7 @@
     "fetch-cheerio-object": "^1.3.0",
     "front-matter": "^4.0.2",
     "fs-extra": "^11.2.0",
+    "inquirer": "^9.2.19",
     "jsonwebtoken": "^9.0.2",
     "knex": "^0.95.15",
     "markdown-it": "^12.3.2",
@@ -110,8 +114,6 @@
     "morgan": "^1.10.0",
     "morgan-debug": "^2.0.0",
     "mysql2": "^3.9.7",
-    "nanocurrency": "^2.5.0",
-    "nanocurrency-web": "^1.4.3",
     "node-cache": "^5.1.2",
     "node-cron": "^3.0.3",
     "node-fetch": "2.7.0",
