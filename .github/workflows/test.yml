@@ -37,6 +37,10 @@ jobs:
       - name: yarn install
         run: |
           YARN_CHECKSUM_BEHAVIOR=update yarn install
+          cd cli
+          YARN_CHECKSUM_BEHAVIOR=update yarn install
+          cd ..
+
 
       - name: yarn lint
         env:
