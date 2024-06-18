@@ -8,6 +8,18 @@ tags: nano, xno, cli, nano-community, alias, representative, metadata, signing k
 
 ## Installation
 
+The Nano.Community CLI is available as a global npm package. You'll need to have [Node.js installed](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) to use it.
+
+```bash
+npm install -g nano-community
+```
+
+It is also available as a yarn global package.
+
+```bash
+yarn global add nano-community
+```
+
 ### Setting Environment Variables
 
 The best way to pass the private key to the CLI is to set the `NC_CLI_NANO_PRIVATE_KEY` environment variable.
