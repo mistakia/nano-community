@@ -97,13 +97,22 @@ export default async function update_representative_meta({
 
     const has_existing_value = edit.lhs
     if (has_existing_value) {
-      await db('representatives_meta_index_changelog').insert({
-        account: representative_row.account,
-        column: prop,
-        previous_value: edit.lhs,
-        new_value: edit.rhs,
-        timestamp: Math.floor(Date.now() / 1000)
-      })
+      await db('representatives_meta_index_changelog')
+        .insert({
+          account: representative_row.account,
+          column: prop,
+          previous_value: edit.lhs,
+          new_value: edit.rhs,
+          timestamp: Math.floor(Date.now() / 1000)
+        })
+        .onConflict([
+          'account',
+          'column',
+          'previous_value',
+          'new_value',
+          'timestamp'
+        ])
+        .ignore()
     }
 
     await db('representatives_meta_index')

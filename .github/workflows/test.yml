@@ -41,7 +41,6 @@ jobs:
           YARN_CHECKSUM_BEHAVIOR=update yarn install
           cd ..
 
-
       - name: yarn lint
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

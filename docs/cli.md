@@ -11,13 +11,13 @@ tags: nano, xno, cli, nano-community, alias, representative, metadata, signing k
 The Nano.Community CLI is available as a global npm package. You'll need to have [Node.js installed](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) to use it.
 
 ```bash
-npm install -g nano-community
+npm install -g nano-community-cli
 ```
 
 It is also available as a yarn global package.
 
 ```bash
-yarn global add nano-community
+yarn global add nano-community-cli
 ```
 
 ### Setting Environment Variables (optional)
@@ -37,21 +37,21 @@ Choose the method that best suits your security and convenience needs.
 You can set the environment variable for a single command by passing it as an argument.
 
 ```bash
-NC_CLI_NANO_PRIVATE_KEY='your_private_key_here' nano-community update-rep-meta
+NC_CLI_NANO_PRIVATE_KEY='<private_key>' nano-community update-rep-meta
 ```
 
 #### Setting the environment variable for a single session
 
-**Linux/Mac:**
+##### Linux/Mac:
 
 ```bash
-export NC_CLI_NANO_PRIVATE_KEY='your_private_key_here'
+export NC_CLI_NANO_PRIVATE_KEY='<private_key>'
 ```
 
-**Windows:**
+##### Windows:
 
 ```cmd
-set NC_CLI_NANO_PRIVATE_KEY=your_private_key_here
+set NC_CLI_NANO_PRIVATE_KEY=<private_key>
 ```
 
 This will persist for the duration of the current session in the terminal. You can now run commands without having to set the environment variable for each command.

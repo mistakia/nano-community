@@ -84,13 +84,22 @@ export default async function update_account({
 
     const has_existing_value = edit.lhs
     if (has_existing_value) {
-      await db('accounts_changelog').insert({
-        account: account_row.account,
-        column: prop,
-        previous_value: edit.lhs,
-        new_value: edit.rhs,
-        timestamp: Math.floor(Date.now() / 1000)
-      })
+      await db('accounts_changelog')
+        .insert({
+          account: account_row.account,
+          column: prop,
+          previous_value: edit.lhs,
+          new_value: edit.rhs,
+          timestamp: Math.floor(Date.now() / 1000)
+        })
+        .onConflict([
+          'account',
+          'column',
+          'previous_value',
+          'new_value',
+          'timestamp'
+        ])
+        .ignore()
     }
 
     await db('accounts')

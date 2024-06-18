@@ -30,7 +30,7 @@ CREATE TABLE `accounts_changelog` (
   `previous_value` varchar(1000) CHARACTER SET utf8mb4 DEFAULT '',
   `new_value` varchar(1000) CHARACTER SET utf8mb4 DEFAULT '',
   `timestamp` int(11) NOT NULL,
-  UNIQUE `change` (`account`, `column`, `previous_value`(60), `new_value`(60))
+  UNIQUE `change` (`account`, `column`, `previous_value`(60), `new_value`(60), `timestamp`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- ----------------------------------------------------------
@@ -353,7 +353,7 @@ CREATE TABLE `representatives_meta_index_changelog` (
   `previous_value` varchar(1000) CHARACTER SET utf8mb4 DEFAULT '',
   `new_value` varchar(1000) CHARACTER SET utf8mb4 DEFAULT '',
   `timestamp` int(11) NOT NULL,
-  UNIQUE `change` (`account`, `column`, `previous_value`(60), `new_value`(60))
+  UNIQUE `change` (`account`, `column`, `previous_value`(55), `new_value`(55), `timestamp`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
