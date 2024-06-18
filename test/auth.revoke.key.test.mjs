@@ -26,15 +26,15 @@ describe('API /auth/revoke/key', () => {
         '00000000000000000000000000000000000000000000000000000000000000000',
         'hex'
       )
-      const nano_account_public_key = ed25519.publicKey(nano_account_private_key)
+      const nano_account_public_key = ed25519.publicKey(
+        nano_account_private_key
+      )
 
       const new_signing_private_key = Buffer.from(
         '00000000000000000000000000000000000000000000000000000000000000001',
         'hex'
       )
-      const new_signing_public_key = ed25519.publicKey(
-        new_signing_private_key
-      )
+      const new_signing_public_key = ed25519.publicKey(new_signing_private_key)
       const nano_account = encode_nano_address({
         public_key_buf: nano_account_public_key
       })
@@ -81,7 +81,9 @@ describe('API /auth/revoke/key', () => {
       // eslint-disable-next-line no-unused-expressions
       expect(revoked_row).to.exist
       expect(revoked_row.account).to.equal(nano_account)
-      expect(revoked_row.public_key).to.equal(new_signing_public_key.toString('hex'))
+      expect(revoked_row.public_key).to.equal(
+        new_signing_public_key.toString('hex')
+      )
       expect(revoked_row.revoke_signature).to.equal(
         revoke_signature.toString('hex')
       )
@@ -93,7 +95,9 @@ describe('API /auth/revoke/key', () => {
         '000000000000000000000000000000000000000000000000000000000000000FF',
         'hex'
       )
-      const nano_account_public_key = ed25519.publicKey(nano_account_private_key)
+      const nano_account_public_key = ed25519.publicKey(
+        nano_account_private_key
+      )
 
       const new_signing_private_key = Buffer.from(
         '00000000000000000000000000000000000000000000000000000000000000FFF',
@@ -146,7 +150,9 @@ describe('API /auth/revoke/key', () => {
       // eslint-disable-next-line no-unused-expressions
       expect(revoked_row).to.exist
       expect(revoked_row.account).to.equal(nano_account)
-      expect(revoked_row.public_key).to.equal(new_signing_public_key.toString('hex'))
+      expect(revoked_row.public_key).to.equal(
+        new_signing_public_key.toString('hex')
+      )
       expect(revoked_row.revoke_signature).to.equal(
         revoke_signature.toString('hex')
       )

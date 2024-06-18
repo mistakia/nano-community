@@ -10,6 +10,7 @@ import {
   ACCOUNT_TRACKING_MINIMUM_BALANCE,
   REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT
 } from '#constants'
+import { process_community_message } from '#libs-server'
 
 const router = express.Router()
 
@@ -29,9 +30,9 @@ router.post('/?', async (req, res) => {
       public_key,
       operation,
       content,
-      tags,
+      tags = [],
 
-      references,
+      references = [],
 
       created_at,
 
@@ -68,7 +69,12 @@ router.post('/?', async (req, res) => {
     }
 
     // operation must be SET or DELETE
-    const allowed_operations = ['SET', 'SET_ACCOUNT_META', 'SET_BLOCK_META']
+    const allowed_operations = [
+      'SET',
+      'SET_ACCOUNT_META',
+      'SET_REPRESENTATIVE_META',
+      'SET_BLOCK_META'
+    ]
     if (!allowed_operations.includes(operation)) {
       return res.status(400).json({ error: 'Invalid operation' })
     }
@@ -117,37 +123,31 @@ router.post('/?', async (req, res) => {
     }
 
     // public_key can be a linked keypair or an existing nano account
-    const linked_accounts = await db('account_keys')
+
+    const linked_account = await db('account_keys')
       .select('account')
       .where({ public_key })
       .whereNull('revoked_at')
-    const nano_account = encode_nano_address({
-      public_key_buf: Buffer.from(public_key, 'hex')
+      .first()
+
+    const message_nano_account = linked_account
+      ? linked_account.account
+      : encode_nano_address({
+          public_key_buf: Buffer.from(public_key, 'hex')
+        })
+
+    const account_info = await rpc.accountInfo({
+      account: message_nano_account
     })
 
-    const all_accounts = [
-      ...linked_accounts.map((row) => row.account),
-      nano_account
-    ]
-
-    const accounts_info = []
-    for (const account of all_accounts) {
-      const account_info = await rpc.accountInfo({ account })
-      if (account_info) {
-        accounts_info.push(account_info)
-      }
-    }
-
     // check if any of the accounts have a balance beyond the tracking threshold
-    const has_balance = accounts_info.some((account_info) =>
-      new BigNumber(account_info.balance).gte(ACCOUNT_TRACKING_MINIMUM_BALANCE)
+    const has_balance = new BigNumber(account_info?.balance || 0).gte(
+      ACCOUNT_TRACKING_MINIMUM_BALANCE
     )
 
     // check if any of the accounts have weight beyond the tracking threshold
-    const has_weight = accounts_info.some((account_info) =>
-      new BigNumber(account_info.weight).gte(
-        REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT
-      )
+    const has_weight = new BigNumber(account_info?.weight || 0).gte(
+      REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT
     )
 
     if (has_balance || has_weight) {
@@ -173,6 +173,15 @@ router.post('/?', async (req, res) => {
         })
         .onConflict()
         .merge()
+    }
+
+    try {
+      await process_community_message({
+        message,
+        message_account: message_nano_account
+      })
+    } catch (error) {
+      logger(error)
     }
 
     res.status(200).send({

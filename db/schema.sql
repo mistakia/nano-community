@@ -19,6 +19,21 @@ CREATE TABLE `accounts` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `accounts_changelog`
+--
+
+DROP TABLE IF EXISTS `accounts_changelog`;
+
+CREATE TABLE `accounts_changelog` (
+  `account` char(65) NOT NULL,
+  `column` varchar(65) NOT NULL,
+  `previous_value` varchar(1000) CHARACTER SET utf8mb4 DEFAULT '',
+  `new_value` varchar(1000) CHARACTER SET utf8mb4 DEFAULT '',
+  `timestamp` int(11) NOT NULL,
+  UNIQUE `change` (`account`, `column`, `previous_value`(60), `new_value`(60))
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- ----------------------------------------------------------
 -- Table structure for table `account_keys`
 --
 
@@ -225,7 +240,7 @@ CREATE TABLE `nano_community_messages` (
   `entry_clock` int(10) unsigned DEFAULT NULL,
   `chain_clock` int(10) unsigned DEFAULT NULL,
   `public_key` varchar(64) NOT NULL,
-  `operation` varchar(10) NOT NULL,
+  `operation` varchar(50) NOT NULL,
   `content` text CHARACTER SET utf8mb4 DEFAULT NULL,
   `tags` text CHARACTER SET utf8mb4 DEFAULT NULL,
   `references` text CHARACTER SET utf8mb4 DEFAULT NULL,
@@ -295,6 +310,7 @@ CREATE TABLE `representatives_meta_index` (
   `bandwidth_description` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `ram` int(3) DEFAULT NULL,
   `ram_description` varchar(255) DEFAULT NULL,
+  `donation_address` char(65) DEFAULT NULL,
 
   `description` varchar(1000) CHARACTER SET utf8mb4 DEFAULT NULL,
   `dedicated` tinyint(1) DEFAULT NULL,

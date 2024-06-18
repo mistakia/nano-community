@@ -6,7 +6,9 @@
     "#common/*": "./common/*",
     "#constants": "./constants.mjs",
     "#config": "./config.js",
-    "#db": "./db/index.mjs"
+    "#db": "./db/index.mjs",
+    "#libs-server": "./libs-server/index.mjs",
+    "#libs-server/*": "./libs-server/*"
   },
   "scripts": {
     "dev": "concurrently \"yarn start\" \"yarn start:api\"",

@@ -179,13 +179,13 @@ const send_message_handler = async (type, block_hash = null) => {
         { name: 'donation_address', message: 'Donation Address:' },
         { name: 'cpu_model', message: 'CPU Model:' },
         { name: 'cpu_cores', message: 'CPU Cores:' },
-        { name: 'ram_amount', message: 'RAM Amount:' },
-        { name: 'reddit_username', message: 'Reddit Username:' },
-        { name: 'twitter_username', message: 'Twitter Username:' },
-        { name: 'discord_username', message: 'Discord Username:' },
-        { name: 'github_username', message: 'GitHub Username:' },
+        { name: 'ram', message: 'RAM Amount (GB):' },
+        { name: 'reddit', message: 'Reddit Username:' },
+        { name: 'twitter', message: 'Twitter Username:' },
+        { name: 'discord', message: 'Discord Username:' },
+        { name: 'github', message: 'GitHub Username:' },
         { name: 'email', message: 'Email:' },
-        { name: 'website_url', message: 'Website URL:' }
+        { name: 'website', message: 'Website URL:' }
       ]
       break
     case 'update-account-meta':
@@ -244,6 +244,8 @@ const send_message_handler = async (type, block_hash = null) => {
   let operation = ''
   switch (type) {
     case 'update-rep-meta':
+      operation = 'SET_REPRESENTATIVE_META'
+      break
     case 'update-account-meta':
       operation = 'SET_ACCOUNT_META'
       break

@@ -2,9 +2,15 @@
 import chai from 'chai'
 import { exec, spawn } from 'child_process'
 import util from 'util'
+import nock from 'nock'
 
 import server from '#api/server.mjs'
 import config from '#config'
+import db from '#db'
+import {
+  REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT,
+  ACCOUNT_TRACKING_MINIMUM_BALANCE
+} from '#constants'
 
 const { port } = config
 const exec_promise = util.promisify(exec)
@@ -30,10 +36,13 @@ describe('CLI', function () {
   this.timeout(30000)
 
   let new_signing_key
+  const nano_private_key =
+    '1111111111111111111111111111111111111111111111111111111111111111'
+  const nano_account_address =
+    'nano_3d78japo7ziqqcsptk47eonzwzwjyaydcywq5ebzowjpxgyehynnjc9pd5zj'
 
   before(() => {
-    process.env.NC_CLI_NANO_PRIVATE_KEY =
-      '1111111111111111111111111111111111111111111111111111111111111111'
+    process.env.NC_CLI_NANO_PRIVATE_KEY = nano_private_key
 
     server.listen(port, () => console.log(`API listening on port ${port}`))
   })
@@ -75,10 +84,31 @@ describe('CLI', function () {
   })
 
   describe('update-rep-meta operation', () => {
-    it('should send a message for update-rep-meta operation', async () => {
+    it('should send a message for update-rep-meta operation and check database updates', async () => {
       let stdout = ''
       let stderr = ''
+      const expected_alias = 'TestNodeAlias'
+      const expected_description = 'A test node for development purposes.'
+      const expected_donation_address =
+        'nano_3niceeeyiaaif5xoiqjvth5gqrypuwytrm867asbciw3ndz8j3mazqqk6cok'
+      const expected_cpu_model = 'Intel i7'
+      const expected_cpu_cores = 4
+      const expected_ram = 16
+      const expected_reddit = 'test_reddit_user'
+      const expected_twitter = 'test_twitter_user'
+      const expected_discord = 'test_discord_user#1234'
+      const expected_github = 'test_github_user'
+      const expected_email = 'test@example.com'
+      const expected_website = 'https://example.com'
+
       try {
+        // mock the account_info rpc request needed for message storing
+        nock('http://nano:7076')
+          .post('/', (body) => body.action === 'account_info')
+          .reply(200, {
+            weight: String(REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT)
+          })
+
         const child = spawn('node', ['cli/index.mjs', 'update-rep-meta'], {
           stdio: ['pipe', 'pipe', 'pipe']
         })
@@ -88,42 +118,40 @@ describe('CLI', function () {
 
           switch (output) {
             case '? Alias:':
-              child.stdin.write('TestNodeAlias\n')
+              child.stdin.write(`${expected_alias}\n`)
               break
             case '? Description:':
-              child.stdin.write('A test node for development purposes.\n')
+              child.stdin.write(`${expected_description}\n`)
               break
             case '? Donation Address:':
-              child.stdin.write(
-                'nano_3niceeeyiaaif5xoiqjvth5gqrypuwytrm867asbciw3ndz8j3mazqqk6cok\n'
-              )
+              child.stdin.write(`${expected_donation_address}\n`)
               break
             case '? CPU Model:':
-              child.stdin.write('Intel i7\n')
+              child.stdin.write(`${expected_cpu_model}\n`)
               break
             case '? CPU Cores:':
-              child.stdin.write('4\n')
+              child.stdin.write(`${expected_cpu_cores}\n`)
               break
-            case '? RAM Amount:':
-              child.stdin.write('16GB\n')
+            case '? RAM Amount (GB):':
+              child.stdin.write(`${expected_ram}\n`)
               break
             case '? Reddit Username:':
-              child.stdin.write('test_reddit_user\n')
+              child.stdin.write(`${expected_reddit}\n`)
               break
             case '? Twitter Username:':
-              child.stdin.write('test_twitter_user\n')
+              child.stdin.write(`${expected_twitter}\n`)
               break
             case '? Discord Username:':
-              child.stdin.write('test_discord_user#1234\n')
+              child.stdin.write(`${expected_discord}\n`)
               break
             case '? GitHub Username:':
-              child.stdin.write('test_github_user\n')
+              child.stdin.write(`${expected_github}\n`)
               break
             case '? Email:':
-              child.stdin.write('test@example.com\n')
+              child.stdin.write(`${expected_email}\n`)
               break
             case '? Website URL:':
-              child.stdin.write('https://example.com\n')
+              child.stdin.write(`${expected_website}\n`)
               break
             case '? Would you like to edit any field? (y/N)':
               child.stdin.write('N\n')
@@ -150,6 +178,32 @@ describe('CLI', function () {
         // eslint-disable-next-line no-unused-expressions
         expect(stderr).to.be.empty
         expect(exit_code).to.equal(0)
+
+        // Check database for updated columns
+        const updated_account = await db('accounts')
+          .where({ account: nano_account_address })
+          .first()
+        expect(updated_account.alias).to.equal(expected_alias)
+
+        const updated_representative = await db('representatives_meta_index')
+          .where({ account: nano_account_address })
+          .first()
+
+        expect(updated_representative.description).to.equal(
+          expected_description
+        )
+        expect(updated_representative.donation_address).to.equal(
+          expected_donation_address
+        )
+        expect(updated_representative.cpu_model).to.equal(expected_cpu_model)
+        expect(updated_representative.cpu_cores).to.equal(expected_cpu_cores)
+        expect(updated_representative.ram).to.equal(expected_ram)
+        expect(updated_representative.reddit).to.equal(expected_reddit)
+        expect(updated_representative.twitter).to.equal(expected_twitter)
+        expect(updated_representative.discord).to.equal(expected_discord)
+        expect(updated_representative.github).to.equal(expected_github)
+        expect(updated_representative.email).to.equal(expected_email)
+        expect(updated_representative.website).to.equal(expected_website)
       } catch (err) {
         console.log(err)
         console.log(stderr)
@@ -164,6 +218,13 @@ describe('CLI', function () {
       let stderr = ''
       let stdout = ''
       try {
+        // mock the account_info rpc request needed for message storing
+        nock('http://nano:7076')
+          .post('/', (body) => body.action === 'account_info')
+          .reply(200, {
+            balance: String(ACCOUNT_TRACKING_MINIMUM_BALANCE)
+          })
+
         const child = spawn('node', ['cli/index.mjs', 'update-account-meta'], {
           stdio: ['pipe', 'pipe', 'pipe']
         })
