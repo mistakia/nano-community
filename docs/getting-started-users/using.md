@@ -22,6 +22,7 @@ You can look them up using the following block explorers
 - <a href="https://nano.community" target="_blank">Nano.community</a>
 - <a href="https://nanobrowse.com/" target="_blank">Nanobrowse.com</a>
 - <a href="https://nanexplorer.com/nano" target="_blank">Nanexplorer.com</a>
+- <a href="https://blocklattice.io/" target="_blank">blocklattice.io</a>
 - <a href="https://nault.cc/" target="_blank">Nault.cc</a>
 
 Once a send block has been confirmed by the network, the transaction is irreversible. The receiver can broadcast a receive block at any point in the future. However, until they do, they will not be able to use the amount they have received since they have not updated their balance.
