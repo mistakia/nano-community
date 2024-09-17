@@ -184,7 +184,7 @@ For convenience, users may prefer to use internet identifiers as an alternative 
 
 For this reason, it is preferable for Nano wallet clients to support handling of Nano internet identifiers in addition to Nano public addresses. 
 
-An internet identifier, defined in [RFC-5322 Section 3.4.1](https://datatracker.ietf.org/doc/html/rfc5322#section-3.4.1) as an `"addr-spec"`, is an email address-like identifier that contains a locally interpreted string, the `<local-part>`, followed by the at-sign character ("@"), followed by an Internet domain, the `<domain>`, resulting in `<local-part>@<doman>`.
+An internet identifier, defined in [RFC-5322 Section 3.4.1](https://datatracker.ietf.org/doc/html/rfc5322#section-3.4.1) as an `"addr-spec"`, is an email address-like identifier that contains a locally interpreted string, the `<local-part>`, followed by the at-sign character ("@"), followed by an Internet domain, the `<domain>`. To avoid confusion with email addresses, it is recommended that services that support Nano Internet Identifiers use the at-sign as a prefix for both the `<local-part>` and the `<domain>`, resulting in `@<local-part>@<doman>`.
 
 ##### Table of Contents
 
@@ -204,13 +204,25 @@ An internet identifier, defined in [RFC-5322 Section 3.4.1](https://datatracker.
 
 #### .well-known/nano-currency.json endpoint
 
-Nano identifier services MUST accept and respond to requests made to
+Nano identifier services MUST accept and respond to requests made to the endpoint `<domain>/.well-known/nano-currency.json`.
 
+##### Request schema
 ```
-<domain>/.well-known/nano-currency.json?names=<local-part>
+<domain>/.well-known/nano-currency.json?names=<local-part>,<local-part>,...
 ```
 
-with a JSON document response in the format of
+##### names
+
+A comma-delimited list of `local-part` (identifiers) to search for.
+
+Nano identifier services MUST treat each `local-part` as case-insensitive. 
+
+On record creation, Nano identifier services MAY choose to store the `local-part` with user-specified casing for display purposes.
+
+<small>For example, a record for `johndoe` should be returned for all requests for `JohnDoe`, `JOHNDOE`, etc</small>
+
+##### Response schema
+Nano identifier services MUST respond to requests with a JSON document response in the format of
 
 ```json
 {
@@ -225,6 +237,33 @@ with a JSON document response in the format of
     ]
 }
 ```
+
+###### names
+
+MUST be included in responses.
+
+A list of all matching records for all `local-part` values included in the `names` query parameter of the request.
+
+If no matching records are found for any of the `local-part` values, an empty list should be returned.
+
+###### name (required)
+
+MUST be included in each matching record returned in the `names` list.
+
+The `local-part` value for the matching record.
+
+###### address (required)
+
+MUST be included in each matching record returned in the `names` list.
+
+The Nano address (prefixed with `nano_`) for the matching record.
+
+###### expiry
+
+MAY be included in each matching record returned in the `names` list.
+
+The expiration date/time for the matching record in ISO 8601 UTC format (e.g. `yyyy-mm-ddThh:MM:SSZ`).
+
 
 #### Request and response formats
 
@@ -294,7 +333,7 @@ This restriction ensures that a new user cannot claim an expired identifier and 
 
 ### Client Use of Nano Identifiers
 
-Upon encountering a Nano identifier in the format `<local-part>@<domain>`, the client SHOULD perform an address lookup by sending a GET request to the endpoint `<domain>/.well-known/nano-currency.json?names=<local-part>`.
+Upon encountering a Nano identifier in the format `@<local-part>@<domain>`, the client SHOULD perform an address lookup by sending a GET request to the endpoint `<domain>/.well-known/nano-currency.json?names=<local-part>`.
 
 If an error is received, the client SHOULD attempt to resolve a DNS SRV record for the service with the name `_nano_curency_names._tcp.<domain>`, and retry with the resolved subdomain and port. If preferred, the client MAY preemptively do this resolution prior to the initial request.
 
@@ -349,13 +388,13 @@ nano:nano_3wm37qz19zhei7nzscjcopbrbnnachs4p1gnwo5oroi3qonw6inwgoeuufdp
 #### payto: <small>(recommended)</small>
 
 ```
-payto:nano/nanouser@example.com
+payto:nano/@nanouser@example.com
 ```
 
 #### nano:
 
 ```
-nano:nanouser@example.com
+nano:@nanouser@example.com
 ```
 
 ---
@@ -381,13 +420,13 @@ nano:nano_3wm37qz19zhei7nzscjcopbrbnnachs4p1gnwo5oroi3qonw6inwgoeuufdp?amount=10
 #### payto: <small>(recommended)</small>
 
 ```
-payto:nano/nanouser@example.com?amount=1000
+payto:nano/@nanouser@example.com?amount=1000
 ```
 
 #### nano:
 
 ```
-nano:nanouser@example.com?amount=1000
+nano:@nanouser@example.com?amount=1000
 ```
 
 ---
@@ -429,13 +468,13 @@ nano:nano_3wm37qz19zhei7nzscjcopbrbnnachs4p1gnwo5oroi3qonw6inwgoeuufdp?label=Dev
 #### payto: <small>(recommended)</small>
 
 ```
-payto:nano/nanouser@example.com?amount=1000&receiver-name=Developers%20Fund%20Address&message=Donate%20Now
+payto:nano/@nanouser@example.com?amount=1000&receiver-name=Developers%20Fund%20Address&message=Donate%20Now
 ```
 
 #### nano:
 
 ```
-nano:nanouser@example.com?amount=1000&label=Developers%20Fund%20Address&message=Donate%20Now
+nano:@nanouser@example.com?amount=1000&label=Developers%20Fund%20Address&message=Donate%20Now
 ```
 
 ---
