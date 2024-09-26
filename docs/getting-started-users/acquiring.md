@@ -37,27 +37,27 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 
 | Exchange                                                                                        | Maker Fee | Taker Fee | Withdrawal Fee |
 | ----------------------------------------------------------------------------------------------- | --------- | --------- | -------------- |
-| <a href="https://www.binance.com/en/trade/NANO_USDT?layout=pro" target="_blank">Binance.com</a> | 0.1%      | 0.1%      | Ӿ 0.01         |
+| <a href="https://www.binance.com/en/trade/XNO_USDT?layout=pro" target="_blank">Binance.com</a> | 0.1%      | 0.1%      | Ӿ 0.041         |
 | <a href="https://www.kraken.com/prices/nano" target="_blank">Kraken.com</a>                     | 0.16%     | 0.26%     | Ӿ 0.05         |
-| <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>                         | 0.1%      | 0.1%      | Ӿ 0.01         |
+| <a href="https://www.kucoin.com/trade/XNO-USDT" target="_blank">KuCoin</a>                         | 0.1%      | 0.1%      | Ӿ 0.01         |
 | <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                          | 0.4%      | 0.4%      | Ӿ 0.008        |
 
 #### Canada
 
 | Exchange                                                                                        | Maker Fee | Taker Fee | Withdrawal Fee |
 | ----------------------------------------------------------------------------------------------- | --------- | --------- | -------------- |
-| <a href="https://www.binance.com/en/trade/NANO_USDT?layout=pro" target="_blank">Binance.com</a> | 0.1%      | 0.1%      | Ӿ 0.01         |
+| <a href="https://www.binance.com/en/trade/XNO_USDT?layout=pro" target="_blank">Binance.com</a> | 0.1%      | 0.1%      | Ӿ 0.041         |
 | <a href="https://www.kraken.com/prices/nano" target="_blank">Kraken.com</a>                     | 0.16%     | 0.26%     | Ӿ 0.05         |
-| <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>                         | 0.1%      | 0.1%      | Ӿ 0.01         |
+| <a href="https://www.kucoin.com/trade/XNO-USDT" target="_blank">KuCoin</a>                         | 0.1%      | 0.1%      | Ӿ 0.01         |
 | <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                          | 0.4%      | 0.4%      | Ӿ 0.008        |
 
 #### Europe
 
 | Exchange                                                                                                     | Maker Fee | Taker Fee | Withdrawal Fee |
 | ------------------------------------------------------------------------------------------------------------ | --------- | --------- | -------------- |
-| <a href="https://www.binance.com/en/trade/NANO_USDT?layout=pro" target="_blank">Binance.com</a>              | 0.1%      | 0.1%      | Ӿ 0.01         |
-| <a href="https://www.kraken.com/prices/nano-price-chart/eur-euro?interval=1m" target="_blank">Kraken.com</a> | 0.16%     | 0.26%     | Ӿ 0.05         |
-| <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>                                      | 0.1%      | 0.1%      | Ӿ 0.01         |
+| <a href="https://www.binance.com/en/trade/XNO_USDT?layout=pro" target="_blank">Binance.com</a>              | 0.1%      | 0.1%      | Ӿ 0.041         |
+| <a href="https://www.kraken.com/prices/nano" target="_blank">Kraken.com</a> | 0.16%     | 0.26%     | Ӿ 0.05         |
+| <a href="https://www.kucoin.com/trade/XNO-USDT" target="_blank">KuCoin</a>                                      | 0.1%      | 0.1%      | Ӿ 0.01         |
 | <a href="https://account.bitvavo.com/markets/NANO-EUR" target="_blank">Bitvavo.com</a>                       | 0.15%     | 0.25%     | Ӿ 0.00025      |
 | <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                                       | 0.4%      | 0.4%      | Ӿ 0.008        |
 
@@ -78,9 +78,9 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 
 | Exchange                                                                                                     | Maker Fee | Taker Fee | Withdrawal Fee |
 | ------------------------------------------------------------------------------------------------------------ | --------- | --------- | -------------- |
-| <a href="https://www.binance.com/en/trade/NANO_USDT?layout=pro" target="_blank">Binance.com</a>              | 0.1%      | 0.1%      | Ӿ 0.01         |
-| <a href="https://www.kraken.com/prices/nano-price-chart/eur-euro?interval=1m" target="_blank">Kraken.com</a> | 0.16%     | 0.26%     | Ӿ 0.05         |
-| <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>                                      | 0.1%      | 0.1%      | Ӿ 0.01         |
+| <a href="https://www.binance.com/en/trade/XNO_USDT?layout=pro" target="_blank">Binance.com</a>              | 0.1%      | 0.1%      | Ӿ 0.041         |
+| <a href="https://www.kraken.com/prices/nano" target="_blank">Kraken.com</a> | 0.16%     | 0.26%     | Ӿ 0.05         |
+| <a href="https://www.kucoin.com/trade/XNO-USDT" target="_blank">KuCoin</a>                                      | 0.1%      | 0.1%      | Ӿ 0.01         |
 | <a href="https://account.bitvavo.com/markets/NANO-EUR" target="_blank">Bitvavo.com</a>                       | 0.15%     | 0.25%     | Ӿ 0.00025      |
 | <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>                                       | 0.4%      | 0.4%      | Ӿ 0.008        |
 
@@ -90,7 +90,7 @@ As a rule of thumb, depositing money onto a trusted exchange is the most cost-ef
 | --------------------------------------------------------------------------------- | --------- | --------- | -------------- |
 | <a href="https://www.binance.us/en/trade/NANO_USD" target="_blank">Binance.US</a> | 0.1%      | 0.1%      | Ӿ 0.01         |
 | <a href="https://www.kraken.com/prices/nano" target="_blank">Kraken.com</a>       | 0.16%     | 0.26%     | Ӿ 0.05         |
-| <a href="https://trade.kucoin.com/NANO-USDT" target="_blank">KuCoin</a>           | 0.1%      | 0.1%      | Ӿ 0.01         |
+| <a href="https://www.kucoin.com/trade/XNO-USDT" target="_blank">KuCoin</a>           | 0.1%      | 0.1%      | Ӿ 0.01         |
 | <a href="https://crypto.com/price/nano" target="_blank">Crypto.com</a>            | 0.4%      | 0.4%      | Ӿ 0.008        |
 
 ### Services
