@@ -175,7 +175,7 @@ CREATE TABLE `github_events` (
   `actor_name` varchar(100) CHARACTER SET utf8 NOT NULL,
   `actor_avatar` varchar(255) CHARACTER SET utf8 NOT NULL,
 
-  `action` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `action` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `ref` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `body` text CHARACTER SET utf8mb4 DEFAULT NULL,
