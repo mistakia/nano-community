@@ -60,9 +60,10 @@ const getMetaTags = ({
     metaTags.push({ itemprop: 'image', content: absoluteUrl(image) })
     metaTags.push({ property: 'og:image', content: absoluteUrl(image) })
     metaTags.push({ property: 'twitter:image', content: absoluteUrl(image) })
+    metaTags.push({ property: 'twitter:card', content: 'summary_large_image' })
+  } else {
+    metaTags.push({ property: 'twitter:card', content: 'summary' })
   }
-
-  metaTags.push({ property: 'twitter:card', content: 'summary' })
 
   return metaTags
 }
@@ -91,7 +92,7 @@ const Seo = ({
   description,
   path = history.location.pathname,
   contentType = 'website',
-  image = '/static/symbol-white.png',
+  image = '/static/default-card.png',
   published,
   updated,
   category,

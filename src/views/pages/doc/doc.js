@@ -172,7 +172,7 @@ export default class DocPage extends React.Component {
     }
 
     const frontmatter = fm(doc.content)
-    const { title, description, tags } = frontmatter.attributes
+    const { title, description, tags, image } = frontmatter.attributes
     const html = md
       .render(frontmatter.body)
       .replace(
@@ -187,6 +187,7 @@ export default class DocPage extends React.Component {
           description={description}
           tags={tags ? tags.split(',').map((t) => t.trim()) : []}
           path={this.path}
+          image={image}
         />
         <div className='doc__content markdown__content'>
           <div dangerouslySetInnerHTML={{ __html: html }} />
