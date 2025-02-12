@@ -115,6 +115,7 @@ const Seo = ({
       category,
       tags
     })}
+    defer={false}
   />
 )
 

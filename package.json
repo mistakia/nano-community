@@ -76,7 +76,9 @@
     "exclude": [
       "/static/**",
       "/nano_*"
-    ]
+    ],
+    "waitFor": 1000,
+    "puppeteerArgs": ["--no-sandbox", "--disable-setuid-sandbox"]
   },
   "resolutions": {
     "nib/stylus": "0.56.0"
