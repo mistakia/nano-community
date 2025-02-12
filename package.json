@@ -16,7 +16,7 @@
     "start": "webpack serve --mode=development --config webpack/webpack.dev.babel.mjs --port 8081 --history-api-fallback --static-directory static --static-public-path /static --open",
     "start:api": "NODE_ENV=development node server.mjs",
     "deploy:ipfs": "ipfs-deploy build/index.html",
-    "deploy": "scp -r build/* nano.community:/root/nano-community/build",
+    "deploy": "scp -r build/* nano.community:/root/nano-community/source/build",
     "build": "cross-env NODE_ENV=production webpack --config webpack/webpack.prod.babel.mjs --color --progress && react-snap",
     "lint": "eslint . --ext js,mjs",
     "prettier": "prettier --write .",
