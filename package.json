@@ -78,7 +78,10 @@
       "/nano_*"
     ],
     "waitFor": 1000,
-    "puppeteerArgs": ["--no-sandbox", "--disable-setuid-sandbox"]
+    "puppeteerArgs": [
+      "--no-sandbox",
+      "--disable-setuid-sandbox"
+    ]
   },
   "resolutions": {
     "nib/stylus": "0.56.0"
@@ -193,5 +196,5 @@
     "webpack-dev-server": "5.0.4",
     "yargs": "^16.2.0"
   },
-  "packageManager": "yarn@3.2.1"
+  "packageManager": "yarn@4.6.0"
 }
