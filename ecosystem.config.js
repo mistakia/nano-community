@@ -3,6 +3,7 @@ module.exports = {
     {
       script: 'server.mjs',
       watch: '.',
+      ignore_watch: ['build', 'static', 'test'],
       env_production: {
         NODE_ENV: 'production'
       },
