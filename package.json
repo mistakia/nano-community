@@ -89,7 +89,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "@octokit/graphql": "^4.8.0",
-    "@trashman/ed25519-blake2b": "^0.0.6",
+    "@trashman/ed25519-blake2b": "^0.0.7",
     "bignumber.js": "^9.1.2",
     "body-parser": "^1.20.2",
     "compression": "^1.7.4",
