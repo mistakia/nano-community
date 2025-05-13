@@ -41,7 +41,7 @@
 8 6 * * 4 NODE_ENV=production /root/.nvm/versions/node/v17.9.1/bin/node /root/nano-community/scripts/generate-node-observations.mjs &>> /var/log/nano-community/generate-node-observations.log
 
 ## backup mysql
-0 0 * * 0 /bin/bash /root/nano-community/scripts/backup-mysql.sh -f &>> /var/log/nano-community/backup-mysql-full.log
+0 0 * * 0 /bin/bash /root/nano-community/scripts/backup-mysql.sh -s &>> /var/log/nano-community/backup-mysql-snapshot.log
 
 ## rollups
 0 0 * * * NODE_ENV=production /root/.nvm/versions/node/v17.9.1/bin/node /root/nano-community/scripts/rollup-uptime.mjs --days 2 &>> /var/log/nano-community/rollup-uptime.log
