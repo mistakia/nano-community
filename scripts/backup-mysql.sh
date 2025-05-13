@@ -3,10 +3,12 @@ set -e
 set -x
 
 FULL=false
+SNAPSHOT=false
 
-while getopts 'f' opt; do
+while getopts 'fs' opt; do
     case $opt in
         f) FULL=true ;;
+        s) SNAPSHOT=true ;;
         *) echo 'Error in command line parsing' >&2
     esac
 done
@@ -17,11 +19,16 @@ DB_FILE="/root/mysqldump.cnf"
 DB_TABLES="accounts accounts_changelog accounts_meta_index accounts_tags github_discussion_labels github_discussions github_events github_issue_labels github_issues nano_community_messages posts post_labels representatives_meta_index representatives_meta_index_changelog representatives_network representatives_network_index sources users user_addresses"
 DATE_FORMAT="%Y-%m-%d_%H-%M"
 
-file_name="$(date +$DATE_FORMAT)"
-if $FULL; then
+if $SNAPSHOT; then
+    file_name="snapshot"
     backup_type="full"
 else
-    backup_type="user"
+    file_name="$(date +$DATE_FORMAT)"
+    if $FULL; then
+        backup_type="full"
+    else
+        backup_type="user"
+    fi
 fi
 sql_file="$file_name-$backup_type.sql"
 gz_file="$file_name-$backup_type.tar.gz"
@@ -31,7 +38,7 @@ mkdir -p $DUMP_DIR
 cd $DUMP_DIR
 
 # run mysqlbackup, tar gz and delete sql file
-if $FULL; then
+if $FULL || $SNAPSHOT; then
     mysqldump --defaults-extra-file=$DB_FILE $DB_NAME > $sql_file
 else
     mysqldump --defaults-extra-file=$DB_FILE $DB_NAME $DB_TABLES > $sql_file
@@ -40,4 +47,6 @@ tar -zvcf $gz_file $sql_file
 rm $sql_file
 
 /root/.google-drive-upload/bin/gupload $gz_file
-rm $gz_file
+if ! $SNAPSHOT; then
+    rm $gz_file
+fi
