@@ -46,7 +46,7 @@ fi
 tar -zvcf $gz_file $sql_file
 rm $sql_file
 
-/root/.google-drive-upload/bin/gupload $gz_file
+/root/.google-drive-upload/bin/gupload -o $gz_file
 if ! $SNAPSHOT; then
     rm $gz_file
 fi
