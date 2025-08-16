@@ -21,7 +21,9 @@
     "lint": "eslint . --ext js,mjs",
     "prettier": "prettier --write .",
     "test": "TZ=America/New_York NODE_ENV=test TEST=all mocha --exit",
-    "scan:links": "npx linkinator https://nano.community --recurse --timeout 10000"
+    "scan:links": "npx linkinator https://nano.community --recurse --timeout 10000",
+    "load:crontab": "ssh nano.community 'cd /root/nano-community && git pull && crontab /root/nano-community/server/server-crontab'",
+    "show:crontab": "ssh nano.community 'crontab -l'"
   },
   "homepage": "https://nano.community/",
   "reactSnap": {
