@@ -1,6 +1,7 @@
 import debug from 'debug'
 
 import { request, isMain } from '#common'
+import report_job from '../libs-server/report-job.mjs'
 import db from '#db'
 
 const logger = debug('import-nanotipbot-twitter')
@@ -28,11 +29,22 @@ const importNanoTipBotTwitter = async () => {
 
 if (isMain(import.meta.url)) {
   const main = async () => {
+    const start_time = Date.now()
+    let error
     try {
       await importNanoTipBotTwitter()
     } catch (err) {
+      error = err
       console.log(err)
     }
+
+    await report_job({
+      job_id: 'nano-community-import-nanotipbot-twitter',
+      success: !error,
+      reason: error ? error.message : null,
+      duration_ms: Date.now() - start_time,
+    })
+
     process.exit()
   }
 

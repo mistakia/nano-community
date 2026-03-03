@@ -7,6 +7,7 @@ import { graphql } from '@octokit/graphql'
 import { isMain } from '#common'
 import config from '#config'
 import db from '#db'
+import report_job from '../libs-server/report-job.mjs'
 
 const { github_access_token } = config
 const argv = yargs(hideBin(process.argv)).argv
@@ -182,16 +183,26 @@ const importGithubDiscussions = async ({ repo, all = false }) => {
 
 if (isMain(import.meta.url)) {
   const main = async () => {
+    const start_time = Date.now()
+    let error
     try {
       if (!argv.repo) {
-        console.log('missing --repo')
-        process.exit()
+        throw new Error('missing --repo')
       }
 
       await importGithubDiscussions({ repo: argv.repo })
     } catch (err) {
+      error = err
       console.log(err)
     }
+
+    await report_job({
+      job_id: 'nano-community-import-github-discussions',
+      success: !error,
+      reason: error ? error.message : null,
+      duration_ms: Date.now() - start_time,
+    })
+
     process.exit()
   }
 

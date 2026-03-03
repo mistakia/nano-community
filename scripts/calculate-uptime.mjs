@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 
 import db from '#db'
 import { isMain } from '#common'
+import report_job from '../libs-server/report-job.mjs'
 
 const logger = debug('calculate-uptime')
 debug.enable('calculate-uptime')
@@ -51,11 +52,22 @@ const calculateUptime = async () => {
 
 if (isMain(import.meta.url)) {
   const main = async () => {
+    const start_time = Date.now()
+    let error
     try {
       await calculateUptime()
     } catch (err) {
+      error = err
       console.log(err)
     }
+
+    await report_job({
+      job_id: 'nano-community-calculate-uptime',
+      success: !error,
+      reason: error ? error.message : null,
+      duration_ms: Date.now() - start_time,
+    })
+
     process.exit()
   }
 

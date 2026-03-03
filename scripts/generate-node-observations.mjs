@@ -1,6 +1,7 @@
 import debug from 'debug'
 
 import { isMain, saveData } from '#common'
+import report_job from '../libs-server/report-job.mjs'
 import db from '#db'
 
 const log = debug('generate-node-observations')
@@ -48,11 +49,22 @@ const generateNodeObservations = async () => {
 
 if (isMain(import.meta.url)) {
   const main = async () => {
+    const start_time = Date.now()
+    let error
     try {
       await generateNodeObservations()
     } catch (err) {
+      error = err
       console.log(err)
     }
+
+    await report_job({
+      job_id: 'nano-community-generate-node-observations',
+      success: !error,
+      reason: error ? error.message : null,
+      duration_ms: Date.now() - start_time,
+    })
+
     process.exit()
   }
 

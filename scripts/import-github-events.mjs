@@ -2,6 +2,7 @@ import dayjs from 'dayjs'
 import debug from 'debug'
 
 import { request, isMain } from '#common'
+import report_job from '../libs-server/report-job.mjs'
 import db from '#db'
 
 const logger = debug('import-github-events')
@@ -143,11 +144,22 @@ const importGithubEvents = async () => {
 
 if (isMain(import.meta.url)) {
   const main = async () => {
+    const start_time = Date.now()
+    let error
     try {
       await importGithubEvents()
     } catch (err) {
+      error = err
       console.log(err)
     }
+
+    await report_job({
+      job_id: 'nano-community-import-github-events',
+      success: !error,
+      reason: error ? error.message : null,
+      duration_ms: Date.now() - start_time,
+    })
+
     process.exit()
   }
 

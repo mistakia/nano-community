@@ -1,7 +1,11 @@
 ################################### Storage Server Nano.Community Crontab ###################################
 
-0 */4 * * * NODE_ENV=production /home/user/.nvm/versions/node/v16.14.0/bin/node /home/user/projects/nano-community/scripts/import-subreddit.mjs -r nanocurrency &>> /var/log/nano-community/import-nanocurrency.log
-0 */6 * * * NODE_ENV=production /home/user/.nvm/versions/node/v16.14.0/bin/node /home/user/projects/nano-community/scripts/import-subreddit.mjs -r nanotrade &>> /var/log/nano-community/import-nanotrade.log
+JOB_API_URL=https://localhost:8081
+JOB_API_KEY=PLACEHOLDER_SET_ON_SERVER
+JOB_PROJECT=nano-community
+
+0 */4 * * * JOB_SCHEDULE="0 */4 * * *" JOB_SCHEDULE_TYPE=expr job-wrapper.sh nano-community-import-nanocurrency NODE_ENV=production /home/user/.nvm/versions/node/v16.14.0/bin/node /home/user/projects/nano-community/scripts/import-subreddit.mjs -r nanocurrency &>> /var/log/nano-community/import-nanocurrency.log
+0 */6 * * * JOB_SCHEDULE="0 */6 * * *" JOB_SCHEDULE_TYPE=expr job-wrapper.sh nano-community-import-nanotrade NODE_ENV=production /home/user/.nvm/versions/node/v16.14.0/bin/node /home/user/projects/nano-community/scripts/import-subreddit.mjs -r nanotrade &>> /var/log/nano-community/import-nanotrade.log
 
 
-0 1 * * * NODE_ENV=production /home/user/.nvm/versions/node/v16.14.0/bin/node /home/user/projects/nano-community/scripts/archive-mysql.mjs &>> /var/log/nano-community/archive-mysql.log
+0 1 * * * JOB_SCHEDULE="0 1 * * *" JOB_SCHEDULE_TYPE=expr job-wrapper.sh nano-community-archive-mysql NODE_ENV=production /home/user/.nvm/versions/node/v16.14.0/bin/node /home/user/projects/nano-community/scripts/archive-mysql.mjs &>> /var/log/nano-community/archive-mysql.log

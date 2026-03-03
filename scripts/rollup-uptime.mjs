@@ -6,6 +6,7 @@ import { hideBin } from 'yargs/helpers'
 
 import db from '#db'
 import { groupBy, isMain } from '#common'
+import report_job from '../libs-server/report-job.mjs'
 
 dayjs.extend(utc)
 const argv = yargs(hideBin(process.argv)).argv
@@ -94,11 +95,22 @@ const rollupUptime = async (days = 1) => {
 
 if (isMain(import.meta.url)) {
   const main = async () => {
+    const start_time = Date.now()
+    let error
     try {
       await rollupUptime(argv.days)
     } catch (err) {
+      error = err
       console.log(err)
     }
+
+    await report_job({
+      job_id: 'nano-community-rollup-uptime',
+      success: !error,
+      reason: error ? error.message : null,
+      duration_ms: Date.now() - start_time,
+    })
+
     process.exit()
   }
 

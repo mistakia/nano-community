@@ -57,5 +57,10 @@ module.exports = {
     zone_id: '',
     user_email: '',
     token: ''
+  },
+
+  job_tracker: {
+    api_url: 'https://storage-server:8081',
+    api_key: 'your-api-key-here'
   }
 }
