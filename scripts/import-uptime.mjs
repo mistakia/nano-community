@@ -2,6 +2,7 @@ import debug from 'debug'
 import dayjs from 'dayjs'
 
 import { rpc, groupBy, isMain } from '#common'
+import report_job from '../libs-server/report-job.mjs'
 import config from '#config'
 import db from '#db'
 import { REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT } from '#constants'
@@ -185,11 +186,22 @@ const importUptime = async () => {
 
 if (isMain(import.meta.url)) {
   const main = async () => {
+    const start_time = Date.now()
+    let error
     try {
       await importUptime()
     } catch (err) {
+      error = err
       console.log(err)
     }
+
+    await report_job({
+      job_id: 'nano-community-import-uptime',
+      success: !error,
+      reason: error ? error.message : null,
+      duration_ms: Date.now() - start_time,
+    })
+
     process.exit()
   }
 

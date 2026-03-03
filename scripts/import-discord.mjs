@@ -6,6 +6,7 @@ import { hideBin } from 'yargs/helpers'
 import db from '#db'
 import config from '#config'
 import { request, wait, isMain } from '#common'
+import report_job from '../libs-server/report-job.mjs'
 
 const { discordAuthorization } = config
 const argv = yargs(hideBin(process.argv)).argv
@@ -260,11 +261,22 @@ if (isMain(import.meta.url)) {
   const guildId = argv.gid
   const getFullHistory = argv.full
   const main = async () => {
+    const start_time = Date.now()
+    let error
     try {
       await importDiscord(guildId, { getFullHistory })
     } catch (err) {
+      error = err
       console.log(err)
     }
+
+    await report_job({
+      job_id: `nano-community-import-discord-${guildId}`,
+      success: !error,
+      reason: error ? error.message : null,
+      duration_ms: Date.now() - start_time,
+    })
+
     process.exit()
   }
 

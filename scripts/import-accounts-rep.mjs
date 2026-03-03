@@ -2,6 +2,7 @@ import debug from 'debug'
 import dayjs from 'dayjs'
 
 import { rpc, isMain } from '#common'
+import report_job from '../libs-server/report-job.mjs'
 import { BURN_ACCOUNT } from '#constants'
 import db from '#db'
 
@@ -86,11 +87,22 @@ const importAccountsRep = async ({
 
 if (isMain(import.meta.url)) {
   const main = async () => {
+    const start_time = Date.now()
+    let error
     try {
       await importAccountsRep()
     } catch (err) {
+      error = err
       console.log(err)
     }
+
+    await report_job({
+      job_id: 'nano-community-import-accounts-rep',
+      success: !error,
+      reason: error ? error.message : null,
+      duration_ms: Date.now() - start_time,
+    })
+
     process.exit()
   }
 
