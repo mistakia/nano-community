@@ -2,8 +2,8 @@
 
 JOB_PROJECT=nano-community
 
-0 */4 * * * job-wrapper.sh nano-community-import-nanocurrency NODE_ENV=production /home/user/.nvm/versions/node/v16.14.0/bin/node /home/user/projects/nano-community/scripts/import-subreddit.mjs -r nanocurrency &>> /var/log/nano-community/import-nanocurrency.log
-0 */6 * * * job-wrapper.sh nano-community-import-nanotrade NODE_ENV=production /home/user/.nvm/versions/node/v16.14.0/bin/node /home/user/projects/nano-community/scripts/import-subreddit.mjs -r nanotrade &>> /var/log/nano-community/import-nanotrade.log
+0 */4 * * * job-wrapper.sh nano-community-import-nanocurrency NODE_ENV=production /home/user/.nvm/versions/node/v16.14.0/bin/node /home/user/projects/nano-community/scripts/import-subreddit.mjs -r nanocurrency >> /var/log/nano-community/import-nanocurrency.log 2>&1
+0 */6 * * * job-wrapper.sh nano-community-import-nanotrade NODE_ENV=production /home/user/.nvm/versions/node/v16.14.0/bin/node /home/user/projects/nano-community/scripts/import-subreddit.mjs -r nanotrade >> /var/log/nano-community/import-nanotrade.log 2>&1
 
 
-0 1 * * * job-wrapper.sh nano-community-archive-mysql NODE_ENV=production /home/user/.nvm/versions/node/v16.14.0/bin/node /home/user/projects/nano-community/scripts/archive-mysql.mjs &>> /var/log/nano-community/archive-mysql.log
+0 1 * * * job-wrapper.sh nano-community-archive-mysql NODE_ENV=production /home/user/.nvm/versions/node/v16.14.0/bin/node /home/user/projects/nano-community/scripts/archive-mysql.mjs >> /var/log/nano-community/archive-mysql.log 2>&1
