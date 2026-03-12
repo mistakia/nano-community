@@ -1,8 +1,4 @@
 import debug from 'debug'
-import util from 'util'
-import fs from 'fs'
-import { exec } from 'child_process'
-import { createObjectCsvWriter as createCsvWriter } from 'csv-writer'
 import dayjs from 'dayjs'
 import Knex from 'knex'
 import yargs from 'yargs'
@@ -15,408 +11,122 @@ import config from '#config'
 const argv = yargs(hideBin(process.argv)).argv
 const storage_mysql = Knex(config.storage_mysql)
 
-const execp = util.promisify(exec)
 const logger = debug('archive')
 debug.enable('archive')
 
-const dir = '/home/user/nano-community-archives'
+const archive_table = async ({
+  table,
+  timestamp_column = 'timestamp',
+  retention_hours,
+  batch_size = 20000,
+  exclude_where = ''
+}) => {
+  logger(`archiving ${table} (retention: ${retention_hours / 24} days)`)
 
-// const zip = async ({ gzFilename, csvFilename }) => {
-//   logger(`creating zip of ${csvFilename}`)
-//   const { stderr } = await exec(
-//     `tar -zvcf ${dir}/${gzFilename} -C ${dir} ${csvFilename}`
-//   )
-//   if (stderr) {
-//     logger(stderr)
-//     throw new Error(stderr)
-//   }
-//   fs.unlinkSync(`${dir}/${csvFilename}`)
-// }
-
-const upload = async (gzFilename) => {
-  const file = `${dir}/${gzFilename}`
-  logger(`uploading ${file}`)
-  const { stderr } = await execp(
-    `/home/user/.google-drive-upload/bin/gupload ${file}`
-  )
-  if (stderr) {
-    throw new Error(stderr)
-  }
-  fs.unlinkSync(file)
-}
-
-const archive_representatives_uptime = async ({ batch_size = 20000 }) => {
-  logger('archiving representatives_uptime')
-  const timestamp = dayjs().format('YYYY-MM-DD_HH-mm-ss')
-  const hours = 12 * 7 * 24 // 12 weeks
-
-  // Get a list of stale timestamps and number of rows for each
+  const where_clause = `WHERE ${timestamp_column} < UNIX_TIMESTAMP(NOW() - INTERVAL ${retention_hours} HOUR)${exclude_where ? ` AND ${exclude_where}` : ''}`
   const stale_timestamps = await db.raw(
-    `SELECT timestamp, COUNT(*) as count FROM representatives_uptime WHERE timestamp < UNIX_TIMESTAMP(NOW() - INTERVAL ${hours} HOUR) GROUP BY timestamp ORDER BY timestamp ASC`
+    `SELECT ${timestamp_column}, COUNT(*) as count FROM ${table} ${where_clause} GROUP BY ${timestamp_column} ORDER BY ${timestamp_column} ASC`
   )
 
+  let total_archived = 0
   let current_batch_size = 0
   let timestamps_for_batch = []
-  for (const { timestamp, count } of stale_timestamps[0]) {
+
+  for (const row of stale_timestamps[0]) {
+    const ts = row[timestamp_column]
+    const count = row.count
     if (current_batch_size + count <= batch_size) {
-      timestamps_for_batch.push(timestamp)
+      timestamps_for_batch.push(ts)
       current_batch_size += count
     } else {
-      // Process the current batch
-      await processBatch(timestamps_for_batch)
-      timestamps_for_batch = [timestamp] // Start a new batch with the current timestamp
-      current_batch_size = count
-    }
-  }
-  // Process the last batch
-  if (timestamps_for_batch.length > 0) {
-    await processBatch(timestamps_for_batch)
-  }
-
-  async function processBatch(timestamps) {
-    logger(
-      `processing batch of ${timestamps.length} timestamps. Newest: ${dayjs
-        .unix(timestamps[timestamps.length - 1])
-        .format('YYYY-MM-DD HH:mm:ss')}, oldest: ${dayjs
-        .unix(timestamps[0])
-        .format('YYYY-MM-DD HH:mm:ss')}`
-    )
-    const rows = await db('representatives_uptime')
-      .whereIn('timestamp', timestamps)
-      .select()
-
-    if (!rows.length) {
-      logger('no rows to archive')
-      return
-    }
-
-    await storage_mysql('representatives_uptime')
-      .insert(rows)
-      .onConflict()
-      .merge()
-    logger(`copied ${rows.length} rows to storage_mysql`)
-
-    logger(`archiving ${rows.length} representatives_uptime entries`)
-    const filename = `representatives-uptime-archive_${timestamp}_${dayjs().format(
-      'YYYY-MM-DD_HH-mm-ss'
-    )}`
-    const csv_filename = `${filename}.csv`
-    const csv_writer = createCsvWriter({
-      path: `${dir}/${csv_filename}`,
-      header: [
-        { id: 'account', title: 'account' },
-        { id: 'online', title: 'online' },
-        { id: 'timestamp', title: 'timestamp' }
-      ]
-    })
-    await csv_writer.writeRecords(rows)
-
-    await upload(csv_filename)
-
-    const count_deleted = await db('representatives_uptime')
-      .whereIn('timestamp', timestamps)
-      .del()
-    logger(`removed ${count_deleted} rows from representatives_uptime`)
-  }
-}
-
-const archive_representatives_telemetry = async ({ batch_size = 20000 }) => {
-  logger('archiving representatives_telemetry')
-  const timestamp = dayjs().format('YYYY-MM-DD_HH-mm-ss')
-  const hours = 6 * 7 * 24 // 6 weeks
-
-  // Get a list of stale timestamps and number of rows for each
-  const stale_timestamps = await db.raw(
-    `SELECT timestamp, COUNT(*) as count FROM representatives_telemetry WHERE timestamp < UNIX_TIMESTAMP(NOW() - INTERVAL ${hours} HOUR) GROUP BY timestamp ORDER BY timestamp ASC`
-  )
-
-  let current_batch_size = 0
-  let timestamps_for_batch = []
-  for (const { timestamp, count } of stale_timestamps[0]) {
-    if (current_batch_size + count <= batch_size) {
-      timestamps_for_batch.push(timestamp)
-      current_batch_size += count
-    } else {
-      // Process the current batch
-      await processBatch(timestamps_for_batch)
-      timestamps_for_batch = [timestamp] // Start a new batch with the current timestamp
-      current_batch_size = count
-    }
-  }
-  // Process the last batch
-  if (timestamps_for_batch.length > 0) {
-    await processBatch(timestamps_for_batch)
-  }
-
-  async function processBatch(timestamps) {
-    logger(
-      `processing batch of ${timestamps.length} timestamps. Newest: ${dayjs
-        .unix(timestamps[timestamps.length - 1])
-        .format('YYYY-MM-DD HH:mm:ss')}, oldest: ${dayjs
-        .unix(timestamps[0])
-        .format('YYYY-MM-DD HH:mm:ss')}`
-    )
-    const rows = await db('representatives_telemetry')
-      .whereIn('timestamp', timestamps)
-      .select()
-
-    if (!rows.length) {
-      logger('no rows to archive')
-      return
-    }
-
-    await storage_mysql('representatives_telemetry')
-      .insert(rows)
-      .onConflict()
-      .merge()
-    logger(`copied ${rows.length} rows to storage_mysql`)
-
-    logger(`archiving ${rows.length} representatives_telemetry entries`)
-    const filename = `representatives-telemetry-archive_${timestamp}_${dayjs().format(
-      'YYYY-MM-DD_HH-mm-ss'
-    )}`
-    const csv_filename = `${filename}.csv`
-    const csv_writer = createCsvWriter({
-      path: `${dir}/${csv_filename}`,
-      header: [
-        { id: 'account', title: 'account' },
-        { id: 'weight', title: 'weight' },
-        { id: 'block_count', title: 'block_count' },
-        { id: 'block_behind', title: 'block_behind' },
-        { id: 'cemented_count', title: 'cemented_count' },
-        { id: 'cemented_behind', title: 'cemented_behind' },
-        { id: 'unchecked_count', title: 'unchecked_count' },
-        { id: 'bandwidth_cap', title: 'bandwidth_cap' },
-        { id: 'peer_count', title: 'peer_count' },
-        { id: 'protocol_version', title: 'protocol_version' },
-        { id: 'uptime', title: 'uptime' },
-        { id: 'major_version', title: 'major_version' },
-        { id: 'minor_version', title: 'minor_version' },
-        { id: 'patch_version', title: 'patch_version' },
-        { id: 'pre_release_version', title: 'pre_release_version' },
-        { id: 'maker', title: 'maker' },
-        { id: 'node_id', title: 'node_id' },
-        { id: 'address', title: 'address' },
-        { id: 'port', title: 'port' },
-        { id: 'telemetry_timestamp', title: 'telemetry_timestamp' },
-        { id: 'timestamp', title: 'timestamp' }
-      ]
-    })
-    await csv_writer.writeRecords(rows)
-
-    await upload(csv_filename)
-
-    const count_deleted = await db('representatives_telemetry')
-      .whereIn('timestamp', timestamps)
-      .del()
-    logger(`removed ${count_deleted} rows from representatives_telemetry`)
-  }
-}
-
-// const archive_representatives_telemetry_index = async ({
-//   batch_size = 20000
-// }) => {
-//   logger('archiving representatives_telemetry_index')
-//   const timestamp = dayjs().format('YYYY-MM-DD_HH-mm-ss')
-//   const hours = 6 * 7 * 24 // 6 weeks
-
-//   const stale_timestamps = await db.raw(
-//     `SELECT timestamp, COUNT(*) as count FROM representatives_telemetry_index WHERE timestamp < UNIX_TIMESTAMP(NOW() - INTERVAL ${hours} HOUR) GROUP BY timestamp ORDER BY timestamp ASC`
-//   )
-
-//   let current_batch_size = 0
-//   let timestamps_for_batch = []
-//   for (const { timestamp, count } of stale_timestamps[0]) {
-//     if (current_batch_size + count <= batch_size) {
-//       timestamps_for_batch.push(timestamp)
-//       current_batch_size += count
-//     } else {
-//       await processBatch(timestamps_for_batch)
-//       timestamps_for_batch = [timestamp]
-//       current_batch_size = count
-//     }
-//   }
-//   if (timestamps_for_batch.length > 0) {
-//     await processBatch(timestamps_for_batch)
-//   }
-
-//   async function processBatch(timestamps) {
-//     logger(
-//       `processing batch of ${timestamps.length} timestamps. Newest: ${dayjs
-//         .unix(timestamps[timestamps.length - 1])
-//         .format('YYYY-MM-DD HH:mm:ss')}, oldest: ${dayjs
-//         .unix(timestamps[0])
-//         .format('YYYY-MM-DD HH:mm:ss')}`
-//     )
-//     const rows = await db('representatives_telemetry_index')
-//       .whereIn('timestamp', timestamps)
-//       .select()
-
-//     if (!rows.length) {
-//       logger('no rows to archive')
-//       return
-//     }
-
-//     await storage_mysql('representatives_telemetry_index')
-//       .insert(rows)
-//       .onConflict()
-//       .merge()
-//     logger(`copied ${rows.length} rows to storage_mysql`)
-
-//     logger(`archiving ${rows.length} representatives_telemetry_index entries`)
-//     const filename = `representatives-telemetry-index-archive_${timestamp}_${dayjs().format(
-//       'YYYY-MM-DD_HH-mm-ss'
-//     )}`
-//     const csv_filename = `${filename}.csv`
-//     const csv_writer = createCsvWriter({
-//       path: `${dir}/${csv_filename}`,
-//       header: [
-//         { id: 'account', title: 'account' },
-//         { id: 'weight', title: 'weight' },
-//         { id: 'block_count', title: 'block_count' },
-//         { id: 'block_behind', title: 'block_behind' },
-//         { id: 'cemented_count', title: 'cemented_count' },
-//         { id: 'cemented_behind', title: 'cemented_behind' },
-//         { id: 'unchecked_count', title: 'unchecked_count' },
-//         { id: 'bandwidth_cap', title: 'bandwidth_cap' },
-//         { id: 'peer_count', title: 'peer_count' },
-//         { id: 'protocol_version', title: 'protocol_version' },
-//         { id: 'uptime', title: 'uptime' },
-//         { id: 'major_version', title: 'major_version' },
-//         { id: 'minor_version', title: 'minor_version' },
-//         { id: 'patch_version', title: 'patch_version' },
-//         { id: 'pre_release_version', title: 'pre_release_version' },
-//         { id: 'maker', title: 'maker' },
-//         { id: 'node_id', title: 'node_id' },
-//         { id: 'address', title: 'address' },
-//         { id: 'port', title: 'port' },
-//         { id: 'telemetry_timestamp', title: 'telemetry_timestamp' },
-//         { id: 'timestamp', title: 'timestamp' }
-//       ]
-//     })
-//     await csv_writer.writeRecords(rows)
-
-//     await upload(csv_filename)
-
-//     const count_deleted = await db('representatives_telemetry_index')
-//       .whereIn('timestamp', timestamps)
-//       .del()
-//     logger(`removed ${count_deleted} rows from representatives_telemetry_index`)
-//   }
-// }
-
-const archive_posts = async ({ batch_size = 20000 }) => {
-  logger('archiving posts')
-  const timestamp = dayjs().format('YYYY-MM-DD_HH-mm-ss')
-  const hours = 6 * 7 * 24 // 6 weeks
-
-  const stale_timestamps = await db.raw(
-    `SELECT created_at as timestamp, COUNT(*) as count FROM posts
-    WHERE created_at < UNIX_TIMESTAMP(NOW() - INTERVAL ${hours} HOUR)
-    AND id NOT IN (SELECT post_id FROM post_labels)
-    GROUP BY created_at ORDER BY created_at ASC`
-  )
-
-  let current_batch_size = 0
-  let timestamps_for_batch = []
-  for (const { timestamp, count } of stale_timestamps[0]) {
-    if (current_batch_size + count <= batch_size) {
-      timestamps_for_batch.push(timestamp)
-      current_batch_size += count
-    } else {
-      await processBatch(timestamps_for_batch)
-      timestamps_for_batch = [timestamp]
+      total_archived += await process_batch(
+        table,
+        timestamp_column,
+        timestamps_for_batch,
+        exclude_where
+      )
+      timestamps_for_batch = [ts]
       current_batch_size = count
     }
   }
   if (timestamps_for_batch.length > 0) {
-    await processBatch(timestamps_for_batch)
-  }
-
-  async function processBatch(timestamps) {
-    logger(
-      `processing batch of ${timestamps.length} timestamps. Newest: ${dayjs
-        .unix(timestamps[timestamps.length - 1])
-        .format('YYYY-MM-DD HH:mm:ss')}, oldest: ${dayjs
-        .unix(timestamps[0])
-        .format('YYYY-MM-DD HH:mm:ss')}`
+    total_archived += await process_batch(
+      table,
+      timestamp_column,
+      timestamps_for_batch,
+      exclude_where
     )
-    const posts = await db('posts')
-      .whereIn('created_at', timestamps)
-      .andWhereNotExists(function () {
-        this.select('*')
-          .from('post_labels')
-          .whereRaw('posts.id = post_labels.post_id')
-      })
-      .select()
-
-    if (!posts.length) {
-      logger('no posts to archive')
-      return
-    }
-
-    await storage_mysql('posts').insert(posts).onConflict().merge()
-    logger(`copied ${posts.length} rows to storage_mysql`)
-
-    logger(`archiving ${posts.length} posts`)
-    const filename = `posts-archive_${timestamp}_${dayjs().format(
-      'YYYY-MM-DD_HH-mm-ss'
-    )}`
-    const csv_filename = `${filename}.csv`
-    const csv_writer = createCsvWriter({
-      path: `${dir}/${csv_filename}`,
-      header: [
-        { id: 'id', title: 'id' },
-        { id: 'pid', title: 'pid' },
-        { id: 'sid', title: 'sid' },
-        { id: 'title', title: 'title' },
-        { id: 'url', title: 'url' },
-        { id: 'content_url', title: 'content_url' },
-        { id: 'author', title: 'author' },
-        { id: 'authorid', title: 'authorid' },
-        { id: 'text', title: 'text' },
-        { id: 'html', title: 'html' },
-        { id: 'summary', title: 'summary' },
-        { id: 'score', title: 'score' },
-        { id: 'social_score', title: 'social_score' },
-        { id: 'created_at', title: 'created_at' },
-        { id: 'updated_at', title: 'updated_at' }
-      ]
-    })
-    await csv_writer.writeRecords(posts)
-
-    await upload(csv_filename)
-
-    const count_deleted = await db('posts')
-      .whereIn('created_at', timestamps)
-      .del()
-    logger(`removed ${count_deleted} rows from posts`)
   }
+
+  logger(`${table}: archived ${total_archived} total rows`)
+  return total_archived
+}
+
+const process_batch = async (table, timestamp_column, timestamps, exclude_where = '') => {
+  if (!timestamps.length) return 0
+
+  logger(
+    `${table}: processing batch of ${timestamps.length} timestamps. ` +
+      `Range: ${dayjs.unix(timestamps[0]).format('YYYY-MM-DD HH:mm:ss')} to ${dayjs.unix(timestamps[timestamps.length - 1]).format('YYYY-MM-DD HH:mm:ss')}`
+  )
+
+  let query = db(table).whereIn(timestamp_column, timestamps)
+  if (exclude_where) {
+    query = query.whereRaw(exclude_where)
+  }
+  const rows = await query.select()
+  if (!rows.length) {
+    logger(`${table}: no rows to archive`)
+    return 0
+  }
+
+  // Insert into storage first
+  await storage_mysql(table).insert(rows).onConflict().merge()
+  logger(`${table}: copied ${rows.length} rows to storage`)
+
+  // Delete from production only after successful insert
+  let delete_query = db(table).whereIn(timestamp_column, timestamps)
+  if (exclude_where) {
+    delete_query = delete_query.whereRaw(exclude_where)
+  }
+  const count_deleted = await delete_query.del()
+  logger(`${table}: removed ${count_deleted} rows from production`)
+
+  return count_deleted
 }
 
 const archive_mysql = async ({ batch_size = 20000 }) => {
-  try {
-    await archive_representatives_uptime({ batch_size })
-  } catch (err) {
-    console.log(err)
-  }
+  const tables = [
+    {
+      table: 'representatives_uptime',
+      timestamp_column: 'timestamp',
+      retention_hours: 12 * 7 * 24 // 12 weeks
+    },
+    {
+      table: 'representatives_telemetry',
+      timestamp_column: 'timestamp',
+      retention_hours: 6 * 7 * 24 // 6 weeks
+    },
+    {
+      table: 'representatives_telemetry_index',
+      timestamp_column: 'timestamp',
+      retention_hours: 6 * 7 * 24 // 6 weeks
+    },
+    {
+      table: 'posts',
+      timestamp_column: 'created_at',
+      retention_hours: 6 * 7 * 24, // 6 weeks
+      exclude_where: 'id NOT IN (SELECT post_id FROM post_labels)'
+    }
+  ]
 
-  try {
-    await archive_representatives_telemetry({ batch_size })
-  } catch (err) {
-    console.log(err)
-  }
-
-  // try {
-  //   await archive_representatives_telemetry_index({ batch_size })
-  // } catch (err) {
-  //   console.log(err)
-  // }
-
-  try {
-    await archive_posts({ batch_size })
-  } catch (err) {
-    console.log(err)
+  for (const { table, timestamp_column, retention_hours, exclude_where } of tables) {
+    try {
+      await archive_table({ table, timestamp_column, retention_hours, batch_size, exclude_where })
+    } catch (err) {
+      logger(`ERROR archiving ${table}: ${err.message}`)
+      console.error(err)
+    }
   }
 }
 
