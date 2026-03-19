@@ -46,7 +46,8 @@ fi
 tar -zvcf $gz_file $sql_file
 rm $sql_file
 
-/root/.google-drive-upload/bin/gupload -o $gz_file
+# DISABLED: GDrive freeze for canonicalize-storage-hierarchy (2026-03-19)
+# /root/.google-drive-upload/bin/gupload -o $gz_file
 if ! $SNAPSHOT; then
     rm $gz_file
 fi
