@@ -2,7 +2,7 @@ module.exports = {
   discord_authorization: '', // user authorization header bearer token
   twitter_authorization: '', // twitter auth bearer token
 
-  port: 8080, // api port
+  port: 8085, // api port
 
   github_access_token: '',
 
