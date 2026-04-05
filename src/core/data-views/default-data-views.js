@@ -89,7 +89,7 @@ export const default_data_views = {
     view_id: 'TELEMETRY_UPTIME',
     view_name: 'Uptime Leaders',
     view_description:
-      'Representatives sorted by uptime for evaluating reliability',
+      'Principal representatives sorted by uptime for evaluating reliability',
     table_state: {
       sort: [{ column_id: ids.UPTIME, desc: true }],
       prefix_columns: [ids.ALIAS],
@@ -102,7 +102,7 @@ export const default_data_views = {
         ids.LAST_SEEN,
         ids.COUNTRY
       ],
-      where: [],
+      where: [{ column_id: ids.WEIGHT_PCT, operator: '>=', value: 0.1 }],
       offset: 0,
       limit: 500
     }
