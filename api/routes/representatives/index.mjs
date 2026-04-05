@@ -5,10 +5,11 @@ import cron from 'node-cron'
 import db from '#db'
 import cache from '#api/cache.mjs'
 import top from './top.mjs'
+import data_view_route from './data-view.mjs'
 
 const router = express.Router()
 
-const loadRepresentatives = async () => {
+export const loadRepresentatives = async () => {
   // get reps seen in the last month
   const representatives = await db('accounts')
     .select('accounts.*')
@@ -122,5 +123,6 @@ router.get('/', async (req, res) => {
 })
 
 router.use('/top', top)
+router.use('/data-view', data_view_route)
 
 export default router
