@@ -119,7 +119,7 @@ api.use('/api/*', (err, req, res, next) => {
 
 if (IS_DEV) {
   api.get('*', (req, res) => {
-    res.redirect(307, `http://localhost:8081${req.path}`)
+    res.redirect(307, `http://localhost:8094${req.path}`)
   })
 } else {
   const buildPath = path.join(__dirname, '..', 'build')
