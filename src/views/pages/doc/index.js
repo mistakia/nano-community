@@ -9,7 +9,7 @@ import DocPage from './doc'
 const getRouterLocation = (state, ownProps) => {
   if (ownProps.location) return ownProps
   const router = state.get('router')
-  return { location: router.get('location') }
+  return { location: router.location }
 }
 
 const mapStateToProps = createSelector(
