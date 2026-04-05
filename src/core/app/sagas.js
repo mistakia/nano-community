@@ -1,14 +1,8 @@
 import { takeLatest, fork, select } from 'redux-saga/effects'
-import { LOCATION_CHANGE } from 'connected-react-router'
+import { LOCATION_CHANGE } from 'redux-first-history'
 
-import history from '@core/history'
 import { getApp } from './selectors'
 import { appActions } from './actions'
-
-async function pageView() {
-  console.log(`pageView: ${history.location.pathname}`)
-  // TODO
-}
 
 export function* init() {
   const { token, key } = yield select(getApp)
@@ -19,7 +13,6 @@ export function* init() {
 
 export function reset() {
   window.scrollTo(0, 0)
-  pageView()
 }
 
 //= ====================================

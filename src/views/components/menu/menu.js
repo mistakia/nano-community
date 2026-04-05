@@ -7,8 +7,9 @@ import SpeedDial from '@mui/material/SpeedDial'
 import SpeedDialAction from '@mui/material/SpeedDialAction'
 import HomeIcon from '@mui/icons-material/Home'
 
+import { useNavigate, useLocation } from 'react-router-dom'
+
 import SearchBar from '@components/search-bar'
-import history from '@core/history'
 
 import './menu.styl'
 
@@ -117,13 +118,15 @@ function MenuSections() {
 
 export default function Menu({ hide, hideSearch, hide_speed_dial }) {
   const [open, setOpen] = useState(false)
+  const navigate = useNavigate()
+  const location = useLocation()
 
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
   const handleClick = () => setOpen(!open)
-  const handleHomeClick = () => history.push('/')
+  const handleHomeClick = () => navigate('/')
 
-  const isHome = history.location.pathname === '/'
+  const isHome = location.pathname === '/'
   const isMobile = window.innerWidth < 750
 
   return (

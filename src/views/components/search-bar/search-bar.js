@@ -3,7 +3,7 @@ import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey'
 import ClearIcon from '@mui/icons-material/Clear'
 import SearchIcon from '@mui/icons-material/Search'
 
-import history from '@core/history'
+import { useNavigate } from 'react-router-dom'
 
 import './search-bar.styl'
 
@@ -14,6 +14,7 @@ const SearchBar = () => {
   const [value, setValue] = useState('')
   const [invalid, setInvalid] = useState(false)
   const input_ref = useRef(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handle_key_down = (event) => {
@@ -38,7 +39,7 @@ const SearchBar = () => {
     const { value } = event.target
     setValue(value)
     if (ACCOUNT_REGEX.test(value) || BLOCK_REGEX.test(value)) {
-      history.push(`/${value}`)
+      navigate(`/${value}`)
     } else {
       setInvalid(true)
     }

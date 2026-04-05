@@ -1,12 +1,9 @@
-// Needed for redux-saga es6 generator support
-import '@babel/polyfill'
-
 import React from 'react'
-import { render } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 
 import Root from '@views/root'
 
 document.addEventListener('DOMContentLoaded', () => {
   const rootElement = document.getElementById('app')
-  render(<Root />, rootElement)
+  createRoot(rootElement).render(<Root />)
 })

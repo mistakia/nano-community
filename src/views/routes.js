@@ -1,9 +1,8 @@
 import React from 'react'
-import { Route, Switch } from 'react-router'
+import { Route, Routes, useLocation, useParams } from 'react-router-dom'
 
-import AccountPage from '@pages/account'
-import BlockPage from '@pages/block'
 import DocPage from '@pages/doc'
+import DynamicPage from '@pages/dynamic'
 import HomePage from '@pages/home'
 import RoadmapPage from '@pages/roadmap'
 import LedgerPage from '@pages/ledger'
@@ -13,26 +12,30 @@ import TelemetryPage from '@pages/telemetry'
 import LabelPage from '@pages/label'
 import LivePage from '@pages/live'
 
-const Routes = () => (
-  <Switch>
-    <Route exact path='/' component={HomePage} />
-    <Route exact path='/live' component={LivePage} />
-    <Route exact path='/roadmap' component={RoadmapPage} />
-    <Route exact path='/ledger' component={LedgerPage} />
-    <Route exact path='/representatives' component={RepresentativesPage} />
-    <Route exact path='/telemetry' component={TelemetryPage} />
-    <Route exact path='/labels/:label' component={LabelPage} />
-    <Route exact path='/404.html' component={NotFoundPage} />
-    <Route
-      exact
-      path={
-        '/:prefix(nano_|xrb_):address([13]{1}[13456789abcdefghijkmnopqrstuwxyz]{59})'
-      }
-      component={AccountPage}
-    />
-    <Route exact path={'/:hash([0-9A-F]{64})'} component={BlockPage} />
-    <Route path='/*' component={DocPage} />
-  </Switch>
+function LabelPageWrapper() {
+  const location = useLocation()
+  const params = useParams()
+  return <LabelPage location={location} match={{ params }} />
+}
+
+function DocPageWrapper() {
+  const location = useLocation()
+  return <DocPage location={location} />
+}
+
+const AppRoutes = () => (
+  <Routes>
+    <Route path='/' element={<HomePage />} />
+    <Route path='/live' element={<LivePage />} />
+    <Route path='/roadmap' element={<RoadmapPage />} />
+    <Route path='/ledger' element={<LedgerPage />} />
+    <Route path='/representatives' element={<RepresentativesPage />} />
+    <Route path='/telemetry' element={<TelemetryPage />} />
+    <Route path='/labels/:label' element={<LabelPageWrapper />} />
+    <Route path='/404.html' element={<NotFoundPage />} />
+    <Route path='/:id' element={<DynamicPage />} />
+    <Route path='/*' element={<DocPageWrapper />} />
+  </Routes>
 )
 
-export default Routes
+export default AppRoutes

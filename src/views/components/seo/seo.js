@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 
-import history from '@core/history'
+import { useLocation } from 'react-router-dom'
+
 import { BASE_URL } from '@core/constants'
 
 const absoluteUrl = (path) => `${BASE_URL}${path}`
@@ -90,34 +91,39 @@ const Seo = ({
   schema,
   title,
   description,
-  path = history.location.pathname,
+  path,
   contentType = 'website',
   image = '/static/default-card.png',
   published,
   updated,
   category,
   tags
-}) => (
-  <Helmet
-    htmlAttributes={getHtmlAttributes({
-      schema
-    })}
-    title={title}
-    link={[{ rel: 'canonical', href: absoluteUrl(path) }]}
-    meta={getMetaTags({
-      title,
-      description,
-      contentType,
-      image,
-      url: absoluteUrl(path),
-      published,
-      updated,
-      category,
-      tags
-    })}
-    defer={false}
-  />
-)
+}) => {
+  const location = useLocation()
+  const resolved_path = path || location.pathname
+
+  return (
+    <Helmet
+      htmlAttributes={getHtmlAttributes({
+        schema
+      })}
+      title={title}
+      link={[{ rel: 'canonical', href: absoluteUrl(resolved_path) }]}
+      meta={getMetaTags({
+        title,
+        description,
+        contentType,
+        image,
+        url: absoluteUrl(resolved_path),
+        published,
+        updated,
+        category,
+        tags
+      })}
+      defer={false}
+    />
+  )
+}
 
 Seo.propTypes = {
   schema: PropTypes.string,

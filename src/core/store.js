@@ -1,46 +1,50 @@
 import { fromJS } from 'immutable'
 import { applyMiddleware, compose, createStore } from 'redux'
-import { routerMiddleware } from 'connected-react-router/immutable'
+import { createReduxHistoryContext } from 'redux-first-history'
 import createSagaMiddleware, { END } from 'redux-saga'
+import { createBrowserHistory } from 'history'
 
 import rootSaga from './sagas'
 import rootReducer from './reducers'
 
 const sagaMiddleware = createSagaMiddleware()
 
-export default (history, initialState = {}) => {
-  const composeEnhancers =
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+const { createReduxHistory, routerMiddleware, routerReducer } =
+  createReduxHistoryContext({
+    history: createBrowserHistory(),
+    selectRouterState: (state) => state.get('router')
+  })
 
-  // ======================================================
-  // Middleware Configuration
-  // ======================================================
-  const middlewares = [sagaMiddleware, routerMiddleware(history)]
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
-  // ======================================================
-  // Store Enhancers
-  // ======================================================
-  const enhancers = [applyMiddleware(...middlewares)]
+// ======================================================
+// Middleware Configuration
+// ======================================================
+const middlewares = [sagaMiddleware, routerMiddleware]
 
-  // ======================================================
-  // Store Instantiation and HMR Setup
-  // ======================================================
-  const store = createStore(
-    rootReducer(history),
-    fromJS(initialState),
-    composeEnhancers(...enhancers)
-  )
+// ======================================================
+// Store Enhancers
+// ======================================================
+const enhancers = [applyMiddleware(...middlewares)]
 
-  sagaMiddleware.run(rootSaga)
-  store.close = () => store.dispatch(END)
+// ======================================================
+// Store Instantiation and HMR Setup
+// ======================================================
+export const store = createStore(
+  rootReducer(routerReducer),
+  fromJS({}),
+  composeEnhancers(...enhancers)
+)
 
-  if (module.hot) {
-    // Enable webpack hot module replacement for reducers
-    module.hot.accept('./reducers', () => {
-      const nextReducers = rootReducer(history)
-      store.replaceReducer(nextReducers)
-    })
-  }
+sagaMiddleware.run(rootSaga)
+store.close = () => store.dispatch(END)
 
-  return store
+if (module.hot) {
+  // Enable webpack hot module replacement for reducers
+  module.hot.accept('./reducers', () => {
+    const nextReducers = rootReducer(routerReducer)
+    store.replaceReducer(nextReducers)
+  })
 }
+
+export const history = createReduxHistory(store)

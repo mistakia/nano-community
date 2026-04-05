@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux-immutable'
-import { connectRouter } from 'connected-react-router/immutable'
 
 import { appReducer } from './app'
 import { accounts_reducer } from './accounts'
@@ -16,9 +15,9 @@ import { postlistsReducer } from './postlists'
 import { nanodb_reducer } from './nanodb'
 import { api_reducer } from './api'
 
-const rootReducer = (history) =>
+const rootReducer = (router) =>
   combineReducers({
-    router: connectRouter(history),
+    router,
     app: appReducer,
     blocks: blocksReducer,
     accounts: accounts_reducer,

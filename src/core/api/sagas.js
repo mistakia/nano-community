@@ -1,5 +1,4 @@
 import { call, put, cancelled, select } from 'redux-saga/effects'
-// import { LOCATION_CHANGE } from 'connected-react-router'
 
 import { api, apiRequest } from '@core/api/service'
 import { getApp } from '@core/app'
@@ -61,7 +60,6 @@ function* fetchAPI(apiFunction, actions, opts = {}) {
 
 function* fetch(...args) {
   yield call(fetchAPI.bind(null, ...args))
-  // yield race([call(fetchAPI.bind(null, ...args)), take(LOCATION_CHANGE)])
 }
 
 export const getAccount = fetch.bind(

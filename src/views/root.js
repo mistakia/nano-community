@@ -1,13 +1,9 @@
 import React from 'react'
-import { create } from 'jss'
 import { Provider } from 'react-redux'
-import { withRouter } from 'react-router'
-import { ConnectedRouter } from 'connected-react-router/immutable'
-import { createGenerateClassName, StylesProvider, jssPreset } from '@mui/styles'
+import { HistoryRouter as Router } from 'redux-first-history/rr6'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
-import createStore from '@core/store'
-import history from '@core/history'
+import { store, history } from '@core/store'
 import App from '@components/app'
 
 // Import Language Provider
@@ -71,23 +67,13 @@ const theme = createTheme({
   }
 })
 
-const initialState = window.__INITIAL_STATE__
-const store = createStore(history, initialState)
-const ConnectedApp = withRouter(App)
-const jss = create({ plugins: [...jssPreset().plugins] })
-const generateClassName = createGenerateClassName({
-  productionPrefix: navigator.userAgent === 'ReactSnap' ? 'snap' : 'jss'
-})
-
 const Root = () => (
   <Provider store={store}>
-    <StylesProvider jss={jss} generateClassName={generateClassName} injectFirst>
-      <ThemeProvider theme={theme}>
-        <ConnectedRouter history={history}>
-          <ConnectedApp />
-        </ConnectedRouter>
-      </ThemeProvider>
-    </StylesProvider>
+    <ThemeProvider theme={theme}>
+      <Router history={history}>
+        <App />
+      </Router>
+    </ThemeProvider>
   </Provider>
 )
 
