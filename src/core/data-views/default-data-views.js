@@ -10,8 +10,7 @@ export const default_data_views = {
     table_state: {
       sort: [{ column_id: REPRESENTATIVE_COLUMN_IDS.WEIGHT, desc: true }],
       prefix_columns: [
-        REPRESENTATIVE_COLUMN_IDS.ALIAS,
-        REPRESENTATIVE_COLUMN_IDS.ACCOUNT
+        REPRESENTATIVE_COLUMN_IDS.ALIAS
       ],
       columns: [
         REPRESENTATIVE_COLUMN_IDS.WEIGHT,
@@ -27,7 +26,8 @@ export const default_data_views = {
         REPRESENTATIVE_COLUMN_IDS.BLOCK_COUNT,
         REPRESENTATIVE_COLUMN_IDS.UNCHECKED_COUNT,
         REPRESENTATIVE_COLUMN_IDS.LAST_SEEN,
-        REPRESENTATIVE_COLUMN_IDS.COUNTRY
+        REPRESENTATIVE_COLUMN_IDS.COUNTRY,
+        REPRESENTATIVE_COLUMN_IDS.ACCOUNT
       ],
       where: [],
       offset: 0,

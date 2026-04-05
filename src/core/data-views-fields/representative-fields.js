@@ -97,7 +97,7 @@ export default function get_representative_fields() {
     [ids.ACCOUNT]: {
       column_title: 'Account',
       header_label: 'Account',
-      size: 180,
+      size: 680,
       data_type: table_constants.TABLE_DATA_TYPES.TEXT,
       component: AccountCell,
       operators: text_operators,
