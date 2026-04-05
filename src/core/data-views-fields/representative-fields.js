@@ -31,7 +31,7 @@ const COLUMN_GROUPS = {
 }
 
 const StatusCell = React.memo(({ row }) => (
-  <Uptime data={row.original.uptime || []} length={1} />
+  <Uptime data={row.original._uptime_data || []} length={1} />
 ))
 StatusCell.displayName = 'StatusCell'
 
@@ -41,12 +41,12 @@ const AccountCell = React.memo(({ value }) => (
 AccountCell.displayName = 'AccountCell'
 
 const UptimeCell = React.memo(({ row }) => (
-  <Uptime data={row.original.uptime || []} length={25} />
+  <Uptime data={row.original._uptime_data || []} length={25} />
 ))
 UptimeCell.displayName = 'UptimeCell'
 
 const LastSeenCell = React.memo(({ row }) =>
-  row.original.is_online ? (
+  row.original._is_online ? (
     <FiberManualRecordIcon className='green' />
   ) : row.original.last_seen ? (
     timeago.format(row.original.last_seen * 1000, 'nano_short')
@@ -80,10 +80,17 @@ export default function get_representative_fields() {
   const fields = {
     [ids.STATUS]: {
       column_title: 'Status',
-      header_label: '',
+      header_label: 'Status',
       size: 36,
       data_type: table_constants.TABLE_DATA_TYPES.BOOLEAN,
       component: StatusCell,
+      export_value: ({ row }) => (row._is_online ? 'online' : 'offline'),
+      operators: [
+        table_constants.TABLE_OPERATORS.EQUAL,
+        table_constants.TABLE_OPERATORS.NOT_EQUAL,
+        table_constants.TABLE_OPERATORS.IS_NULL,
+        table_constants.TABLE_OPERATORS.IS_NOT_NULL
+      ],
       column_groups: [COLUMN_GROUPS.TELEMETRY]
     },
     [ids.ALIAS]: {
@@ -238,6 +245,12 @@ export default function get_representative_fields() {
       size: 100,
       data_type: table_constants.TABLE_DATA_TYPES.NUMBER,
       component: LastSeenCell,
+      export_value: ({ row }) =>
+        row._is_online
+          ? 'online'
+          : row.last_seen
+            ? timeago.format(row.last_seen * 1000, 'nano_short')
+            : '',
       operators: number_operators,
       column_groups: [COLUMN_GROUPS.TELEMETRY]
     },

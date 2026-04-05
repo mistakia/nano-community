@@ -166,10 +166,11 @@ function flatten_representative(rep) {
     }
   }
 
-  // Include uptime array for the Uptime cell renderer
-  flat.uptime = rep.uptime || []
+  // Include uptime array for the Uptime cell renderer (prefixed to avoid
+  // overwriting the computed numeric 'uptime' column value)
+  flat._uptime_data = rep.uptime || []
   // Include is_online for the LastSeen cell renderer
-  flat.is_online = rep.is_online || (rep.last_online > (rep.last_offline || 0))
+  flat._is_online = rep.is_online || (rep.last_online > (rep.last_offline || 0))
   return flat
 }
 
@@ -204,7 +205,8 @@ router.post('/', async (req, res) => {
 
     const denominator = quorum_total ? BigNumber(quorum_total) : total_weight
 
-    // Pre-compute weight_pct and version on a shallow copy to avoid mutating cache
+    // Pre-compute weight_pct, version, and is_online on a shallow copy to avoid mutating cache.
+    // is_online must be computed here (before apply_filters) so that status filters work.
     const reps_with_computed = representatives.map((rep) => {
       const weight_pct =
         rep.account_meta && rep.account_meta.weight && denominator.gt(0)
@@ -213,7 +215,14 @@ router.post('/', async (req, res) => {
               .multipliedBy(100)
               .toNumber()
           : null
-      return { ...rep, weight_pct, version: get_version_string(rep) }
+      const is_online =
+        rep.is_online || (rep.last_online > (rep.last_offline || 0))
+      return {
+        ...rep,
+        weight_pct,
+        version: get_version_string(rep),
+        is_online
+      }
     })
 
     let result = reps_with_computed
