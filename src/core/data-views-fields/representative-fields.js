@@ -80,7 +80,7 @@ export default function get_representative_fields() {
   const fields = {
     [ids.STATUS]: {
       column_title: 'Status',
-      header_label: 'Status',
+      header_label: '',
       size: 36,
       data_type: table_constants.TABLE_DATA_TYPES.BOOLEAN,
       component: StatusCell,
@@ -140,6 +140,16 @@ export default function get_representative_fields() {
       size: 150,
       data_type: table_constants.TABLE_DATA_TYPES.NUMBER,
       component: UptimeCell,
+      export_value: ({ row }) => {
+        const seconds = row.uptime
+        if (seconds == null) return ''
+        const abs = Math.abs(seconds)
+        const days = Math.floor(abs / 86400)
+        const hours = Math.floor((abs % 86400) / 3600)
+        const sign = seconds < 0 ? '-' : ''
+        if (days > 0) return `${sign}${days}d ${hours}h`
+        return `${sign}${hours}h`
+      },
       operators: number_operators,
       column_groups: [COLUMN_GROUPS.TELEMETRY]
     },
