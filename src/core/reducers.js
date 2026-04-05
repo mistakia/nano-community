@@ -14,6 +14,8 @@ import { postsReducer } from './posts'
 import { postlistsReducer } from './postlists'
 import { nanodb_reducer } from './nanodb'
 import { api_reducer } from './api'
+import { data_views_reducer } from './data-views'
+import { data_view_request_reducer } from './data-view-request/reducer'
 
 const rootReducer = (router) =>
   combineReducers({
@@ -31,7 +33,9 @@ const rootReducer = (router) =>
     posts: postsReducer,
     postlists: postlistsReducer,
     nanodb: nanodb_reducer,
-    api: api_reducer
+    api: api_reducer,
+    data_views: data_views_reducer,
+    data_view_request: data_view_request_reducer
   })
 
 export default rootReducer

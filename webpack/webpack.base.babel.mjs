@@ -25,8 +25,8 @@ const base = (options) => ({
   module: {
     rules: [
       {
-        test: /\.jsx?$/, // Transform all .js and .jsx files required somewhere with Babel
-        exclude: /node_modules/,
+        test: /\.m?jsx?$/, // Transform all .js, .mjs, and .jsx files required somewhere with Babel
+        exclude: /node_modules\/(?!react-table)/,
         use: {
           loader: 'babel-loader',
           options: options.babelQuery
@@ -149,7 +149,7 @@ const base = (options) => ({
   ]),
   resolve: {
     modules: ['node_modules', 'app'],
-    extensions: ['.js', '.jsx', '.react.js'],
+    extensions: ['.js', '.jsx', '.react.js', '.mjs'],
     mainFields: ['browser', 'jsnext:main', 'main']
   },
   devtool: options.devtool,

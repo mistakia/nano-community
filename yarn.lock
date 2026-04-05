@@ -2570,7 +2570,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.25.7, @babel/runtime@npm:^7.26.0, @babel/runtime@npm:^7.28.4, @babel/runtime@npm:^7.28.6, @babel/runtime@npm:^7.7.6":
+"@babel/runtime@npm:^7.24.6, @babel/runtime@npm:^7.25.7, @babel/runtime@npm:^7.26.0, @babel/runtime@npm:^7.28.4, @babel/runtime@npm:^7.28.6, @babel/runtime@npm:^7.7.6":
   version: 7.29.2
   resolution: "@babel/runtime@npm:7.29.2"
   checksum: 10/f55ba4052aa0255055b34371a145fbe69c29b37b49eaea14805b095bfb4153701486416e89392fd27ec8abafa53868be86e960b9f8f959fff91f2c8ac2a14b02
@@ -2713,6 +2713,68 @@ __metadata:
   version: 0.5.2
   resolution: "@discoveryjs/json-ext@npm:0.5.2"
   checksum: 10/0447653b340fe5e6629851b8ea8023b4d128de86b59c9889adf01149c1d4066443cde2701d78e428ec30747b5bbdb38a591864a707528eb6db25c51ffdb69279
+  languageName: node
+  linkType: hard
+
+"@dnd-kit/accessibility@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "@dnd-kit/accessibility@npm:3.1.1"
+  dependencies:
+    tslib: "npm:^2.0.0"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 10/961000456a36700a9cd13be51147a818bc100f7dfabb332b80438d02e06f3b556aa0ff46ddf13bdff3b70bc8f9b63dd5a392cc285597ab1f7026e672660c54b6
+  languageName: node
+  linkType: hard
+
+"@dnd-kit/core@npm:^6.3.1":
+  version: 6.3.1
+  resolution: "@dnd-kit/core@npm:6.3.1"
+  dependencies:
+    "@dnd-kit/accessibility": "npm:^3.1.1"
+    "@dnd-kit/utilities": "npm:^3.2.2"
+    tslib: "npm:^2.0.0"
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 10/a5ae6fa8404765712aa80e308f58cb79bac9a306c274ec8272c405c2a59dd277d24b966348fe8ca6340bb3f0d75f90b8a021fa781edcf65255114d3cf2bef891
+  languageName: node
+  linkType: hard
+
+"@dnd-kit/modifiers@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "@dnd-kit/modifiers@npm:9.0.0"
+  dependencies:
+    "@dnd-kit/utilities": "npm:^3.2.2"
+    tslib: "npm:^2.0.0"
+  peerDependencies:
+    "@dnd-kit/core": ^6.3.0
+    react: ">=16.8.0"
+  checksum: 10/2ae238a1b787029e95d92319d7e4a0e2ffba8fceed56c4b58dfee7ed6890df207bf89ce522d4126411051121954222bd8e1444fae321485b594ae518c7c4397d
+  languageName: node
+  linkType: hard
+
+"@dnd-kit/sortable@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "@dnd-kit/sortable@npm:10.0.0"
+  dependencies:
+    "@dnd-kit/utilities": "npm:^3.2.2"
+    tslib: "npm:^2.0.0"
+  peerDependencies:
+    "@dnd-kit/core": ^6.3.0
+    react: ">=16.8.0"
+  checksum: 10/bc61c25e76905204a53f91294b8116bf106fa27247eebca2c66478450b2051d7177115a384054e7e5639e6c4430083ade63056f79ee45f549da537cf05bc5288
+  languageName: node
+  linkType: hard
+
+"@dnd-kit/utilities@npm:^3.2.2":
+  version: 3.2.2
+  resolution: "@dnd-kit/utilities@npm:3.2.2"
+  dependencies:
+    tslib: "npm:^2.0.0"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 10/6cfe46a5fcdaced943982e7ae66b08b89235493e106eb5bc833737c25905e13375c6ecc3aa0c357d136cb21dae3966213dba063f19b7a60b1235a29a7b05ff84
   languageName: node
   linkType: hard
 
@@ -2931,6 +2993,44 @@ __metadata:
     streaming-iterables: "npm:^6.0.0"
     throttled-queue: "npm:^2.1.2"
   checksum: 10/c728764626fe25ee06c2dd0f9fed90e550d901f28cf1576524b978f0d6983eb2d09f371055bc3144b5efaee787f2a8da8ae7a336df19b5e98d33e310fd3e8979
+  languageName: node
+  linkType: hard
+
+"@floating-ui/core@npm:^1.7.5":
+  version: 1.7.5
+  resolution: "@floating-ui/core@npm:1.7.5"
+  dependencies:
+    "@floating-ui/utils": "npm:^0.2.11"
+  checksum: 10/fecdc9b3ce93f02bf78a6114b93730a4cb9fa8234c62f9a949016186297a039c9f9cd3c5c81ff74b93ebddf0b32048c4af7a528afe7904b75423ed2e7491b888
+  languageName: node
+  linkType: hard
+
+"@floating-ui/dom@npm:^1.7.6":
+  version: 1.7.6
+  resolution: "@floating-ui/dom@npm:1.7.6"
+  dependencies:
+    "@floating-ui/core": "npm:^1.7.5"
+    "@floating-ui/utils": "npm:^0.2.11"
+  checksum: 10/84dff2ffdf85c8b92d7edafc543c55869abbeaeb3007fa983159467e050153b507a0f5fe8e84f88c3f28c35a82de9df9c20a6eef5560cbba3afae19141444ff2
+  languageName: node
+  linkType: hard
+
+"@floating-ui/react-dom@npm:^2.0.8":
+  version: 2.1.8
+  resolution: "@floating-ui/react-dom@npm:2.1.8"
+  dependencies:
+    "@floating-ui/dom": "npm:^1.7.6"
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 10/39c3e3e5538a111a3eadf1b9ca486d7dc17c7eb24b83a0ea9b4c189fa7dbe5abe01357388d8cf6a4badb2d3fec2b1090e10529537bde91acbcfe19b0a8d10f90
+  languageName: node
+  linkType: hard
+
+"@floating-ui/utils@npm:^0.2.11":
+  version: 0.2.11
+  resolution: "@floating-ui/utils@npm:0.2.11"
+  checksum: 10/72150138ba1c274d757a1da85233202fa9fdfd2272ec1fb0883eb0ffdf138863af81573049ed2c20b98adb4b7ae2236065541ce14037fe328955089831a678d5
   languageName: node
   linkType: hard
 
@@ -3166,6 +3266,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mui/base@npm:^5.0.0-dev.20240529-082515-213b5e33ab":
+  version: 5.0.0-dev.20240529-082515-213b5e33ab
+  resolution: "@mui/base@npm:5.0.0-dev.20240529-082515-213b5e33ab"
+  dependencies:
+    "@babel/runtime": "npm:^7.24.6"
+    "@floating-ui/react-dom": "npm:^2.0.8"
+    "@mui/types": "npm:^7.2.14-dev.20240529-082515-213b5e33ab"
+    "@mui/utils": "npm:^6.0.0-dev.20240529-082515-213b5e33ab"
+    "@popperjs/core": "npm:^2.11.8"
+    clsx: "npm:^2.1.1"
+    prop-types: "npm:^15.8.1"
+  peerDependencies:
+    "@types/react": ^17.0.0 || ^18.0.0
+    react: ^17.0.0 || ^18.0.0
+    react-dom: ^17.0.0 || ^18.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10/5e6a4f8d2583dec3c776a8681753665504b8c72e8b7c0348c6a373c3830bc51243be7740c38a4876f300b6114f2e57247b75f5754df7bee11c625d228d2640c9
+  languageName: node
+  linkType: hard
+
 "@mui/core-downloads-tracker@npm:^6.5.0":
   version: 6.5.0
   resolution: "@mui/core-downloads-tracker@npm:6.5.0"
@@ -3293,7 +3415,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/types@npm:^7.4.12":
+"@mui/types@npm:^7.2.14-dev.20240529-082515-213b5e33ab, @mui/types@npm:^7.4.12":
   version: 7.4.12
   resolution: "@mui/types@npm:7.4.12"
   dependencies:
@@ -3339,7 +3461,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/utils@npm:^6.4.9":
+"@mui/utils@npm:^6.0.0-dev.20240529-082515-213b5e33ab, @mui/utils@npm:^6.4.9":
   version: 6.4.9
   resolution: "@mui/utils@npm:6.4.9"
   dependencies:
@@ -3383,6 +3505,54 @@ __metadata:
     "@emotion/styled":
       optional: true
   checksum: 10/a5557d85beb9991970b47b83303142342b3d223c568c174ddf61d5bbad2b2b48ed132d875274837a062c0bc76d5c65fd45d30ba21618a7ca77b0739caa59a96f
+  languageName: node
+  linkType: hard
+
+"@mui/x-date-pickers@npm:^7.23.6":
+  version: 7.29.4
+  resolution: "@mui/x-date-pickers@npm:7.29.4"
+  dependencies:
+    "@babel/runtime": "npm:^7.25.7"
+    "@mui/utils": "npm:^5.16.6 || ^6.0.0 || ^7.0.0"
+    "@mui/x-internals": "npm:7.29.0"
+    "@types/react-transition-group": "npm:^4.4.11"
+    clsx: "npm:^2.1.1"
+    prop-types: "npm:^15.8.1"
+    react-transition-group: "npm:^4.4.5"
+  peerDependencies:
+    "@emotion/react": ^11.9.0
+    "@emotion/styled": ^11.8.1
+    "@mui/material": ^5.15.14 || ^6.0.0 || ^7.0.0
+    "@mui/system": ^5.15.14 || ^6.0.0 || ^7.0.0
+    date-fns: ^2.25.0 || ^3.2.0 || ^4.0.0
+    date-fns-jalali: ^2.13.0-0 || ^3.2.0-0 || ^4.0.0-0
+    dayjs: ^1.10.7
+    luxon: ^3.0.2
+    moment: ^2.29.4
+    moment-hijri: ^2.1.2 || ^3.0.0
+    moment-jalaali: ^0.7.4 || ^0.8.0 || ^0.9.0 || ^0.10.0
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@emotion/react":
+      optional: true
+    "@emotion/styled":
+      optional: true
+    date-fns:
+      optional: true
+    date-fns-jalali:
+      optional: true
+    dayjs:
+      optional: true
+    luxon:
+      optional: true
+    moment:
+      optional: true
+    moment-hijri:
+      optional: true
+    moment-jalaali:
+      optional: true
+  checksum: 10/d1c87dfd27455532187efd6188573606828dedd7377e4a0d94a0629b9656435272e7a8f1c03df1b1c4fcfe7833f958d62e4e9bbeb4cad8d679427cc1c4802da6
   languageName: node
   linkType: hard
 
@@ -4302,6 +4472,2571 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@stdlib/array-base-filled@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/array-base-filled@npm:0.2.3"
+  checksum: 10/4454986bc552ca1e79572d2928dd5832814f2933ec68b61d9de608c5442074d43c0bf7a477ed597fb57a2abf4d489f37c13991f9caa03d83250dd8a6d352c9b5
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/array-base-zeros@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/array-base-zeros@npm:0.2.3"
+  dependencies:
+    "@stdlib/array-base-filled": "npm:^0.2.2"
+  checksum: 10/4c20e6aa57cfdccd7030b54f848c22e0c6b986ec074fc82ffd88829b12a17ffeb683023a408fc9e53087613064a9ad816c756b1c70eb8c458d678eabab0c753a
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/array-float32@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/array-float32@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-has-float32array-support": "npm:^0.2.3"
+  checksum: 10/cf322add59195ab2bd09120eaa4f1ebc3f4ae5b29102deedce95da38880bd6e9f1de7a27fc276c6585b3b4f7c4f20824f5963bed169ef666ae898cc07b62bcdb
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/array-float64@npm:^0.2.2, @stdlib/array-float64@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/array-float64@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-has-float64array-support": "npm:^0.2.3"
+  checksum: 10/f7cceb5bf222abe3208cff606085fc47ba3dc896a3615de7c15224b7bbd47b8a418bb6d5e64f451b461087111fd8cd4ae6031d61e3874cee8657e8b22682b4d2
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/array-uint16@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/array-uint16@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-has-uint16array-support": "npm:^0.2.3"
+  checksum: 10/6499a25fb07156250eb8f5598f8703c5a4ae62c93a4e551490a7971d4fd875c45f2728c2c2710c44404e1efe12f32995d5ea13a8fd0f22df4041089e6b4b7b0c
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/array-uint32@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/array-uint32@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-has-uint32array-support": "npm:^0.2.3"
+  checksum: 10/81fa41e8767bc9cfab97a835e987d009d88e76a5e65bbbe34d9e944b750a8958fa76da046abecaa06a90f419da539aa88e7c1a5bd1866f72b2221142d150ef9a
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/array-uint8@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/array-uint8@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-has-uint8array-support": "npm:^0.2.3"
+  checksum: 10/93dc2e7550a1386efae06c60f8e8dd1639d4ae5992cf38c492199de51af78e292585c079f34cebd74da194ed83ca8e3b56940c2dda81a09103a65dbb662bae40
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-has-float32array-support@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/assert-has-float32array-support@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-is-float32array": "npm:^0.2.3"
+    "@stdlib/constants-float64-pinf": "npm:^0.2.3"
+  checksum: 10/90c0461fc8767a3b11eeb25b8078ac042eaa7cee589fe458d78b4221a5cb592deff325cf44be4f8b88c25e6106955890ac8ff255d8f8a41a7861c63596aebbdd
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-has-float64array-support@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/assert-has-float64array-support@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-is-float64array": "npm:^0.2.3"
+  checksum: 10/9a61719a1ac20670d4c77f85148a7d044207fbc28ba58d578ffbb0766e6d79e0a2888a4eaae4c1580a957b376c39f6749196c91194e544c67c287f388efe5f9d
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-has-generator-support@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/assert-has-generator-support@npm:0.2.3"
+  dependencies:
+    "@stdlib/utils-eval": "npm:^0.2.3"
+  checksum: 10/6df38ea12bcc3fa2ffaaebb497693995e90c8a32ed2969bbcdc3ab7f5c88a19e2ee16ecafa3829cda0518ed78748a1d44132f624501cab03346913a89d6581ad
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-has-own-property@npm:^0.2.2, @stdlib/assert-has-own-property@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/assert-has-own-property@npm:0.2.3"
+  checksum: 10/cad053cfc4548d96db6c6f962fac7cfa4651520e33f0059315733a521fd7cb00b8d2eb440875339d03db38c5d2e15d8558168b1e5d48eca46a5e1a98e3f6d1d8
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-has-symbol-support@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/assert-has-symbol-support@npm:0.2.3"
+  checksum: 10/c243f3930d28e1a0fcfec45c775c1ee048ace9ddaec5062406fcf25c86d383965b3694a1199993c06c9870c7c89ee15281bd320eaec8cb7857c59f5b9ebf2523
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-has-to-primitive-symbol-support@npm:^0.1.0":
+  version: 0.1.1
+  resolution: "@stdlib/assert-has-to-primitive-symbol-support@npm:0.1.1"
+  dependencies:
+    "@stdlib/assert-has-own-property": "npm:^0.2.3"
+    "@stdlib/symbol-ctor": "npm:^0.2.3"
+  checksum: 10/c15a60efc287659819613ca7ab46c348b018cf203bc7e9221a2dfca75b4d46a071e7d17f3ba6fc5cc1067920d105a710e34b38ccc0cbed26d289fca8b238f1b2
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-has-tostringtag-support@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/assert-has-tostringtag-support@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-has-symbol-support": "npm:^0.2.3"
+  checksum: 10/933b4802a5ff495d1e106ef01bf83f5a6df4a2d362ab88b99f3c086bc074311877437eea5a3bcf6bf18327ecd9a8e37f62094c3184b9b6924c73e2f337277d77
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-has-uint16array-support@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/assert-has-uint16array-support@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-is-uint16array": "npm:^0.2.2"
+    "@stdlib/constants-uint16-max": "npm:^0.2.3"
+  checksum: 10/ec5846dc40352246b7b1b26fdc3df88ff52443bd5b88cfb0da6fa5ece9a06abaa9d5abb20228a98a88c66b2fa3330f718e9fe02f7b9edd7f762ceeb64cb69a0f
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-has-uint32array-support@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/assert-has-uint32array-support@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-is-uint32array": "npm:^0.2.2"
+    "@stdlib/constants-uint32-max": "npm:^0.2.3"
+  checksum: 10/ed9b5d2441204b14a51a5adc7dd8420a5713868795c79e1020386c7e184569edf7401450656fdc5491431e88aa6211acd5cd2f4ee86d193826c13a9b302385d4
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-has-uint8array-support@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/assert-has-uint8array-support@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-is-uint8array": "npm:^0.2.2"
+    "@stdlib/constants-uint8-max": "npm:^0.2.3"
+  checksum: 10/46bdd068729e09b09a2e3834e3de4627235297a062e31b28bbbc7f856b8323e7d7fc8f53c14fc29f3c536824fb73ef864a2db409798c090324e72b81d793654c
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-is-array@npm:^0.2.2, @stdlib/assert-is-array@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/assert-is-array@npm:0.2.3"
+  dependencies:
+    "@stdlib/utils-native-class": "npm:^0.2.2"
+  checksum: 10/3755ebef053cedd86578714c1bc45eca7904a4362b2335f046e39bca442265edd15f589ce8ddddbe34086ed804933735452ee110d164e9858cb2e03c8a9c0af7
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-is-big-endian@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/assert-is-big-endian@npm:0.2.3"
+  dependencies:
+    "@stdlib/array-uint16": "npm:^0.2.2"
+    "@stdlib/array-uint8": "npm:^0.2.2"
+  checksum: 10/93d797d6242e9f88e993db31d320351915032e4b545bd8a43b9d1389f8fc4b8dbf7d925ed7bf0bee1b750432c906744585898b1a74b2aa7da9cfbac676544382
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-is-boolean@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/assert-is-boolean@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-has-tostringtag-support": "npm:^0.2.3"
+    "@stdlib/boolean-ctor": "npm:^0.2.3"
+    "@stdlib/utils-define-nonenumerable-read-only-property": "npm:^0.2.3"
+    "@stdlib/utils-native-class": "npm:^0.2.2"
+  checksum: 10/4420d165eb2a7158025ac8257b7cc2cb549c458f4363a2b8142c3005d6dd288d2dae0047caac0e2ab4124dccf7208ba2f2307fa8b967cf90ea43667a0bfed158
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-is-buffer@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/assert-is-buffer@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-is-object-like": "npm:^0.2.2"
+  checksum: 10/90569f5d25bb02e0928cfd73e8061a9aae09ea920c4016669238faa43fed9030276fa3676635a3c5b268de738246a7320276c823ed93baf0276f1af459afef79
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-is-float32array@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/assert-is-float32array@npm:0.2.3"
+  dependencies:
+    "@stdlib/utils-native-class": "npm:^0.2.2"
+  checksum: 10/9bffff2d1a93419374a215775ef05f2b380db4037d47bb4f14ef1d127f77629bfbefb7a182d66457935850676a85eeb26cfdced47feeaa0e216ede5c3e343ba0
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-is-float64array@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/assert-is-float64array@npm:0.2.3"
+  dependencies:
+    "@stdlib/utils-native-class": "npm:^0.2.2"
+  checksum: 10/7f0e7a054543e4a901d567c60dbae263109e529a83f51e0b23c7b06909ebb86dbca5c0c5db4d1fb59a1441c254da873c0aa7190d78159c0f435825ad5a87e8eb
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-is-function@npm:^0.2.2, @stdlib/assert-is-function@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/assert-is-function@npm:0.2.3"
+  dependencies:
+    "@stdlib/utils-type-of": "npm:^0.2.2"
+  checksum: 10/794928a1d9870343815a3c73f4e802267956f1d14c77528b5dc62b43c33bbe3d689203df6a806dcb07a672543d6d4d4c3e0563fce43a364b272711e1a03ccaee
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-is-little-endian@npm:^0.2.2, @stdlib/assert-is-little-endian@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/assert-is-little-endian@npm:0.2.3"
+  dependencies:
+    "@stdlib/array-uint16": "npm:^0.2.2"
+    "@stdlib/array-uint8": "npm:^0.2.2"
+  checksum: 10/16e32bec0d7fd903ff785e13fc843f0a3f39919f6255c3d7f25b455408718ac80a52df20ffeff357bc6d57e924be17c58e25e1f2e2f3fb88a02fad63fe5a762e
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-is-number@npm:^0.2.2, @stdlib/assert-is-number@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/assert-is-number@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-has-tostringtag-support": "npm:^0.2.3"
+    "@stdlib/number-ctor": "npm:^0.2.3"
+    "@stdlib/utils-define-nonenumerable-read-only-property": "npm:^0.2.3"
+    "@stdlib/utils-native-class": "npm:^0.2.2"
+  checksum: 10/49edc9d27534fc4099ce62e040a4847fc78638264523a6d8f145ce81e4ac3c4754d730036712621c81a471e9b1226b974322c35d8b828a6a9dd1a3c911535a81
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-is-object-like@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/assert-is-object-like@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-tools-array-function": "npm:^0.2.2"
+    "@stdlib/utils-define-nonenumerable-read-only-property": "npm:^0.2.3"
+  checksum: 10/c481ba7f8ec136eca2443a1b7beb0a493418d02cdc00f187540b613f0980510b246aafc3fbb394399c26ad951234594c36ba5254ea59a517bbfe1c80d4859dcd
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-is-object@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/assert-is-object@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-is-array": "npm:^0.2.3"
+  checksum: 10/3eb215799d134493325cc524c0884630a7900524027e213cbbface08a3e88f662ae223f0d7b842818d5ce33b7205adb01705c84f52b5981da8ca3c0ac4476442
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-is-plain-object@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/assert-is-plain-object@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-has-own-property": "npm:^0.2.3"
+    "@stdlib/assert-is-function": "npm:^0.2.3"
+    "@stdlib/assert-is-object": "npm:^0.2.2"
+    "@stdlib/utils-get-prototype-of": "npm:^0.2.3"
+    "@stdlib/utils-native-class": "npm:^0.2.3"
+  checksum: 10/0244fc8775f3b9b67abe8d71fee00b923187281465c515587f2a30eef1f53f72197f852e78f14c360dcf47f859ac01fdc8be004b8ef6d66472b9613b0e07f68e
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-is-regexp@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/assert-is-regexp@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-has-tostringtag-support": "npm:^0.2.3"
+    "@stdlib/utils-native-class": "npm:^0.2.2"
+  checksum: 10/29accd180121f93907030e5fcba680dac2b42df312ce7fcda30096c5e82ca71349e9971cf4cb32f7e100320da0c56faab6354685c5825e0eda7d82cb54ed34f1
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-is-string@npm:^0.2.2, @stdlib/assert-is-string@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/assert-is-string@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-has-tostringtag-support": "npm:^0.2.3"
+    "@stdlib/utils-define-nonenumerable-read-only-property": "npm:^0.2.3"
+    "@stdlib/utils-native-class": "npm:^0.2.2"
+  checksum: 10/e01266fdf82d2591cf5a51ca371caf136d3cf2a8d1524f5e927d0303603fbe0dac9681c15774db39078217be78e736695fac55d7614a3b0823268a3699b0e154
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-is-uint16array@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/assert-is-uint16array@npm:0.2.3"
+  dependencies:
+    "@stdlib/utils-native-class": "npm:^0.2.2"
+  checksum: 10/f0b15685c59ca08e629d7e096f185a62ca737c974f9b1df4f5a536e4396fef86c2d28aedd8a36476cb2615840a64fb5ec18cad0d20bc2dff89e49b3c1d3bea2e
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-is-uint32array@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/assert-is-uint32array@npm:0.2.3"
+  dependencies:
+    "@stdlib/utils-native-class": "npm:^0.2.2"
+  checksum: 10/f9301b5e1f7e13dd51a2ab1e80c8ce6c830d92046291a7795c0072ec7bfc7d44736a28f7c22cb89b7df0654df9c3fe1e62a362a54f25329b0988fee3aeac7e9b
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-is-uint8array@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/assert-is-uint8array@npm:0.2.3"
+  dependencies:
+    "@stdlib/utils-native-class": "npm:^0.2.2"
+  checksum: 10/25f9e5b9e579e2ed4c7b143b7cb2153fef0ca6b0fd53ec55c9136a02f41ea9ed8de858c9cf603b4ddf8e0449a00e457a75585d859839e439b684d5a17023f8b1
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-napi-equal-typedarray-types@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/assert-napi-equal-typedarray-types@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-napi-status-ok": "npm:^0.2.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/294342fe7f4b04914616ee69fa1faac9a16aa8c9ef3fbc6002ec4a716ca84ac11f93de865f3326e6d858ac8571a275e38cc18fd9c71a39d3d4a83d683c788fc0
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-napi-equal-types@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/assert-napi-equal-types@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-napi-status-ok": "npm:^0.2.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/079dd6eb10ae4f5ebd01081de47ee849e79912718e443d87ae83764ca097df8312e105133a26436e642841e8abd59a1db64e52f9b43f390bbd22addf5b575bc2
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-napi-is-type@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/assert-napi-is-type@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-napi-equal-types": "npm:^0.2.2"
+    "@stdlib/assert-napi-status-ok": "npm:^0.2.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/a4fcccf726767ef28ed45dc1e5da3273cd368813dbf51dc2a0876c099c7b96316f8fbcbaac9db8307e74045950bad740f3050172b7172dbf65e459aa44ff0edf
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-napi-is-typedarray@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/assert-napi-is-typedarray@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-napi-status-ok": "npm:^0.2.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/f97b9f00e69f5cab0c5486effe94e2022386cb84662fc8d6fc58771e06b9f9fc27287bdcb23b6c7c16b4c5c953792ab7399127e446b7365b20899a99223c3cb3
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-napi-status-ok@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/assert-napi-status-ok@npm:0.2.3"
+  checksum: 10/990d8b832dd502f78c117b09c6ad47cb89d692f7e7ccd4f7388344056545bb925c6c5f57f972ec1789de6d2634b4e5e7568c9bedb6ab2396536521e87e37dc95
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/assert-tools-array-function@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/assert-tools-array-function@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-is-array": "npm:^0.2.2"
+    "@stdlib/error-tools-fmtprodmsg": "npm:^0.2.3"
+    "@stdlib/string-format": "npm:^0.2.3"
+  checksum: 10/19538a3902489b08b06d348af88960b5cc8b1ffaaba3154db97b327c8be706f8835ebca1046e05cf036d3483f23f0feceef3294ffed7d3c0aa8e38d66689da6d
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/boolean-ctor@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/boolean-ctor@npm:0.2.3"
+  checksum: 10/b02611092436c081492333749534cf461421a532c254a6fa0352b8c1b2798236e8463da7d42a45836761f37fb6515c9a059bc55de36f9a623c07bc6b63e7b7a4
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/complex-float32-ctor@npm:^0.1.0":
+  version: 0.1.1
+  resolution: "@stdlib/complex-float32-ctor@npm:0.1.1"
+  dependencies:
+    "@stdlib/assert-is-number": "npm:^0.2.3"
+    "@stdlib/error-tools-fmtprodmsg": "npm:^0.2.3"
+    "@stdlib/number-float64-base-to-float32": "npm:^0.2.2"
+    "@stdlib/string-format": "npm:^0.2.3"
+    "@stdlib/utils-define-nonenumerable-read-only-property": "npm:^0.2.3"
+    "@stdlib/utils-define-read-only-property": "npm:^0.2.3"
+  checksum: 10/17b85b24c9ce3f044d88ebb3aa7ed44defe733fc3a47cdfb3f77cd29d8f60e7821e36015d9b14147217ec83c668413eba39185fd446eccb389d1e665ac022ec3
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/complex-float32-reim@npm:^0.1.3":
+  version: 0.1.4
+  resolution: "@stdlib/complex-float32-reim@npm:0.1.4"
+  dependencies:
+    "@stdlib/array-float32": "npm:^0.2.3"
+    "@stdlib/complex-float32-ctor": "npm:^0.1.0"
+  checksum: 10/00cc3816ba8836169b9165a0460efb1c23e7c8a7d0a8dcf0acc42da6855800424d9c43260edcdb57fd32b71f93dcd5b1919232f6bd871086374571e4e35a033c
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/complex-float64-ctor@npm:^0.1.1, @stdlib/complex-float64-ctor@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "@stdlib/complex-float64-ctor@npm:0.1.2"
+  dependencies:
+    "@stdlib/assert-is-number": "npm:^0.2.2"
+    "@stdlib/complex-float32-ctor": "npm:^0.1.0"
+    "@stdlib/error-tools-fmtprodmsg": "npm:^0.2.3"
+    "@stdlib/string-format": "npm:^0.2.3"
+    "@stdlib/utils-define-nonenumerable-read-only-property": "npm:^0.2.3"
+    "@stdlib/utils-define-read-only-property": "npm:^0.2.3"
+  checksum: 10/f9593e580106d684e24c657c9b70554f905229de2cd730ab0865b38663a810d9121a303b10ba946aa6471d222280287381625d410ce6bd542e22f891eb0feefa
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/complex-float64-reim@npm:^0.1.3":
+  version: 0.1.4
+  resolution: "@stdlib/complex-float64-reim@npm:0.1.4"
+  dependencies:
+    "@stdlib/array-float64": "npm:^0.2.3"
+    "@stdlib/complex-float64-ctor": "npm:^0.1.2"
+  checksum: 10/c98e3a7e7f03d0c4b0db1f58a12b1c6058a1401c6534b35965ffa0f66bc68b69b75504275dafc2a7982325bf14841d6cd0e6799dfa674ed8534118919b26c6dd
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float16-eps@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float16-eps@npm:0.2.3"
+  checksum: 10/756a9e7d1cbb931517861275a237ac59c11206d1da00c063900e5e13cfd930307f82e7890b6b2260a66fcdc3da395bb42b78912fa709cbafa808c87f43c86880
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float16-exponent-bias@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "@stdlib/constants-float16-exponent-bias@npm:0.3.1"
+  checksum: 10/99ab961d80b41d6a3dd2746f7027fc3c7cf6a51b8ca55d4a126c2865f355c27a1a003243af3f78b9ce1c17b4a46a340225844cb322f8f980dd04722e60218327
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float16-exponent-mask@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@stdlib/constants-float16-exponent-mask@npm:0.1.1"
+  checksum: 10/41fc89368fa6e3b6a3f5d8a35a5ec5aeb3242fba5dac5a3728b9856451eedb30baa14b4bdb9438490ebc75ee05748776ce03190b76000d8b616564fd0e6bb244
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float16-max@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float16-max@npm:0.2.3"
+  checksum: 10/45a7ef0f2c8e4ed1c0f681d426b0809bd1134d0fceb62f9f513564f4354b708be144486d327075c3d4b03527a5b1c8abfd437a01376831ffb29573a49251aae6
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float16-num-significand-bits@npm:^0.0.2":
+  version: 0.0.2
+  resolution: "@stdlib/constants-float16-num-significand-bits@npm:0.0.2"
+  checksum: 10/d84f8e5f172f298408326503ba5a53ff814065a31f7b9230ca16955ce5983dd1bf57b0afbe330766966353d88c1c73ed30c03d9fd77d9e7c17e7d27e9b498bdf
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float16-sign-mask@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@stdlib/constants-float16-sign-mask@npm:0.1.1"
+  checksum: 10/279c5221395165e5fb3847d54bcabd13fe29034157c367ff2df71647f1c8fdfb73e0fd196c179b47e5f9bd4239563beb497ae8eb1818c404a83c133712faf3af
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float16-significand-mask@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@stdlib/constants-float16-significand-mask@npm:0.1.1"
+  checksum: 10/ffc84225917a1f1225d2aeb7cd0e86bdc543be134a6760efeb64b058eeebd7e843f5705902ee22f7141b62f6f5ed2ea60037fd6b6fee6253696075c2b1eb639c
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float16-smallest-normal@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float16-smallest-normal@npm:0.2.3"
+  checksum: 10/741a7ed5d52db5b3ecfaf849d615e02bd150d9c2115e98a26cfbb615909447364529abee554b62422c7951b1deb5d175245e496a1ea52a19759d4ee38cdd9d9d
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float32-abs-mask@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float32-abs-mask@npm:0.2.3"
+  checksum: 10/c94f2d19863660d4819e94a03447ee8412252219ab6393056f86b9c02d3157f48e363792381ca51b1bd9482dc222b193bf288827e02db9128688dc270af64373
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float32-eps@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float32-eps@npm:0.2.3"
+  dependencies:
+    "@stdlib/number-float64-base-to-float32": "npm:^0.2.2"
+  checksum: 10/0c2ab529e2155b5447291905305e2901c7fdd9760ef2b6e70179933d513031f0be34027e3359799a5164fcaf71648affe7940eefe8dd28b9055301ce9f7eec53
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float32-exponent-bias@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float32-exponent-bias@npm:0.2.3"
+  checksum: 10/ebcebd01c199d45b3ebcf8baaa2313fd20c829ee392f29fea9a77d42cd41c5017926570eec58cbb5e95eeaca0a6197e0491a0c559b1086eb3d01ef153f5524cb
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float32-exponent-mask@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float32-exponent-mask@npm:0.2.3"
+  checksum: 10/71ac83354964d3a7bf7073c9ba1c7ebb22e21ea3f560b30d7d6661854df13962199b19b66fd9c549a5eaa1e7e413afca67c0a69c1cebb208d74daeb238071c11
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float32-ninf@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float32-ninf@npm:0.2.3"
+  dependencies:
+    "@stdlib/array-float32": "npm:^0.2.3"
+    "@stdlib/array-uint32": "npm:^0.2.3"
+  checksum: 10/a24cb9fbd35dbd1ff56762882b2d8eb9efba304e8e1f4a65e26299c5dbd6f7af09327efb07b873a3cbb53eb6d5dbb5348daef387a975a24e4cfdb41f417c126f
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float32-num-significand-bits@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@stdlib/constants-float32-num-significand-bits@npm:0.1.1"
+  checksum: 10/2e71cac7c63f2306ac5ae96100614fb70c74ab9ea5cd95815b682e8e6faedb0c52487e6a73c45e8128852bfc3a986240ec02bf0fd2f03ea060ae309bb7a4bef1
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float32-pinf@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float32-pinf@npm:0.2.3"
+  dependencies:
+    "@stdlib/array-float32": "npm:^0.2.3"
+    "@stdlib/array-uint32": "npm:^0.2.3"
+  checksum: 10/5ed9a3de5e167491c51b221aec7b8d486b5c8dd85db4f68799eec19efa1d8071b94681c1d3a0f7d739ad86d4191c7db276965900c1f1cda4a5576632577358a9
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float32-sign-mask@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float32-sign-mask@npm:0.2.3"
+  checksum: 10/fcd964784da96ce3afc0eeed599eb64a3c80700a371676226892e1579951e727af06f9d05ad4ea47dfe093231c159a3854ab73d26f34eb5b14abc091d126f222
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float32-significand-mask@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "@stdlib/constants-float32-significand-mask@npm:0.2.4"
+  checksum: 10/3e1c2ad752d4cb1a7bd4934a9f468bdc4a0a249c8662a6496fca4c5b120946acc1d7887ec5030eb38ff49fae9629758b000e447f9442aece65fbc3190a5bcdb5
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float32-smallest-normal@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float32-smallest-normal@npm:0.2.3"
+  checksum: 10/8c82c72b2b57848f3e7ff5c7c2b5da444208756e8a4065048e7092825660645893990f2bb0b598994ced43d9498a8b6ab0bd119621e147bae31eb18587edb59a
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-e@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-e@npm:0.2.3"
+  checksum: 10/bbf833b0fc2e03969e701bb91a27a49ffc6533499f2129410c1d65cf0f6a50aeff1c89eb9d1a65382a122ff28f7f6718ecdef99b33ba76492a7dd19162d2ef7d
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-eps@npm:^0.2.2, @stdlib/constants-float64-eps@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-eps@npm:0.2.3"
+  checksum: 10/62adf1c3acb1e73025cf812d2e32e9f0a7f661aface712fa262b9bf7385ba36d0235e1cccd847e39b26bdd8c1aca2d3bc8249dd93126d181d9b69cdf7829769a
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-eulergamma@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-eulergamma@npm:0.2.3"
+  checksum: 10/9d4906d0c855bffb6a35d5986bca79a48a662e007e7fe855e728a69a4c8c35aa008bc0097b05a024d56ebae0268b63b937b01bfa53b0f92cc2ebcf61a3f83a4f
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-exponent-bias@npm:^0.2.2, @stdlib/constants-float64-exponent-bias@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-exponent-bias@npm:0.2.3"
+  checksum: 10/c5685409e3311a77543e3def3423d2ca9122627c3a8d4a3e8a6fcd1b4196d481df73693dcca5639e91f9903f369a24b0b9d6a6a6d33d010650e8e0f1767e0291
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-fourth-pi@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-fourth-pi@npm:0.2.3"
+  checksum: 10/f9cc7e45fc46f3ee923c4f72460058db1b58f477e07c6963922855f3464d1c215c84e71691b70f0fb4741be7eae4fde653553fa0096a1d8b0e8980cb7bed6e2c
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-gamma-lanczos-g@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-gamma-lanczos-g@npm:0.2.3"
+  checksum: 10/403ec26905cd79e39878f6fc0d335151fc5b909eba7ea09a9f69914dabb957b500e00bdc67b9a6e9b3109faf352c7e7afef4e6f75709b27a2302bd65098d5f64
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-half-ln-two@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-half-ln-two@npm:0.2.3"
+  checksum: 10/d2d3bcd556baf077c39aa831586f71055629f7ffbb8f9ab9aadc40a185977da2f82181f028d05a539a449397883431fd019316bd44099bb9529a57435d2042e1
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-half-pi@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-half-pi@npm:0.2.3"
+  checksum: 10/48ab6c1c7280dba2682120a0b86ee4a19fb99c8a6919074257008861f508c861b10250e388b70db155e5263b7193b04906a08e8a9f92df3351a8d6970a96323d
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-high-word-abs-mask@npm:^0.2.2, @stdlib/constants-float64-high-word-abs-mask@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-high-word-abs-mask@npm:0.2.3"
+  checksum: 10/261f2bf0f907534f13a97ff8f44be070de6ddf4f63fe8951243f0c2d6aa0dcfc3362c5ea7e751a4c1fff96f76cf66dce2b4ade81294f4531fbb4eb4cbbe52b1c
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-high-word-exponent-mask@npm:^0.2.2, @stdlib/constants-float64-high-word-exponent-mask@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-high-word-exponent-mask@npm:0.2.3"
+  checksum: 10/4e525d0d480212ca57ad1b17911510b9676134b41a324c8f783c18ec76ddff3ac7be56aca46df26259d71d091d5187ac096156cc9df80d1ad93736828bdda4e6
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-high-word-sign-mask@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "@stdlib/constants-float64-high-word-sign-mask@npm:0.2.1"
+  checksum: 10/69aee8e4e0b5434783bffe39e000984b619af208eff617604bd8508e0dfa84866448e66ca49891e14b8d61e72d17bd580b0d16d55b1b1ed5a2769dc882f6851d
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-high-word-significand-mask@npm:^0.2.2, @stdlib/constants-float64-high-word-significand-mask@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-high-word-significand-mask@npm:0.2.3"
+  checksum: 10/3b1670f8da6a3128c0451b2128ebe7f135cd9d5ec9e7000f843b0b43dd16f0880341060cc88fb42766d6ea2f0efb4b51edf66e656f2710da9da361d91244f015
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-ln-two@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-ln-two@npm:0.2.3"
+  checksum: 10/78e6ddc748d509b4486a7a3c1b1f28bd3e4dca94959dfa19839d4a0a2a5ab16d14f96b9eaa4df9a4be0af0dd516e68a008116c362b01a1a643e0a5f035669db9
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-max-base2-exponent-subnormal@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "@stdlib/constants-float64-max-base2-exponent-subnormal@npm:0.2.1"
+  checksum: 10/c27d1e685154ef005411c54c7b43b5771a49a727ac5f43c46bad4cc3033d1dcbb6d61b17e98e30efe95a1d27cbba8c3c9e3490014a54e0590fc6600c8952e0d3
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-max-base2-exponent@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-max-base2-exponent@npm:0.2.3"
+  checksum: 10/0ae6aa8aa91713d09c7c03485e1b5743ffe75828701f1630c925b996632e340b6ec19f49e2b5eb4e8c76db90159222c7c67fcb8276ea74e46c39b215e0369b30
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-max-ln@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-max-ln@npm:0.2.3"
+  checksum: 10/68c6f89ea8088f0c74a4ea2e4d87d1c581cbbf8f6683ba4f9dc42987f386a6c79d8af1d47f087c6effd079ec71fa22a2763995563f6872d1f0dde9b9a0308a69
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-max-nth-factorial@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@stdlib/constants-float64-max-nth-factorial@npm:0.1.1"
+  checksum: 10/0c3e7051e3bbaf82e588cdcab7b85ecaddf3fced3824e2c8c271334099f65416a2c8d971fdd5c8c4632d900442b0fac9221f5b634d4963bd23c7e3e75d083581
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-max-safe-integer@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-max-safe-integer@npm:0.2.3"
+  checksum: 10/817f7df8d2eeea6fb56671bbec8be5f6af1fd6e6d4f5e89a1d51436c36531c8e40282d2384fe9e41e1fc2464894432df062b0af366eef9ef93cde377f6706361
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-max@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-max@npm:0.2.3"
+  checksum: 10/ee4d765eab4460974ded7340418fff95608a5616f799eab15bad2964519f0a4cdbe21604ed2b216135ff9ce911615a6088cb6d05298a69ac3d774ab1d802b6d7
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-min-base2-exponent-subnormal@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "@stdlib/constants-float64-min-base2-exponent-subnormal@npm:0.2.1"
+  checksum: 10/0dc9a8f3ad5b0f2e9c5f9494944c0a37bf92467a4a20e28b9edfad6fa7ab3e6504ee2c1fbf61af650d66224058c2209b12547e8603e3158aa2158370d94443e8
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-min-base2-exponent@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-min-base2-exponent@npm:0.2.3"
+  checksum: 10/6602f267ea3ec898ee71954eb2e932566c278f765293f7deabc4a270c8f3fcdbfc73e7181a7cc6fe79537e40261e4573dc3b338ca41eb2dad422b97c155c924d
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-min-ln@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-min-ln@npm:0.2.3"
+  checksum: 10/b6e2e1035f1af025ec516c40d10c10ab27ebb32f1d424b9e4ed86e7b092088ea133c0fd77e3cc1bc8a60d9464c159eeef62ef48f72819145202383d575844b6f
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-ninf@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-ninf@npm:0.2.3"
+  dependencies:
+    "@stdlib/number-ctor": "npm:^0.2.3"
+  checksum: 10/d12718721f5269efec4466a6ea29c1446ee23e7d2fc3817c0c9a7ca8fd2b9c2b9bd50fbd6885c12e091f55cebaa1b82584d43b130d474b14ec71c9d79ce78462
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-num-high-word-significand-bits@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@stdlib/constants-float64-num-high-word-significand-bits@npm:0.1.1"
+  checksum: 10/25b624a90c1f71222551d67eb80a675fe2fe7520b2e8ef9b8a07ab7d8ca7c3b5d11d50374c27375711c5afa6fc3f4c6576dceb2934438986c616156fa01d3da4
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-pi@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-pi@npm:0.2.3"
+  checksum: 10/41082bed40a29514a4f5c58ca18704cf5db094aef8f666c1dbba6724c809369cc58c791d00fa1bd4d7a7f5b63ae07336c6331e04aea8bc151508433109f19120
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-pinf@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-pinf@npm:0.2.3"
+  checksum: 10/82d7f52b7ba1385b440bd5cc3803963b21e9aa46c5181fca35107651947a566b3e64f3a032291c0e5f2ef5d5c2a69719b4e21d843fe34003fd642a7d0cd0426d
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-smallest-normal@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-smallest-normal@npm:0.2.3"
+  checksum: 10/844b6fe2ffb675c42b3222b8cdbefa54e53daa698082089b877917d5306f5a94f29d76f22951d9f8f47efe4c3c524442a9bcce02de680decfbef56695b93e602
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-sqrt-eps@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-sqrt-eps@npm:0.2.3"
+  checksum: 10/a97f2f73a0444eac785caa624c26a79bfa147b640680e51f1d512fa610205e4c82bc370dd2858b34eeee43b1bcb4f6a77dadcf0c1cd54a17d5eaa3db2276572b
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-sqrt-two-pi@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-sqrt-two-pi@npm:0.2.3"
+  checksum: 10/67844b0595930e1431eb7151f24b7004eb8ca99338324250ffd6175c4245bb8e6734d5cad47a46773cecb94564db845f92d569f2ecfe1fb68ac6509d802f721f
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-float64-two-pi@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-float64-two-pi@npm:0.2.3"
+  checksum: 10/dd2446467d73cd779aaa2086bc7b1a50e1196dd200efec08c83d355c2a0849fe2c54acbadf14622be1ab2b0559f2ef85a5a31104452e297e548cf6e319cf61ef
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-int32-max@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "@stdlib/constants-int32-max@npm:0.3.1"
+  checksum: 10/eee327dd1f8c467a4a7b9a4dccdf99e7b42dc69d6af138b6112955e49511ffd58429331f5a935fcfd54a749401425dfc53b80f4d6a491ab931268e2d78560094
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-uint16-max@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-uint16-max@npm:0.2.3"
+  checksum: 10/52dd0a8fb8d868e2e453982fe11923380c834bcccee57a5847975742a9610f36310980f0edddf0ab397e292ad0931047d10bfdcec5d5b774c013226b0d9c8ac2
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-uint32-max@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-uint32-max@npm:0.2.3"
+  checksum: 10/e248f4ea1e2a7f29f7f07b7d920de928a79960f564bf812440c4b1b0842e79ab906e63292b32be1f38fac553160817b019653abe7341dea0ffb54ee3073e5d8d
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/constants-uint8-max@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/constants-uint8-max@npm:0.2.3"
+  checksum: 10/9c1bee5e2ebeced8a7ea14106321db21504704bb827ef79047d3aaff4c3cba46c8ab4b0f7c18fdd7c082ed42a2937d3b5076d2d120dfe8ef0b45f741362289f7
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/error-tools-fmtprodmsg@npm:^0.2.2, @stdlib/error-tools-fmtprodmsg@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/error-tools-fmtprodmsg@npm:0.2.3"
+  checksum: 10/37d2b758352fa7dd38f56acb18b4854ae43c07191667f2b08336150c0a60a4dd7a3200e03a58e27691c7f6016a496b3610164e38c299261b128121016779be13
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/fs-exists@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/fs-exists@npm:0.2.3"
+  dependencies:
+    "@stdlib/utils-define-nonenumerable-read-only-property": "npm:^0.2.3"
+  checksum: 10/6d6c41693d14aeedd0e53ef397bcc1081192390f3fed5ed060ebf43c83abc99d4957421aa32ed7fcea29475327552d372fe9e8630dc87fb146d71573de48b415
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/fs-resolve-parent-path@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/fs-resolve-parent-path@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-has-own-property": "npm:^0.2.3"
+    "@stdlib/assert-is-function": "npm:^0.2.3"
+    "@stdlib/assert-is-plain-object": "npm:^0.2.3"
+    "@stdlib/assert-is-string": "npm:^0.2.3"
+    "@stdlib/error-tools-fmtprodmsg": "npm:^0.2.3"
+    "@stdlib/fs-exists": "npm:^0.2.3"
+    "@stdlib/process-cwd": "npm:^0.2.3"
+    "@stdlib/string-format": "npm:^0.2.3"
+    "@stdlib/utils-define-nonenumerable-read-only-property": "npm:^0.2.3"
+  checksum: 10/c2d30ab7e4357596901859d17ae77eca7547d8cff918f69f9e40260aa8b2f9daede81c6d60e3867eae0504d4ba6f56c2805cd776da2aba4c719801b962b8730e
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/function-ctor@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/function-ctor@npm:0.2.3"
+  checksum: 10/8d2c47f4fc11afcf33c3e8d3b2a97e3d4f9ecc6db28e40fbe9d5282811cf1624c102a89315bb154a7cd5f509d0f868a1e41de8c727f5f7084f0ed334fba72d7c
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-assert-is-even@npm:^0.2.4":
+  version: 0.2.5
+  resolution: "@stdlib/math-base-assert-is-even@npm:0.2.5"
+  dependencies:
+    "@stdlib/math-base-assert-is-integer": "npm:^0.2.7"
+    "@stdlib/napi-argv": "npm:^0.2.3"
+    "@stdlib/napi-argv-double": "npm:^0.2.2"
+    "@stdlib/napi-create-int32": "npm:^0.0.3"
+    "@stdlib/napi-export": "npm:^0.3.1"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/a449ebedb6da19a0950d07e754910233e87e6bcf38462d301866ca583dd943d2294ee53bed87a12caf533b1ddeb1ff9155670cda41f28169ed51b1d6ef70b78c
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-assert-is-finite@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/math-base-assert-is-finite@npm:0.2.3"
+  dependencies:
+    "@stdlib/constants-float64-ninf": "npm:^0.2.3"
+    "@stdlib/constants-float64-pinf": "npm:^0.2.3"
+    "@stdlib/napi-argv": "npm:^0.2.3"
+    "@stdlib/napi-argv-double": "npm:^0.2.2"
+    "@stdlib/napi-create-int32": "npm:^0.0.3"
+    "@stdlib/napi-export": "npm:^0.3.1"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/e091c5ee05bc6433ce664e1cd0b14028a205323c30a6b58e4c52bb4b623d8e2c2406ffad5916717ac867e5f66c61484c321fb523736e9399a0648883013b114c
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-assert-is-finitef@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/math-base-assert-is-finitef@npm:0.2.3"
+  dependencies:
+    "@stdlib/constants-float32-ninf": "npm:^0.2.2"
+    "@stdlib/constants-float32-pinf": "npm:^0.2.2"
+    "@stdlib/napi-argv": "npm:^0.2.3"
+    "@stdlib/napi-argv-float": "npm:^0.2.3"
+    "@stdlib/napi-create-int32": "npm:^0.0.3"
+    "@stdlib/napi-export": "npm:^0.3.1"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/d8707079ed619fc737f69d917b9d985f6e49a8fc70037cd180980256b23d68f161e434a6e27fd3e937e11ec58cd468b04e23d7a89e02c22bc04162ab51ad7a76
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-assert-is-infinite@npm:^0.2.2, @stdlib/math-base-assert-is-infinite@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/math-base-assert-is-infinite@npm:0.2.3"
+  dependencies:
+    "@stdlib/constants-float64-ninf": "npm:^0.2.3"
+    "@stdlib/constants-float64-pinf": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/23d1b6e1af959345381200a339c9200a8db6d4690d756ff7e6856ded05d8f2031989b8aefae4e787bbf2be91a155ce7858a409983bcb83d8811d8a7e7abba957
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-assert-is-integer@npm:^0.2.7":
+  version: 0.2.7
+  resolution: "@stdlib/math-base-assert-is-integer@npm:0.2.7"
+  dependencies:
+    "@stdlib/math-base-special-floor": "npm:^0.2.4"
+    "@stdlib/napi-argv": "npm:^0.2.3"
+    "@stdlib/napi-argv-double": "npm:^0.2.2"
+    "@stdlib/napi-create-int32": "npm:^0.0.3"
+    "@stdlib/napi-export": "npm:^0.3.1"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/2cba7ed999631f141ce97e2558f3c5189d31bcf154ba7d1d7e02ede6b6c4502999c617d5e333903843c4a5f8d327175c99d2e5f4adae4a2ad80aa7cf19742655
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-assert-is-nan@npm:^0.2.2, @stdlib/math-base-assert-is-nan@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/math-base-assert-is-nan@npm:0.2.3"
+  dependencies:
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/17ede524dc3b0b93cefc8160d41a94392c77070b293aa3657010bc004e50e1494f9dbc52ea7cb217d6417e784adef5f5333c174f6b7277e8cfcd0002397d43e4
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-assert-is-nanf@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/math-base-assert-is-nanf@npm:0.2.3"
+  dependencies:
+    "@stdlib/napi-argv": "npm:^0.2.3"
+    "@stdlib/napi-argv-float": "npm:^0.2.3"
+    "@stdlib/napi-create-int32": "npm:^0.0.3"
+    "@stdlib/napi-export": "npm:^0.3.1"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/2eb3244c9a804717b3a3c12de5561d8377abfb05c72f07ddcac7502d29b02ae4ee15dd7e56a12de19ce4a4a9f537d0e984041d60aa0a8de7f6574309a09e7ce4
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-assert-is-negative-zero@npm:^0.2.2, @stdlib/math-base-assert-is-negative-zero@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/math-base-assert-is-negative-zero@npm:0.2.3"
+  dependencies:
+    "@stdlib/constants-float64-ninf": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/c909a42946b9ea1f16cf11a291ae1d07c90c8896244b69061e7b8976a149d306e17573474c684cefe597af25b069153db6cf9e89dd9f672a0c14266c70e69aea
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-assert-is-odd@npm:^0.3.2":
+  version: 0.3.2
+  resolution: "@stdlib/math-base-assert-is-odd@npm:0.3.2"
+  dependencies:
+    "@stdlib/math-base-assert-is-even": "npm:^0.2.4"
+    "@stdlib/napi-argv": "npm:^0.2.3"
+    "@stdlib/napi-argv-double": "npm:^0.2.2"
+    "@stdlib/napi-create-int32": "npm:^0.0.3"
+    "@stdlib/napi-export": "npm:^0.3.1"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/0abaaffd3ff41d08874dbca141b39597e3e7f50ac5f4b5ad37f677c4115666dfbb81d311664ea0b46dd44020a9e70f1d5a6624f3f4dadfb8ce3f0e7ba93c557c
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-assert-is-positive-zero@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/math-base-assert-is-positive-zero@npm:0.2.3"
+  dependencies:
+    "@stdlib/constants-float64-pinf": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/7bae86604f6f67b12765c3c9bad22c576b20921459b948ccec774844cd32ade616fd693bf646947d008630d4dafac6538ca5437995c651c973d5b8a34dcec114
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-napi-binary@npm:^0.3.2, @stdlib/math-base-napi-binary@npm:^0.3.3":
+  version: 0.3.3
+  resolution: "@stdlib/math-base-napi-binary@npm:0.3.3"
+  dependencies:
+    "@stdlib/complex-float32-ctor": "npm:^0.1.0"
+    "@stdlib/complex-float32-reim": "npm:^0.1.3"
+    "@stdlib/complex-float64-ctor": "npm:^0.1.1"
+    "@stdlib/complex-float64-reim": "npm:^0.1.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/efef7e321432faf138a33d40bc8d6d2aee24d8d39f5d0b81995e6fe0f24c0f4576caa78259015ccbcfcdaa619aaa6bbe17531307eb3a0bcf2cb9d05301f999f4
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-napi-unary@npm:^0.2.6, @stdlib/math-base-napi-unary@npm:^0.2.7":
+  version: 0.2.7
+  resolution: "@stdlib/math-base-napi-unary@npm:0.2.7"
+  dependencies:
+    "@stdlib/complex-float32-ctor": "npm:^0.1.0"
+    "@stdlib/complex-float32-reim": "npm:^0.1.3"
+    "@stdlib/complex-float64-ctor": "npm:^0.1.1"
+    "@stdlib/complex-float64-reim": "npm:^0.1.3"
+    "@stdlib/number-float16-base-to-float64": "npm:^0.1.1"
+    "@stdlib/number-float16-ctor": "npm:^0.1.1"
+    "@stdlib/number-float64-base-to-float16": "npm:^0.1.1"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/23807b6baf8cc2b3b94c48b84c161d4dd9cb602627bf11ac707f015753d5a689ac4d5b41e78da93bf72d25f125d0d01de96a987ba858619597ac2cf2e3522985
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-abs@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/math-base-special-abs@npm:0.2.3"
+  dependencies:
+    "@stdlib/constants-float64-high-word-abs-mask": "npm:^0.2.2"
+    "@stdlib/math-base-napi-unary": "npm:^0.2.6"
+    "@stdlib/number-float64-base-to-words": "npm:^0.2.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/bcd8b767a8e31a75ac0b3b0dbc09c41d8675669c282196abc36c62f5e6e8b2fdde994fbdd88b44efe70961110ea7f31abbea6c05b763c0a7f4c97cd9cbc29540
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-absf@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/math-base-special-absf@npm:0.2.3"
+  dependencies:
+    "@stdlib/constants-float32-abs-mask": "npm:^0.2.2"
+    "@stdlib/math-base-napi-unary": "npm:^0.2.6"
+    "@stdlib/number-float32-base-to-word": "npm:^0.2.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/5ed6db8aa38796e55f138c86520fbc443dc0855239b3fb6172e0a5b06816ba7ea79dd4ce19915a963bac52e36ef3f4dc01c03292cb5d06e6958c8066722f2f91
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-asin@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "@stdlib/math-base-special-asin@npm:0.2.4"
+  dependencies:
+    "@stdlib/constants-float64-fourth-pi": "npm:^0.2.2"
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.3"
+    "@stdlib/math-base-napi-unary": "npm:^0.2.7"
+    "@stdlib/math-base-special-sqrt": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/abe56603caaed7f71b6721794586388b26a45e336e89a5a1f02b0518b88f348d32ec13ca5679cfc5d441e125197137f2d834bacff555ef08d4727d14ce5efbd4
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-beta@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "@stdlib/math-base-special-beta@npm:0.3.1"
+  dependencies:
+    "@stdlib/constants-float64-e": "npm:^0.2.3"
+    "@stdlib/constants-float64-eps": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.3"
+    "@stdlib/math-base-napi-binary": "npm:^0.3.3"
+    "@stdlib/math-base-special-abs": "npm:^0.2.3"
+    "@stdlib/math-base-special-exp": "npm:^0.2.4"
+    "@stdlib/math-base-special-log1p": "npm:^0.2.4"
+    "@stdlib/math-base-special-pow": "npm:^0.3.0"
+    "@stdlib/math-base-special-sqrt": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/fa0fa1a9c76596fc3cddd8fb8322485a9a57fc17fa04f8740ace7b41577773d3e5533b9186421cf0329517cc0306c8046d5748fbe635b5723b8779d7ca380456
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-betainc@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/math-base-special-betainc@npm:0.2.3"
+  dependencies:
+    "@stdlib/math-base-special-kernel-betainc": "npm:^0.2.2"
+  checksum: 10/183f7c6a50c3007d8b8848741996d88b37963f065a3048e3779df5acc80078bde92fe6c1c2fe3c9c1f78a862a65c35df205dbc25ce5283743ec1b7310f34a2eb
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-binomcoef@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "@stdlib/math-base-special-binomcoef@npm:0.3.1"
+  dependencies:
+    "@stdlib/constants-float64-max-safe-integer": "npm:^0.2.2"
+    "@stdlib/constants-float64-pinf": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-integer": "npm:^0.2.7"
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-odd": "npm:^0.3.2"
+    "@stdlib/math-base-napi-binary": "npm:^0.3.3"
+    "@stdlib/math-base-special-floor": "npm:^0.2.4"
+    "@stdlib/math-base-special-gcd": "npm:^0.3.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/78b8a29340dc2a0bd4db5e4ad8c4d4887fb6d9e92bea5234a2bdb2868ae48901ee8055754b5e2d43112cd9fc6eafb845efe59f0a7beaccd808453dbe25a4dc56
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-ceil@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/math-base-special-ceil@npm:0.2.3"
+  dependencies:
+    "@stdlib/math-base-napi-unary": "npm:^0.2.6"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/ff408f8d8e5c51f919a207a1b7f376e6e1aad3f426b07111dfcac0e479c5f261310164a51960a397ab269f2d639bbba6c8a290757dc664077614af302fa2a75a
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-copysign@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/math-base-special-copysign@npm:0.2.3"
+  dependencies:
+    "@stdlib/constants-float64-high-word-abs-mask": "npm:^0.2.3"
+    "@stdlib/constants-float64-high-word-sign-mask": "npm:^0.2.1"
+    "@stdlib/math-base-napi-binary": "npm:^0.3.3"
+    "@stdlib/number-float64-base-from-words": "npm:^0.2.2"
+    "@stdlib/number-float64-base-get-high-word": "npm:^0.2.3"
+    "@stdlib/number-float64-base-to-words": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/81bb82877937abc9431e47d2f0e662091ddb94803c6870c1fe5c879a8a966bd011a8229879559436a282162848ff9ff5c73ee8932c90aeafd66e06b130154c7f
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-cos@npm:^0.3.0":
+  version: 0.3.1
+  resolution: "@stdlib/math-base-special-cos@npm:0.3.1"
+  dependencies:
+    "@stdlib/constants-float64-high-word-abs-mask": "npm:^0.2.3"
+    "@stdlib/constants-float64-high-word-exponent-mask": "npm:^0.2.3"
+    "@stdlib/math-base-napi-unary": "npm:^0.2.7"
+    "@stdlib/math-base-special-kernel-cos": "npm:^0.2.4"
+    "@stdlib/math-base-special-kernel-sin": "npm:^0.2.4"
+    "@stdlib/math-base-special-rempio2": "npm:^0.3.0"
+    "@stdlib/number-float64-base-get-high-word": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/bba7f000c2ae02dbbf5574e08bab55ad3369d3984dd95e0738dd9c166a75f477e0bcb3a794640caf5ac25677e89de4299ffce1a80ff23c82cab95be9314d3585
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-erfc@npm:^0.2.5":
+  version: 0.2.5
+  resolution: "@stdlib/math-base-special-erfc@npm:0.2.5"
+  dependencies:
+    "@stdlib/constants-float64-ninf": "npm:^0.2.3"
+    "@stdlib/constants-float64-pinf": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.3"
+    "@stdlib/math-base-napi-unary": "npm:^0.2.7"
+    "@stdlib/math-base-special-exp": "npm:^0.2.4"
+    "@stdlib/number-float64-base-set-low-word": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/67c534b1192366ceaf7a5527c0f785c7b92eb5aa6620ec20b81ed0b6251d5837bbc0938ceac5c51f93b3f7d6c0064018a8e6323f8b06a89d285f6927c56df88c
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-exp@npm:^0.2.4, @stdlib/math-base-special-exp@npm:^0.2.5":
+  version: 0.2.5
+  resolution: "@stdlib/math-base-special-exp@npm:0.2.5"
+  dependencies:
+    "@stdlib/constants-float64-ninf": "npm:^0.2.3"
+    "@stdlib/constants-float64-pinf": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.3"
+    "@stdlib/math-base-napi-unary": "npm:^0.2.7"
+    "@stdlib/math-base-special-ldexp": "npm:^0.2.4"
+    "@stdlib/math-base-special-trunc": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/0591b559d08e3bd02ab0103529d5b8946b6ab16c2928a6578bcefaac9c2d84bb2552546e18510798797d907581364f3d796145f5ff6ead62369266e2629efd8b
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-expm1@npm:^0.2.3, @stdlib/math-base-special-expm1@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "@stdlib/math-base-special-expm1@npm:0.2.4"
+  dependencies:
+    "@stdlib/constants-float64-exponent-bias": "npm:^0.2.3"
+    "@stdlib/constants-float64-half-ln-two": "npm:^0.2.3"
+    "@stdlib/constants-float64-ninf": "npm:^0.2.3"
+    "@stdlib/constants-float64-pinf": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.3"
+    "@stdlib/math-base-napi-unary": "npm:^0.2.7"
+    "@stdlib/number-float64-base-from-words": "npm:^0.2.2"
+    "@stdlib/number-float64-base-get-high-word": "npm:^0.2.3"
+    "@stdlib/number-float64-base-set-high-word": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/8d50072f5c32ff595f1e1e274635c139128ed6909ecf8fe86038098476a3ec98f2eb389ad36f7ed1e1b4c81cb9fb5e93d6f02bba40f79d413a88395a03951c2b
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-factorial@npm:^0.3.2":
+  version: 0.3.2
+  resolution: "@stdlib/math-base-special-factorial@npm:0.3.2"
+  dependencies:
+    "@stdlib/constants-float64-max-nth-factorial": "npm:^0.1.1"
+    "@stdlib/constants-float64-pinf": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-integer": "npm:^0.2.7"
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.3"
+    "@stdlib/math-base-napi-unary": "npm:^0.2.7"
+    "@stdlib/math-base-special-gamma": "npm:^0.3.0"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/e8e152c3a1bd1c5d6880617113b43a35c13961306c9990884f2681c60ee8a0c9406b5d5a2c6a1cf535c8bf352ce029f5b4322a3a054a1bf25003490df1678113
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-floor@npm:^0.2.3, @stdlib/math-base-special-floor@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "@stdlib/math-base-special-floor@npm:0.2.4"
+  dependencies:
+    "@stdlib/math-base-napi-unary": "npm:^0.2.6"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/b45db2e83a626e5e69553826125668c930cbae85f13864f9f053b65d80e9c59ead0cbc01e3b1167d804e3ad20227cd91dc5474381c2250ad8e69d78e5b00cb3a
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-fmod@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@stdlib/math-base-special-fmod@npm:0.1.1"
+  dependencies:
+    "@stdlib/constants-float64-exponent-bias": "npm:^0.2.2"
+    "@stdlib/constants-float64-high-word-abs-mask": "npm:^0.2.2"
+    "@stdlib/constants-float64-high-word-exponent-mask": "npm:^0.2.2"
+    "@stdlib/constants-float64-high-word-sign-mask": "npm:^0.2.1"
+    "@stdlib/constants-float64-high-word-significand-mask": "npm:^0.2.2"
+    "@stdlib/constants-float64-min-base2-exponent": "npm:^0.2.2"
+    "@stdlib/math-base-napi-binary": "npm:^0.3.2"
+    "@stdlib/number-float64-base-from-words": "npm:^0.2.2"
+    "@stdlib/number-float64-base-to-words": "npm:^0.2.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/d7ef14b37554774f52f06afd641b770ecb80f52972de3f2dc1757c6cf7391022dccf487768036bc2d551ff31304f56b2918ca9a54cfbebd96e6a469735d878de
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-gamma-delta-ratio@npm:^0.3.0":
+  version: 0.3.1
+  resolution: "@stdlib/math-base-special-gamma-delta-ratio@npm:0.3.1"
+  dependencies:
+    "@stdlib/constants-float64-e": "npm:^0.2.3"
+    "@stdlib/constants-float64-eps": "npm:^0.2.3"
+    "@stdlib/constants-float64-gamma-lanczos-g": "npm:^0.2.3"
+    "@stdlib/constants-float64-max-nth-factorial": "npm:^0.1.1"
+    "@stdlib/math-base-napi-binary": "npm:^0.3.3"
+    "@stdlib/math-base-special-abs": "npm:^0.2.3"
+    "@stdlib/math-base-special-exp": "npm:^0.2.5"
+    "@stdlib/math-base-special-factorial": "npm:^0.3.2"
+    "@stdlib/math-base-special-floor": "npm:^0.2.4"
+    "@stdlib/math-base-special-gamma": "npm:^0.3.0"
+    "@stdlib/math-base-special-gamma-lanczos-sum": "npm:^0.3.2"
+    "@stdlib/math-base-special-log1p": "npm:^0.2.4"
+    "@stdlib/math-base-special-pow": "npm:^0.3.1"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/3b64bcaa070442fb30d58982e9a32b3713cb04ae6d82c5c7627fd53dc70f92a90c4ce04a667c0b57fd5aac0e1885a9eae009d272d89968ef8531ae3e13f55683
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-gamma-lanczos-sum-expg-scaled@npm:^0.2.2":
+  version: 0.2.2
+  resolution: "@stdlib/math-base-special-gamma-lanczos-sum-expg-scaled@npm:0.2.2"
+  dependencies:
+    "@stdlib/math-base-napi-unary": "npm:^0.2.6"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/4f3b315811349e2d6d3f9d3ae5ae5cd61d46381de355e5ecfc0266f6b33540153119bd751d92ef8e1c714e20721d3351fbbf8f4b6fa81e944e974582af4b2be0
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-gamma-lanczos-sum@npm:^0.3.2":
+  version: 0.3.2
+  resolution: "@stdlib/math-base-special-gamma-lanczos-sum@npm:0.3.2"
+  dependencies:
+    "@stdlib/math-base-napi-unary": "npm:^0.2.6"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/99f55cf18311d33d653c7e5910a5bf4505e4539e48e8e5eed5dbf94ed208b6568f67a1454ad8be3a72a9aabf90fe5dfd0769984d80802158b56d6ee10e9ddd80
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-gamma1pm1@npm:^0.3.0":
+  version: 0.3.1
+  resolution: "@stdlib/math-base-special-gamma1pm1@npm:0.3.1"
+  dependencies:
+    "@stdlib/constants-float64-eps": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.3"
+    "@stdlib/math-base-napi-unary": "npm:^0.2.7"
+    "@stdlib/math-base-special-expm1": "npm:^0.2.4"
+    "@stdlib/math-base-special-gamma": "npm:^0.3.0"
+    "@stdlib/math-base-special-ln": "npm:^0.2.5"
+    "@stdlib/math-base-special-log1p": "npm:^0.2.4"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/938660cb44c4f1a75ba888eb5f65615791a9b5174df2d5bfc1fe1373ec7723d987a37311c85bb8078d0513a981ac349cd66a158c992c145ace4082a1313718eb
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-gamma@npm:^0.3.0":
+  version: 0.3.1
+  resolution: "@stdlib/math-base-special-gamma@npm:0.3.1"
+  dependencies:
+    "@stdlib/constants-float64-eulergamma": "npm:^0.2.3"
+    "@stdlib/constants-float64-ninf": "npm:^0.2.3"
+    "@stdlib/constants-float64-pi": "npm:^0.2.3"
+    "@stdlib/constants-float64-pinf": "npm:^0.2.3"
+    "@stdlib/constants-float64-sqrt-two-pi": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-integer": "npm:^0.2.7"
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-negative-zero": "npm:^0.2.3"
+    "@stdlib/math-base-napi-unary": "npm:^0.2.7"
+    "@stdlib/math-base-special-abs": "npm:^0.2.3"
+    "@stdlib/math-base-special-exp": "npm:^0.2.5"
+    "@stdlib/math-base-special-floor": "npm:^0.2.4"
+    "@stdlib/math-base-special-pow": "npm:^0.3.1"
+    "@stdlib/math-base-special-sin": "npm:^0.3.0"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/b30791f638ceae6cf66d379cb7522968acbc4fe49ced7e1a739ac8c286ec87ded30a40bf6f9bcc021b50186c299da75c32c91950ed1042022829deddbb499cc8
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-gammainc@npm:^0.3.0":
+  version: 0.3.1
+  resolution: "@stdlib/math-base-special-gammainc@npm:0.3.1"
+  dependencies:
+    "@stdlib/constants-float32-smallest-normal": "npm:^0.2.3"
+    "@stdlib/constants-float64-e": "npm:^0.2.3"
+    "@stdlib/constants-float64-eps": "npm:^0.2.3"
+    "@stdlib/constants-float64-gamma-lanczos-g": "npm:^0.2.3"
+    "@stdlib/constants-float64-max": "npm:^0.2.3"
+    "@stdlib/constants-float64-max-ln": "npm:^0.2.3"
+    "@stdlib/constants-float64-max-nth-factorial": "npm:^0.1.1"
+    "@stdlib/constants-float64-min-ln": "npm:^0.2.3"
+    "@stdlib/constants-float64-pi": "npm:^0.2.3"
+    "@stdlib/constants-float64-pinf": "npm:^0.2.3"
+    "@stdlib/constants-float64-sqrt-eps": "npm:^0.2.3"
+    "@stdlib/constants-float64-sqrt-two-pi": "npm:^0.2.3"
+    "@stdlib/constants-float64-two-pi": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.3"
+    "@stdlib/math-base-special-abs": "npm:^0.2.3"
+    "@stdlib/math-base-special-erfc": "npm:^0.2.5"
+    "@stdlib/math-base-special-exp": "npm:^0.2.5"
+    "@stdlib/math-base-special-floor": "npm:^0.2.4"
+    "@stdlib/math-base-special-gamma": "npm:^0.3.0"
+    "@stdlib/math-base-special-gamma-lanczos-sum-expg-scaled": "npm:^0.2.2"
+    "@stdlib/math-base-special-gamma1pm1": "npm:^0.3.0"
+    "@stdlib/math-base-special-gammaln": "npm:^0.3.0"
+    "@stdlib/math-base-special-ln": "npm:^0.2.5"
+    "@stdlib/math-base-special-log1pmx": "npm:^0.2.4"
+    "@stdlib/math-base-special-max": "npm:^0.3.1"
+    "@stdlib/math-base-special-min": "npm:^0.2.4"
+    "@stdlib/math-base-special-pow": "npm:^0.3.1"
+    "@stdlib/math-base-special-powm1": "npm:^0.3.2"
+    "@stdlib/math-base-special-sqrt": "npm:^0.2.3"
+    "@stdlib/math-base-tools-continued-fraction": "npm:^0.2.3"
+    "@stdlib/math-base-tools-evalpoly": "npm:^0.2.3"
+    "@stdlib/math-base-tools-sum-series": "npm:^0.2.3"
+    "@stdlib/napi-argv": "npm:^0.2.3"
+    "@stdlib/napi-argv-bool": "npm:^0.1.1"
+    "@stdlib/napi-argv-double": "npm:^0.2.2"
+    "@stdlib/napi-create-double": "npm:^0.0.3"
+    "@stdlib/napi-export": "npm:^0.3.1"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/7482018a443d075ff339c1646281db3d61422b1cfec7f83262ffeea6d4b21be0f678942292bb49a8e996a81a504e926ccdbe7dbd7b63bece7806c5c2df46ff74
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-gammaln@npm:^0.3.0":
+  version: 0.3.1
+  resolution: "@stdlib/math-base-special-gammaln@npm:0.3.1"
+  dependencies:
+    "@stdlib/constants-float64-pi": "npm:^0.2.3"
+    "@stdlib/constants-float64-pinf": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-infinite": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.3"
+    "@stdlib/math-base-napi-unary": "npm:^0.2.7"
+    "@stdlib/math-base-special-abs": "npm:^0.2.3"
+    "@stdlib/math-base-special-ln": "npm:^0.2.5"
+    "@stdlib/math-base-special-sinpi": "npm:^0.3.0"
+    "@stdlib/math-base-special-trunc": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/f7f3b4cf9a3e47164860adf697892a6ffc1107dfb137d756f999997b5ceee13eb8263509e22131d631217c6c587ebea5ca193cbc47eb2160517e2120525ac940
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-gcd@npm:^0.3.2":
+  version: 0.3.2
+  resolution: "@stdlib/math-base-special-gcd@npm:0.3.2"
+  dependencies:
+    "@stdlib/constants-float64-ninf": "npm:^0.2.3"
+    "@stdlib/constants-float64-pinf": "npm:^0.2.3"
+    "@stdlib/constants-int32-max": "npm:^0.3.1"
+    "@stdlib/math-base-assert-is-integer": "npm:^0.2.7"
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.3"
+    "@stdlib/math-base-napi-binary": "npm:^0.3.3"
+    "@stdlib/math-base-special-fmod": "npm:^0.1.1"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/79c0b18fc97b454c9ce7726e5f41f438d4873bad666dfba30802a265944565e1a4408af180464274eda97db3f0eeeede5489438d051869292eb9f99971ccc244
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-kernel-betainc@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/math-base-special-kernel-betainc@npm:0.2.3"
+  dependencies:
+    "@stdlib/constants-float64-e": "npm:^0.2.3"
+    "@stdlib/constants-float64-eps": "npm:^0.2.3"
+    "@stdlib/constants-float64-gamma-lanczos-g": "npm:^0.2.3"
+    "@stdlib/constants-float64-half-pi": "npm:^0.2.3"
+    "@stdlib/constants-float64-max": "npm:^0.2.3"
+    "@stdlib/constants-float64-max-ln": "npm:^0.2.3"
+    "@stdlib/constants-float64-min-ln": "npm:^0.2.3"
+    "@stdlib/constants-float64-pi": "npm:^0.2.3"
+    "@stdlib/constants-float64-smallest-normal": "npm:^0.2.3"
+    "@stdlib/constants-int32-max": "npm:^0.3.1"
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.3"
+    "@stdlib/math-base-special-abs": "npm:^0.2.3"
+    "@stdlib/math-base-special-asin": "npm:^0.2.4"
+    "@stdlib/math-base-special-beta": "npm:^0.3.1"
+    "@stdlib/math-base-special-binomcoef": "npm:^0.3.1"
+    "@stdlib/math-base-special-exp": "npm:^0.2.5"
+    "@stdlib/math-base-special-expm1": "npm:^0.2.4"
+    "@stdlib/math-base-special-factorial": "npm:^0.3.2"
+    "@stdlib/math-base-special-floor": "npm:^0.2.4"
+    "@stdlib/math-base-special-gamma": "npm:^0.3.0"
+    "@stdlib/math-base-special-gamma-delta-ratio": "npm:^0.3.0"
+    "@stdlib/math-base-special-gamma-lanczos-sum-expg-scaled": "npm:^0.2.2"
+    "@stdlib/math-base-special-gammainc": "npm:^0.3.0"
+    "@stdlib/math-base-special-gammaln": "npm:^0.3.0"
+    "@stdlib/math-base-special-ln": "npm:^0.2.5"
+    "@stdlib/math-base-special-log1p": "npm:^0.2.4"
+    "@stdlib/math-base-special-max": "npm:^0.3.1"
+    "@stdlib/math-base-special-maxabs": "npm:^0.3.1"
+    "@stdlib/math-base-special-min": "npm:^0.2.4"
+    "@stdlib/math-base-special-minabs": "npm:^0.2.4"
+    "@stdlib/math-base-special-pow": "npm:^0.3.1"
+    "@stdlib/math-base-special-sqrt": "npm:^0.2.3"
+    "@stdlib/math-base-tools-continued-fraction": "npm:^0.2.3"
+    "@stdlib/math-base-tools-sum-series": "npm:^0.2.3"
+    "@stdlib/utils-define-nonenumerable-read-only-property": "npm:^0.2.3"
+  checksum: 10/4cc8c81eb7868e1a579269dab428ea2e23a0da205a7dcb8797ea2934afc5a190fe2f464afc7eee0db824fda67608994c22bb27eb24dab97dfb0ef1cef9a88bc4
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-kernel-cos@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "@stdlib/math-base-special-kernel-cos@npm:0.2.4"
+  dependencies:
+    "@stdlib/math-base-napi-binary": "npm:^0.3.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/c273dcd0a7a1c290e3949d16f3eae6c729ce85c17fc5997a0f12b4cbb6a79dd0a2b0d60a43dbc89bdd38595940cc736073047eb167a05b8257d43e09896da20c
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-kernel-sin@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "@stdlib/math-base-special-kernel-sin@npm:0.2.4"
+  dependencies:
+    "@stdlib/math-base-napi-binary": "npm:^0.3.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/29375a5d9fb80ac860f1774572897ce0c2459f110c66187c9a09960253dd62068567df27667ba330b9f8bf8fdd4687297a14f0371835dd2a474558dd19575b49
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-ldexp@npm:^0.2.4, @stdlib/math-base-special-ldexp@npm:^0.2.5":
+  version: 0.2.5
+  resolution: "@stdlib/math-base-special-ldexp@npm:0.2.5"
+  dependencies:
+    "@stdlib/constants-float64-exponent-bias": "npm:^0.2.3"
+    "@stdlib/constants-float64-max-base2-exponent": "npm:^0.2.3"
+    "@stdlib/constants-float64-max-base2-exponent-subnormal": "npm:^0.2.1"
+    "@stdlib/constants-float64-min-base2-exponent-subnormal": "npm:^0.2.1"
+    "@stdlib/constants-float64-ninf": "npm:^0.2.3"
+    "@stdlib/constants-float64-pinf": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-infinite": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.3"
+    "@stdlib/math-base-special-copysign": "npm:^0.2.3"
+    "@stdlib/number-float64-base-exponent": "npm:^0.2.3"
+    "@stdlib/number-float64-base-from-words": "npm:^0.2.2"
+    "@stdlib/number-float64-base-normalize": "npm:^0.2.4"
+    "@stdlib/number-float64-base-to-words": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/a7fb67c2b1e526b47022ae4dffb44cb63ebfa1bb2f5885d06a08a39df66ef08c48cbc9cbdbcfce3671c5d5e653f5537add2e31fbec9ad52296869a0ebe090c4b
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-ln@npm:^0.2.5":
+  version: 0.2.5
+  resolution: "@stdlib/math-base-special-ln@npm:0.2.5"
+  dependencies:
+    "@stdlib/constants-float64-exponent-bias": "npm:^0.2.3"
+    "@stdlib/constants-float64-ninf": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.3"
+    "@stdlib/math-base-napi-unary": "npm:^0.2.7"
+    "@stdlib/number-float64-base-get-high-word": "npm:^0.2.2"
+    "@stdlib/number-float64-base-set-high-word": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/d2ffb7fd4c1d27b8ad79d3c4033e100455d85db5616b649e335191fc2c90bd3b5876721a928b8d6d0289d80ed5efbb67e666c13c59ac40403f184185f1d1ed51
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-log1p@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "@stdlib/math-base-special-log1p@npm:0.2.4"
+  dependencies:
+    "@stdlib/constants-float64-exponent-bias": "npm:^0.2.3"
+    "@stdlib/constants-float64-ninf": "npm:^0.2.3"
+    "@stdlib/constants-float64-pinf": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.3"
+    "@stdlib/math-base-napi-unary": "npm:^0.2.7"
+    "@stdlib/number-float64-base-get-high-word": "npm:^0.2.2"
+    "@stdlib/number-float64-base-set-high-word": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/803cc18507a25b1927a4b944b86c82d1339cab0a21a1fc36e16c241ca82a1e5086592b4a6ad876bb74ade260d3eef9b80a1da68646455d2694ec2eeabe07ab4c
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-log1pmx@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "@stdlib/math-base-special-log1pmx@npm:0.2.4"
+  dependencies:
+    "@stdlib/constants-float64-eps": "npm:^0.2.3"
+    "@stdlib/math-base-napi-unary": "npm:^0.2.7"
+    "@stdlib/math-base-special-abs": "npm:^0.2.3"
+    "@stdlib/math-base-special-ln": "npm:^0.2.5"
+    "@stdlib/math-base-special-log1p": "npm:^0.2.4"
+    "@stdlib/math-base-tools-sum-series": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/99dd1b8074111982f882f4e92c2786484ef89c5c6ae17930fd0f239dfb3d909cf290e8dc5a452bf77d6defa573e7404589a02f29addfaed7a66cd29221d251aa
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-max@npm:^0.3.0, @stdlib/math-base-special-max@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "@stdlib/math-base-special-max@npm:0.3.1"
+  dependencies:
+    "@stdlib/constants-float64-pinf": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-positive-zero": "npm:^0.2.3"
+    "@stdlib/math-base-napi-binary": "npm:^0.3.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/dbd7ee253aa2fb65339a1df3a0fb52e18352790ecec71a5f6f87fd5fdcbdadc9792c2e46a0ffe46aca69e050c4533e26165928b7f8b47442d3c557a81d01c619
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-maxabs@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "@stdlib/math-base-special-maxabs@npm:0.3.1"
+  dependencies:
+    "@stdlib/math-base-napi-binary": "npm:^0.3.3"
+    "@stdlib/math-base-special-abs": "npm:^0.2.3"
+    "@stdlib/math-base-special-max": "npm:^0.3.0"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/3d712069c68462ae5bba8a3ac75a64292edf3c6b85fdad16b0cef82717aa242ffc0601543de50a6ed94e34a070a4f60c331fd20444d0bff2dc3bb1d5e9cfbebe
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-min@npm:^0.2.3, @stdlib/math-base-special-min@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "@stdlib/math-base-special-min@npm:0.2.4"
+  dependencies:
+    "@stdlib/constants-float64-ninf": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-negative-zero": "npm:^0.2.2"
+    "@stdlib/math-base-napi-binary": "npm:^0.3.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/95a3b897ea0fe0af2b96f225ddbf6720eb86de9733ee04579ac512df6811e6157ef79155541f0dba4a2cdcc7c3524492ba01132a26a0fd0393d156c38e5195bc
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-minabs@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "@stdlib/math-base-special-minabs@npm:0.2.4"
+  dependencies:
+    "@stdlib/math-base-napi-binary": "npm:^0.3.3"
+    "@stdlib/math-base-special-abs": "npm:^0.2.3"
+    "@stdlib/math-base-special-min": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/9f6a4a67a6f6fec542c2bce36165e6515587a618f3da474e20dd0c068529e480f34a4ed5e52ce9abbcf52cc5dcbb8807cd6130ea714d53b48dd45280eb12a941
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-pow@npm:^0.3.0, @stdlib/math-base-special-pow@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "@stdlib/math-base-special-pow@npm:0.3.1"
+  dependencies:
+    "@stdlib/constants-float64-exponent-bias": "npm:^0.2.3"
+    "@stdlib/constants-float64-high-word-abs-mask": "npm:^0.2.3"
+    "@stdlib/constants-float64-high-word-significand-mask": "npm:^0.2.3"
+    "@stdlib/constants-float64-ln-two": "npm:^0.2.3"
+    "@stdlib/constants-float64-ninf": "npm:^0.2.3"
+    "@stdlib/constants-float64-num-high-word-significand-bits": "npm:^0.1.1"
+    "@stdlib/constants-float64-pinf": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-infinite": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-integer": "npm:^0.2.7"
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-odd": "npm:^0.3.2"
+    "@stdlib/math-base-napi-binary": "npm:^0.3.3"
+    "@stdlib/math-base-special-abs": "npm:^0.2.3"
+    "@stdlib/math-base-special-copysign": "npm:^0.2.3"
+    "@stdlib/math-base-special-ldexp": "npm:^0.2.4"
+    "@stdlib/math-base-special-sqrt": "npm:^0.2.3"
+    "@stdlib/number-float64-base-get-high-word": "npm:^0.2.3"
+    "@stdlib/number-float64-base-set-high-word": "npm:^0.2.3"
+    "@stdlib/number-float64-base-set-low-word": "npm:^0.2.3"
+    "@stdlib/number-float64-base-to-words": "npm:^0.2.3"
+    "@stdlib/number-uint32-base-to-int32": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/7767f14461043ae53d0074732dd9d4c7e00129b44622e3ec9b1dd0405dafad9169f76228b6189a8b815f0868fd35ee5ffa8a8f0703df14ee31d827e26469b1fd
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-powm1@npm:^0.3.2":
+  version: 0.3.2
+  resolution: "@stdlib/math-base-special-powm1@npm:0.3.2"
+  dependencies:
+    "@stdlib/math-base-assert-is-infinite": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.3"
+    "@stdlib/math-base-napi-binary": "npm:^0.3.3"
+    "@stdlib/math-base-special-abs": "npm:^0.2.3"
+    "@stdlib/math-base-special-expm1": "npm:^0.2.3"
+    "@stdlib/math-base-special-fmod": "npm:^0.1.1"
+    "@stdlib/math-base-special-ln": "npm:^0.2.5"
+    "@stdlib/math-base-special-pow": "npm:^0.3.0"
+    "@stdlib/math-base-special-trunc": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/d9c559b652976611713c3d1f01dda8308ae2e3cea1391910ed85c56885af71c5a76c1168ed8ec598028f1a2682cc601b6f69b646a90af330025f7699b89ef423
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-rempio2@npm:^0.3.0":
+  version: 0.3.1
+  resolution: "@stdlib/math-base-special-rempio2@npm:0.3.1"
+  dependencies:
+    "@stdlib/array-base-zeros": "npm:^0.2.2"
+    "@stdlib/constants-float64-high-word-abs-mask": "npm:^0.2.3"
+    "@stdlib/constants-float64-high-word-exponent-mask": "npm:^0.2.3"
+    "@stdlib/constants-float64-high-word-significand-mask": "npm:^0.2.3"
+    "@stdlib/math-base-special-floor": "npm:^0.2.4"
+    "@stdlib/math-base-special-ldexp": "npm:^0.2.5"
+    "@stdlib/math-base-special-round": "npm:^0.3.1"
+    "@stdlib/napi-argv": "npm:^0.2.3"
+    "@stdlib/napi-argv-double": "npm:^0.2.2"
+    "@stdlib/napi-argv-float64array": "npm:^0.2.3"
+    "@stdlib/napi-create-double": "npm:^0.0.3"
+    "@stdlib/napi-export": "npm:^0.3.1"
+    "@stdlib/number-float64-base-from-words": "npm:^0.2.3"
+    "@stdlib/number-float64-base-get-high-word": "npm:^0.2.3"
+    "@stdlib/number-float64-base-get-low-word": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/a4b052333782bf6d1ebbcae88b1616d1d5e53bd146f0c2d4ab97fab093a910745d431c0f93e2fe424fa4a05dd8315e7e4e97a1bf824f842fbdb409c7625a118e
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-round@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "@stdlib/math-base-special-round@npm:0.3.1"
+  dependencies:
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.2"
+    "@stdlib/math-base-assert-is-negative-zero": "npm:^0.2.2"
+    "@stdlib/math-base-napi-unary": "npm:^0.2.6"
+    "@stdlib/math-base-special-floor": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/10d4ac3ee9e18cbbbc50ccb507ed29d46b246a73b1a490dc353966e5c105b0f60d0e264ff334df4c6f525e3ed9afda182a82bafc819d710fb126b45b97058b2e
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-sin@npm:^0.3.0":
+  version: 0.3.1
+  resolution: "@stdlib/math-base-special-sin@npm:0.3.1"
+  dependencies:
+    "@stdlib/constants-float64-high-word-abs-mask": "npm:^0.2.3"
+    "@stdlib/constants-float64-high-word-exponent-mask": "npm:^0.2.3"
+    "@stdlib/math-base-napi-unary": "npm:^0.2.7"
+    "@stdlib/math-base-special-kernel-cos": "npm:^0.2.4"
+    "@stdlib/math-base-special-kernel-sin": "npm:^0.2.4"
+    "@stdlib/math-base-special-rempio2": "npm:^0.3.0"
+    "@stdlib/number-float64-base-get-high-word": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/5e66a233e57c3e1ba71c578321c015d2f0bd415a4b6a98d5768dea829c43055f35746390cef9c48a2e9eb8e7c96f0f5f5124815646101d97b9ec0bf8c290dbfa
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-sinpi@npm:^0.3.0":
+  version: 0.3.1
+  resolution: "@stdlib/math-base-special-sinpi@npm:0.3.1"
+  dependencies:
+    "@stdlib/constants-float64-pi": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-infinite": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.3"
+    "@stdlib/math-base-napi-unary": "npm:^0.2.7"
+    "@stdlib/math-base-special-abs": "npm:^0.2.3"
+    "@stdlib/math-base-special-copysign": "npm:^0.2.3"
+    "@stdlib/math-base-special-cos": "npm:^0.3.0"
+    "@stdlib/math-base-special-fmod": "npm:^0.1.1"
+    "@stdlib/math-base-special-sin": "npm:^0.3.0"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/9c17faf1db54cbef7c7f58e8c0dc0951e3ccd0597966282b5e97e88b15e46b86db052bd48f202d333b1c9d18c6ba2565c42ab2b231c7b83a2f300bb9d5fe4681
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-sqrt@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/math-base-special-sqrt@npm:0.2.3"
+  dependencies:
+    "@stdlib/math-base-napi-unary": "npm:^0.2.6"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/15e980bded783b3d9e4d3ceeb7d4a3f2fbe919db674679f53a87a7cdb065818db4d3497648e39a93d21a1550dd07a525b066bac85c47e7cbee38a43b47d6160d
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-special-trunc@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/math-base-special-trunc@npm:0.2.3"
+  dependencies:
+    "@stdlib/math-base-napi-unary": "npm:^0.2.6"
+    "@stdlib/math-base-special-ceil": "npm:^0.2.2"
+    "@stdlib/math-base-special-floor": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/1a78d3a1ebd4fb368e72a9f86197f4bcc69e8ece7e42f4e32b3691a5d377d98c22cdd57aaead6fa8075903507715ed0e840315de3ef1b0ba80f6f5b4a039ea1e
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-tools-continued-fraction@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/math-base-tools-continued-fraction@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-has-generator-support": "npm:^0.2.2"
+    "@stdlib/constants-float32-smallest-normal": "npm:^0.2.3"
+    "@stdlib/constants-float64-eps": "npm:^0.2.3"
+    "@stdlib/math-base-special-abs": "npm:^0.2.3"
+  checksum: 10/8b15c9a98a68bdec3504de1d0ac98286b80f04e333ca4c449a0971beb404a5c06f1e972403c6ff1ac2dc0ec6d795c8d91c334f497ca121c3ac52a45ebe7eb3fd
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-tools-evalpoly@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/math-base-tools-evalpoly@npm:0.2.3"
+  dependencies:
+    "@stdlib/function-ctor": "npm:^0.2.2"
+    "@stdlib/utils-define-nonenumerable-read-only-property": "npm:^0.2.3"
+  checksum: 10/2c4b2034c22dacf657ff062f7ce8f610852228c6f82b8292198e04d79731895dcd83aea1f1082584b8871d113511dae3136f4e4dd12da58a942e59ddbc5313c3
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/math-base-tools-sum-series@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/math-base-tools-sum-series@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-has-generator-support": "npm:^0.2.2"
+    "@stdlib/constants-float64-eps": "npm:^0.2.3"
+    "@stdlib/math-base-special-abs": "npm:^0.2.3"
+  checksum: 10/fe13b1d28371f0e27ebce9820d1059384e6421c54a37aeacafa7b8346a5d6413803b6a964ef9774725e0cd11e4a2a59a961136dfbe32f89dd54ca963684b9598
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/napi-argv-bool@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@stdlib/napi-argv-bool@npm:0.1.1"
+  dependencies:
+    "@stdlib/assert-napi-is-type": "npm:^0.2.2"
+    "@stdlib/assert-napi-status-ok": "npm:^0.2.2"
+    "@stdlib/napi-argv": "npm:^0.2.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/5dcda1093fe019bb1f1abed3dd51c206fc31fda155e690e870fc00c0c6070bafe3fef03785b8927a7e4f82d303bf17cf2d26f50c3194b8629f2ec8d776a8840a
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/napi-argv-double@npm:^0.2.1, @stdlib/napi-argv-double@npm:^0.2.2":
+  version: 0.2.2
+  resolution: "@stdlib/napi-argv-double@npm:0.2.2"
+  dependencies:
+    "@stdlib/assert-napi-is-type": "npm:^0.2.2"
+    "@stdlib/assert-napi-status-ok": "npm:^0.2.2"
+    "@stdlib/napi-argv": "npm:^0.2.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/c459745220cf3d4221b6d698b3654046a99b64bffb58365bf971f1e2b643fbffa87695951741eb5223affd0b7c1f89cf60ac73fdddb0d9b3dc9329d91b607d74
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/napi-argv-float64array@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/napi-argv-float64array@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-napi-equal-typedarray-types": "npm:^0.2.2"
+    "@stdlib/assert-napi-is-typedarray": "npm:^0.2.2"
+    "@stdlib/assert-napi-status-ok": "npm:^0.2.2"
+    "@stdlib/napi-argv": "npm:^0.2.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/1787c5bb9649e875df5aef83a7e7d49478c890f471dc17efd166eb479f7503c344756cc23c609cbe18594f385ed2fecd3ee2ea11f941abe8196ce58cc0636c96
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/napi-argv-float@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/napi-argv-float@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-napi-is-type": "npm:^0.2.2"
+    "@stdlib/assert-napi-status-ok": "npm:^0.2.2"
+    "@stdlib/napi-argv": "npm:^0.2.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/4533f5cc9537711ba49038c42d6d016359e729e05a825943cfb9a9a7a935fea23183fc3c6b826c1d9b00f9e2fa4e614d771050ac462b863993182e32edc60385
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/napi-argv-int32@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/napi-argv-int32@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-napi-is-type": "npm:^0.2.2"
+    "@stdlib/assert-napi-status-ok": "npm:^0.2.2"
+    "@stdlib/napi-argv": "npm:^0.2.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/558281427df7b45e513dc9001d822b1557564c618c0a2cfccc9d83a06253c906598e4fd3997f0c49a0b68ca793b11df819800bf5fce2b420398c8155743a6ddd
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/napi-argv@npm:^0.2.2, @stdlib/napi-argv@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/napi-argv@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-napi-status-ok": "npm:^0.2.2"
+  checksum: 10/a65814a6a66baeed9ff5faa29ccd11573d35ed13ea677d6695bafb07144fcba317149841dd36cf6a64c5c1816cddd373efec1d20e678599ba470c290879261d6
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/napi-create-double@npm:^0.0.3":
+  version: 0.0.3
+  resolution: "@stdlib/napi-create-double@npm:0.0.3"
+  dependencies:
+    "@stdlib/assert-napi-status-ok": "npm:^0.2.2"
+    "@stdlib/napi-argv": "npm:^0.2.2"
+    "@stdlib/napi-argv-double": "npm:^0.2.1"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/fd1d7cca9f849e5c0b52d6e3d74204f6f12238a7eeee7b29cdf8bb18c0446a66856d7da5b70c0a1cfd9a2d82be3b2939b1a511036c1b42a5ad1ded5e9edf826a
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/napi-create-int32@npm:^0.0.3":
+  version: 0.0.3
+  resolution: "@stdlib/napi-create-int32@npm:0.0.3"
+  dependencies:
+    "@stdlib/assert-napi-status-ok": "npm:^0.2.2"
+    "@stdlib/napi-argv": "npm:^0.2.2"
+    "@stdlib/napi-argv-int32": "npm:^0.2.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/141fa5e5bf07cb2767388332deb3039c99690314cf47b2c76635c773d18d1c68accb283aaec62b6d3239e158878bb52bd6424c516674fa052b01b012759cffaa
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/napi-export@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "@stdlib/napi-export@npm:0.3.1"
+  checksum: 10/a650c5b41e475e4a8eebd00e96bf7ccf2627fa3a1b8cd387cba0e86b6e0a94329e76738bcde72a22a96c484c923590f979968c7906d0e91cea3771ccf0f43caa
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/number-ctor@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/number-ctor@npm:0.2.3"
+  checksum: 10/2049651bc940af4d0247fc11d9e3912e7e1a8fb6b335e2a2bef377c3ca99d7cde98e99bd3717f8059fd66aaa686b407f1ad1e93fe4a21fe647b03a77f2035c94
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/number-float16-base-to-float32@npm:^0.1.1":
+  version: 0.1.2
+  resolution: "@stdlib/number-float16-base-to-float32@npm:0.1.2"
+  dependencies:
+    "@stdlib/constants-float16-exponent-bias": "npm:^0.3.1"
+    "@stdlib/constants-float16-exponent-mask": "npm:^0.1.1"
+    "@stdlib/constants-float16-num-significand-bits": "npm:^0.0.2"
+    "@stdlib/constants-float16-sign-mask": "npm:^0.1.1"
+    "@stdlib/constants-float16-significand-mask": "npm:^0.1.1"
+    "@stdlib/constants-float32-exponent-bias": "npm:^0.2.3"
+    "@stdlib/constants-float32-exponent-mask": "npm:^0.2.3"
+    "@stdlib/constants-float32-num-significand-bits": "npm:^0.1.1"
+    "@stdlib/number-float16-ctor": "npm:^0.1.2"
+    "@stdlib/number-float32-base-to-float16": "npm:^0.1.0"
+    "@stdlib/number-float64-base-to-float16": "npm:^0.1.2"
+    "@stdlib/number-float64-base-to-float32": "npm:^0.2.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/1b418bd43dd639ae4ffd00ae92db0801d7a16491d158fb6526ddca8681cae90ab09840ad0e84f35ebd43f28a8a64b5c051c807c49a7303449197ca03e4d7eb51
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/number-float16-base-to-float64@npm:^0.1.1":
+  version: 0.1.2
+  resolution: "@stdlib/number-float16-base-to-float64@npm:0.1.2"
+  dependencies:
+    "@stdlib/number-float16-base-to-float32": "npm:^0.1.1"
+    "@stdlib/number-float16-ctor": "npm:^0.1.1"
+    "@stdlib/number-float64-base-to-float16": "npm:^0.1.1"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/048bd3df389f9c578419d8f76e968bdc95f06d8f3103cb98c3098bcecebb9fa4cb096c7285fe202a8b0607966021505c49c56c30212b024dbae4b3b01c1824a6
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/number-float16-ctor@npm:^0.1.1, @stdlib/number-float16-ctor@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "@stdlib/number-float16-ctor@npm:0.1.2"
+  dependencies:
+    "@stdlib/assert-has-to-primitive-symbol-support": "npm:^0.1.0"
+    "@stdlib/assert-is-number": "npm:^0.2.3"
+    "@stdlib/error-tools-fmtprodmsg": "npm:^0.2.3"
+    "@stdlib/number-float64-base-to-float16": "npm:^0.1.2"
+    "@stdlib/string-format": "npm:^0.2.3"
+    "@stdlib/symbol-to-primitive": "npm:^0.1.1"
+    "@stdlib/utils-define-nonenumerable-read-only-property": "npm:^0.2.3"
+    "@stdlib/utils-define-read-only-property": "npm:^0.2.3"
+  checksum: 10/3b25193a345e899273ff90a6db6c7929dc1859fd9ed3316040b30323f51087c096ec5c77980f145e17974ee4f7463891505507524d3c0d12140a18057a97f00c
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/number-float32-base-exponent@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "@stdlib/number-float32-base-exponent@npm:0.2.4"
+  dependencies:
+    "@stdlib/constants-float32-exponent-bias": "npm:^0.2.3"
+    "@stdlib/constants-float32-exponent-mask": "npm:^0.2.3"
+    "@stdlib/number-float32-base-to-word": "npm:^0.2.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/5f4d38c5c5957ff2bbfecacfcb1a1dbf0c7c855c17bf0431b86e416a8455dff1896132f689f13e2fdc30c700f19c93133a54945a890574cefd05bef47ef645a9
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/number-float32-base-to-float16@npm:^0.1.0":
+  version: 0.1.1
+  resolution: "@stdlib/number-float32-base-to-float16@npm:0.1.1"
+  dependencies:
+    "@stdlib/constants-float16-eps": "npm:^0.2.3"
+    "@stdlib/constants-float16-max": "npm:^0.2.3"
+    "@stdlib/constants-float16-smallest-normal": "npm:^0.2.3"
+    "@stdlib/constants-float32-eps": "npm:^0.2.3"
+    "@stdlib/constants-float32-exponent-mask": "npm:^0.2.3"
+    "@stdlib/constants-float32-num-significand-bits": "npm:^0.1.1"
+    "@stdlib/constants-float32-pinf": "npm:^0.2.2"
+    "@stdlib/constants-float32-sign-mask": "npm:^0.2.3"
+    "@stdlib/constants-float32-significand-mask": "npm:^0.2.4"
+    "@stdlib/math-base-assert-is-finitef": "npm:^0.2.2"
+    "@stdlib/math-base-assert-is-nanf": "npm:^0.2.3"
+    "@stdlib/math-base-special-absf": "npm:^0.2.3"
+    "@stdlib/number-float16-ctor": "npm:^0.1.2"
+    "@stdlib/number-float32-base-exponent": "npm:^0.2.4"
+    "@stdlib/number-float64-base-to-float32": "npm:^0.2.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/8efd6368baee3e1b3667d37f88130715eb034f180430f3f4d851fedae07d8e8bbf21193cbd3ff64146eefc409f69b43c5cb149bdd071ac5a65494a37d7a48fdb
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/number-float32-base-to-word@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/number-float32-base-to-word@npm:0.2.3"
+  dependencies:
+    "@stdlib/array-float32": "npm:^0.2.3"
+    "@stdlib/array-uint32": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/70f5620d379333d9e46824a24915b779e677c4e98ae4520e5d1bbd92834a463f5d922878466a88f02452441de531662532daf0999d8dffdc0944df347f856a36
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/number-float64-base-exponent@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/number-float64-base-exponent@npm:0.2.3"
+  dependencies:
+    "@stdlib/constants-float64-exponent-bias": "npm:^0.2.3"
+    "@stdlib/constants-float64-high-word-exponent-mask": "npm:^0.2.3"
+    "@stdlib/number-float64-base-get-high-word": "npm:^0.2.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/75ad2ebb8dd73fa38c7792ba7257311ce4e9943f1726901e686c74a92e39b0add6f5f81f459e7b2493798586379f7e5be393ea3f249423943db33c88bf11d20d
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/number-float64-base-from-words@npm:^0.2.2, @stdlib/number-float64-base-from-words@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/number-float64-base-from-words@npm:0.2.3"
+  dependencies:
+    "@stdlib/array-float64": "npm:^0.2.3"
+    "@stdlib/array-uint32": "npm:^0.2.3"
+    "@stdlib/assert-is-little-endian": "npm:^0.2.3"
+    "@stdlib/number-float64-base-to-words": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.4"
+  checksum: 10/e483fda0bd0ab3b1d4ed3242a40294d7cfc6972edcaafb57d7cd2ba8a1a9f718e29c325aee30d74f110b7ba6d91e3be40c75716ccd70ef107a1f50784a4b061d
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/number-float64-base-get-high-word@npm:^0.2.2, @stdlib/number-float64-base-get-high-word@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/number-float64-base-get-high-word@npm:0.2.3"
+  dependencies:
+    "@stdlib/array-float64": "npm:^0.2.2"
+    "@stdlib/array-uint32": "npm:^0.2.3"
+    "@stdlib/assert-is-little-endian": "npm:^0.2.2"
+    "@stdlib/number-float64-base-to-words": "npm:^0.2.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/79bcd911694d0182d05d907e5809b52c4c97a94aa71b532bddb8c9db4e9cb20eccf63021942e9119c27d2a10db369616285b79199022b5d74a0642d407d18247
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/number-float64-base-get-low-word@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/number-float64-base-get-low-word@npm:0.2.3"
+  dependencies:
+    "@stdlib/array-float64": "npm:^0.2.2"
+    "@stdlib/array-uint32": "npm:^0.2.3"
+    "@stdlib/assert-is-little-endian": "npm:^0.2.2"
+    "@stdlib/number-float64-base-to-words": "npm:^0.2.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/8354910c21cdd33f66cfc8459d6b80271e72311dde14b603e2cb6e9cd0aff552240360fd62203196ffec592f4b4a137d634aa9517a66cf5df51540b333194b45
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/number-float64-base-normalize@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "@stdlib/number-float64-base-normalize@npm:0.2.4"
+  dependencies:
+    "@stdlib/constants-float64-smallest-normal": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-infinite": "npm:^0.2.2"
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.3"
+    "@stdlib/math-base-special-abs": "npm:^0.2.3"
+    "@stdlib/utils-define-nonenumerable-read-only-property": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/86e4d56c00a7cbb86a7b744743b7207a4693a72105967954584e8acb057ad09432fff5f6f3b4a256ba3c3e64be9c9872a5bbbd1915b3d8fdf58cc25285a558fe
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/number-float64-base-set-high-word@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/number-float64-base-set-high-word@npm:0.2.3"
+  dependencies:
+    "@stdlib/array-float64": "npm:^0.2.2"
+    "@stdlib/array-uint32": "npm:^0.2.3"
+    "@stdlib/assert-is-little-endian": "npm:^0.2.2"
+    "@stdlib/number-float64-base-to-words": "npm:^0.2.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/d3ec3ca1890912ee9b13313704fd768ec2f1e775cf4c61f554157bee20cb51b683806bac4cd1692d8bf1282300c14b1c85008d0a83a537f54131e562fe9d9ac4
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/number-float64-base-set-low-word@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/number-float64-base-set-low-word@npm:0.2.3"
+  dependencies:
+    "@stdlib/array-float64": "npm:^0.2.2"
+    "@stdlib/array-uint32": "npm:^0.2.3"
+    "@stdlib/assert-is-little-endian": "npm:^0.2.2"
+    "@stdlib/number-float64-base-to-words": "npm:^0.2.2"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/909393231feae2ec5d09b1fe04c9018dcac70bc5a04f712c713e95c3e0491b7afefe2922db8cb387dc7b91a3cdaa7c79d9759ff44434171ebdeeb5c03c32298e
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/number-float64-base-to-float16@npm:^0.1.1, @stdlib/number-float64-base-to-float16@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "@stdlib/number-float64-base-to-float16@npm:0.1.2"
+  dependencies:
+    "@stdlib/constants-float16-eps": "npm:^0.2.3"
+    "@stdlib/constants-float16-max": "npm:^0.2.3"
+    "@stdlib/constants-float16-smallest-normal": "npm:^0.2.3"
+    "@stdlib/constants-float64-eps": "npm:^0.2.2"
+    "@stdlib/constants-float64-pinf": "npm:^0.2.3"
+    "@stdlib/math-base-assert-is-finite": "npm:^0.2.3"
+    "@stdlib/math-base-special-abs": "npm:^0.2.3"
+    "@stdlib/number-float16-ctor": "npm:^0.1.1"
+    "@stdlib/number-float32-base-to-float16": "npm:^0.1.0"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/2dbca20fd8fddd6b5e627ed78bed9f8741c24bae1b8186e7dc8e49bbab6a35f64f35863084e0224fbd41eba72b8f4966ceb387145f959279ddb5d22a61088903
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/number-float64-base-to-float32@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/number-float64-base-to-float32@npm:0.2.3"
+  dependencies:
+    "@stdlib/array-float32": "npm:^0.2.3"
+  checksum: 10/1293dec60e720bc0657ce9cda2834aed60cd39d7185f66b9f81f72c353846086aa24af22dd0d61cf85e611c01437d949b410fe818bd326fc36e4d84df48f0b49
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/number-float64-base-to-words@npm:^0.2.2, @stdlib/number-float64-base-to-words@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/number-float64-base-to-words@npm:0.2.3"
+  dependencies:
+    "@stdlib/array-float64": "npm:^0.2.2"
+    "@stdlib/array-uint32": "npm:^0.2.3"
+    "@stdlib/assert-is-little-endian": "npm:^0.2.2"
+    "@stdlib/os-byte-order": "npm:^0.2.2"
+    "@stdlib/os-float-word-order": "npm:^0.2.3"
+    "@stdlib/utils-define-nonenumerable-read-only-property": "npm:^0.2.3"
+    "@stdlib/utils-library-manifest": "npm:^0.2.3"
+  checksum: 10/665437f3d6c3892d9ffe278cff2035c363eb35a39dda9db5fcc4c5269e7d4f8826936a299d81588afc9c8d95ee2662dc0a2d049fda7b66c73001e9399a2ab02e
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/number-uint32-base-to-int32@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/number-uint32-base-to-int32@npm:0.2.3"
+  checksum: 10/cd00b7f41b77ecfb6239d5747d16394a53852c8b3390146754c1ac1a25e2bf399fdb31e15119fad0ee81963623d86255ac93910fa0fc3e062b4bb47a3ceaf312
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/object-ctor@npm:^0.2.2":
+  version: 0.2.2
+  resolution: "@stdlib/object-ctor@npm:0.2.2"
+  checksum: 10/271e29710185238571adc7a6ddbc9437573eaf438e32283d8aa642ad55a21616b441888d5b0ff62d9f4c9e35b5da1f883e400159bd17e9dac02ab523542fd51a
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/os-byte-order@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/os-byte-order@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-is-big-endian": "npm:^0.2.2"
+    "@stdlib/assert-is-little-endian": "npm:^0.2.2"
+  checksum: 10/b297b431e24b6ee9174f6f8e90a99766c2df0f7fcb904f8178d5ae4a346e758ebce86db191ea159d10fe58c808268ade42cdae8d6cb2dc111e993b89ec6f84ad
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/os-float-word-order@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/os-float-word-order@npm:0.2.3"
+  dependencies:
+    "@stdlib/os-byte-order": "npm:^0.2.2"
+  checksum: 10/c72658a832d8a4f79b617887aa70170d5adfdd95f348bc1d4cd44c6f5d7a560ca74c0e8f9edeed4f57823da91f92ef5be4106c7bac7d34c727cf689c58c816f2
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/process-cwd@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/process-cwd@npm:0.2.3"
+  checksum: 10/5155cf73ad55493f5eb68f1be8578a7dcee0b0353b110f8fb8b24645088bc47f18fbb7df9d1e499e95e8c7727efbf4bf7286d95089443d30799ee7b981c9250e
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/regexp-extended-length-path@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/regexp-extended-length-path@npm:0.2.3"
+  dependencies:
+    "@stdlib/utils-define-nonenumerable-read-only-property": "npm:^0.2.3"
+  checksum: 10/c0810301ef2170d773ddcc8e6a97763877f8768dc9724e76e8ce18a69e9ca6c67d92c06387815a7ae8c283bc3d7bfbb4c508131f859e93dc9fb4212055541ef0
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/regexp-function-name@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/regexp-function-name@npm:0.2.3"
+  dependencies:
+    "@stdlib/utils-define-nonenumerable-read-only-property": "npm:^0.2.3"
+  checksum: 10/1d24bf9579f6ae6a4ab81d5354bbe41778802a9d6105cad666cd7ef5cda7baa391259bd08e4e23839ed199b87fa619323af149a6c715541ec9ab24fca0a6074f
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/stats-base-dists-t-cdf@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/stats-base-dists-t-cdf@npm:0.2.3"
+  dependencies:
+    "@stdlib/math-base-assert-is-nan": "npm:^0.2.3"
+    "@stdlib/math-base-special-betainc": "npm:^0.2.2"
+    "@stdlib/math-base-special-pow": "npm:^0.3.1"
+    "@stdlib/utils-constant-function": "npm:^0.2.3"
+    "@stdlib/utils-define-nonenumerable-read-only-property": "npm:^0.2.3"
+  checksum: 10/08a16c9b9daf88e4a31f6d14cc739941b2dbd3c3571c0e33fe2f8ab53b145abcad7c953f0951651b978c4bca88adf717fdbca982a0cd0c13981c40da7ea8df4b
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/string-base-format-interpolate@npm:^0.2.3":
+  version: 0.2.4
+  resolution: "@stdlib/string-base-format-interpolate@npm:0.2.4"
+  checksum: 10/0c78324d2278a081abf5cc50087ad44e2b230a26c22cf2ad0cf480aa614b95444ac9e0c5782e60ad3e0bc67ee666c1b99c3f84f02ff2fa06d2066b8957102b6a
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/string-base-format-tokenize@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "@stdlib/string-base-format-tokenize@npm:0.2.4"
+  checksum: 10/7243014c5b8a91589b299c03a6efeb112c7e0cee24b12f3033425eb85b9f3631314cdf63a5ebbdb27a3ea589b1e8dad0f72e7041c16628a9e9e83feeed18fe9a
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/string-base-lowercase@npm:^0.4.1":
+  version: 0.4.1
+  resolution: "@stdlib/string-base-lowercase@npm:0.4.1"
+  checksum: 10/00df52090db78fa64797bfeef90dbd620893032b453800d5237da3a4e28edcdb137561baaabad22eef7b49d982def3f789f8415339f431ffd5aab12db8c6f24b
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/string-base-replace@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/string-base-replace@npm:0.2.3"
+  checksum: 10/c2b738458c4a5c1ea819b65e2013fa3f4b93692646d66c501f24641e528fb140fc0faa073d986979de82886a3e4c0d7184f331768eedd47e4e3f61401eaf78cc
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/string-format@npm:^0.2.2, @stdlib/string-format@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/string-format@npm:0.2.3"
+  dependencies:
+    "@stdlib/string-base-format-interpolate": "npm:^0.2.3"
+    "@stdlib/string-base-format-tokenize": "npm:^0.2.4"
+  checksum: 10/6dcc2c4b83012375dcadd42c2797e197673ecd0d56422df63d8bab45947c66880b2325971ec6493cccc43957612efa83f19674d8feabddc03d397cbb2998ac03
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/string-replace@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/string-replace@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-is-function": "npm:^0.2.3"
+    "@stdlib/assert-is-regexp": "npm:^0.2.3"
+    "@stdlib/assert-is-string": "npm:^0.2.3"
+    "@stdlib/error-tools-fmtprodmsg": "npm:^0.2.3"
+    "@stdlib/string-base-replace": "npm:^0.2.3"
+    "@stdlib/string-format": "npm:^0.2.3"
+    "@stdlib/utils-escape-regexp-string": "npm:^0.2.3"
+  checksum: 10/5ef59e28e3833470f2762fe87bb5fbecebc16b9135f894b6ac2ba753b2f585d4a1db2f671850ca43ccc799c2b3fd64f0fb27b09d8b853fef8a04daa49b5ab1ba
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/symbol-ctor@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/symbol-ctor@npm:0.2.3"
+  checksum: 10/170c0aaf373a6d8bac8aa8a2f8b71e7f4347e210fc022472d22def43c5ca663a94ec01e75cdf9bba8172841776157778ee53700e2866faec47ecab6dcec61701
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/symbol-to-primitive@npm:^0.1.1":
+  version: 0.1.2
+  resolution: "@stdlib/symbol-to-primitive@npm:0.1.2"
+  dependencies:
+    "@stdlib/assert-has-to-primitive-symbol-support": "npm:^0.1.0"
+    "@stdlib/symbol-ctor": "npm:^0.2.3"
+  checksum: 10/123be4de30726016b9e82b39181f574dbc2e79976664523e74b5b9f69a32276349955c791f2c3e0eb886e946533e4e83c4a6bff55f766faac7a822f0109dd0cf
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/types@npm:^0.4.3":
+  version: 0.4.3
+  resolution: "@stdlib/types@npm:0.4.3"
+  checksum: 10/1d28755a87184f337e8473d5350bac23c0d90c499cdb20bc07d463587ed22f68c51b28d311f03892fda45c7d7669ad86ceaac8b6aba98abf7909265c23f9d0ad
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/utils-constant-function@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/utils-constant-function@npm:0.2.3"
+  checksum: 10/564f0ffd89d790238e7c8f317f1b5c295d7177378f513bc93a9b9d988a58fc2febe558d4e89d835ba13c2802ebda09b9979758a293ac67d4a027feff9ef69db9
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/utils-constructor-name@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/utils-constructor-name@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-is-buffer": "npm:^0.2.2"
+    "@stdlib/regexp-function-name": "npm:^0.2.3"
+    "@stdlib/utils-native-class": "npm:^0.2.2"
+  checksum: 10/9ea32fe8a834baee3a5d5c51853a50d721ac6024b2c48ee6c27a86b73b3d021f70b5372fcf7bee4435a57d7a9f93779afeb9aae8730c594dc54aa938ee67d03b
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/utils-convert-path@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/utils-convert-path@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-is-string": "npm:^0.2.3"
+    "@stdlib/error-tools-fmtprodmsg": "npm:^0.2.3"
+    "@stdlib/regexp-extended-length-path": "npm:^0.2.3"
+    "@stdlib/string-base-lowercase": "npm:^0.4.1"
+    "@stdlib/string-format": "npm:^0.2.3"
+    "@stdlib/string-replace": "npm:^0.2.2"
+  checksum: 10/3034bba32544436d6009b2d99e126a77ba796cf3deb014a6af11b2b1fc5c84861bb0381b063a6aef6454f50c2c0e1d86d5a2abde6e0f4b3b8915270aaef0be90
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/utils-define-nonenumerable-read-only-property@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/utils-define-nonenumerable-read-only-property@npm:0.2.3"
+  dependencies:
+    "@stdlib/types": "npm:^0.4.3"
+    "@stdlib/utils-define-property": "npm:^0.2.5"
+  checksum: 10/8f0eaca0d657d8773b2a5c416814d9886f70658840460894191d0409668f3ccfe75e3cc888c7777e9ab452848d659fbea6eba1f5860470f5e5a213d7e0060912
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/utils-define-property@npm:^0.2.4, @stdlib/utils-define-property@npm:^0.2.5":
+  version: 0.2.5
+  resolution: "@stdlib/utils-define-property@npm:0.2.5"
+  dependencies:
+    "@stdlib/error-tools-fmtprodmsg": "npm:^0.2.2"
+    "@stdlib/string-format": "npm:^0.2.2"
+  checksum: 10/0fcbbea73a46018a14f7b30cdab03fa60aa91e1495e63e222d0392007349899e3e2e92dce46fd221f80bc868a1fa73e23f9ea3fc4dff7ac183dd437af9ccf1fb
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/utils-define-read-only-property@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/utils-define-read-only-property@npm:0.2.3"
+  dependencies:
+    "@stdlib/utils-define-property": "npm:^0.2.4"
+  checksum: 10/08fa5c1664d43712abac926f509babaeccbae0f9b26adc84280670b8fd880ccf8048177d2d967e48ba3348d9dd3f7e820500f581b80b986a38c21efc28bf5072
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/utils-escape-regexp-string@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/utils-escape-regexp-string@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-is-string": "npm:^0.2.2"
+    "@stdlib/error-tools-fmtprodmsg": "npm:^0.2.3"
+    "@stdlib/string-format": "npm:^0.2.3"
+  checksum: 10/6708027d53a529569375f724f11d285631af79ee2c60666324c3459929a099880832bd3cb2ddc6b8d5009ca25adae9a205a8ea8487d9944fd6f3ba6d05b8b412
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/utils-eval@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/utils-eval@npm:0.2.3"
+  checksum: 10/454191de93bb521185f574f6bcb84006a641930e79a2799cc3f814248c1da7d3b9da9eec922eb39877315dfcf5aef32cbdbc403c9972bc500ee18ce1c2a67922
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/utils-get-prototype-of@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/utils-get-prototype-of@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-is-function": "npm:^0.2.2"
+    "@stdlib/object-ctor": "npm:^0.2.2"
+    "@stdlib/utils-native-class": "npm:^0.2.2"
+  checksum: 10/50ac3de745204ff37ebdd1262cefd2c7a427d1ebfb7f9149fdb6dae9ee47ffd8172ce2416d0f68ead465f40bc257f90d344f8eab505922bfeee1ae87cdef4d17
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/utils-global@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/utils-global@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-is-boolean": "npm:^0.2.2"
+    "@stdlib/error-tools-fmtprodmsg": "npm:^0.2.3"
+    "@stdlib/string-format": "npm:^0.2.3"
+  checksum: 10/e6b260faac81812b73946524b6ffcaa619013f68a947aa84b4599c4a2c6f1e35872c62153aadd93cb54a1709d99ddeb739c2c74462d0ade6cfa5fac64e2e27af
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/utils-library-manifest@npm:^0.2.3, @stdlib/utils-library-manifest@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "@stdlib/utils-library-manifest@npm:0.2.4"
+  dependencies:
+    "@stdlib/fs-resolve-parent-path": "npm:^0.2.3"
+    "@stdlib/utils-convert-path": "npm:^0.2.2"
+    debug: "npm:^2.6.9"
+    resolve: "npm:^1.1.7"
+  checksum: 10/eac5dc4e8c9b566ada94a062c513642086854b2e1ed422f6241bd54ef6e5303fcd122f8df217e6c94f02683edc238f970cb4975fac755307d02c7c73efbd294e
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/utils-native-class@npm:^0.2.2, @stdlib/utils-native-class@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "@stdlib/utils-native-class@npm:0.2.3"
+  dependencies:
+    "@stdlib/assert-has-own-property": "npm:^0.2.2"
+    "@stdlib/assert-has-tostringtag-support": "npm:^0.2.3"
+    "@stdlib/symbol-ctor": "npm:^0.2.3"
+  checksum: 10/9d3115e5f81c2b3e03cd816ae7d9fb98c643bdf6a3e9e8cb09324f58c5f56f39cc3e61ca4c4b8eaf8651aae785ce8f204c21018167d1d4502de50884fe75e44c
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
+"@stdlib/utils-type-of@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@stdlib/utils-type-of@npm:0.2.3"
+  dependencies:
+    "@stdlib/utils-constructor-name": "npm:^0.2.2"
+    "@stdlib/utils-global": "npm:^0.2.3"
+  checksum: 10/e1b2be1e8eb7501b72acfdbe18ba876f81952b1ddfa20462335cd2d325f2961da9fbb3e0cb94a7b22e59dca24739268b5e8743655c58eb4262a6f32970b3bdac
+  conditions: (os=aix | os=darwin | os=freebsd | os=linux | os=macos | os=openbsd | os=sunos | os=win32 | os=windows)
+  languageName: node
+  linkType: hard
+
 "@szmarczak/http-timer@npm:^1.1.2":
   version: 1.1.2
   resolution: "@szmarczak/http-timer@npm:1.1.2"
@@ -4317,6 +7052,44 @@ __metadata:
   dependencies:
     defer-to-connect: "npm:^2.0.0"
   checksum: 10/27b713859bc7d370f81631eea99879a9d496e1def5d33752fccd6c80dba32cde2094f378c8d07d56f236b08afb4b3621fbf6254faaca52b1a8146ece1eba8428
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-table@npm:^8.20.6":
+  version: 8.21.3
+  resolution: "@tanstack/react-table@npm:8.21.3"
+  dependencies:
+    "@tanstack/table-core": "npm:8.21.3"
+  peerDependencies:
+    react: ">=16.8"
+    react-dom: ">=16.8"
+  checksum: 10/a32217ebe64d24e71dea6a6742bc288dcabf389657b16805a1ab3f347d3dca8262759c45c604a1f65bd97925d5cbdfb66d1be7637100a12eb5b279bdd420962d
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-virtual@npm:3.11.2":
+  version: 3.11.2
+  resolution: "@tanstack/react-virtual@npm:3.11.2"
+  dependencies:
+    "@tanstack/virtual-core": "npm:3.11.2"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10/a1136da0ec4c2ecbd4f996d8b84f228f0b8d851b15806e01049a160ad1d9b2eef0e0a491035fe017c6f84a0e125334f69ea23b32c180df23614ea4a8eeb7490c
+  languageName: node
+  linkType: hard
+
+"@tanstack/table-core@npm:8.21.3":
+  version: 8.21.3
+  resolution: "@tanstack/table-core@npm:8.21.3"
+  checksum: 10/aa05e5f80110f0f56d66161e950668ea6ef3e2ea4f3a2ccd5d5980b39b4feea987245b20531aee2c6743e6edd12c0361503413b63090c807f88a61b19bfd04f3
+  languageName: node
+  linkType: hard
+
+"@tanstack/virtual-core@npm:3.11.2":
+  version: 3.11.2
+  resolution: "@tanstack/virtual-core@npm:3.11.2"
+  checksum: 10/8433044a5c801052ba2e4cdda098cdc8e32adfd3a76ba31af7064bbdda60062fe221a3558096987baa66cd94f528855e887c282cb0f9eb99d3751457c2a62872
   languageName: node
   linkType: hard
 
@@ -4664,7 +7437,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-transition-group@npm:^4.4.12":
+"@types/react-transition-group@npm:^4.4.11, @types/react-transition-group@npm:^4.4.12":
   version: 4.4.12
   resolution: "@types/react-transition-group@npm:4.4.12"
   peerDependencies:
@@ -5165,6 +7938,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ajv-formats@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "ajv-formats@npm:3.0.1"
+  dependencies:
+    ajv: "npm:^8.0.0"
+  peerDependencies:
+    ajv: ^8.0.0
+  peerDependenciesMeta:
+    ajv:
+      optional: true
+  checksum: 10/5679b9f9ced9d0213a202a37f3aa91efcffe59a6de1a6e3da5c873344d3c161820a1f11cc29899661fee36271fd2895dd3851b6461c902a752ad661d1c1e8722
+  languageName: node
+  linkType: hard
+
 "ajv-keywords@npm:^3.5.2":
   version: 3.5.2
   resolution: "ajv-keywords@npm:3.5.2"
@@ -5206,6 +7993,18 @@ __metadata:
     require-from-string: "npm:^2.0.2"
     uri-js: "npm:^4.2.2"
   checksum: 10/b406f3b79b5756ac53bfe2c20852471b08e122bc1ee4cde08ae4d6a800574d9cd78d60c81c69c63ff81e4da7cd0b638fafbb2303ae580d49cf1600b9059efb85
+  languageName: node
+  linkType: hard
+
+"ajv@npm:^8.12.0":
+  version: 8.18.0
+  resolution: "ajv@npm:8.18.0"
+  dependencies:
+    fast-deep-equal: "npm:^3.1.3"
+    fast-uri: "npm:^3.0.1"
+    json-schema-traverse: "npm:^1.0.0"
+    require-from-string: "npm:^2.0.2"
+  checksum: 10/bfed9de827a2b27c6d4084324eda76a4e32bdde27410b3e9b81d06e6f8f5c78370fc6b93fe1d869f1939ff1d7c4ae8896960995acb8425e3e9288c8884247c48
   languageName: node
   linkType: hard
 
@@ -7473,10 +10272,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dayjs@npm:^1.11.11":
-  version: 1.11.11
-  resolution: "dayjs@npm:1.11.11"
-  checksum: 10/f03948b172fbeed229837965988d1d5bac99c72a31c28731a457303259439f2f36289186489ae140adbeb10f591a926908c8de5d81eb449a2edbf5cbd6e9e30c
+"dayjs@npm:^1.11.13":
+  version: 1.11.20
+  resolution: "dayjs@npm:1.11.20"
+  checksum: 10/5347533f21a55b8bb1b1ef559be9b805514c3a8fb7e68b75fb7e73808131c59e70909c073aa44ce8a0d159195cd110cdd4081cf87ab96cb06fee3edacae791c6
   languageName: node
   linkType: hard
 
@@ -9402,6 +12201,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fast-uri@npm:^3.0.1":
+  version: 3.1.0
+  resolution: "fast-uri@npm:3.1.0"
+  checksum: 10/818b2c96dc913bcf8511d844c3d2420e2c70b325c0653633f51821e4e29013c2015387944435cd0ef5322c36c9beecc31e44f71b257aeb8e0b333c1d62bb17c2
+  languageName: node
+  linkType: hard
+
 "fast-xml-parser@npm:4.2.5":
   version: 4.2.5
   resolution: "fast-xml-parser@npm:4.2.5"
@@ -10633,6 +13439,31 @@ __metadata:
   version: 1.0.0
   resolution: "hexoid@npm:1.0.0"
   checksum: 10/f2271b8b6b0e13fb5a1eccf740f53ce8bae689c80b9498b854c447f9dc94f75f44e0de064c0e4660ecdbfa8942bb2b69973fdcb080187b45bbb409a3c71f19d4
+  languageName: node
+  linkType: hard
+
+"highcharts-react-official@npm:3.2.1":
+  version: 3.2.1
+  resolution: "highcharts-react-official@npm:3.2.1"
+  peerDependencies:
+    highcharts: ">=6.0.0"
+    react: ">=16.8.0"
+  checksum: 10/47d90801804ff83f1a07393adece16b367d8305a020d2a72f2411984f0c8e2b3a654f19e607cc94c347ae4a5db4dbc15087889dcacf2b74e120dbb9bc739b3f6
+  languageName: node
+  linkType: hard
+
+"highcharts@npm:^12.1.2":
+  version: 12.5.0
+  resolution: "highcharts@npm:12.5.0"
+  peerDependencies:
+    jspdf: ^3.0.0
+    svg2pdf.js: ^2.6.0
+  peerDependenciesMeta:
+    jspdf:
+      optional: true
+    svg2pdf.js:
+      optional: true
+  checksum: 10/62aa4edd523a10eada71f6bf870c220c382d462026198c7f5df3b9c537ca496bb72b821bc86fe2a942861de4076172ddf3af39f21c34febf360118357b05761e
   languageName: node
   linkType: hard
 
@@ -11937,6 +14768,15 @@ __metadata:
   dependencies:
     hasown: "npm:^2.0.0"
   checksum: 10/d53bd0cc24b0a0351fb4b206ee3908f71b9bbf1c47e9c9e14e5f06d292af1663704d2abd7e67700d6487b2b7864e0d0f6f10a1edf1892864bdffcb197d1845a2
+  languageName: node
+  linkType: hard
+
+"is-core-module@npm:^2.16.1":
+  version: 2.16.1
+  resolution: "is-core-module@npm:2.16.1"
+  dependencies:
+    hasown: "npm:^2.0.2"
+  checksum: 10/452b2c2fb7f889cbbf7e54609ef92cf6c24637c568acc7e63d166812a0fb365ae8a504c333a29add8bdb1686704068caa7f4e4b639b650dde4f00a038b8941fb
   languageName: node
   linkType: hard
 
@@ -16203,6 +19043,36 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-table@mistakia/react-table#fe8bb86954b77e45bae5b864023261befbe3c620":
+  version: 0.0.1
+  resolution: "react-table@https://github.com/mistakia/react-table.git#commit=fe8bb86954b77e45bae5b864023261befbe3c620"
+  dependencies:
+    "@dnd-kit/core": "npm:^6.3.1"
+    "@dnd-kit/modifiers": "npm:^9.0.0"
+    "@dnd-kit/sortable": "npm:^10.0.0"
+    "@stdlib/stats-base-dists-t-cdf": "npm:^0.2.2"
+    "@tanstack/react-table": "npm:^8.20.6"
+    "@tanstack/react-virtual": "npm:3.11.2"
+    ajv: "npm:^8.12.0"
+    ajv-formats: "npm:^3.0.1"
+    timeago.js: "npm:^4.0.2"
+  peerDependencies:
+    "@emotion/react": ^11.14.0
+    "@emotion/styled": ^11.14.0
+    "@mui/base": ^5.0.0
+    "@mui/icons-material": ^6.3.1
+    "@mui/material": ^6.3.1
+    "@mui/x-date-pickers": ^7.23.6
+    dayjs: 1.11.13
+    highcharts: ^12.1.2
+    highcharts-react-official: 3.2.1
+    prop-types: ^15.8.1
+    react: ^19.0.0
+    react-dom: ^19.0.0
+  checksum: 10/41ffa89de7798a40f8efcb52989c4b2b9c1c3b8a3a96a4059ec584482fd789a9cd1ee68ae27fe93bfeca30dcc21dc77ae8040960716e31e69c97f28ee7d0419d
+  languageName: node
+  linkType: hard
+
 "react-transition-group@npm:^4.4.5":
   version: 4.4.5
   resolution: "react-transition-group@npm:4.4.5"
@@ -16685,6 +19555,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"resolve@npm:^1.1.7":
+  version: 1.22.11
+  resolution: "resolve@npm:1.22.11"
+  dependencies:
+    is-core-module: "npm:^2.16.1"
+    path-parse: "npm:^1.0.7"
+    supports-preserve-symlinks-flag: "npm:^1.0.0"
+  bin:
+    resolve: bin/resolve
+  checksum: 10/e1b2e738884a08de03f97ee71494335eba8c2b0feb1de9ae065e82c48997f349f77a2b10e8817e147cf610bfabc4b1cb7891ee8eaf5bf80d4ad514a34c4fab0a
+  languageName: node
+  linkType: hard
+
 "resolve@npm:^1.10.0, resolve@npm:^1.10.1, resolve@npm:^1.14.2, resolve@npm:^1.9.0":
   version: 1.20.0
   resolution: "resolve@npm:1.20.0"
@@ -16718,6 +19601,19 @@ __metadata:
   bin:
     resolve: bin/resolve
   checksum: 10/2d6fd28699f901744368e6f2032b4268b4c7b9185fd8beb64f68c93ac6b22e52ae13560ceefc96241a665b985edf9ffd393ae26d2946a7d3a07b7007b7d51e79
+  languageName: node
+  linkType: hard
+
+"resolve@patch:resolve@npm%3A^1.1.7#optional!builtin<compat/resolve>":
+  version: 1.22.11
+  resolution: "resolve@patch:resolve@npm%3A1.22.11#optional!builtin<compat/resolve>::version=1.22.11&hash=c3c19d"
+  dependencies:
+    is-core-module: "npm:^2.16.1"
+    path-parse: "npm:^1.0.7"
+    supports-preserve-symlinks-flag: "npm:^1.0.0"
+  bin:
+    resolve: bin/resolve
+  checksum: 10/fd342cad25e52cd6f4f3d1716e189717f2522bfd6641109fe7aa372f32b5714a296ed7c238ddbe7ebb0c1ddfe0b7f71c9984171024c97cf1b2073e3e40ff71a8
   languageName: node
   linkType: hard
 
@@ -16858,9 +19754,11 @@ __metadata:
     "@babel/register": "npm:^7.23.7"
     "@emotion/react": "npm:^11.14.0"
     "@emotion/styled": "npm:^11.14.0"
+    "@mui/base": "npm:^5.0.0-dev.20240529-082515-213b5e33ab"
     "@mui/icons-material": "npm:^6.3.1"
     "@mui/material": "npm:^6.3.1"
     "@mui/x-data-grid": "npm:^7.23.6"
+    "@mui/x-date-pickers": "npm:^7.23.6"
     "@octokit/graphql": "npm:^4.8.0"
     "@trashman/ed25519-blake2b": "npm:^0.0.7"
     babel-loader: "npm:9.1.3"
@@ -16879,7 +19777,7 @@ __metadata:
     css-loader: "npm:7.1.1"
     csv-parser: "npm:^3.0.0"
     csv-writer: "npm:^1.6.0"
-    dayjs: "npm:^1.11.11"
+    dayjs: "npm:^1.11.13"
     debug: "npm:^4.3.4"
     deep-diff: "npm:^1.0.2"
     deep-extend: "npm:^0.6.0"
@@ -16903,6 +19801,8 @@ __metadata:
     file-loader: "npm:^6.2.0"
     front-matter: "npm:^4.0.2"
     fs-extra: "npm:^11.2.0"
+    highcharts: "npm:^12.1.2"
+    highcharts-react-official: "npm:3.2.1"
     highlight.js: "npm:^11.9.0"
     history: "npm:^5.3.0"
     html-inline-script-webpack-plugin: "npm:^3.2.1"
@@ -16930,6 +19830,7 @@ __metadata:
     p-queue: "npm:8.0.1"
     percentile: "npm:^1.6.0"
     prettier: "npm:3.2.5"
+    prop-types: "npm:^15.8.1"
     query-string: "npm:^9.0.0"
     react: "npm:^19.0.0"
     react-dom: "npm:^19.0.0"
@@ -16939,6 +19840,7 @@ __metadata:
     react-router: "npm:^6.28.1"
     react-router-dom: "npm:^6.28.1"
     react-snap: "mistakia/react-snap#359df6598700375a79b98746402b819d433366fc"
+    react-table: "mistakia/react-table#fe8bb86954b77e45bae5b864023261befbe3c620"
     redux: "npm:^5.0.1"
     redux-first-history: "npm:^5.2.0"
     redux-immutable: "npm:^4.0.0"

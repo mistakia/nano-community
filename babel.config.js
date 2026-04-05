@@ -19,7 +19,8 @@ module.exports = {
           '@pages': './src/views/pages',
           '@core': './src/core',
           '@components': './src/views/components',
-          '@styles': './src/styles'
+          '@styles': './src/styles',
+          '#common': './common'
         }
       }
     ],

@@ -11,6 +11,7 @@ import { ledgerSagas } from './ledger'
 import { networkSagas } from './network'
 import { postlistSagas } from './postlists'
 import { nanodb_sagas } from './nanodb'
+import { data_views_sagas } from './data-views'
 
 export default function* rootSage() {
   yield all([
@@ -24,6 +25,7 @@ export default function* rootSage() {
     ...ledgerSagas,
     ...networkSagas,
     ...postlistSagas,
-    ...nanodb_sagas
+    ...nanodb_sagas,
+    ...data_views_sagas
   ])
 }

@@ -17,6 +17,7 @@ import {
   weightRequestActions,
   weightHistoryRequestActions
 } from '@core/network/actions'
+import { representatives_data_view_request_actions } from '@core/data-view-request/actions'
 import {
   representativesRequestActions,
   accountRequestActions,
@@ -168,4 +169,10 @@ export const get_account_blocks_per_day = fetch.bind(
   null,
   api.get_account_blocks_per_day,
   accountBlocksPerDayRequestActions
+)
+
+export const post_representatives_data_view = fetch.bind(
+  null,
+  api.postRepresentativesDataView,
+  representatives_data_view_request_actions
 )

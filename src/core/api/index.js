@@ -22,7 +22,8 @@ export {
   get_account_balance_history,
   get_price_history,
   get_account_stats,
-  get_account_blocks_per_day
+  get_account_blocks_per_day,
+  post_representatives_data_view
 } from './sagas'
 
 export { api_reducer } from './reducer'
