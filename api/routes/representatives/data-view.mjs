@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js'
 import cache from '#api/cache.mjs'
 import {
   get_representative_value,
+  REPRESENTATIVE_COLUMN_IDS,
   REPRESENTATIVE_COLUMN_DATA_TYPES
 } from '#common/representative-table-columns.mjs'
 
@@ -36,6 +37,7 @@ const DATA_TYPES = {
 }
 
 function compare_values(a_value, b_value, data_type) {
+  // Always sort nulls to the end regardless of sort direction
   if (a_value == null && b_value == null) return 0
   if (a_value == null) return 1
   if (b_value == null) return -1
@@ -86,6 +88,12 @@ function apply_sorting(data, sort_config) {
     for (const { column_id, desc } of sort_config) {
       const a_value = get_representative_value(a, column_id)
       const b_value = get_representative_value(b, column_id)
+
+      // Null handling: always push nulls to end
+      if (a_value == null && b_value == null) continue
+      if (a_value == null) return 1
+      if (b_value == null) return -1
+
       const data_type = REPRESENTATIVE_COLUMN_DATA_TYPES[column_id]
       const result = compare_values(a_value, b_value, data_type)
       if (result !== 0) {
@@ -94,6 +102,75 @@ function apply_sorting(data, sort_config) {
     }
     return 0
   })
+}
+
+/**
+ * Construct version string from telemetry data
+ */
+function get_version_string(rep) {
+  const t = rep.telemetry
+  if (!t || t.major_version == null) return null
+  return `${t.major_version}.${t.minor_version}.${t.patch_version}`
+}
+
+function format_big_number(value) {
+  if (value == null) return null
+  return BigNumber(value).toFormat()
+}
+
+/**
+ * Flatten a representative row into a flat object keyed by column IDs.
+ * Display values are pre-formatted for direct rendering.
+ */
+function flatten_representative(rep) {
+  const flat = {}
+  for (const column_id of Object.values(REPRESENTATIVE_COLUMN_IDS)) {
+    if (column_id === REPRESENTATIVE_COLUMN_IDS.VERSION) {
+      flat[column_id] = get_version_string(rep)
+    } else {
+      flat[column_id] = get_representative_value(rep, column_id)
+    }
+  }
+
+  // Format display values for number columns
+  const weight = flat[REPRESENTATIVE_COLUMN_IDS.WEIGHT]
+  if (weight != null) {
+    flat[REPRESENTATIVE_COLUMN_IDS.WEIGHT] = BigNumber(weight).shiftedBy(-30).toFormat(0)
+  }
+
+  const weight_pct = flat[REPRESENTATIVE_COLUMN_IDS.WEIGHT_PCT]
+  if (weight_pct != null) {
+    flat[REPRESENTATIVE_COLUMN_IDS.WEIGHT_PCT] = `${Number(weight_pct).toFixed(2)}%`
+  }
+
+  for (const col of [
+    REPRESENTATIVE_COLUMN_IDS.CONFS_BEHIND,
+    REPRESENTATIVE_COLUMN_IDS.BLOCKS_BEHIND,
+    REPRESENTATIVE_COLUMN_IDS.CEMENTED_COUNT,
+    REPRESENTATIVE_COLUMN_IDS.BLOCK_COUNT,
+    REPRESENTATIVE_COLUMN_IDS.UNCHECKED_COUNT
+  ]) {
+    flat[col] = format_big_number(flat[col])
+  }
+
+  const bw = flat[REPRESENTATIVE_COLUMN_IDS.BANDWIDTH_CAP]
+  if (bw === 0) {
+    flat[REPRESENTATIVE_COLUMN_IDS.BANDWIDTH_CAP] = 'Unlimited'
+  } else if (bw != null) {
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+    const i = parseInt(Math.floor(Math.log(bw) / Math.log(1024)), 10)
+    if (i === 0) {
+      flat[REPRESENTATIVE_COLUMN_IDS.BANDWIDTH_CAP] = `${bw} ${sizes[i]}/s`
+    } else {
+      flat[REPRESENTATIVE_COLUMN_IDS.BANDWIDTH_CAP] = `${(bw / 1024 ** i).toFixed(1)} ${sizes[i]}/s`
+    }
+  }
+
+  // Include uptime array for the Uptime cell renderer
+  flat.uptime = rep.uptime || []
+  // Include is_online for the LastSeen cell renderer
+  flat.is_online = rep.is_online || (rep.last_online > (rep.last_offline || 0))
+  return flat
 }
 
 router.post('/', async (req, res) => {
@@ -126,35 +203,39 @@ router.post('/', async (req, res) => {
     }
 
     const denominator = quorum_total ? BigNumber(quorum_total) : total_weight
-    // Pre-compute weight_pct on each representative
-    for (const rep of representatives) {
-      if (rep.account_meta && rep.account_meta.weight && denominator.gt(0)) {
-        rep.weight_pct = BigNumber(rep.account_meta.weight)
-          .dividedBy(denominator)
-          .multipliedBy(100)
-          .toNumber()
-      } else {
-        rep.weight_pct = null
-      }
-    }
 
-    let result = representatives
+    // Pre-compute weight_pct and version on a shallow copy to avoid mutating cache
+    const reps_with_computed = representatives.map((rep) => {
+      const weight_pct =
+        rep.account_meta && rep.account_meta.weight && denominator.gt(0)
+          ? BigNumber(rep.account_meta.weight)
+              .dividedBy(denominator)
+              .multipliedBy(100)
+              .toNumber()
+          : null
+      return { ...rep, weight_pct, version: get_version_string(rep) }
+    })
+
+    let result = reps_with_computed
     result = apply_filters(result, where)
     result = apply_sorting(result, sort)
 
     const total_count = result.length
     const paginated = result.slice(offset, offset + limit)
 
+    // Flatten each row to column-keyed values for react-table
+    const flat_data = paginated.map(flatten_representative)
+
     res.status(200).send({
-      data: paginated,
-      total_count,
-      offset,
-      limit,
-      has_more: offset + limit < total_count,
+      data: flat_data,
       metadata: {
+        total_count,
         total_weight: total_weight.toString(),
         quorum_total
-      }
+      },
+      offset,
+      limit,
+      has_more: offset + limit < total_count
     })
   } catch (error) {
     logger(error)
