@@ -125,7 +125,7 @@ router.post('/', async (req, res) => {
       quorum_total = BigNumber.max(online, trended).toNumber()
     }
 
-    const denominator = quorum_total || total_weight
+    const denominator = quorum_total ? BigNumber(quorum_total) : total_weight
     // Pre-compute weight_pct on each representative
     for (const rep of representatives) {
       if (rep.account_meta && rep.account_meta.weight && denominator.gt(0)) {
