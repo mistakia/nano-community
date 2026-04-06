@@ -19,7 +19,7 @@
   "author": "Nano Community",
   "license": "MIT",
   "dependencies": {
-    "@trashman/ed25519-blake2b": "0.0.6",
+    "@trashman/ed25519-blake2b": "0.0.7",
     "inquirer": "9.2.23",
     "node-fetch": "3.3.2",
     "yargs": "17.7.2"
