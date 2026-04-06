@@ -62,7 +62,7 @@ if (isMain(import.meta.url)) {
       job_id: 'nano-community-generate-node-observations',
       success: !error,
       reason: error ? error.message : null,
-      duration_ms: Date.now() - start_time,
+      duration_ms: Date.now() - start_time
     })
 
     process.exit()

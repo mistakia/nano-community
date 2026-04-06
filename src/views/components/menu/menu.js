@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import SwipeableDrawer from '@mui/material/SwipeableDrawer'
 import CloseIcon from '@mui/icons-material/Close'
 import SpeedDial from '@mui/material/SpeedDial'
 import SpeedDialAction from '@mui/material/SpeedDialAction'
 import HomeIcon from '@mui/icons-material/Home'
-
-import { useNavigate, useLocation } from 'react-router-dom'
 
 import SearchBar from '@components/search-bar'
 

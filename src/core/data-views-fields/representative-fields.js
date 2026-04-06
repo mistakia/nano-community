@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 
@@ -34,16 +35,33 @@ const StatusCell = React.memo(({ row }) => (
   <Uptime data={row.original._uptime_data || []} length={1} />
 ))
 StatusCell.displayName = 'StatusCell'
+StatusCell.propTypes = {
+  row: PropTypes.shape({
+    original: PropTypes.shape({
+      _uptime_data: PropTypes.array
+    })
+  })
+}
 
 const AccountCell = React.memo(({ value }) => (
   <Link to={`/${value}`}>{value}</Link>
 ))
 AccountCell.displayName = 'AccountCell'
+AccountCell.propTypes = {
+  value: PropTypes.string
+}
 
 const UptimeCell = React.memo(({ row }) => (
   <Uptime data={row.original._uptime_data || []} length={25} />
 ))
 UptimeCell.displayName = 'UptimeCell'
+UptimeCell.propTypes = {
+  row: PropTypes.shape({
+    original: PropTypes.shape({
+      _uptime_data: PropTypes.array
+    })
+  })
+}
 
 const LastSeenCell = React.memo(({ row }) =>
   row.original._is_online ? (
@@ -53,6 +71,14 @@ const LastSeenCell = React.memo(({ row }) =>
   ) : null
 )
 LastSeenCell.displayName = 'LastSeenCell'
+LastSeenCell.propTypes = {
+  row: PropTypes.shape({
+    original: PropTypes.shape({
+      _is_online: PropTypes.bool,
+      last_seen: PropTypes.number
+    })
+  })
+}
 
 const number_operators = [
   table_constants.TABLE_OPERATORS.EQUAL,

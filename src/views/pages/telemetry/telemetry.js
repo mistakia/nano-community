@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import PropTypes from 'prop-types'
 import Table from 'react-table/index.js'
 
 import Seo from '@components/seo'
@@ -70,4 +71,21 @@ export default function TelemetryPage({
       </div>
     </>
   )
+}
+
+TelemetryPage.propTypes = {
+  data: PropTypes.array,
+  all_columns: PropTypes.array,
+  table_state: PropTypes.object,
+  saved_table_state: PropTypes.object,
+  is_loading: PropTypes.bool,
+  is_fetching: PropTypes.bool,
+  total_row_count: PropTypes.number,
+  total_rows_fetched: PropTypes.number,
+  selected_view: PropTypes.object,
+  views: PropTypes.array,
+  data_view_changed: PropTypes.func,
+  set_selected_data_view: PropTypes.func,
+  reset_data_view_cache: PropTypes.func,
+  load_data_view: PropTypes.func
 }
