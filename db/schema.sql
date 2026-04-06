@@ -30,7 +30,7 @@ CREATE TABLE `accounts_changelog` (
   `previous_value` varchar(1000) CHARACTER SET utf8mb4 DEFAULT '',
   `new_value` varchar(1000) CHARACTER SET utf8mb4 DEFAULT '',
   `timestamp` int(11) NOT NULL,
-  UNIQUE `change` (`account`, `column`, `previous_value`(60), `new_value`(60), `timestamp`)
+  UNIQUE `change` (`account`, `column`, `previous_value`(55), `new_value`(55), `timestamp`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- ----------------------------------------------------------
@@ -623,7 +623,7 @@ CREATE TABLE `users` (
 DROP TABLE IF EXISTS `voting_weight`;
 
 CREATE TABLE `voting_weight` (
-  `address` varchar(120) NOT NULL,
+  `address` varchar(65) NOT NULL,
   `quorum_delta` decimal(39,0) NOT NULL,
   `online_weight_quorum_percent` int(3) NOT NULL,
   `online_weight_minimum` decimal(39,0) NOT NULL,
