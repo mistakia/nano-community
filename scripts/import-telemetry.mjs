@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 
 import config from '#config'
 import { rpc, getNetworkInfo, wait, median, isMain, getData } from '#common'
-import report_job from '../libs-server/report-job.mjs'
+import report_job from '#libs-server/report-job.mjs'
 import db from '#db'
 
 const log = debug('import-telemetry')

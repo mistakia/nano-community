@@ -7,7 +7,7 @@ import { hideBin } from 'yargs/helpers'
 import { request, isMain } from '#common'
 import config from '#config'
 import db from '#db'
-import report_job from '../libs-server/report-job.mjs'
+import report_job from '#libs-server/report-job.mjs'
 
 const { github_access_token } = config
 const argv = yargs(hideBin(process.argv)).argv

@@ -1,7 +1,7 @@
 import debug from 'debug'
 
 import { request, isMain } from '#common'
-import report_job from '../libs-server/report-job.mjs'
+import report_job from '#libs-server/report-job.mjs'
 import db from '#db'
 
 const logger = debug('import-nanotipbot-twitter')

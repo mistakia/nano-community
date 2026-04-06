@@ -1,7 +1,7 @@
 import debug from 'debug'
 
 import { isMain, saveData } from '#common'
-import report_job from '../libs-server/report-job.mjs'
+import report_job from '#libs-server/report-job.mjs'
 import db from '#db'
 
 const log = debug('generate-node-observations')

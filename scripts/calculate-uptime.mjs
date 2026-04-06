@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 
 import db from '#db'
 import { isMain } from '#common'
-import report_job from '../libs-server/report-job.mjs'
+import report_job from '#libs-server/report-job.mjs'
 
 const logger = debug('calculate-uptime')
 debug.enable('calculate-uptime')

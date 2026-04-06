@@ -2,7 +2,7 @@ import debug from 'debug'
 import dayjs from 'dayjs'
 
 import { rpc, isMain } from '#common'
-import report_job from '../libs-server/report-job.mjs'
+import report_job from '#libs-server/report-job.mjs'
 import db from '#db'
 
 const logger = debug('import-accounts-meta')

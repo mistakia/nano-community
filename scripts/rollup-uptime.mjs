@@ -6,7 +6,7 @@ import { hideBin } from 'yargs/helpers'
 
 import db from '#db'
 import { groupBy, isMain } from '#common'
-import report_job from '../libs-server/report-job.mjs'
+import report_job from '#libs-server/report-job.mjs'
 
 dayjs.extend(utc)
 const argv = yargs(hideBin(process.argv)).argv

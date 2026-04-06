@@ -2,7 +2,7 @@ import debug from 'debug'
 import dayjs from 'dayjs'
 
 import { rpc, groupBy, isMain } from '#common'
-import report_job from '../libs-server/report-job.mjs'
+import report_job from '#libs-server/report-job.mjs'
 import config from '#config'
 import db from '#db'
 import { REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT } from '#constants'
