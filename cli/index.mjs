@@ -11,7 +11,9 @@ import ed25519 from '@trashman/ed25519-blake2b'
 
 const is_test = process.env.NODE_ENV === 'test'
 
-const base_url = is_test ? 'http://localhost:8080' : 'https://nano.community'
+const base_url =
+  process.env.NC_CLI_API_URL ||
+  (is_test ? 'http://localhost:8085' : 'https://nano.community')
 
 function sign_nano_community_link_key({
   linked_public_key,

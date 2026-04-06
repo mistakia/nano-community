@@ -41,11 +41,17 @@ describe('CLI', function () {
   const nano_account_address =
     'nano_3d78japo7ziqqcsptk47eonzwzwjyaydcywq5ebzowjpxgyehynnjc9pd5zj'
 
-  before(() => {
-    process.env.NC_CLI_NANO_PRIVATE_KEY = nano_private_key
+  before(
+    () =>
+      new Promise((resolve) => {
+        process.env.NC_CLI_NANO_PRIVATE_KEY = nano_private_key
 
-    server.listen(port, () => console.log(`API listening on port ${port}`))
-  })
+        server.listen(port, () => {
+          console.log(`API listening on port ${port}`)
+          resolve()
+        })
+      })
+  )
 
   after(() => {
     server.close()
