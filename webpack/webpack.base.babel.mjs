@@ -150,7 +150,15 @@ const base = (options) => ({
   resolve: {
     modules: ['node_modules', 'app'],
     extensions: ['.js', '.jsx', '.react.js', '.mjs'],
-    mainFields: ['browser', 'jsnext:main', 'main']
+    mainFields: ['browser', 'jsnext:main', 'main'],
+    alias: {
+      '@views': path.resolve(__dirname, '../src/views'),
+      '@pages': path.resolve(__dirname, '../src/views/pages'),
+      '@core': path.resolve(__dirname, '../src/core'),
+      '@components': path.resolve(__dirname, '../src/views/components'),
+      '@styles': path.resolve(__dirname, '../src/styles'),
+      '#common': path.resolve(__dirname, '../common')
+    }
   },
   devtool: options.devtool,
   target: 'web', // Make web variables accessible to webpack, e.g. window
