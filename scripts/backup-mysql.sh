@@ -46,8 +46,8 @@ fi
 tar -zvcf $gz_file $sql_file
 rm $sql_file
 
-# DISABLED: GDrive freeze for canonicalize-storage-hierarchy (2026-03-19)
-# /root/.google-drive-upload/bin/gupload -o $gz_file
+# Storage server pulls snapshot-full.tar.gz weekly via nano-community-snapshot-pull.
+# Time-series dumps are local-only; cap retention at 7 days.
 if ! $SNAPSHOT; then
-    rm $gz_file
+    find "$DUMP_DIR" -maxdepth 1 -type f -name "[0-9]*-${backup_type}.tar.gz" -mtime +7 -delete
 fi
