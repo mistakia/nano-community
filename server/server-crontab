@@ -45,6 +45,9 @@ JOB_PROJECT=nano-community
 ## backup mysql
 0 0 * * 0 job-wrapper.sh nano-community-backup-mysql /bin/bash /root/nano-community/scripts/backup-mysql.sh -s >> /var/log/nano-community/backup-mysql-snapshot.log 2>&1
 
+## Export crontab for backup sync (hourly) — sentinel file for pull-based backup freshness monitor
+0 * * * * crontab -l > /tmp/nano-community-crontab.txt
+
 ## rollups
 0 0 * * * NODE_ENV=production /root/.nvm/versions/node/v17.9.1/bin/node /root/nano-community/scripts/rollup-uptime.mjs --days 2 >> /var/log/nano-community/rollup-uptime.log 2>&1
 0 */6 * * * NODE_ENV=production /root/.nvm/versions/node/v17.9.1/bin/node /root/nano-community/scripts/calculate-uptime.mjs >> /var/log/nano-community/calculate-uptime.log 2>&1
