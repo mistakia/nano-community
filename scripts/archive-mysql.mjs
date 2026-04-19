@@ -62,7 +62,12 @@ const archive_table = async ({
   return total_archived
 }
 
-const process_batch = async (table, timestamp_column, timestamps, exclude_where = '') => {
+const process_batch = async (
+  table,
+  timestamp_column,
+  timestamps,
+  exclude_where = ''
+) => {
   if (!timestamps.length) return 0
 
   logger(
@@ -120,9 +125,20 @@ const archive_mysql = async ({ batch_size = 20000 }) => {
     }
   ]
 
-  for (const { table, timestamp_column, retention_hours, exclude_where } of tables) {
+  for (const {
+    table,
+    timestamp_column,
+    retention_hours,
+    exclude_where
+  } of tables) {
     try {
-      await archive_table({ table, timestamp_column, retention_hours, batch_size, exclude_where })
+      await archive_table({
+        table,
+        timestamp_column,
+        retention_hours,
+        batch_size,
+        exclude_where
+      })
     } catch (err) {
       logger(`ERROR archiving ${table}: ${err.message}`)
       console.error(err)

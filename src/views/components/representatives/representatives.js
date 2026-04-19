@@ -112,8 +112,7 @@ export default class Representatives extends React.Component {
         field: 'weight_pct',
         headerName: '%',
         width: 80,
-        valueFormatter: (value) =>
-          value ? `${value.toFixed(2)}%` : null,
+        valueFormatter: (value) => (value ? `${value.toFixed(2)}%` : null),
         valueGetter: (value, row) =>
           row.account_meta.weight
             ? BigNumber(row.account_meta.weight)
@@ -126,8 +125,7 @@ export default class Representatives extends React.Component {
         field: 'confs_behind',
         headerName: 'Confs Behind',
         width: 145,
-        valueFormatter: (value) =>
-          value ? BigNumber(value).toFormat() : null,
+        valueFormatter: (value) => (value ? BigNumber(value).toFormat() : null),
         valueGetter: (value, row) => row.telemetry.cemented_behind,
         sortComparator: sort_comparator
       },
@@ -135,9 +133,7 @@ export default class Representatives extends React.Component {
         field: 'uptime',
         headerName: 'Uptime',
         width: 150,
-        renderCell: (p) => (
-          <Uptime data={p.row.uptime} length={25} />
-        ),
+        renderCell: (p) => <Uptime data={p.row.uptime} length={25} />,
         valueGetter: (value, row) =>
           (row.last_online || 0) - (row.last_offline || 0),
         sortComparator: sort_comparator
@@ -184,8 +180,7 @@ export default class Representatives extends React.Component {
         field: 'blocks_behind',
         headerName: 'Blocks Behind',
         width: 145,
-        valueFormatter: (value) =>
-          value ? BigNumber(value).toFormat() : null,
+        valueFormatter: (value) => (value ? BigNumber(value).toFormat() : null),
         valueGetter: (value, row) => row.telemetry.block_behind,
         sortComparator: sort_comparator
       },
@@ -193,8 +188,7 @@ export default class Representatives extends React.Component {
         field: 'cemented_count',
         headerName: 'Confs.',
         width: 140,
-        valueFormatter: (value) =>
-          value ? BigNumber(value).toFormat() : null,
+        valueFormatter: (value) => (value ? BigNumber(value).toFormat() : null),
         valueGetter: (value, row) => row.telemetry.cemented_count,
         sortComparator: sort_comparator
       },
@@ -202,8 +196,7 @@ export default class Representatives extends React.Component {
         field: 'block_count',
         headerName: 'Blocks',
         width: 140,
-        valueFormatter: (value) =>
-          value ? BigNumber(value).toFormat() : null,
+        valueFormatter: (value) => (value ? BigNumber(value).toFormat() : null),
         valueGetter: (value, row) => row.telemetry.block_count,
         sortComparator: sort_comparator
       },
@@ -211,8 +204,7 @@ export default class Representatives extends React.Component {
         field: 'unchecked_count',
         headerName: 'Unchecked',
         width: 140,
-        valueFormatter: (value) =>
-          value ? BigNumber(value).toFormat() : null,
+        valueFormatter: (value) => (value ? BigNumber(value).toFormat() : null),
         valueGetter: (value, row) => row.telemetry.unchecked_count,
         sortComparator: sort_comparator
       },
@@ -252,7 +244,8 @@ export default class Representatives extends React.Component {
           ) : (
             timeago.format(p.row.last_seen * 1000, 'nano_short')
           ),
-        valueGetter: (value, row) => Math.floor(Date.now() / 1000) - row.last_seen,
+        valueGetter: (value, row) =>
+          Math.floor(Date.now() / 1000) - row.last_seen,
         sortComparator: sort_comparator
       },
       {

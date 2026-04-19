@@ -5,8 +5,7 @@ import AccountPage from '@pages/account'
 import BlockPage from '@pages/block'
 import DocPage from '@pages/doc'
 
-const ACCOUNT_REGEX =
-  /^(nano_|xrb_)[13][13456789abcdefghijkmnopqrstuwxyz]{59}$/
+const ACCOUNT_REGEX = /^(nano_|xrb_)[13][13456789abcdefghijkmnopqrstuwxyz]{59}$/
 const BLOCK_REGEX = /^[0-9A-F]{64}$/
 
 export default function DynamicPage() {

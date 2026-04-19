@@ -6,8 +6,7 @@ import { post_representatives_data_view } from '@core/api'
 function get_selected_data_view(state) {
   const data_views = state.get('data_views')
   const selected_id =
-    state.getIn(['app', 'selected_data_view_id']) ||
-    data_views.keySeq().first()
+    state.getIn(['app', 'selected_data_view_id']) || data_views.keySeq().first()
   return data_views.get(selected_id)
 }
 

@@ -18,8 +18,12 @@ const db = Knex(config.mysql)
 const migrate_rows = async () => {
   const one_hour_in_seconds = 3600
 
-  const min_timestamp_query_response = await db('representatives_uptime').min('timestamp as min_timestamp')
-  const max_timestamp_query_response = await db('representatives_uptime').max('timestamp as max_timestamp')
+  const min_timestamp_query_response = await db('representatives_uptime').min(
+    'timestamp as min_timestamp'
+  )
+  const max_timestamp_query_response = await db('representatives_uptime').max(
+    'timestamp as max_timestamp'
+  )
   const end_timestamp = min_timestamp_query_response[0].min_timestamp
   const start_timestamp = max_timestamp_query_response[0].max_timestamp
 

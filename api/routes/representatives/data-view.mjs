@@ -135,12 +135,15 @@ function flatten_representative(rep) {
   // Format display values for number columns
   const weight = flat[REPRESENTATIVE_COLUMN_IDS.WEIGHT]
   if (weight != null) {
-    flat[REPRESENTATIVE_COLUMN_IDS.WEIGHT] = BigNumber(weight).shiftedBy(-30).toFormat(0)
+    flat[REPRESENTATIVE_COLUMN_IDS.WEIGHT] = BigNumber(weight)
+      .shiftedBy(-30)
+      .toFormat(0)
   }
 
   const weight_pct = flat[REPRESENTATIVE_COLUMN_IDS.WEIGHT_PCT]
   if (weight_pct != null) {
-    flat[REPRESENTATIVE_COLUMN_IDS.WEIGHT_PCT] = `${Number(weight_pct).toFixed(2)}%`
+    flat[REPRESENTATIVE_COLUMN_IDS.WEIGHT_PCT] =
+      `${Number(weight_pct).toFixed(2)}%`
   }
 
   for (const col of [
@@ -162,7 +165,8 @@ function flatten_representative(rep) {
     if (i === 0) {
       flat[REPRESENTATIVE_COLUMN_IDS.BANDWIDTH_CAP] = `${bw} ${sizes[i]}/s`
     } else {
-      flat[REPRESENTATIVE_COLUMN_IDS.BANDWIDTH_CAP] = `${(bw / 1024 ** i).toFixed(1)} ${sizes[i]}/s`
+      flat[REPRESENTATIVE_COLUMN_IDS.BANDWIDTH_CAP] =
+        `${(bw / 1024 ** i).toFixed(1)} ${sizes[i]}/s`
     }
   }
 
@@ -170,7 +174,7 @@ function flatten_representative(rep) {
   // overwriting the computed numeric 'uptime' column value)
   flat._uptime_data = rep.uptime || []
   // Include is_online for the LastSeen cell renderer
-  flat._is_online = rep.is_online || (rep.last_online > (rep.last_offline || 0))
+  flat._is_online = rep.is_online || rep.last_online > (rep.last_offline || 0)
   return flat
 }
 
@@ -198,8 +202,12 @@ router.post('/', async (req, res) => {
     const weight_data = cache.get('weight')
     let quorum_total = null
     if (weight_data) {
-      const online = weight_data.onlineWeight ? weight_data.onlineWeight.median : 0
-      const trended = weight_data.trendedWeight ? weight_data.trendedWeight.median : 0
+      const online = weight_data.onlineWeight
+        ? weight_data.onlineWeight.median
+        : 0
+      const trended = weight_data.trendedWeight
+        ? weight_data.trendedWeight.median
+        : 0
       quorum_total = BigNumber.max(online, trended).toNumber()
     }
 
@@ -216,7 +224,7 @@ router.post('/', async (req, res) => {
               .toNumber()
           : null
       const is_online =
-        rep.is_online || (rep.last_online > (rep.last_offline || 0))
+        rep.is_online || rep.last_online > (rep.last_offline || 0)
       return {
         ...rep,
         weight_pct,

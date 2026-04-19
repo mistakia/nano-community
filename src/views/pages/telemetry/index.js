@@ -17,9 +17,7 @@ const mapStateToProps = createSelector(
   get_selected_data_view_id,
   (data_views, data_view_request, selected_view_id) => {
     const selected_view = data_views.get(selected_view_id)
-    const table_state = selected_view
-      ? selected_view.get('table_state')
-      : null
+    const table_state = selected_view ? selected_view.get('table_state') : null
     const saved_table_state = selected_view
       ? selected_view.get('saved_table_state')
       : null
@@ -49,9 +47,7 @@ const mapStateToProps = createSelector(
           ? selected_view.toJS()
           : selected_view
         : null,
-      views: data_views.toJS
-        ? Object.values(data_views.toJS())
-        : []
+      views: data_views.toJS ? Object.values(data_views.toJS()) : []
     }
   }
 )
