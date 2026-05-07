@@ -152,7 +152,28 @@ SELECT create_hypertable(
   if_not_exists => TRUE
 );
 
--- 6. Unique constraints (dedup keys). All include the time column to
+-- 6. Integer-now function for time-relative TimescaleDB policies. All five
+--    hypertables share the same Unix-epoch-seconds time convention with an
+--    int4 time column, so one shared function suffices. Required for the
+--    compression policy in section 10 to compute "older than 7 days"
+--    against int4 time columns; without it, policy_compression errors
+--    with "integer_now function not set" and show_chunks(..., older_than
+--    => INTERVAL '...') is unusable. Return type must match the
+--    hypertable time column exactly (TimescaleDB rejects a mismatched
+--    return type), hence INTEGER not BIGINT. STABLE (not IMMUTABLE)
+--    because now() varies per txn. Y2038 caveat is inherited from the
+--    int4 time column itself; converting either is out of scope here.
+CREATE OR REPLACE FUNCTION public.unix_now_seconds()
+  RETURNS INTEGER LANGUAGE SQL STABLE AS
+$$ SELECT EXTRACT(EPOCH FROM now())::INTEGER $$;
+
+SELECT set_integer_now_func('public.representatives_uptime',          'public.unix_now_seconds', replace_if_exists => TRUE);
+SELECT set_integer_now_func('public.representatives_telemetry',       'public.unix_now_seconds', replace_if_exists => TRUE);
+SELECT set_integer_now_func('public.representatives_telemetry_index', 'public.unix_now_seconds', replace_if_exists => TRUE);
+SELECT set_integer_now_func('public.accounts_meta',                   'public.unix_now_seconds', replace_if_exists => TRUE);
+SELECT set_integer_now_func('public.posts',                           'public.unix_now_seconds', replace_if_exists => TRUE);
+
+-- 7. Unique constraints (dedup keys). All include the time column to
 --    satisfy the TimescaleDB hypertable rule. UNIQUE INDEXes (not
 --    constraints) are used so they can include "timestamp" without
 --    affecting the upstream Knex code's ON CONFLICT targets.
@@ -174,12 +195,12 @@ CREATE UNIQUE INDEX IF NOT EXISTS posts_id_created_uniq
 CREATE UNIQUE INDEX IF NOT EXISTS posts_url_created_uniq
   ON public.posts (url, created_at);
 
--- 7. Lookup indexes (mirroring bench setup-pg.mjs and the leftmost-prefix
+-- 8. Lookup indexes (mirroring bench setup-pg.mjs and the leftmost-prefix
 --    paths used by the existing nano-community app).
 CREATE INDEX IF NOT EXISTS representatives_telemetry_node_ts
   ON public.representatives_telemetry (node_id, "timestamp");
 
--- 8. Compression configuration. Per-table segment_by chosen for cardinality:
+-- 9. Compression configuration. Per-table segment_by chosen for cardinality:
 --    account dominates uptime/telemetry/accounts_meta; node_id dominates
 --    representatives_telemetry_index after the dedup-key fix; posts has
 --    no segment_by (id distribution is uniform across chunks).
@@ -208,7 +229,7 @@ ALTER TABLE public.posts SET (
   timescaledb.compress_orderby = 'created_at DESC'
 );
 
--- 9. Compression policy: compress chunks older than 7 days. The policy is
+-- 10. Compression policy: compress chunks older than 7 days. The policy is
 --    background-driven; chunks become compressed asynchronously and reads
 --    transparently span compressed and uncompressed chunks. compress_after
 --    must be an integer (epoch seconds) because the time dimension column
@@ -219,7 +240,7 @@ SELECT add_compression_policy('public.representatives_telemetry_index', BIGINT '
 SELECT add_compression_policy('public.accounts_meta', BIGINT '604800', if_not_exists => TRUE);
 SELECT add_compression_policy('public.posts', BIGINT '604800', if_not_exists => TRUE);
 
--- 10. ETL state table. Used by archive-to-postgres.mjs to mark per-table
+-- 11. ETL state table. Used by archive-to-postgres.mjs to mark per-table
 --     completion and support resume after interruption.
 CREATE TABLE IF NOT EXISTS public.etl_state (
   table_name        text PRIMARY KEY,
@@ -231,7 +252,7 @@ CREATE TABLE IF NOT EXISTS public.etl_state (
   notes             text
 );
 
--- 11. Privileges. nano_archive_writer reads/writes the time-series tables
+-- 12. Privileges. nano_archive_writer reads/writes the time-series tables
 --     and etl_state; future nano_archive_reader is created at app-cutover.
 GRANT USAGE ON SCHEMA public TO nano_archive_writer;
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO nano_archive_writer;
