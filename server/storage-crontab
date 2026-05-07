@@ -6,4 +6,13 @@ JOB_PROJECT=nano-community
 0 */6 * * * job-wrapper.sh nano-community-import-nanotrade env NODE_ENV=production /home/user/.nvm/versions/node/v16.14.0/bin/node /home/user/nano-community/scripts/import-subreddit.mjs -r nanotrade >> /var/log/nano-community/import-nanotrade.log 2>&1
 
 
-0 1 * * * flock -n /tmp/nano-community-archive-mysql.lock job-wrapper.sh nano-community-archive-mysql env NODE_ENV=production /home/user/.nvm/versions/node/v16.14.0/bin/node /home/user/nano-community/scripts/archive-mysql.mjs >> /var/log/nano-community/archive-mysql.log 2>&1
+# DISABLED 2026-05-07 -- archive-mysql.mjs is being superseded by the
+# bulk MySQL->PG/Timescale migration in
+# user:task/homelab/etl-nano-community-archive-bulk-migration.md.
+# The cron has been failing since 2024-03 (uptime trim stall, see
+# user:task/homelab/diagnose-archive-mysql-uptime-trim-stalled-2024-03.md);
+# the replacement script is scripts/archive-to-postgres.mjs.
+# RE-ENABLE only if the bulk migration is reverted; otherwise the cutover
+# (user:task/homelab/cutover-nano-community-archive-crons.md) will replace
+# this line entirely with a delta-mode PG-targeted archive job.
+# 0 1 * * * flock -n /tmp/nano-community-archive-mysql.lock job-wrapper.sh nano-community-archive-mysql env NODE_ENV=production /home/user/.nvm/versions/node/v16.14.0/bin/node /home/user/nano-community/scripts/archive-mysql.mjs >> /var/log/nano-community/archive-mysql.log 2>&1
