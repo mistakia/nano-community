@@ -127,22 +127,22 @@ CREATE TABLE IF NOT EXISTS public.posts (
 --    30 days for the high-cardinality time-series tables, 90 days for
 --    accounts_meta (lower cardinality dim, ~800 distinct accounts).
 SELECT create_hypertable(
-  'public.representatives_uptime', '"timestamp"',
+  'public.representatives_uptime', 'timestamp',
   chunk_time_interval => 30 * 86400,
   if_not_exists => TRUE
 );
 SELECT create_hypertable(
-  'public.representatives_telemetry', '"timestamp"',
+  'public.representatives_telemetry', 'timestamp',
   chunk_time_interval => 30 * 86400,
   if_not_exists => TRUE
 );
 SELECT create_hypertable(
-  'public.representatives_telemetry_index', '"timestamp"',
+  'public.representatives_telemetry_index', 'timestamp',
   chunk_time_interval => 30 * 86400,
   if_not_exists => TRUE
 );
 SELECT create_hypertable(
-  'public.accounts_meta', '"timestamp"',
+  'public.accounts_meta', 'timestamp',
   chunk_time_interval => 90 * 86400,
   if_not_exists => TRUE
 );
@@ -210,12 +210,14 @@ ALTER TABLE public.posts SET (
 
 -- 9. Compression policy: compress chunks older than 7 days. The policy is
 --    background-driven; chunks become compressed asynchronously and reads
---    transparently span compressed and uncompressed chunks.
-SELECT add_compression_policy('public.representatives_uptime', INTERVAL '7 days', if_not_exists => TRUE);
-SELECT add_compression_policy('public.representatives_telemetry', INTERVAL '7 days', if_not_exists => TRUE);
-SELECT add_compression_policy('public.representatives_telemetry_index', INTERVAL '7 days', if_not_exists => TRUE);
-SELECT add_compression_policy('public.accounts_meta', INTERVAL '7 days', if_not_exists => TRUE);
-SELECT add_compression_policy('public.posts', INTERVAL '7 days', if_not_exists => TRUE);
+--    transparently span compressed and uncompressed chunks. compress_after
+--    must be an integer (epoch seconds) because the time dimension column
+--    is int4, not timestamptz. 7 days = 604800 seconds.
+SELECT add_compression_policy('public.representatives_uptime', BIGINT '604800', if_not_exists => TRUE);
+SELECT add_compression_policy('public.representatives_telemetry', BIGINT '604800', if_not_exists => TRUE);
+SELECT add_compression_policy('public.representatives_telemetry_index', BIGINT '604800', if_not_exists => TRUE);
+SELECT add_compression_policy('public.accounts_meta', BIGINT '604800', if_not_exists => TRUE);
+SELECT add_compression_policy('public.posts', BIGINT '604800', if_not_exists => TRUE);
 
 -- 10. ETL state table. Used by archive-to-postgres.mjs to mark per-table
 --     completion and support resume after interruption.
