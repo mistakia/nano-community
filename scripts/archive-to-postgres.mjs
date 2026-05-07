@@ -29,6 +29,8 @@ import debug from 'debug'
 import mysql from 'mysql2/promise'
 import pg from 'pg'
 import pgCopyStreams from 'pg-copy-streams'
+import yargs from 'yargs'
+import { hideBin } from 'yargs/helpers'
 
 import { isMain } from '#common'
 import config from '#config'
@@ -43,16 +45,6 @@ const RUN_ORDER = [
   'representatives_telemetry',
   'representatives_uptime'
 ]
-
-// Time-dimension column per table (informational; matches schema hypertable defs).
-// eslint-disable-next-line no-unused-vars
-const TIME_COLUMN = {
-  representatives_uptime: 'timestamp',
-  representatives_telemetry: 'timestamp',
-  representatives_telemetry_index: 'timestamp',
-  accounts_meta: 'timestamp',
-  posts: 'created_at'
-}
 
 // Ordinal column lists transcribed verbatim from db/schema.archive.postgres.sql.
 // Used for both the SELECT projection against MySQL and the COPY column list
@@ -102,18 +94,6 @@ function rowToTsv(row, cols) {
   const parts = new Array(cols.length)
   for (let i = 0; i < cols.length; i++) parts[i] = pgEscape(row[cols[i]])
   return parts.join('\t') + '\n'
-}
-
-function parseFlags(argv) {
-  const out = {}
-  for (let i = 0; i < argv.length; i++) {
-    const a = argv[i]
-    if (!a.startsWith('--')) continue
-    const eq = a.indexOf('=')
-    if (eq > 0) out[a.slice(2, eq)] = a.slice(eq + 1)
-    else out[a.slice(2)] = true
-  }
-  return out
 }
 
 async function openMysqlReader() {
@@ -169,7 +149,6 @@ async function runTable(table, mysqlConn, pgClient, opts) {
   let liveBefore = 0
   let liveAfter = 0
   let committed = false
-  let rolledBack = false
 
   await pgClient.query('BEGIN')
   try {
@@ -228,7 +207,7 @@ async function runTable(table, mysqlConn, pgClient, opts) {
     if (opts.dryRun) {
       logger(`${table}: --dry-run -- ROLLBACK (skip INSERT into public."${table}")`)
       await pgClient.query('ROLLBACK')
-      rolledBack = true
+      committed = true
     } else {
       const before = await pgClient.query(`SELECT count(*)::bigint AS c FROM public."${table}"`)
       liveBefore = Number(before.rows[0].c)
@@ -258,7 +237,7 @@ async function runTable(table, mysqlConn, pgClient, opts) {
       committed = true
     }
   } catch (err) {
-    if (!committed && !rolledBack) {
+    if (!committed) {
       try { await pgClient.query('ROLLBACK') } catch { /* ignore */ }
     }
     throw err
@@ -286,11 +265,11 @@ async function runTable(table, mysqlConn, pgClient, opts) {
 }
 
 async function main() {
-  const flags = parseFlags(process.argv.slice(2))
+  const argv = yargs(hideBin(process.argv)).argv
   const opts = {
-    onlyTable: flags['only-table'] || null,
-    dryRun: !!flags['dry-run'],
-    resumeFrom: flags['resume-from'] || null
+    onlyTable: argv.onlyTable || null,
+    dryRun: !!argv.dryRun,
+    resumeFrom: argv.resumeFrom || null
   }
 
   let order = RUN_ORDER.slice()
