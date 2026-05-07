@@ -78,11 +78,19 @@ const LOCKFILE = '/tmp/nano-community-archive-mysql.lock' // operator wraps invo
 
 // PG TEXT format escapes: \\, \r, \n, \t; NULL -> \N. Lifted from bench
 // extract-subset.mjs (proven against the bench dataset).
+// NUL byte (0x00) is stripped: PG TEXT format rejects it and PG text columns
+// cannot store it -- some posts.text/html rows from upstream reddit imports
+// carry stray NULs from corrupted source text.
+let _nul_strip_count = 0
 function pgEscape(v) {
   if (v === null || v === undefined) return '\\N'
   if (typeof v === 'number') return String(v)
   if (Buffer.isBuffer(v)) v = v.toString('utf8')
   let s = String(v)
+  if (s.indexOf('\u0000') >= 0) {
+    _nul_strip_count++
+    s = s.replace(/\u0000/g, '')
+  }
   if (s.indexOf('\\') >= 0) s = s.replace(/\\/g, '\\\\')
   if (s.indexOf('\n') >= 0) s = s.replace(/\n/g, '\\n')
   if (s.indexOf('\r') >= 0) s = s.replace(/\r/g, '\\r')
@@ -311,7 +319,7 @@ async function main() {
   }
 
   const tookMs = Date.now() - tStart
-  logger(`archive-to-postgres done in ${tookMs}ms`)
+  logger(`archive-to-postgres done in ${tookMs}ms (nul_strip_count=${_nul_strip_count})`)
   for (const s of summaries) {
     logger(
       `  ${s.table}: extracted=${s.rows_extracted.toLocaleString()} ` +
@@ -323,14 +331,14 @@ async function main() {
 
   if (failed) {
     logger(`FAILURE on table=${failed.table}: ${failed.error}`)
-    process.exit(1)
+    process.exitCode = 1
   }
 }
 
 if (isMain(import.meta.url)) {
   main().catch((err) => {
     console.error(err)
-    process.exit(1)
+    process.exitCode = 1
   })
 }
 
