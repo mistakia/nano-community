@@ -149,20 +149,40 @@ async function verifyHistoryTable({ reader, pgClient, dump, dumpName, table, imp
 
   const mysqlCols = await getMysqlColumns(reader, table.name)
   const pgCols = TABLE_COLUMNS[table.live]
-  const projection = mysqlCols.filter((c) => pgCols.includes(c))
-  const missing = pgCols.filter((c) => !mysqlCols.includes(c))
-  logger('dump %s table %s: mysql cols=%j; projecting %d into PG (missing in dump: %j)', dumpName, table.name, mysqlCols, projection.length, missing)
+  // Project only the columns needed for the anti-join (and the bogus-epoch
+  // filter / range probe). Full-row projection trips integer-vs-decimal
+  // mismatches on columns we don't actually look at (e.g., posts.summary).
+  // --import-unmatched paths still want full rows, but the dump branch is
+  // verify-only by default; toggling that is a separate task.
+  let neededCols
+  if (table.live === 'posts') neededCols = ['url', 'created_at']
+  else neededCols = [...table.keys] // (account, [node_id,] timestamp)
+  const projection = neededCols.filter((c) => mysqlCols.includes(c))
+  const missing = neededCols.filter((c) => !mysqlCols.includes(c))
+  if (missing.length > 0) {
+    logger('dump %s table %s: missing required cols %j; skipping verification', dumpName, table.name, missing)
+    await ledger.appendRow({
+      file: `dump:${dumpName}#${table.name}`,
+      table: table.live,
+      classification: 'skipped',
+      notes: `missing required cols=${JSON.stringify(missing)} mysql_cols=${mysqlCols.length}`
+    })
+    return null
+  }
+  logger('dump %s table %s: mysql cols=%d; projecting key cols=%j', dumpName, table.name, mysqlCols.length, projection)
 
   const srcCount = await tableRowCount(reader, table.name)
   logger('dump %s table %s: mysql row count = %d', dumpName, table.name, srcCount)
 
+  // Lightweight typed staging table that holds only the anti-join keys.
   await pgClient.query('BEGIN')
-  await pgClient.query(`CREATE TEMP TABLE _stage (LIKE public.${table.live} INCLUDING DEFAULTS) ON COMMIT DROP`)
-  if (table.live === 'representatives_telemetry' || table.live === 'representatives_telemetry_index') {
-    await pgClient.query('ALTER TABLE _stage ALTER COLUMN account_count DROP NOT NULL, ALTER COLUMN account_count SET DEFAULT 0')
-  }
   if (table.live === 'posts') {
-    await pgClient.query('ALTER TABLE _stage ALTER COLUMN author TYPE TEXT, ALTER COLUMN authorid TYPE TEXT')
+    await pgClient.query('CREATE TEMP TABLE _stage (url varchar(255), created_at integer) ON COMMIT DROP')
+  } else if (table.live === 'representatives_uptime') {
+    await pgClient.query('CREATE TEMP TABLE _stage (account character(65), "timestamp" integer) ON COMMIT DROP')
+  } else {
+    // representatives_telemetry: account + node_id + timestamp
+    await pgClient.query('CREATE TEMP TABLE _stage (account character(65), node_id character(65), "timestamp" integer) ON COMMIT DROP')
   }
 
   const tCopy0 = Date.now()
@@ -251,44 +271,12 @@ async function verifyHistoryTable({ reader, pgClient, dump, dumpName, table, imp
   let imported = null
 
   if (importMode && unmatched > 0) {
-    await pgClient.query('SET LOCAL timescaledb.max_tuples_decompressed_per_dml_transaction TO 0')
-    const projList = projection.map((c) => `"${c}"`).join(', ')
-    const projSelect = projection.map((c) => `s."${c}"`).join(', ')
-    const tIns0 = Date.now()
-    let insertSql
-    if (table.live === 'posts') {
-      insertSql = `INSERT INTO public.${table.live} (${projList})
-                   SELECT DISTINCT ON (s.url, s.created_at) ${projSelect}
-                     FROM _stage s
-                    WHERE s.url IS NOT NULL AND s.created_at > 1262304000
-                      AND NOT EXISTS (SELECT 1 FROM public.${table.live} l WHERE l.url = s.url)
-                   ON CONFLICT DO NOTHING`
-    } else if (table.live === 'representatives_uptime') {
-      insertSql = `INSERT INTO public.${table.live} (${projList})
-                   SELECT DISTINCT ON (s.account, s."timestamp") ${projSelect}
-                     FROM _stage s
-                    WHERE s."timestamp" > 0
-                      AND NOT EXISTS (SELECT 1 FROM public.${table.live} l WHERE l.account = s.account AND l."timestamp" = s."timestamp")
-                   ON CONFLICT DO NOTHING`
-    } else {
-      // representatives_telemetry: NULLS-DISTINCT loophole on account; do not use ON CONFLICT to dedupe.
-      // Filter explicitly via NOT EXISTS with IS NOT DISTINCT FROM, then DISTINCT ON staging.
-      insertSql = `INSERT INTO public.${table.live} (${projList})
-                   SELECT DISTINCT ON (s.account, s.node_id, s."timestamp") ${projSelect}
-                     FROM _stage s
-                    WHERE s."timestamp" > 0
-                      AND NOT EXISTS (
-                        SELECT 1 FROM public.${table.live} l
-                         WHERE l.account IS NOT DISTINCT FROM s.account
-                           AND l.node_id = s.node_id
-                           AND l."timestamp" = s."timestamp"
-                      )`
-    }
-    const ins = await pgClient.query(insertSql)
-    imported = ins.rowCount
-    logger('dump %s table %s: imported=%d (%.1fs)', dumpName, table.name, imported, (Date.now() - tIns0) / 1000)
-    await pgClient.query('COMMIT')
-    classification = `partial+imported(${imported})`
+    // Dump-branch staging only carries the anti-join keys, so we cannot
+    // INSERT full rows from staging. Importing dump rows requires a full-row
+    // projection, which lives in a separate task (the dedup follow-up will
+    // also drive that). For now, --import-unmatched is a no-op for dumps.
+    logger('dump %s table %s: --import-unmatched ignored; full-row projection not implemented in dump branch', dumpName, table.name)
+    await pgClient.query('ROLLBACK')
   } else {
     await pgClient.query('ROLLBACK')
   }
