@@ -13,6 +13,7 @@
 import { createReadStream } from 'node:fs'
 import { stat } from 'node:fs/promises'
 import { pipeline } from 'node:stream/promises'
+import { Transform } from 'node:stream'
 
 import debug from 'debug'
 import pgCopyStreams from 'pg-copy-streams'
@@ -40,6 +41,29 @@ const STAGE_LIKE = 'public.representatives_telemetry'
 const LIVE_TABLE = CLUSTER_TARGETS[CLUSTER]
 const COLS = TABLE_COLUMNS.representatives_telemetry
 
+// Drops empty lines from the byte stream so trailing blank lines on
+// header-only CSVs don't trip "missing data for column" in PG COPY. Buffers
+// across chunk boundaries; emits only complete non-empty lines.
+function emptyLineFilter() {
+  let pending = ''
+  return new Transform({
+    transform(chunk, _enc, cb) {
+      const buf = pending + chunk.toString('utf8')
+      const lines = buf.split('\n')
+      pending = lines.pop() // last partial line
+      const out = []
+      for (const ln of lines) {
+        if (ln.length > 0 && ln !== '\r') out.push(ln)
+      }
+      cb(null, out.length ? out.join('\n') + '\n' : '')
+    },
+    flush(cb) {
+      if (pending.length > 0 && pending !== '\r') cb(null, pending + '\n')
+      else cb()
+    }
+  })
+}
+
 async function copyOne(client, path) {
   const dialect = await sniffCsvDialect(path)
   for (const c of dialect.header) {
@@ -50,7 +74,7 @@ async function copyOne(client, path) {
   const colList = dialect.header.map((c) => `"${c}"`).join(', ')
   const sql = `COPY _stage (${colList}) FROM STDIN WITH (FORMAT csv, HEADER true)`
   const ingest = client.query(pgCopyStreams.from(sql))
-  await pipeline(createReadStream(path), ingest)
+  await pipeline(createReadStream(path), emptyLineFilter(), ingest)
   return { rows: ingest.rowCount, columnCount: dialect.column_count }
 }
 
