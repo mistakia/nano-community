@@ -72,6 +72,9 @@ async function run() {
   try {
     await client.query('BEGIN')
     await client.query(`CREATE TEMP TABLE _stage (LIKE ${STAGE_LIKE} INCLUDING DEFAULTS) ON COMMIT DROP`)
+    // Live schema declares account_count NOT NULL with no DEFAULT, so legacy
+    // 21-col CSVs (which lack the column) cannot ingest. Loosen for staging.
+    await client.query('ALTER TABLE _stage ALTER COLUMN account_count DROP NOT NULL, ALTER COLUMN account_count SET DEFAULT 0')
 
     let totalRows = 0
     let totalBytes = 0
