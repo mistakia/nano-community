@@ -355,7 +355,7 @@ if (isMain(import.meta.url)) {
     .option('selftest', { type: 'string', describe: 'Path to a sample CSV; opens PG, sniffs file, pings Discord' })
     .option('validate-cluster', { type: 'string', describe: 'Cluster name; walks every CSV and reports column-shape distribution', choices: Object.keys(CLUSTER_PATTERNS) })
     .strict()
-    .parseSync()
+    .argv
   ;(async () => {
     let code = EXIT_SAFE
     if (argv.selftest) {
