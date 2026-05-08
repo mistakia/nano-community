@@ -49,18 +49,18 @@ function emptyLineFilter() {
   let pending = ''
   return new Transform({
     transform(chunk, _enc, cb) {
-      const buf = (pending + chunk.toString('utf8')).replace(/\u0000/g, '')
+      const buf = (pending + chunk.toString('utf8')).replace(/[\u0000\r]/g, '')
       const lines = buf.split('\n')
       pending = lines.pop()
       const out = []
       for (const ln of lines) {
-        if (ln.length > 0 && ln !== '\r') out.push(ln)
+        if (ln.length > 0) out.push(ln)
       }
       cb(null, out.length ? out.join('\n') + '\n' : '')
     },
     flush(cb) {
-      const tail = pending.replace(/\u0000/g, '')
-      if (tail.length > 0 && tail !== '\r') cb(null, tail + '\n')
+      const tail = pending.replace(/[\u0000\r]/g, '')
+      if (tail.length > 0) cb(null, tail + '\n')
       else cb()
     }
   })
