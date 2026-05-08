@@ -80,9 +80,7 @@ async function run() {
       const { rows: n, columnCount } = await copyOne(client, f)
       totalRows += n
       shapeHistogram.set(columnCount, (shapeHistogram.get(columnCount) || 0) + 1)
-      if (totalRows % 5000000 < n) {
-        logger('COPY progress: cum %d rows / %.1f MB', totalRows, totalBytes / 1024 / 1024)
-      }
+      logger('COPY %s -> %d rows (cum %d)', f.split('/').pop(), n, totalRows)
     }
     const shapeSummary = JSON.stringify(Object.fromEntries(shapeHistogram))
     const tCopy = Date.now() - t0
