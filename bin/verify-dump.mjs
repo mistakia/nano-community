@@ -96,10 +96,19 @@ async function mysqlAdmin(sql) {
 }
 
 async function loadDump(dumpPath) {
-  // Prefer streaming the dump through stdin to avoid a temporary file.
-  // mysql nano_verify_tmp < dump.sql; we use bash -c to handle the < redirect.
+  // Storage MySQL is on HDD with default flush semantics; large dump loads
+  // are I/O bound on per-transaction fsync. Disable binary logging, unique
+  // checks, foreign-key checks and tighten flush behavior for the duration
+  // of the load. nano_verify_tmp is transient so durability is moot.
+  const initCmd = [
+    'SET sql_log_bin=0',
+    'SET unique_checks=0',
+    'SET foreign_key_checks=0',
+    'SET innodb_flush_log_at_trx_commit=0',
+    'SET autocommit=1'
+  ].join('; ')
   const t0 = Date.now()
-  await shell('bash', ['-c', `mysql ${TMP_DB} < ${dumpPath}`])
+  await shell('bash', ['-c', `mysql --init-command='${initCmd}' ${TMP_DB} < ${dumpPath}`])
   return Date.now() - t0
 }
 
