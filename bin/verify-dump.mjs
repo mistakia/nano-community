@@ -100,11 +100,12 @@ async function loadDump(dumpPath) {
   // are I/O bound on per-transaction fsync. Disable binary logging, unique
   // checks, foreign-key checks and tighten flush behavior for the duration
   // of the load. nano_verify_tmp is transient so durability is moot.
+  // innodb_flush_log_at_trx_commit is GLOBAL only; the operator sets it once
+  // out-of-band ahead of running the loop. The remaining tweaks are session.
   const initCmd = [
     'SET sql_log_bin=0',
     'SET unique_checks=0',
     'SET foreign_key_checks=0',
-    'SET innodb_flush_log_at_trx_commit=0',
     'SET autocommit=1'
   ].join('; ')
   const t0 = Date.now()
