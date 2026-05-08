@@ -135,6 +135,30 @@ async function run() {
     const unmatched = Number(aj.rows[0].unmatched)
     logger('anti-join: unmatched=%d (%.1fs)', unmatched, tAj / 1000)
 
+    let yearHistogram = null
+    if (unmatched > 0) {
+      // Bucket unmatched by year so we can tell trim-driven (older rows
+      // missing) apart from migration-coverage-gap (rows missing across
+      // the full range).
+      const tH = Date.now()
+      const hist = await client.query(
+        `SELECT extract(year FROM to_timestamp(s."timestamp"))::int AS yr,
+                count(*)::bigint AS n
+           FROM (SELECT DISTINCT account, node_id, "timestamp" FROM _stage WHERE "timestamp" > 0) s
+           LEFT JOIN public.${LIVE_TABLE} l
+             ON l.account IS NOT DISTINCT FROM s.account
+            AND l.node_id = s.node_id
+            AND l."timestamp" = s."timestamp"
+            AND l."timestamp" BETWEEN $1 AND $2
+          WHERE l."timestamp" IS NULL
+          GROUP BY yr
+          ORDER BY yr`,
+        [r.min_ts, r.max_ts]
+      )
+      yearHistogram = Object.fromEntries(hist.rows.map((row) => [row.yr, Number(row.n)]))
+      logger('unmatched by year (%.1fs): %j', (Date.now() - tH) / 1000, yearHistogram)
+    }
+
     const liveCount = await client.query(
       `SELECT count(*) AS n FROM public.${LIVE_TABLE} WHERE "timestamp" BETWEEN $1 AND $2`,
       [r.min_ts, r.max_ts]
@@ -164,7 +188,7 @@ async function run() {
       anti_join_count: unmatched,
       live_count_in_window: liveInWindow,
       classification,
-      notes: `n_files=${files.length} bytes=${totalBytes} bogus_in_stage=${r.bogus} copy_ms=${tCopy} antijoin_ms=${tAj}`
+      notes: `n_files=${files.length} bytes=${totalBytes} bogus_in_stage=${r.bogus} copy_ms=${tCopy} antijoin_ms=${tAj}${yearHistogram ? ' unmatched_by_year=' + JSON.stringify(yearHistogram) : ''}`
     })
 
     logger('cluster %s: %s (unmatched=%d)', CLUSTER, classification, unmatched)
