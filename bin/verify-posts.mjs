@@ -176,6 +176,10 @@ async function run() {
       // Import only rows whose url is not yet in live. Posts schema has url
       // and id NOT NULL on the unique-index columns, so ON CONFLICT DO NOTHING
       // is tight (no NULLS-DISTINCT loophole).
+      // Lift TimescaleDB's per-DML decompression cap: ON CONFLICT against the
+      // unique indexes on a compressed hypertable will decompress conflicting
+      // chunks, and the default 100k tuple cap is exceeded by 8M-row staging.
+      await client.query('SET LOCAL timescaledb.max_tuples_decompressed_per_dml_transaction TO 0')
       const colList = COLS.map((c) => `"${c}"`).join(', ')
       const tIns = Date.now()
       const ins = await client.query(
