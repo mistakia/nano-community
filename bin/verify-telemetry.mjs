@@ -175,7 +175,31 @@ async function run() {
       exit = EXIT_PARTIAL
     }
 
-    await client.query('ROLLBACK')
+    // --import-unmatched: when the cluster is partial because the CSVs
+    // contain rows the bulk migration could not have copied (the CSVs are
+    // independent VPS-side backups whose 2021-2022 history never reached
+    // storage MySQL), backfill them into live before re-verifying. The
+    // unique index (account, node_id, "timestamp") absorbs duplicates so
+    // ON CONFLICT DO NOTHING is idempotent.
+    let imported = null
+    const importMode = process.argv.includes('--import-unmatched')
+    if (importMode && unmatched > 0) {
+      const colList = COLS.map((c) => `"${c}"`).join(', ')
+      const tIns = Date.now()
+      const ins = await client.query(
+        `INSERT INTO public.${LIVE_TABLE} (${colList})
+         SELECT ${colList} FROM _stage WHERE "timestamp" > 0
+         ON CONFLICT DO NOTHING`
+      )
+      imported = ins.rowCount
+      logger('import-unmatched: inserted=%d (skipped via ON CONFLICT) (%.1fs)', imported, (Date.now() - tIns) / 1000)
+      await client.query('COMMIT')
+      classification = `partial+imported(${imported})`
+      // Treat the import as the closing action; verdict relays back to caller.
+      exit = imported >= unmatched ? EXIT_SAFE : EXIT_PARTIAL
+    } else {
+      await client.query('ROLLBACK')
+    }
 
     await ledger.appendRow({
       file: `cluster:${CLUSTER}`,
@@ -188,7 +212,7 @@ async function run() {
       anti_join_count: unmatched,
       live_count_in_window: liveInWindow,
       classification,
-      notes: `n_files=${files.length} bytes=${totalBytes} bogus_in_stage=${r.bogus} copy_ms=${tCopy} antijoin_ms=${tAj}${yearHistogram ? ' unmatched_by_year=' + JSON.stringify(yearHistogram) : ''}`
+      notes: `n_files=${files.length} bytes=${totalBytes} bogus_in_stage=${r.bogus} copy_ms=${tCopy} antijoin_ms=${tAj}${yearHistogram ? ' unmatched_by_year=' + JSON.stringify(yearHistogram) : ''}${imported !== null ? ' imported=' + imported : ''}`
     })
 
     logger('cluster %s: %s (unmatched=%d)', CLUSTER, classification, unmatched)
