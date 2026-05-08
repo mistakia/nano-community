@@ -102,6 +102,11 @@ async function run() {
   try {
     await client.query('BEGIN')
     await client.query(`CREATE TEMP TABLE _stage (LIKE ${STAGE_LIKE} INCLUDING DEFAULTS) ON COMMIT DROP`)
+    // CSVs occasionally carry values longer than live posts.author / authorid
+    // (varchar(32)). Widen staging so verification can ingest everything; the
+    // anti-join is on url only so wider values do not affect classification.
+    // --import-unmatched truncates with substring() before INSERT.
+    await client.query('ALTER TABLE _stage ALTER COLUMN author TYPE TEXT, ALTER COLUMN authorid TYPE TEXT')
 
     let totalRows = 0
     let totalBytes = 0
