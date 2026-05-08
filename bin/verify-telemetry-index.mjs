@@ -29,7 +29,8 @@ import {
   listClusterFiles,
   notifyDiscord,
   openLedger,
-  sha256File
+  sha256File,
+  sniffCsvDialect
 } from './verify-common.mjs'
 
 const logger = debug('verify-telemetry-index')
@@ -40,12 +41,21 @@ const STAGE_LIKE = 'public.representatives_telemetry_index'
 const LIVE_TABLE = CLUSTER_TARGETS[CLUSTER] // representatives_telemetry
 const COLS = TABLE_COLUMNS.representatives_telemetry_index
 
+// COPY column list is driven by the file's actual header so 20-col CSVs (no
+// account_count) and 21-col CSVs (with account_count) both ingest cleanly.
+// Unlisted columns are filled by the staging table's INCLUDING DEFAULTS.
 async function copyOne(client, path) {
-  const colList = COLS.map((c) => `"${c}"`).join(', ')
+  const dialect = await sniffCsvDialect(path)
+  for (const c of dialect.header) {
+    if (!COLS.includes(c)) {
+      throw new Error(`unknown CSV header column ${c} in ${path}; expected subset of ${COLS.join(',')}`)
+    }
+  }
+  const colList = dialect.header.map((c) => `"${c}"`).join(', ')
   const sql = `COPY _stage (${colList}) FROM STDIN WITH (FORMAT csv, HEADER true)`
   const ingest = client.query(pgCopyStreams.from(sql))
   await pipeline(createReadStream(path), ingest)
-  return ingest.rowCount
+  return { rows: ingest.rowCount, columnCount: dialect.column_count }
 }
 
 async function run() {
@@ -65,14 +75,17 @@ async function run() {
 
     let totalRows = 0
     let totalBytes = 0
+    const shapeHistogram = new Map()
     const t0 = Date.now()
     for (const f of files) {
       const stt = await stat(f)
       totalBytes += stt.size
-      const n = await copyOne(client, f)
+      const { rows: n, columnCount } = await copyOne(client, f)
       totalRows += n
-      logger('COPY %s -> %d rows (cum %d, %.1f MB)', f.split('/').pop(), n, totalRows, totalBytes / 1024 / 1024)
+      shapeHistogram.set(columnCount, (shapeHistogram.get(columnCount) || 0) + 1)
+      logger('COPY %s -> %d rows (cum %d, %.1f MB, %d cols)', f.split('/').pop(), n, totalRows, totalBytes / 1024 / 1024, columnCount)
     }
+    const shapeSummary = JSON.stringify(Object.fromEntries(shapeHistogram))
     const tCopy = Date.now() - t0
     logger('COPY phase: %d rows from %d files in %.1fs (%.1f MB)', totalRows, files.length, tCopy / 1000, totalBytes / 1024 / 1024)
 
@@ -137,7 +150,7 @@ async function run() {
       min_ts: r.min_ts,
       max_ts: r.max_ts,
       pk_used: '(node_id, "timestamp")',
-      column_delta: '21-col uniform',
+      column_delta: shapeSummary,
       anti_join_count: unmatched,
       live_count_in_window: liveInWindow,
       classification,
