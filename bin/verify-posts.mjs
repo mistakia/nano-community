@@ -62,6 +62,12 @@ function emptyLineFilter() {
   })
 }
 
+// Live schema marks content_url, author, pid, sid NOT NULL but CSV represents
+// missing values as unquoted empty fields, which PG's CSV parser maps to NULL
+// by default. FORCE_NOT_NULL converts the unquoted empties on those columns
+// into empty strings so the staging table's NOT NULL inheritance is satisfied.
+const FORCE_NOT_NULL_COLS = ['content_url', 'author', 'pid', 'sid', 'title']
+
 async function copyOne(client, path) {
   const dialect = await sniffCsvDialect(path)
   for (const c of dialect.header) {
@@ -70,7 +76,9 @@ async function copyOne(client, path) {
     }
   }
   const colList = dialect.header.map((c) => `"${c}"`).join(', ')
-  const sql = `COPY _stage (${colList}) FROM STDIN WITH (FORMAT csv, HEADER true)`
+  const fnn = FORCE_NOT_NULL_COLS.filter((c) => dialect.header.includes(c)).map((c) => `"${c}"`).join(', ')
+  const fnnClause = fnn.length > 0 ? `, FORCE_NOT_NULL (${fnn})` : ''
+  const sql = `COPY _stage (${colList}) FROM STDIN WITH (FORMAT csv, HEADER true${fnnClause})`
   const ingest = client.query(pgCopyStreams.from(sql))
   await pipeline(createReadStream(path), emptyLineFilter(), ingest)
   return { rows: ingest.rowCount, columnCount: dialect.column_count }
