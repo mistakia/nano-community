@@ -89,7 +89,7 @@ function pgEscape(v) {
   let s = String(v)
   if (s.indexOf('\u0000') >= 0) {
     _nul_strip_count++
-    s = s.replace(/\u0000/g, '')
+    s = s.split('\u0000').join('')
   }
   if (s.indexOf('\\') >= 0) s = s.replace(/\\/g, '\\\\')
   if (s.indexOf('\n') >= 0) s = s.replace(/\n/g, '\\n')

@@ -29,7 +29,6 @@ import {
   listClusterFiles,
   notifyDiscord,
   openLedger,
-  sha256File,
   sniffCsvDialect
 } from './verify-common.mjs'
 

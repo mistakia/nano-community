@@ -7,9 +7,8 @@
 // Plan: user:task/homelab/verify-nano-community-csv-ingestion.md
 
 import { createReadStream } from 'node:fs'
-import { readdir } from 'node:fs/promises'
+import { appendFile, mkdir, readdir, readFile } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
-import { appendFile, mkdir, readFile } from 'node:fs/promises'
 import { dirname } from 'node:path'
 
 import debug from 'debug'
@@ -180,7 +179,7 @@ export function pgEscape(v) {
   let s = String(v)
   if (s.indexOf('\u0000') >= 0) {
     _nul_strip_count++
-    s = s.replace(/\u0000/g, '')
+    s = s.split('\u0000').join('')
   }
   if (s.indexOf('\\') >= 0) s = s.replace(/\\/g, '\\\\')
   if (s.indexOf('\n') >= 0) s = s.replace(/\n/g, '\\n')
