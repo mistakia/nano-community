@@ -42,11 +42,14 @@ const LIVE_TABLE = CLUSTER_TARGETS[CLUSTER]
 const COLS = TABLE_COLUMNS.posts
 const POSTS_BOGUS_EPOCH_THRESHOLD = 1262304000 // 2010-01-01 UTC; matches plan
 
+// Drops empty lines and strips NUL bytes (0x00). PG rejects NULs in UTF8
+// text columns and the bulk migration already removed 95 NULs from posts
+// content -- the CSV files preserve the originals so we strip again here.
 function emptyLineFilter() {
   let pending = ''
   return new Transform({
     transform(chunk, _enc, cb) {
-      const buf = pending + chunk.toString('utf8')
+      const buf = (pending + chunk.toString('utf8')).replace(/\u0000/g, '')
       const lines = buf.split('\n')
       pending = lines.pop()
       const out = []
@@ -56,7 +59,8 @@ function emptyLineFilter() {
       cb(null, out.length ? out.join('\n') + '\n' : '')
     },
     flush(cb) {
-      if (pending.length > 0 && pending !== '\r') cb(null, pending + '\n')
+      const tail = pending.replace(/\u0000/g, '')
+      if (tail.length > 0 && tail !== '\r') cb(null, tail + '\n')
       else cb()
     }
   })
