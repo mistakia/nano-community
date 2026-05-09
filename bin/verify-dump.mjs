@@ -300,9 +300,9 @@ async function verifyHistoryTable({ reader, pgClient, dump, dumpName, table, imp
     logger('dump %s table %s: full-row projection cols=%d missing=%j', dumpName, table.name, fullProjection.length, missingFull)
 
     await pgClient.query(`CREATE TEMP TABLE _stage_full (LIKE public.${table.live} INCLUDING DEFAULTS) ON COMMIT DROP`)
-    // Match verify-posts widening: dump may carry author/authorid longer than
-    // live varchar(32). Substring on INSERT below.
-    await pgClient.query('ALTER TABLE _stage_full ALTER COLUMN author TYPE TEXT, ALTER COLUMN authorid TYPE TEXT')
+    // author/authorid: dump may carry longer than live varchar(32) -> TEXT, substring on INSERT.
+    // social_score: dump stores decimal(7,1) but live is integer -> TEXT, floor-cast on INSERT.
+    await pgClient.query('ALTER TABLE _stage_full ALTER COLUMN author TYPE TEXT, ALTER COLUMN authorid TYPE TEXT, ALTER COLUMN social_score TYPE TEXT')
 
     // Fetch from MySQL in batches to keep IN-list manageable.
     const BATCH = 500
@@ -331,6 +331,7 @@ async function verifyHistoryTable({ reader, pgClient, dump, dumpName, table, imp
     const selectCols = pgPostsCols.map((c) => {
       if (!fullProjection.includes(c)) return 'NULL'
       if (c === 'author' || c === 'authorid') return `substring(s."${c}" FROM 1 FOR 32)`
+      if (c === 'social_score') return `floor(s."${c}"::numeric)::integer`
       return `s."${c}"`
     }).join(', ')
     const tIns = Date.now()
