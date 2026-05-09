@@ -280,12 +280,75 @@ async function verifyHistoryTable({ reader, pgClient, dump, dumpName, table, imp
   let classification = unmatched === 0 ? 'verified-safe' : 'partial'
   let imported = null
 
-  if (importMode && unmatched > 0) {
-    // Dump-branch staging only carries the anti-join keys, so we cannot
-    // INSERT full rows from staging. Importing dump rows requires a full-row
-    // projection, which lives in a separate task (the dedup follow-up will
-    // also drive that). For now, --import-unmatched is a no-op for dumps.
-    logger('dump %s table %s: --import-unmatched ignored; full-row projection not implemented in dump branch', dumpName, table.name)
+  if (importMode && unmatched > 0 && table.live === 'posts') {
+    // Posts full-row import path: re-fetch the unmatched URLs' full rows from
+    // MySQL into a richer staging table mirroring public.posts, then INSERT
+    // ... ON CONFLICT DO NOTHING. Same shape as verify-posts.mjs's import
+    // path. Other history tables go through their CSV verifier's import path,
+    // not this branch.
+    const um = await pgClient.query(
+      `SELECT DISTINCT url FROM _stage s
+        WHERE url IS NOT NULL AND created_at > 1262304000
+          AND NOT EXISTS (SELECT 1 FROM public.${table.live} l WHERE l.url = s.url)`
+    )
+    const unmatchedUrls = um.rows.map((row) => row.url)
+    logger('dump %s table %s: importing %d unmatched urls', dumpName, table.name, unmatchedUrls.length)
+
+    const pgPostsCols = TABLE_COLUMNS.posts
+    const fullProjection = pgPostsCols.filter((c) => mysqlCols.includes(c))
+    const missingFull = pgPostsCols.filter((c) => !mysqlCols.includes(c))
+    logger('dump %s table %s: full-row projection cols=%d missing=%j', dumpName, table.name, fullProjection.length, missingFull)
+
+    await pgClient.query(`CREATE TEMP TABLE _stage_full (LIKE public.${table.live} INCLUDING DEFAULTS) ON COMMIT DROP`)
+    // Match verify-posts widening: dump may carry author/authorid longer than
+    // live varchar(32). Substring on INSERT below.
+    await pgClient.query('ALTER TABLE _stage_full ALTER COLUMN author TYPE TEXT, ALTER COLUMN authorid TYPE TEXT')
+
+    // Fetch from MySQL in batches to keep IN-list manageable.
+    const BATCH = 500
+    let staged_full = 0
+    for (let i = 0; i < unmatchedUrls.length; i += BATCH) {
+      const batch = unmatchedUrls.slice(i, i + BATCH)
+      const colSql = fullProjection.map((c) => `\`${c}\``).join(', ')
+      const stream = reader.connection
+        .query(`SELECT ${colSql} FROM \`${TMP_DB}\`.\`${table.name}\` WHERE \`url\` IN (?)`, [batch])
+        .stream({ highWaterMark: 1000 })
+      const xform = new Transform({
+        objectMode: true,
+        transform(row, _enc, cb) { cb(null, rowToTextLine(row, fullProjection)) }
+      })
+      const pgColList = fullProjection.map((c) => `"${c}"`).join(', ')
+      const ingest = pgClient.query(pgCopyStreams.from(`COPY _stage_full (${pgColList}) FROM STDIN WITH (FORMAT text)`))
+      await pipeline(stream, xform, ingest)
+      staged_full += ingest.rowCount
+    }
+    logger('dump %s table %s: staged %d full rows for import', dumpName, table.name, staged_full)
+
+    // Lift Timescale per-DML decompression cap (matches verify-posts).
+    await pgClient.query('SET LOCAL timescaledb.max_tuples_decompressed_per_dml_transaction TO 0')
+
+    const insertColList = pgPostsCols.map((c) => `"${c}"`).join(', ')
+    const selectCols = pgPostsCols.map((c) => {
+      if (!fullProjection.includes(c)) return 'NULL'
+      if (c === 'author' || c === 'authorid') return `substring(s."${c}" FROM 1 FOR 32)`
+      return `s."${c}"`
+    }).join(', ')
+    const tIns = Date.now()
+    const ins = await pgClient.query(
+      `INSERT INTO public.${table.live} (${insertColList})
+       SELECT DISTINCT ON (s.url, s.created_at) ${selectCols}
+         FROM _stage_full s
+        WHERE s.url IS NOT NULL
+          AND s.created_at > 1262304000
+          AND NOT EXISTS (SELECT 1 FROM public.${table.live} l WHERE l.url = s.url)
+       ON CONFLICT DO NOTHING`
+    )
+    imported = ins.rowCount
+    logger('dump %s table %s: import-unmatched inserted=%d (%.1fs)', dumpName, table.name, imported, (Date.now() - tIns) / 1000)
+    await pgClient.query('COMMIT')
+    classification = `partial+imported(${imported})`
+  } else if (importMode && unmatched > 0) {
+    logger('dump %s table %s: --import-unmatched skipped (only posts implemented in dump branch)', dumpName, table.name)
     await pgClient.query('ROLLBACK')
   } else {
     await pgClient.query('ROLLBACK')
