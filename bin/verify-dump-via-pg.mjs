@@ -29,6 +29,7 @@ import {
   EXIT_PARTIAL,
   EXIT_SAFE,
   EXIT_SETUP,
+  TABLE_COLUMNS,
   createPgClient,
   notifyDiscord,
   openLedger,
@@ -48,9 +49,11 @@ const HISTORY_TABLES = [
     null_safe: [],
     bogus_filter: '"timestamp" > 0',
     stage: '_stage_uptime',
-    stage_ddl: '("account" character(65), "online" smallint, "timestamp" integer)',
-    stage_cols: ['account', 'online', 'timestamp'],
-    live_cols: ['account', 'online', 'timestamp'],
+    stage_full_ddl: '(LIKE public.representatives_uptime INCLUDING DEFAULTS)',
+    stage_cols: TABLE_COLUMNS.representatives_uptime,
+    live_cols: TABLE_COLUMNS.representatives_uptime,
+    stage_alters: [],
+    select_transforms: {},
     importable: true
   },
   {
@@ -60,8 +63,12 @@ const HISTORY_TABLES = [
     null_safe: ['account'],
     bogus_filter: '"timestamp" > 0',
     stage: '_stage_telemetry',
-    stage_ddl: '("account" character(65), "node_id" character(65), "timestamp" integer)',
-    stage_cols: ['account', 'node_id', 'timestamp']
+    stage_full_ddl: '(LIKE public.representatives_telemetry INCLUDING DEFAULTS)',
+    stage_cols: TABLE_COLUMNS.representatives_telemetry,
+    live_cols: TABLE_COLUMNS.representatives_telemetry,
+    stage_alters: [],
+    select_transforms: {},
+    importable: true
   },
   {
     name: 'posts',
@@ -70,8 +77,23 @@ const HISTORY_TABLES = [
     null_safe: [],
     bogus_filter: 'created_at > 1262304000',
     stage: '_stage_posts',
-    stage_ddl: '("url" varchar(255), "created_at" integer)',
-    stage_cols: ['url', 'created_at']
+    stage_full_ddl: '(LIKE public.posts INCLUDING DEFAULTS)',
+    stage_cols: TABLE_COLUMNS.posts,
+    live_cols: TABLE_COLUMNS.posts,
+    // Dump's author/authorid may exceed live varchar(32); social_score in older
+    // dumps is decimal(7,1) but live is integer. Widen on stage, transform on
+    // INSERT. Mirrors verify-dump.mjs posts import path.
+    stage_alters: [
+      'ALTER COLUMN author TYPE TEXT',
+      'ALTER COLUMN authorid TYPE TEXT',
+      'ALTER COLUMN social_score TYPE TEXT'
+    ],
+    select_transforms: {
+      author: 'substring(s."author" FROM 1 FOR 32)',
+      authorid: 'substring(s."authorid" FROM 1 FOR 32)',
+      social_score: 'floor(s."social_score"::numeric)::integer'
+    },
+    importable: true
   }
 ]
 
@@ -170,7 +192,10 @@ async function run ({ dumpPath, importUnmatched = false, sampleUnmatched = 20 })
 
   try {
     for (const cfg of HISTORY_TABLES) {
-      await pgClient.query(`CREATE TEMP TABLE ${cfg.stage} ${cfg.stage_ddl}`)
+      await pgClient.query(`CREATE TEMP TABLE ${cfg.stage} ${cfg.stage_full_ddl}`)
+      for (const alter of (cfg.stage_alters || [])) {
+        await pgClient.query(`ALTER TABLE ${cfg.stage} ${alter}`)
+      }
     }
 
     const targetTables = Object.fromEntries(HISTORY_TABLES.map((c) => [c.name, c.stage_cols]))
@@ -264,16 +289,27 @@ async function run ({ dumpPath, importUnmatched = false, sampleUnmatched = 20 })
         if (importUnmatched && cfg.importable) {
           await pgClient.query('BEGIN')
           await pgClient.query('SET LOCAL timescaledb.max_tuples_decompressed_per_dml_transaction TO 0')
-          const liveCols = cfg.live_cols.map((c) => '"' + c + '"').join(', ')
-          const selectCols = cfg.live_cols.map((c) => 's."' + c + '"').join(', ')
+          const liveColList = cfg.live_cols.map((c) => '"' + c + '"').join(', ')
+          const resolvedSelect = cfg.live_cols.map((c) => {
+            const xform = cfg.select_transforms && cfg.select_transforms[c]
+            if (!xform) return `s."${c}"`
+            // xform is the SQL fragment string (declarative, not a JS fn).
+            return xform
+          }).join(', ')
+          const onPredicate = cfg.keys.map((k) =>
+            cfg.null_safe.includes(k)
+              ? `l."${k}" IS NOT DISTINCT FROM s."${k}"`
+              : `l."${k}" = s."${k}"`
+          ).join(' AND ')
+          const distinctKeys = cfg.keys.map((k) => `s."${k}"`).join(', ')
+          const whereBogus = cfg.bogus_filter ? `s.${cfg.bogus_filter}` : 'TRUE'
           const tIns = Date.now()
           const ins = await pgClient.query(
-            `INSERT INTO public.${cfg.live} (${liveCols})
-             SELECT DISTINCT ON (${cfg.keys.map((k) => 's."' + k + '"').join(', ')}) ${selectCols}
+            `INSERT INTO public.${cfg.live} (${liveColList})
+             SELECT DISTINCT ON (${distinctKeys}) ${resolvedSelect}
                FROM ${cfg.stage} s
-              WHERE s."timestamp" > 0
-                AND NOT EXISTS (SELECT 1 FROM public.${cfg.live} l
-                                  WHERE ${cfg.keys.map((k) => 'l."' + k + '" = s."' + k + '"').join(' AND ')})
+              WHERE ${whereBogus}
+                AND NOT EXISTS (SELECT 1 FROM public.${cfg.live} l WHERE ${onPredicate})
              ON CONFLICT DO NOTHING`
           )
           imported = ins.rowCount
