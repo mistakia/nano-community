@@ -48,8 +48,10 @@ const HISTORY_TABLES = [
     null_safe: [],
     bogus_filter: '"timestamp" > 0',
     stage: '_stage_uptime',
-    stage_ddl: '("account" character(65), "timestamp" integer)',
-    stage_cols: ['account', 'timestamp']
+    stage_ddl: '("account" character(65), "online" smallint, "timestamp" integer)',
+    stage_cols: ['account', 'online', 'timestamp'],
+    live_cols: ['account', 'online', 'timestamp'],
+    importable: true
   },
   {
     name: 'representatives_telemetry',
@@ -152,7 +154,7 @@ async function yearHistogram ({ pgClient, cfg, probe }) {
   return Object.fromEntries(r.rows.map((row) => [row.yr, Number(row.n)]))
 }
 
-async function run ({ dumpPath }) {
+async function run ({ dumpPath, importUnmatched = false, sampleUnmatched = 20 }) {
   const dumpName = basename(dumpPath)
   const dumpStat = await stat(dumpPath)
   logger('verify-dump-via-pg: %s (%.1f MB)', dumpName, dumpStat.size / 1024 / 1024)
@@ -240,13 +242,52 @@ async function run ({ dumpPath }) {
       logger('%s: anti-join unmatched=%d (%.1fs)', cfg.name, unmatched, tAj / 1000)
 
       let yearHist = null
+      let unmatchedSample = null
+      let imported = null
       if (unmatched > 0) {
         yearHist = await yearHistogram({ pgClient, cfg, probe })
         logger('%s: unmatched_by_year=%j', cfg.name, yearHist)
+
+        if (sampleUnmatched > 0) {
+          const sampleSql = cfg.name === 'posts'
+            ? `SELECT s.url FROM (SELECT DISTINCT url FROM ${cfg.stage} WHERE url IS NOT NULL AND created_at > 1262304000) s
+                 WHERE NOT EXISTS (SELECT 1 FROM public.${cfg.live} l WHERE l.url = s.url)
+                 LIMIT ${sampleUnmatched}`
+            : `SELECT s.account, s."timestamp" FROM (SELECT DISTINCT ${cfg.keys.map((k) => '"' + k + '"').join(', ')} FROM ${cfg.stage} WHERE "timestamp" > 0) s
+                 WHERE NOT EXISTS (SELECT 1 FROM public.${cfg.live} l WHERE ${cfg.keys.map((k) => 'l."' + k + '" = s."' + k + '"').join(' AND ')})
+                 LIMIT ${sampleUnmatched}`
+          const sr = await pgClient.query(sampleSql)
+          unmatchedSample = sr.rows
+          logger('%s: unmatched_sample=%j', cfg.name, unmatchedSample)
+        }
+
+        if (importUnmatched && cfg.importable) {
+          await pgClient.query('BEGIN')
+          await pgClient.query('SET LOCAL timescaledb.max_tuples_decompressed_per_dml_transaction TO 0')
+          const liveCols = cfg.live_cols.map((c) => '"' + c + '"').join(', ')
+          const selectCols = cfg.live_cols.map((c) => 's."' + c + '"').join(', ')
+          const tIns = Date.now()
+          const ins = await pgClient.query(
+            `INSERT INTO public.${cfg.live} (${liveCols})
+             SELECT DISTINCT ON (${cfg.keys.map((k) => 's."' + k + '"').join(', ')}) ${selectCols}
+               FROM ${cfg.stage} s
+              WHERE s."timestamp" > 0
+                AND NOT EXISTS (SELECT 1 FROM public.${cfg.live} l
+                                  WHERE ${cfg.keys.map((k) => 'l."' + k + '" = s."' + k + '"').join(' AND ')})
+             ON CONFLICT DO NOTHING`
+          )
+          imported = ins.rowCount
+          await pgClient.query('COMMIT')
+          logger('%s: import-unmatched inserted=%d (%.1fs)', cfg.name, imported, (Date.now() - tIns) / 1000)
+        } else if (importUnmatched && !cfg.importable) {
+          logger('%s: --import-unmatched skipped (not yet implemented for this table)', cfg.name)
+        }
       }
 
-      const classification = unmatched === 0 ? 'verified-safe' : 'partial'
-      if (unmatched > 0) exit = EXIT_PARTIAL
+      const classification = imported != null
+        ? `partial+imported(${imported})`
+        : (unmatched === 0 ? 'verified-safe' : 'partial')
+      if (unmatched > 0 && imported == null) exit = EXIT_PARTIAL
 
       await ledger.appendRow({
         file: `dump:${dumpName}#${cfg.name}`,
@@ -257,7 +298,7 @@ async function run ({ dumpPath }) {
         pk_used: cfg.keys.join(','),
         anti_join_count: unmatched,
         classification,
-        notes: `staged=${probe.staged} distinct=${probe.distinct_keys} bogus=${probe.bogus} probe_ms=${tProbe} antijoin_ms=${tAj}${yearHist ? ' unmatched_by_year=' + JSON.stringify(yearHist) : ''}`
+        notes: `staged=${probe.staged} distinct=${probe.distinct_keys} bogus=${probe.bogus} probe_ms=${tProbe} antijoin_ms=${tAj}${yearHist ? ' unmatched_by_year=' + JSON.stringify(yearHist) : ''}${imported != null ? ' imported=' + imported : ''}`
       })
     }
   } catch (e) {
@@ -291,9 +332,11 @@ function startCopySync ({ pgClient, cfg }) {
 if (isMain(import.meta.url)) {
   const argv = yargs(hideBin(process.argv))
     .option('dump', { type: 'string', describe: 'Path to .sql dump', demandOption: true })
+    .option('import-unmatched', { type: 'boolean', default: false })
+    .option('sample-unmatched', { type: 'number', default: 20 })
     .strict()
     .argv
-  run({ dumpPath: argv.dump })
+  run({ dumpPath: argv.dump, importUnmatched: argv['import-unmatched'], sampleUnmatched: argv['sample-unmatched'] })
     .then((c) => { process.exitCode = c })
     .catch((e) => {
       console.error('fatal:', e.stack || e.message)
