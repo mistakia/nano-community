@@ -33,7 +33,7 @@ const IN_QUOTED = 3
 const IN_ESCAPE = 4
 const BETWEEN_FIELDS = 5
 
-export async function parseMysqlDump ({ dumpPath, targetTables, onRow, onProgress } = {}) {
+export async function parseMysqlDump({ dumpPath, targetTables, onRow, onProgress } = {}) {
   if (!dumpPath) throw new Error('parseMysqlDump: dumpPath required')
   if (!targetTables || typeof targetTables !== 'object') throw new Error('parseMysqlDump: targetTables required')
   if (typeof onRow !== 'function') throw new Error('parseMysqlDump: onRow required')
@@ -120,13 +120,13 @@ export async function parseMysqlDump ({ dumpPath, targetTables, onRow, onProgres
   return { schemas, rowsByTable, bytesRead }
 }
 
-function matchCreateTable (line) {
+function matchCreateTable(line) {
   // CREATE TABLE `<name>` (
   const m = line.match(/^CREATE TABLE `([^`]+)` \(/)
   return m ? m[1] : null
 }
 
-function matchColumnDef (line) {
+function matchColumnDef(line) {
   // Leading whitespace + `<colname>` <typedef> ...
   // Stop accepting if the line is a constraint (PRIMARY KEY, UNIQUE KEY, KEY,
   // CONSTRAINT, FOREIGN KEY, FULLTEXT, SPATIAL).
@@ -135,7 +135,7 @@ function matchColumnDef (line) {
   return m[1]
 }
 
-function matchInsertInto (line) {
+function matchInsertInto(line) {
   // INSERT INTO `<name>` VALUES (...
   const prefix = 'INSERT INTO `'
   if (!line.startsWith(prefix)) return null
@@ -148,7 +148,7 @@ function matchInsertInto (line) {
   return { table, valuesStart }
 }
 
-function emitTuples ({ line, startIdx, ncols, ordinals, projection, table, onRow }) {
+function emitTuples({ line, startIdx, ncols, ordinals, projection, table, onRow }) {
   let state = BEFORE_TUPLE
   let i = startIdx
   const n = line.length
@@ -279,12 +279,12 @@ function emitTuples ({ line, startIdx, ncols, ordinals, projection, table, onRow
   return emitted
 }
 
-function interpretBare (buf) {
+function interpretBare(buf) {
   if (buf === 'NULL') return null
   return buf
 }
 
-function decodeEscape (c) {
+function decodeEscape(c) {
   switch (c) {
     case "'": return "'"
     case '"': return '"'

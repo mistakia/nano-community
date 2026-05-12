@@ -114,12 +114,12 @@ async function loadDump(dumpPath) {
 }
 
 async function getMysqlTables(reader) {
-  const [rows] = await reader.query(`SELECT table_name FROM information_schema.tables WHERE table_schema = ?`, [TMP_DB])
+  const [rows] = await reader.query('SELECT table_name FROM information_schema.tables WHERE table_schema = ?', [TMP_DB])
   return rows.map((r) => r.table_name || r.TABLE_NAME)
 }
 
 async function getMysqlColumns(reader, table) {
-  const [rows] = await reader.query(`SELECT column_name FROM information_schema.columns WHERE table_schema = ? AND table_name = ? ORDER BY ordinal_position`, [TMP_DB, table])
+  const [rows] = await reader.query('SELECT column_name FROM information_schema.columns WHERE table_schema = ? AND table_name = ? ORDER BY ordinal_position', [TMP_DB, table])
   return rows.map((r) => r.column_name || r.COLUMN_NAME)
 }
 
@@ -158,7 +158,6 @@ async function verifyHistoryTable({ reader, pgClient, dump, dumpName, table, imp
   }
 
   const mysqlCols = await getMysqlColumns(reader, table.name)
-  const pgCols = TABLE_COLUMNS[table.live]
   // Project only the columns needed for the anti-join (and the bogus-epoch
   // filter / range probe). Full-row projection trips integer-vs-decimal
   // mismatches on columns we don't actually look at (e.g., posts.summary).

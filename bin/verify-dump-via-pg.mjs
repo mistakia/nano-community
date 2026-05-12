@@ -97,17 +97,17 @@ const HISTORY_TABLES = [
   }
 ]
 
-function tableConfigByName (name) {
+function tableConfigByName(name) {
   return HISTORY_TABLES.find((t) => t.name === name)
 }
 
-function tsvLine ({ values, cols }) {
+function tsvLine({ values, cols }) {
   const parts = new Array(cols.length)
   for (let i = 0; i < cols.length; i++) parts[i] = pgEscape(values[cols[i]])
   return parts.join('\t') + '\n'
 }
 
-async function rangeProbe ({ pgClient, cfg }) {
+async function rangeProbe({ pgClient, cfg }) {
   if (cfg.name === 'posts') {
     const r = await pgClient.query(
       `SELECT count(*)::bigint AS staged,
@@ -129,7 +129,7 @@ async function rangeProbe ({ pgClient, cfg }) {
   return r.rows[0]
 }
 
-async function antiJoin ({ pgClient, cfg, probe }) {
+async function antiJoin({ pgClient, cfg, probe }) {
   if (cfg.name === 'posts') {
     const r = await pgClient.query(
       `SELECT count(*)::bigint AS unmatched
@@ -153,7 +153,7 @@ async function antiJoin ({ pgClient, cfg, probe }) {
   return Number(r.rows[0].unmatched)
 }
 
-async function yearHistogram ({ pgClient, cfg, probe }) {
+async function yearHistogram({ pgClient, cfg, probe }) {
   if (cfg.name === 'posts') {
     const r = await pgClient.query(
       `SELECT extract(year FROM to_timestamp(s.created_at))::int AS yr, count(*)::bigint AS n
@@ -176,7 +176,7 @@ async function yearHistogram ({ pgClient, cfg, probe }) {
   return Object.fromEntries(r.rows.map((row) => [row.yr, Number(row.n)]))
 }
 
-async function run ({ dumpPath, importUnmatched = false, sampleUnmatched = 20 }) {
+async function run({ dumpPath, importUnmatched = false, sampleUnmatched = 20 }) {
   const dumpName = basename(dumpPath)
   const dumpStat = await stat(dumpPath)
   logger('verify-dump-via-pg: %s (%.1f MB)', dumpName, dumpStat.size / 1024 / 1024)
@@ -357,7 +357,7 @@ async function run ({ dumpPath, importUnmatched = false, sampleUnmatched = 20 })
   return exit
 }
 
-function startCopySync ({ pgClient, cfg }) {
+function startCopySync({ pgClient, cfg }) {
   const colList = cfg.stage_cols.map((c) => `"${c}"`).join(', ')
   const sink = pgClient.query(pgCopyStreams.from(`COPY ${cfg.stage} (${colList}) FROM STDIN WITH (FORMAT text)`))
   const source = new PassThrough({ highWaterMark: 4 * 1024 * 1024 })

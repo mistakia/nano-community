@@ -49,7 +49,7 @@ function emptyLineFilter() {
   let pending = ''
   return new Transform({
     transform(chunk, _enc, cb) {
-      const buf = (pending + chunk.toString('utf8')).replace(/[\u0000\r]/g, '')
+      const buf = (pending + chunk.toString('utf8')).split('\u0000').join('').replace(/\r/g, '')
       const lines = buf.split('\n')
       pending = lines.pop()
       const out = []
@@ -59,7 +59,7 @@ function emptyLineFilter() {
       cb(null, out.length ? out.join('\n') + '\n' : '')
     },
     flush(cb) {
-      const tail = pending.replace(/[\u0000\r]/g, '')
+      const tail = pending.split('\u0000').join('').replace(/\r/g, '')
       if (tail.length > 0) cb(null, tail + '\n')
       else cb()
     }

@@ -328,7 +328,7 @@ async function buildNodeAccountMapPg(pgClient) {
   const t0 = Date.now()
   const map = new Map()
   const res = await pgClient.query(
-    `SELECT DISTINCT account, node_id FROM public.representatives_telemetry WHERE account IS NOT NULL`
+    'SELECT DISTINCT account, node_id FROM public.representatives_telemetry WHERE account IS NOT NULL'
   )
   for (const row of res.rows) {
     if (!map.has(row.node_id)) map.set(row.node_id, row.account)
@@ -401,7 +401,7 @@ async function runTableDelta(table, vpsConn, pgClient, opts, nodeAccountMap) {
   // Bootstrap watermark if NULL.
   let watermark
   const sw = await pgClient.query(
-    `SELECT last_max_ts FROM public.etl_state WHERE table_name = $1`, [table]
+    'SELECT last_max_ts FROM public.etl_state WHERE table_name = $1', [table]
   )
   if (sw.rowCount === 0 || sw.rows[0].last_max_ts == null) {
     const r = await pgClient.query(
@@ -521,10 +521,15 @@ async function runTableDelta(table, vpsConn, pgClient, opts, nodeAccountMap) {
   )
 
   return {
-    table, rows_extracted: rowsRead, rows_inserted: rowsInserted,
-    live_before: liveBefore, live_after: liveAfter,
-    watermark_after: runningMax, vps_deleted: vpsDeleted,
-    took_ms: tookMs, dry_run: !!opts.dryRun
+    table,
+rows_extracted: rowsRead,
+rows_inserted: rowsInserted,
+    live_before: liveBefore,
+live_after: liveAfter,
+    watermark_after: runningMax,
+vps_deleted: vpsDeleted,
+    took_ms: tookMs,
+dry_run: !!opts.dryRun
   }
 }
 
