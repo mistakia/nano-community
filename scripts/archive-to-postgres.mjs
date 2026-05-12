@@ -76,6 +76,43 @@ const TABLE_COLUMNS = {
 
 const LOCKFILE = '/tmp/nano-community-archive-mysql.lock' // operator wraps invocation in flock -n
 
+// Delta-mode configuration. --delta does NOT include accounts_meta (the
+// legacy archive-mysql cron only handled 4 tables; accounts_meta has its own
+// upstream refresh path).
+const DELTA_RUN_ORDER = [
+  'posts',
+  'representatives_telemetry_index',
+  'representatives_telemetry',
+  'representatives_uptime'
+]
+
+const TIME_COLUMN = {
+  posts: 'created_at',
+  representatives_telemetry_index: 'timestamp',
+  representatives_telemetry: 'timestamp',
+  representatives_uptime: 'timestamp'
+}
+
+// Retention windows transcribed verbatim from the legacy scripts/archive-mysql.mjs.
+// Rows on VPS older than (NOW() - retention) are deleted after PG insert succeeds.
+const RETENTION_HOURS = {
+  posts: 6 * 7 * 24,
+  representatives_telemetry_index: 6 * 7 * 24,
+  representatives_telemetry: 6 * 7 * 24,
+  representatives_uptime: 12 * 7 * 24
+}
+
+// Delta-mode VPS delete batch size (rows per DELETE batch). Matches legacy.
+const VPS_DELETE_BATCH = 20000
+
+// Wall-clock budget for the VPS-delete phase per table per run. The first
+// catch-up after a long stall (e.g. uptime backlog of 60M+ rows) would
+// otherwise hold the flock for many hours; capping ensures the daily cron
+// completes within a reasonable window. Subsequent daily runs chip at the
+// backlog until it is exhausted; once caught up, steady-state runs delete a
+// single day of accumulation and finish well under the cap.
+const VPS_DELETE_WALLTIME_MS = 60 * 60 * 1000
+
 // PG TEXT format escapes: \\, \r, \n, \t; NULL -> \N. Lifted from bench
 // extract-subset.mjs (proven against the bench dataset).
 // NUL byte (0x00) is stripped: PG TEXT format rejects it and PG text columns
@@ -106,6 +143,16 @@ function rowToTsv(row, cols) {
 
 async function openMysqlReader() {
   const base = config.storage_mysql.connection
+  return mysql.createConnection({
+    ...base,
+    decimalNumbers: false
+  })
+}
+
+// VPS production MySQL via the storage-side tunnel (config.mysql, port 13306).
+// Delta mode reads from here; the bulk migrator read from storage_mysql.
+async function openVpsMysqlReader() {
+  const base = config.mysql.connection
   return mysql.createConnection({
     ...base,
     decimalNumbers: false
@@ -272,40 +319,261 @@ async function runTable(table, mysqlConn, pgClient, opts) {
   }
 }
 
+// Delta-mode telemetry_index pre-pass: builds node_id -> account map from
+// live PG representatives_telemetry, which carries full history. The bulk path
+// builds the same map from storage MySQL; VPS-side telemetry only carries the
+// 6-week active retention, so we read PG instead.
+async function buildNodeAccountMapPg(pgClient) {
+  logger('delta pre-pass: building node_id -> account map from public.representatives_telemetry')
+  const t0 = Date.now()
+  const map = new Map()
+  const res = await pgClient.query(
+    `SELECT DISTINCT account, node_id FROM public.representatives_telemetry WHERE account IS NOT NULL`
+  )
+  for (const row of res.rows) {
+    if (!map.has(row.node_id)) map.set(row.node_id, row.account)
+  }
+  logger(`delta pre-pass: ${map.size.toLocaleString()} entries in ${Date.now() - t0}ms`)
+  return map
+}
+
+async function deleteVpsByRetention(vpsConn, table, opts) {
+  const timeCol = TIME_COLUMN[table]
+  const retentionHours = RETENTION_HOURS[table]
+  if (opts.skipVpsDelete) {
+    logger(`${table}: --skip-vps-delete -- skipping VPS retention prune`)
+    return 0
+  }
+  const cutoffSql = `UNIX_TIMESTAMP(NOW() - INTERVAL ${retentionHours} HOUR)`
+  // Stale timestamps grouped (mirrors archive-mysql.mjs). Batch by row count.
+  const [stale] = await vpsConn.query(
+    `SELECT \`${timeCol}\` AS ts, COUNT(*) AS n FROM \`${table}\` ` +
+    `WHERE \`${timeCol}\` < ${cutoffSql} GROUP BY \`${timeCol}\` ORDER BY \`${timeCol}\` ASC`
+  )
+  if (!stale.length) {
+    logger(`${table}: VPS prune -- nothing older than ${retentionHours / 24}d`)
+    return 0
+  }
+  let batch = []
+  let batchN = 0
+  let deletedTotal = 0
+  const tDeleteStart = Date.now()
+  let timeBudgetExceeded = false
+  const flush = async () => {
+    if (!batch.length) return
+    const [res] = await vpsConn.query(
+      `DELETE FROM \`${table}\` WHERE \`${timeCol}\` IN (?)`,
+      [batch]
+    )
+    deletedTotal += res.affectedRows
+    logger(`${table}: VPS deleted ${res.affectedRows} rows across ${batch.length} timestamps (running total ${deletedTotal})`)
+    batch = []
+    batchN = 0
+  }
+  for (const row of stale) {
+    if (batchN + Number(row.n) > VPS_DELETE_BATCH && batch.length) {
+      await flush()
+      if (Date.now() - tDeleteStart >= VPS_DELETE_WALLTIME_MS) {
+        timeBudgetExceeded = true
+        break
+      }
+    }
+    batch.push(row.ts)
+    batchN += Number(row.n)
+  }
+  if (!timeBudgetExceeded) await flush()
+  if (timeBudgetExceeded) {
+    logger(`${table}: VPS retention prune stopped at wall-clock budget (${VPS_DELETE_WALLTIME_MS / 1000}s); deleted ${deletedTotal} rows; backlog continues next run`)
+  } else {
+    logger(`${table}: VPS retention prune complete, deleted ${deletedTotal} rows`)
+  }
+  return deletedTotal
+}
+
+async function runTableDelta(table, vpsConn, pgClient, opts, nodeAccountMap) {
+  const cols = TABLE_COLUMNS[table]
+  if (!cols) throw new Error(`unknown table: ${table}`)
+  const timeCol = TIME_COLUMN[table]
+  if (!timeCol) throw new Error(`no TIME_COLUMN for ${table}`)
+  const pgColList = cols.map((c) => `"${c}"`).join(',')
+  const mysqlColList = cols.map((c) => '`' + c + '`').join(',')
+
+  // Bootstrap watermark if NULL.
+  let watermark
+  const sw = await pgClient.query(
+    `SELECT last_max_ts FROM public.etl_state WHERE table_name = $1`, [table]
+  )
+  if (sw.rowCount === 0 || sw.rows[0].last_max_ts == null) {
+    const r = await pgClient.query(
+      `SELECT MAX("${timeCol}")::bigint AS m FROM public."${table}"`
+    )
+    watermark = Number(r.rows[0].m || 0)
+    await pgClient.query(
+      `INSERT INTO public.etl_state (table_name, last_max_ts)
+       VALUES ($1, $2)
+       ON CONFLICT (table_name) DO UPDATE SET last_max_ts = EXCLUDED.last_max_ts`,
+      [table, watermark]
+    )
+    logger(`${table}: bootstrapped watermark from PG MAX(${timeCol}) = ${watermark}`)
+  } else {
+    watermark = Number(sw.rows[0].last_max_ts)
+    logger(`${table}: resumed watermark = ${watermark}`)
+  }
+
+  const isIndex = table === 'representatives_telemetry_index'
+  const t0 = Date.now()
+  let rowsRead = 0
+  let runningMax = watermark
+  let rowsInserted = 0
+  let liveBefore = 0
+  let liveAfter = 0
+
+  await pgClient.query('BEGIN')
+  let committed = false
+  try {
+    await pgClient.query('SET LOCAL timescaledb.max_tuples_decompressed_per_dml_transaction TO 0')
+    await pgClient.query(
+      `CREATE TEMP TABLE _stage (LIKE public."${table}" INCLUDING DEFAULTS) ON COMMIT DROP`
+    )
+
+    const copyStream = pgClient.query(pgCopyStreams.from(
+      `COPY _stage (${pgColList}) FROM STDIN WITH (FORMAT text)`
+    ))
+
+    const mysqlStream = vpsConn.connection
+      .query('SELECT ' + mysqlColList + ' FROM `' + table + '` WHERE `' + timeCol + '` > ?', [watermark])
+      .stream({ highWaterMark: 50000 })
+
+    let lastLogged = 0
+    const transform = new Transform({
+      writableObjectMode: true,
+      readableObjectMode: false,
+      transform(row, _enc, cb) {
+        if (table === 'posts' && row.social_score != null) {
+          row.social_score = Math.floor(Number(row.social_score))
+        }
+        if (isIndex && nodeAccountMap && (row.account === null || row.account === undefined)) {
+          if (nodeAccountMap.has(row.node_id)) row.account = nodeAccountMap.get(row.node_id)
+        }
+        const ts = Number(row[timeCol])
+        if (Number.isFinite(ts) && ts > runningMax) runningMax = ts
+        rowsRead++
+        if (rowsRead - lastLogged >= 500_000) {
+          const elapsed = (Date.now() - t0) / 1000
+          logger(`${table}: delta ${rowsRead.toLocaleString()} rows streamed @ ${Math.round(rowsRead / elapsed).toLocaleString()} rows/s`)
+          lastLogged = rowsRead
+        }
+        cb(null, rowToTsv(row, cols))
+      }
+    })
+
+    await pipeline(mysqlStream, transform, copyStream)
+    logger(`${table}: delta COPY done -- ${rowsRead.toLocaleString()} rows into _stage in ${Date.now() - t0}ms`)
+
+    if (opts.dryRun) {
+      logger(`${table}: --dry-run -- ROLLBACK`)
+      await pgClient.query('ROLLBACK')
+      committed = true
+    } else {
+      const before = await pgClient.query(`SELECT count(*)::bigint AS c FROM public."${table}"`)
+      liveBefore = Number(before.rows[0].c)
+      await pgClient.query(
+        `INSERT INTO public."${table}" (${pgColList})
+         SELECT ${pgColList} FROM _stage
+         ON CONFLICT DO NOTHING`
+      )
+      const after = await pgClient.query(`SELECT count(*)::bigint AS c FROM public."${table}"`)
+      liveAfter = Number(after.rows[0].c)
+      rowsInserted = liveAfter - liveBefore
+      await pgClient.query(
+        `UPDATE public.etl_state
+           SET last_max_ts = $2,
+               rows_extracted = rows_extracted + $3,
+               rows_inserted = rows_inserted + $4,
+               completed_at = NOW(),
+               notes = $5
+         WHERE table_name = $1`,
+        [table, runningMax, rowsRead, rowsInserted,
+         `delta live_before=${liveBefore} live_after=${liveAfter}`]
+      )
+      await pgClient.query('COMMIT')
+      committed = true
+    }
+  } catch (err) {
+    if (!committed) {
+      try { await pgClient.query('ROLLBACK') } catch { /* ignore */ }
+    }
+    throw err
+  }
+
+  // Post-commit: VPS retention prune (skipped on dry-run).
+  let vpsDeleted = 0
+  if (!opts.dryRun) {
+    vpsDeleted = await deleteVpsByRetention(vpsConn, table, opts)
+  }
+
+  const tookMs = Date.now() - t0
+  logger(
+    `${table}: DELTA extracted=${rowsRead.toLocaleString()} inserted=${rowsInserted.toLocaleString()} ` +
+    `live_before=${liveBefore.toLocaleString()} live_after=${liveAfter.toLocaleString()} ` +
+    `watermark=${runningMax} vps_deleted=${vpsDeleted.toLocaleString()} took=${tookMs}ms` +
+    (opts.dryRun ? ' [dry-run]' : '')
+  )
+
+  return {
+    table, rows_extracted: rowsRead, rows_inserted: rowsInserted,
+    live_before: liveBefore, live_after: liveAfter,
+    watermark_after: runningMax, vps_deleted: vpsDeleted,
+    took_ms: tookMs, dry_run: !!opts.dryRun
+  }
+}
+
 async function main() {
   const argv = yargs(hideBin(process.argv)).argv
   const opts = {
     onlyTable: argv.onlyTable || null,
     dryRun: !!argv.dryRun,
-    resumeFrom: argv.resumeFrom || null
+    resumeFrom: argv.resumeFrom || null,
+    delta: !!argv.delta,
+    skipVpsDelete: !!argv.skipVpsDelete
   }
 
-  let order = RUN_ORDER.slice()
+  const baseOrder = opts.delta ? DELTA_RUN_ORDER : RUN_ORDER
+  let order = baseOrder.slice()
   if (opts.onlyTable) {
-    if (!RUN_ORDER.includes(opts.onlyTable)) {
-      throw new Error(`--only-table=${opts.onlyTable} is not in RUN_ORDER`)
+    if (!baseOrder.includes(opts.onlyTable)) {
+      throw new Error(`--only-table=${opts.onlyTable} is not in ${opts.delta ? 'DELTA_RUN_ORDER' : 'RUN_ORDER'}`)
     }
     order = [opts.onlyTable]
   } else if (opts.resumeFrom) {
-    const i = RUN_ORDER.indexOf(opts.resumeFrom)
-    if (i < 0) throw new Error(`--resume-from=${opts.resumeFrom} is not in RUN_ORDER`)
-    order = RUN_ORDER.slice(i)
+    const i = baseOrder.indexOf(opts.resumeFrom)
+    if (i < 0) throw new Error(`--resume-from=${opts.resumeFrom} is not in ${opts.delta ? 'DELTA_RUN_ORDER' : 'RUN_ORDER'}`)
+    order = baseOrder.slice(i)
   }
 
   logger(
-    `archive-to-postgres starting: order=[${order.join(', ')}] ` +
+    `archive-to-postgres starting: mode=${opts.delta ? 'delta' : 'bulk'} order=[${order.join(', ')}] ` +
     `dry_run=${opts.dryRun} (lockfile=${LOCKFILE}, expected to be held by wrapper flock -n)`
   )
   const tStart = Date.now()
 
-  const mysqlConn = await openMysqlReader()
+  const mysqlConn = opts.delta ? await openVpsMysqlReader() : await openMysqlReader()
   const pgClient = await openPgWriter()
+  // Telemetry-index pre-pass map: built once if delta + index is in scope.
+  let nodeAccountMap = null
+  if (opts.delta && order.includes('representatives_telemetry_index')) {
+    nodeAccountMap = await buildNodeAccountMapPg(pgClient)
+  }
   const summaries = []
   let failed = null
   try {
     for (const table of order) {
       try {
-        summaries.push(await runTable(table, mysqlConn, pgClient, opts))
+        const runner = opts.delta ? runTableDelta : runTable
+        const args = opts.delta
+          ? [table, mysqlConn, pgClient, opts, nodeAccountMap]
+          : [table, mysqlConn, pgClient, opts]
+        summaries.push(await runner(...args))
       } catch (err) {
         logger(`${table}: FAILED -- ${err.message}`)
         console.error(err)
@@ -321,12 +589,22 @@ async function main() {
   const tookMs = Date.now() - tStart
   logger(`archive-to-postgres done in ${tookMs}ms (nul_strip_count=${_nul_strip_count})`)
   for (const s of summaries) {
-    logger(
-      `  ${s.table}: extracted=${s.rows_extracted.toLocaleString()} ` +
-      `inserted=${s.rows_inserted.toLocaleString()} took=${s.took_ms}ms ` +
-      `rate=${s.rate_rows_per_s.toLocaleString()}rows/s` +
-      (s.dry_run ? ' [dry-run]' : '')
-    )
+    if (s.watermark_after !== undefined) {
+      logger(
+        `  ${s.table}: extracted=${s.rows_extracted.toLocaleString()} ` +
+        `inserted=${s.rows_inserted.toLocaleString()} ` +
+        `vps_deleted=${(s.vps_deleted || 0).toLocaleString()} ` +
+        `watermark=${s.watermark_after} took=${s.took_ms}ms` +
+        (s.dry_run ? ' [dry-run]' : '')
+      )
+    } else {
+      logger(
+        `  ${s.table}: extracted=${s.rows_extracted.toLocaleString()} ` +
+        `inserted=${s.rows_inserted.toLocaleString()} took=${s.took_ms}ms ` +
+        `rate=${s.rate_rows_per_s.toLocaleString()}rows/s` +
+        (s.dry_run ? ' [dry-run]' : '')
+      )
+    }
   }
 
   if (failed) {
