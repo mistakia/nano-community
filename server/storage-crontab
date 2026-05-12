@@ -6,13 +6,11 @@ JOB_PROJECT=nano-community
 0 */6 * * * job-wrapper.sh nano-community-import-nanotrade env NODE_ENV=production /home/user/.nvm/versions/node/v16.14.0/bin/node /home/user/nano-community/scripts/import-subreddit.mjs -r nanotrade >> /var/log/nano-community/import-nanotrade.log 2>&1
 
 
-# DISABLED 2026-05-07 -- archive-mysql.mjs is being superseded by the
-# bulk MySQL->PG/Timescale migration in
-# user:task/homelab/etl-nano-community-archive-bulk-migration.md.
-# The cron has been failing since 2024-03 (uptime trim stall, see
-# user:task/homelab/diagnose-archive-mysql-uptime-trim-stalled-2024-03.md);
-# the replacement script is scripts/archive-to-postgres.mjs.
-# RE-ENABLE only if the bulk migration is reverted; otherwise the cutover
-# (user:task/homelab/cutover-nano-community-archive-crons.md) will replace
-# this line entirely with a delta-mode PG-targeted archive job.
-# 0 1 * * * flock -n /tmp/nano-community-archive-mysql.lock job-wrapper.sh nano-community-archive-mysql env NODE_ENV=production /home/user/.nvm/versions/node/v16.14.0/bin/node /home/user/nano-community/scripts/archive-mysql.mjs >> /var/log/nano-community/archive-mysql.log 2>&1
+# Daily delta archive: reads new rows since etl_state.last_max_ts from VPS
+# (port 13306 tunnel) and inserts into PG/Timescale nano_community_archive
+# on database-server, then prunes VPS retention (12 weeks uptime; 6 weeks
+# telemetry/posts/telemetry_index). Replaces the legacy archive-mysql.mjs
+# cron disabled 2026-05-07. Wall-clock-capped at 60 min per table for VPS
+# delete phase; first-run uptime backlog (~61M rows) clears over multiple
+# daily runs. See user:task/homelab/cutover-nano-community-archive-crons.md.
+0 1 * * * flock -n /tmp/nano-community-archive-mysql.lock job-wrapper.sh nano-community-archive-postgres env NODE_ENV=production /home/user/.nvm/versions/node/v22.22.2/bin/node /home/user/nano-community/scripts/archive-to-postgres.mjs --delta >> /var/log/nano-community/archive-to-postgres.log 2>&1
