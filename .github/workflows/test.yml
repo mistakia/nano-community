@@ -36,17 +36,11 @@ jobs:
         with:
           node-version: '22'
 
-      # TODO: Fix checksum issue and remove env variable
-      #
-      # SECURITY: YARN_CHECKSUM_BEHAVIOR=update tells Yarn to silently update
-      # mismatched checksums in the lockfile instead of failing. This defeats
-      # one of the lockfile's supply-chain integrity guarantees. Resolve the
-      # underlying mismatch and remove this override.
       - name: yarn install
         run: |
-          YARN_CHECKSUM_BEHAVIOR=update yarn install
+          yarn install --immutable
           cd cli
-          YARN_CHECKSUM_BEHAVIOR=update yarn install
+          yarn install --immutable
           cd ..
 
       - name: yarn lint
