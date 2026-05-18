@@ -555,11 +555,11 @@ CREATE TABLE IF NOT EXISTS public.etl_state (
 --     storage-side archive delta cron arriving via autossh tunnel.
 GRANT USAGE ON SCHEMA public TO nano_production_app, nano_production_reader;
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO nano_production_app;
-GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO nano_production_app;
+GRANT SELECT, USAGE, UPDATE ON ALL SEQUENCES IN SCHEMA public TO nano_production_app;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public
   GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO nano_production_app;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public
-  GRANT USAGE ON SEQUENCES TO nano_production_app;
+  GRANT SELECT, USAGE, UPDATE ON SEQUENCES TO nano_production_app;
 
 GRANT SELECT ON
   public.representatives_uptime,
