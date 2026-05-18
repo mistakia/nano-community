@@ -22,7 +22,7 @@
 //   user:task/homelab/etl-nano-community-archive-bulk-migration.md
 //   user:text/homelab/nano-community-database-architecture-decision.md
 
-import { Transform } from 'node:stream'
+import { Readable, Transform } from 'node:stream'
 import { pipeline } from 'node:stream/promises'
 
 import debug from 'debug'
@@ -93,25 +93,11 @@ const TIME_COLUMN = {
   representatives_uptime: 'timestamp'
 }
 
-// Retention windows transcribed verbatim from the legacy scripts/archive-mysql.mjs.
-// Rows on VPS older than (NOW() - retention) are deleted after PG insert succeeds.
-const RETENTION_HOURS = {
-  posts: 6 * 7 * 24,
-  representatives_telemetry_index: 6 * 7 * 24,
-  representatives_telemetry: 6 * 7 * 24,
-  representatives_uptime: 12 * 7 * 24
-}
-
-// Delta-mode VPS delete batch size (rows per DELETE batch). Matches legacy.
-const VPS_DELETE_BATCH = 20000
-
-// Wall-clock budget for the VPS-delete phase per table per run. The first
-// catch-up after a long stall (e.g. uptime backlog of 60M+ rows) would
-// otherwise hold the flock for many hours; capping ensures the daily cron
-// completes within a reasonable window. Subsequent daily runs chip at the
-// backlog until it is exhausted; once caught up, steady-state runs delete a
-// single day of accumulation and finish well under the cap.
-const VPS_DELETE_WALLTIME_MS = 60 * 60 * 1000
+// Retention on VPS PG is handled by TimescaleDB retention policies declared
+// in db/schema.postgres.sql (uptime 12w, telemetry 6w, telemetry_index 6w).
+// The delta cron no longer needs to issue DELETEs against the source --
+// drop_chunks runs as a background job. Posts on VPS PG is a plain table
+// with no retention (matches MySQL behavior).
 
 // PG TEXT format escapes: \\, \r, \n, \t; NULL -> \N. Lifted from bench
 // extract-subset.mjs (proven against the bench dataset).
@@ -149,14 +135,13 @@ async function openMysqlReader() {
   })
 }
 
-// VPS production MySQL via the storage-side tunnel (config.mysql, port 13306).
-// Delta mode reads from here; the bulk migrator read from storage_mysql.
-async function openVpsMysqlReader() {
-  const base = config.mysql.connection
-  return mysql.createConnection({
-    ...base,
-    decimalNumbers: false
-  })
+// VPS production PG via the storage-side tunnel
+// (nano-community-vps-pg-tunnel forwards localhost:15432 -> VPS:5432).
+// Delta mode reads from here post-cutover (replaces the prior MySQL path).
+async function openVpsPgReader() {
+  const client = new pg.Client(config.vps_postgres.connection)
+  await client.connect()
+  return client
 }
 
 async function openPgWriter() {
@@ -337,66 +322,12 @@ async function buildNodeAccountMapPg(pgClient) {
   return map
 }
 
-async function deleteVpsByRetention(vpsConn, table, opts) {
-  const timeCol = TIME_COLUMN[table]
-  const retentionHours = RETENTION_HOURS[table]
-  if (opts.skipVpsDelete) {
-    logger(`${table}: --skip-vps-delete -- skipping VPS retention prune`)
-    return 0
-  }
-  const cutoffSql = `UNIX_TIMESTAMP(NOW() - INTERVAL ${retentionHours} HOUR)`
-  // Stale timestamps grouped (mirrors archive-mysql.mjs). Batch by row count.
-  const [stale] = await vpsConn.query(
-    `SELECT \`${timeCol}\` AS ts, COUNT(*) AS n FROM \`${table}\` ` +
-    `WHERE \`${timeCol}\` < ${cutoffSql} GROUP BY \`${timeCol}\` ORDER BY \`${timeCol}\` ASC`
-  )
-  if (!stale.length) {
-    logger(`${table}: VPS prune -- nothing older than ${retentionHours / 24}d`)
-    return 0
-  }
-  let batch = []
-  let batchN = 0
-  let deletedTotal = 0
-  const tDeleteStart = Date.now()
-  let timeBudgetExceeded = false
-  const flush = async () => {
-    if (!batch.length) return
-    const [res] = await vpsConn.query(
-      `DELETE FROM \`${table}\` WHERE \`${timeCol}\` IN (?)`,
-      [batch]
-    )
-    deletedTotal += res.affectedRows
-    logger(`${table}: VPS deleted ${res.affectedRows} rows across ${batch.length} timestamps (running total ${deletedTotal})`)
-    batch = []
-    batchN = 0
-  }
-  for (const row of stale) {
-    if (batchN + Number(row.n) > VPS_DELETE_BATCH && batch.length) {
-      await flush()
-      if (Date.now() - tDeleteStart >= VPS_DELETE_WALLTIME_MS) {
-        timeBudgetExceeded = true
-        break
-      }
-    }
-    batch.push(row.ts)
-    batchN += Number(row.n)
-  }
-  if (!timeBudgetExceeded) await flush()
-  if (timeBudgetExceeded) {
-    logger(`${table}: VPS retention prune stopped at wall-clock budget (${VPS_DELETE_WALLTIME_MS / 1000}s); deleted ${deletedTotal} rows; backlog continues next run`)
-  } else {
-    logger(`${table}: VPS retention prune complete, deleted ${deletedTotal} rows`)
-  }
-  return deletedTotal
-}
-
-async function runTableDelta(table, vpsConn, pgClient, opts, nodeAccountMap) {
+async function runTableDelta(table, vpsPg, pgClient, opts, nodeAccountMap) {
   const cols = TABLE_COLUMNS[table]
   if (!cols) throw new Error(`unknown table: ${table}`)
   const timeCol = TIME_COLUMN[table]
   if (!timeCol) throw new Error(`no TIME_COLUMN for ${table}`)
   const pgColList = cols.map((c) => `"${c}"`).join(',')
-  const mysqlColList = cols.map((c) => '`' + c + '`').join(',')
 
   // Bootstrap watermark if NULL.
   let watermark
@@ -440,9 +371,16 @@ async function runTableDelta(table, vpsConn, pgClient, opts, nodeAccountMap) {
       `COPY _stage (${pgColList}) FROM STDIN WITH (FORMAT text)`
     ))
 
-    const mysqlStream = vpsConn.connection
-      .query('SELECT ' + mysqlColList + ' FROM `' + table + '` WHERE `' + timeCol + '` > ?', [watermark])
-      .stream({ highWaterMark: 50000 })
+    // Source read from VPS PG. Delta size is bounded by the watermark
+    // gap (typically minutes-to-hours of accumulation between cron ticks),
+    // so a single in-memory query is acceptable. If a future stall causes
+    // backlog growth, swap to a server-side cursor (pg-cursor) here.
+    const vpsSrcCols = cols.map((c) => `"${c}"`).join(',')
+    const vpsRes = await vpsPg.query(
+      `SELECT ${vpsSrcCols} FROM public."${table}" WHERE "${timeCol}" > $1 ORDER BY "${timeCol}" ASC`,
+      [watermark]
+    )
+    const sourceStream = Readable.from(vpsRes.rows, { objectMode: true })
 
     let lastLogged = 0
     const transform = new Transform({
@@ -467,7 +405,7 @@ async function runTableDelta(table, vpsConn, pgClient, opts, nodeAccountMap) {
       }
     })
 
-    await pipeline(mysqlStream, transform, copyStream)
+    await pipeline(sourceStream, transform, copyStream)
     logger(`${table}: delta COPY done -- ${rowsRead.toLocaleString()} rows into _stage in ${Date.now() - t0}ms`)
 
     if (opts.dryRun) {
@@ -506,30 +444,27 @@ async function runTableDelta(table, vpsConn, pgClient, opts, nodeAccountMap) {
     throw err
   }
 
-  // Post-commit: VPS retention prune (skipped on dry-run).
-  let vpsDeleted = 0
-  if (!opts.dryRun) {
-    vpsDeleted = await deleteVpsByRetention(vpsConn, table, opts)
-  }
+  // Source retention is handled by VPS PG Timescale retention policies
+  // (uptime 12w, telemetry 6w, telemetry_index 6w). No source-side DELETE
+  // from the delta cron.
 
   const tookMs = Date.now() - t0
   logger(
     `${table}: DELTA extracted=${rowsRead.toLocaleString()} inserted=${rowsInserted.toLocaleString()} ` +
     `live_before=${liveBefore.toLocaleString()} live_after=${liveAfter.toLocaleString()} ` +
-    `watermark=${runningMax} vps_deleted=${vpsDeleted.toLocaleString()} took=${tookMs}ms` +
+    `watermark=${runningMax} took=${tookMs}ms` +
     (opts.dryRun ? ' [dry-run]' : '')
   )
 
   return {
     table,
-rows_extracted: rowsRead,
-rows_inserted: rowsInserted,
+    rows_extracted: rowsRead,
+    rows_inserted: rowsInserted,
     live_before: liveBefore,
-live_after: liveAfter,
+    live_after: liveAfter,
     watermark_after: runningMax,
-vps_deleted: vpsDeleted,
     took_ms: tookMs,
-dry_run: !!opts.dryRun
+    dry_run: !!opts.dryRun
   }
 }
 
@@ -539,8 +474,7 @@ async function main() {
     onlyTable: argv.onlyTable || null,
     dryRun: !!argv.dryRun,
     resumeFrom: argv.resumeFrom || null,
-    delta: !!argv.delta,
-    skipVpsDelete: !!argv.skipVpsDelete
+    delta: !!argv.delta
   }
 
   const baseOrder = opts.delta ? DELTA_RUN_ORDER : RUN_ORDER
@@ -562,7 +496,10 @@ async function main() {
   )
   const tStart = Date.now()
 
-  const mysqlConn = opts.delta ? await openVpsMysqlReader() : await openMysqlReader()
+  // Source connection: VPS PG for delta mode (post-cutover); storage MySQL
+  // for bulk mode (legacy, only used for the original Phase 4 backfill).
+  const mysqlConn = opts.delta ? null : await openMysqlReader()
+  const vpsPg = opts.delta ? await openVpsPgReader() : null
   const pgClient = await openPgWriter()
   // Telemetry-index pre-pass map: built once if delta + index is in scope.
   let nodeAccountMap = null
@@ -576,7 +513,7 @@ async function main() {
       try {
         const runner = opts.delta ? runTableDelta : runTable
         const args = opts.delta
-          ? [table, mysqlConn, pgClient, opts, nodeAccountMap]
+          ? [table, vpsPg, pgClient, opts, nodeAccountMap]
           : [table, mysqlConn, pgClient, opts]
         summaries.push(await runner(...args))
       } catch (err) {
@@ -588,7 +525,8 @@ async function main() {
     }
   } finally {
     try { await pgClient.end() } catch { /* ignore */ }
-    try { await mysqlConn.end() } catch { /* ignore */ }
+    if (vpsPg) { try { await vpsPg.end() } catch { /* ignore */ } }
+    if (mysqlConn) { try { await mysqlConn.end() } catch { /* ignore */ } }
   }
 
   const tookMs = Date.now() - tStart
@@ -598,7 +536,6 @@ async function main() {
       logger(
         `  ${s.table}: extracted=${s.rows_extracted.toLocaleString()} ` +
         `inserted=${s.rows_inserted.toLocaleString()} ` +
-        `vps_deleted=${(s.vps_deleted || 0).toLocaleString()} ` +
         `watermark=${s.watermark_after} took=${s.took_ms}ms` +
         (s.dry_run ? ' [dry-run]' : '')
       )

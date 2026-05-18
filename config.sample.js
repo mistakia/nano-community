@@ -18,14 +18,16 @@ module.exports = {
   cert: '', // ssl cert
   url: '', // url
 
-  mysql: {
-    client: 'mysql',
+  // VPS production database -- consumed by db/index.mjs (the app's single
+  // Knex instance) and scripts/vps-to-postgres.mjs (one-shot bulk migrator).
+  production_postgres: {
+    client: 'pg',
     connection: {
-      host: 'localhost',
-      user: 'root',
+      host: '127.0.0.1',
+      port: 5432,
+      user: 'nano_production_app',
       password: '',
-      database: 'nano_development',
-      charset: 'utf8mb4'
+      database: 'nano_production'
     },
     pool: {
       min: 2,
@@ -33,18 +35,30 @@ module.exports = {
     }
   },
 
-  storage_mysql: {
-    client: 'mysql',
+  // Storage-side: VPS PG via the autossh tunnel (nano-community-vps-pg-tunnel
+  // forwards localhost:15432 -> nano.community:5432). Read-only role; consumed
+  // by scripts/archive-to-postgres.mjs delta-mode after VPS cutover.
+  vps_postgres: {
+    client: 'pg',
     connection: {
-      host: 'localhost',
-      user: 'root',
+      host: '127.0.0.1',
+      port: 15432,
+      user: 'nano_production_reader',
       password: '',
-      database: 'nano_development',
-      charset: 'utf8mb4'
-    },
-    pool: {
-      min: 2,
-      max: 20
+      database: 'nano_production'
+    }
+  },
+
+  // Archive PG on database-server (see schema.archive.postgres.sql). Consumed
+  // by scripts/archive-to-postgres.mjs writer and bin/verify-common.mjs.
+  archive_postgres: {
+    client: 'pg',
+    connection: {
+      host: 'database',
+      port: 5432,
+      user: 'nano_archive_writer',
+      password: '',
+      database: 'nano_community_archive'
     }
   },
 
