@@ -17,31 +17,13 @@ module.exports = {
   cert: '',
   url: '',
 
-  mysql: {
-    client: 'mysql2',
+  production_postgres: {
+    client: 'pg',
     connection: {
       host: '127.0.0.1',
-      user: 'root',
-      database: 'nano_test',
-      multipleStatements: true,
-      decimalNumbers: true,
-      charset: 'utf8mb4'
-    }
-  },
-
-  storage_mysql: {
-    client: 'mysql2',
-    connection: {
-      host: '127.0.0.1',
-      user: 'root',
-      database: 'nano_storage_test',
-      multipleStatements: true,
-      decimalNumbers: true,
-      charset: 'utf8mb4'
-    },
-    pool: {
-      min: 2,
-      max: 20
+      port: 5432,
+      user: 'postgres',
+      database: 'nano_test'
     }
   },
 

@@ -56,7 +56,7 @@ const importSubreddit = async (subreddit, { getFullHistory = false } = {}) => {
 
     if (inserts.length) {
       logger(`saving ${inserts.length} posts from ${subreddit}`)
-      await db('posts').insert(inserts).onConflict().merge()
+      await db('posts').insert(inserts).onConflict('url').merge()
     }
 
     messageIds = res.data.children.map((p) => p.data.id)

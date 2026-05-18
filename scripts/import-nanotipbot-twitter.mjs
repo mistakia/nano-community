@@ -21,7 +21,7 @@ const importNanoTipBotTwitter = async () => {
     for (let i = 0; i < inserts.length; i += 1000) {
       await db('accounts')
         .insert(inserts.slice(i, i + 1000))
-        .onConflict()
+        .onConflict('account')
         .merge()
     }
   }

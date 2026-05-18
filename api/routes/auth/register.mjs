@@ -55,10 +55,11 @@ router.post('/?', async (req, res) => {
         signature,
         last_visit: Math.round(Date.now() / 1000)
       })
-      .onConflict()
+      .onConflict('public_key')
       .merge()
+      .returning('id')
 
-    const user_id = result[0]
+    const user_id = result[0].id
 
     return res.send({
       user_id,
@@ -116,7 +117,7 @@ router.post('/key/?', async (req, res) => {
         link_signature: signature,
         created_at
       })
-      .onConflict()
+      .onConflict(['account', 'public_key'])
       .ignore()
 
     res.send({

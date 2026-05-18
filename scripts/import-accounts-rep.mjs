@@ -66,7 +66,7 @@ const importAccountsRep = async ({
       })
     }
 
-    await db('accounts_delegators').insert(inserts).onConflict().merge()
+    await db('accounts_delegators').insert(inserts).onConflict('account').merge()
 
     index += batchSize
     account = addresses[addressCount - 1]

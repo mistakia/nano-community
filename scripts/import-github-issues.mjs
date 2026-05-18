@@ -126,7 +126,7 @@ const importGithubIssues = async ({ repo }) => {
 
   if (issues.length) {
     log(`saving ${issues.length} issues from github`)
-    await db('github_issues').insert(issues).onConflict().merge()
+    await db('github_issues').insert(issues).onConflict('id').merge()
   }
 
   if (issueLabels.length) {
@@ -135,7 +135,7 @@ const importGithubIssues = async ({ repo }) => {
     await db('github_issue_labels').del().whereIn('issue_id', issueIds)
 
     log(`saving ${issues.length} issue labels from github`)
-    await db('github_issue_labels').insert(issueLabels).onConflict().merge()
+    await db('github_issue_labels').insert(issueLabels).onConflict(['issue_id', 'label_id']).merge()
   }
 }
 

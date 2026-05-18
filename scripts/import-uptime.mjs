@@ -42,7 +42,7 @@ const importUptime = async () => {
   for (const rep in results) {
     accountInserts.push({
       account: rep,
-      representative: 1,
+      representative: true,
       last_seen: timestamp
     })
   }
@@ -50,7 +50,7 @@ const importUptime = async () => {
   // update accounts table
   if (accountInserts.length) {
     logger(`saving/updating ${accountInserts.length} reps`)
-    await db('accounts').insert(accountInserts).onConflict().merge()
+    await db('accounts').insert(accountInserts).onConflict('account').merge()
   }
 
   // insert into uptime
@@ -169,7 +169,7 @@ const importUptime = async () => {
       logger(`saving ${inserts.length} rollups for ${account}`)
       await db('representatives_uptime_rollup_hour')
         .insert(inserts)
-        .onConflict()
+        .onConflict(['account', 'interval'])
         .merge()
     }
   }

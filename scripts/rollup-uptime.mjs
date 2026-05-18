@@ -83,7 +83,7 @@ const rollupUptime = async (days = 1) => {
       logger(`saving ${inserts.length} rollups`)
       await db('representatives_uptime_rollup_day')
         .insert(inserts)
-        .onConflict()
+        .onConflict(['account', 'timestamp'])
         .merge()
     }
 

@@ -1,6 +1,6 @@
 import Knex from 'knex'
 import config from '#config'
 
-const mysql = Knex(config.mysql)
+const knex = Knex(config.production_postgres)
 
-export default mysql
+export default knex

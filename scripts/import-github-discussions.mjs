@@ -120,7 +120,7 @@ const saveDiscussions = async ({ items, repo }) => {
 
   if (discussions.length) {
     log(`saving ${discussions.length} discussions`)
-    await db('github_discussions').insert(discussions).onConflict().merge()
+    await db('github_discussions').insert(discussions).onConflict('id').merge()
   }
 
   if (discussion_labels.length) {
@@ -134,7 +134,7 @@ const saveDiscussions = async ({ items, repo }) => {
 
     await db('github_discussion_labels')
       .insert(discussion_labels)
-      .onConflict()
+      .onConflict(['discussion_id', 'label_id'])
       .merge()
   }
 }

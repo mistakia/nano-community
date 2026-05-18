@@ -224,7 +224,7 @@ const importDiscord = async (guildId, { getFullHistory = false } = {}) => {
       }))
 
       if (posts.length) {
-        await db('posts').insert(posts).onConflict().merge()
+        await db('posts').insert(posts).onConflict('url').merge()
         logger(`saved ${posts.length} posts from ${channel.name}`)
       }
 

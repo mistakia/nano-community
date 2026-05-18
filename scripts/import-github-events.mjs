@@ -138,7 +138,7 @@ const importGithubEvents = async () => {
   const items = res.map((i) => format(i))
   if (items.length) {
     logger(`saving ${items.length} events from github`)
-    await db('github_events').insert(items).onConflict().merge()
+    await db('github_events').insert(items).onConflict('id').merge()
   }
 }
 

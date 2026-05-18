@@ -7,6 +7,14 @@ import cache from '#api/cache.mjs'
 
 const router = express.Router()
 
+// Shared SQL fragment for the deduplication key: collapses to content_url
+// when set, falling back to url. Used as the DISTINCT ON target and as the
+// matching leading-ORDER-BY column. Inlined (not a CTE/computed column) so
+// the expressions in DISTINCT ON and ORDER BY are literally identical, as
+// PG requires.
+const MAIN_URL_EXPR =
+  "(CASE WHEN posts.content_url = '' THEN posts.url ELSE posts.content_url END)"
+
 router.get('/labels', async (req, res) => {
   const { db, logger, cache } = req.app.locals
   try {
@@ -30,36 +38,35 @@ router.get('/labels', async (req, res) => {
       return res.status(200).send(cachePosts)
     }
 
-    const query = db('sources').offset(offset)
-    query.select('posts.*', 'sources.score_avg')
-    query.select(
-      db.raw(
-        '(CASE WHEN `posts`.`content_url` = "" THEN `posts`.`url` ELSE `posts`.`content_url` END) as main_url'
-      )
-    )
-    query.select(db.raw('sources.title as source_title'))
-    query.select(db.raw('sources.logo_url as source_logo_url'))
-    query.select(db.raw('(posts.score / sources.score_avg) as strength'))
-    query.join('posts', 'posts.sid', 'sources.id')
-    query.leftJoin('post_labels', 'posts.id', 'post_labels.post_id')
-    query.whereNotNull('posts.text')
+    const inner = db('sources')
+    inner.select(db.raw(
+      `DISTINCT ON (${MAIN_URL_EXPR}) posts.*, sources.score_avg, ` +
+      `${MAIN_URL_EXPR} AS main_url, ` +
+      `sources.title AS source_title, sources.logo_url AS source_logo_url, ` +
+      `(posts.score / sources.score_avg) AS strength`
+    ))
+    inner.join('posts', 'posts.sid', 'sources.id')
+    inner.leftJoin('post_labels', 'posts.id', 'post_labels.post_id')
+    inner.whereNotNull('posts.text')
+    inner.whereIn('post_labels.label', label)
+    inner.whereNot('posts.text', '')
+    inner.whereNot('posts.pid', 'like', 'discord:844618231553720330:%') // network status
+    inner.whereNot('posts.pid', 'like', 'discord:370285586894028811:%') // announcements
+    inner.whereNot('posts.pid', 'like', 'discord:572793415138410517:%') // beta-announcements
+    inner.whereNot('posts.pid', 'like', 'discord:644987172935565335:%') // rep-announcements
+    inner.whereNot('posts.sid', 'discord:403628195548495882') // NanoTrade Server
+    inner.whereNot('posts.sid', 'discord:431804330853662721') // Nano rep-support
+    // DISTINCT ON requires the leading ORDER BY column to match the
+    // DISTINCT ON expression literally; the second sort selects the
+    // winning row per main_url group (highest strength).
+    inner.orderByRaw(`${MAIN_URL_EXPR}, (posts.score / sources.score_avg) DESC`)
 
-    query.whereIn('post_labels.label', label)
-
-    query.whereNot('posts.text', '')
-    query.whereNot('posts.pid', 'like', 'discord:844618231553720330:%') // network status
-    query.whereNot('posts.pid', 'like', 'discord:370285586894028811:%') // announcements
-    query.whereNot('posts.pid', 'like', 'discord:572793415138410517:%') // beta-announcements
-    query.whereNot('posts.pid', 'like', 'discord:644987172935565335:%') // rep-announcements
-    query.whereNot('posts.sid', 'discord:403628195548495882') // NanoTrade Server
-    query.whereNot('posts.sid', 'discord:431804330853662721') // Nano rep-support
-
-    query.orderBy('strength', 'desc')
-    query.groupBy('main_url')
-
-    query.limit(limit)
-
-    const posts = await query
+    const posts = await db
+      .from(inner.as('t'))
+      .select('*')
+      .orderBy('strength', 'desc')
+      .offset(offset)
+      .limit(limit)
     const postIds = posts.map((p) => p.id)
     const labels = await db('post_labels').whereIn('post_id', postIds)
     const labelsByPostId = groupBy(labels, 'post_id')
@@ -81,38 +88,37 @@ const load_trending_posts = async ({
   age = 72,
   decay = 90000
 } = {}) => {
-  const query = db('sources')
-  query.select('posts.*', 'sources.score_avg')
-  query.select(
-    db.raw(
-      '(CASE WHEN `posts`.`content_url` = "" THEN `posts`.`url` ELSE `posts`.`content_url` END) as main_url'
-    )
-  )
-  query.select(db.raw('sources.title as source_title'))
-  query.select(db.raw('sources.logo_url as source_logo_url'))
-  query.select(
-    db.raw(
-      'MAX(LOG10(posts.score / sources.score_avg) - ((UNIX_TIMESTAMP() - posts.created_at) / ?)) as strength',
-      [decay]
-    )
-  )
-  query.join('posts', 'posts.sid', 'sources.id')
-  query.orderBy('strength', 'desc')
-  // query.whereIn('sources.id', sourceIds)
-  query.whereRaw('posts.created_at > (UNIX_TIMESTAMP() - ?)', age * 60 * 60)
-  query.whereNotNull('posts.text')
-  query.whereNot('posts.text', '')
-  query.where('posts.score', '>', 4)
-  query.whereNot('posts.pid', 'like', 'discord:370266023905198085:%') // Nano #general
-  query.whereNot('posts.sid', 'discord:403628195548495882') // NanoTrade Server
-  query.whereNot('posts.pid', 'like', 'discord:431804330853662721:%') // Nano #rep-support
+  // MySQL semantic (lax GROUP BY + MAX aggregate over alias-equal expr):
+  // for each unique main_url, keep one row with the maximum per-row strength
+  // value. PG equivalent: DISTINCT ON (main_url) with ORDER BY strength DESC.
+  // The MAX wrapper is dropped because per-row strength is constant within a
+  // single posts row; the dedup is what picks the winning row per group.
+  const strength_expr =
+    `(LOG10(posts.score / sources.score_avg) - ` +
+    `((EXTRACT(EPOCH FROM NOW())::INTEGER - posts.created_at) / ?))`
+  const inner = db('sources')
+  inner.select(db.raw(
+    `DISTINCT ON (${MAIN_URL_EXPR}) posts.*, sources.score_avg, ` +
+    `${MAIN_URL_EXPR} AS main_url, ` +
+    `sources.title AS source_title, sources.logo_url AS source_logo_url, ` +
+    `${strength_expr} AS strength`,
+    [decay]
+  ))
+  inner.join('posts', 'posts.sid', 'sources.id')
+  inner.whereRaw('posts.created_at > (EXTRACT(EPOCH FROM NOW())::INTEGER - ?)', age * 60 * 60)
+  inner.whereNotNull('posts.text')
+  inner.whereNot('posts.text', '')
+  inner.where('posts.score', '>', 4)
+  inner.whereNot('posts.pid', 'like', 'discord:370266023905198085:%') // Nano #general
+  inner.whereNot('posts.sid', 'discord:403628195548495882') // NanoTrade Server
+  inner.whereNot('posts.pid', 'like', 'discord:431804330853662721:%') // Nano #rep-support
+  inner.orderByRaw(`${MAIN_URL_EXPR}, ${strength_expr} DESC`, [decay])
 
-  // if (excludedIds.length) query.whereNotIn('posts.id', excludedIds)
-  query.groupBy('main_url')
-
-  query.limit(limit)
-
-  const posts = await query
+  const posts = await db
+    .from(inner.as('t'))
+    .select('*')
+    .orderBy('strength', 'desc')
+    .limit(limit)
   const postIds = posts.map((p) => p.id)
   const labels = await db('post_labels').whereIn('post_id', postIds)
   const labelsByPostId = groupBy(labels, 'post_id')
@@ -154,28 +160,27 @@ router.get('/announcements', async (req, res) => {
       return res.status(200).send(cachePosts)
     }
 
-    const query = db('sources')
-    query.select('posts.*', 'sources.score_avg')
-    query.select(
-      db.raw(
-        '(CASE WHEN `posts`.`content_url` = "" THEN `posts`.`url` ELSE `posts`.`content_url` END) as main_url'
-      )
-    )
-    query.select(db.raw('sources.title as source_title'))
-    query.select(db.raw('sources.logo_url as source_logo_url'))
-    query.join('posts', 'posts.sid', 'sources.id')
-
-    query.where(function () {
+    const inner = db('sources')
+    inner.select(db.raw(
+      `DISTINCT ON (${MAIN_URL_EXPR}) posts.*, sources.score_avg, ` +
+      `${MAIN_URL_EXPR} AS main_url, ` +
+      `sources.title AS source_title, sources.logo_url AS source_logo_url`
+    ))
+    inner.join('posts', 'posts.sid', 'sources.id')
+    inner.where(function () {
       this.where('posts.pid', 'like', 'discord:844618231553720330:%') // network status
       this.orWhere('posts.pid', 'like', 'discord:370285586894028811:%') // announcements
       this.orWhere('posts.pid', 'like', 'discord:572793415138410517:%') // beta-announcements
       this.orWhere('posts.pid', 'like', 'discord:644987172935565335:%') // rep-announcements
     })
-    query.whereRaw('posts.created_at > (UNIX_TIMESTAMP() - ?)', age * 60 * 60)
-    query.orderBy('posts.created_at', 'desc')
-    query.groupBy('main_url')
+    inner.whereRaw('posts.created_at > (EXTRACT(EPOCH FROM NOW())::INTEGER - ?)', age * 60 * 60)
+    // DISTINCT ON winner per main_url: newest post (created_at DESC).
+    inner.orderByRaw(`${MAIN_URL_EXPR}, posts.created_at DESC`)
 
-    const posts = await query
+    const posts = await db
+      .from(inner.as('t'))
+      .select('*')
+      .orderBy('created_at', 'desc')
     const postIds = posts.map((p) => p.id)
     const labels = await db('post_labels').whereIn('post_id', postIds)
     const labelsByPostId = groupBy(labels, 'post_id')
@@ -193,34 +198,31 @@ router.get('/announcements', async (req, res) => {
 })
 
 const load_top_posts = async ({ offset = 0, age = 168, limit = 5 } = {}) => {
-  const query = db('sources').offset(offset)
-  query.select('posts.*', 'sources.score_avg')
-  query.select(
-    db.raw(
-      '(CASE WHEN `posts`.`content_url` = "" THEN `posts`.`url` ELSE `posts`.`content_url` END) as main_url'
-    )
-  )
-  query.select(db.raw('sources.title as source_title'))
-  query.select(db.raw('sources.logo_url as source_logo_url'))
-  query.select(db.raw('(posts.score / sources.score_avg) as strength'))
-  query.join('posts', 'posts.sid', 'sources.id')
-  query.whereRaw('posts.created_at > (UNIX_TIMESTAMP() - ?)', age * 60 * 60)
-  query.whereNotNull('posts.text')
+  const inner = db('sources')
+  inner.select(db.raw(
+    `DISTINCT ON (${MAIN_URL_EXPR}) posts.*, sources.score_avg, ` +
+    `${MAIN_URL_EXPR} AS main_url, ` +
+    `sources.title AS source_title, sources.logo_url AS source_logo_url, ` +
+    `(posts.score / sources.score_avg) AS strength`
+  ))
+  inner.join('posts', 'posts.sid', 'sources.id')
+  inner.whereRaw('posts.created_at > (EXTRACT(EPOCH FROM NOW())::INTEGER - ?)', age * 60 * 60)
+  inner.whereNotNull('posts.text')
+  inner.whereNot('posts.text', '')
+  inner.whereNot('posts.pid', 'like', 'discord:844618231553720330:%') // network status
+  inner.whereNot('posts.pid', 'like', 'discord:370285586894028811:%') // announcements
+  inner.whereNot('posts.pid', 'like', 'discord:572793415138410517:%') // beta-announcements
+  inner.whereNot('posts.pid', 'like', 'discord:644987172935565335:%') // rep-announcements
+  inner.whereNot('posts.sid', 'discord:403628195548495882') // NanoTrade Server
+  inner.whereNot('posts.pid', 'like', 'discord:431804330853662721:%') // Nano #rep-support
+  inner.orderByRaw(`${MAIN_URL_EXPR}, (posts.score / sources.score_avg) DESC`)
 
-  query.whereNot('posts.text', '')
-  query.whereNot('posts.pid', 'like', 'discord:844618231553720330:%') // network status
-  query.whereNot('posts.pid', 'like', 'discord:370285586894028811:%') // announcements
-  query.whereNot('posts.pid', 'like', 'discord:572793415138410517:%') // beta-announcements
-  query.whereNot('posts.pid', 'like', 'discord:644987172935565335:%') // rep-announcements
-  query.whereNot('posts.sid', 'discord:403628195548495882') // NanoTrade Server
-  query.whereNot('posts.pid', 'like', 'discord:431804330853662721:%') // Nano #rep-support
-
-  query.orderBy('strength', 'desc')
-  query.groupBy('main_url')
-
-  query.limit(limit)
-
-  const posts = await query
+  const posts = await db
+    .from(inner.as('t'))
+    .select('*')
+    .orderBy('strength', 'desc')
+    .offset(offset)
+    .limit(limit)
   const postIds = posts.map((p) => p.id)
   const labels = await db('post_labels').whereIn('post_id', postIds)
   const labelsByPostId = groupBy(labels, 'post_id')

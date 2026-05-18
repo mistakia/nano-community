@@ -82,7 +82,7 @@ const importRedditUser = async (
 
     if (inserts.length) {
       logger(`saving ${inserts.length} posts from ${user}`)
-      await db('posts').insert(inserts).onConflict().merge()
+      await db('posts').insert(inserts).onConflict('url').merge()
     }
 
     messageIds = res.data.children.map((p) => p.data.id)

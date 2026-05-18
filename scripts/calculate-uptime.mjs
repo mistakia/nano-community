@@ -45,7 +45,7 @@ const calculateUptime = async () => {
     logger(`saving ${inserts.length} summaries for ${reps.length} reps`)
     await db('representatives_uptime_summary')
       .insert(inserts)
-      .onConflict()
+      .onConflict(['account', 'days'])
       .merge()
   }
 }

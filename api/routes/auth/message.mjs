@@ -171,7 +171,7 @@ router.post('/?', async (req, res) => {
 
           created_at
         })
-        .onConflict()
+        .onConflict('signature')
         .merge()
     }
 

@@ -68,7 +68,7 @@ const importForum = async ({
 
     if (posts.length) {
       logger(`saving ${posts.length} posts from forum`)
-      await db('posts').insert(posts).onConflict().merge()
+      await db('posts').insert(posts).onConflict('url').merge()
     }
 
     items = items.concat(res.latest_posts)
