@@ -139,10 +139,10 @@ const importUptime = async () => {
     const inserts = []
     // calculate uptime for each group
     for (const [interval, items] of Object.entries(rollup)) {
-      let online = true
+      let online = 1
       for (const value of items) {
         if (value.online === 0) {
-          online = false
+          online = 0
           break
         }
       }
@@ -160,7 +160,7 @@ const importUptime = async () => {
         inserts.push({
           account,
           interval,
-          online: false
+          online: 0
         })
       }
     }

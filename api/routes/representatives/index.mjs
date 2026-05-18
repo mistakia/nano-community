@@ -56,13 +56,13 @@ export const loadRepresentatives = async () => {
 
   /***********************************************************/
   const online_query = db('representatives_uptime_index').where({
-    online: true
+    online: 1
   })
   const online = online_query.whereIn('account', accounts)
 
   /***********************************************************/
   const offline_query = db('representatives_uptime_index').where({
-    online: false
+    online: 0
   })
   const offline = offline_query.whereIn('account', accounts)
 
