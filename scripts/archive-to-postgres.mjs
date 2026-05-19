@@ -40,7 +40,6 @@ debug.enable('archive-to-pg')
 
 const RUN_ORDER = [
   'posts',
-  'representatives_telemetry_index',
   'accounts_meta',
   'representatives_telemetry',
   'representatives_uptime'
@@ -52,13 +51,6 @@ const RUN_ORDER = [
 const TABLE_COLUMNS = {
   representatives_uptime: ['account', 'online', 'timestamp'],
   representatives_telemetry: [
-    'account', 'weight', 'block_count', 'block_behind', 'cemented_count',
-    'cemented_behind', 'account_count', 'unchecked_count', 'bandwidth_cap',
-    'peer_count', 'protocol_version', 'uptime', 'major_version',
-    'minor_version', 'patch_version', 'pre_release_version', 'maker',
-    'node_id', 'address', 'port', 'telemetry_timestamp', 'timestamp'
-  ],
-  representatives_telemetry_index: [
     'account', 'weight', 'block_count', 'block_behind', 'cemented_count',
     'cemented_behind', 'account_count', 'unchecked_count', 'bandwidth_cap',
     'peer_count', 'protocol_version', 'uptime', 'major_version',
@@ -79,9 +71,11 @@ const LOCKFILE = '/tmp/nano-community-archive-mysql.lock' // operator wraps invo
 // Delta-mode configuration. --delta does NOT include accounts_meta (the
 // legacy archive-mysql cron only handled 4 tables; accounts_meta has its own
 // upstream refresh path). representatives_telemetry_index was collapsed on
-// VPS (2026-05-19) and is no longer extractable from source -- existing
+// VPS (2026-05-19) -- source table no longer exists; existing
 // nano_community_archive.representatives_telemetry_index rows remain as a
-// historical artifact.
+// historical artifact and are not pruned. The bulk RUN_ORDER also drops the
+// table; storage MySQL still has it but the bulk path is one-shot and would
+// not re-target it.
 const DELTA_RUN_ORDER = [
   'posts',
   'representatives_telemetry',
@@ -90,7 +84,6 @@ const DELTA_RUN_ORDER = [
 
 const TIME_COLUMN = {
   posts: 'created_at',
-  representatives_telemetry_index: 'timestamp',
   representatives_telemetry: 'timestamp',
   representatives_uptime: 'timestamp'
 }
@@ -152,36 +145,11 @@ async function openPgWriter() {
   return client
 }
 
-// One-time pre-pass for representatives_telemetry_index. Reads distinct
-// (account, node_id) pairs from representatives_telemetry where account IS
-// NOT NULL, ordered by (account, node_id) to drive an index-only scan over
-// the multi-column BTree (cardinalities 326k/2.6M/73M, ~28GB on disk).
-// Returns Map<node_id, account>. Budget ~5-10 min wall clock.
-async function buildNodeAccountMap(mysqlConn) {
-  logger('building node_id -> account map from representatives_telemetry')
-  const t0 = Date.now()
-  const map = new Map()
-  const stream = mysqlConn.connection
-    .query(
-      'SELECT DISTINCT account, node_id FROM representatives_telemetry ' +
-      'WHERE account IS NOT NULL ORDER BY account, node_id'
-    )
-    .stream({ highWaterMark: 5000 })
-  for await (const row of stream) {
-    if (!map.has(row.node_id)) map.set(row.node_id, row.account)
-  }
-  logger(`node_id->account map: ${map.size.toLocaleString()} entries in ${Date.now() - t0}ms`)
-  return map
-}
-
 async function runTable(table, mysqlConn, pgClient, opts) {
   const cols = TABLE_COLUMNS[table]
   if (!cols) throw new Error(`unknown table: ${table}`)
   const pgColList = cols.map((c) => `"${c}"`).join(',')
   const mysqlColList = cols.map((c) => '`' + c + '`').join(',')
-
-  const isIndex = table === 'representatives_telemetry_index'
-  const nodeAccountMap = isIndex ? await buildNodeAccountMap(mysqlConn) : null
 
   logger(`${table}: starting (dry_run=${!!opts.dryRun})`)
   const t0 = Date.now()
@@ -219,13 +187,6 @@ async function runTable(table, mysqlConn, pgClient, opts) {
       writableObjectMode: true,
       readableObjectMode: false,
       transform(row, _enc, cb) {
-        if (
-          isIndex &&
-          (row.account === null || row.account === undefined) &&
-          nodeAccountMap.has(row.node_id)
-        ) {
-          row.account = nodeAccountMap.get(row.node_id)
-        }
         rowsRead++
         if (rowsRead - lastLogged >= 1_000_000) {
           const elapsed = (Date.now() - t0) / 1000
@@ -306,25 +267,7 @@ async function runTable(table, mysqlConn, pgClient, opts) {
   }
 }
 
-// Delta-mode telemetry_index pre-pass: builds node_id -> account map from
-// live PG representatives_telemetry, which carries full history. The bulk path
-// builds the same map from storage MySQL; VPS-side telemetry only carries the
-// 6-week active retention, so we read PG instead.
-async function buildNodeAccountMapPg(pgClient) {
-  logger('delta pre-pass: building node_id -> account map from public.representatives_telemetry')
-  const t0 = Date.now()
-  const map = new Map()
-  const res = await pgClient.query(
-    'SELECT DISTINCT account, node_id FROM public.representatives_telemetry WHERE account IS NOT NULL'
-  )
-  for (const row of res.rows) {
-    if (!map.has(row.node_id)) map.set(row.node_id, row.account)
-  }
-  logger(`delta pre-pass: ${map.size.toLocaleString()} entries in ${Date.now() - t0}ms`)
-  return map
-}
-
-async function runTableDelta(table, vpsPg, pgClient, opts, nodeAccountMap) {
+async function runTableDelta(table, vpsPg, pgClient, opts) {
   const cols = TABLE_COLUMNS[table]
   if (!cols) throw new Error(`unknown table: ${table}`)
   const timeCol = TIME_COLUMN[table]
@@ -353,7 +296,6 @@ async function runTableDelta(table, vpsPg, pgClient, opts, nodeAccountMap) {
     logger(`${table}: resumed watermark = ${watermark}`)
   }
 
-  const isIndex = table === 'representatives_telemetry_index'
   const t0 = Date.now()
   let rowsRead = 0
   let runningMax = watermark
@@ -391,9 +333,6 @@ async function runTableDelta(table, vpsPg, pgClient, opts, nodeAccountMap) {
       transform(row, _enc, cb) {
         if (table === 'posts' && row.social_score != null) {
           row.social_score = Math.floor(Number(row.social_score))
-        }
-        if (isIndex && nodeAccountMap && (row.account === null || row.account === undefined)) {
-          if (nodeAccountMap.has(row.node_id)) row.account = nodeAccountMap.get(row.node_id)
         }
         const ts = Number(row[timeCol])
         if (Number.isFinite(ts) && ts > runningMax) runningMax = ts
@@ -503,11 +442,6 @@ async function main() {
   const mysqlConn = opts.delta ? null : await openMysqlReader()
   const vpsPg = opts.delta ? await openVpsPgReader() : null
   const pgClient = await openPgWriter()
-  // Telemetry-index pre-pass map: built once if delta + index is in scope.
-  let nodeAccountMap = null
-  if (opts.delta && order.includes('representatives_telemetry_index')) {
-    nodeAccountMap = await buildNodeAccountMapPg(pgClient)
-  }
   const summaries = []
   let failed = null
   try {
@@ -515,7 +449,7 @@ async function main() {
       try {
         const runner = opts.delta ? runTableDelta : runTable
         const args = opts.delta
-          ? [table, vpsPg, pgClient, opts, nodeAccountMap]
+          ? [table, vpsPg, pgClient, opts]
           : [table, mysqlConn, pgClient, opts]
         summaries.push(await runner(...args))
       } catch (err) {
