@@ -33,6 +33,9 @@ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'nano_production_reader') THEN
     CREATE ROLE nano_production_reader LOGIN PASSWORD 'CHANGEME_READER';
   END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'nano_production_backup') THEN
+    CREATE ROLE nano_production_backup LOGIN PASSWORD 'CHANGEME_BACKUP';
+  END IF;
 END
 $do$;
 
@@ -472,9 +475,11 @@ CREATE TABLE IF NOT EXISTS public.etl_state (
 );
 
 -- 11. Privileges. nano_production_app gets full DML on the app surface;
---     nano_production_reader gets SELECT on the 5 hot read tables for the
---     storage-side archive delta cron arriving via autossh tunnel.
-GRANT USAGE ON SCHEMA public TO nano_production_app, nano_production_reader;
+--     nano_production_reader gets SELECT on the 4 hot tables consumed by the
+--     storage-side archive delta cron and freshness monitor;
+--     nano_production_backup gets SELECT on every table for the storage-side
+--     weekly pg_dump cron.
+GRANT USAGE ON SCHEMA public TO nano_production_app, nano_production_reader, nano_production_backup;
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO nano_production_app;
 GRANT SELECT, USAGE, UPDATE ON ALL SEQUENCES IN SCHEMA public TO nano_production_app;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public
@@ -488,3 +493,7 @@ GRANT SELECT ON
   public.accounts_meta,
   public.posts
 TO nano_production_reader;
+
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO nano_production_backup;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+  GRANT SELECT ON TABLES TO nano_production_backup;

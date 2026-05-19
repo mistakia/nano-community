@@ -42,8 +42,10 @@ JOB_PROJECT=nano-community
 8 5 * * 0 NODE_ENV=production /root/.nvm/versions/node/v22.22.1/bin/node /root/nano-community/scripts/generate-rep-observations.mjs >> /var/log/nano-community/generate-rep-observations.log 2>&1
 8 6 * * 4 NODE_ENV=production /root/.nvm/versions/node/v22.22.1/bin/node /root/nano-community/scripts/generate-node-observations.mjs >> /var/log/nano-community/generate-node-observations.log 2>&1
 
-## backup postgres
-0 0 * * 0 job-wrapper.sh nano-community-backup-postgres /bin/bash /root/nano-community/scripts/backup-postgres.sh -s >> /var/log/nano-community/backup-postgres-snapshot.log 2>&1
+## Backups are storage-initiated post-2026-05-19: storage runs
+## ~/bin/nano-community-pg-dump weekly over the existing autossh tunnel.
+## No backup cron on VPS. See repository/active/bootstrap/server/storage/
+## binfiles/nano-community-pg-dump and text/homelab/nano-community-server.md.
 
 ## Export crontab for backup sync (hourly) — sentinel file for pull-based backup freshness monitor
 0 * * * * crontab -l > /tmp/nano-community-crontab.txt
