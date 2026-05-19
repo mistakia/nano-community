@@ -26,10 +26,15 @@ export const loadRepresentatives = async () => {
 
   const accounts = representatives.map((r) => r.account)
 
-  const telemetry = db('representatives_telemetry_index').whereIn(
-    'account',
-    accounts
-  )
+  // Latest telemetry row per account, derived directly from the
+  // representatives_telemetry hypertable. Supersedes the
+  // representatives_telemetry_index denormalized cache that existed for MyISAM.
+  const telemetry = db
+    .raw(
+      'SELECT DISTINCT ON (account) * FROM representatives_telemetry WHERE account = ANY(?) ORDER BY account, "timestamp" DESC',
+      [accounts]
+    )
+    .then((r) => r.rows)
 
   const uptime = db('representatives_uptime_rollup_hour')
     .whereIn('account', accounts)

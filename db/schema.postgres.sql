@@ -304,31 +304,6 @@ CREATE TABLE IF NOT EXISTS public.representatives_telemetry (
   "timestamp"          integer NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS public.representatives_telemetry_index (
-  account              char(65),
-  weight               numeric(39,0),
-  block_count          integer NOT NULL,
-  block_behind         integer NOT NULL,
-  cemented_count       integer NOT NULL,
-  cemented_behind      integer NOT NULL,
-  account_count        integer NOT NULL,
-  unchecked_count      integer NOT NULL,
-  bandwidth_cap        integer NOT NULL,
-  peer_count           integer NOT NULL,
-  protocol_version     integer NOT NULL,
-  uptime               integer NOT NULL,
-  major_version        integer NOT NULL,
-  minor_version        integer NOT NULL,
-  patch_version        integer NOT NULL,
-  pre_release_version  varchar(10) NOT NULL,
-  maker                varchar(10) NOT NULL,
-  node_id              char(65) NOT NULL,
-  address              char(65) NOT NULL,
-  port                 integer NOT NULL,
-  telemetry_timestamp  integer NOT NULL,
-  "timestamp"          integer NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS public.representatives_network (
   account       char(65) NOT NULL,
   address       varchar(65) NOT NULL,
@@ -459,11 +434,6 @@ SELECT create_hypertable(
   if_not_exists => TRUE
 );
 SELECT create_hypertable(
-  'public.representatives_telemetry_index', 'timestamp',
-  chunk_time_interval => 86400,
-  if_not_exists => TRUE
-);
-SELECT create_hypertable(
   'public.accounts_meta', 'timestamp',
   chunk_time_interval => 86400,
   if_not_exists => TRUE
@@ -474,8 +444,6 @@ CREATE UNIQUE INDEX IF NOT EXISTS representatives_uptime_account_ts_uniq
   ON public.representatives_uptime (account, "timestamp");
 CREATE UNIQUE INDEX IF NOT EXISTS representatives_telemetry_account_node_ts_uniq
   ON public.representatives_telemetry (account, node_id, "timestamp");
-CREATE UNIQUE INDEX IF NOT EXISTS representatives_telemetry_index_node_ts_uniq
-  ON public.representatives_telemetry_index (node_id, "timestamp");
 CREATE UNIQUE INDEX IF NOT EXISTS accounts_meta_account_ts_uniq
   ON public.accounts_meta (account, "timestamp");
 
@@ -484,7 +452,6 @@ CREATE UNIQUE INDEX IF NOT EXISTS accounts_meta_account_ts_uniq
 --    compression in the archive migration; declared up-front here.
 SELECT set_integer_now_func('public.representatives_uptime',          'public.unix_now_seconds', replace_if_exists => TRUE);
 SELECT set_integer_now_func('public.representatives_telemetry',       'public.unix_now_seconds', replace_if_exists => TRUE);
-SELECT set_integer_now_func('public.representatives_telemetry_index', 'public.unix_now_seconds', replace_if_exists => TRUE);
 SELECT set_integer_now_func('public.accounts_meta',                   'public.unix_now_seconds', replace_if_exists => TRUE);
 
 -- 7. Compression configuration.
@@ -498,11 +465,6 @@ ALTER TABLE public.representatives_telemetry SET (
   timescaledb.compress_orderby = '"timestamp" DESC',
   timescaledb.compress_segmentby = 'account'
 );
-ALTER TABLE public.representatives_telemetry_index SET (
-  timescaledb.compress = true,
-  timescaledb.compress_orderby = '"timestamp" DESC',
-  timescaledb.compress_segmentby = 'node_id'
-);
 ALTER TABLE public.accounts_meta SET (
   timescaledb.compress = true,
   timescaledb.compress_orderby = '"timestamp" DESC',
@@ -512,15 +474,12 @@ ALTER TABLE public.accounts_meta SET (
 -- 8. Compression policies: compress chunks older than 7 days (604800 s).
 SELECT add_compression_policy('public.representatives_uptime',          BIGINT '604800', if_not_exists => TRUE);
 SELECT add_compression_policy('public.representatives_telemetry',       BIGINT '604800', if_not_exists => TRUE);
-SELECT add_compression_policy('public.representatives_telemetry_index', BIGINT '604800', if_not_exists => TRUE);
 SELECT add_compression_policy('public.accounts_meta',                   BIGINT '604800', if_not_exists => TRUE);
 
 -- 9. Retention policies (drop_after in seconds). Per scripts/archive-mysql.mjs:
---    uptime 12 weeks, telemetry 6 weeks, telemetry_index 6 weeks.
---    accounts_meta and posts: no retention.
+--    uptime 12 weeks, telemetry 6 weeks. accounts_meta and posts: no retention.
 SELECT add_retention_policy('public.representatives_uptime',          BIGINT '7257600', if_not_exists => TRUE); -- 12w
 SELECT add_retention_policy('public.representatives_telemetry',       BIGINT '3628800', if_not_exists => TRUE); -- 6w
-SELECT add_retention_policy('public.representatives_telemetry_index', BIGINT '3628800', if_not_exists => TRUE); -- 6w
 
 -- 10. ETL state table. Populated by the one-shot scripts/vps-to-postgres.mjs
 --     bulk migrator only. Independent of database-server's
@@ -549,7 +508,6 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public
 GRANT SELECT ON
   public.representatives_uptime,
   public.representatives_telemetry,
-  public.representatives_telemetry_index,
   public.accounts_meta,
   public.posts
 TO nano_production_reader;

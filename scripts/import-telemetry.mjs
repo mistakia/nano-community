@@ -281,10 +281,6 @@ const importTelemetry = async () => {
     )
 
     await db('representatives_telemetry').insert(nodeInserts)
-    await db('representatives_telemetry_index')
-      .insert(nodeInserts)
-      .onConflict('account')
-      .merge()
   }
 
   const now = dayjs()
