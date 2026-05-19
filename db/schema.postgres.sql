@@ -495,5 +495,8 @@ GRANT SELECT ON
 TO nano_production_reader;
 
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO nano_production_backup;
+GRANT SELECT, USAGE ON ALL SEQUENCES IN SCHEMA public TO nano_production_backup;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public
   GRANT SELECT ON TABLES TO nano_production_backup;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+  GRANT SELECT, USAGE ON SEQUENCES TO nano_production_backup;
