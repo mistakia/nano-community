@@ -78,10 +78,12 @@ const LOCKFILE = '/tmp/nano-community-archive-mysql.lock' // operator wraps invo
 
 // Delta-mode configuration. --delta does NOT include accounts_meta (the
 // legacy archive-mysql cron only handled 4 tables; accounts_meta has its own
-// upstream refresh path).
+// upstream refresh path). representatives_telemetry_index was collapsed on
+// VPS (2026-05-19) and is no longer extractable from source -- existing
+// nano_community_archive.representatives_telemetry_index rows remain as a
+// historical artifact.
 const DELTA_RUN_ORDER = [
   'posts',
-  'representatives_telemetry_index',
   'representatives_telemetry',
   'representatives_uptime'
 ]
