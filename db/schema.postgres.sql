@@ -327,29 +327,6 @@ CREATE TABLE IF NOT EXISTS public.representatives_network (
 CREATE UNIQUE INDEX IF NOT EXISTS representatives_network_account_ts_uniq
   ON public.representatives_network (account, "timestamp");
 
-CREATE TABLE IF NOT EXISTS public.representatives_network_index (
-  account       char(65) NOT NULL,
-  address       varchar(65) NOT NULL,
-  continent     varchar(65) NOT NULL,
-  country       varchar(65) NOT NULL,
-  "countryCode" char(2) NOT NULL,
-  region        varchar(65) NOT NULL,
-  "regionName"  varchar(65) NOT NULL,
-  city          varchar(65) NOT NULL,
-  zip           varchar(65) NOT NULL,
-  lat           varchar(65) NOT NULL,
-  lon           varchar(65) NOT NULL,
-  timezone      varchar(65) NOT NULL,
-  isp           varchar(65) NOT NULL,
-  org           varchar(65) NOT NULL,
-  "as"          varchar(65) NOT NULL,
-  asname        varchar(65) NOT NULL,
-  hosted        boolean NOT NULL,
-  "timestamp"   integer NOT NULL
-);
-CREATE UNIQUE INDEX IF NOT EXISTS representatives_network_index_account_uniq
-  ON public.representatives_network_index (account);
-
 CREATE TABLE IF NOT EXISTS public.representatives_uptime (
   account     char(65) NOT NULL,
   online      smallint NOT NULL,

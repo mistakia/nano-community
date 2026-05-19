@@ -341,10 +341,6 @@ const importTelemetry = async () => {
       }
 
       await db('representatives_network').insert(rep_network_insert)
-      await db('representatives_network_index')
-        .insert(rep_network_insert)
-        .onConflict('account')
-        .merge()
     }
 
     await wait(2000)
