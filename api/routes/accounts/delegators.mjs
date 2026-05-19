@@ -33,7 +33,7 @@ router.get('/?', async (req, res) => {
       )
       .leftJoin('accounts', 'accounts.account', 'accounts_delegators.account')
       .where('accounts_delegators.representative', address)
-      .orderBy('accounts_delegators.balance', 'desc')
+      .orderByRaw('accounts_delegators.balance desc nulls last')
       .limit(limit)
       .offset(offset)
 
