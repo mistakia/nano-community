@@ -60,19 +60,15 @@ export const loadRepresentatives = async () => {
     .whereIn('account', accounts)
 
   /***********************************************************/
-  // Latest online=1 / online=0 row per account, derived directly from the
-  // representatives_uptime hypertable. Supersedes the
+  // Latest uptime observation per account from the representatives_uptime
+  // hypertable; bucketed by online flag in JS below. Supersedes the
   // representatives_uptime_index denormalized cache that existed for MyISAM.
-  const online = db
+  // 7-day LATERAL bound lets Timescale chunk-prune to ~7 daily chunks; the
+  // importer writes uptime every 5min for every tracked rep so any rep in
+  // the rep list has an observation within the bound.
+  const latest_uptime = db
     .raw(
-      'SELECT DISTINCT ON (account) account, "timestamp" FROM representatives_uptime WHERE account = ANY(?) AND online = 1 ORDER BY account, "timestamp" DESC',
-      [accounts]
-    )
-    .then((r) => r.rows)
-
-  const offline = db
-    .raw(
-      'SELECT DISTINCT ON (account) account, "timestamp" FROM representatives_uptime WHERE account = ANY(?) AND online = 0 ORDER BY account, "timestamp" DESC',
+      `SELECT u.account, u.online, u."timestamp" FROM unnest(?::char(65)[]) AS reps(account), LATERAL (SELECT account, online, "timestamp" FROM representatives_uptime WHERE account = reps.account AND "timestamp" > (EXTRACT(EPOCH FROM now()) - 7*86400)::int ORDER BY "timestamp" DESC LIMIT 1) u`,
       [accounts]
     )
     .then((r) => r.rows)
@@ -83,8 +79,7 @@ export const loadRepresentatives = async () => {
     uptime, // 2
     network, // 3
     rep_meta, // 4
-    offline, // 5
-    online // 6
+    latest_uptime // 5
   ])
 
   for (const rep of representatives) {
@@ -98,10 +93,11 @@ export const loadRepresentatives = async () => {
     rep.telemetry = queryResults[1].find((a) => a.account === rep.account) || {}
     rep.network = queryResults[3].find((a) => a.account === rep.account) || {}
 
-    const lastOnline = queryResults[6].find((a) => a.account === rep.account)
-    rep.last_online = lastOnline ? lastOnline.timestamp : 0
-    const lastOffline = queryResults[5].find((a) => a.account === rep.account)
-    rep.last_offline = lastOffline ? lastOffline.timestamp : 0
+    // Original semantic: latest observation timestamp; bucketed into
+    // last_online/last_offline by that observation's online flag.
+    const latest = queryResults[5].find((a) => a.account === rep.account)
+    rep.last_online = latest && latest.online === 1 ? latest.timestamp : 0
+    rep.last_offline = latest && latest.online === 0 ? latest.timestamp : 0
   }
 
   cache.set('representatives', representatives, 60 * 10)
