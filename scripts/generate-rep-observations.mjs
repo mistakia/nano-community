@@ -27,7 +27,7 @@ const generateRepObseravtions = async () => {
       '>',
       1000000000000000000000000000000000
     ) // minimum 100 nano voting weight
-    .orderBy('accounts_meta_index.weight', 'desc')
+    .orderByRaw('accounts_meta_index.weight desc nulls last')
     .limit(1000) // TODO - remove limit at some point
 
   let count = 0

@@ -21,7 +21,7 @@ export const loadRepresentatives = async () => {
       '=',
       'accounts_meta_index.account'
     )
-    .orderBy('accounts_meta_index.weight', 'desc')
+    .orderByRaw('accounts_meta_index.weight desc nulls last')
     .limit(1000) // TODO - remove limit at some point
 
   const accounts = representatives.map((r) => r.account)

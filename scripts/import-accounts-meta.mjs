@@ -21,7 +21,7 @@ const importAccountsMeta = async () => {
     .select('accounts.account')
     .where('accounts.representative', true)
     .andWhere('accounts.last_seen', '>', dayjs().subtract(1, 'month').unix())
-    .orderBy('accounts_meta_index.weight', 'desc')
+    .orderByRaw('accounts_meta_index.weight desc nulls last')
   const accounts = rows.map((r) => r.account)
 
   const inserts = []

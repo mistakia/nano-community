@@ -68,7 +68,7 @@ const importUptime = async () => {
       '=',
       'accounts_meta_index.account'
     )
-    .orderBy('accounts_meta_index.weight', 'desc')
+    .orderByRaw('accounts_meta_index.weight desc nulls last')
     .where(
       'accounts_meta_index.weight',
       '>=',
