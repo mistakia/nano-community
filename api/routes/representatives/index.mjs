@@ -55,16 +55,22 @@ export const loadRepresentatives = async () => {
     .whereIn('account', accounts)
 
   /***********************************************************/
-  const online_query = db('representatives_uptime_index').where({
-    online: 1
-  })
-  const online = online_query.whereIn('account', accounts)
+  // Latest online=1 / online=0 row per account, derived directly from the
+  // representatives_uptime hypertable. Supersedes the
+  // representatives_uptime_index denormalized cache that existed for MyISAM.
+  const online = db
+    .raw(
+      'SELECT DISTINCT ON (account) account, "timestamp" FROM representatives_uptime WHERE account = ANY(?) AND online = 1 ORDER BY account, "timestamp" DESC',
+      [accounts]
+    )
+    .then((r) => r.rows)
 
-  /***********************************************************/
-  const offline_query = db('representatives_uptime_index').where({
-    online: 0
-  })
-  const offline = offline_query.whereIn('account', accounts)
+  const offline = db
+    .raw(
+      'SELECT DISTINCT ON (account) account, "timestamp" FROM representatives_uptime WHERE account = ANY(?) AND online = 0 ORDER BY account, "timestamp" DESC',
+      [accounts]
+    )
+    .then((r) => r.rows)
 
   const queryResults = await Promise.all([
     account_meta, // 0

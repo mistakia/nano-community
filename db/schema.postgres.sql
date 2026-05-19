@@ -383,21 +383,6 @@ CREATE TABLE IF NOT EXISTS public.representatives_uptime (
 CREATE INDEX IF NOT EXISTS representatives_uptime_online
   ON public.representatives_uptime (online);
 
-CREATE TABLE IF NOT EXISTS public.representatives_uptime_index (
-  account     char(65) NOT NULL,
-  online      smallint NOT NULL,
-  "timestamp" integer NOT NULL
-);
--- Tightened to single-column UNIQUE(account) per plan: matches the
--- import-uptime callsite's .onConflict('account') intent (one row per
--- account, latest online/timestamp). The MySQL DDL had UNIQUE(account,
--- online) which permitted two rows per account. Bulk ETL must dedup
--- historical MySQL rows during the load (one-shot step in vps-to-postgres.mjs).
-CREATE UNIQUE INDEX IF NOT EXISTS representatives_uptime_index_account_uniq
-  ON public.representatives_uptime_index (account);
-CREATE INDEX IF NOT EXISTS representatives_uptime_index_online
-  ON public.representatives_uptime_index (online);
-
 CREATE TABLE IF NOT EXISTS public.representatives_uptime_summary (
   account        char(65) NOT NULL,
   days           integer NOT NULL,
