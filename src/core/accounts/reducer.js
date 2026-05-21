@@ -65,11 +65,22 @@ export function accounts_reducer(state = initial_state, { payload, type }) {
       return state.withMutations((state) => {
         const account_key = ['items', payload.params]
         const existing_account = state.getIn(account_key, new Account())
+        // When the server reports the account has no chain, the saga skips
+        // /open and the blocks-summary follow-ups. Those flags default to
+        // `true` in the Account record (so the bar shows on initial load),
+        // so we must explicitly mark them done here -- otherwise the
+        // LinearProgress and per-section spinners never clear.
+        const is_unopened = Boolean(payload.data && payload.data.unopened)
         const updated_account = createAccount({
           ...existing_account.toJS(),
           ...payload.data,
           account_is_loading: false,
-          account_is_loaded: true
+          account_is_loaded: true,
+          ...(is_unopened && {
+            account_is_loading_open: false,
+            account_is_loading_blocks_send_summary: false,
+            account_is_loading_blocks_change_summary: false
+          })
         })
         state.setIn(account_key, updated_account)
       })
@@ -79,14 +90,19 @@ export function accounts_reducer(state = initial_state, { payload, type }) {
       // progress bar. We mark `account_is_loaded: true` because the data we
       // have (an empty Account record) is the best the server could give us;
       // the existing "hasn't been opened yet" branch in `account.js` handles
-      // the empty-account case correctly.
+      // the empty-account case correctly. The saga also won't issue the /open
+      // or blocks-summary follow-ups when getAccount failed, so clear those
+      // default-`true` flags too.
       return state.withMutations((state) => {
         const account_key = ['items', payload.params]
         const existing_account = state.getIn(account_key, new Account())
         const updated_account = createAccount({
           ...existing_account.toJS(),
           account_is_loading: false,
-          account_is_loaded: true
+          account_is_loaded: true,
+          account_is_loading_open: false,
+          account_is_loading_blocks_send_summary: false,
+          account_is_loading_blocks_change_summary: false
         })
         state.setIn(account_key, updated_account)
       })
