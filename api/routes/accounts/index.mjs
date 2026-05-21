@@ -1,7 +1,7 @@
 import express from 'express'
 import BigNumber from 'bignumber.js'
 
-import { rpc } from '#common'
+import { rpc, is_terminal_rpc_error } from '#common'
 import delegators from './delegators.mjs'
 import blocks from './blocks.mjs'
 import open from './open.mjs'
@@ -38,6 +38,45 @@ router.get('/:address', async (req, res) => {
       })
     ])
 
+    // Unopened account: every node returned "Account not found" / similar.
+    // Build a zero-valued payload, cache it, and skip the representative
+    // database lookups (the address can't be a representative if it has
+    // never published a block).
+    if (is_terminal_rpc_error(accountInfo)) {
+      const unopened = {
+        account: address,
+        alias: null,
+        representative: false,
+        representative_meta: {},
+        uptime: [],
+        uptime_summary: {},
+        telemetry: {},
+        telemetry_history: [],
+        network: {},
+        account_meta: {
+          account: address,
+          modified_timestamp: 0,
+          account_version: 0,
+          representative: null,
+          pending: 0,
+          balance: 0,
+          block_count: 0,
+          weight: 0,
+          confirmation_height: 0
+        },
+        unopened: true
+      }
+      cache.set(cacheKey, unopened, 30)
+      return res.status(200).send(unopened)
+    }
+
+    // Some addresses fall through the retry loop with a `null` (all nodes
+    // unreachable / timed out). Treat that as a transport failure rather
+    // than crashing on `BigNumber(undefined)`.
+    if (!accountInfo) {
+      return res.status(502).send({ error: 'nano_rpc_unreachable' })
+    }
+
     const data = {
       account: address,
       account_meta: {
@@ -50,7 +89,9 @@ router.get('/:address', async (req, res) => {
         pending: BigNumber(accountInfo.pending).toNumber(),
         balance: BigNumber(accountInfo.balance).toNumber(),
         block_count: BigNumber(accountInfo.block_count).toNumber(),
-        weight: BigNumber(account_weight.weight).toNumber(),
+        weight: BigNumber(
+          (account_weight && account_weight.weight) || 0
+        ).toNumber(),
         confirmation_height: BigNumber(
           accountInfo.confirmation_height
         ).toNumber()

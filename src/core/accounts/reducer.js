@@ -50,6 +50,17 @@ export function accounts_reducer(state = initial_state, { payload, type }) {
         search: payload.value
       })
 
+    case accountsActions.GET_ACCOUNT_PENDING:
+      return state.withMutations((state) => {
+        const account_key = ['items', payload.params]
+        const existing_account = state.getIn(account_key, new Account())
+        const updated_account = createAccount({
+          ...existing_account.toJS(),
+          account_is_loading: true
+        })
+        state.setIn(account_key, updated_account)
+      })
+
     case accountsActions.GET_ACCOUNT_FULFILLED:
       return state.withMutations((state) => {
         const account_key = ['items', payload.params]
@@ -57,6 +68,23 @@ export function accounts_reducer(state = initial_state, { payload, type }) {
         const updated_account = createAccount({
           ...existing_account.toJS(),
           ...payload.data,
+          account_is_loading: false,
+          account_is_loaded: true
+        })
+        state.setIn(account_key, updated_account)
+      })
+
+    case accountsActions.GET_ACCOUNT_FAILED:
+      // Surface the failure to the view so it can stop showing the indefinite
+      // progress bar. We mark `account_is_loaded: true` because the data we
+      // have (an empty Account record) is the best the server could give us;
+      // the existing "hasn't been opened yet" branch in `account.js` handles
+      // the empty-account case correctly.
+      return state.withMutations((state) => {
+        const account_key = ['items', payload.params]
+        const existing_account = state.getIn(account_key, new Account())
+        const updated_account = createAccount({
+          ...existing_account.toJS(),
           account_is_loading: false,
           account_is_loaded: true
         })
@@ -81,6 +109,17 @@ export function accounts_reducer(state = initial_state, { payload, type }) {
         const updated_account = createAccount({
           ...existing_account.toJS(),
           open: payload.data,
+          account_is_loading_open: false
+        })
+        state.setIn(account_key, updated_account)
+      })
+
+    case accountsActions.GET_ACCOUNT_OPEN_FAILED:
+      return state.withMutations((state) => {
+        const account_key = ['items', payload.params]
+        const existing_account = state.getIn(account_key, new Account())
+        const updated_account = createAccount({
+          ...existing_account.toJS(),
           account_is_loading_open: false
         })
         state.setIn(account_key, updated_account)

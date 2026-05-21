@@ -10,6 +10,8 @@ import {
   get_account_stats,
   get_account_blocks_per_day
 } from '@core/api'
+import { Account } from './account'
+import { getAccountItems } from './selectors'
 import { accountsActions } from './actions'
 
 export function* loadReps() {
@@ -19,6 +21,15 @@ export function* loadReps() {
 export function* loadAccount({ payload }) {
   const { account } = payload
   yield call(getAccount, account)
+
+  // Skip the follow-on requests when the account has no chain. The opening
+  // block doesn't exist (so /open would hit nanodb pointlessly) and there
+  // can't be any send/change blocks to summarize.
+  const items = yield select(getAccountItems)
+  const account_record = items.get(account, new Account())
+  const block_count = account_record.getIn(['account_meta', 'block_count'])
+  if (!block_count) return
+
   yield call(getAccountOpen, account)
   yield fork(getAccountBlocksSummary, { account, type: 'send', limit: 10 })
   // yield fork(getAccountBlocksSummary, { account, type: 'receive', limit: 10 })

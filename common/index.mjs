@@ -90,14 +90,27 @@ export const formatRedditPost = (p) => ({
   score: p.data.score // p.data.upvote_ratio + p.data.ups + p.data.total_awards_received + p.data.score + p.num_comments - p.data.downs
 })
 
+// RPC node errors that are deterministic answers, not transport failures.
+// All nodes will return the same response, so retrying the next address is
+// pure wasted latency (and a big tail-cost when any address is slow). Treat
+// these as terminal and return on the first occurrence.
+const TERMINAL_RPC_ERRORS = [
+  /Account not found/i,
+  /Account does not exist/i,
+  /Bad account number/i,
+  /Block not found/i
+]
+
+const is_terminal_rpc_error = (res) => {
+  if (!res || typeof res.error !== 'string') return false
+  return TERMINAL_RPC_ERRORS.some((re) => re.test(res.error))
+}
+
 const rpcRequest = async (
   data,
   { url, trusted = false, timeout = 20000 } = {}
 ) => {
   if (url) {
-    console.log({
-      url
-    })
     const options = { url, timeout, ...POST(data) }
     return request(options)
   }
@@ -114,7 +127,8 @@ const rpcRequest = async (
       res = null
     }
 
-    if (res && !res.error) {
+    // Success or a definitive "no such entity" answer: stop iterating.
+    if (res && (!res.error || is_terminal_rpc_error(res))) {
       return res
     }
   }
@@ -152,7 +166,11 @@ const rpcAccountInfo = ({
   representative = false,
   pending = false,
   include_confirmed = false,
-  timeout = 20000,
+  // `account_info` is a cheap point lookup; a 20s per-address ceiling is
+  // overkill and turns one stale node in `rpcAddresses` into a multi-second
+  // user-visible stall. 5s is plenty for a healthy node and lets the retry
+  // loop move on quickly when one isn't.
+  timeout = 5000,
   weight = true
 } = {}) => {
   const data = {
@@ -230,6 +248,8 @@ const rpcAccountWeight = ({ url, account }) => {
   }
   return rpcRequest(data, { url })
 }
+
+export { is_terminal_rpc_error }
 
 export const rpc = {
   telemetry: rpcTelemetry,
