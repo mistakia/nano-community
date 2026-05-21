@@ -68,7 +68,7 @@ export const loadRepresentatives = async () => {
   // the rep list has an observation within the bound.
   const latest_uptime = db
     .raw(
-      `SELECT u.account, u.online, u."timestamp" FROM unnest(?::char(65)[]) AS reps(account), LATERAL (SELECT account, online, "timestamp" FROM representatives_uptime WHERE account = reps.account AND "timestamp" > (EXTRACT(EPOCH FROM now()) - 7*86400)::int ORDER BY "timestamp" DESC LIMIT 1) u`,
+      'SELECT u.account, u.online, u."timestamp" FROM unnest(?::char(65)[]) AS reps(account), LATERAL (SELECT account, online, "timestamp" FROM representatives_uptime WHERE account = reps.account AND "timestamp" > (EXTRACT(EPOCH FROM now()) - 7*86400)::int ORDER BY "timestamp" DESC LIMIT 1) u',
       [accounts]
     )
     .then((r) => r.rows)

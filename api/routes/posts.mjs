@@ -42,8 +42,8 @@ router.get('/labels', async (req, res) => {
     inner.select(db.raw(
       `DISTINCT ON (${MAIN_URL_EXPR}) posts.*, sources.score_avg, ` +
       `${MAIN_URL_EXPR} AS main_url, ` +
-      `sources.title AS source_title, sources.logo_url AS source_logo_url, ` +
-      `(posts.score / sources.score_avg) AS strength`
+      'sources.title AS source_title, sources.logo_url AS source_logo_url, ' +
+      '(posts.score / sources.score_avg) AS strength'
     ))
     inner.join('posts', 'posts.sid', 'sources.id')
     inner.leftJoin('post_labels', 'posts.id', 'post_labels.post_id')
@@ -94,13 +94,13 @@ const load_trending_posts = async ({
   // The MAX wrapper is dropped because per-row strength is constant within a
   // single posts row; the dedup is what picks the winning row per group.
   const strength_expr =
-    `(LOG10(posts.score / sources.score_avg) - ` +
-    `((EXTRACT(EPOCH FROM NOW())::INTEGER - posts.created_at) / ?))`
+    '(LOG10(posts.score / sources.score_avg) - ' +
+    '((EXTRACT(EPOCH FROM NOW())::INTEGER - posts.created_at) / ?))'
   const inner = db('sources')
   inner.select(db.raw(
     `DISTINCT ON (${MAIN_URL_EXPR}) posts.*, sources.score_avg, ` +
     `${MAIN_URL_EXPR} AS main_url, ` +
-    `sources.title AS source_title, sources.logo_url AS source_logo_url, ` +
+    'sources.title AS source_title, sources.logo_url AS source_logo_url, ' +
     `${strength_expr} AS strength`,
     [decay]
   ))
@@ -164,7 +164,7 @@ router.get('/announcements', async (req, res) => {
     inner.select(db.raw(
       `DISTINCT ON (${MAIN_URL_EXPR}) posts.*, sources.score_avg, ` +
       `${MAIN_URL_EXPR} AS main_url, ` +
-      `sources.title AS source_title, sources.logo_url AS source_logo_url`
+      'sources.title AS source_title, sources.logo_url AS source_logo_url'
     ))
     inner.join('posts', 'posts.sid', 'sources.id')
     inner.where(function () {
@@ -202,8 +202,8 @@ const load_top_posts = async ({ offset = 0, age = 168, limit = 5 } = {}) => {
   inner.select(db.raw(
     `DISTINCT ON (${MAIN_URL_EXPR}) posts.*, sources.score_avg, ` +
     `${MAIN_URL_EXPR} AS main_url, ` +
-    `sources.title AS source_title, sources.logo_url AS source_logo_url, ` +
-    `(posts.score / sources.score_avg) AS strength`
+    'sources.title AS source_title, sources.logo_url AS source_logo_url, ' +
+    '(posts.score / sources.score_avg) AS strength'
   ))
   inner.join('posts', 'posts.sid', 'sources.id')
   inner.whereRaw('posts.created_at > (EXTRACT(EPOCH FROM NOW())::INTEGER - ?)', age * 60 * 60)
