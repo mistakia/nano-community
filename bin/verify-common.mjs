@@ -258,15 +258,7 @@ async function safeFirstLine(path) {
   }
 }
 
-// Posts a verifier finding to the unified base signal queue (channel-system
-// fans out to Discord/iOS). Off-host: uses HTTPS + X-Signal-Secret rather
-// than the in-process capability registry because this submodule lacks the
-// #base/* import alias.
-//
-// Argv0 (e.g. 'verify-uptime') is captured as the source-discriminator so each
-// verify script gets its own dedup_key. Severity is inferred from the leading
-// '[OK]' / '[PARTIAL]' / '[DIVERGED]' / '[ERROR]' tag emitted by the
-// verifiers; default is medium.
+// Off-host: HTTPS + X-Signal-Secret because this submodule lacks the #base/* import alias.
 export async function notifyDiscord(text) {
   const base_url = process.env.BASE_API_URL
   const secret = process.env.BASE_SIGNAL_SECRET
@@ -319,8 +311,10 @@ export async function notifyDiscord(text) {
     )
     if (!res.ok) {
       logger('signal emit returned %s', res.status)
+      await res.text().catch(() => {})
       return false
     }
+    await res.text().catch(() => {})
     return true
   } catch (e) {
     logger('signal emit error: %s', e.message)
