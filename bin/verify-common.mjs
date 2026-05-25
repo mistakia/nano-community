@@ -258,25 +258,72 @@ async function safeFirstLine(path) {
   }
 }
 
+// Posts a verifier finding to the unified base signal queue (channel-system
+// fans out to Discord/iOS). Off-host: uses HTTPS + X-Signal-Secret rather
+// than the in-process capability registry because this submodule lacks the
+// #base/* import alias.
+//
+// Argv0 (e.g. 'verify-uptime') is captured as the source-discriminator so each
+// verify script gets its own dedup_key. Severity is inferred from the leading
+// '[OK]' / '[PARTIAL]' / '[DIVERGED]' / '[ERROR]' tag emitted by the
+// verifiers; default is medium.
 export async function notifyDiscord(text) {
-  const url = process.env.DISCORD_WEBHOOK_URL
-  if (!url) {
-    logger('DISCORD_WEBHOOK_URL not set; skipping Discord notify: %s', text.slice(0, 80))
+  const base_url = process.env.BASE_API_URL
+  const secret = process.env.BASE_SIGNAL_SECRET
+  if (!base_url || !secret) {
+    logger(
+      'BASE_API_URL/BASE_SIGNAL_SECRET not set; skipping signal emit: %s',
+      text.slice(0, 80)
+    )
     return false
   }
+  const script_name = (process.argv[1] || 'verify-common')
+    .split('/')
+    .pop()
+    .replace(/\.mjs$/, '')
+  const source = `user:repository/active/nano-community/bin/${script_name}.mjs`
+  const tag_match = text.match(/^\s*\[(OK|PARTIAL|DIVERGED|ERROR|FAIL|WARN)\]/i)
+  const tag = tag_match ? tag_match[1].toUpperCase() : null
+  let kind = 'pipeline_failure'
+  let severity = 'medium'
+  let dedup_key = `pipeline_failure:nano-community:${script_name}`
+  if (tag === 'OK') {
+    kind = 'pipeline_success'
+    severity = 'low'
+    dedup_key = `pipeline_success:nano-community:${script_name}`
+  } else if (tag === 'DIVERGED' || tag === 'ERROR' || tag === 'FAIL') {
+    severity = 'high'
+  } else if (tag === 'WARN' || tag === 'PARTIAL') {
+    severity = 'medium'
+  }
+  const title = text.split('\n')[0].slice(0, 200)
   try {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ content: text.slice(0, 1900) })
-    })
+    const res = await fetch(
+      `${base_url.replace(/\/$/, '')}/api/signals/`,
+      {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-signal-secret': secret
+        },
+        body: JSON.stringify({
+          source,
+          kind,
+          severity,
+          title,
+          payload: { full_text: text.slice(0, 4000) },
+          dedup_key
+        }),
+        signal: AbortSignal.timeout(10000)
+      }
+    )
     if (!res.ok) {
-      logger('Discord webhook returned %s', res.status)
+      logger('signal emit returned %s', res.status)
       return false
     }
     return true
   } catch (e) {
-    logger('Discord webhook error: %s', e.message)
+    logger('signal emit error: %s', e.message)
     return false
   }
 }
