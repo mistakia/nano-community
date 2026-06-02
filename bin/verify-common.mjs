@@ -6,9 +6,9 @@
 //
 // Plan: user:task/homelab/verify-nano-community-csv-ingestion.md
 
-import { createReadStream } from 'node:fs'
+import { createReadStream, existsSync, readFileSync } from 'node:fs'
 import { appendFile, mkdir, readdir, readFile } from 'node:fs/promises'
-import { createHash } from 'node:crypto'
+import { createHash, createPrivateKey, sign as crypto_sign } from 'node:crypto'
 import { dirname } from 'node:path'
 
 import debug from 'debug'
@@ -258,13 +258,30 @@ async function safeFirstLine(path) {
   }
 }
 
-// Off-host: HTTPS + X-Signal-Secret because this submodule lacks the #base/* import alias.
+const MACHINE_TOKEN_TTL_MS = 30 * 1000
+
+// Inline machine-token signer. Symmetric with libs-server/auth/sign-machine-token.mjs
+// in the base repo; duplicated here so nano-community has no runtime dependency
+// on the base CLI source tree. Reads BASE_MACHINE_SLUG + BASE_INSTANCE_KEY_FILE;
+// returns null when either is missing or the key file is absent.
+function sign_machine_token() {
+  const slug = process.env.BASE_MACHINE_SLUG
+  const key_path = process.env.BASE_INSTANCE_KEY_FILE
+  if (!slug || !key_path || !existsSync(key_path)) return null
+  const private_key = createPrivateKey(readFileSync(key_path, 'utf8'))
+  const exp = Date.now() + MACHINE_TOKEN_TTL_MS
+  const payload = `${slug}.${exp}`
+  const sig = crypto_sign(null, Buffer.from(payload), private_key).toString('base64url')
+  return `${payload}.${sig}`
+}
+
+// Off-host: HTTPS + Authorization: Machine token because this submodule lacks the #base/* import alias.
 export async function notifyDiscord(text) {
   const base_url = process.env.BASE_API_URL
-  const secret = process.env.BASE_SIGNAL_SECRET
-  if (!base_url || !secret) {
+  const token = sign_machine_token()
+  if (!base_url || !token) {
     logger(
-      'BASE_API_URL/BASE_SIGNAL_SECRET not set; skipping signal emit: %s',
+      'BASE_API_URL/BASE_MACHINE_SLUG/BASE_INSTANCE_KEY_FILE not set; skipping signal emit: %s',
       text.slice(0, 80)
     )
     return false
@@ -296,7 +313,7 @@ export async function notifyDiscord(text) {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
-          'x-signal-secret': secret
+          authorization: `Machine ${token}`
         },
         body: JSON.stringify({
           source,
