@@ -28,7 +28,6 @@ import {
   TABLE_COLUMNS,
   createPgClient,
   listClusterFiles,
-  notifyDiscord,
   openLedger,
   sniffCsvDialect
 } from './verify-common.mjs'
@@ -216,9 +215,6 @@ async function run() {
     })
 
     logger('cluster %s: %s (unmatched=%d)', CLUSTER, classification, unmatched)
-    if (classification !== 'verified-safe') {
-      await notifyDiscord(`verify-posts: ${classification} (unmatched=${unmatched})`)
-    }
   } catch (e) {
     logger('error: %s', e.stack || e.message)
     try { await client.query('ROLLBACK') } catch (_) {}
@@ -228,7 +224,6 @@ async function run() {
       classification: 'error',
       notes: (e.message || String(e)).slice(0, 200)
     })
-    await notifyDiscord(`verify-posts: error -- ${e.message}`)
     exit = EXIT_SETUP
   } finally {
     await client.end()

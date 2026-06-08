@@ -31,7 +31,6 @@ import {
   EXIT_SETUP,
   TABLE_COLUMNS,
   createPgClient,
-  notifyDiscord,
   openLedger,
   pgEscape
 } from './verify-common.mjs'
@@ -345,15 +344,11 @@ async function run({ dumpPath, importUnmatched = false, sampleUnmatched = 20 }) 
       classification: 'error',
       notes: (e.message || String(e)).slice(0, 300)
     })
-    await notifyDiscord(`verify-dump-via-pg ${dumpName}: error -- ${e.message}`)
     exit = EXIT_SETUP
   } finally {
     try { await pgClient.end() } catch {}
   }
 
-  if (exit !== EXIT_SAFE) {
-    await notifyDiscord(`verify-dump-via-pg ${dumpName}: exit=${exit} staged=${JSON.stringify(stagedRows)}`)
-  }
   return exit
 }
 

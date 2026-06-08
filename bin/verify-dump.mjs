@@ -37,7 +37,6 @@ import {
   EXIT_SETUP,
   TABLE_COLUMNS,
   createPgClient,
-  notifyDiscord,
   openLedger,
   pgEscape
 } from './verify-common.mjs'
@@ -431,7 +430,6 @@ async function run({ dumpPath, importMode, keepMysql }) {
       classification: 'error',
       notes: (e.message || String(e)).slice(0, 200)
     })
-    await notifyDiscord(`verify-dump ${dumpName}: error -- ${e.message}`)
     exit = EXIT_SETUP
   } finally {
     await reader.end()
@@ -447,9 +445,6 @@ async function run({ dumpPath, importMode, keepMysql }) {
   }
 
   logger('verify-dump %s: %j', dumpName, verdicts)
-  if (verdicts.some((v) => v.unmatched > 0)) {
-    await notifyDiscord(`verify-dump ${dumpName}: ${JSON.stringify(verdicts)}`)
-  }
   return exit
 }
 

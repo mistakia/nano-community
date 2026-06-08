@@ -6,9 +6,9 @@
 //
 // Plan: user:task/homelab/verify-nano-community-csv-ingestion.md
 
-import { createReadStream, existsSync, readFileSync } from 'node:fs'
+import { createReadStream } from 'node:fs'
 import { appendFile, mkdir, readdir, readFile } from 'node:fs/promises'
-import { createHash, createPrivateKey, sign as crypto_sign } from 'node:crypto'
+import { createHash } from 'node:crypto'
 import { dirname } from 'node:path'
 
 import debug from 'debug'
@@ -258,88 +258,7 @@ async function safeFirstLine(path) {
   }
 }
 
-const MACHINE_TOKEN_TTL_MS = 30 * 1000
-
-// Inline machine-token signer. Symmetric with libs-server/auth/sign-machine-token.mjs
-// in the base repo; duplicated here so nano-community has no runtime dependency
-// on the base CLI source tree. Reads BASE_MACHINE_SLUG + BASE_INSTANCE_KEY_FILE;
-// returns null when either is missing or the key file is absent.
-function sign_machine_token() {
-  const slug = process.env.BASE_MACHINE_SLUG
-  const key_path = process.env.BASE_INSTANCE_KEY_FILE
-  if (!slug || !key_path || !existsSync(key_path)) return null
-  const private_key = createPrivateKey(readFileSync(key_path, 'utf8'))
-  const exp = Date.now() + MACHINE_TOKEN_TTL_MS
-  const payload = `${slug}.${exp}`
-  const sig = crypto_sign(null, Buffer.from(payload), private_key).toString('base64url')
-  return `${payload}.${sig}`
-}
-
-// Off-host: HTTPS + Authorization: Machine token because this submodule lacks the #base/* import alias.
-export async function notifyDiscord(text) {
-  const base_url = process.env.BASE_API_URL
-  const token = sign_machine_token()
-  if (!base_url || !token) {
-    logger(
-      'BASE_API_URL/BASE_MACHINE_SLUG/BASE_INSTANCE_KEY_FILE not set; skipping signal emit: %s',
-      text.slice(0, 80)
-    )
-    return false
-  }
-  const script_name = (process.argv[1] || 'verify-common')
-    .split('/')
-    .pop()
-    .replace(/\.mjs$/, '')
-  const source = `user:repository/active/nano-community/bin/${script_name}.mjs`
-  const tag_match = text.match(/^\s*\[(OK|PARTIAL|DIVERGED|ERROR|FAIL|WARN)\]/i)
-  const tag = tag_match ? tag_match[1].toUpperCase() : null
-  let kind = 'pipeline_failure'
-  let severity = 'medium'
-  let dedup_key = `pipeline_failure:nano-community:${script_name}`
-  if (tag === 'OK') {
-    kind = 'pipeline_success'
-    severity = 'low'
-    dedup_key = `pipeline_success:nano-community:${script_name}`
-  } else if (tag === 'DIVERGED' || tag === 'ERROR' || tag === 'FAIL') {
-    severity = 'high'
-  } else if (tag === 'WARN' || tag === 'PARTIAL') {
-    severity = 'medium'
-  }
-  const title = text.split('\n')[0].slice(0, 200)
-  try {
-    const res = await fetch(
-      `${base_url.replace(/\/$/, '')}/api/signals/`,
-      {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-          authorization: `Machine ${token}`
-        },
-        body: JSON.stringify({
-          source,
-          kind,
-          severity,
-          title,
-          payload: { full_text: text.slice(0, 4000) },
-          dedup_key
-        }),
-        signal: AbortSignal.timeout(10000)
-      }
-    )
-    if (!res.ok) {
-      logger('signal emit returned %s', res.status)
-      await res.text().catch(() => {})
-      return false
-    }
-    await res.text().catch(() => {})
-    return true
-  } catch (e) {
-    logger('signal emit error: %s', e.message)
-    return false
-  }
-}
-
-// CLI: --selftest <csv>  open PG, sniff CSV, ping Discord
+// CLI: --selftest <csv>  open PG, sniff CSV
 //      --validate-cluster <cluster>  walk every CSV in cluster, sniff headers,
 //                                    report column-shape distribution.
 
@@ -356,8 +275,6 @@ async function cliSelftest(csv) {
   logger('Header: %s', dialect.header.join(','))
   const sha = await sha256File(csv)
   logger('sha256: %s', sha)
-  const dn = await notifyDiscord(`verify-common selftest ok: ${csv} (${dialect.column_count} cols, sha=${sha.slice(0, 12)})`)
-  logger('Discord notify: %s', dn ? 'sent' : 'skipped/failed')
   return EXIT_SAFE
 }
 
