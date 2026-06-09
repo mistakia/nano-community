@@ -22,8 +22,8 @@
     "test": "TZ=America/New_York NODE_ENV=test TEST=all mocha --require polyfills/node25-slow-buffer.cjs --exit",
     "scan:links": "npx linkinator https://nano.community --recurse --timeout 10000",
     "load:server": "ssh -A nano.community 'export NVM_DIR=\"$HOME/.nvm\" && [ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\" && cd /root/nano-community && git pull && yarn install'",
-    "load:crontab": "base crontab build server/server-crontab | ssh nano.community 'cat > ~/crontab/nano-community.cron && ~/bin/load_crontab_files'",
-    "load:crontab:storage": "base crontab build server/storage-crontab | ssh storage 'cat > ~/crontab/nano-community.cron && ~/bin/load_crontab_files'",
+    "load:crontab": "bash server/deploy-crontab.sh nano.community server/server-crontab nano-community-main nano-community",
+    "load:crontab:storage": "bash server/deploy-crontab.sh storage server/storage-crontab nano-community-storage nano-community",
     "show:crontab": "ssh nano.community 'crontab -l'"
   },
   "homepage": "https://nano.community/",
