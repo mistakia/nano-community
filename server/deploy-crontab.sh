@@ -45,6 +45,6 @@ fi
 
 REMOTE_TMP=$(ssh -A "$SSH_HOST" 'mktemp -d')
 scp -q "$TMPDIR"/*.cron "$SSH_HOST":"$REMOTE_TMP/"
-ssh -A "$SSH_HOST" "deploy_crontab_scope '$SCOPE_KEY' '$REMOTE_TMP' cat && rm -rf '$REMOTE_TMP' && \$HOME/bin/load_crontab_files"
+ssh -A "$SSH_HOST" "\$HOME/bin/deploy_crontab_scope '$SCOPE_KEY' '$REMOTE_TMP' cat && rm -rf '$REMOTE_TMP' && \$HOME/bin/load_crontab_files"
 
 echo "Deployed $SOURCE to $SSH_HOST (scope=$SCOPE_KEY)"
