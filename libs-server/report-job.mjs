@@ -1,35 +1,50 @@
-import config from '#config'
+import os from 'os'
+import { execFile } from 'child_process'
+import { promisify } from 'util'
 
-const report_job = async ({ job_id, success, reason, duration_ms }) => {
-  const { api_url, api_key } = config.job_tracker || {}
-  if (!api_url || !api_key) {
-    return
-  }
+const exec_file = promisify(execFile)
+
+const report_job = async ({ job_id, success, reason }) => {
+  const api_url = process.env.BASE_API_URL
+  if (!api_url) return
+
+  const source =
+    process.env.JOB_SCHEDULE_ENTITY_URI || `service:nano-community-${job_id}`
+  const outcome = success ? 'success' : 'failure'
 
   const controller = new AbortController()
   const timeout_id = setTimeout(() => controller.abort(), 5000)
   try {
-    const res = await fetch(`${api_url}/api/jobs/report`, {
+    const { stdout } = await exec_file('base', ['instance', 'sign-token'], {
+      timeout: 5000
+    })
+    const token = stdout.trim()
+    if (!token) {
+      console.error('run report failed: empty machine token')
+      return
+    }
+
+    const res = await fetch(`${api_url.replace(/\/$/, '')}/api/runs/report`, {
       method: 'POST',
       signal: controller.signal,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${api_key}`
+        Authorization: `Machine ${token}`
       },
       body: JSON.stringify({
-        job_id,
-        success,
-        reason,
-        duration_ms,
-        schedule: process.env.JOB_SCHEDULE || null,
-        schedule_type: process.env.JOB_SCHEDULE_TYPE || null,
-        project: process.env.JOB_PROJECT || 'nano-community',
-        server: process.env.JOB_PROJECT || 'nano-community'
+        source,
+        host: os.hostname().split('.')[0],
+        outcome,
+        exit_code: success ? 0 : 1,
+        reason: reason || null
       })
     })
     await res.body?.cancel()
+    if (!res.ok) {
+      console.error(`run report failed: HTTP ${res.status}`)
+    }
   } catch (error) {
-    console.error(`job tracker report failed: ${error.message}`)
+    console.error(`run report failed: ${error.message}`)
   } finally {
     clearTimeout(timeout_id)
   }
