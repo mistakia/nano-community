@@ -40,6 +40,7 @@ const getDiscussions = async ({ repo, query }) => {
           name
         }
         author {
+          login
           avatarUrl
           ... on User {
             id
@@ -81,9 +82,9 @@ const getDiscussions = async ({ repo, query }) => {
 
 const formatDiscussion = ({ item, repo }) => ({
   id: item.id,
-  author_id: item.author.id,
-  author_name: item.author.name,
-  author_avatar: item.author.avatarUrl,
+  author_id: item.author.id || item.author.login || 'unknown',
+  author_name: item.author.name || item.author.login || 'unknown',
+  author_avatar: item.author.avatarUrl || '',
   ref: item.number,
   title: item.title,
   url: item.url,
