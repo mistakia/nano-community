@@ -58,6 +58,4 @@ JOB_PROJECT=nano-community
 15 * * * * NODE_ENV=production /root/.nvm/versions/node/v22.22.1/bin/node /root/nano-community/scripts/import-accounts-rep.mjs >> /var/log/nano-community/import-accounts-rep.log 2>&1
 
 ## aliases
-18 3 * * * NODE_ENV=production /root/.nvm/versions/node/v22.22.1/bin/node /root/nano-community/scripts/import-nanotipbot-twitter.mjs >> /var/log/nano-community/import-nanotipbot-twitter.log 2>&1
-18 4 * * * NODE_ENV=production /root/.nvm/versions/node/v22.22.1/bin/node /root/nano-community/scripts/import-nanotipbot-telegram.mjs >> /var/log/nano-community/import-nanotipbot-telegram.log 2>&1
 18 3 * * * NODE_ENV=production /root/.nvm/versions/node/v22.22.1/bin/node /root/nano-community/scripts/import-graham-tipbot.mjs >> /var/log/nano-community/import-graham-tipbot.log 2>&1
