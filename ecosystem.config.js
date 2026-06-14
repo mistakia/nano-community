@@ -5,7 +5,10 @@ module.exports = {
       watch: '.',
       ignore_watch: ['build', 'static', 'test'],
       env_production: {
-        NODE_ENV: 'production'
+        NODE_ENV: 'production',
+        // Path (not the key) to the mode-0600 keyfile that config.js uses to
+        // decrypt ENCRYPTED| values in config.production.js. harden-secrets WS1.
+        CONFIG_ENCRYPTION_KEY_FILE: '/root/.config-encryption-key'
       },
       max_memory_restart: '2G'
     }
