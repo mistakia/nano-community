@@ -1,8 +1,9 @@
-import os from 'os'
 import { execFile } from 'child_process'
 import { promisify } from 'util'
 
 const exec_file = promisify(execFile)
+
+const BASE_CLI = process.env.BASE_CLI_PATH || 'base'
 
 const report_job = async ({ job_id, success, reason }) => {
   const api_url = process.env.BASE_API_URL
@@ -12,41 +13,26 @@ const report_job = async ({ job_id, success, reason }) => {
     process.env.JOB_SCHEDULE_ENTITY_URI || `service:nano-community-${job_id}`
   const outcome = success ? 'success' : 'failure'
 
-  const controller = new AbortController()
-  const timeout_id = setTimeout(() => controller.abort(), 5000)
-  try {
-    const { stdout } = await exec_file('base', ['instance', 'sign-token'], {
-      timeout: 5000
-    })
-    const token = stdout.trim()
-    if (!token) {
-      console.error('run report failed: empty machine token')
-      return
-    }
+  // Single canonical client: `base run report` owns transport selection (local
+  // UDS on the writer, an Authorization: Machine token off-host), host identity
+  // (BASE_MACHINE_SLUG), and the payload cap -- no hand-rolled sign-token+curl.
+  // See user:text/base/machine-token-auth.md.
+  const args = [
+    'run',
+    'report',
+    '--source',
+    source,
+    '--outcome',
+    outcome,
+    '--exit-code',
+    success ? '0' : '1'
+  ]
+  if (reason) args.push('--reason', reason)
 
-    const res = await fetch(`${api_url.replace(/\/$/, '')}/api/runs/report`, {
-      method: 'POST',
-      signal: controller.signal,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Machine ${token}`
-      },
-      body: JSON.stringify({
-        source,
-        host: os.hostname().split('.')[0],
-        outcome,
-        exit_code: success ? 0 : 1,
-        reason: reason || null
-      })
-    })
-    await res.body?.cancel()
-    if (!res.ok) {
-      console.error(`run report failed: HTTP ${res.status}`)
-    }
+  try {
+    await exec_file(BASE_CLI, args, { timeout: 5000 })
   } catch (error) {
     console.error(`run report failed: ${error.message}`)
-  } finally {
-    clearTimeout(timeout_id)
   }
 }
 
