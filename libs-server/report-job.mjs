@@ -3,7 +3,10 @@ import { promisify } from 'util'
 
 const exec_file = promisify(execFile)
 
-const BASE_CLI = process.env.BASE_CLI_PATH || 'base'
+// Resolve base by absolute path, not bare `base` on PATH: the pm2 process env
+// does not include ~/.base/bin, so a bare `base` spawn ENOENTs and every run
+// report is silently lost. See user:text/base/machine-token-auth.md.
+const BASE_CLI = process.env.BASE_CLI_PATH || '/root/.base/bin/base'
 
 const report_job = async ({ job_id, success, reason }) => {
   const api_url = process.env.BASE_API_URL
