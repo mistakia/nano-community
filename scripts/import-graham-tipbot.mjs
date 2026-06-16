@@ -1,6 +1,7 @@
 import debug from 'debug'
+import fetch from 'node-fetch'
 
-import { request, isMain } from '#common'
+import { isMain } from '#common'
 import report_job from '#libs-server/report-job.mjs'
 import db from '#db'
 
@@ -9,7 +10,23 @@ debug.enable('import-graham-tipbot')
 
 const importGrahamTipbot = async () => {
   const url = 'https://nanobotapi.banano.cc/users'
-  const res = await request({ url })
+  const response = await fetch(url, { timeout: 20000 })
+
+  // Upstream added auth in 2026-06: GET /users now returns plain-text
+  // `401: Invalid or missing API key.` and the host root 404s, so there is no
+  // self-serve key registration. Treat any non-OK response as a clean no-op so
+  // the daily job stops paging instead of throwing on the unparseable error
+  // body. To restore the alias import, register a banano API key and pass it
+  // via an Authorization header here.
+  // See user:task/nano-community/retire-dead-tipbot-importers.md.
+  if (!response.ok) {
+    logger(
+      `skipping import: ${url} returned HTTP ${response.status}; upstream requires an API key (none provisioned)`
+    )
+    return
+  }
+
+  const res = await response.json()
 
   const inserts = res.map((i) => ({
     account: i.address,
