@@ -66,7 +66,7 @@ const TABLE_COLUMNS = {
   ]
 }
 
-const LOCKFILE = '/tmp/nano-community-archive-mysql.lock' // operator wraps invocation in flock -n
+const LOCKFILE = '/tmp/nano-community-archive.lock' // operator wraps invocation in flock -n
 
 // Delta-mode configuration. --delta does NOT include accounts_meta (the
 // legacy archive-mysql cron only handled 4 tables; accounts_meta has its own
