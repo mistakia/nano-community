@@ -30,7 +30,19 @@ const report_job = async ({ job_id, success, reason }) => {
     '--exit-code',
     success ? '0' : '1'
   ]
-  if (reason) args.push('--reason', reason)
+  // Cap the reason before it becomes an argv entry. A Knex query error embeds
+  // the full SQL; a bulk insert that overflows the PG parameter limit produces
+  // a multi-megabyte message, and passing that as `--reason` overflows execve's
+  // MAX_ARG_STRLEN, so the whole spawn fails with E2BIG and the run report is
+  // silently lost. Truncate to a size base run report will accept regardless.
+  if (reason) {
+    const MAX_REASON_LENGTH = 2000
+    const trimmed =
+      reason.length > MAX_REASON_LENGTH
+        ? `${reason.slice(0, MAX_REASON_LENGTH)} [truncated]`
+        : reason
+    args.push('--reason', trimmed)
+  }
 
   try {
     await exec_file(BASE_CLI, args, { timeout: 5000 })

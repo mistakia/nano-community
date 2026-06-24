@@ -114,9 +114,14 @@ const generateRepObseravtions = async () => {
           'representatives_telemetry.timestamp as last_seen',
           'representatives_telemetry.address',
           'representatives_telemetry.port',
-          'X.observations'
+          // lowercase alias: PostgreSQL folds the unquoted `AS x` to lowercase,
+          // so the reference must be lowercase too. The MySQL-era `AS X` /
+          // `X.observations` pairing matched case-insensitively; after the
+          // Postgres cutover the quoted "X" reference no longer resolved
+          // (42P01 missing FROM-clause entry for table "X").
+          'x.observations'
         )
-        .from(db.raw('(' + nodeIdSubQuery.toString() + ') AS X'))
+        .from(db.raw('(' + nodeIdSubQuery.toString() + ') AS x'))
         .innerJoin('representatives_telemetry', function () {
           this.on(function () {
             this.on('address', '=', 'aid')

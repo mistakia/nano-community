@@ -43,10 +43,17 @@ const calculateUptime = async () => {
 
   if (inserts.length) {
     logger(`saving ${inserts.length} summaries for ${reps.length} reps`)
-    await db('representatives_uptime_summary')
-      .insert(inserts)
-      .onConflict(['account', 'days'])
-      .merge()
+    // PostgreSQL caps a single bind message at 65535 parameters. At 4 columns
+    // per row, one insert of every summary (~159k rows) sends ~635k params and
+    // fails with 08P01 (exec_bind_message protocol violation). Chunk the upsert
+    // to stay well under the limit.
+    const chunk_size = 5000
+    for (let i = 0; i < inserts.length; i += chunk_size) {
+      await db('representatives_uptime_summary')
+        .insert(inserts.slice(i, i + chunk_size))
+        .onConflict(['account', 'days'])
+        .merge()
+    }
   }
 }
 
