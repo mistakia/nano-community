@@ -205,5 +205,10 @@
     "webpack-dev-server": "5.0.4",
     "yargs": "^16.2.0"
   },
+  "dependenciesMeta": {
+    "@trashman/ed25519-blake2b": {
+      "built": true
+    }
+  },
   "packageManager": "yarn@4.6.0"
 }

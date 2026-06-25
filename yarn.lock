@@ -16150,6 +16150,9 @@ __metadata:
     webpack-dev-server: "npm:5.0.4"
     ws: "npm:^7.5.9"
     yargs: "npm:^16.2.0"
+  dependenciesMeta:
+    "@trashman/ed25519-blake2b":
+      built: true
   languageName: unknown
   linkType: soft
 
