@@ -19,7 +19,7 @@
     "build": "cross-env NODE_ENV=production webpack --config webpack/webpack.prod.babel.mjs --color --progress && react-snap",
     "lint": "eslint . --ext js,mjs",
     "prettier": "prettier --write .",
-    "test": "TZ=America/New_York NODE_ENV=test TEST=all mocha --require polyfills/node25-slow-buffer.cjs --exit",
+    "test": "NODE_OPTIONS=--disable-warning=DEP0040 TZ=America/New_York NODE_ENV=test TEST=all mocha --require polyfills/node25-slow-buffer.cjs --exit",
     "scan:links": "npx linkinator https://nano.community --recurse --timeout 10000",
     "load:server": "ssh -A nano.community 'export NVM_DIR=\"$HOME/.nvm\" && [ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\" && cd /root/nano-community && git pull && yarn install'",
     "load:crontab": "bash server/deploy-crontab.sh nano.community server/server-crontab nano-community-main nano-community",

@@ -14,14 +14,18 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     services:
-      mysql:
-        image: mysql:8.0
+      # Tests connect via config.test.js (production_postgres: client pg, user
+      # postgres, db nano_test, 127.0.0.1:5432) and load db/schema.postgres.sql,
+      # which requires the TimescaleDB extension. The TSL image preloads it so
+      # the schema's CREATE EXTENSION timescaledb + create_hypertable() succeed.
+      postgres:
+        image: timescale/timescaledb:latest-pg16
         env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_DATABASE: nano_test
+          POSTGRES_DB: nano_test
+          POSTGRES_HOST_AUTH_METHOD: trust
         ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+          - 5432:5432
+        options: --health-cmd="pg_isready -U postgres" --health-interval=10s --health-timeout=5s --health-retries=5
 
     strategy:
       matrix:
