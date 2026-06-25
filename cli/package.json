@@ -24,6 +24,11 @@
     "node-fetch": "3.3.2",
     "yargs": "17.7.2"
   },
+  "dependenciesMeta": {
+    "@trashman/ed25519-blake2b": {
+      "built": true
+    }
+  },
   "engines": {
     "node": ">=16.0.0"
   },

@@ -934,6 +934,9 @@ __metadata:
     inquirer: "npm:9.2.23"
     node-fetch: "npm:3.3.2"
     yargs: "npm:17.7.2"
+  dependenciesMeta:
+    "@trashman/ed25519-blake2b":
+      built: true
   bin:
     nano-community: index.mjs
   languageName: unknown
