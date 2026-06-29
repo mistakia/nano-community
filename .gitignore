@@ -29,4 +29,5 @@ cli/.yarn/*
 #
 build/
 config.production.js
+config.production.json
 config.mjs
