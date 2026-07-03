@@ -34,7 +34,7 @@ Auth: JWT. Integrations: Discord, Twitter. Storage: MySQL or PostgreSQL via knex
 
 ## Configuration
 
-`config.js` is environment-aware. `config.sample.js` shows the structure (JWT secret, DB credentials, Cloudflare token, GitHub token). Production config and secrets live outside the repo.
+`config.js` is environment-aware. In production it decrypts secrets from `config.production.json` at load time by shelling out to `sops` (age envelope encryption; recipient policy in `.sops.yaml`, private identity host-only at `~/.config/sops/age/keys.txt`) — fail-closed, with no plaintext fallback. Test and development load plaintext `config.${env}.js` unchanged. `config.sample.js` shows the structure (JWT secret, DB credentials, Cloudflare token, GitHub token). To add or edit a production secret, follow [[user:guideline/homelab/sops-age-authoring.md]].
 
 ## Conventions
 
