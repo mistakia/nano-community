@@ -124,12 +124,9 @@ const format = (item) => {
 const importGithubEvents = async () => {
   const url = 'https://api.github.com/repos/nanocurrency/nano-node/events'
 
-  let res
-  try {
-    res = await request({ url })
-  } catch (err) {
-    console.log(err)
-  }
+  // Do not swallow: a failed fetch is fatal — let it propagate so main() reports
+  // the run as a failure instead of returning early as a success.
+  const res = await request({ url })
 
   if (!res) {
     return

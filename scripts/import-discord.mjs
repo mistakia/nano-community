@@ -148,18 +148,13 @@ const excludeChannels = [
 ]
 
 const getChannelsForGuildId = async (guildId) => {
-  const channels = []
   const url = `https://discord.com/api/v8/guilds/${guildId}/channels`
 
-  let res
-  try {
-    res = await request({ url, headers })
-    res.forEach(({ name, id }) => channels.push({ name, id }))
-  } catch (err) {
-    console.log(err)
-  }
-
-  return channels
+  // Do not swallow: a guild-level fetch failure (e.g. 401 on a dead token) is
+  // fatal — let it propagate so main() reports the run as a failure rather than
+  // silently importing zero channels and reporting success.
+  const res = await request({ url, headers })
+  return res.map(({ name, id }) => ({ name, id }))
 }
 
 const importDiscord = async (guildId, { getFullHistory = false } = {}) => {

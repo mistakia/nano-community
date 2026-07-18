@@ -63,11 +63,9 @@ const importGithubIssues = async ({ repo }) => {
 
     log(url)
 
-    try {
-      res = await request({ url })
-    } catch (err) {
-      log(err)
-    }
+    // Do not swallow: a failed page fetch is fatal — let it propagate so main()
+    // reports the run as a failure instead of returning early as a success.
+    res = await request({ url })
 
     if (!res) {
       return
