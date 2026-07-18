@@ -62,6 +62,17 @@ module.exports = {
     }
   },
 
+  // Reddit app-only OAuth (client_credentials) for scripts/import-subreddit.mjs.
+  // In production on the storage host these are decrypted lazily from the
+  // host-local sops/age file config.reddit.sops.json; this stanza is the shape
+  // reference and a dev override. user_agent must be unique + descriptive per
+  // Reddit's format: platform:app-id:version (by /u/username).
+  reddit: {
+    client_id: '',
+    client_secret: '',
+    user_agent: 'linux:nano.community-subreddit-import:v1 (by /u/username)'
+  },
+
   nanodb_api: '',
   nanodb_api_experimental: '',
   trusted_addresses: [],

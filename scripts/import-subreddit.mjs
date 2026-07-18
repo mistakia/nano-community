@@ -2,7 +2,7 @@ import debug from 'debug'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 
-import { request, wait, formatRedditPost, isMain } from '#common'
+import { fetchSubredditListing, wait, formatRedditPost, isMain } from '#common'
 import db from '#db'
 
 const argv = yargs(hideBin(process.argv)).argv
@@ -27,15 +27,15 @@ const importSubreddit = async (subreddit, { getFullHistory = false } = {}) => {
   let afterId, messageIds, res
 
   do {
-    const url =
-      `https://www.reddit.com/r/${subreddit}.json?limit=100` +
-      (afterId ? `&after=${afterId}` : '')
-
     logger(`fetching content from ${subreddit}, after: ${afterId || 'n/a'}`)
     try {
-      res = await request({ url })
+      res = await fetchSubredditListing(subreddit, {
+        after: afterId,
+        limit: 100
+      })
     } catch (err) {
-      // console.log(err)
+      logger(`fetch error: ${err.message}`)
+      res = null
     }
 
     if (!res) {

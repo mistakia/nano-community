@@ -9,6 +9,7 @@ import { encode_nano_base32, decode_nano_base32 } from './nano-base-32.mjs'
 
 export * as cloudflare from './cloudflare.mjs'
 export { request }
+export { fetchSubredditListing } from './reddit.mjs'
 export { default as convertToCSV } from './convert-to-csv.mjs'
 export { default as read_csv } from './read-csv.mjs'
 export { default as verify_nano_community_message_signature } from './verify-nano-community-message-signature.mjs'
