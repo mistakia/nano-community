@@ -1,7 +1,7 @@
 import debug from 'debug'
 import dayjs from 'dayjs'
 
-import { rpc, isMain } from '#common'
+import { rpc, isMain, wait } from '#common'
 import report_job from '#libs-server/report-job.mjs'
 import { BURN_ACCOUNT } from '#constants'
 import db from '#db'
@@ -10,6 +10,35 @@ const logger = debug('import-accounts-rep')
 debug.enable('import-accounts-rep')
 
 const timestamp = Math.round(Date.now() / 1000)
+
+// `ledger` is served only by the trusted full node (rpc.ledger uses
+// trustedAddresses) -- there is no proxy fallback, so a single transient blip
+// on any one paginated page would otherwise abort the whole import and fire a
+// false pipeline_failure. Absorb a sub-minute node hiccup with a bounded
+// backoff; a sustained outage still throws once the retries are exhausted.
+const LEDGER_RETRY_BACKOFF_MS = [2000, 5000, 15000]
+
+const fetchLedgerPage = async (params) => {
+  let response
+  for (let attempt = 0; attempt <= LEDGER_RETRY_BACKOFF_MS.length; attempt++) {
+    response = await rpc.ledger(params)
+    if (response && !response.error) {
+      return response
+    }
+
+    if (attempt < LEDGER_RETRY_BACKOFF_MS.length) {
+      const delay = LEDGER_RETRY_BACKOFF_MS[attempt]
+      logger(
+        `ledger request failed (${
+          response ? response.error : 'Empty RPC Response'
+        }); retry ${attempt + 1}/${LEDGER_RETRY_BACKOFF_MS.length} in ${delay}ms`
+      )
+      await wait(delay)
+    }
+  }
+
+  throw new Error(response ? response.error : 'Empty RPC Response')
+}
 
 const importAccountsRep = async ({
   hours,
@@ -39,15 +68,11 @@ const importAccountsRep = async ({
       `Fetching accounts from ${index} to ${index + batchSize} (${account})`
     )
 
-    const rpcResponse = await rpc.ledger({
+    const rpcResponse = await fetchLedgerPage({
       ...opts,
       account,
       representative: true
     })
-
-    if (!rpcResponse || rpcResponse.error) {
-      throw new Error(rpcResponse ? rpcResponse.error : 'Empty RPC Response')
-    }
 
     const { accounts } = rpcResponse
     const addresses = Object.keys(accounts)
@@ -66,7 +91,10 @@ const importAccountsRep = async ({
       })
     }
 
-    await db('accounts_delegators').insert(inserts).onConflict('account').merge()
+    await db('accounts_delegators')
+      .insert(inserts)
+      .onConflict('account')
+      .merge()
 
     index += batchSize
     account = addresses[addressCount - 1]
