@@ -23,7 +23,7 @@
     "scan:links": "npx linkinator https://nano.community --recurse --timeout 10000",
     "load:server": "ssh -A nano.community 'export NVM_DIR=\"$HOME/.nvm\" && [ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\" && cd /root/nano-community && git pull && yarn install'",
     "load:crontab": "bash server/deploy-crontab.sh nano.community server/server-crontab nano-community-main nano-community",
-    "load:crontab:storage": "bash server/deploy-crontab.sh storage server/storage-crontab nano-community-storage nano-community",
+    "load:crontab:storage": "bash server/deploy-crontab.sh base-storage server/storage-crontab nano-community-storage nano-community",
     "show:crontab": "ssh nano.community 'crontab -l'"
   },
   "homepage": "https://nano.community/",

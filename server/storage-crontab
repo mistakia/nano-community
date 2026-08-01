@@ -2,8 +2,8 @@
 
 JOB_PROJECT=nano-community
 
-0 */4 * * * job-wrapper.sh nano-community-import-nanocurrency env NODE_ENV=production /home/user/.nvm/versions/node/v22.22.2/bin/node /home/user/nano-community/scripts/import-subreddit.mjs -r nanocurrency >> /var/log/nano-community/import-nanocurrency.log 2>&1
-0 */6 * * * job-wrapper.sh nano-community-import-nanotrade env NODE_ENV=production /home/user/.nvm/versions/node/v22.22.2/bin/node /home/user/nano-community/scripts/import-subreddit.mjs -r nanotrade >> /var/log/nano-community/import-nanotrade.log 2>&1
+0 */4 * * * job-wrapper.sh nano-community-import-nanocurrency env NODE_ENV=production /home/user/.nvm/versions/node/current/bin/node /home/user/nano-community/scripts/import-subreddit.mjs -r nanocurrency >> /var/log/nano-community/import-nanocurrency.log 2>&1
+0 */6 * * * job-wrapper.sh nano-community-import-nanotrade env NODE_ENV=production /home/user/.nvm/versions/node/current/bin/node /home/user/nano-community/scripts/import-subreddit.mjs -r nanotrade >> /var/log/nano-community/import-nanotrade.log 2>&1
 
 
 # Daily delta archive: reads new rows since etl_state.last_max_ts from VPS
@@ -13,4 +13,4 @@ JOB_PROJECT=nano-community
 # cron disabled 2026-05-07. Wall-clock-capped at 60 min per table for VPS
 # delete phase; first-run uptime backlog (~61M rows) clears over multiple
 # daily runs. See user:task/homelab/cutover-nano-community-archive-crons.md.
-0 1 * * * flock -n /tmp/nano-community-archive.lock job-wrapper.sh nano-community-archive-postgres env NODE_ENV=production /home/user/.nvm/versions/node/v22.22.2/bin/node /home/user/nano-community/scripts/archive-to-postgres.mjs --delta >> /var/log/nano-community/archive-to-postgres.log 2>&1
+0 1 * * * flock -n /tmp/nano-community-archive.lock job-wrapper.sh nano-community-archive-postgres env NODE_ENV=production /home/user/.nvm/versions/node/current/bin/node /home/user/nano-community/scripts/archive-to-postgres.mjs --delta >> /var/log/nano-community/archive-to-postgres.log 2>&1
