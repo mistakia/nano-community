@@ -1,3 +1,9 @@
+# Managed by nano-community repo -- do not edit deployed copy
+# Source: nano-community/server/server-crontab
+# Deploy: yarn load:crontab  (scope nano-community-main -> nano-community:~/crontab/nano-community.cron)
+#         NOTE the rename: this source is extensionless and lands under a DIFFERENT
+#         basename, so grepping the host for 'server-crontab' finds nothing.
+#
 # Edit this file to introduce tasks to be run by cron.
 #
 # Each task to run has to be defined through a single line

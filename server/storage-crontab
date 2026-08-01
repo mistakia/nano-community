@@ -1,3 +1,9 @@
+# Managed by nano-community repo -- do not edit deployed copy
+# Source: nano-community/server/storage-crontab
+# Deploy: yarn load:crontab:storage  (scope nano-community-storage -> base-storage:~/crontab/nano-community.cron)
+#         NOTE the rename, and note this is the BASE-STORAGE copy -- the same deployed
+#         basename as server-crontab's, but a different source and a different host.
+#
 ################################### Storage Server Nano.Community Crontab ###################################
 
 JOB_PROJECT=nano-community
