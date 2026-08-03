@@ -5,29 +5,12 @@ import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 
 import { request, isMain } from '#common'
-import config from '#config'
 import db from '#db'
 import report_job from '#libs-server/report-job.mjs'
 
-const { github_access_token } = config
 const argv = yargs(hideBin(process.argv)).argv
 const log = debug('import-github-issues')
 debug.enable('import-github-issues')
-
-const setIssueLabel = async ({ repo, issue_number, labels }) => {
-  log(`set issue #${issue_number} labels: ${labels}`)
-  const url = `https://api.github.com/repos/${repo}/issues/${issue_number}`
-  return request({
-    url,
-    method: 'PATCH',
-    body: JSON.stringify({ labels }),
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/vnd.github.v3+json',
-      Authorization: `token ${github_access_token}`
-    }
-  })
-}
 
 const importGithubIssues = async ({ repo }) => {
   // get most recent updated_at for repo
@@ -102,21 +85,6 @@ const importGithubIssues = async ({ repo }) => {
       issue.assignee_id = item.assignee?.id
       issue.assignee_name = item.assignee?.login
       issue.assignee_avatar = item.assignee?.avatar_url
-
-      // check if issue needs triage
-      const labels = issueLabels.map((i) => i.label_name)
-      const hasPriority = Boolean(
-        labels.find((name) => name.includes('priority/'))
-      )
-      const hasKind = Boolean(labels.find((name) => name.includes('kind/')))
-      const needsTriage = !hasPriority || !hasKind
-      const hasTriage = Boolean(
-        labels.find((name) => name.includes('need/triage'))
-      )
-      if (needsTriage && !hasTriage) {
-        labels.push('need/triage')
-        await setIssueLabel({ repo, issue_number: item.number, labels })
-      }
     }
 
     page++
@@ -133,7 +101,10 @@ const importGithubIssues = async ({ repo }) => {
     await db('github_issue_labels').del().whereIn('issue_id', issueIds)
 
     log(`saving ${issues.length} issue labels from github`)
-    await db('github_issue_labels').insert(issueLabels).onConflict(['issue_id', 'label_id']).merge()
+    await db('github_issue_labels')
+      .insert(issueLabels)
+      .onConflict(['issue_id', 'label_id'])
+      .merge()
   }
 }
 
