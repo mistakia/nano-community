@@ -1,9 +1,7 @@
 // one content edge for every block; the intro gets its own space, then the
-// page reads as a grid of tiles: properties with their live proof, then the data
+// properties with their live proof, then the data. Only the footer menu is boxed.
 $home_width = 992px
-$home_tile_gap = 16px
 $home_group_gap = 48px
-$home_tile_border = lighten($borderColor, 40%)
 $home_intro_space = 96px
 $home_intro_space_narrow = 56px
 $home_gutter_narrow = 16px
@@ -63,23 +61,13 @@ $home_gutter_narrow = 16px
   flex-wrap wrap
   gap 12px
 
-// tiles share the footer menu's box language
-.home__property
-.home__sections .network__container
-.home__sections .github__container
-.home__body .community-feed
-  border 1px solid $home_tile_border
-  border-radius 8px
-  background white
-
 .home__properties
   display grid
   grid-template-columns repeat(3, 1fr)
-  gap $home_tile_gap
+  column-gap 48px
+  row-gap 40px
   margin-top $home_intro_space
-
-.home__property
-  padding 24px
+  margin-bottom $home_group_gap
 
 .home__property-title
   font-family 'IBM Plex Mono', monospace
@@ -96,19 +84,19 @@ $home_gutter_narrow = 16px
   text-wrap pretty
 
 .home__highlights
-  margin-top $home_tile_gap
   margin-bottom $home_group_gap
 
 .home__sections
   display grid
   grid-template-columns 1fr 1fr
-  gap $home_tile_gap
-  margin-bottom $home_tile_gap
+  column-gap 48px
+  margin-bottom $home_group_gap
 
   .network__container
   .github__container
     margin 0
-    padding 8px 24px 16px
+    padding 0
+    border-radius 0
 
   .network__stat:last-child
   .github__event:last-child
@@ -117,17 +105,20 @@ $home_gutter_narrow = 16px
   .github__events
     padding 0
 
-// the feed reads as a plain list inside its tile
+// the feed drops its tray and card and reads as a plain list like the sections
 .home__body .community-feed
   margin-bottom 0
-  padding 8px 24px 8px
+  padding 0
+  border none
+  border-radius 0
+  background none
 
   .header__container
     margin 0
     padding 0
 
   .community-feed__tabs
-    margin 16px 0
+    margin 0 0 8px
     gap 24px
 
   .community-feed__tab
@@ -203,11 +194,10 @@ $home_gutter_narrow = 16px
 
   .home__properties
     grid-template-columns repeat(2, 1fr)
-    gap 12px
+    column-gap 24px
+    row-gap 28px
     margin-top $home_intro_space_narrow
-
-  .home__property
-    padding 16px
+    margin-bottom 40px
 
   .home__property-title
     font-size 16px
@@ -216,19 +206,12 @@ $home_gutter_narrow = 16px
     font-size 14px
 
   .home__highlights
-    margin-top 12px
+    margin-bottom 40px
 
   .home__sections
     grid-template-columns 1fr
-    gap 12px
-    margin-bottom 12px
-
-    .network__container
-    .github__container
-      padding 4px 16px 8px
-
-  .home__body .community-feed
-    padding 4px 16px
+    row-gap 40px
+    margin-bottom 40px
 
   // the menu boxes carry their own 8px margin
   .home__footer
