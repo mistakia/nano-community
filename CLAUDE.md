@@ -19,6 +19,13 @@ yarn test              # Mocha (TZ=America/New_York)
 yarn lint
 ```
 
+## Deploy
+
+1. Confirm CI (Test and CodeQL) is green on the head commit.
+2. On host `nano.community`, fast-forward `/root/nano-community/source` to `origin/main`.
+3. If `api/` or `server/` changed, run `pm2 restart server` there and confirm its uptime reset. The pm2 file watch does not reliably restart it.
+4. Locally, run `yarn build` (react-snap prerender) and then `yarn deploy` (copies `build/` to the host).
+
 ## Architecture
 
 ```
