@@ -1,5 +1,9 @@
-// one vertical rhythm between every homepage section
+// the intro gets its own space; data sections share a tighter rhythm
+$home_intro_space = 96px
+$home_intro_break = 128px
 $home_section_gap = 72px
+$home_intro_space_narrow = 56px
+$home_intro_break_narrow = 72px
 $home_section_gap_narrow = 48px
 
 .home__container
@@ -10,17 +14,19 @@ $home_section_gap_narrow = 48px
     border 1px solid $borderColor
 
 .home__intro
-  max-width 640px
-  margin 16px auto $home_section_gap
+  max-width 720px
+  margin $home_intro_space auto 0
   padding 0 16px
   text-align center
 
 .home__intro-title
   font-family 'IBM Plex Mono', monospace
-  font-size 24px
+  font-size 40px
   font-weight 600
-  line-height 1.3
-  margin 0 0 24px
+  letter-spacing -0.02em
+  line-height 1.15
+  margin 0 0 32px
+  text-wrap balance
 
 .home__intro-actions
   display flex
@@ -32,24 +38,26 @@ $home_section_gap_narrow = 48px
   display grid
   grid-template-columns repeat(3, 1fr)
   column-gap 48px
-  row-gap 32px
-  max-width 1000px
-  margin 0 auto $home_section_gap
-  padding 0 40px
+  row-gap 40px
+  max-width 960px
+  margin $home_intro_space auto $home_intro_break
+  padding 0 16px
+  text-align center
 
 .home__property-title
   font-family 'IBM Plex Mono', monospace
-  font-size 12px
-  font-weight 800
-  letter-spacing 0.2em
+  font-size 11px
+  font-weight 600
+  letter-spacing 0.16em
   text-transform uppercase
   margin-bottom 8px
 
 .home__property-text
   font-family 'Inter', sans-serif
-  font-size 14px
+  font-size 15px
   line-height 1.5
-  color rgba(0, 0, 0, 0.7)
+  color rgba(0, 0, 0, 0.6)
+  text-wrap balance
 
 .home__body
   max-width 1000px
@@ -90,13 +98,23 @@ $home_section_gap_narrow = 48px
 
 @media (max-width 749px)
   .home__intro
-    margin-bottom $home_section_gap_narrow
+    margin-top $home_intro_space_narrow
+
+  .home__intro-title
+    font-size 28px
+    margin-bottom 24px
+
+  .home__intro-actions
+    flex-direction column
+    align-items stretch
+    max-width 320px
+    margin 0 auto
 
   .home__properties
     grid-template-columns repeat(2, 1fr)
-    gap 24px
-    padding 0 40px
-    margin-bottom $home_section_gap_narrow
+    column-gap 24px
+    row-gap 32px
+    margin $home_intro_space_narrow auto $home_intro_break_narrow
 
   .home__sections
     margin-bottom $home_section_gap_narrow
@@ -104,12 +122,3 @@ $home_section_gap_narrow = 48px
 
   .home__footer
     margin-top $home_section_gap_narrow
-
-  .home__intro-title
-    font-size 20px
-
-  .home__intro-actions
-    flex-direction column
-    align-items stretch
-    max-width 320px
-    margin 0 auto
