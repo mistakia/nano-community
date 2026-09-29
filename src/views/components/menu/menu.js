@@ -6,6 +6,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import SpeedDial from '@mui/material/SpeedDial'
 import SpeedDialAction from '@mui/material/SpeedDialAction'
 import HomeIcon from '@mui/icons-material/Home'
+import MenuIcon from '@mui/icons-material/Menu'
 
 import SearchBar from '@components/search-bar'
 
@@ -150,13 +151,13 @@ export default function Menu({ hide, hideSearch, hide_speed_dial }) {
           direction={isMobile ? 'up' : 'down'}
           onClick={handleClick}
           open={open}
+          FabProps={{ variant: 'extended', size: 'medium' }}
           icon={
-            <img
-              alt='Nano is feeless, instant, and green / energy efficient digital money (cryptocurrency)'
-              src='/static/symbol-white.svg'
-            />
-          }
-          openIcon={<CloseIcon />}>
+            <span className='menu__dial-label'>
+              {open ? <CloseIcon /> : <MenuIcon />}
+              {open ? 'Close' : 'Menu'}
+            </span>
+          }>
           {!isHome && (
             <SpeedDialAction
               icon={<HomeIcon />}
