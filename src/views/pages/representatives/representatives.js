@@ -7,6 +7,7 @@ import Seo from '@components/seo'
 import Menu from '@components/menu'
 import Representatives from '@components/representatives'
 import RepresentativesOffline from '@components/representatives-offline'
+import RepresentativeAlerts from '@components/representative-alerts'
 import RepresentativesWeight from '@components/representatives-weight'
 import RepresentativesSearch from '@components/representatives-search'
 import RepresentativesFilters from '@components/representatives-filters'
@@ -100,6 +101,7 @@ export default class RepresentativesPage extends React.Component {
               <Tab label='Telemetry' />
               <Tab label='Weight Distribution' />
               <Tab label='Weight History' />
+              <Tab label='Alerts' />
               <Tab label='Offline Reps' />
             </Tabs>
             <TabPanel value={this.state.value} index={0}>
@@ -112,6 +114,9 @@ export default class RepresentativesPage extends React.Component {
               <RepresentativesQuorumCharts />
             </TabPanel>
             <TabPanel value={this.state.value} index={3}>
+              <RepresentativeAlerts />
+            </TabPanel>
+            <TabPanel value={this.state.value} index={4}>
               <RepresentativesOffline />
             </TabPanel>
           </div>

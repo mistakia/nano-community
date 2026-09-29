@@ -111,9 +111,11 @@ export default class RepresentativeAlerts extends React.Component {
                       align='right'>
                       {row.account.is_online ? (
                         <FiberManualRecordIcon className='green' />
-                      ) : row.account.last_online ? (
+                      ) : row.account.last_online || row.account.last_seen ? (
+                        // last_online is 0 for reps not seen online in the tracked window
                         timeago.format(
-                          row.account.last_online * 1000,
+                          (row.account.last_online || row.account.last_seen) *
+                            1000,
                           'nano_short'
                         )
                       ) : (
