@@ -19,7 +19,7 @@ const convert_ms_to_readable_time = (ms) => {
     // more than 2500 ms
     return `${(ms / 1000).toFixed(2)} secs`
   } else {
-    return `${ms} ms`
+    return `${Math.round(ms)} ms`
   }
 }
 

@@ -22,3 +22,8 @@
   &.selected
     color rgba(0, 0, 0, 0.87)
     border-bottom-color $nanoSoftBlue
+
+// without the card around it, the list's bottom margin would add to the gap below
+@media (max-width 749px)
+  .community-feed .posts__body
+    margin-bottom 0

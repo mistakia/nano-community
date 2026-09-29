@@ -10,13 +10,24 @@ import Seo from '@components/seo'
 
 import './home.styl'
 
+// the combination that sets nano apart, one line each
+const properties = [
+  { title: 'Instant', text: 'Settles in under a second.' },
+  { title: 'Feeless', text: 'Every payment arrives in full.' },
+  { title: 'Fixed Supply', text: '133 million Nano. No mining, no inflation.' },
+  {
+    title: 'Self-Sovereign',
+    text: 'No issuer. Only your key moves your money.'
+  }
+]
+
 export default class HomePage extends React.Component {
   render() {
     return (
       <div className='home__container'>
         <Seo
           title='Nano Community'
-          description='Send money like a message. Nano settles in under a second with no fees. Learn the basics, make your first payment, and watch the network live.'
+          description='Send money like a message. Nano is instant, feeless, fixed in supply, and self-sovereign. Learn the basics, make your first payment, and watch the network live.'
           tags={[
             'nano',
             'wiki',
@@ -38,8 +49,7 @@ export default class HomePage extends React.Component {
         <div className='home__intro'>
           <h1 className='home__intro-title'>Send money like a message.</h1>
           <p className='home__intro-text'>
-            Nano settles in under a second, anywhere in the world. No fees, ever
-            — what you send is what arrives.
+            Nano is digital money with nothing in the way.
           </p>
           <div className='home__intro-actions'>
             <Button
@@ -55,6 +65,14 @@ export default class HomePage extends React.Component {
               Make your first payment
             </Button>
           </div>
+        </div>
+        <div className='home__properties'>
+          {properties.map(({ title, text }) => (
+            <div className='home__property' key={title}>
+              <div className='home__property-title'>{title}</div>
+              <div className='home__property-text'>{text}</div>
+            </div>
+          ))}
         </div>
         <div className='home__body'>
           <div className='home__sections'>
