@@ -35,6 +35,9 @@ function MenuSections() {
         <div className='menu__heading'>Guides</div>
         <div className='menu__links'>
           <NavLink to='/getting-started-users/basics'>Basics</NavLink>
+          <NavLink to='/getting-started-users/first-payment'>
+            First Payment
+          </NavLink>
           <NavLink to='/getting-started-users/storing/basics'>Storing</NavLink>
           <NavLink to='/getting-started-users/acquiring'>Acquiring</NavLink>
           <NavLink to='/getting-started-users/choosing-a-representative'>
