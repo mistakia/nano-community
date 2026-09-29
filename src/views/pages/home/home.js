@@ -2,8 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import Button from '@mui/material/Button'
 
-import RepresentativeAlerts from '@components/representative-alerts'
-import Collapsible from '@components/collapsible'
 import CommunityFeed from '@components/community-feed'
 import Network from '@components/network'
 import GithubEvents from '@components/github-events'
@@ -67,9 +65,6 @@ export default class HomePage extends React.Component {
             <GithubEvents />
           </div>
           <CommunityFeed />
-          <Collapsible title='Representative Alerts'>
-            <RepresentativeAlerts />
-          </Collapsible>
         </div>
         <div className='home__footer'>
           <Menu />
