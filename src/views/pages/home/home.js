@@ -4,8 +4,9 @@ import Button from '@mui/material/Button'
 
 import CommunityFeed from '@components/community-feed'
 import Network from '@components/network'
+import NetworkHighlights from '@components/network-highlights'
 import GithubEvents from '@components/github-events'
-import Menu from '@components/menu'
+import Menu, { MenuSections } from '@components/menu'
 import Seo from '@components/seo'
 
 import './home.styl'
@@ -17,7 +18,7 @@ const properties = [
   { title: 'Borderless', text: 'Send to anyone, anywhere, anytime.' },
   {
     title: 'Fixed Supply',
-    text: '133 million, fully distributed. No inflation.'
+    text: '133 million. Fully distributed.'
   },
   {
     title: 'Self-Sovereign',
@@ -76,6 +77,9 @@ export default class HomePage extends React.Component {
             </div>
           ))}
         </div>
+        <div className='home__highlights'>
+          <NetworkHighlights />
+        </div>
         <div className='home__body'>
           <div className='home__sections'>
             <Network />
@@ -84,7 +88,7 @@ export default class HomePage extends React.Component {
           <CommunityFeed />
         </div>
         <div className='home__footer'>
-          <Menu />
+          <MenuSections />
         </div>
       </div>
     )

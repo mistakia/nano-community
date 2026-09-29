@@ -13,7 +13,7 @@ import './menu.styl'
 
 const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
 
-function MenuSections() {
+export function MenuSections() {
   return (
     <div className='menu__sections'>
       <div className='menu__section'>

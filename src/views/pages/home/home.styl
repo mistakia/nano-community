@@ -1,10 +1,13 @@
-// the intro gets its own space; data sections share a tighter rhythm
+// one content edge for every block; the intro gets its own space,
+// the properties and their live proof pair up, data sections share a tighter rhythm
+$home_width = 992px
 $home_intro_space = 96px
 $home_intro_break = 128px
 $home_section_gap = 72px
 $home_intro_space_narrow = 56px
 $home_intro_break_narrow = 72px
 $home_section_gap_narrow = 48px
+$home_gutter_narrow = 24px
 
 .home__container
   margin 0 auto
@@ -14,9 +17,18 @@ $home_section_gap_narrow = 48px
     border 1px solid $borderColor
 
 .home__intro
-  max-width 720px
-  margin $home_intro_space auto 0
+.home__properties
+.home__highlights
+.home__body
+.home__footer
+  max-width $home_width
+  margin-left auto
+  margin-right auto
   padding 0 16px
+
+.home__intro
+  max-width 720px
+  margin-top $home_intro_space
   text-align center
 
 .home__intro-title
@@ -38,19 +50,16 @@ $home_section_gap_narrow = 48px
   display grid
   grid-template-columns repeat(3, 1fr)
   column-gap 48px
-  row-gap 40px
-  max-width 960px
-  margin $home_intro_space auto $home_intro_break
-  padding 0 16px
+  row-gap 48px
+  margin-top $home_intro_space
   text-align center
 
 .home__property-title
   font-family 'IBM Plex Mono', monospace
-  font-size 11px
+  font-size 20px
   font-weight 600
-  letter-spacing 0.16em
-  text-transform uppercase
-  margin-bottom 8px
+  letter-spacing -0.01em
+  margin-bottom 6px
 
 .home__property-text
   font-family 'Inter', sans-serif
@@ -59,44 +68,99 @@ $home_section_gap_narrow = 48px
   color rgba(0, 0, 0, 0.6)
   text-wrap balance
 
-.home__body
-  max-width 1000px
-  overflow hidden
-  margin 0 auto
-  padding 0 16px
+.home__highlights
+  margin-top $home_intro_space
+  margin-bottom $home_intro_break
 
 .home__sections
-  display flex
-  flex-wrap wrap
-  align-items stretch
+  display grid
+  grid-template-columns 1fr 1fr
+  column-gap 48px
   margin-bottom $home_section_gap
 
+  // every block shares the page's content edge
   .network__container
   .github__container
-    margin-top 0
+    margin 0
+    padding 0
+    border-radius 0
 
-  // section titles carry their own top padding
   .network__title
   .github__title
     padding-top 0
 
+  .github__events
+    padding 0
+
+// the feed drops its tray and card and reads as a plain list like the sections
 .home__body .community-feed
   margin-bottom 0
+  padding 0
+  border none
+  border-radius 0
+  background none
+
+  .header__container
+    margin 0
+    padding 0
+
+  .community-feed__tabs
+    margin 0 0 8px
+    gap 24px
+
+  .community-feed__tab
+    font-size 12px
+    font-weight 800
+    letter-spacing 0.2em
+    text-transform uppercase
+
+  .posts__body
+    margin 0
+    box-shadow none
+    border-radius 0
+
+  .post
+    border-bottom 1px solid $borderColor
+
+  .post__title
+    padding 14px 0 0
+
+  .post__meta
+    padding 8px 0 14px
 
 .home__footer
-  display flex
-  flex-direction column
-  align-items center
   margin-top $home_section_gap
+  padding-bottom $home_section_gap
 
-  .menu__container
-    padding-top $home_section_gap_narrow
+  .menu__sections
+    display grid
+    grid-template-columns repeat(7, 1fr)
+    column-gap 16px
 
-@media (min-width 750px)
-  .home__body
-    border-radius 16px
+  // headings match the section titles above
+  .menu__heading
+    font-size 12px
+    font-weight 800
+    letter-spacing 0.2em
+    text-transform uppercase
+
+  .menu__section
+    margin 0
+    padding 0
+    min-width 0
+    border none
+    &:hover
+      background none
+      box-shadow none
 
 @media (max-width 749px)
+  .home__intro
+  .home__properties
+  .home__highlights
+  .home__body
+  .home__footer
+    padding 0 $home_gutter_narrow
+
   .home__intro
     margin-top $home_intro_space_narrow
 
@@ -114,11 +178,24 @@ $home_section_gap_narrow = 48px
     grid-template-columns repeat(2, 1fr)
     column-gap 24px
     row-gap 32px
-    margin $home_intro_space_narrow auto $home_intro_break_narrow
+    margin-top $home_intro_space_narrow
+
+  .home__property-title
+    font-size 17px
+
+  .home__highlights
+    margin-top $home_intro_space_narrow
+    margin-bottom $home_intro_break_narrow
 
   .home__sections
-    margin-bottom $home_section_gap_narrow
+    grid-template-columns 1fr
     row-gap $home_section_gap_narrow
+    margin-bottom $home_section_gap_narrow
 
   .home__footer
     margin-top $home_section_gap_narrow
+    padding-bottom $home_section_gap_narrow
+
+    .menu__sections
+      grid-template-columns repeat(2, 1fr)
+      row-gap 24px

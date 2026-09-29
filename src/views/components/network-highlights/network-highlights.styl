@@ -1,0 +1,38 @@
+.network-highlights
+  text-align center
+
+.network-highlights__caption
+  font-family 'IBM Plex Mono', monospace
+  font-size 12px
+  font-weight 800
+  letter-spacing 0.2em
+  text-transform uppercase
+  color rgba(0, 0, 0, 0.45)
+  margin-bottom 32px
+
+.network-highlights__figures
+  display grid
+  grid-template-columns repeat(auto-fit, minmax(160px, 1fr))
+  gap 32px
+
+.network-highlights__value
+  font-family 'IBM Plex Mono', monospace
+  font-size 36px
+  font-weight 500
+  letter-spacing -0.02em
+  line-height 1.1
+  margin-bottom 8px
+
+.network-highlights__label
+  font-family 'Inter', sans-serif
+  font-size 14px
+  color rgba(0, 0, 0, 0.6)
+
+@media (max-width 749px)
+  .network-highlights__figures
+    grid-template-columns repeat(2, 1fr)
+    row-gap 32px
+    column-gap 16px
+
+  .network-highlights__value
+    font-size 28px

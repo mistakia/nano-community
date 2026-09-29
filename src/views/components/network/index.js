@@ -5,7 +5,6 @@ import BigNumber from 'bignumber.js'
 import {
   getNetwork,
   getNetworkStats,
-  getNetworkWattHour,
   get_principal_representative_minimum_weight
 } from '@core/network'
 import { getNetworkUnconfirmedBlockCount } from '@core/accounts'
@@ -27,14 +26,12 @@ const get_confirmed_buckets = (nanodb, period) =>
 const mapStateToProps = createSelector(
   getNetwork,
   getNetworkStats,
-  getNetworkWattHour,
   getNetworkUnconfirmedBlockCount,
   (state) => state.get('nanodb'),
   get_principal_representative_minimum_weight,
   (
     network,
     stats,
-    wattHour,
     unconfirmed_block_pool_count,
     nanodb,
     principal_representative_minimum_weight
@@ -74,7 +71,6 @@ const mapStateToProps = createSelector(
     return {
       nanodb_stats,
       stats,
-      wattHour,
       total_reps: network.get('totalReps'),
       unconfirmed_block_pool_count,
       settlement_usd,
