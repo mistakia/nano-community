@@ -12,13 +12,18 @@ import './home.styl'
 
 // the combination that sets nano apart, one line each
 const properties = [
-  { title: 'Instant', text: 'Settles in under a second.' },
+  { title: 'Instant', text: 'Final in under a second.' },
   { title: 'Feeless', text: 'Every payment arrives in full.' },
-  { title: 'Fixed Supply', text: '133 million Nano. No mining, no inflation.' },
+  { title: 'Borderless', text: 'Send to anyone, anywhere, anytime.' },
+  {
+    title: 'Fixed Supply',
+    text: '133 million, fully distributed. No inflation.'
+  },
   {
     title: 'Self-Sovereign',
-    text: 'No issuer. Only your key moves your money.'
-  }
+    text: 'No issuer. Controlled only by your key.'
+  },
+  { title: 'Sustainable', text: 'Secured by voting, not mining.' }
 ]
 
 export default class HomePage extends React.Component {
@@ -27,7 +32,7 @@ export default class HomePage extends React.Component {
       <div className='home__container'>
         <Seo
           title='Nano Community'
-          description='Send money like a message. Nano is instant, feeless, fixed in supply, and self-sovereign. Learn the basics, make your first payment, and watch the network live.'
+          description='Send money like a message. Nano is instant, feeless, borderless, fixed in supply, and self-sovereign. Learn the basics, make your first payment, and watch the network live.'
           tags={[
             'nano',
             'wiki',
@@ -48,9 +53,6 @@ export default class HomePage extends React.Component {
         <Menu hide />
         <div className='home__intro'>
           <h1 className='home__intro-title'>Send money like a message.</h1>
-          <p className='home__intro-text'>
-            Nano is digital money with nothing in the way.
-          </p>
           <div className='home__intro-actions'>
             <Button
               variant='outlined'
