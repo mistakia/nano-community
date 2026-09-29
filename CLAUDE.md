@@ -13,6 +13,7 @@ For graph context (related task dir, tags, sibling nano repos), see [ABOUT.md](A
 ```bash
 yarn install
 yarn dev               # Concurrent webpack + Express
+yarn dev:live          # Client only at localhost:8094 against the production API (no local DB needed)
 yarn build             # Production bundle + react-snap static generation
 yarn test              # Mocha (TZ=America/New_York)
 yarn lint
