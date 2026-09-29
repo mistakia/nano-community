@@ -1,70 +1,82 @@
-// a dark band: the one high-contrast moment on the page
+// a warm, washed-out band: the one filled shape on the page
 .network-highlights
-  background black
-  color white
+  --highlights-bg #efe8dd
+  --highlights-fg #2a2520
+  --highlights-muted rgba(42, 37, 32, 0.6)
+  display flex
+  align-items center
+  gap 32px
+  background var(--highlights-bg)
+  color var(--highlights-fg)
   border-radius 8px
-  padding 32px
+  padding 20px 32px
 
 .network-highlights__caption
+  flex 0 0 auto
   display flex
   align-items center
   gap 10px
+  max-width 118px
   font-family 'IBM Plex Mono', monospace
-  font-size 12px
+  font-size 11px
   font-weight 800
   letter-spacing 0.2em
+  line-height 1.6
   text-transform uppercase
-  color rgba(255, 255, 255, 0.6)
-  margin-bottom 32px
+  color var(--highlights-muted)
 
   // live indicator
   &:before
     content ''
+    flex 0 0 auto
     width 8px
     height 8px
     border-radius 50%
-    background #30d158
-    box-shadow 0 0 0 0 rgba(48, 209, 88, 0.6)
+    background #4caf6a
     animation network-highlights-pulse 2s infinite
 
 @keyframes network-highlights-pulse
   0%
-    box-shadow 0 0 0 0 rgba(48, 209, 88, 0.6)
+    box-shadow 0 0 0 0 rgba(76, 175, 106, 0.5)
   70%
-    box-shadow 0 0 0 8px rgba(48, 209, 88, 0)
+    box-shadow 0 0 0 8px rgba(76, 175, 106, 0)
   100%
-    box-shadow 0 0 0 0 rgba(48, 209, 88, 0)
+    box-shadow 0 0 0 0 rgba(76, 175, 106, 0)
 
 .network-highlights__figures
+  flex 1
   display grid
   grid-template-columns repeat(4, 1fr)
-  gap 32px
+  gap 24px
 
 .network-highlights__value
   font-family 'IBM Plex Mono', monospace
-  font-size 40px
+  font-size 28px
   font-weight 500
   font-variant-numeric tabular-nums
   letter-spacing -0.02em
   line-height 1.1
-  margin-bottom 8px
+  margin-bottom 4px
 
 .network-highlights__label
   font-family 'Inter', sans-serif
-  font-size 14px
-  color rgba(255, 255, 255, 0.6)
+  font-size 13px
+  color var(--highlights-muted)
 
 @media (max-width 749px)
   .network-highlights
-    padding 24px 16px
+    flex-direction column
+    align-items stretch
+    gap 16px
+    padding 16px
 
   .network-highlights__caption
-    margin-bottom 24px
+    max-width none
 
   .network-highlights__figures
     grid-template-columns repeat(2, 1fr)
-    row-gap 24px
+    row-gap 16px
     column-gap 16px
 
   .network-highlights__value
-    font-size 28px
+    font-size 24px
