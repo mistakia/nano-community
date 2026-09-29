@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import Tooltip from '@mui/material/Tooltip'
 
@@ -122,7 +123,12 @@ export default function Network({
 
   return (
     <div className='network__container'>
-      <div className='network__title'>Network</div>
+      <div className='network__title'>
+        Network
+        <Link to='/representatives' className='network__more'>
+          Representatives →
+        </Link>
+      </div>
       {rows.map(({ label, help, value }) => (
         <div className='network__stat' key={label}>
           <div>
