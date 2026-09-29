@@ -26,9 +26,6 @@ const convert_ms_to_readable_time = (ms) => {
 const is_present = (value) =>
   value !== null && value !== undefined && value !== ''
 
-const pr_text =
-  'as observed across the network principal representatives: voting nodes with more than 0.1% of the online voting weight delegated to them'
-
 export default function Network({
   nanodb_stats,
   stats,
@@ -49,34 +46,34 @@ export default function Network({
 
   const rows = [
     {
-      label: 'Confirmations (24h)',
-      help: 'Total number of transactions confirmed by the network over the last 24 hours',
+      label: 'Transactions (24h)',
+      help: 'Transactions confirmed in the last 24 hours.',
       value: nanodb_stats?.confirmations_last_24_hours
         ? format_number(nanodb_stats.confirmations_last_24_hours)
         : null
     },
     {
-      label: 'Settlement (24h)',
-      help: 'Total amount of value settled by the network over the last 24 hours (only send blocks)',
+      label: 'Value Settled (24h)',
+      help: 'USD value of all sends confirmed in the last 24 hours.',
       value: settlement_usd
         ? `$${format_number(settlement_usd.toFixed(0))}`
         : null
     },
     {
-      label: 'Tx Fees (24h)',
-      help: 'The Nano network operates without fees',
+      label: 'Fees (24h)',
+      help: 'Nano has no transaction fees.',
       value: '$0'
     },
     {
-      label: 'Tx Throughput (10m)',
-      help: 'Average number of transactions confirmed per second over the last 10 minutes',
+      label: 'Throughput (10m)',
+      help: 'Average transactions confirmed per second over the last 10 minutes.',
       value: confirmations_per_second_10m
         ? `${confirmations_per_second_10m.toFixed(1)} CPS`
         : null
     },
     {
-      label: 'Tx Speed (24h)',
-      help: 'Median time for a block to get confirmed in the bucket with the median number of confirmed blocks in the last 24 hours',
+      label: 'Confirmation Time (24h)',
+      help: 'Median time to confirm a transaction over the last 24 hours, in the bucket with the median volume.',
       value: median_latency_of_median_bucket_by_confirmed_blocks_24h
         ? convert_ms_to_readable_time(
             median_latency_of_median_bucket_by_confirmed_blocks_24h
@@ -84,15 +81,15 @@ export default function Network({
         : null
     },
     {
-      label: 'Tx Speed (1h)',
-      help: 'Median time for a block to get confirmed (across all buckets)',
+      label: 'Confirmation Time (1h)',
+      help: 'Median time to confirm a transaction over the last hour.',
       value: nanodb_stats?.median_latency_ms_last_hour
         ? convert_ms_to_readable_time(nanodb_stats.median_latency_ms_last_hour)
         : null
     },
     {
-      label: 'Tx Speed (10m)',
-      help: 'Median time for a block to get confirmed (across all buckets)',
+      label: 'Confirmation Time (10m)',
+      help: 'Median time to confirm a transaction over the last 10 minutes.',
       value: nanodb_stats?.median_latency_ms_last_10_mins
         ? convert_ms_to_readable_time(
             nanodb_stats.median_latency_ms_last_10_mins
@@ -100,59 +97,59 @@ export default function Network({
         : null
     },
     {
-      label: 'Unconfirmed Blocks',
-      help: `Number of blocks waiting to be confirmed ${pr_text}`,
+      label: 'Awaiting Confirmation',
+      help: 'Blocks waiting to be confirmed, as reported by the most up-to-date online representative.',
       value: unconfirmed_block_pool_count
     },
     {
       label: 'Online Voting Weight',
-      help: 'Nano delegated to representatives that are online and voting',
+      help: 'Nano delegated to representatives that are online and voting.',
       value: stats.online_weight_nano
         ? format_value({ value: stats.online_weight_nano })
         : null
     },
     {
-      label: 'Principal Reps',
-      help: 'Online representatives with at least 0.1% of the trended voting weight delegated to them',
+      label: 'Principal Representatives',
+      help: 'Online representatives holding at least 0.1% of voting weight. Their votes confirm transactions.',
       value: stats.prCount
     },
     {
-      label: 'Principal Rep Minimum Weight',
-      help: `The minimum weight required to be a principal representative is the trended weight / 1000. Current threshold: ${pr_minimum_weight_nano} Nano`,
+      label: 'Principal Threshold',
+      help: 'Minimum voting weight to be a principal representative: the trended online weight divided by 1,000.',
       value: pr_minimum_weight_nano
         ? format_value({ value: pr_minimum_weight_nano })
         : null
     },
     {
-      label: 'Total Reps (24h)',
-      help: 'Representatives seen on the network in the last 24 hours',
+      label: 'Representatives (24h)',
+      help: 'Representatives seen on the network in the last 24 hours.',
       value: total_reps
     },
     {
       label: 'Peers',
-      help: 'Highest peer count reported by an online representative',
+      help: 'Most peers reported by any online representative.',
       value: stats.peers_max
     },
     {
       label: 'Reps to Confirm',
-      help: 'The minimum number of representatives needed to confirm transactions',
+      help: 'Fewest representatives whose combined weight can confirm transactions.',
       value: stats.confirmReps
     },
     {
       label: 'Reps to Censor or Stall',
-      help: 'The minimum number of representatives needed to censor transactions or stall the network',
+      help: 'Fewest representatives whose combined weight can censor transactions or stall the network.',
       value: stats.censorReps
     },
     {
-      label: 'Energy Usage (TDP) (24h)',
-      help: 'Estimated CPU energy usage of online principal representatives based on collected CPU model info. The estimate is based on CPU TDP, the average power, in watts, the processor dissipates when operating at base frequency with all cores active under a manufacturer-defined, high-complexity workload',
+      label: 'Energy (24h)',
+      help: 'Estimated daily energy use of principal representatives, based on the rated power (TDP) of their CPUs.',
       value: wattHour ? `${((wattHour * 24) / 1000).toFixed(2)} kWh` : null
     }
   ].filter((row) => is_present(row.value))
 
   return (
     <div className='network__container'>
-      <div className='network__title'>Network Stats</div>
+      <div className='network__title'>Network</div>
       {rows.map(({ label, help, value }) => (
         <div className='network__stat' key={label}>
           <div>
@@ -166,7 +163,7 @@ export default function Network({
       ))}
       {!nanodb_stats && (
         <div className='network__notice'>
-          Transaction volume and speed stats are temporarily unavailable.
+          Volume and speed stats are temporarily unavailable.
         </div>
       )}
     </div>

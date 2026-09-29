@@ -16,7 +16,7 @@ export default class HomePage extends React.Component {
       <div className='home__container'>
         <Seo
           title='Nano Community'
-          description='Nano is digital money that settles in under a second with no fees. Guides for making your first payment, live network stats, and community news.'
+          description='Send money like a message. Nano settles in under a second with no fees. Learn the basics, make your first payment, and watch the network live.'
           tags={[
             'nano',
             'wiki',
@@ -36,13 +36,10 @@ export default class HomePage extends React.Component {
         />
         <Menu hide />
         <div className='home__intro'>
-          <h1 className='home__intro-title'>
-            Digital money that settles in under a second, with no fees.
-          </h1>
+          <h1 className='home__intro-title'>Send money like a message.</h1>
           <p className='home__intro-text'>
-            Nano is a peer-to-peer currency run by an open network of
-            community-chosen representatives. Send any amount, anywhere, and the
-            recipient gets all of it.
+            Nano settles in under a second, anywhere in the world. No fees, ever
+            — what you send is what arrives.
           </p>
           <div className='home__intro-actions'>
             <Button

@@ -7,7 +7,7 @@ import GithubEvents from './github-events'
 
 const mapStateToProps = createSelector(getGithubEvents, (events) => {
   // match the height of the network stats column beside it
-  return { events: events.slice(0, 12) }
+  return { events: events.slice(0, 15) }
 })
 
 export default connect(mapStateToProps)(GithubEvents)

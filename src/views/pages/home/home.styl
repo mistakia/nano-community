@@ -1,3 +1,7 @@
+// one vertical rhythm between every homepage section
+$home_section_gap = 72px
+$home_section_gap_narrow = 48px
+
 .home__container
   margin 0 auto
   background white
@@ -7,7 +11,7 @@
 
 .home__intro
   max-width 640px
-  margin 8px auto 48px
+  margin 16px auto $home_section_gap
   padding 0 16px
   text-align center
 
@@ -33,28 +37,48 @@
 .home__body
   max-width 1000px
   overflow hidden
-  margin 16px auto
+  margin 0 auto
   padding 0 16px
 
 .home__sections
   display flex
   flex-wrap wrap
   align-items stretch
-  margin-bottom 32px
+  margin-bottom $home_section_gap
+
+  // section titles carry their own top padding
+  .network__title
+  .github__title
+    padding-top 0
+
+.home__body .community-feed
+  margin-bottom 0
 
 .home__footer
   display flex
   flex-direction column
   align-items center
+  margin-top $home_section_gap
+  border-top 1px solid lighten($borderColor, 50%)
 
   .menu__container
-    padding-top 16px
+    padding-top $home_section_gap_narrow
 
 @media (min-width 750px)
   .home__body
     border-radius 16px
 
 @media (max-width 749px)
+  .home__intro
+    margin-bottom $home_section_gap_narrow
+
+  .home__sections
+    margin-bottom $home_section_gap_narrow
+    row-gap $home_section_gap_narrow
+
+  .home__footer
+    margin-top $home_section_gap_narrow
+
   .home__intro-title
     font-size 20px
 

@@ -96,7 +96,7 @@ export default class GithubEvents extends React.Component {
 
     return (
       <div className='github__container'>
-        <div className='github__title'>Development Events</div>
+        <div className='github__title'>Development</div>
         <div className='github__events'>
           {Boolean(items.size) && items}
           {!items.size &&
