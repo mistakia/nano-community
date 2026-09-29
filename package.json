@@ -76,7 +76,8 @@
     "excludedThirdPartyRequests": [
       "https://fonts.googleapis.com",
       "https://fonts.gstatic.com",
-      "https://api.github.com"
+      "https://api.github.com",
+      "https://nano.community/api/"
     ],
     "exclude": [
       "/static/**",
