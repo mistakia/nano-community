@@ -1,26 +1,43 @@
-// one content edge for every block; the intro gets its own space,
-// the properties and their live proof pair up, data sections share a tighter rhythm
+// one content edge for every block; the intro gets its own space, then the
+// page reads as a grid of tiles: properties with their live proof, then the data
 $home_width = 992px
+$home_tile_gap = 16px
+$home_group_gap = 48px
+$home_tile_border = lighten($borderColor, 40%)
 $home_intro_space = 96px
-$home_intro_break = 128px
-$home_section_gap = 72px
 $home_intro_space_narrow = 56px
-$home_intro_break_narrow = 72px
-$home_section_gap_narrow = 48px
-$home_gutter_narrow = 24px
+$home_gutter_narrow = 16px
 
 .home__container
   margin 0 auto
   background white
 
-  .menu__container .search__bar
+// the header is one slim bar on the content edge, so the headline is the only centered focus
+.home__container > .menu__container
+  margin 0
+  padding-top 20px
+
+  .menu__body
+    flex-direction row
+    justify-content space-between
+    max-width $home_width
+    min-height 56px
+    margin 0 auto
+    padding 0 16px
+
+  .menu__text
+    font-size 24px
+    margin 0
+
+  .search__bar
+    height 40px
+    margin 0
     border 1px solid $borderColor
 
 .home__intro
 .home__properties
 .home__highlights
 .home__body
-.home__footer
   max-width $home_width
   margin-left auto
   margin-right auto
@@ -46,13 +63,23 @@ $home_gutter_narrow = 24px
   flex-wrap wrap
   gap 12px
 
+// tiles share the footer menu's box language
+.home__property
+.home__sections .network__container
+.home__sections .github__container
+.home__body .community-feed
+  border 1px solid $home_tile_border
+  border-radius 8px
+  background white
+
 .home__properties
   display grid
   grid-template-columns repeat(3, 1fr)
-  column-gap 48px
-  row-gap 48px
+  gap $home_tile_gap
   margin-top $home_intro_space
-  text-align center
+
+.home__property
+  padding 24px
 
 .home__property-title
   font-family 'IBM Plex Mono', monospace
@@ -66,46 +93,41 @@ $home_gutter_narrow = 24px
   font-size 15px
   line-height 1.5
   color rgba(0, 0, 0, 0.6)
-  text-wrap balance
+  text-wrap pretty
 
 .home__highlights
-  margin-top $home_intro_space
-  margin-bottom $home_intro_break
+  margin-top $home_tile_gap
+  margin-bottom $home_group_gap
 
 .home__sections
   display grid
   grid-template-columns 1fr 1fr
-  column-gap 48px
-  margin-bottom $home_section_gap
+  gap $home_tile_gap
+  margin-bottom $home_tile_gap
 
-  // every block shares the page's content edge
   .network__container
   .github__container
     margin 0
-    padding 0
-    border-radius 0
+    padding 8px 24px 16px
 
-  .network__title
-  .github__title
-    padding-top 0
+  .network__stat:last-child
+  .github__event:last-child
+    border-bottom none
 
   .github__events
     padding 0
 
-// the feed drops its tray and card and reads as a plain list like the sections
+// the feed reads as a plain list inside its tile
 .home__body .community-feed
   margin-bottom 0
-  padding 0
-  border none
-  border-radius 0
-  background none
+  padding 8px 24px 8px
 
   .header__container
     margin 0
     padding 0
 
   .community-feed__tabs
-    margin 0 0 8px
+    margin 16px 0
     gap 24px
 
   .community-feed__tab
@@ -118,9 +140,13 @@ $home_gutter_narrow = 24px
     margin 0
     box-shadow none
     border-radius 0
+    background none
 
   .post
+    background none
     border-bottom 1px solid $borderColor
+    &:last-child
+      border-bottom none
 
   .post__title
     padding 14px 0 0
@@ -128,38 +154,39 @@ $home_gutter_narrow = 24px
   .post__meta
     padding 8px 0 14px
 
+// the footer keeps the site's boxed menu, at the width it had before
 .home__footer
-  margin-top $home_section_gap
-  padding-bottom $home_section_gap
+  max-width 1134px
+  margin $home_group_gap auto 0
+  padding 0 16px $home_group_gap
 
-  .menu__sections
-    display grid
-    grid-template-columns repeat(7, 1fr)
-    column-gap 16px
-
-  // headings match the section titles above
-  .menu__heading
-    font-size 12px
-    font-weight 800
-    letter-spacing 0.2em
-    text-transform uppercase
-
-  .menu__section
-    margin 0
-    padding 0
-    min-width 0
-    border none
-    &:hover
-      background none
-      box-shadow none
+// clear the fixed menu button until the content edge moves past it
+@media (min-width 750px) and (max-width 1150px)
+  .home__container > .menu__container .menu__body
+    padding-left 88px
 
 @media (max-width 749px)
+  .home__container > .menu__container
+    .menu__body
+      flex-wrap wrap
+      padding 0 $home_gutter_narrow
+
+    .search__bar
+      flex 1 0 100%
+      max-width none
+      margin-top 16px
+
+      .search__input
+        flex 1
+        width auto
+
   .home__intro
   .home__properties
   .home__highlights
   .home__body
   .home__footer
-    padding 0 $home_gutter_narrow
+    padding-left $home_gutter_narrow
+    padding-right $home_gutter_narrow
 
   .home__intro
     margin-top $home_intro_space_narrow
@@ -176,26 +203,34 @@ $home_gutter_narrow = 24px
 
   .home__properties
     grid-template-columns repeat(2, 1fr)
-    column-gap 24px
-    row-gap 32px
+    gap 12px
     margin-top $home_intro_space_narrow
+
+  .home__property
+    padding 16px
 
   .home__property-title
-    font-size 17px
+    font-size 16px
+
+  .home__property-text
+    font-size 14px
 
   .home__highlights
-    margin-top $home_intro_space_narrow
-    margin-bottom $home_intro_break_narrow
+    margin-top 12px
 
   .home__sections
     grid-template-columns 1fr
-    row-gap $home_section_gap_narrow
-    margin-bottom $home_section_gap_narrow
+    gap 12px
+    margin-bottom 12px
 
+    .network__container
+    .github__container
+      padding 4px 16px 8px
+
+  .home__body .community-feed
+    padding 4px 16px
+
+  // the menu boxes carry their own 8px margin
   .home__footer
-    margin-top $home_section_gap_narrow
-    padding-bottom $home_section_gap_narrow
-
-    .menu__sections
-      grid-template-columns repeat(2, 1fr)
-      row-gap 24px
+    padding-left $home_gutter_narrow - 8px
+    padding-right $home_gutter_narrow - 8px

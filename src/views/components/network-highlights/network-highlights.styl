@@ -1,24 +1,50 @@
+// a dark band: the one high-contrast moment on the page
 .network-highlights
-  text-align center
+  background black
+  color white
+  border-radius 8px
+  padding 32px
 
 .network-highlights__caption
+  display flex
+  align-items center
+  gap 10px
   font-family 'IBM Plex Mono', monospace
   font-size 12px
   font-weight 800
   letter-spacing 0.2em
   text-transform uppercase
-  color rgba(0, 0, 0, 0.45)
+  color rgba(255, 255, 255, 0.6)
   margin-bottom 32px
+
+  // live indicator
+  &:before
+    content ''
+    width 8px
+    height 8px
+    border-radius 50%
+    background #30d158
+    box-shadow 0 0 0 0 rgba(48, 209, 88, 0.6)
+    animation network-highlights-pulse 2s infinite
+
+@keyframes network-highlights-pulse
+  0%
+    box-shadow 0 0 0 0 rgba(48, 209, 88, 0.6)
+  70%
+    box-shadow 0 0 0 8px rgba(48, 209, 88, 0)
+  100%
+    box-shadow 0 0 0 0 rgba(48, 209, 88, 0)
 
 .network-highlights__figures
   display grid
-  grid-template-columns repeat(auto-fit, minmax(160px, 1fr))
+  grid-template-columns repeat(4, 1fr)
   gap 32px
 
 .network-highlights__value
   font-family 'IBM Plex Mono', monospace
-  font-size 36px
+  font-size 40px
   font-weight 500
+  font-variant-numeric tabular-nums
   letter-spacing -0.02em
   line-height 1.1
   margin-bottom 8px
@@ -26,12 +52,18 @@
 .network-highlights__label
   font-family 'Inter', sans-serif
   font-size 14px
-  color rgba(0, 0, 0, 0.6)
+  color rgba(255, 255, 255, 0.6)
 
 @media (max-width 749px)
+  .network-highlights
+    padding 24px 16px
+
+  .network-highlights__caption
+    margin-bottom 24px
+
   .network-highlights__figures
     grid-template-columns repeat(2, 1fr)
-    row-gap 32px
+    row-gap 24px
     column-gap 16px
 
   .network-highlights__value

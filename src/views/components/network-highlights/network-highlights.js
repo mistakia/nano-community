@@ -20,7 +20,7 @@ export default function NetworkHighlights({ nanodb_stats, wattHour }) {
     },
     {
       value: wattHour ? `${Math.round((wattHour * 24) / 1000)} kWh` : null,
-      label: 'Runs the network a day'
+      label: 'Energy a day'
     }
   ].filter(({ value }) => value)
 
