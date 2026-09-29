@@ -1,7 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import Button from '@mui/material/Button'
 
 import RepresentativeAlerts from '@components/representative-alerts'
+import Collapsible from '@components/collapsible'
 import CommunityFeed from '@components/community-feed'
 import Network from '@components/network'
 import GithubEvents from '@components/github-events'
@@ -45,16 +47,18 @@ export default class HomePage extends React.Component {
             recipient gets all of it.
           </p>
           <div className='home__intro-actions'>
-            <Link
-              className='home__intro-action primary'
+            <Button
+              variant='outlined'
+              component={Link}
+              to='/introduction/basics'>
+              What is Nano
+            </Button>
+            <Button
+              variant='outlined'
+              component={Link}
               to='/getting-started-users/first-payment'>
               Make your first payment
-            </Link>
-            <Link
-              className='home__intro-action'
-              to='/introduction/how-it-works'>
-              How it works
-            </Link>
+            </Button>
           </div>
         </div>
         <div className='home__body'>
@@ -63,7 +67,9 @@ export default class HomePage extends React.Component {
             <GithubEvents />
           </div>
           <CommunityFeed />
-          <RepresentativeAlerts />
+          <Collapsible title='Representative Alerts'>
+            <RepresentativeAlerts />
+          </Collapsible>
         </div>
         <div className='home__footer'>
           <Menu />
