@@ -2,6 +2,9 @@ import express from 'express'
 
 const router = express.Router()
 
+// automated reviewers and CI bots that drown out contributor activity
+const bot_actors = ['copilot-pull-request-reviewer', 'gr0vity-dev-bot']
+
 router.get('/nano-node', async (req, res) => {
   const { logger, cache, db } = req.app.locals
   try {
@@ -16,7 +19,11 @@ router.get('/nano-node', async (req, res) => {
       return res.status(200).send(cachedEvents)
     }
 
-    let query = db('github_events').orderBy('created_at', 'desc').limit(20)
+    let query = db('github_events')
+      .whereNotIn('actor_name', bot_actors)
+      .whereNot('actor_name', 'like', '%[bot]')
+      .orderBy('created_at', 'desc')
+      .limit(20)
 
     if (exclude.length) {
       query = query.whereNotIn('type', exclude)
