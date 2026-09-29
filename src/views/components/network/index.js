@@ -13,6 +13,17 @@ import { nanodb_actions } from '@core/nanodb'
 
 import Network from './network'
 
+const get_confirmed_buckets = (nanodb, period) =>
+  Object.values(
+    nanodb.getIn(
+      [
+        `block_confirmed_summary_${period}`,
+        'confirmation_latency_ms_by_bucket'
+      ],
+      {}
+    )
+  )
+
 const mapStateToProps = createSelector(
   getNetwork,
   getNetworkStats,
@@ -28,44 +39,48 @@ const mapStateToProps = createSelector(
     nanodb,
     principal_representative_minimum_weight
   ) => {
-    const send_volume_raw = network.getIn(
-      ['stats', 'nanodb', 'send_volume_last_24_hours'],
+    const nanodb_stats = network.getIn(['stats', 'nanodb']) || null
+    const send_volume_raw = nanodb_stats?.send_volume_last_24_hours
+    const current_price_usd = network.getIn(['stats', 'current_price_usd'])
+    const settlement_usd =
+      send_volume_raw && current_price_usd
+        ? BigNumber(send_volume_raw)
+            .shiftedBy(-30)
+            .times(current_price_usd)
+            .toNumber()
+        : null
+
+    // median latency of the bucket with the median number of confirmed blocks
+    const buckets_24h = get_confirmed_buckets(nanodb, '24h')
+      .filter((b) => b.confirmed_blocks)
+      .sort((a, b) => a.confirmed_blocks - b.confirmed_blocks)
+    const median_latency_of_median_bucket_by_confirmed_blocks_24h =
+      buckets_24h[Math.floor(buckets_24h.length / 2)]?.median
+
+    const confirmed_blocks_10m = get_confirmed_buckets(nanodb, '10m').reduce(
+      (sum, { confirmed_blocks = 0 }) => sum + confirmed_blocks,
       0
     )
-    const send_volume_nano = BigNumber(send_volume_raw)
-      .shiftedBy(-30)
-      .toNumber()
+    const confirmations_per_second_10m = confirmed_blocks_10m
+      ? confirmed_blocks_10m / 600
+      : null
 
-    const confirmation_latency_by_bucket = nanodb.getIn(
-      ['block_confirmed_summary_24h', 'confirmation_latency_ms_by_bucket'],
-      {}
-    )
-
-    const buckets_sorted_by_confirmed_blocks = Object.keys(
-      confirmation_latency_by_bucket
-    ).sort((a, b) => {
-      return (
-        confirmation_latency_by_bucket[a].confirmed_blocks -
-        confirmation_latency_by_bucket[b].confirmed_blocks
-      )
-    })
-
-    const median_bucket =
-      buckets_sorted_by_confirmed_blocks[
-        Math.floor(buckets_sorted_by_confirmed_blocks.length / 2)
-      ]
-
-    const median_latency_of_median_bucket_by_confirmed_blocks_24h =
-      confirmation_latency_by_bucket[median_bucket]?.median
+    const pr_minimum_weight_nano = principal_representative_minimum_weight
+      ? BigNumber(principal_representative_minimum_weight.toString())
+          .shiftedBy(-30)
+          .toNumber()
+      : null
 
     return {
-      network,
+      nanodb_stats,
       stats,
       wattHour,
+      total_reps: network.get('totalReps'),
       unconfirmed_block_pool_count,
-      send_volume_nano,
+      settlement_usd,
+      confirmations_per_second_10m,
       median_latency_of_median_bucket_by_confirmed_blocks_24h,
-      principal_representative_minimum_weight
+      pr_minimum_weight_nano
     }
   }
 )

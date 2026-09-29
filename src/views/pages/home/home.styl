@@ -5,6 +5,46 @@
   .menu__container .search__bar
     border 1px solid $borderColor
 
+.home__intro
+  max-width 640px
+  margin 8px auto 24px
+  padding 0 16px
+  text-align center
+
+.home__intro-title
+  font-family 'Inter', sans-serif
+  font-size 28px
+  font-weight 600
+  line-height 1.25
+  margin 0 0 12px
+
+.home__intro-text
+  font-family 'Inter', sans-serif
+  font-size 16px
+  line-height 1.5
+  color rgba(0, 0, 0, 0.7)
+  margin 0 0 20px
+
+.home__intro-actions
+  display flex
+  justify-content center
+  flex-wrap wrap
+  gap 12px
+
+.home__intro-action
+  font-family 'Inter', sans-serif
+  padding 10px 20px
+  border-radius 6px
+  border 1px solid $borderColor
+  color rgba(0, 0, 0, 0.87)
+  font-weight 500
+  &:hover
+    border-color $nanoSoftBlue
+  &.primary
+    background $nanoSoftBlue
+    border-color $nanoSoftBlue
+    color white
+
 .home__body
   max-width 1000px
   overflow hidden

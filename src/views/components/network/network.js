@@ -1,9 +1,7 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import Tooltip from '@mui/material/Tooltip'
-import ImmutablePropTypes from 'react-immutable-proptypes'
-import BigNumber from 'bignumber.js'
 
 import './network.styl'
 
@@ -25,272 +23,165 @@ const convert_ms_to_readable_time = (ms) => {
   }
 }
 
+const is_present = (value) =>
+  value !== null && value !== undefined && value !== ''
+
+const pr_text =
+  'as observed across the network principal representatives: voting nodes with more than 0.1% of the online voting weight delegated to them'
+
 export default function Network({
-  network,
-  wattHour,
+  nanodb_stats,
   stats,
+  wattHour,
+  total_reps,
   unconfirmed_block_pool_count,
-  send_volume_nano,
+  settlement_usd,
+  confirmations_per_second_10m,
   get_blocks_confirmed_summary,
   median_latency_of_median_bucket_by_confirmed_blocks_24h,
-  principal_representative_minimum_weight
+  pr_minimum_weight_nano
 }) {
   useEffect(() => {
-    // get confirmed blocks summary for 24h period for `Tx Speed (24h)`
+    // 24h summary for `Tx Speed (24h)`, 10m summary for `Tx Throughput`
     get_blocks_confirmed_summary('24h')
+    get_blocks_confirmed_summary('10m')
   }, [])
 
-  const prText =
-    'as observed across the networks principal representatives: voting nodes with more than 0.1% of the online voting weight delegated to them'
-
-  const confirmationsText =
-    'Total number of transactions confirmed by the network over the last 24 hours'
-  const settlementText =
-    'Total amount of value settled by the network over the last 24 hours (only send blocks)'
-  const throughputText = `Median number of transactions confirmed per second in the last minute ${prText}`
-  const speedText =
-    'Median time in milliseconds for a block to get confirmed (across all buckets)'
-  const speedText_24h =
-    'Median time in milliseconds for a block to get confirmed in the bucket with the median number of confirmed blocks in the last 24 hours'
-  const unconfirmed_pool_text = `Number of blocks waiting to be confirmed ${prText}`
-  const stakeText =
-    'Percentage of delegated Nano weight actively participating in voting'
-  const confirmText =
-    'The minimum number of representatives needed to confirm transactions'
-  const censorText =
-    'The minimum number of representatives needed to censor transactions or stall the network'
-  const feeText = 'The Nano network operates without fees'
-  const energyText =
-    'Estimated live network CPU energy usage of Principle Representatives based on collected CPU model info. The estimate is based on CPU TDP, which is the average power, in watts, the processor dissipates when operating at base frequency with all cores active under manufacture-defined, high-complexity workload'
-
-  const pr_min_weight_text = `The minimum weight required to be a principal representative is the trended weight / 1000. Current threshold: \n${principal_representative_minimum_weight} Raw\n${BigNumber(principal_representative_minimum_weight).shiftedBy(-30).toNumber()} Nano`
-
-  const pr_min_weight = useMemo(() => {
-    return principal_representative_minimum_weight
-      ? format_value({
-          value: BigNumber(principal_representative_minimum_weight)
-            .shiftedBy(-30)
-            .toNumber()
-        })
-      : '-'
-  }, [principal_representative_minimum_weight])
+  const rows = [
+    {
+      label: 'Confirmations (24h)',
+      help: 'Total number of transactions confirmed by the network over the last 24 hours',
+      value: nanodb_stats?.confirmations_last_24_hours
+        ? format_number(nanodb_stats.confirmations_last_24_hours)
+        : null
+    },
+    {
+      label: 'Settlement (24h)',
+      help: 'Total amount of value settled by the network over the last 24 hours (only send blocks)',
+      value: settlement_usd
+        ? `$${format_number(settlement_usd.toFixed(0))}`
+        : null
+    },
+    {
+      label: 'Tx Fees (24h)',
+      help: 'The Nano network operates without fees',
+      value: '$0'
+    },
+    {
+      label: 'Tx Throughput (10m)',
+      help: 'Average number of transactions confirmed per second over the last 10 minutes',
+      value: confirmations_per_second_10m
+        ? `${confirmations_per_second_10m.toFixed(1)} CPS`
+        : null
+    },
+    {
+      label: 'Tx Speed (24h)',
+      help: 'Median time for a block to get confirmed in the bucket with the median number of confirmed blocks in the last 24 hours',
+      value: median_latency_of_median_bucket_by_confirmed_blocks_24h
+        ? convert_ms_to_readable_time(
+            median_latency_of_median_bucket_by_confirmed_blocks_24h
+          )
+        : null
+    },
+    {
+      label: 'Tx Speed (1h)',
+      help: 'Median time for a block to get confirmed (across all buckets)',
+      value: nanodb_stats?.median_latency_ms_last_hour
+        ? convert_ms_to_readable_time(nanodb_stats.median_latency_ms_last_hour)
+        : null
+    },
+    {
+      label: 'Tx Speed (10m)',
+      help: 'Median time for a block to get confirmed (across all buckets)',
+      value: nanodb_stats?.median_latency_ms_last_10_mins
+        ? convert_ms_to_readable_time(
+            nanodb_stats.median_latency_ms_last_10_mins
+          )
+        : null
+    },
+    {
+      label: 'Unconfirmed Blocks',
+      help: `Number of blocks waiting to be confirmed ${pr_text}`,
+      value: unconfirmed_block_pool_count
+    },
+    {
+      label: 'Online Voting Weight',
+      help: 'Nano delegated to representatives that are online and voting',
+      value: stats.online_weight_nano
+        ? format_value({ value: stats.online_weight_nano })
+        : null
+    },
+    {
+      label: 'Principal Reps',
+      help: 'Online representatives with at least 0.1% of the trended voting weight delegated to them',
+      value: stats.prCount
+    },
+    {
+      label: 'Principal Rep Minimum Weight',
+      help: `The minimum weight required to be a principal representative is the trended weight / 1000. Current threshold: ${pr_minimum_weight_nano} Nano`,
+      value: pr_minimum_weight_nano
+        ? format_value({ value: pr_minimum_weight_nano })
+        : null
+    },
+    {
+      label: 'Total Reps (24h)',
+      help: 'Representatives seen on the network in the last 24 hours',
+      value: total_reps
+    },
+    {
+      label: 'Peers',
+      help: 'Highest peer count reported by an online representative',
+      value: stats.peers_max
+    },
+    {
+      label: 'Reps to Confirm',
+      help: 'The minimum number of representatives needed to confirm transactions',
+      value: stats.confirmReps
+    },
+    {
+      label: 'Reps to Censor or Stall',
+      help: 'The minimum number of representatives needed to censor transactions or stall the network',
+      value: stats.censorReps
+    },
+    {
+      label: 'Energy Usage (TDP) (24h)',
+      help: 'Estimated CPU energy usage of online principal representatives based on collected CPU model info. The estimate is based on CPU TDP, the average power, in watts, the processor dissipates when operating at base frequency with all cores active under a manufacturer-defined, high-complexity workload',
+      value: wattHour ? `${((wattHour * 24) / 1000).toFixed(2)} kWh` : null
+    }
+  ].filter((row) => is_present(row.value))
 
   return (
     <div className='network__container'>
       <div className='network__title'>Network Stats</div>
-      <div className='network__stat'>
-        <div>
-          Confirmations (24h)
-          <Tooltip title={confirmationsText}>
-            <HelpOutlineIcon fontSize='inherit' />
-          </Tooltip>
+      {rows.map(({ label, help, value }) => (
+        <div className='network__stat' key={label}>
+          <div>
+            {label}
+            <Tooltip title={help}>
+              <HelpOutlineIcon fontSize='inherit' />
+            </Tooltip>
+          </div>
+          <div>{value}</div>
         </div>
-        <div>
-          {network.getIn(['stats', 'nanodb', 'confirmations_last_24_hours'])
-            ? format_number(
-                network.getIn([
-                  'stats',
-                  'nanodb',
-                  'confirmations_last_24_hours'
-                ])
-              )
-            : '-'}
+      ))}
+      {!nanodb_stats && (
+        <div className='network__notice'>
+          Transaction volume and speed stats are temporarily unavailable.
         </div>
-      </div>
-      <div className='network__stat'>
-        <div>
-          Settlement (24h)
-          <Tooltip title={settlementText}>
-            <HelpOutlineIcon fontSize='inherit' />
-          </Tooltip>
-        </div>
-        <div>
-          {network.getIn(['stats', 'current_price_usd'])
-            ? `$${format_number(
-                (
-                  send_volume_nano *
-                  network.getIn(['stats', 'current_price_usd'])
-                ).toFixed(0)
-              )}`
-            : '-'}
-        </div>
-      </div>
-      <div className='network__stat'>
-        <div>
-          Tx Fees (24h)
-          <Tooltip title={feeText}>
-            <HelpOutlineIcon fontSize='inherit' />
-          </Tooltip>
-        </div>
-        <div>$0</div>
-      </div>
-      <div className='network__stat'>
-        <div>
-          Tx Throughput
-          <Tooltip title={throughputText}>
-            <HelpOutlineIcon fontSize='inherit' />
-          </Tooltip>
-        </div>
-        <div>
-          {/* TODO remove this nanoticker dependency */}
-          {network.getIn(['stats', 'nanobrowse', 'CPSMedian_pr'])
-            ? `${network
-                .getIn(['stats', 'nanobrowse', 'CPSMedian_pr'])
-                .toFixed(1)} CPS`
-            : '-'}
-        </div>
-      </div>
-      <div className='network__stat'>
-        <div>
-          Tx Speed (24h)
-          <Tooltip title={speedText_24h}>
-            <HelpOutlineIcon fontSize='inherit' />
-          </Tooltip>
-        </div>
-        <div>
-          {median_latency_of_median_bucket_by_confirmed_blocks_24h
-            ? convert_ms_to_readable_time(
-                median_latency_of_median_bucket_by_confirmed_blocks_24h
-              )
-            : '-'}
-        </div>
-      </div>
-      <div className='network__stat'>
-        <div>
-          Tx Speed (1h)
-          <Tooltip title={speedText}>
-            <HelpOutlineIcon fontSize='inherit' />
-          </Tooltip>
-        </div>
-        <div>
-          {network.getIn(['stats', 'nanodb', 'median_latency_ms_last_hour'], 0)
-            ? convert_ms_to_readable_time(
-                network.getIn(
-                  ['stats', 'nanodb', 'median_latency_ms_last_hour'],
-                  0
-                )
-              )
-            : '-'}
-        </div>
-      </div>
-      <div className='network__stat'>
-        <div>
-          Tx Speed (10m)
-          <Tooltip title={speedText}>
-            <HelpOutlineIcon fontSize='inherit' />
-          </Tooltip>
-        </div>
-        <div>
-          {network.getIn(
-            ['stats', 'nanodb', 'median_latency_ms_last_10_mins'],
-            0
-          )
-            ? convert_ms_to_readable_time(
-                network.getIn(
-                  ['stats', 'nanodb', 'median_latency_ms_last_10_mins'],
-                  0
-                )
-              )
-            : '-'}
-        </div>
-      </div>
-      <div className='network__stat'>
-        <div>
-          Unconfirmed Blocks
-          <Tooltip title={unconfirmed_pool_text}>
-            <HelpOutlineIcon fontSize='inherit' />
-          </Tooltip>
-        </div>
-        <div>
-          {unconfirmed_block_pool_count != null
-            ? format_number(unconfirmed_block_pool_count)
-            : '-'}
-        </div>
-      </div>
-      <div className='network__stat'>
-        <div>
-          Online Stake
-          <Tooltip title={stakeText}>
-            <HelpOutlineIcon fontSize='inherit' />
-          </Tooltip>
-        </div>
-        <div>
-          {/* TODO remove this nanoticker dependency */}
-          {network.getIn(['stats', 'nanobrowse', 'pStakeTotalStat'])
-            ? `${network
-                .getIn(['stats', 'nanobrowse', 'pStakeTotalStat'])
-                .toFixed(1)}%`
-            : '-'}
-        </div>
-      </div>
-      <div className='network__stat'>
-        <div>Principal Reps</div>
-        <div>{stats.prCount || '-'}</div>
-      </div>
-      <div className='network__stat'>
-        <div>
-          Principal Rep Minimum Weight
-          <Tooltip title={pr_min_weight_text}>
-            <HelpOutlineIcon fontSize='inherit' />
-          </Tooltip>
-        </div>
-        <div>{pr_min_weight || '-'}</div>
-      </div>
-      <div className='network__stat'>
-        <div>Total Reps (24h)</div>
-        <div>{network.getIn(['totalReps'], '-')}</div>
-      </div>
-      <div className='network__stat'>
-        <div>Peers</div>
-        <div>{network.getIn(['stats', 'nanobrowse', 'peersMax'], '-')}</div>
-      </div>
-      <div className='network__stat'>
-        <div>
-          Reps to Confirm
-          <Tooltip title={confirmText}>
-            <HelpOutlineIcon fontSize='inherit' />
-          </Tooltip>
-        </div>
-        <div>{stats.confirmReps || '-'}</div>
-      </div>
-      <div className='network__stat'>
-        <div>
-          Reps to Censor or Stall
-          <Tooltip title={censorText}>
-            <HelpOutlineIcon fontSize='inherit' />
-          </Tooltip>
-        </div>
-        <div>{stats.censorReps || '-'}</div>
-      </div>
-      <div className='network__stat'>
-        <div>
-          Energy Usage (TDP) (24h)
-          <Tooltip title={energyText}>
-            <HelpOutlineIcon fontSize='inherit' />
-          </Tooltip>
-        </div>
-        <div>
-          {wattHour ? `${((wattHour * 24) / 1000).toFixed(2)} kWh` : '-'}
-        </div>
-      </div>
-      <a
-        href='https://stats.nanobrowse.com/'
-        rel='noreferrer'
-        className='network__stat-link'
-        target='_blank'>
-        NanoTicker
-      </a>
+      )}
     </div>
   )
 }
 
 Network.propTypes = {
-  network: ImmutablePropTypes.map,
+  nanodb_stats: PropTypes.object,
   stats: PropTypes.object,
   wattHour: PropTypes.number,
+  total_reps: PropTypes.number,
   unconfirmed_block_pool_count: PropTypes.number,
-  send_volume_nano: PropTypes.number,
+  settlement_usd: PropTypes.number,
+  confirmations_per_second_10m: PropTypes.number,
   get_blocks_confirmed_summary: PropTypes.func,
   median_latency_of_median_bucket_by_confirmed_blocks_24h: PropTypes.number,
-  principal_representative_minimum_weight: PropTypes.number
+  pr_minimum_weight_nano: PropTypes.number
 }

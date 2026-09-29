@@ -1,0 +1,24 @@
+.community-feed__tabs
+  flex 1
+  display flex
+  gap 16px
+  margin 15px 0
+
+.community-feed__tab
+  background none
+  border none
+  padding 0 0 2px
+  cursor pointer
+  font-family 'IBM Plex Mono', monospace
+  font-size 8pt
+  font-weight 600
+  letter-spacing 0.1em
+  color rgba(0, 0, 0, 0.45)
+  border-bottom 2px solid transparent
+
+  &:hover
+    color rgba(0, 0, 0, 0.8)
+
+  &.selected
+    color rgba(0, 0, 0, 0.87)
+    border-bottom-color $nanoSoftBlue

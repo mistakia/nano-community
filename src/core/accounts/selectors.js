@@ -124,6 +124,9 @@ export function getNetworkUnconfirmedBlockCount(state) {
   })
 
   const rep = sorted.first()
+  if (!rep) {
+    return null
+  }
 
   return (
     rep.getIn(['telemetry', 'block_count']) -
