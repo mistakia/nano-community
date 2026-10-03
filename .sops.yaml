@@ -2,7 +2,7 @@
 #
 # config.production.json holds this site's production secrets, encrypted to this
 # single host's age recipient (nano.community VPS, .104). The private identity
-# lives only on that host at ~/.config/sops/age/keys.txt; this file records only
+# lives on that host (plus a hot-vault recovery copy) at ~/.config/sops/age/keys.txt; this file records only
 # the PUBLIC recipient, which is safe to commit. To re-encrypt after editing:
 # `sops config.production.json` (sops reads this policy for the recipient set).
 #
