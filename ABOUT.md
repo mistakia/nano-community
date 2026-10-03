@@ -7,6 +7,7 @@ description: >-
 base_uri: user:repository/active/nano-community/ABOUT.md
 created_at: '2026-05-13T18:06:28.336Z'
 entity_id: 379b9ac6-c208-4305-8b0d-ce818474d761
+owner_identity_uri: user:identity/trashman.md
 public_read: false
 relations:
   - follows [[user:guideline/directory-markdown-standards.md]]
@@ -14,7 +15,6 @@ tags:
   - user:tag/nano-community-project.md
   - user:tag/nano-cryptocurrency.md
 updated_at: '2026-05-13T18:06:28.336Z'
-user_public_key: 10ba842b1307fd60475b887df61ccc7e697970a2d222e7cbf011e51f5de3349b
 ---
 
 ## Purpose
