@@ -130,6 +130,7 @@ account_id = nanolib.generate_account_id(seed, 0)
 | [pippin](https://github.com/appditto/pippin_nano_wallet)  | A high performance, lightweight alternative to the NANO Node developer wallet (includes production wallet)                                     |
 | [nanohakase](https://github.com/stjet/nanohakase)         | Nanohakase is a python library for the Nano cryptocurrency. It aims to be the simplest Nano library out there, and is a self fork of Bananopie |
 | [nano-rpc-py](https://github.com/gr0vity-dev/nano-rpc-py) | python library that dynamically generates methods based on a commands dictionary                                                               |
+| [feeless402](https://github.com/Feeless402/feeless402) | x402 (HTTP 402) micropayments for AI agents over Nano — self-custodied client, merchant server, MCP server, agent faucet |
 
 ##### Rust
 
