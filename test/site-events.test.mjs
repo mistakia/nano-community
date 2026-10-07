@@ -122,33 +122,6 @@ describe('API /site-events', () => {
     expect(row.is_authenticated).to.equal(true)
   })
 
-  it('writes no row for an excluded account', async () => {
-    const original = config.site_events
-      ? config.site_events.excluded_user_ids
-      : undefined
-    config.site_events = { excluded_user_ids: [4242] }
-    try {
-      const token = jwt.sign({ sub: 4242 }, config.jwt.secret, {
-        algorithm: 'HS256'
-      })
-      const response = await chai
-        .request(server)
-        .post('/api/site-events')
-        .set('User-Agent', DESKTOP_UA)
-        .set('Authorization', `Bearer ${token}`)
-        .send({ site_event_name: 'page_view', request_path: '/' })
-      expect(response).to.have.status(201)
-      const { count } = await knex('site_events').count('* as count').first()
-      expect(Number(count)).to.equal(0)
-    } finally {
-      if (original === undefined) {
-        delete config.site_events
-      } else {
-        config.site_events = { excluded_user_ids: original }
-      }
-    }
-  })
-
   it('stores client_error with message and source details only', async () => {
     const response = await chai
       .request(server)

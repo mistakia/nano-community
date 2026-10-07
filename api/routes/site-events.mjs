@@ -2,7 +2,6 @@ import crypto from 'crypto'
 
 import express from 'express'
 
-import config from '#config'
 import db from '#db'
 import { isbot } from 'isbot'
 
@@ -82,11 +81,6 @@ const anonymous_client_hash = ({ hash_key, ip, user_agent }) =>
     .digest('hex')
     .slice(0, 16)
 
-const excluded_user_ids = () => {
-  const ids = config.site_events?.excluded_user_ids
-  return Array.isArray(ids) ? ids.map(String) : []
-}
-
 // Never throws and never fails the request: analytics must not break a page.
 router.post('/', async (req, res) => {
   try {
@@ -101,13 +95,6 @@ router.post('/', async (req, res) => {
 
     if (!ALLOWED_EVENT_NAMES.has(site_event_name)) {
       return res.status(400).json({ error: 'invalid site_event_name' })
-    }
-
-    // Skip the insert entirely for an excluded account (the operator's own
-    // browsing), so their analytics never land alongside visitors'.
-    const user_id = req.auth?.sub ?? req.auth?.id ?? req.auth?.user_id
-    if (user_id != null && excluded_user_ids().includes(String(user_id))) {
-      return res.status(201).json({ ok: true })
     }
 
     const client_ip =
