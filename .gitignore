@@ -32,3 +32,4 @@ config.production.js
 config.production.json
 config.reddit.sops.json
 config.mjs
+config.local.js
