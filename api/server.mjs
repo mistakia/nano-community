@@ -41,8 +41,11 @@ const speedLimiter = slowDown({
   maxDelayMs: 20000 // maximum delay of 20 seconds
 })
 // Separate instance for the site-events collector so its traffic never exhausts
-// (or is exhausted by) the auth limiter's shared in-memory counter.
+// (or is exhausted by) the auth limiter's shared in-memory counter. Keyed on the
+// visitor IP Cloudflare forwards: node serves port 80 directly behind Cloudflare
+// without trust proxy, so req.ip is the shared edge address.
 const siteEventsLimiter = slowDown({
+  keyGenerator: (req) => req.headers['cf-connecting-ip'] || req.ip,
   windowMs: 10 * 60 * 1000,
   delayAfter: 50,
   delayMs: (hits, req) => (hits - req.slowDown.limit) * 500,

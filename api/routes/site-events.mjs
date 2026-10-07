@@ -12,7 +12,8 @@ const ALLOWED_EVENT_NAMES = new Set(['page_view', 'client_error'])
 
 // Paths that carry identifying values are normalized before storage so
 // analysis never stores a spendable Nano address or a block hash. The regexes
-// match src/views/pages/dynamic/index.js (ACCOUNT_REGEX / BLOCK_REGEX).
+// follow src/views/pages/dynamic/index.js (ACCOUNT_REGEX / BLOCK_REGEX), with
+// the block regex widened to lowercase hex so no hash form slips through.
 const normalize_path = (request_path) =>
   request_path.split('/').map(normalize_segment).join('/')
 
@@ -22,7 +23,7 @@ const normalize_segment = (segment) => {
   ) {
     return ':account'
   }
-  if (/^[0-9A-F]{64}$/.test(segment)) {
+  if (/^[0-9A-Fa-f]{64}$/.test(segment)) {
     return ':block'
   }
   return segment

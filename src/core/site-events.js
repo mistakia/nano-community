@@ -86,7 +86,8 @@ const load_time_milliseconds = () => {
 }
 
 // The landing page view carries the referrer host, the ?ref= tag and the
-// navigation-to-load time, then strips ?ref= so it never leaks onward.
+// navigation-to-load time, then strips only ?ref= (keeping other params and the
+// #anchor doc pages scroll to) so it never leaks onward.
 const send_first_page_view = (location) => {
   const request_path = location.pathname
   const referral_tag = query_ref_tag(location)
@@ -106,8 +107,14 @@ const send_first_page_view = (location) => {
   } else {
     window.addEventListener('load', send, { once: true })
   }
-  if (referral_tag && request_path) {
-    history.replaceState(history.state, '', request_path)
+  if (referral_tag) {
+    const url = new URL(window.location.href)
+    url.searchParams.delete('ref')
+    history.replaceState(
+      history.state,
+      '',
+      `${url.pathname}${url.search}${url.hash}`
+    )
   }
 }
 
