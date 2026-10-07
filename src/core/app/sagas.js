@@ -1,6 +1,7 @@
 import { takeLatest, fork, select } from 'redux-saga/effects'
 import { LOCATION_CHANGE } from 'redux-first-history'
 
+import { send_page_view } from '../site-events'
 import { getApp } from './selectors'
 import { appActions } from './actions'
 
@@ -24,7 +25,12 @@ export function* watchInitApp() {
 }
 
 export function* watchLocationChange() {
-  yield takeLatest(LOCATION_CHANGE, reset)
+  yield takeLatest(LOCATION_CHANGE, (action) => {
+    reset()
+    if (action.payload && action.payload.location) {
+      send_page_view(action.payload.location)
+    }
+  })
 }
 
 //= ====================================

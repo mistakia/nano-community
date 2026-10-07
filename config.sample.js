@@ -78,6 +78,16 @@ module.exports = {
   trusted_addresses: [],
   rpc_addresses: [],
 
+  // First-party site analytics (see user:text/analytics/product-analytics.md).
+  // Snapshot captures zero fields: POST /api/site-events in
+  // api/routes/site-events.mjs stores events in public.site_events (raw events
+  // retained 180 days by scripts/prune-site-events.mjs).
+  site_events: {
+    // Sessions belonging to these user ids are skipped entirely, so the
+    // operator's own browsing never lands. User ids come from public.users.
+    excluded_user_ids: []
+  },
+
   cloudflare: {
     zone_id: '',
     user_email: '',

@@ -65,3 +65,6 @@ JOB_PROJECT=nano-community
 
 ## aliases
 18 3 * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/scripts/import-graham-tipbot.mjs >> /var/log/nano-community/import-graham-tipbot.log 2>&1
+
+## site analytics
+45 0 * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/scripts/prune-site-events.mjs >> /var/log/nano-community/prune-site-events.log 2>&1
