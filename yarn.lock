@@ -9845,6 +9845,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"isbot@npm:5.2.2":
+  version: 5.2.2
+  resolution: "isbot@npm:5.2.2"
+  checksum: 10/e627afb5c9f7f62790d8092b6734be4d08126e667667882c23b6d835fd2562b82806ab3b2405b6f8fc1a598cc545ba343cfe2910b9aaa2ade194a75f8bc98079
+  languageName: node
+  linkType: hard
+
 "isexe@npm:^2.0.0":
   version: 2.0.0
   resolution: "isexe@npm:2.0.0"
@@ -13489,6 +13496,7 @@ __metadata:
     image-webpack-loader: "npm:^8.1.0"
     immutable: "npm:^4.3.0"
     inquirer: "npm:^9.2.19"
+    isbot: "npm:5.2.2"
     jsonwebtoken: "npm:^9.0.2"
     knex: "npm:^0.95.15"
     markdown-it: "npm:^12.3.2"

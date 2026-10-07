@@ -112,6 +112,7 @@ export function MenuSections() {
         <div className='menu__heading'>Topics</div>
         <div className='menu__links'>
           <NavLink to='/labels/privacy'>Privacy</NavLink>
+          <NavLink to='/privacy'>Privacy policy</NavLink>
         </div>
       </div>
     </div>

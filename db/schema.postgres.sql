@@ -500,3 +500,39 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public
   GRANT SELECT ON TABLES TO nano_production_backup;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public
   GRANT SELECT, USAGE ON SEQUENCES TO nano_production_backup;
+
+-- 12. First-party site analytics. Written by POST /api/site-events; see
+--     user:text/analytics/product-analytics.md. Raw events are retained 180
+--     days by scripts/prune-site-events.mjs (daily cron, server/server-crontab).
+CREATE TABLE IF NOT EXISTS public.site_events (
+  site_event_id              uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  occurred_at                timestamptz NOT NULL,
+  site_event_name            text NOT NULL,
+  request_path               text NOT NULL,
+  referrer_host              text,
+  referral_tag               text,
+  anonymous_client_hash      char(16) NOT NULL,
+  is_authenticated           boolean NOT NULL DEFAULT false,
+  is_bot_user_agent          boolean NOT NULL DEFAULT false,
+  device_type                text NOT NULL,
+  page_response_milliseconds integer,
+  event_details              jsonb
+);
+CREATE INDEX IF NOT EXISTS site_events_occurred_at_idx
+  ON public.site_events (occurred_at);
+CREATE INDEX IF NOT EXISTS site_events_name_occurred_at_idx
+  ON public.site_events (site_event_name, occurred_at);
+
+-- One row per UTC day, current day only. The collector creates today's key and
+-- deletes every older one in the same step, so past days cannot be recomputed.
+CREATE TABLE IF NOT EXISTS public.site_client_hash_keys (
+  hash_key_date date PRIMARY KEY,
+  hash_key      text NOT NULL,
+  created_at    timestamptz NOT NULL DEFAULT now()
+);
+
+-- Reader read on site_events only; site_client_hash_keys stays unreadable by
+-- reader roles so a day's hashes cannot be recomputed. Lives after the tables
+-- so this file stays re-appliable in order. The app and backup roles get the
+-- new tables through their ALTER DEFAULT PRIVILEGES above.
+GRANT SELECT ON public.site_events TO nano_production_reader;

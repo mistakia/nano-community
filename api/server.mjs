@@ -40,6 +40,17 @@ const speedLimiter = slowDown({
   delayMs: (hits, req) => (hits - req.slowDown.limit) * 500, // begin adding 500ms of delay per request above 50
   maxDelayMs: 20000 // maximum delay of 20 seconds
 })
+// Separate instance for the site-events collector so its traffic never exhausts
+// (or is exhausted by) the auth limiter's shared in-memory counter. Keyed on the
+// visitor IP Cloudflare forwards: node serves port 80 directly behind Cloudflare
+// without trust proxy, so req.ip is the shared edge address.
+const siteEventsLimiter = slowDown({
+  keyGenerator: (req) => req.headers['cf-connecting-ip'] || req.ip,
+  windowMs: 10 * 60 * 1000,
+  delayAfter: 50,
+  delayMs: (hits, req) => (hits - req.slowDown.limit) * 500,
+  maxDelayMs: 20000
+})
 
 const api = express()
 
@@ -100,6 +111,7 @@ api.use('/api/accounts', routes.accounts)
 api.use('/api/blocks', routes.blocks)
 api.use('/api/representatives', routes.representatives)
 api.use('/api/weight', routes.weight)
+api.use('/api/site-events', siteEventsLimiter, routes.site_events)
 
 const docsPath = path.join(__dirname, '..', 'docs')
 
