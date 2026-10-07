@@ -1,6 +1,6 @@
 import debug from 'debug'
 import dayjs from 'dayjs'
-import utc from 'dayjs/plugin/utc'
+import utc from 'dayjs/plugin/utc.js'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 
