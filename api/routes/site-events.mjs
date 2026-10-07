@@ -13,8 +13,12 @@ const ALLOWED_EVENT_NAMES = new Set(['page_view', 'client_error'])
 // analysis never stores a spendable Nano address or a block hash. The regexes
 // follow src/views/pages/dynamic/index.js (ACCOUNT_REGEX / BLOCK_REGEX), with
 // the block regex widened to lowercase hex so no hash form slips through.
-const normalize_path = (request_path) =>
-  request_path.split('/').map(normalize_segment).join('/')
+// A trailing slash is dropped (except on the root) because the static host
+// redirects /faqs to /faqs/, which would otherwise split one page in two.
+const normalize_path = (request_path) => {
+  const normalized = request_path.split('/').map(normalize_segment).join('/')
+  return normalized.length > 1 ? normalized.replace(/\/+$/, '') : normalized
+}
 
 const normalize_segment = (segment) => {
   if (

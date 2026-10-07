@@ -67,7 +67,7 @@ describe('API /site-events', () => {
   it('normalizes a Nano address to :account and a block hash to :block', async () => {
     await post_page_view({ request_path: `/${ADDRESS}` })
     await post_page_view({ request_path: `/${BLOCK_HASH}` })
-    await post_page_view({ request_path: `/${BLOCK_HASH.toLowerCase()}` })
+    await post_page_view({ request_path: `/${BLOCK_HASH.toLowerCase()}/` })
     const paths = (await knex('site_events').select('request_path')).map(
       (row) => row.request_path
     )

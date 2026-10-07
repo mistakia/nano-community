@@ -102,10 +102,13 @@ const send_first_page_view = (location) => {
     body.page_response_milliseconds = load_time_milliseconds()
     post(body)
   }
+  // Read one task after the load event: the browser fills loadEventEnd only
+  // once every load handler has returned, so a read inside the handler sees 0.
+  const send_next_task = () => setTimeout(send, 0)
   if (document.readyState === 'complete') {
-    send()
+    send_next_task()
   } else {
-    window.addEventListener('load', send, { once: true })
+    window.addEventListener('load', send_next_task, { once: true })
   }
   if (referral_tag) {
     const url = new URL(window.location.href)
