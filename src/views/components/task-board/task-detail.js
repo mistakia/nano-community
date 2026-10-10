@@ -228,7 +228,8 @@ export default function TaskDetail({ issue_id }) {
           )}
         </Property>
         <Property label='Filed'>
-          <PubkeyName pubkey={task.pubkey} mark_untrusted /> <Age at={task.created_at} />
+          <PubkeyName pubkey={task.pubkey} mark_untrusted />{' '}
+          <Age at={task.created_at} />
         </Property>
         {task.supersedes_issue_id && (
           <Property label='Replaces'>
@@ -323,7 +324,8 @@ export default function TaskDetail({ issue_id }) {
         {comments.map((event) => (
           <div key={event.id} className='task-detail__comment'>
             <div className='task-detail__comment-meta'>
-              <PubkeyName pubkey={event.pubkey} mark_untrusted /> <Age at={event.created_at} />
+              <PubkeyName pubkey={event.pubkey} mark_untrusted />{' '}
+              <Age at={event.created_at} />
             </div>
             <TaskText content={event.content} />
           </div>
@@ -352,7 +354,7 @@ export default function TaskDetail({ issue_id }) {
                 variant='outlined'
                 type='submit'
                 disabled={publishing('comment')?.pending || !comment.trim()}>
-                Comment
+                {publishing('comment')?.preparing ? 'Preparing…' : 'Comment'}
               </Button>
               <Button
                 variant='outlined'

@@ -5,6 +5,7 @@ export const task_board_actions = {
   TASK_BOARD_RELAY_ERROR: 'TASK_BOARD_RELAY_ERROR',
   TASK_BOARD_PUBLISH: 'TASK_BOARD_PUBLISH',
   TASK_BOARD_PUBLISH_PENDING: 'TASK_BOARD_PUBLISH_PENDING',
+  TASK_BOARD_PUBLISH_PREPARING: 'TASK_BOARD_PUBLISH_PREPARING',
   TASK_BOARD_PUBLISH_FULFILLED: 'TASK_BOARD_PUBLISH_FULFILLED',
   TASK_BOARD_PUBLISH_FAILED: 'TASK_BOARD_PUBLISH_FAILED',
 
@@ -34,6 +35,12 @@ export const task_board_actions = {
 
   publish_pending: ({ key }) => ({
     type: task_board_actions.TASK_BOARD_PUBLISH_PENDING,
+    payload: { key }
+  }),
+
+  // Mining proof of work before signing.
+  publish_preparing: ({ key }) => ({
+    type: task_board_actions.TASK_BOARD_PUBLISH_PREPARING,
     payload: { key }
   }),
 

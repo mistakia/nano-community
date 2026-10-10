@@ -43,7 +43,7 @@ const initial_state = new Map({
   profiles: new Map(), // pubkey -> { created_at, name, content }
   is_loaded: false,
   relay_errors: new Map(),
-  publishing: new Map() // key -> { pending, error }
+  publishing: new Map() // key -> { pending, preparing, error }
 })
 
 export function task_board_reducer(state = initial_state, { payload, type }) {
@@ -65,6 +65,12 @@ export function task_board_reducer(state = initial_state, { payload, type }) {
 
     case task_board_actions.TASK_BOARD_PUBLISH_PENDING:
       return state.setIn(['publishing', payload.key], { pending: true })
+
+    case task_board_actions.TASK_BOARD_PUBLISH_PREPARING:
+      return state.setIn(['publishing', payload.key], {
+        pending: true,
+        preparing: true
+      })
 
     case task_board_actions.TASK_BOARD_PUBLISH_FULFILLED:
       return add_events(

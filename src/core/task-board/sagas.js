@@ -14,6 +14,8 @@ import { SimplePool } from 'nostr-tools'
 
 import {
   TASK_BOARD_KINDS,
+  TASK_UNVOUCHED_POW_DIFFICULTY,
+  needs_event_pow,
   build_board_filters,
   build_issue_filters,
   build_task_claim,
@@ -25,6 +27,7 @@ import {
   sign_event
 } from '@core/nostr-identity'
 import { task_board_actions } from './actions'
+import { mine_event_pow } from './mine-event-pow.mjs'
 import { get_task_board, get_task_board_state } from './selectors'
 
 const BATCH_MS = 200
@@ -211,16 +214,32 @@ function* order_after_previous_claim({ template, pubkey }) {
   return order_claim_after({ template, previous })
 }
 
-function* sign_and_publish({ template }) {
+// An issue or comment from a key with no standing counts only when mined.
+function* mine_if_needed({ key, template, pubkey }) {
+  const state = yield select(get_task_board_state)
+  if (!state || !needs_event_pow({ state, pubkey, kind: template.kind })) {
+    return template
+  }
+  if (key) yield put(task_board_actions.publish_preparing({ key }))
+  return yield call(mine_event_pow, {
+    template: { ...template, pubkey },
+    difficulty: TASK_UNVOUCHED_POW_DIFFICULTY
+  })
+}
+
+function* sign_and_publish({ template, key = null }) {
   const identity = yield call(ensure_signer)
+  const pubkey = identity.get('pubkey')
   const { relays } = (yield select(get_task_board)).toJS()
-  const ordered = yield call(order_after_previous_claim, {
-    template,
-    pubkey: identity.get('pubkey')
+  const ordered = yield call(order_after_previous_claim, { template, pubkey })
+  const prepared = yield call(mine_if_needed, {
+    key,
+    template: ordered,
+    pubkey
   })
   const event = yield call(sign_event, {
     method: identity.get('method'),
-    template: ordered
+    template: prepared
   })
   yield call(publish_to_relays, { relays, event })
   return event
@@ -247,7 +266,7 @@ export function* publish({ payload }) {
   try {
     const { board } = (yield select(get_task_board)).toJS()
     const template = build(board)
-    const event = yield call(sign_and_publish, { template })
+    const event = yield call(sign_and_publish, { template, key })
     // Renew before reporting done, so the UI cannot start a claim change
     // that races the renewal.
     // A failed renewal must not report the published event as failed, or a

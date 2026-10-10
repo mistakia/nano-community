@@ -130,7 +130,11 @@ export default function NewTask() {
                 variant='outlined'
                 disabled={publishing?.pending}
                 onClick={publish}>
-                {publishing?.pending ? 'Publishing…' : 'File task'}
+                {publishing?.preparing
+                  ? 'Preparing…'
+                  : publishing?.pending
+                    ? 'Publishing…'
+                    : 'File task'}
               </Button>
               {publishing?.error && (
                 <div className='task-board__error'>{publishing.error}</div>

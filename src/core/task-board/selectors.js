@@ -2,8 +2,11 @@ import { createSelector } from 'reselect'
 
 import {
   build_task_board_state,
+  get_event_pow,
+  needs_event_pow,
   parse_nano_account_binding,
-  TASK_BOARD_KINDS
+  TASK_BOARD_KINDS,
+  TASK_UNVOUCHED_POW_DIFFICULTY
 } from '#common/task-board/index.mjs'
 
 export const get_task_board = (state) => state.get('task_board')
@@ -26,9 +29,18 @@ export const get_task_board_state = createSelector(
 )
 
 // A comment its author asked to delete is dropped, as the reducer does for
-// every other kind.
+// every other kind, and so is one short of the proof of work its author needs.
 export const get_task_comments = (state, issue_id) => {
   const events = Array.from(get_events(state).values())
+  const board_state = get_task_board_state(state)
+  const counts = (event) =>
+    !board_state ||
+    !needs_event_pow({
+      state: board_state,
+      pubkey: event.pubkey,
+      kind: event.kind
+    }) ||
+    get_event_pow(event) >= TASK_UNVOUCHED_POW_DIFFICULTY
   const deleted = new Set()
   for (const event of events) {
     if (event.kind !== 5) continue
@@ -41,6 +53,7 @@ export const get_task_comments = (state, issue_id) => {
       (event) =>
         event.kind === 1111 &&
         !deleted.has(`${event.pubkey}:${event.id}`) &&
+        counts(event) &&
         event.tags.some((tag) => tag[0] === 'E' && tag[1] === issue_id)
     )
     .sort((a, b) => a.created_at - b.created_at)
