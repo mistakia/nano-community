@@ -2742,10 +2742,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@noble/curves@npm:2.4.0":
+  version: 2.4.0
+  resolution: "@noble/curves@npm:2.4.0"
+  dependencies:
+    "@noble/hashes": "npm:2.4.0"
+  checksum: 10/9d9c592c500a6248068200ce46e1bde5e4df03c4162a528397f7a5f02c885a0408dc20d365e6224b63efef3fc3ea26fc1c9c8338d602fc78991feadb2e425968
+  languageName: node
+  linkType: hard
+
 "@noble/hashes@npm:2.0.1":
   version: 2.0.1
   resolution: "@noble/hashes@npm:2.0.1"
   checksum: 10/f4d00e7564eb4ff4e6d16be151dd0e404aede35f91e4372b0a8a6ec888379c1dd1e02c721b480af8e7853bea9637185b5cb9533970c5b77d60c254ead0cfd8f7
+  languageName: node
+  linkType: hard
+
+"@noble/hashes@npm:2.4.0":
+  version: 2.4.0
+  resolution: "@noble/hashes@npm:2.4.0"
+  checksum: 10/88d4cdd6cef00f412a39f65bda1d24cba2264c6cacdd1c6c48d7ed66fd9be865ffb7231024fb81177975c684b8a463879b89c5ae6960370b05a546c0fd8afa2c
   languageName: node
   linkType: hard
 
@@ -11265,6 +11281,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nano-signed-message@npm:0.1.0":
+  version: 0.1.0
+  resolution: "nano-signed-message@npm:0.1.0"
+  dependencies:
+    "@noble/curves": "npm:2.4.0"
+    "@noble/hashes": "npm:2.4.0"
+  dependenciesMeta:
+    "@trashman/ed25519-blake2b":
+      built: true
+  checksum: 10/66e38dedc0b269c1c5a373259a5f2053f3823f389dbe425051a3f6f2cd3ebbee412cd1a8505f02f0fe929e1cb9dbb098bbef7eb450da2d46cf4a82bd1ceb6838
+  languageName: node
+  linkType: hard
+
 "nanoid@npm:^3.3.7":
   version: 3.3.7
   resolution: "nanoid@npm:3.3.7"
@@ -13585,6 +13614,7 @@ __metadata:
     morgan: "npm:^1.10.0"
     morgan-debug: "npm:^2.0.0"
     mysql2: "npm:^3.9.7"
+    nano-signed-message: "npm:0.1.0"
     nib: "npm:^1.2.0"
     nock: "npm:^13.5.4"
     node-cache: "npm:^5.1.2"

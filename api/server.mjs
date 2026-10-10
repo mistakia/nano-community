@@ -35,6 +35,8 @@ const defaults = {}
 const options = extend(defaults, config)
 const IS_DEV = process.env.NODE_ENV === 'development'
 const speedLimiter = slowDown({
+  // the auth suites send more than 50 requests in one run
+  skip: () => process.env.NODE_ENV === 'test',
   windowMs: 10 * 60 * 1000, // 10 minutes
   delayAfter: 50, // allow 50 requests per 10 minutes, then...
   delayMs: (hits, req) => (hits - req.slowDown.limit) * 500, // begin adding 500ms of delay per request above 50

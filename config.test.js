@@ -21,7 +21,7 @@ module.exports = {
     client: 'pg',
     connection: {
       host: '127.0.0.1',
-      port: 5432,
+      port: Number(process.env.NANO_TEST_PG_PORT || 5432),
       user: 'postgres',
       database: 'nano_test'
     }
