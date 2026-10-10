@@ -134,6 +134,7 @@
     "node-cache": "^5.1.2",
     "node-cron": "^3.0.3",
     "node-fetch": "2.7.0",
+    "nostr-tools": "^2.25.2",
     "p-queue": "8.0.1",
     "pg": "^8.13.1",
     "pg-copy-streams": "^6.0.6",
