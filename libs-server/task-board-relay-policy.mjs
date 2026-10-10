@@ -234,7 +234,7 @@ function consume_rate_limit(
   const window = state.rate_windows.get(key)
   if (!window || window.start !== window_start) {
     state.rate_windows.set(key, { start: window_start, count: 1 })
-    return true
+    return limit >= 1
   }
   window.count += 1
   return window.count <= limit

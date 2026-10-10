@@ -336,6 +336,20 @@ describe('task board relay write policy', () => {
     expect(file(newcomer, NOW + 33).action).to.equal('accept')
   })
 
+  it('rejects the first issue in a window when the limit is 0', () => {
+    state.rate_limits = {
+      per_pubkey: 100,
+      per_ip: 100,
+      untrusted_issues_per_day: 0
+    }
+    expect(
+      evaluate(sign(stranger, build_task_issue({ board, subject: 'First' })))
+    ).to.deep.equal({
+      action: 'reject',
+      msg: 'rate-limited: daily issue limit for keys outside the web of trust'
+    })
+  })
+
   it('derives stewards and trust from seeded events in any order', () => {
     const steward = make_key('8')
     const announcement = sign(
