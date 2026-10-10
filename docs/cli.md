@@ -20,6 +20,14 @@ It is also available as a yarn global package.
 yarn global add nano-community-cli
 ```
 
+Version 0.1.0 or later is required. Earlier versions sign in a format the API no longer accepts.
+
+### Obtaining your account private key
+
+The CLI signs with the 32-byte private key of a nano account, as 64 hex characters. Wallets usually show a seed or a mnemonic rather than an account private key. A seed and an account index derive the private key, as described in the nano documentation's [key management guide](https://docs.nano.org/integration-guides/key-management/#backing-up-seed). Back up the seed before you export any key from it.
+
+Use the account private key once, to link a signing key, and use the signing key for everything after that.
+
 ### Setting Environment Variables (optional)
 
 The CLI will prompt you for the private key if it is not already set as an environment variable. Using the CLI in this way is simple and secure, as the private key will neither be stored in command history nor saved to a file.
@@ -70,17 +78,29 @@ The purpose of a signing key is to sign messages to manage metadata related to a
 nano-community add-signing-key
 ```
 
-This will generate a new signing key and output the public and private keys in the console. Take care to securely store the private key.
+Run it with the account private key. The CLI generates a new signing key and links it to the account. Linking takes both keys' consent: the account signs a message naming the new key, and the new key signs a message naming the account. The CLI prints the new key's public and private keys. Store the private key securely.
 
-This new signing key can now be used in place of your account key. Make sure to replace the `NC_CLI_NANO_PRIVATE_KEY` environment variable with the newly generated private key of the signing key.
+This new signing key can now be used in place of your account key. Replace the `NC_CLI_NANO_PRIVATE_KEY` environment variable with the signing key's private key. Messages it signs apply to the linked account.
+
+A key can be linked only once. A key that was ever linked, to any account and whether or not it was later revoked, is refused with "key previously linked; generate a new key". Run `add-signing-key` again to get a new one.
+
+#### Re-linking after the October 2026 update
+
+Signing keys linked before the CLI 0.1.0 release were revoked when the update was deployed, because the old link signature did not bind the key it linked. If you had a signing key, run `add-signing-key` again with the account private key to link a new one. The old key cannot be linked again.
 
 #### Revoking a signing key
 
-To revoke a signing key, use the `revoke-signing-key` command. The signing key can be revoked by either the signing key or the account key.
+To revoke a signing key, use the `revoke-signing-key` command with the public key of the signing key. Either the signing key itself or the account key can sign the revocation.
 
 ```bash
-nano-community revoke-signing-key
+nano-community revoke-signing-key <linked_public_key>
 ```
+
+The CLI asks you to confirm and shows the key that will be revoked.
+
+### How messages are signed
+
+Every command signs a [canonical Nano signed message](https://github.com/mistakia/nano-signed-message/blob/main/SPECIFICATION.md) for the domain `nano.community`. The signature binds the action, every field you entered, the signing account, the time and a one-time nonce. The API accepts a message only within ten minutes of its signing time, so the clock on your computer needs to be roughly right.
 
 ### Updating Nano Representative Metadata
 
@@ -127,7 +147,7 @@ Supported metadata fields:
 You can set a public message for a nano block using the `update-block-meta` command.
 
 ```bash
-nano-community update-block-meta
+nano-community update-block-meta <block_hash>
 ```
 
 Supported metadata fields:
