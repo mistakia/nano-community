@@ -1,6 +1,6 @@
 // Standalone task board client: one self-contained build/task-board-client/index.html.
 // Everything (scripts and styles, which style-loader injects from the script)
-// is inlined, and module ids are content hashes, so two builds from the same
+// is inlined, and module ids follow traversal order, so two builds from the same
 // commit produce the same bytes and anyone can verify a copy by its sha256.
 
 import path from 'path'
@@ -10,7 +10,7 @@ import webpack from 'webpack'
 
 import base from './webpack.base.babel.mjs'
 
-const config = base({
+export default base({
   mode: 'production',
   entry: [path.join(process.cwd(), 'src/task-board-client.js')],
   output: {
@@ -24,8 +24,10 @@ const config = base({
     concatenateModules: true,
     splitChunks: false,
     runtimeChunk: false,
-    moduleIds: 'deterministic',
-    chunkIds: 'deterministic'
+    // Numbered in module traversal order rather than by path hash, so the
+    // bytes do not depend on where the checkout or its node_modules live.
+    moduleIds: 'natural',
+    chunkIds: 'natural'
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -46,9 +48,3 @@ const config = base({
   performance: { hints: false }
 })
 
-// Module ids hash each module's path relative to the build; resolving through
-// a symlinked node_modules (as worktrees here do) would make them depend on
-// where the real tree lives.
-config.resolve.symlinks = false
-
-export default config
