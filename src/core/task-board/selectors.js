@@ -10,8 +10,8 @@ export const get_task_board = (state) => state.get('task_board')
 const get_events = (state) => state.getIn(['task_board', 'events'])
 const get_board = (state) => state.getIn(['task_board', 'board'])
 
-// Recomputed when events arrive. `now` is taken at derivation time so claim
-// expiry is evaluated against the clock, not a stale snapshot.
+// Recomputed when events arrive, so claim expiry is evaluated against the
+// clock at the latest event, not continuously.
 export const get_task_board_state = createSelector(
   get_events,
   get_board,

@@ -24,7 +24,13 @@ const parse_params = (location) => {
 }
 
 const to_hex_pubkey = (value) => {
-  if (value.startsWith('npub1')) return nip19.decode(value).data
+  if (value.startsWith('npub1')) {
+    try {
+      return nip19.decode(value).data
+    } catch (error) {
+      return null // a malformed npub falls back to the default board
+    }
+  }
   if (/^[0-9a-f]{64}$/i.test(value)) return value.toLowerCase()
   return null
 }

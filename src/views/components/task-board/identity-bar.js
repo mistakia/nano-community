@@ -71,7 +71,14 @@ export default function IdentityBar() {
           </button>
         </div>
       )}
-      {panel === 'import' && (
+      {panel === 'import' && method === 'local' && needs_backup && (
+        <div className='task-board__notice'>
+          Importing replaces the key in this browser, which is not backed up
+          yet. Export it first, or its identity is lost.{' '}
+          <button onClick={() => set_panel('export')}>Back up now</button>
+        </div>
+      )}
+      {panel === 'import' && !(method === 'local' && needs_backup) && (
         <form
           className='task-board__panel'
           onSubmit={(event) => {

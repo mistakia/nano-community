@@ -40,13 +40,18 @@ export const is_local_key_backed_up = () =>
   get_storage()?.getItem(BACKED_UP_STORAGE) === 'true'
 
 export function mark_local_key_backed_up() {
-  get_storage()?.setItem(BACKED_UP_STORAGE, 'true')
+  try {
+    get_storage()?.setItem(BACKED_UP_STORAGE, 'true')
+  } catch (error) {
+    // storage full or blocked: the backup prompt shows again next visit
+  }
 }
 
 export function generate_local_key() {
   const secret_key = generateSecretKey()
+  const pubkey = getPublicKey(secret_key)
   save_local_secret_key(secret_key, { backed_up: false })
-  return getPublicKey(secret_key)
+  return pubkey
 }
 
 // Accepts an nsec or 64 hex characters; returns the pubkey.
@@ -62,8 +67,10 @@ export function import_local_key(value) {
   } else {
     throw new Error('enter an nsec or a 64-character hex key')
   }
+  // Derive first: an out-of-range key throws here instead of being stored.
+  const pubkey = getPublicKey(secret_key)
   save_local_secret_key(secret_key, { backed_up: true })
-  return getPublicKey(secret_key)
+  return pubkey
 }
 
 export function export_local_key() {

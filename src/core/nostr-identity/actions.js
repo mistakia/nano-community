@@ -1,7 +1,6 @@
 export const nostr_identity_actions = {
   NOSTR_IDENTITY_INIT: 'NOSTR_IDENTITY_INIT',
   NOSTR_IDENTITY_SET: 'NOSTR_IDENTITY_SET',
-  NOSTR_IDENTITY_GENERATE_KEY: 'NOSTR_IDENTITY_GENERATE_KEY',
   NOSTR_IDENTITY_IMPORT_KEY: 'NOSTR_IDENTITY_IMPORT_KEY',
   NOSTR_IDENTITY_IMPORT_FAILED: 'NOSTR_IDENTITY_IMPORT_FAILED',
   NOSTR_IDENTITY_MARK_BACKED_UP: 'NOSTR_IDENTITY_MARK_BACKED_UP',
@@ -12,10 +11,6 @@ export const nostr_identity_actions = {
   set: ({ method, pubkey, needs_backup = false }) => ({
     type: nostr_identity_actions.NOSTR_IDENTITY_SET,
     payload: { method, pubkey, needs_backup }
-  }),
-
-  generate_key: () => ({
-    type: nostr_identity_actions.NOSTR_IDENTITY_GENERATE_KEY
   }),
 
   import_key: ({ value }) => ({

@@ -257,8 +257,19 @@ export function* publish({ payload }) {
     const event = yield call(sign_and_publish, { template })
     // Renew before reporting done, so the UI cannot start a claim change
     // that races the renewal.
+    // A failed renewal must not report the published event as failed, or a
+    // retry would duplicate it.
     if (issue_id && event.kind !== TASK_BOARD_KINDS.claim) {
-      yield call(renew_claim, { issue_id, pubkey: event.pubkey })
+      try {
+        yield call(renew_claim, { issue_id, pubkey: event.pubkey })
+      } catch (error) {
+        yield put(
+          task_board_actions.publish_failed({
+            key: 'claim-renewal',
+            error: error.message
+          })
+        )
+      }
     }
     yield put(task_board_actions.publish_fulfilled({ key, event }))
     if (on_published) yield call(on_published, event)
