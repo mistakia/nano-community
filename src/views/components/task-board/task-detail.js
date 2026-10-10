@@ -26,10 +26,14 @@ import IdentityLink, { use_go_to_account } from './identity-link'
 import { use_task_board_links } from './task-board-links'
 import PubkeyName from './pubkey-name'
 import Age from './age'
+import InlineSelect from './inline-select'
 import { TaskTitle, TaskText } from './task-text'
 import { COLUMN_TITLES, STATUS_TITLES, format_date } from './format'
 
 const STATUSES = ['open', 'resolved', 'closed', 'draft']
+
+const as_options = (values, titles = {}) =>
+  values.map((value) => ({ value, label: titles[value] || value }))
 
 const PUBLISH_KEYS = [
   'status',
@@ -58,122 +62,6 @@ function Property({ label, children }) {
 
 Property.propTypes = { label: PropTypes.string, children: PropTypes.node }
 
-function Field({ label, value, options, on_change }) {
-  return (
-    <label className='task-detail__field'>
-      <span>{label}</span>
-      <select value={value || ''} onChange={(e) => on_change(e.target.value)}>
-        {!value && <option value=''>none</option>}
-        {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
-    </label>
-  )
-}
-
-Field.propTypes = {
-  label: PropTypes.string,
-  value: PropTypes.string,
-  options: PropTypes.array,
-  on_change: PropTypes.func
-}
-
-// Every change here signs a permanent event, so edits are staged and go out
-// together on Save rather than on each dropdown change.
-function ManageTask({ task, is_steward, publish, pending }) {
-  const current = {
-    status: task.status,
-    priority: task.priority || '',
-    state: task.state || ''
-  }
-  const [draft, set_draft] = useState(current)
-  const changed = Object.keys(current).filter(
-    (key) => draft[key] !== current[key]
-  )
-  const set = (key) => (value) => set_draft({ ...draft, [key]: value })
-
-  const builds = {
-    status: (b) =>
-      build_task_status({ board: b, issue: task, status: draft.status }),
-    priority: () =>
-      build_task_label({
-        issue: task,
-        namespace: TASK_PRIORITY_NAMESPACE,
-        value: draft.priority
-      }),
-    state: () =>
-      build_task_label({
-        issue: task,
-        namespace: TASK_STATE_NAMESPACE,
-        value: draft.state
-      })
-  }
-  // One at a time: each publish renews the actor's claim, and concurrent
-  // renewals would race each other.
-  const save = (keys = changed) => {
-    if (!keys.length) return
-    const [key, ...rest] = keys
-    publish(key, builds[key], () => save(rest))
-  }
-
-  return (
-    <section className='task-section task-detail__manage'>
-      <h3 className='task-section__title'>Manage</h3>
-      <div className='task-detail__fields'>
-        <Field
-          label='Status'
-          value={draft.status}
-          options={STATUSES}
-          on_change={set('status')}
-        />
-        {is_steward && (
-          <>
-            <Field
-              label='Priority'
-              value={draft.priority}
-              options={TASK_PRIORITIES}
-              on_change={set('priority')}
-            />
-            <Field
-              label='State'
-              value={draft.state}
-              options={TASK_STATES}
-              on_change={set('state')}
-            />
-          </>
-        )}
-      </div>
-      {changed.length > 0 && (
-        <div className='task-detail__save'>
-          <span>
-            Saving publishes {changed.join(', ')} for everyone. It cannot be
-            taken back, only changed again.
-          </span>
-          <Button variant='outlined' disabled={pending} onClick={() => save()}>
-            Save
-          </Button>
-          <Button
-            variant='outlined'
-            disabled={pending}
-            onClick={() => set_draft(current)}>
-            Cancel
-          </Button>
-        </div>
-      )}
-    </section>
-  )
-}
-
-ManageTask.propTypes = {
-  task: PropTypes.object.isRequired,
-  is_steward: PropTypes.bool,
-  publish: PropTypes.func.isRequired,
-  pending: PropTypes.bool
-}
-
 export default function TaskDetail({ issue_id }) {
   const dispatch = useDispatch()
   const { Link, board_path, task_path, account_path } = use_task_board_links()
@@ -185,6 +73,7 @@ export default function TaskDetail({ issue_id }) {
   const own_triage_set = useSelector((s) => get_own_triage_set(s, pubkey))
   const [comment, set_comment] = useState('')
   const go_to_account = use_go_to_account()
+  const [staged, set_staged] = useState({})
   const [commenting, set_commenting] = useState(false)
 
   const top_bar = (
@@ -230,7 +119,44 @@ export default function TaskDetail({ issue_id }) {
   const author_trusted =
     state.stewards.includes(task.pubkey) || state.trusted.includes(task.pubkey)
   const active_claims = task.claims.filter((claim) => claim.is_active)
-  const stage = stage_of(task)
+  const current = {
+    status: task.status,
+    priority: task.priority || '',
+    state: task.state || 'actionable'
+  }
+  const value_of = (key) => staged[key] ?? current[key]
+  const changed = Object.keys(staged).filter(
+    (key) => staged[key] !== current[key]
+  )
+  const stage = stage_of({ ...task, status: value_of('status') })
+  const can_edit_status = is_steward || is_author
+  const stage_options = as_options(STATUSES, STATUS_TITLES)
+  const stage_key = (key) => (value) => set_staged({ ...staged, [key]: value })
+
+  // Each edit signs a permanent event, so edits are staged in place and go
+  // out together on Save, one at a time: each publish renews the actor's
+  // claim, and concurrent renewals would race.
+  const builds = {
+    status: (b) =>
+      build_task_status({ board: b, issue: task, status: staged.status }),
+    priority: () =>
+      build_task_label({
+        issue: task,
+        namespace: TASK_PRIORITY_NAMESPACE,
+        value: staged.priority
+      }),
+    state: () =>
+      build_task_label({
+        issue: task,
+        namespace: TASK_STATE_NAMESPACE,
+        value: staged.state
+      })
+  }
+  const save = (keys = changed) => {
+    if (!keys.length) return set_staged({})
+    const [key, ...rest] = keys
+    publish(key, builds[key], () => save(rest))
+  }
 
   return (
     <div className='task-detail'>
@@ -242,20 +168,47 @@ export default function TaskDetail({ issue_id }) {
 
       <dl className='task-detail__properties'>
         <Property label='Stage'>
-          <span className='task-stage' data-stage={stage.key}>
-            {stage.title}
-          </span>
-        </Property>
-        {task.priority && (
-          <Property label='Priority'>
-            <span className='task-priority' data-priority={task.priority}>
-              {task.priority}
+          <InlineSelect
+            value={value_of('status')}
+            options={stage_options}
+            on_select={stage_key('status')}
+            editable={can_edit_status}
+            staged={changed.includes('status')}>
+            <span className='task-stage' data-stage={stage.key}>
+              {stage.title}
             </span>
+          </InlineSelect>
+        </Property>
+        {(task.priority || is_steward) && (
+          <Property label='Priority'>
+            <InlineSelect
+              value={value_of('priority')}
+              options={as_options(TASK_PRIORITIES)}
+              on_select={stage_key('priority')}
+              editable={is_steward}
+              staged={changed.includes('priority')}>
+              {value_of('priority') ? (
+                <span
+                  className='task-priority'
+                  data-priority={value_of('priority')}>
+                  {value_of('priority')}
+                </span>
+              ) : (
+                <span className='task-muted'>none</span>
+              )}
+            </InlineSelect>
           </Property>
         )}
-        {task.state && task.state !== 'actionable' && (
+        {(value_of('state') !== 'actionable' || is_steward) && (
           <Property label='State'>
-            <span className='task-state'>{task.state}</span>
+            <InlineSelect
+              value={value_of('state')}
+              options={as_options(TASK_STATES)}
+              on_select={stage_key('state')}
+              editable={is_steward}
+              staged={changed.includes('state')}>
+              <span className='task-state'>{value_of('state')}</span>
+            </InlineSelect>
           </Property>
         )}
         <Property label='Working on it'>
@@ -283,6 +236,27 @@ export default function TaskDetail({ issue_id }) {
           </Property>
         )}
       </dl>
+
+      {changed.length > 0 && (
+        <div className='task-detail__save'>
+          <span>
+            Saving publishes {changed.join(', ')} for everyone. It cannot be
+            taken back, only changed again.
+          </span>
+          <Button
+            variant='outlined'
+            disabled={any_pending}
+            onClick={() => save()}>
+            Save
+          </Button>
+          <Button
+            variant='outlined'
+            disabled={any_pending}
+            onClick={() => set_staged({})}>
+            Cancel
+          </Button>
+        </div>
+      )}
 
       {task.is_hidden && (
         <div className='task-board__notice'>
@@ -328,16 +302,6 @@ export default function TaskDetail({ issue_id }) {
                 : 'Work on this'}
           </Button>
         </div>
-      )}
-
-      {(is_steward || is_author) && (
-        <ManageTask
-          key={`${task.status}:${task.priority}:${task.state}`}
-          task={task}
-          is_steward={is_steward}
-          publish={publish}
-          pending={any_pending}
-        />
       )}
 
       {errors.map((error) => (

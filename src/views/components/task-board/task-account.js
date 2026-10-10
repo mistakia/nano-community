@@ -10,6 +10,7 @@ import {
 } from '@core/nostr-identity'
 import PubkeyName from './pubkey-name'
 import CopyValue from './copy-value'
+import KeyProperties from './key-properties'
 import { use_task_board_links } from './task-board-links'
 
 function ImportKey() {
@@ -159,6 +160,7 @@ export default function TaskAccount() {
               )}
             </section>
           )}
+          <KeyProperties pubkey={pubkey} />
         </>
       )}
 

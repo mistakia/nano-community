@@ -403,24 +403,37 @@ for $name, $color in $stageColors
   gap 8px
   margin-bottom 24px
 
-.task-detail__fields
-  display flex
-  flex-wrap wrap
-  gap 12px 24px
+// A property value the viewer may change: plain text until hovered.
+.task-inline
+  display inline-flex
+  align-items baseline
+  gap 4px
+  margin -2px -6px
+  padding 2px 6px
+  border 1px solid transparent
+  border-radius 4px
+  background none
+  color inherit
+  font inherit
+  cursor pointer
 
-.task-detail__field
-  display flex
-  gap 8px
-  align-items center
-  font-size 12px
+  &:hover, &:focus-visible
+    border-color $controlBorder
+
+.task-inline__caret
+  font-size 10px
   color $taskTertiary
+
+.task-inline--staged
+  border-style dashed
+  border-color $controlBorder
 
 .task-detail__save
   display flex
   flex-wrap wrap
   gap 8px
   align-items center
-  margin-top 16px
+  margin -8px 0 24px
   font-size 12px
   color $nanoBlueGrey
 
@@ -468,9 +481,6 @@ for $name, $color in $stageColors
       position static
       margin-top 12px
 
-  .task-detail__field span
-    flex 0 0 64px
-
   .task-board__columns
     flex-direction column
     align-items stretch
@@ -479,3 +489,31 @@ for $name, $color in $stageColors
   .task-board__column
     flex none
     max-height none
+
+// --- key properties ---------------------------------------------------------
+
+.task-properties__list
+  grid-template-columns 1fr
+
+  .task-detail__property dt
+    flex-basis 120px
+
+.task-properties__item
+  display flex
+  align-items baseline
+  gap 8px
+
+.task-properties__add, .task-properties__remove
+  font-size 12px
+
+.task-properties__add
+  display inline-block
+  margin 4px 0 8px
+
+.task-properties__request
+  display flex
+  flex-wrap wrap
+  align-items center
+  gap 8px
+  margin-bottom 12px
+  font-size 13px
