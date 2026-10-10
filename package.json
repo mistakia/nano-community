@@ -15,7 +15,7 @@
     "dev:live": "NC_DEV_LIVE=true yarn start",
     "start": "webpack serve --mode=development --config webpack/webpack.dev.babel.mjs --port 8094 --history-api-fallback --static-directory static --static-public-path /static --open",
     "start:api": "NODE_ENV=development node server.mjs",
-    "deploy": "scp -r build/* nano.community:/root/nano-community/source/build",
+    "deploy": "rsync -a --delete build/ nano.community:/root/nano-community/source/build/",
     "build": "cross-env NODE_ENV=production webpack --config webpack/webpack.prod.babel.mjs --color --progress && react-snap",
     "build:task-board-client": "cross-env NODE_ENV=production webpack --config webpack/webpack.task-board-client.babel.mjs && rm -f build/task-board-client/task-board-client.js*",
     "lint": "eslint . --ext js,mjs",
