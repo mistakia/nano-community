@@ -23,7 +23,12 @@ import {
   format_board_address,
   now_seconds
 } from './build-task-board-events.mjs'
-import { build_trust_graph, select_trust_sets } from './build-trust-graph.mjs'
+import {
+  build_trust_graph,
+  select_trust_sets,
+  select_account_attestations,
+  select_established
+} from './build-trust-graph.mjs'
 
 const get_tag_value = (event, name) =>
   (event.tags.find((tag) => tag[0] === name) || [])[1]
@@ -121,10 +126,15 @@ export default function build_task_board_state({
 
   // Web of trust: stewards' vouches, one step further through step 1 keys.
   const { vouch_sets, block_sets } = select_trust_sets(live_events)
+  const account_attestations = select_account_attestations({
+    events: live_events,
+    stewards
+  })
   const { trusted, blocked } = build_trust_graph({
     stewards,
     vouch_sets,
-    block_sets
+    block_sets,
+    established: select_established({ attestations: account_attestations, now })
   })
 
   // Key relations: each key's latest properties event on this board. A
@@ -319,6 +329,7 @@ export default function build_task_board_state({
     trust: Object.fromEntries(trusted),
     blocked: [...blocked],
     vouch_sets: Object.fromEntries(vouch_sets),
+    account_attestations: Object.fromEntries(account_attestations),
     key_relations,
     key_properties: Object.fromEntries(key_properties),
     tasks: Object.fromEntries(tasks),

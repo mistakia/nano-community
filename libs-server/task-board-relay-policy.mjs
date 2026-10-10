@@ -15,6 +15,10 @@ import {
   build_trust_graph,
   is_voucher,
   parse_nano_account_binding,
+  select_account_attestations,
+  select_established,
+  ACCOUNT_ATTESTATION_NAMESPACE,
+  ACCOUNT_ATTESTATION_VALUES,
   format_board_address
 } from '#common/task-board/index.mjs'
 
@@ -44,6 +48,7 @@ export function create_relay_policy_state({
     announcements: new Map(), // d tag -> latest owner announcement
     vouch_sets: new Map(), // pubkey -> latest vouch set
     block_sets: new Map(), // pubkey -> latest block set
+    account_labels: new Map(), // `${author}:${pubkey}` -> latest attestation
     rate_limits: { ...DEFAULT_RATE_LIMITS, ...rate_limits },
     rate_windows: new Map()
   }
@@ -64,13 +69,22 @@ export function get_stewards(state) {
 }
 
 // The web of trust as the board derives it.
-export function get_trust(state, stewards = get_stewards(state)) {
+export function get_trust(
+  state,
+  stewards = get_stewards(state),
+  now = Math.floor(Date.now() / 1000)
+) {
+  const attestations = select_account_attestations({
+    events: state.account_labels.values(),
+    stewards
+  })
   return {
     stewards,
     ...build_trust_graph({
       stewards,
       vouch_sets: state.vouch_sets,
-      block_sets: state.block_sets
+      block_sets: state.block_sets,
+      established: select_established({ attestations, now })
     })
   }
 }
@@ -94,6 +108,12 @@ function record_accepted_event(state, event) {
       state.announcements.set(d_tag, event)
     }
   }
+  if (is_account_attestation(event)) {
+    const key = `${event.pubkey}:${get_tag_value(event, 'p')}`
+    if (is_newer(event, state.account_labels.get(key))) {
+      state.account_labels.set(key, event)
+    }
+  }
   if (event.kind === TASK_BOARD_KINDS.follow_set) {
     const sets =
       get_tag_value(event, 'd') === BLOCK_SET_D_TAG
@@ -102,6 +122,10 @@ function record_accepted_event(state, event) {
     if (is_newer(event, sets.get(event.pubkey))) sets.set(event.pubkey, event)
   }
 }
+
+const is_account_attestation = (event) =>
+  event.kind === TASK_BOARD_KINDS.label &&
+  get_tag_value(event, 'L') === ACCOUNT_ATTESTATION_NAMESPACE
 
 const has_board_address = (state, event) =>
   get_tag_values(event, 'a').some((a) => state.board_addresses.has(a))
@@ -123,6 +147,20 @@ function check_kind_rules(state, event) {
   }
   if (TASK_STATUS_BY_KIND[kind]) {
     return is_board_bound(state, event) || 'status must reference a board issue'
+  }
+  if (is_account_attestation(event)) {
+    if (!get_stewards(state).has(event.pubkey)) {
+      return 'only stewards attest Nano accounts'
+    }
+    const valid =
+      get_tag_values(event, 'p').length === 1 &&
+      event.tags.some(
+        (tag) =>
+          tag[0] === 'l' &&
+          tag[2] === ACCOUNT_ATTESTATION_NAMESPACE &&
+          ACCOUNT_ATTESTATION_VALUES.includes(tag[1])
+      )
+    return valid || 'an account attestation names one key and a known value'
   }
   if (kind === TASK_BOARD_KINDS.label) {
     return (
@@ -231,7 +269,7 @@ export function evaluate_relay_event({
     if (
       event.kind === TASK_BOARD_KINDS.issue &&
       !is_steward &&
-      !get_trust(state, stewards).trusted.has(event.pubkey) &&
+      !get_trust(state, stewards, now).trusted.has(event.pubkey) &&
       !consume_rate_limit(
         state,
         `issues:${event.pubkey}`,

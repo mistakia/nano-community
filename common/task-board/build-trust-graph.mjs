@@ -6,7 +6,10 @@ import {
   TASK_BOARD_KINDS,
   VOUCH_SET_D_TAG,
   BLOCK_SET_D_TAG,
-  VOUCHES_FOR_SECOND_STEP
+  VOUCHES_FOR_SECOND_STEP,
+  ACCOUNT_ATTESTATION_NAMESPACE,
+  ACCOUNT_ATTESTATION_VALUES,
+  ACCOUNT_ATTESTATION_LIFETIME_SECONDS
 } from './constants.mjs'
 
 const get_tag_value = (event, name) =>
@@ -50,6 +53,60 @@ export function select_trust_sets(events) {
   }
   return { vouch_sets, block_sets }
 }
+
+// The steward account attestations about each key, as
+// Map<pubkey, { value, created_at, expiration, author }>: the newest by any
+// current steward wins, and lapses at its expiration (capped at the
+// attestation lifetime).
+export function select_account_attestations({ events, stewards }) {
+  const latest = new Map()
+  for (const event of events) {
+    if (
+      event.kind !== TASK_BOARD_KINDS.label ||
+      !stewards.has(event.pubkey) ||
+      get_tag_value(event, 'L') !== ACCOUNT_ATTESTATION_NAMESPACE
+    ) {
+      continue
+    }
+    const label = event.tags.find(
+      (tag) =>
+        tag[0] === 'l' &&
+        tag[2] === ACCOUNT_ATTESTATION_NAMESPACE &&
+        ACCOUNT_ATTESTATION_VALUES.includes(tag[1])
+    )
+    const pubkey = get_tag_value(event, 'p')
+    if (!label || !pubkey) continue
+    if (is_newer(event, latest.get(pubkey)?.event)) {
+      const max_expiration =
+        event.created_at + ACCOUNT_ATTESTATION_LIFETIME_SECONDS
+      latest.set(pubkey, {
+        event,
+        value: label[1],
+        expiration: Math.min(
+          Number(get_tag_value(event, 'expiration')) || max_expiration,
+          max_expiration
+        )
+      })
+    }
+  }
+  return new Map(
+    [...latest].map(([pubkey, { event, value, expiration }]) => [
+      pubkey,
+      { value, created_at: event.created_at, expiration, author: event.pubkey }
+    ])
+  )
+}
+
+// Keys whose current attestation says their Nano account is established.
+export const select_established = ({ attestations, now }) =>
+  new Set(
+    [...attestations]
+      .filter(
+        ([, { value, expiration }]) =>
+          value === 'established' && expiration > now
+      )
+      .map(([pubkey]) => pubkey)
+  )
 
 // Returns { trusted: Map<pubkey, { step, vouchers }>, blocked: Set<pubkey> }.
 // Stewards are step 0 and are not listed. Step 1 keys are vouched for by a

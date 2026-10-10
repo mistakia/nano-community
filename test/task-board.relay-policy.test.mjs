@@ -12,6 +12,7 @@ import {
   build_task_comment,
   build_vouch_set,
   build_block_set,
+  build_account_attestation,
   build_deletion_request,
   build_key_properties,
   format_board_address
@@ -215,6 +216,31 @@ describe('task board relay write policy', () => {
         ])
       ).action
     ).to.equal('reject')
+  })
+
+  it('takes account attestations from stewards, and counts them toward step 2', () => {
+    state.rate_limits = {
+      per_pubkey: 100,
+      per_ip: 100,
+      untrusted_issues_per_day: 1
+    }
+    const attestation = build_account_attestation({
+      pubkey: stranger.pubkey,
+      value: 'established',
+      created_at: NOW
+    })
+    expect(evaluate(sign(member, attestation))).to.deep.equal({
+      action: 'reject',
+      msg: 'blocked: only stewards attest Nano accounts'
+    })
+    const file = (subject) =>
+      evaluate(sign(stranger, build_task_issue({ board, subject }))).action
+    evaluate(sign(owner, build_vouch_set({ pubkeys: [member.pubkey] })))
+    evaluate(sign(member, build_vouch_set({ pubkeys: [stranger.pubkey] })))
+    expect(file('One vouch')).to.equal('accept')
+    expect(file('One vouch, over the daily limit')).to.equal('reject')
+    expect(evaluate(sign(owner, attestation)).action).to.equal('accept')
+    expect(file('One vouch and an established account')).to.equal('accept')
   })
 
   it('accepts block sets from stewards only, and a block voids vouches', () => {

@@ -8,6 +8,9 @@ import {
   CLAIM_STATUSES,
   CLAIM_LIFETIME_SECONDS,
   VOUCH_SET_D_TAG,
+  ACCOUNT_ATTESTATION_NAMESPACE,
+  ACCOUNT_ATTESTATION_VALUES,
+  ACCOUNT_ATTESTATION_LIFETIME_SECONDS,
   BLOCK_SET_D_TAG,
   KEY_RELATION_COUNTERPARTS,
   BASE_ENTITY_ID_TAG,
@@ -117,6 +120,31 @@ export function build_task_label({
       ['L', namespace],
       ['l', value, namespace],
       ['e', require_value(issue.id, 'issue.id')]
+    ],
+    content: ''
+  }
+}
+
+// A steward's verdict on a key's Nano account binding (kind 1985 on the key).
+export function build_account_attestation({
+  pubkey,
+  binding_event_id = null,
+  value,
+  created_at = now_seconds(),
+  expiration = created_at + ACCOUNT_ATTESTATION_LIFETIME_SECONDS
+}) {
+  if (!ACCOUNT_ATTESTATION_VALUES.includes(value)) {
+    throw new Error(`invalid account attestation: ${value}`)
+  }
+  return {
+    kind: TASK_BOARD_KINDS.label,
+    created_at,
+    tags: [
+      ['L', ACCOUNT_ATTESTATION_NAMESPACE],
+      ['l', value, ACCOUNT_ATTESTATION_NAMESPACE],
+      ['p', require_value(pubkey, 'pubkey')],
+      ...(binding_event_id ? [['e', binding_event_id]] : []),
+      ['expiration', String(expiration)]
     ],
     content: ''
   }

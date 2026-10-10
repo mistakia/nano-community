@@ -5,6 +5,9 @@ import {
   build_trust_graph,
   select_trust_sets,
   is_voucher,
+  select_account_attestations,
+  select_established,
+  build_account_attestation,
   VOUCH_SET_D_TAG,
   BLOCK_SET_D_TAG
 } from '#common/task-board/index.mjs'
@@ -129,5 +132,34 @@ describe('task board web of trust', () => {
       new Set([CAROL])
     )
     expect(trusted.size).to.equal(0)
+  })
+
+  describe('account attestations', () => {
+    const stewards = new Set([STEWARD])
+    const attest = (author, pubkey, value, created_at, expiration) => ({
+      ...build_account_attestation({ pubkey, value, created_at, expiration }),
+      id: String(next_id++).padStart(64, '0'),
+      pubkey: author
+    })
+    const established_at = (events, now) =>
+      select_established({
+        attestations: select_account_attestations({ events, stewards }),
+        now
+      })
+
+    it('reads the newest steward verdict, until it lapses', () => {
+      const events = [attest(STEWARD, CAROL, 'established', 100)]
+      expect([...established_at(events, 200)]).to.deep.equal([CAROL])
+      expect(established_at(events, 100 + 7 * 86400).size).to.equal(0)
+      events.push(attest(STEWARD, CAROL, 'not_established', 150))
+      expect(established_at(events, 200).size).to.equal(0)
+    })
+
+    it('caps the expiration at the lifetime and ignores non-stewards', () => {
+      const far = attest(STEWARD, CAROL, 'established', 100, 100 + 365 * 86400)
+      expect(established_at([far], 100 + 8 * 86400).size).to.equal(0)
+      const forged = attest(ALICE, DAVE, 'established', 100)
+      expect(established_at([forged], 200).size).to.equal(0)
+    })
   })
 })

@@ -537,7 +537,7 @@ A NIP-09 deletion request (kind 5) removes the requester's own events from the d
 Every client is expected to derive the same board from the same events. The reference implementation is `common/task-board/build-task-board-state.mjs` in the nano-community repository. Clients verify every event's signature before reducing it, and where an event repeats a tag that a rule reads one value from, the first occurrence counts.
 
 1. **Stewards** come from the owner's latest announcement.
-2. **Trusted** pubkeys are the step 1 and step 2 keys of the web of trust, minus blocked keys.
+2. **Trusted** pubkeys are the step 1 and step 2 keys of the web of trust, minus blocked keys. A step 2 key may count an unexpired `established` account attestation as one of its two signals.
 3. **Status** is the latest valid status, default open.
 4. **Labels** are the latest steward label per namespace.
 5. **Claims** are merged per claimant, newest first, and counted only while active.
@@ -682,6 +682,44 @@ The contributor binding that account:
 }
 ```
 
+## Account attestation
+
+A steward states whether a key's Nano account binding counts, as a NIP-32 label (kind 1985) on the key:
+
+| Tag          | Meaning                                                                |
+| ------------ | ---------------------------------------------------------------------- |
+| `L`          | `community.nano.account`                                               |
+| `l`          | `established` or `not_established`, with the namespace as marker       |
+| `p`          | The key the verdict is about                                           |
+| `e`          | Optional. The binding event the verdict judged                         |
+| `expiration` | NIP-40. The verdict lapses then, and at most 7 days after `created_at` |
+
+- `established` means the binding verifies and the account meets the board's bar. The Nano community board's bar is an account opened at least 30 days ago that holds at least 1 XNO.
+- A Nano account counts for one key only. When two keys bind the same account, only the earliest binding is attested `established`.
+- The newest attestation about a key by any current steward wins. A steward's automation renews it before it lapses, and replaces it when the binding or the account changes.
+- An `established` key needs only one step 1 voucher to reach step 2 (see Web of trust). An attestation alone grants nothing.
+- Clients read attestations; they do not check bindings or the chain themselves.
+
+A steward attesting the contributor's binding above:
+
+```json
+{
+  "kind": 1985,
+  "created_at": 1767225700,
+  "tags": [
+    ["L", "community.nano.account"],
+    ["l", "established", "community.nano.account"],
+    ["p", "8a3ba5c99568d26602f4cf8038371da3c86057a96eb1b6a8de1b4f1be723c236"],
+    ["e", "9648759cfdde4723de14e8154241506eaf7579bb727e4ed55aa8bfa0e8a328fd"],
+    ["expiration", "1767830500"]
+  ],
+  "content": "",
+  "pubkey": "5f64993ccb4044a005e82ba07e78b2815a6a17aa7d5ad62fd59d519778072483",
+  "id": "dc848c84a88fc1080c27cfa9b865fc728f685e603de4fe7ac7de97317d4327ca",
+  "sig": "51dc239c1d323744eced74851d65b2c2d0abf2d19a0bbf18b7da05f60a0d6c3168fad16159a73f17b3fe7ba0bd19dd818823f80d20ad0e6463a221d6bc9e6a3c"
+}
+```
+
 ## Agents
 
 An agent takes part like any other key.
@@ -706,6 +744,7 @@ The community relay also limits writes:
 
 - 30 events a minute per pubkey, except stewards, and 120 a minute per IP. A rejection reads `rate-limited: slow down`; back off and retry.
 - Kind 30000 vouch sets are accepted only from stewards and step 1 keys, and block sets only from stewards.
+- Kind 1985 labels in `community.nano.account` are accepted only from stewards, naming exactly one key.
 - A key that is neither a steward nor trusted may file 10 issues a day. A rejection reads `rate-limited: daily issue limit for keys outside the web of trust`.
 
 ## Clients

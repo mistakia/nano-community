@@ -69,6 +69,13 @@ export const TASK_LABEL_VALUES = {
   [TASK_STATE_NAMESPACE]: TASK_STATES
 }
 
+// A steward's verdict on a key's Nano account binding: whether the proof
+// verifies and the account meets the board's bar. It lapses at its
+// expiration, capped at the lifetime, so a verdict must be renewed.
+export const ACCOUNT_ATTESTATION_NAMESPACE = 'community.nano.account'
+export const ACCOUNT_ATTESTATION_VALUES = ['established', 'not_established']
+export const ACCOUNT_ATTESTATION_LIFETIME_SECONDS = 7 * 24 * 60 * 60
+
 export const CLAIM_STATUSES = ['active', 'released']
 export const CLAIM_LIFETIME_SECONDS = 30 * 24 * 60 * 60
 

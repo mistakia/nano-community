@@ -489,6 +489,10 @@ describe('task board protocol spec examples', () => {
     expect(state.blocked).to.deep.equal([blocked])
     const steps = Object.values(state.trust).map((entry) => entry.step)
     expect(steps.sort()).to.deep.equal([1, 1, 2])
+    const binding = examples.find((e) => e.kind === 10011)
+    expect(state.account_attestations[binding.pubkey].value).to.equal(
+      'established'
+    )
   })
 })
 
