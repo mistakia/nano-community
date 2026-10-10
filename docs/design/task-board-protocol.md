@@ -507,6 +507,16 @@ The Nano signature uses the canonical Nano signed-message format defined by the 
 
 A nostr key binds a Nano account with a NIP-39 external identity (kind 10011), using the `i` tag `["i", "nano:<nano_account>", <proof>]`. The proof is a canonical-format Nano signature by that account over the NIP-39 sentence `Verifying that I control the following Nostr public key: <npub>`.
 
+## Agents
+
+An agent takes part like any other key.
+
+- An agent signs with a key of its own, never its operator's key. A steward vouches for the agent key on its own, so dropping it leaves the operator's key untouched.
+- The agent's kind 0 profile sets `"bot": true` (NIP-24) and names its operator's npub in `about`.
+- **Handoff.** The claimant comments on the task with an `r` tag holding the pull request or result URL, for example `["r", "https://github.com/mistakia/nano-community/pull/1"]`. A steward or the issue author then resolves the task. A claimant who is neither cannot resolve it.
+
+`scripts/task-board.mjs` in the nano-community repository implements this document for terminals and agents. `AGENTS.md` there is the short guide.
+
 ## Relays
 
 Clients publish to every relay in the board's `relays` tag and read from all of them.

@@ -14,10 +14,10 @@ import { SimplePool } from 'nostr-tools'
 
 import {
   TASK_BOARD_KINDS,
-  TRIAGE_SET_D_TAG,
-  CLAIM_LIFETIME_SECONDS,
-  format_board_address,
-  build_task_claim
+  build_board_filters,
+  build_issue_filters,
+  build_task_claim,
+  order_claim_after
 } from '#common/task-board/index.mjs'
 import {
   nostr_identity_actions,
@@ -30,47 +30,11 @@ import { get_task_board, get_task_board_state } from './selectors'
 
 const BATCH_MS = 200
 const EOSE_MAX_WAIT_MS = 8000
-const STATUS_KINDS = [
-  TASK_BOARD_KINDS.status_open,
-  TASK_BOARD_KINDS.status_resolved,
-  TASK_BOARD_KINDS.status_closed,
-  TASK_BOARD_KINDS.status_draft
-]
-
 let pool = null
 const get_pool = () => {
   if (!pool) pool = new SimplePool()
   return pool
 }
-
-const board_filters = (board) => {
-  const address = format_board_address(board)
-  return [
-    {
-      kinds: [TASK_BOARD_KINDS.repository_announcement],
-      authors: [board.owner_pubkey],
-      '#d': [board.d_tag]
-    },
-    { kinds: [TASK_BOARD_KINDS.issue], '#a': [address] },
-    { kinds: STATUS_KINDS, '#a': [address] },
-    { kinds: [TASK_BOARD_KINDS.claim], '#a': [address] },
-    { kinds: [TASK_BOARD_KINDS.follow_set], '#d': [TRIAGE_SET_D_TAG] }
-  ]
-}
-
-// Events that reference issues without the board tag: labels, statuses from
-// other NIP-34 clients, deletions, and comments.
-const issue_filters = (issue_ids) => [
-  {
-    kinds: [
-      TASK_BOARD_KINDS.label,
-      TASK_BOARD_KINDS.deletion_request,
-      ...STATUS_KINDS
-    ],
-    '#e': issue_ids
-  },
-  { kinds: [TASK_BOARD_KINDS.comment], '#E': issue_ids }
-]
 
 // Emits { events } in batches and { eose } once every filter reached EOSE.
 function create_subscription_channel({ relays, filters }) {
@@ -180,7 +144,7 @@ function* follow_issues({ relays }) {
       if (issue_ids.length) {
         task = yield fork(run_subscription, {
           relays,
-          filters: issue_filters(issue_ids),
+          filters: build_issue_filters(issue_ids),
           on_eose: function* () {
             if (!loaded) {
               loaded = true
@@ -210,7 +174,7 @@ export function* init({ payload }) {
   yield fork(follow_profiles, { relays })
   yield fork(run_subscription, {
     relays,
-    filters: board_filters(board),
+    filters: build_board_filters(board),
     on_eose: function* () {
       if (board_loaded) return
       board_loaded = true
@@ -244,9 +208,6 @@ async function publish_to_relays({ relays, event }) {
   return results
 }
 
-// A claim replaces the claimant's previous one only if it is strictly newer;
-// on equal created_at the lowest id wins, so a release signed in the same
-// second as a renewal could lose. Date it after the previous claim.
 function* order_after_previous_claim({ template, pubkey }) {
   if (template.kind !== TASK_BOARD_KINDS.claim) return template
   const issue_id = template.tags.find((tag) => tag[0] === 'd')[1]
@@ -254,17 +215,7 @@ function* order_after_previous_claim({ template, pubkey }) {
   const previous = state?.tasks[issue_id]?.claims.find(
     (claim) => claim.pubkey === pubkey
   )
-  if (!previous || previous.created_at < template.created_at) return template
-  const created_at = previous.created_at + 1
-  return {
-    ...template,
-    created_at,
-    tags: template.tags.map((tag) =>
-      tag[0] === 'expiration'
-        ? ['expiration', String(created_at + CLAIM_LIFETIME_SECONDS)]
-        : tag
-    )
-  }
+  return order_claim_after({ template, previous })
 }
 
 function* sign_and_publish({ template }) {
