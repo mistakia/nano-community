@@ -6,24 +6,13 @@ tags: labels, nano, community, management, organization, open
 
 # Labeling standards
 
-All new issues should default to `need/triage`, and this label should be removed once all other relevant labels are assigned. All issues labeled `priority/critical` and `priority/high` should have an assignee.
+All new issues should default to `need/triage`, and this label should be removed once all other relevant labels are assigned.
+
+Priority and status live on the [community task board](/roadmap), not in labels. See the [task board protocol](/design/task-board-protocol).
 
 ## Mandatory labels
 
-All issues should have a priority, kind, and need label.
-
-### Priority
-
-Indicates priority as a function of standard OKR priority rankings.
-
-**Important: `priority/critical` items need an assignee to act as a DRI.**
-
-| Label               | Description                                       | Color     |
-| ------------------- | ------------------------------------------------- | --------- |
-| `priority/critical` | Critical: Tackled by core team ASAP               | `#b60205` |
-| `priority/high`     | Likely tackled by core team if no one steps up    | `#d93f0b` |
-| `priority/low`      | Good to have, but can wait until someone steps up | `#e99695` |
-| `priority/none`     | Not priority right now                            | `#f9d0c4` |
+All issues should have a kind and a need label.
 
 ### Kind
 
@@ -41,7 +30,7 @@ Overarching type of issue or PR. For an additional layer of specificity, use the
 
 ### Need
 
-These labels indicate needs that must be met in order for the issue or PR to be completed and closed. These will often appear in conjunction with `status/blocked` to add a layer of specificity to the latter.
+These labels indicate needs that must be met in order for the issue or PR to be completed and closed.
 
 | Label                   | Description                                | Color     |
 | ----------------------- | ------------------------------------------ | --------- |
@@ -87,16 +76,11 @@ Similar to T-shirt sizing, this estimates the _amount_ of work. This can be diff
 
 ### Status
 
-Current status of the issue or PR. Note that it may be advantageous to add second-tier variants on `status/blocked` to your repo if there are common blocking scenarios, i.e. `status/blocked/upstream-bug`.
+Only `status/duplicate` remains, to close a duplicate issue or PR.
 
-| Label                | Description                                     | Color     |
-| -------------------- | ----------------------------------------------- | --------- |
-| `status/blocked`     | Unable to be worked further until needs are met | `#b52ed1` |
-| `status/deferred`    | Conscious decision to pause or backlog          | `#dcc8e0` |
-| `status/inactive`    | No significant work in the previous month       | `#dcc8e0` |
-| `status/in-progress` | In progress                                     | `#dcc8e0` |
-| `status/ready`       | Ready to be worked                              | `#dcc8e0` |
-| `status/duplicate`   | This issue or pull request already exists       | `#e9dfeb` |
+| Label              | Description                               | Color     |
+| ------------------ | ----------------------------------------- | --------- |
+| `status/duplicate` | This issue or pull request already exists | `#e9dfeb` |
 
 ### Topics
 
