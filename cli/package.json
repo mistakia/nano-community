@@ -20,7 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "inquirer": "9.2.23",
-    "nano-signed-message": "file:/Users/trashman/user-base/scratch/nano-signed-message/nano-signed-message-0.1.0.tgz",
+    "nano-signed-message": "0.1.0",
     "node-fetch": "3.3.2",
     "yargs": "17.7.2"
   },

@@ -131,7 +131,7 @@
     "morgan": "^1.10.0",
     "morgan-debug": "^2.0.0",
     "mysql2": "^3.9.7",
-    "nano-signed-message": "file:/Users/trashman/user-base/scratch/nano-signed-message/nano-signed-message-0.1.0.tgz",
+    "nano-signed-message": "0.1.0",
     "node-cache": "^5.1.2",
     "node-cron": "^3.0.3",
     "node-fetch": "2.7.0",

@@ -11281,16 +11281,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nano-signed-message@file:/Users/trashman/user-base/scratch/nano-signed-message/nano-signed-message-0.1.0.tgz::locator=root-workspace-0b6124%40workspace%3A.":
+"nano-signed-message@npm:0.1.0":
   version: 0.1.0
-  resolution: "nano-signed-message@file:/Users/trashman/user-base/scratch/nano-signed-message/nano-signed-message-0.1.0.tgz#/Users/trashman/user-base/scratch/nano-signed-message/nano-signed-message-0.1.0.tgz::hash=1c82fc&locator=root-workspace-0b6124%40workspace%3A."
+  resolution: "nano-signed-message@npm:0.1.0"
   dependencies:
     "@noble/curves": "npm:2.4.0"
     "@noble/hashes": "npm:2.4.0"
   dependenciesMeta:
     "@trashman/ed25519-blake2b":
       built: true
-  checksum: 10/8695b72bd1efd65ecbdad828d609b406deaca310afd9bca685cd6e243a45c495f41d7d7dd0dc5d2b46c52dbc67467434ceb2e0eb1290bad6a450a83832a48350
+  checksum: 10/66e38dedc0b269c1c5a373259a5f2053f3823f389dbe425051a3f6f2cd3ebbee412cd1a8505f02f0fe929e1cb9dbb098bbef7eb450da2d46cf4a82bd1ceb6838
   languageName: node
   linkType: hard
 
@@ -13614,7 +13614,7 @@ __metadata:
     morgan: "npm:^1.10.0"
     morgan-debug: "npm:^2.0.0"
     mysql2: "npm:^3.9.7"
-    nano-signed-message: "file:/Users/trashman/user-base/scratch/nano-signed-message/nano-signed-message-0.1.0.tgz"
+    nano-signed-message: "npm:0.1.0"
     nib: "npm:^1.2.0"
     nock: "npm:^13.5.4"
     node-cache: "npm:^5.1.2"
