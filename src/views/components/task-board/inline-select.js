@@ -6,6 +6,7 @@ import MenuItem from '@mui/material/MenuItem'
 // A property value that opens a menu of choices when the viewer may change
 // it, as Base's entity page edits status in place. Read-only otherwise.
 export default function InlineSelect({
+  label,
   value,
   options,
   on_select,
@@ -15,12 +16,15 @@ export default function InlineSelect({
 }) {
   const [anchor, set_anchor] = useState(null)
   if (!editable) return children
+  const current = options.find((option) => option.value === value)
   return (
     <>
       <button
         type='button'
         className={`task-inline${staged ? ' task-inline--staged' : ''}`}
-        aria-haspopup='listbox'
+        aria-haspopup='menu'
+        aria-expanded={Boolean(anchor)}
+        aria-label={`${label}: ${current ? current.label : 'none'}`}
         onClick={(event) => set_anchor(event.currentTarget)}>
         {children}
         <span className='task-inline__caret' aria-hidden='true'>
@@ -49,6 +53,7 @@ export default function InlineSelect({
 }
 
 InlineSelect.propTypes = {
+  label: PropTypes.string.isRequired,
   value: PropTypes.string,
   options: PropTypes.array.isRequired,
   on_select: PropTypes.func.isRequired,

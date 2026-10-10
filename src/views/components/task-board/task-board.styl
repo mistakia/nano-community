@@ -5,6 +5,18 @@ $taskRule = #E4E4E4
 $taskAccent = $nanoSoftBlue
 $taskError = #b00020
 
+// The site resets every focus outline, so the board's own views draw one for
+// keyboard users.
+.task-board, .task-detail
+  a, button:not(.MuiButtonBase-root)
+    &:focus-visible
+      outline 2px solid $taskAccent
+      outline-offset 2px
+
+  // Cards sit in a scrolling column, which would clip a ring drawn outside.
+  .task-board__card:focus-visible
+    outline-offset -2px
+
 $stageColors = {
   in_progress: #1976d2,
   needs_taker: #e65100,

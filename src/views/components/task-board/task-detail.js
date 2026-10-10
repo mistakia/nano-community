@@ -169,6 +169,7 @@ export default function TaskDetail({ issue_id }) {
       <dl className='task-detail__properties'>
         <Property label='Stage'>
           <InlineSelect
+            label='Stage'
             value={value_of('status')}
             options={stage_options}
             on_select={stage_key('status')}
@@ -182,6 +183,7 @@ export default function TaskDetail({ issue_id }) {
         {(task.priority || is_steward) && (
           <Property label='Priority'>
             <InlineSelect
+              label='Priority'
               value={value_of('priority')}
               options={as_options(TASK_PRIORITIES)}
               on_select={stage_key('priority')}
@@ -202,6 +204,7 @@ export default function TaskDetail({ issue_id }) {
         {(value_of('state') !== 'actionable' || is_steward) && (
           <Property label='State'>
             <InlineSelect
+              label='State'
               value={value_of('state')}
               options={as_options(TASK_STATES)}
               on_select={stage_key('state')}

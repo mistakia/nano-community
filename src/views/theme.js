@@ -4,13 +4,17 @@ import { createTheme } from '@mui/material/styles'
 // board client so both render the same buttons and tooltips.
 const theme = createTheme({
   components: {
+    // Keyboard focus shows the hover look instead of a pulsing ripple.
     MuiButton: {
+      defaultProps: {
+        disableFocusRipple: true
+      },
       styleOverrides: {
         root: {
           fontFamily: "'IBM Plex Mono', monospace",
           border: '1px solid rgba(0, 0, 0, 0.23)',
           color: 'rgba(0, 0, 0, 0.87)',
-          '&:hover': {
+          '&:hover, &.Mui-focusVisible': {
             color: '#4A90E2',
             backgroundColor: '#ffffff',
             border: '1px solid rgba(0, 0, 0, 0.23)',
