@@ -15,6 +15,7 @@ import {
   TASK_LABEL_VALUES,
   TASK_BOARD_COLUMNS,
   TRIAGE_SET_D_TAG,
+  KEY_RELATION_COUNTERPARTS,
   BASE_ENTITY_ID_TAG,
   SUPERSEDES_MARKER,
   CLAIM_LIFETIME_SECONDS
@@ -129,6 +130,42 @@ export default function build_task_board_state({
   const trusted = new Set()
   for (const event of triage_sets.values()) {
     for (const pubkey of get_tag_values(event, 'p')) trusted.add(pubkey)
+  }
+
+  // Key relations: each key's latest properties event on this board. A
+  // relation is confirmed when the other key states the counterpart role.
+  const key_properties = new Map()
+  for (const event of live_events) {
+    if (
+      event.kind === TASK_BOARD_KINDS.key_properties &&
+      get_tag_value(event, 'd') === board_address
+    ) {
+      keep_newest(key_properties, event.pubkey, event)
+    }
+  }
+  const states_relation = (pubkey, role, other) =>
+    Boolean(
+      key_properties
+        .get(pubkey)
+        ?.tags.some((t) => t[0] === 'p' && t[1] === other && t[3] === role)
+    )
+  const key_relations = {}
+  for (const [pubkey, event] of key_properties) {
+    const relations = {}
+    for (const tag of event.tags) {
+      const role = tag[3]
+      const counterpart = KEY_RELATION_COUNTERPARTS[role]
+      if (tag[0] !== 'p' || !counterpart || !tag[1]) continue
+      if (!relations[role]) relations[role] = []
+      if (relations[role].some((relation) => relation.pubkey === tag[1])) {
+        continue
+      }
+      relations[role].push({
+        pubkey: tag[1],
+        confirmed: states_relation(tag[1], counterpart, pubkey)
+      })
+    }
+    key_relations[pubkey] = relations
   }
 
   const tasks = new Map()
@@ -281,6 +318,8 @@ export default function build_task_board_state({
     announcement,
     stewards: [...stewards],
     trusted: [...trusted],
+    key_relations,
+    key_properties: Object.fromEntries(key_properties),
     tasks: Object.fromEntries(tasks),
     columns: Object.fromEntries(
       Object.entries(columns).map(([name, list]) => [

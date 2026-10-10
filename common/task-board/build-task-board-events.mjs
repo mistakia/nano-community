@@ -8,6 +8,7 @@ import {
   CLAIM_STATUSES,
   CLAIM_LIFETIME_SECONDS,
   TRIAGE_SET_D_TAG,
+  KEY_RELATION_COUNTERPARTS,
   BASE_ENTITY_ID_TAG,
   SUPERSEDES_MARKER
 } from './constants.mjs'
@@ -208,6 +209,62 @@ export function build_triage_set({
     ],
     content: ''
   }
+}
+
+// A key's properties on a board, replacing its previous ones. Relations are
+// `p` tags with the role as marker: [{ role: 'acts_for', pubkey }].
+export function build_key_properties({
+  board,
+  relations = [],
+  keep_tags = [],
+  created_at = now_seconds()
+}) {
+  const address = format_board_address(board)
+  for (const { role } of relations) {
+    if (!KEY_RELATION_COUNTERPARTS[role]) {
+      throw new Error(`unknown relation role: ${role}`)
+    }
+  }
+  return {
+    kind: TASK_BOARD_KINDS.key_properties,
+    created_at,
+    tags: [
+      ['d', address],
+      ['a', address],
+      ...relations.map(({ role, pubkey }) => [
+        'p',
+        require_value(pubkey, 'relation pubkey'),
+        '',
+        role
+      ]),
+      ...keep_tags
+    ],
+    content: ''
+  }
+}
+
+// Adds or removes one relation on top of a key's previous properties event.
+// Tags this client does not understand are carried over untouched, so a
+// newer client's properties survive an edit from an older one.
+export function edit_key_relation({
+  board,
+  previous,
+  role,
+  pubkey,
+  remove = false,
+  created_at = now_seconds()
+}) {
+  const known = (tag) => tag[0] === 'p' && KEY_RELATION_COUNTERPARTS[tag[3]]
+  const previous_tags = previous ? previous.tags : []
+  const relations = previous_tags
+    .filter(known)
+    .map((tag) => ({ role: tag[3], pubkey: tag[1] }))
+    .filter((relation) => relation.role !== role || relation.pubkey !== pubkey)
+  if (!remove) relations.push({ role, pubkey })
+  const keep_tags = previous_tags.filter(
+    (tag) => tag[0] !== 'd' && tag[0] !== 'a' && !known(tag)
+  )
+  return build_key_properties({ board, relations, keep_tags, created_at })
 }
 
 // NIP-09 deletion request for events the signer authored.

@@ -15,6 +15,8 @@ import {
   build_task_comment,
   build_triage_set,
   build_deletion_request,
+  build_key_properties,
+  edit_key_relation,
   build_task_board_state
 } from '#common/task-board/index.mjs'
 
@@ -420,7 +422,7 @@ describe('task board protocol spec examples', () => {
   it('has a worked example for each kind', () => {
     const kinds = new Set(examples.map((e) => e.kind))
     for (const kind of [
-      5, 1111, 1621, 1630, 1631, 1632, 1633, 1985, 30000, 30617, 30634
+      5, 1111, 1621, 1630, 1631, 1632, 1633, 1985, 30000, 30617, 30634, 30636
     ]) {
       expect(kinds, `kind ${kind}`).to.include(kind)
     }
@@ -456,5 +458,110 @@ describe('task board protocol spec examples', () => {
     expect(Object.values(state.tasks).map((t) => t.subject)).to.not.include(
       'Old title'
     )
+    const agent = examples.find(
+      (e) => e.kind === 30636 && e.tags.some((t) => t[3] === 'acts_for')
+    )
+    expect(state.key_relations[agent.pubkey].acts_for[0].confirmed).to.equal(
+      true
+    )
+  })
+})
+
+describe('task board key relations', () => {
+  const properties = (key, relations, created_at = T + 5) =>
+    sign(key, build_key_properties({ board, relations, created_at }))
+
+  it('confirms acts_for only when the other key states delegates_to', () => {
+    const claimed = state_of([
+      properties(contributor, [{ role: 'acts_for', pubkey: stranger.pubkey }])
+    ])
+    expect(claimed.key_relations[contributor.pubkey].acts_for).to.deep.equal([
+      { pubkey: stranger.pubkey, confirmed: false }
+    ])
+
+    const confirmed = state_of([
+      properties(contributor, [{ role: 'acts_for', pubkey: stranger.pubkey }]),
+      properties(stranger, [
+        { role: 'delegates_to', pubkey: contributor.pubkey }
+      ])
+    ])
+    expect(confirmed.key_relations[contributor.pubkey].acts_for).to.deep.equal([
+      { pubkey: stranger.pubkey, confirmed: true }
+    ])
+    expect(confirmed.key_relations[stranger.pubkey].delegates_to).to.deep.equal(
+      [{ pubkey: contributor.pubkey, confirmed: true }]
+    )
+  })
+
+  it('reads only the latest properties event of a key', () => {
+    const state = state_of([
+      properties(
+        contributor,
+        [{ role: 'acts_for', pubkey: stranger.pubkey }],
+        T + 5
+      ),
+      properties(contributor, [], T + 6)
+    ])
+    expect(state.key_relations[contributor.pubkey]).to.deep.equal({})
+  })
+
+  it('ignores roles it does not know and other boards', () => {
+    const other_board = { owner_pubkey: owner.pubkey, d_tag: 'other' }
+    const unknown_role = properties(contributor, [])
+    unknown_role.tags.push(['p', stranger.pubkey, '', 'mentors'])
+    const resigned = sign(contributor, {
+      kind: unknown_role.kind,
+      created_at: unknown_role.created_at,
+      tags: unknown_role.tags,
+      content: ''
+    })
+    const elsewhere = sign(
+      stranger,
+      build_key_properties({
+        board: other_board,
+        relations: [{ role: 'acts_for', pubkey: contributor.pubkey }],
+        created_at: T + 5
+      })
+    )
+    const state = state_of([resigned, elsewhere])
+    expect(state.key_relations[contributor.pubkey]).to.deep.equal({})
+    expect(state.key_relations[stranger.pubkey]).to.equal(undefined)
+  })
+
+  it('edits one relation and keeps tags it does not understand', () => {
+    const previous = properties(contributor, [
+      { role: 'acts_for', pubkey: stranger.pubkey }
+    ])
+    previous.tags.push(['nano_account', 'nano_1abc'])
+    const added = edit_key_relation({
+      board,
+      previous,
+      role: 'delegates_to',
+      pubkey: steward.pubkey
+    })
+    expect(added.tags.filter((t) => t[0] === 'p')).to.deep.equal([
+      ['p', stranger.pubkey, '', 'acts_for'],
+      ['p', steward.pubkey, '', 'delegates_to']
+    ])
+    expect(added.tags).to.deep.include(['nano_account', 'nano_1abc'])
+    const removed = edit_key_relation({
+      board,
+      previous: { tags: added.tags },
+      role: 'acts_for',
+      pubkey: stranger.pubkey,
+      remove: true
+    })
+    expect(removed.tags.filter((t) => t[0] === 'p')).to.deep.equal([
+      ['p', steward.pubkey, '', 'delegates_to']
+    ])
+  })
+
+  it('refuses to build a relation role it does not know', () => {
+    expect(() =>
+      build_key_properties({
+        board,
+        relations: [{ role: 'owns', pubkey: stranger.pubkey }]
+      })
+    ).to.throw('unknown relation role')
   })
 })

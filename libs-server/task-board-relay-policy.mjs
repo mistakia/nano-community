@@ -129,6 +129,14 @@ function check_kind_rules(state, event) {
   if (kind === TASK_BOARD_KINDS.claim || kind === TASK_BOARD_KINDS.pledge) {
     return is_board_bound(state, event) || 'must reference a board issue'
   }
+  if (kind === TASK_BOARD_KINDS.key_properties) {
+    const d_tag = get_tag_value(event, 'd')
+    return (
+      (state.board_addresses.has(d_tag) &&
+        get_tag_values(event, 'a').includes(d_tag)) ||
+      'key properties must name the board in d and a'
+    )
+  }
   if (kind === TASK_BOARD_KINDS.repository_announcement) {
     const owner = state.board_owner_by_d_tag.get(get_tag_value(event, 'd'))
     return owner === event.pubkey || 'not a board announcement from its owner'

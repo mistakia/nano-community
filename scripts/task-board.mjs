@@ -6,6 +6,7 @@
 //   node scripts/task-board.mjs comment <issue_id> --content <text> [--pr <url>] --key-file <file>
 //   node scripts/task-board.mjs status <issue_id> <open|resolved|closed|draft> --key-file <file>
 //   node scripts/task-board.mjs file --subject <text> [--content <text>] --key-file <file>
+//   node scripts/task-board.mjs relate <acts_for|delegates_to> <npub> [--remove] --key-file <file>
 //
 // Output is JSON. The key file holds an nsec or a 64-character hex secret key;
 // `--key-file -` reads it from stdin. It is never read from argv. Every
@@ -28,6 +29,7 @@ import {
   TASK_BOARD_D_TAG,
   TASK_BOARD_DEFAULT_RELAYS,
   TASK_STATUS_KINDS,
+  KEY_RELATION_COUNTERPARTS,
   build_board_filters,
   build_issue_filters,
   build_task_board_state,
@@ -35,6 +37,7 @@ import {
   build_task_comment,
   build_task_issue,
   build_task_status,
+  edit_key_relation,
   order_claim_after
 } from '#common/task-board/index.mjs'
 
@@ -189,6 +192,16 @@ const builders = {
         board: argv.board,
         subject: argv.subject,
         content: argv.content || ''
+      }),
+  relate:
+    ({ argv }) =>
+    ({ state, pubkey }) =>
+      edit_key_relation({
+        board: argv.board,
+        previous: state.key_properties[pubkey],
+        role: argv.role,
+        pubkey: to_hex_pubkey(argv.other),
+        remove: argv.remove
       })
 }
 
@@ -248,6 +261,21 @@ const main = async () => {
         .options(key_file)
         .option('subject', { type: 'string', demandOption: true })
         .option('content', { type: 'string' })
+    )
+    .command(
+      'relate <role> <other>',
+      'State a relation to another key; the other key states the counterpart',
+      (y) =>
+        y
+          .options(key_file)
+          .positional('role', {
+            choices: Object.keys(KEY_RELATION_COUNTERPARTS)
+          })
+          .positional('other', {
+            describe: 'npub or hex pubkey',
+            type: 'string'
+          })
+          .option('remove', { type: 'boolean', default: false })
     )
     .demandCommand(1)
     .strict().argv

@@ -11,7 +11,9 @@ import {
   build_task_claim,
   build_task_comment,
   build_triage_set,
-  build_deletion_request
+  build_deletion_request,
+  build_key_properties,
+  format_board_address
 } from '#common/task-board/index.mjs'
 import {
   create_relay_policy_state,
@@ -31,6 +33,7 @@ const stranger = make_key('3')
 const board = { owner_pubkey: owner.pubkey, d_tag: 'nano-community-tasks' }
 const sign = (key, template) => finalizeEvent(template, key.secret_key)
 const NOW = 1760000040
+const get_d = (event) => event.tags.find((tag) => tag[0] === 'd')[1]
 
 describe('task board relay write policy', () => {
   let state
@@ -129,6 +132,28 @@ describe('task board relay write policy', () => {
       content: '{}'
     })
     expect(evaluate(profile).action).to.equal('accept')
+  })
+
+  it('accepts key properties only when d and a name the board', () => {
+    const relations = [{ role: 'acts_for', pubkey: member.pubkey }]
+    const event = sign(stranger, build_key_properties({ board, relations }))
+    expect(evaluate(event).action).to.equal('accept')
+
+    const other = { owner_pubkey: owner.pubkey, d_tag: 'other' }
+    const elsewhere = sign(
+      stranger,
+      build_key_properties({ board: other, relations })
+    )
+    expect(evaluate(elsewhere).msg).to.match(/must name the board/)
+
+    const template = build_key_properties({ board, relations })
+    template.tags = template.tags.filter((tag) => tag[0] !== 'a')
+    expect(evaluate(sign(stranger, template)).msg).to.match(
+      /must name the board/
+    )
+    expect(format_board_address(board)).to.equal(
+      get_d(build_key_properties({ board }))
+    )
   })
 
   it('accepts the board announcement only from its owner', () => {

@@ -10,20 +10,21 @@ The Nano community task board is a set of signed [nostr](https://github.com/nost
 
 The board reuses existing NIPs wherever one fits:
 
-| Concern              | Event                       | Kind        | NIP    |
-| -------------------- | --------------------------- | ----------- | ------ |
-| Board                | Repository announcement     | 30617       | NIP-34 |
-| Task                 | Issue                       | 1621        | NIP-34 |
-| Lifecycle            | Status                      | 1630 - 1633 | NIP-34 |
-| Priority and state   | Label                       | 1985        | NIP-32 |
-| Discussion           | Comment                     | 1111        | NIP-22 |
-| Trusted contributors | Follow set                  | 30000       | NIP-51 |
-| Retraction           | Deletion request            | 5           | NIP-09 |
-| Claim                | Task claim (this document)  | 30634       | -      |
-| Pledge               | Task pledge (this document) | 30635       | -      |
-| Nano account binding | External identity           | 10011       | NIP-39 |
+| Concern              | Event                          | Kind        | NIP    |
+| -------------------- | ------------------------------ | ----------- | ------ |
+| Board                | Repository announcement        | 30617       | NIP-34 |
+| Task                 | Issue                          | 1621        | NIP-34 |
+| Lifecycle            | Status                         | 1630 - 1633 | NIP-34 |
+| Priority and state   | Label                          | 1985        | NIP-32 |
+| Discussion           | Comment                        | 1111        | NIP-22 |
+| Trusted contributors | Follow set                     | 30000       | NIP-51 |
+| Retraction           | Deletion request               | 5           | NIP-09 |
+| Claim                | Task claim (this document)     | 30634       | -      |
+| Pledge               | Task pledge (this document)    | 30635       | -      |
+| Key properties       | Key properties (this document) | 30636       | -      |
+| Nano account binding | External identity              | 10011       | NIP-39 |
 
-Kinds 30634 and 30635 are defined here. Both are addressable, so a newer event from the same pubkey with the same `d` replaces an older one.
+Kinds 30634, 30635 and 30636 are defined here. All three are addressable, so a newer event from the same pubkey with the same `d` replaces an older one.
 
 ## Board
 
@@ -504,6 +505,83 @@ A pledge is a public, non-custodial promise to pay a Nano amount to whoever comp
 
 The Nano signature uses the canonical Nano signed-message format defined by the nano-community signed-message specification. Pledges are specified here and implemented separately; clients that do not implement them ignore kind 30635.
 
+## Key properties (kind 30636)
+
+A key states facts about itself on a board in one key properties event. The event is addressable with `d` set to the board address, so a newer one from the same key replaces the older one whole.
+
+| Tag | Meaning                                                            |
+| --- | ------------------------------------------------------------------ |
+| `d` | The board address                                                  |
+| `a` | The board address                                                  |
+| `p` | A relation to another key: `["p", <pubkey>, <relay hint>, <role>]` |
+
+Relations are the first kind of property. Each role names the role the other key states back, and a relation holds only when both keys state it, so no key can claim another on its own.
+
+| Role           | Meaning                                  | Counterpart    |
+| -------------- | ---------------------------------------- | -------------- |
+| `acts_for`     | This key acts on behalf of the other key | `delegates_to` |
+| `delegates_to` | The other key acts on behalf of this key | `acts_for`     |
+
+- A client shows a relation only when it is confirmed by both keys.
+- A relation grants nothing. A steward still vouches for each key on its own, and either key ending the relation ends it.
+- **Extending.** A later property is a new role in this table or a new tag name. Clients ignore roles and tags they do not know. A client rewriting a key's properties keeps every tag it does not understand.
+
+An agent states `acts_for` its operator, and the operator states `delegates_to` the agent:
+
+```json
+{
+  "kind": 30636,
+  "created_at": 1767225900,
+  "tags": [
+    [
+      "d",
+      "30617:99c2aa85d2b21a62f396907a802a58e521dafd5bddaccbd72786eea189bc4dc9:nano-community-tasks"
+    ],
+    [
+      "a",
+      "30617:99c2aa85d2b21a62f396907a802a58e521dafd5bddaccbd72786eea189bc4dc9:nano-community-tasks"
+    ],
+    [
+      "p",
+      "5e305ef110e77e326fb00a34c1322f08313df989df30f84ce2374324a07e2204",
+      "",
+      "acts_for"
+    ]
+  ],
+  "content": "",
+  "pubkey": "3532289f6c49ce5963f3a52eb6a64a32208f0f7926d4932fa2641bf1557b5f8e",
+  "id": "1fe91aa4eec438fc528b8935005e09922a825afb682002fd72f7484f6ceec735",
+  "sig": "5ca7135fcb38be3dbb002ed41c0b9da776b21d6b5b519e2c45fb2ab9e6dfa2a53e81f9064519cc1d7d0d9519348ac428bc8d167477755dd414dbe7caa5972d3f"
+}
+```
+
+```json
+{
+  "kind": 30636,
+  "created_at": 1767225960,
+  "tags": [
+    [
+      "d",
+      "30617:99c2aa85d2b21a62f396907a802a58e521dafd5bddaccbd72786eea189bc4dc9:nano-community-tasks"
+    ],
+    [
+      "a",
+      "30617:99c2aa85d2b21a62f396907a802a58e521dafd5bddaccbd72786eea189bc4dc9:nano-community-tasks"
+    ],
+    [
+      "p",
+      "3532289f6c49ce5963f3a52eb6a64a32208f0f7926d4932fa2641bf1557b5f8e",
+      "",
+      "delegates_to"
+    ]
+  ],
+  "content": "",
+  "pubkey": "5e305ef110e77e326fb00a34c1322f08313df989df30f84ce2374324a07e2204",
+  "id": "7ccda771f2974aa3050f10b4d256c630391db15663c6b26df6e075443f9f6a6a",
+  "sig": "9b3f444045c8b16ee3162e181226453dcf067ee42fe2a0b7d2548ae262b12fd757de0089aebf4e55ac7536cf2984d10cf4e7f52dfc3fa9fd662c8ddc57ff9eff"
+}
+```
+
 ## Nano account binding
 
 A nostr key binds a Nano account with a NIP-39 external identity (kind 10011), using the `i` tag `["i", "nano:<nano_account>", <proof>]`. The proof is a canonical-format Nano signature by that account over the NIP-39 sentence `Verifying that I control the following Nostr public key: <npub>`.
@@ -513,7 +591,7 @@ A nostr key binds a Nano account with a NIP-39 external identity (kind 10011), u
 An agent takes part like any other key.
 
 - An agent signs with a key of its own, never its operator's key. A steward vouches for the agent key on its own, so dropping it leaves the operator's key untouched.
-- The agent's kind 0 profile sets `"bot": true` (NIP-24) and names its operator's npub in `about`.
+- The agent states `acts_for` its operator in its key properties, and the operator states `delegates_to` the agent (see Key properties).
 - **Handoff.** The claimant comments on the task with an `r` tag holding the pull request or result URL, for example `["r", "https://github.com/mistakia/nano-community/pull/1"]`. A steward or the issue author then resolves the task. A claimant who is neither cannot resolve it.
 
 `scripts/task-board.mjs` in the nano-community repository implements this document for terminals and agents. `AGENTS.md` there is the short guide.
@@ -526,7 +604,7 @@ Clients publish to every relay in the board's `relays` tag and read from all of 
 - Public relays in the default set are best-effort replicas.
 - Every board relay serves TLS (`wss:`), so browser clients with a strict content security policy can reach them.
 
-The community relay accepts kinds 0, 5, 1111, 1621, 1630-1633, 1985, 10011, 30000, 30617, 30634 and 30635. Board-bound events must carry the board `a` tag or an `e`/`E` tag to a known board issue. Kinds 0 and 10011 are accepted only from pubkeys that already have a board event.
+The community relay accepts kinds 0, 5, 1111, 1621, 1630-1633, 1985, 10011, 30000, 30617, 30634, 30635 and 30636. Board-bound events must carry the board `a` tag or an `e`/`E` tag to a known board issue. Kinds 0 and 10011 are accepted only from pubkeys that already have a board event. Kind 30636 must name this board in both `d` and `a`.
 
 The community relay also limits writes:
 
@@ -551,3 +629,5 @@ The examples above are signed with throwaway keys. They verify and reduce to a b
 | Owner       | `99c2aa85d2b21a62f396907a802a58e521dafd5bddaccbd72786eea189bc4dc9` |
 | Steward     | `5f64993ccb4044a005e82ba07e78b2815a6a17aa7d5ad62fd59d519778072483` |
 | Contributor | `8a3ba5c99568d26602f4cf8038371da3c86057a96eb1b6a8de1b4f1be723c236` |
+| Agent       | `3532289f6c49ce5963f3a52eb6a64a32208f0f7926d4932fa2641bf1557b5f8e` |
+| Operator    | `5e305ef110e77e326fb00a34c1322f08313df989df30f84ce2374324a07e2204` |

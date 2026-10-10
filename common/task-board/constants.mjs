@@ -15,7 +15,8 @@ export const TASK_BOARD_KINDS = {
   follow_set: 30000,
   repository_announcement: 30617,
   claim: 30634,
-  pledge: 30635
+  pledge: 30635,
+  key_properties: 30636
 }
 
 export const TASK_STATUS_KINDS = {
@@ -72,6 +73,13 @@ export const CLAIM_STATUSES = ['active', 'released']
 export const CLAIM_LIFETIME_SECONDS = 30 * 24 * 60 * 60
 
 export const TRIAGE_SET_D_TAG = 'nano-community-contributors'
+
+// Relations a key's properties event can state, each with the role the other
+// key states back. A relation holds only when both keys state it.
+export const KEY_RELATION_COUNTERPARTS = {
+  acts_for: 'delegates_to',
+  delegates_to: 'acts_for'
+}
 
 export const BASE_ENTITY_ID_TAG = 'base_entity_id'
 export const SUPERSEDES_MARKER = 'supersedes'
