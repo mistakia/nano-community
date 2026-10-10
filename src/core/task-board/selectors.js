@@ -66,3 +66,12 @@ export const get_own_triage_set = (state, pubkey) => {
 // The profile name a pubkey published in kind 0, or null.
 export const get_profile_name = (state, pubkey) =>
   state.getIn(['task_board', 'profiles', pubkey])?.name || null
+
+// The raw kind 0 content a pubkey published, so an edit can keep its fields.
+export const get_profile_content = (state, pubkey) =>
+  state.getIn(['task_board', 'profiles', pubkey])?.content || ''
+
+// Whether the board holds any event from a pubkey. The community relay takes
+// a kind 0 only from a key that has one.
+export const has_board_activity = (state, pubkey) =>
+  state.getIn(['task_board', 'events']).some((event) => event.pubkey === pubkey)

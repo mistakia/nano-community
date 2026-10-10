@@ -23,6 +23,7 @@ The board reuses existing NIPs wherever one fits:
 | Pledge               | Task pledge (this document)    | 30635       | -      |
 | Key properties       | Key properties (this document) | 30636       | -      |
 | Nano account binding | External identity              | 10011       | NIP-39 |
+| Name                 | Profile metadata               | 0           | NIP-01 |
 
 Kinds 30634, 30635 and 30636 are defined here. All three are addressable, so a newer event from the same pubkey with the same `d` replaces an older one.
 
@@ -604,7 +605,7 @@ Clients publish to every relay in the board's `relays` tag and read from all of 
 - Public relays in the default set are best-effort replicas.
 - Every board relay serves TLS (`wss:`), so browser clients with a strict content security policy can reach them.
 
-The community relay accepts kinds 0, 5, 1111, 1621, 1630-1633, 1985, 10011, 30000, 30617, 30634, 30635 and 30636. Board-bound events must carry the board `a` tag or an `e`/`E` tag to a known board issue. Kinds 0 and 10011 are accepted only from pubkeys that already have a board event. Kind 30636 must name this board in both `d` and `a`.
+The community relay accepts kinds 0, 5, 1111, 1621, 1630-1633, 1985, 10011, 30000, 30617, 30634, 30635 and 30636. Board-bound events must carry the board `a` tag or an `e`/`E` tag to a known board issue. Kinds 0 and 10011 are accepted only from pubkeys that already have a board event. A client that edits the kind 0 name keeps the profile's other fields, because kind 0 is the key's profile on every relay. Kind 30636 must name this board in both `d` and `a`.
 
 The community relay also limits writes:
 

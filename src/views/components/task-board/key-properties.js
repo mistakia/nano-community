@@ -6,16 +6,22 @@ import { nip19 } from 'nostr-tools'
 
 import {
   KEY_RELATION_COUNTERPARTS,
-  edit_key_relation
+  edit_key_relation,
+  build_profile_name
 } from '#common/task-board/index.mjs'
 import {
   task_board_actions,
   get_task_board,
-  get_task_board_state
+  get_task_board_state,
+  get_profile_name,
+  get_profile_content,
+  has_board_activity
 } from '@core/task-board'
 import PubkeyName from './pubkey-name'
 
 const PUBLISH_KEY = 'key-properties'
+const NAME_PUBLISH_KEY = 'profile-name'
+const MAX_NAME_LENGTH = 40
 
 // One module per relation role. A new property is a new entry here, plus
 // its role in the protocol's key properties table.
@@ -103,6 +109,102 @@ AddRelation.propTypes = {
   on_add: PropTypes.func.isRequired
 }
 
+// The key's kind 0 name. The community relay takes one only from a key that
+// has already posted on the board, so a new key is told to post first.
+function NameProperty({ pubkey }) {
+  const dispatch = useDispatch()
+  const name = useSelector((state) => get_profile_name(state, pubkey))
+  const content = useSelector((state) => get_profile_content(state, pubkey))
+  const active = useSelector((state) => has_board_activity(state, pubkey))
+  const publishing = useSelector(get_task_board).getIn([
+    'publishing',
+    NAME_PUBLISH_KEY
+  ])
+  const [editing, set_editing] = useState(false)
+  const [value, set_value] = useState('')
+
+  const error =
+    publishing?.error && publishing.error.includes('no board activity')
+      ? 'The relay takes a name once this key has posted on the board.'
+      : publishing?.error
+
+  return (
+    <div className='task-detail__property'>
+      <dt>Name</dt>
+      <dd>
+        {name ? (
+          <div>{name}</div>
+        ) : (
+          <div className='task-muted'>None yet. Others see your npub.</div>
+        )}
+        {!active && (
+          <div className='task-muted'>
+            You can set a name once you have filed, taken or commented on a
+            task.
+          </div>
+        )}
+        {active && !editing && (
+          <a
+            href='#'
+            className='task-properties__add'
+            onClick={(event) => {
+              event.preventDefault()
+              set_value(name || '')
+              set_editing(true)
+            }}>
+            {name ? 'Change your name' : 'Set a name'}
+          </a>
+        )}
+        {active && editing && (
+          <form
+            className='task-account__form'
+            onSubmit={(event) => {
+              event.preventDefault()
+              dispatch(
+                task_board_actions.publish({
+                  key: NAME_PUBLISH_KEY,
+                  build: () =>
+                    build_profile_name({
+                      previous_content: content,
+                      name: value
+                    }),
+                  on_published: () => set_editing(false)
+                })
+              )
+            }}>
+            <p className='task-account__fine'>
+              Your nostr profile name, shown wherever this key is used.
+            </p>
+            <input
+              autoFocus
+              aria-label='Name'
+              maxLength={MAX_NAME_LENGTH}
+              value={value}
+              onChange={(event) => set_value(event.target.value)}
+            />
+            <div className='task-detail__buttons'>
+              <Button
+                variant='outlined'
+                type='submit'
+                disabled={!value.trim() || publishing?.pending}>
+                Save
+              </Button>
+              <Button variant='outlined' onClick={() => set_editing(false)}>
+                Cancel
+              </Button>
+            </div>
+            {error && <div className='task-board__error'>{error}</div>}
+          </form>
+        )}
+      </dd>
+    </div>
+  )
+}
+
+NameProperty.propTypes = {
+  pubkey: PropTypes.string.isRequired
+}
+
 // The facts a key states about itself on the board, one module each.
 export default function KeyProperties({ pubkey }) {
   const dispatch = useDispatch()
@@ -158,6 +260,7 @@ export default function KeyProperties({ pubkey }) {
         </div>
       ))}
       <dl className='task-detail__properties task-properties__list'>
+        <NameProperty pubkey={pubkey} />
         {RELATION_PROPERTIES.map((property) => {
           const list = relations[property.role] || []
           return (

@@ -30,7 +30,8 @@ const add_events = (state, events) =>
       if (previous && previous.created_at >= event.created_at) continue
       mutable.setIn(['profiles', event.pubkey], {
         created_at: event.created_at,
-        name: parse_profile_name(event.content)
+        name: parse_profile_name(event.content),
+        content: event.content
       })
     }
   })
@@ -39,7 +40,7 @@ const initial_state = new Map({
   board: null,
   relays: [],
   events: new Map(),
-  profiles: new Map(), // pubkey -> { created_at, name }
+  profiles: new Map(), // pubkey -> { created_at, name, content }
   is_loaded: false,
   relay_errors: new Map(),
   publishing: new Map() // key -> { pending, error }
@@ -66,9 +67,10 @@ export function task_board_reducer(state = initial_state, { payload, type }) {
       return state.setIn(['publishing', payload.key], { pending: true })
 
     case task_board_actions.TASK_BOARD_PUBLISH_FULFILLED:
-      return state
-        .setIn(['publishing', payload.key], { pending: false })
-        .setIn(['events', payload.event.id], payload.event)
+      return add_events(
+        state.setIn(['publishing', payload.key], { pending: false }),
+        [payload.event]
+      )
 
     case task_board_actions.TASK_BOARD_PUBLISH_FAILED:
       return state.setIn(['publishing', payload.key], {

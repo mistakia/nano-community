@@ -10,6 +10,7 @@ import {
   build_task_comment,
   build_triage_set,
   build_deletion_request,
+  build_profile_name,
   format_board_address,
   CLAIM_LIFETIME_SECONDS
 } from '#common/task-board/index.mjs'
@@ -228,5 +229,31 @@ describe('task board event templates', () => {
         ['k', '1621']
       ]
     })
+  })
+
+  it('sets a profile name and keeps the other profile fields', () => {
+    const event = build_profile_name({
+      previous_content: JSON.stringify({
+        name: 'old',
+        display_name: 'Old',
+        picture: 'https://example.com/a.png'
+      }),
+      name: '  alice ',
+      created_at
+    })
+    expect(event.kind).to.equal(0)
+    expect(JSON.parse(event.content)).to.deep.equal({
+      name: 'alice',
+      display_name: 'alice',
+      picture: 'https://example.com/a.png'
+    })
+  })
+
+  it('starts a fresh profile when there is none or it is malformed', () => {
+    for (const previous_content of ['', 'not json', '[1]']) {
+      const event = build_profile_name({ previous_content, name: 'bob' })
+      expect(JSON.parse(event.content)).to.deep.equal({ name: 'bob' })
+    }
+    expect(() => build_profile_name({ name: ' ' })).to.throw('missing name')
   })
 })

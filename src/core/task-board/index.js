@@ -6,6 +6,8 @@ export {
   get_task_board_state,
   get_task_comments,
   get_own_triage_set,
-  get_profile_name
+  get_profile_name,
+  get_profile_content,
+  has_board_activity
 } from './selectors'
 export { resolve_board_config } from './board-config'

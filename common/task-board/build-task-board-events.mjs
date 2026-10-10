@@ -267,6 +267,31 @@ export function edit_key_relation({
   return build_key_properties({ board, relations, keep_tags, created_at })
 }
 
+// A kind 0 profile with a new name. Kind 0 is the key's profile on every
+// relay, so the other fields of the previous profile are carried over.
+export function build_profile_name({
+  previous_content = '',
+  name,
+  created_at = now_seconds()
+}) {
+  let profile = {}
+  try {
+    const parsed = JSON.parse(previous_content)
+    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+      profile = parsed
+    }
+  } catch {}
+  const value = require_value(String(name || '').trim(), 'name')
+  const next = { ...profile, name: value }
+  if (typeof profile.display_name === 'string') next.display_name = value
+  return {
+    kind: TASK_BOARD_KINDS.profile,
+    created_at,
+    tags: [],
+    content: JSON.stringify(next)
+  }
+}
+
 // NIP-09 deletion request for events the signer authored.
 export function build_deletion_request({
   events,
