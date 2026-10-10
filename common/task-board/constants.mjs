@@ -86,6 +86,10 @@ export const BLOCK_SET_D_TAG = 'nano-community-blocked'
 // A key two steps from a steward needs this many step 1 vouchers, or one
 // voucher and an established Nano account.
 export const VOUCHES_FOR_SECOND_STEP = 2
+// Issues and comments from a key that is neither trusted nor established
+// count only with this much NIP-13 proof of work, committed in the nonce tag.
+// 17 bits mines in about 2.5 s on a phone (median), measured 2026-10-10.
+export const TASK_UNVOUCHED_POW_DIFFICULTY = 17
 
 // Relations a key's properties event can state, each with the role the other
 // key states back. A relation holds only when both keys state it.
