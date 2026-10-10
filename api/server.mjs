@@ -34,7 +34,12 @@ const logger = debug('api')
 const defaults = {}
 const options = extend(defaults, config)
 const IS_DEV = process.env.NODE_ENV === 'development'
+// node serves port 80 directly behind Cloudflare without trust proxy, so
+// req.ip is the shared edge address; key each limiter on the visitor IP
+// Cloudflare forwards instead
+const visitor_key = (req) => req.headers['cf-connecting-ip'] || req.ip
 const speedLimiter = slowDown({
+  keyGenerator: visitor_key,
   // the auth suites send more than 50 requests in one run
   skip: () => process.env.NODE_ENV === 'test',
   windowMs: 10 * 60 * 1000, // 10 minutes
@@ -43,11 +48,9 @@ const speedLimiter = slowDown({
   maxDelayMs: 20000 // maximum delay of 20 seconds
 })
 // Separate instance for the site-events collector so its traffic never exhausts
-// (or is exhausted by) the auth limiter's shared in-memory counter. Keyed on the
-// visitor IP Cloudflare forwards: node serves port 80 directly behind Cloudflare
-// without trust proxy, so req.ip is the shared edge address.
+// (or is exhausted by) the auth limiter's in-memory counter
 const siteEventsLimiter = slowDown({
-  keyGenerator: (req) => req.headers['cf-connecting-ip'] || req.ip,
+  keyGenerator: visitor_key,
   windowMs: 10 * 60 * 1000,
   delayAfter: 50,
   delayMs: (hits, req) => (hits - req.slowDown.limit) * 500,
