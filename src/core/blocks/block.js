@@ -4,5 +4,6 @@ export const Block = new Record({
   isLoading: true,
   blockInfo: new Map(),
   linkAccountAlias: null,
-  blockAccountAlias: null
+  blockAccountAlias: null,
+  blockNote: null
 })

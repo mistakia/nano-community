@@ -1,4 +1,4 @@
-/* global describe before it */
+/* global describe before after it */
 import chai from 'chai'
 import chaiHTTP from 'chai-http'
 import ed25519 from '@trashman/ed25519-blake2b'
@@ -12,6 +12,7 @@ import {
   now_seconds,
   sign_community_request
 } from './utils/sign-community-request.mjs'
+import { stub_block_info } from './utils/stub-block-info.mjs'
 
 process.env.NODE_ENV = 'test'
 chai.use(chaiHTTP)
@@ -252,7 +253,12 @@ describe('API /auth/message', function () {
 // signed unit with conflicting unsigned fields beside it, then a unit whose
 // signed message was altered after signing.
 describe('API /auth/message binding regression', function () {
-  before(mochaGlobalSetup)
+  let blocks
+  before(async () => {
+    await mochaGlobalSetup()
+    blocks = stub_block_info()
+  })
+  after(() => blocks.restore())
 
   const cases = [
     {
@@ -274,6 +280,9 @@ describe('API /auth/message binding regression', function () {
     it(`${action}: stores and applies only the signed fields`, async () => {
       const key = create_test_key()
       const other = create_test_key()
+      for (const block_hash of references) {
+        blocks.set(block_hash, { block_account: key.account })
+      }
       const wire = sign_community_request({
         key,
         action,

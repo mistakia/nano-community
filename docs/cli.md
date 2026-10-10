@@ -144,7 +144,7 @@ Supported metadata fields:
 
 ### Updating Nano Block Metadata
 
-You can set a public message for a nano block using the `update-block-meta` command.
+You can set a public note for a nano block using the `update-block-meta` command. The note shows on the block's page on nano.community.
 
 ```bash
 nano-community update-block-meta <block_hash>
@@ -152,4 +152,6 @@ nano-community update-block-meta <block_hash>
 
 Supported metadata fields:
 
-- note
+- note — plain text up to 500 characters. Line breaks are kept, other control characters are removed, and a longer note is rejected rather than shortened. An empty note clears the block's note.
+
+The block must be confirmed and published by your account, or by the account your signing key is linked to. Otherwise the message is rejected and nothing is stored. When several notes are signed for one block, the one with the latest signing time is shown.

@@ -6,6 +6,7 @@ import util from 'util'
 import server from '#api/server.mjs'
 import config from '#config'
 import db from '#db'
+import { stub_block_info } from './utils/stub-block-info.mjs'
 
 const { port } = config
 const exec_promise = util.promisify(exec)
@@ -280,11 +281,20 @@ describe('CLI', function () {
   })
 
   describe('update-block-meta operation', () => {
+    const block_hash =
+      '943E3EED4F340ECBF7E06FA2E74A3E17B1DC4148C6913403B8ACFE7FBB1C2139'
+    let blocks
+    before(() => {
+      blocks = stub_block_info()
+      blocks.set(block_hash.toLowerCase(), {
+        block_account: nano_account_address
+      })
+    })
+    after(() => blocks.restore())
+
     it('should send a message for update-block-meta operation', async () => {
       let stdout = ''
       let stderr = ''
-      const block_hash =
-        '943E3EED4F340ECBF7E06FA2E74A3E17B1DC4148C6913403B8ACFE7FBB1C2139'
 
       try {
         const child = spawn(

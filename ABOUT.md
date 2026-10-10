@@ -52,6 +52,10 @@ Part of the nano cryptocurrency ecosystem maintained in this user-base. Sibling 
 
 nano.community is the web portal to the Nano community's nostr task board. The protocol is `docs/design/task-board-protocol.md`. The build and cutover are [[user:task/github/mistakia/nano-community/73-setup-initial-community-project-management-system.md]], and the relay is [[user:text/homelab/nano-community-task-board-relay.md]]. Base publishes the operator's public tasks to the board per [[user:text/base/nostr-integration.md]].
 
+## Block Notes
+
+An account owner signs a `set_block_meta` message to attach a public note to a confirmed block it published, shown on the block page. `blocks_meta` is a projection of `nano_community_messages`, rebuilt by `scripts/rebuild-blocks-meta.mjs`. The operator hides a note with `scripts/hide-block-note.mjs`.
+
 ## Scope
 
 **Belongs in this repo**: site code, API, content pages under `docs/`, monitoring and stats aggregation, schema migrations.

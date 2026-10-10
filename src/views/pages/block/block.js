@@ -10,6 +10,7 @@ import Tooltip from '@mui/material/Tooltip'
 
 import Seo from '@components/seo'
 import BlockInfo from '@components/block-info'
+import BlockNote from '@components/block-note'
 import DisplayNano from '@components/display-nano'
 import DisplayRaw from '@components/display-raw'
 import Menu from '@components/menu'
@@ -214,6 +215,7 @@ export default class BlockPage extends React.Component {
           {!isLoading && (
             <>
               <BlockInfo type={type} block={block} />
+              {block.blockNote && <BlockNote block={block} />}
               <BlockOperation type={type} block={block} />
             </>
           )}

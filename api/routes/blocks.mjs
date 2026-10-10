@@ -19,7 +19,8 @@ router.get('/:hash', async (req, res) => {
       return res.status(401).send({ error: 'invalid hash' })
     }
 
-    const cacheKey = `/block/${hash}`
+    // Lowercase, as block notes store it, so a new note's invalidation hits
+    const cacheKey = `/block/${hash.toLowerCase()}`
     const cachedValue = cache.get(cacheKey)
     if (cachedValue) {
       return res.status(200).send(cachedValue)
@@ -45,10 +46,20 @@ router.get('/:hash', async (req, res) => {
       blockInfo.block_account
     ])
 
+    const block_note = await db('blocks_meta')
+      .select('note', 'account', 'issued_at')
+      .where({ block_hash: hash.toLowerCase() })
+      .whereNull('hidden_at')
+      .whereNot({ note: '' })
+      .first()
+
     const data = {
       blockInfo,
       linkAccountAlias: null,
-      blockAccountAlias: null
+      blockAccountAlias: null,
+      blockNote: block_note
+        ? { ...block_note, issued_at: Number(block_note.issued_at) }
+        : null
     }
 
     const linkRow = aliases.find((a) => a.account === linkAccount)

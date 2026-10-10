@@ -8,6 +8,10 @@ import verify_community_request, {
   is_plain_object,
   send_request_error
 } from '#libs-server/verify-community-request.mjs'
+import {
+  assert_block_owner,
+  parse_block_note
+} from '#libs-server/process-set-block-meta.mjs'
 
 const router = express.Router()
 
@@ -37,7 +41,7 @@ const validate_parameters = (parameters) => {
 }
 
 router.post('/?', async (req, res) => {
-  const { logger, db } = req.app.locals
+  const { logger, db, cache } = req.app.locals
   try {
     let verified
     try {
@@ -64,6 +68,20 @@ router.post('/?', async (req, res) => {
       .first()
     const account = linked_key ? linked_key.account : payload.account
 
+    // A block note is stored only for a confirmed block the signer published
+    let block_hash
+    if (payload.action === 'set_block_meta') {
+      try {
+        block_hash = parse_block_note({ content, references }).block_hash
+        await assert_block_owner({ block_hash, account })
+      } catch (error) {
+        if (error instanceof CommunityRequestError) {
+          return send_request_error({ res, error })
+        }
+        throw error
+      }
+    }
+
     // Deduplicate by digest: a re-signed payload has a new signature but the
     // same digest, so it is stored and applied once
     const inserted = await db('nano_community_messages')
@@ -83,15 +101,28 @@ router.post('/?', async (req, res) => {
       .ignore()
       .returning('message_digest')
 
+    // The message is stored either way; scripts/rebuild-blocks-meta.mjs
+    // reapplies a block note whose processing failed
     if (inserted.length) {
       try {
         await process_community_message({
           action: payload.action,
           content,
-          account
+          references,
+          account,
+          issued_at: payload.issued_at,
+          message_digest,
+          // ownership was checked above
+          get_block_account: async () => account
         })
       } catch (error) {
         logger(error)
+        return res
+          .status(500)
+          .json({ error: 'message stored but not applied', message_digest })
+      }
+      if (block_hash) {
+        cache.del(`/block/${block_hash}`)
       }
     }
 
