@@ -71,3 +71,16 @@ export default function verify_community_request({
 
 export const send_request_error = ({ res, error }) =>
   res.status(error.status).send({ error: error.message })
+
+export function expect_parameter_keys({ parameters, keys }) {
+  const present = Object.keys(parameters)
+  if (
+    present.length !== keys.length ||
+    !keys.every((key) => present.includes(key))
+  ) {
+    throw new CommunityRequestError(
+      400,
+      `parameters must hold exactly ${keys.join(', ')}`
+    )
+  }
+}

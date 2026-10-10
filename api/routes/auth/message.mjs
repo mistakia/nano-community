@@ -3,6 +3,7 @@ import express from 'express'
 import { process_community_message } from '#libs-server'
 import verify_community_request, {
   CommunityRequestError,
+  expect_parameter_keys,
   is_block_hash,
   is_plain_object,
   send_request_error
@@ -18,16 +19,7 @@ const MESSAGE_ACTIONS = [
 const PARAMETER_KEYS = ['content', 'references', 'tags']
 
 const validate_parameters = (parameters) => {
-  const keys = Object.keys(parameters)
-  if (
-    keys.length !== PARAMETER_KEYS.length ||
-    !PARAMETER_KEYS.every((key) => keys.includes(key))
-  ) {
-    throw new CommunityRequestError(
-      400,
-      'parameters must hold exactly content, references and tags'
-    )
-  }
+  expect_parameter_keys({ parameters, keys: PARAMETER_KEYS })
 
   const { content, references, tags } = parameters
   if (!is_plain_object(content)) {
