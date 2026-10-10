@@ -12,6 +12,8 @@ import LabelPage from '@pages/label'
 import LivePage from '@pages/live'
 import TaskBoardPage from '@pages/task-board'
 import TaskPage from '@pages/task'
+import TaskAccountPage from '@pages/task-account'
+import NewTaskPage from '@pages/task-new'
 
 function LabelPageWrapper() {
   const location = useLocation()
@@ -29,6 +31,8 @@ const AppRoutes = () => (
     <Route path='/' element={<HomePage />} />
     <Route path='/live' element={<LivePage />} />
     <Route path='/roadmap' element={<TaskBoardPage />} />
+    <Route path='/roadmap/account' element={<TaskAccountPage />} />
+    <Route path='/roadmap/new' element={<NewTaskPage />} />
     <Route path='/task/:issue_event_id' element={<TaskPage />} />
     <Route path='/ledger' element={<LedgerPage />} />
     <Route path='/representatives' element={<RepresentativesPage />} />

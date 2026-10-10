@@ -21,11 +21,8 @@ import {
   get_task_comments,
   get_own_triage_set
 } from '@core/task-board'
-import {
-  nostr_identity_actions,
-  get_nostr_identity
-} from '@core/nostr-identity'
-import IdentityControl from './identity-control'
+import { get_nostr_identity } from '@core/nostr-identity'
+import IdentityLink, { use_go_to_account } from './identity-link'
 import { use_task_board_links } from './task-board-links'
 import PubkeyName from './pubkey-name'
 import Age from './age'
@@ -179,7 +176,7 @@ ManageTask.propTypes = {
 
 export default function TaskDetail({ issue_id }) {
   const dispatch = useDispatch()
-  const { Link, board_path, task_path } = use_task_board_links()
+  const { Link, board_path, task_path, account_path } = use_task_board_links()
   const board = useSelector(get_task_board)
   const state = useSelector(get_task_board_state)
   const identity = useSelector(get_nostr_identity)
@@ -187,12 +184,13 @@ export default function TaskDetail({ issue_id }) {
   const pubkey = identity.get('pubkey')
   const own_triage_set = useSelector((s) => get_own_triage_set(s, pubkey))
   const [comment, set_comment] = useState('')
+  const go_to_account = use_go_to_account()
   const [commenting, set_commenting] = useState(false)
 
   const top_bar = (
     <div className='task-detail__top'>
       <Link to={board_path()}>← Community Tasks</Link>
-      <IdentityControl />
+      <IdentityLink />
     </div>
   )
 
@@ -233,10 +231,6 @@ export default function TaskDetail({ issue_id }) {
     state.stewards.includes(task.pubkey) || state.trusted.includes(task.pubkey)
   const active_claims = task.claims.filter((claim) => claim.is_active)
   const stage = stage_of(task)
-  const join = () => {
-    dispatch(nostr_identity_actions.set_panel('join'))
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
 
   return (
     <div className='task-detail'>
@@ -410,9 +404,12 @@ export default function TaskDetail({ issue_id }) {
           </Button>
         )}
         {!pubkey && (
-          <Button variant='outlined' onClick={join}>
-            Join in to comment or work on this
-          </Button>
+          <p className='task-muted'>
+            <Link to={account_path()} onClick={go_to_account}>
+              Join in
+            </Link>{' '}
+            to comment or work on this.
+          </p>
         )}
       </section>
     </div>

@@ -31,6 +31,9 @@ export function use_portal_links() {
   return {
     task_path: (issue_id) => `/task/${issue_id}${board_query()}`,
     board_path: () => `/roadmap${board_query()}`,
+    account_path: () => `/roadmap/account${board_query()}`,
+    new_task_path: () => `/roadmap/new${board_query()}`,
+    current_path: () => window.location.pathname + window.location.search,
     navigate,
     Link: PortalLink
   }

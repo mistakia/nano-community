@@ -19,6 +19,9 @@ AnchorLink.propTypes = {
 const default_links = {
   task_path: (issue_id) => `#/task/${issue_id}`,
   board_path: () => '#/',
+  account_path: () => '#/account',
+  new_task_path: () => '#/new',
+  current_path: () => window.location.hash,
   Link: AnchorLink
 }
 

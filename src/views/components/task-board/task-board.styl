@@ -120,7 +120,7 @@ for $name, $color in $priorityColors
   font-weight 500
 
 // The site is set in a monospace face, so code in a title needs no box.
-.task-detail__subject code, .task-board__card-subject code
+.task-detail__subject code, .task-board__card-subject code, .task-new__preview-title code
   padding 0
   background none
   color $nanoBlueGrey
@@ -131,20 +131,22 @@ for $name, $color in $priorityColors
 
 // --- identity control -------------------------------------------------------
 
+// A plain link in the page header: "Join in", or the name you post as.
 .task-identity
-  position relative
-  flex none
-
-// Names keep their own case inside the site's uppercase button.
-.task-identity__toggle.MuiButton-root
-  gap 8px
+  display inline-flex
+  align-items center
+  gap 6px
   max-width 240px
-  text-transform none
+  font-size 13px
+  white-space nowrap
+  text-decoration none
 
   .task-board__name, .task-npub
     overflow hidden
     text-overflow ellipsis
-    white-space nowrap
+
+  &:hover
+    text-decoration underline
 
 .task-identity__dot
   width 7px
@@ -153,49 +155,59 @@ for $name, $color in $priorityColors
   background #e65100
   flex none
 
-.task-identity__panel
-  position absolute
-  right 0
-  top calc(100% + 8px)
-  z-index 10
-  width 320px
-  padding 16px
-  background white
-  border 1px solid $controlBorder
-  border-radius 4px
-  box-shadow $offsetShadow
-  font-size 13px
-  text-align left
+// --- account and new task pages ---------------------------------------------
 
+.task-account, .task-new
   p
-    margin 0 0 12px
+    margin 0 0 16px
 
-  input
-    width 100%
-    margin-bottom 12px
+.task-account__fine, .task-new__help
+  font-size 12px
+  color $taskTertiary
 
-.task-identity__actions
+.task-account__fine
+  .task-account &
+    margin-top 12px
+
+.task-new__help
+  .task-new &
+    margin 0
+
+.task-account__npub, .task-account__secret
+  font-family 'Roboto Mono', monospace
+  font-size 12px
+  word-break break-all
+
+.task-account__npub
+  color $taskTertiary
+
+.task-account__secret
+  user-select all
+
+.task-account__form, .task-new__step
   display flex
-  flex-wrap wrap
+  flex-direction column
+  align-items flex-start
   gap 8px
+  margin-bottom 24px
 
-.task-identity__fine, .task-identity__npub
-  .task-identity__panel &
-    font-size 12px
-    color $taskTertiary
+  label
+    font-weight 600
 
-.task-identity__fine
-  .task-identity__panel &
-    margin 12px 0 0
+  input, textarea
+    width 100%
 
-.task-identity__npub, .task-identity__secret
-  .task-identity__panel &
-    word-break break-all
-    font-family 'Roboto Mono', monospace
+.task-new__preview-title
+  font-size 18px
+  font-weight 600
+  margin-bottom 8px
 
-.task-identity__secret
-  .task-identity__panel &
-    user-select all
+.task-new__preview
+  .task-text
+    margin-bottom 16px
+
+  .task-new__help
+    margin-bottom 16px
 
 // --- board ------------------------------------------------------------------
 
@@ -226,17 +238,6 @@ for $name, $color in $priorityColors
 .task-board__loading
   color $taskTertiary
   font-size 13px
-
-.task-board__file-form
-  display flex
-  flex-direction column
-  gap 8px
-  max-width 640px
-  margin-top 0
-
-.task-board__hint
-  font-size 12px
-  color $taskTertiary
 
 .task-board__columns
   display flex
@@ -455,13 +456,6 @@ for $name, $color in $stageColors
   .task-board__header
     flex-direction column
     gap 12px
-
-  .task-board__header .task-identity__panel
-    left 0
-    right auto
-
-  .task-identity__panel
-    max-width calc(100vw - 32px)
 
   .task-detail__field span
     flex 0 0 64px

@@ -27,6 +27,8 @@ import {
 import {
   TaskBoard,
   TaskDetail,
+  TaskAccount,
+  NewTask,
   TaskBoardLinks,
   AnchorLink
 } from '@components/task-board'
@@ -50,7 +52,11 @@ saga_middleware.run(function* () {
 const parse_route = () => {
   const [path, query = ''] = window.location.hash.replace(/^#/, '').split('?')
   const task_match = path.match(/^\/task\/([0-9a-f]{64})$/)
-  return { issue_id: task_match ? task_match[1] : null, query }
+  return {
+    issue_id: task_match ? task_match[1] : null,
+    page: ['/account', '/new'].includes(path) ? path.slice(1) : null,
+    query
+  }
 }
 
 function App() {
@@ -72,6 +78,9 @@ function App() {
   const links = {
     task_path: (issue_id) => `#/task/${issue_id}${suffix}`,
     board_path: () => `#/${suffix}`,
+    account_path: () => `#/account${suffix}`,
+    new_task_path: () => `#/new${suffix}`,
+    current_path: () => window.location.hash,
     navigate: (path) => {
       window.location.hash = path.replace(/^#/, '')
     },
@@ -80,11 +89,14 @@ function App() {
 
   return (
     <TaskBoardLinks.Provider value={links}>
-      {route.issue_id ? (
-        <TaskDetail issue_id={route.issue_id} />
-      ) : (
-        <TaskBoard />
-      )}
+      {route.page === 'account' && <TaskAccount />}
+      {route.page === 'new' && <NewTask />}
+      {!route.page &&
+        (route.issue_id ? (
+          <TaskDetail issue_id={route.issue_id} />
+        ) : (
+          <TaskBoard />
+        ))}
     </TaskBoardLinks.Provider>
   )
 }

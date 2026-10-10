@@ -53,7 +53,7 @@ The community task board is signed nostr events on relays. nano.community is one
 
 - `common/task-board/` holds the protocol constants, event templates and the pure view reducer (`build-task-board-state.mjs`). Every client must derive the same board from it. Tests: `test/task-board.*.test.mjs`. They run without a database: `npx mocha test/task-board.*.test.mjs`.
 - `src/core/task-board/` holds the relay subscription and publishing (SimplePool). `src/core/nostr-identity/` holds the signer: a NIP-07 extension, else a key kept in localStorage.
-- `src/views/components/task-board/` holds the board and task views, shared by the portal pages (`src/views/pages/task-board`, `src/views/pages/task`) and the standalone client.
+- `src/views/components/task-board/` holds the board, task, account and file-a-task views, shared by the portal pages (`/roadmap`, `/task/<id>`, `/roadmap/account`, `/roadmap/new`) and the standalone client (`#/`, `#/task/<id>`, `#/account`, `#/new`). Actions show only once the visitor has a key from the account page.
 - **Standalone client:** `src/task-board-client.js` builds to one reproducible `build/task-board-client/index.html` (`yarn build:task-board-client`). It routes on the URL fragment and makes no `/api` calls. `scripts/publish-task-board-client.mjs` releases it to Blossom as a NIP-5A site.
 - **Board override:** `?board=<owner npub>[:<d>]&relays=<urls>` overrides the board and relays, in the query string or the fragment.
 - **Relay:** strfry at `wss://relay.nano.community`. Its write policy is `server/strfry/task-board-write-policy.mjs` with `libs-server/task-board-relay-policy.mjs`. Host provisioning lives in the bootstrap repo.

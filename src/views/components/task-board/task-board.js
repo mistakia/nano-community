@@ -5,8 +5,7 @@ import { useSelector } from 'react-redux'
 
 import { get_task_board, get_task_board_state } from '@core/task-board'
 import { get_nostr_identity } from '@core/nostr-identity'
-import IdentityControl from './identity-control'
-import FileTaskForm from './file-task-form'
+import IdentityLink from './identity-link'
 import PubkeyName from './pubkey-name'
 import Age from './age'
 import { TaskTitle } from './task-text'
@@ -108,11 +107,10 @@ BoardColumn.propTypes = {
 }
 
 export default function TaskBoard() {
-  const { navigate, task_path } = use_task_board_links()
+  const { navigate, new_task_path } = use_task_board_links()
   const board = useSelector(get_task_board)
   const state = useSelector(get_task_board_state)
   const has_key = Boolean(useSelector(get_nostr_identity).get('pubkey'))
-  const [show_form, set_show_form] = useState(false)
 
   if (!board.get('board')) {
     return (
@@ -137,29 +135,21 @@ export default function TaskBoard() {
             </a>
           </p>
         </div>
-        <IdentityControl />
+        <IdentityLink />
       </header>
       {(has_key || !board.get('is_loaded')) && (
         <div className='task-board__toolbar'>
           {has_key && (
             <Button
               variant='outlined'
-              onClick={() => set_show_form(!show_form)}>
-              {show_form ? 'Cancel' : 'File a task'}
+              onClick={() => navigate && navigate(new_task_path())}>
+              File a task
             </Button>
           )}
           {!board.get('is_loaded') && (
             <span className='task-board__loading'>Loading from relays…</span>
           )}
         </div>
-      )}
-      {has_key && show_form && (
-        <FileTaskForm
-          on_filed={(issue) => {
-            set_show_form(false)
-            if (navigate) navigate(task_path(issue.id))
-          }}
-        />
       )}
       <div className='task-board__columns'>
         {BOARD_COLUMNS.map((column) => (

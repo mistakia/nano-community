@@ -6,7 +6,7 @@ export const nostr_identity_actions = {
   NOSTR_IDENTITY_IMPORT_FAILED: 'NOSTR_IDENTITY_IMPORT_FAILED',
   NOSTR_IDENTITY_MARK_BACKED_UP: 'NOSTR_IDENTITY_MARK_BACKED_UP',
   NOSTR_IDENTITY_FORGET_KEY: 'NOSTR_IDENTITY_FORGET_KEY',
-  NOSTR_IDENTITY_SET_PANEL: 'NOSTR_IDENTITY_SET_PANEL',
+  NOSTR_IDENTITY_SET_RETURN_TO: 'NOSTR_IDENTITY_SET_RETURN_TO',
 
   init: () => ({ type: nostr_identity_actions.NOSTR_IDENTITY_INIT }),
 
@@ -37,9 +37,9 @@ export const nostr_identity_actions = {
     type: nostr_identity_actions.NOSTR_IDENTITY_FORGET_KEY
   }),
 
-  // The identity panel: 'join' | 'import' | 'account' | 'export' | null
-  set_panel: (panel) => ({
-    type: nostr_identity_actions.NOSTR_IDENTITY_SET_PANEL,
-    payload: { panel }
+  // Where the account page sends you once you have a key.
+  set_return_to: (path) => ({
+    type: nostr_identity_actions.NOSTR_IDENTITY_SET_RETURN_TO,
+    payload: { path }
   })
 }
