@@ -23,6 +23,7 @@ export { default as decode_nano_address } from './decode-nano-address.mjs'
 export { default as binary_to_hex } from './binary-to-hex.mjs'
 export { default as is_nano_address_valid } from './is-nano-address-valid.mjs'
 export { encode_nano_base32, decode_nano_base32 }
+export * as task_board from './task-board/index.mjs'
 
 const POST = (data) => ({
   method: 'POST',
