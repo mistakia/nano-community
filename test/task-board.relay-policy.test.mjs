@@ -425,7 +425,9 @@ describe('task board relay write policy', () => {
     expect(later.action).to.equal('accept')
   })
 
-  describe('proof of work', () => {
+  describe('proof of work', function () {
+    // Mining at the board difficulty takes seconds on a slow CI runner.
+    this.timeout(30000)
     const D = TASK_UNVOUCHED_POW_DIFFICULTY
     const mined = (key, template) =>
       finalizeEvent(

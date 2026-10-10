@@ -27,7 +27,9 @@ const mine = (difficulty) => {
   )
 }
 
-describe('task board proof of work', () => {
+describe('task board proof of work', function () {
+  // Mining at the board difficulty takes seconds on a slow CI runner.
+  this.timeout(30000)
   it('counts a mined event at its committed difficulty', () => {
     const event = mine(TASK_UNVOUCHED_POW_DIFFICULTY)
     expect(get_event_pow(event)).to.equal(TASK_UNVOUCHED_POW_DIFFICULTY)

@@ -74,7 +74,10 @@ const STATE = 'community.nano.state'
 
 const state_of = (events) => build_task_board_state({ events, board, now })
 
-describe('task board view reducer', () => {
+describe('task board view reducer', function () {
+  // Some cases mine at the board difficulty, which takes seconds on a slow CI
+  // runner.
+  this.timeout(30000)
   const announcement = announce({ maintainers: [steward.pubkey] })
 
   it('treats the owner and announced maintainers as stewards', () => {
