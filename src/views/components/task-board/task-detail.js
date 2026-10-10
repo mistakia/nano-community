@@ -336,11 +336,16 @@ export default function TaskDetail({ issue_id }) {
               event.preventDefault()
               if (!comment.trim()) return
               const content = comment.trim()
-              publish('comment', () =>
-                build_task_comment({ issue: task, content })
+              // The form stays open, showing Preparing while it mines,
+              // and keeps the text if publishing fails.
+              publish(
+                'comment',
+                () => build_task_comment({ issue: task, content }),
+                () => {
+                  set_comment('')
+                  set_commenting(false)
+                }
               )
-              set_comment('')
-              set_commenting(false)
             }}>
             <textarea
               rows={4}
