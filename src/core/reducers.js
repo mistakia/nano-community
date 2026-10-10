@@ -16,6 +16,8 @@ import { nanodb_reducer } from './nanodb'
 import { api_reducer } from './api'
 import { data_views_reducer } from './data-views'
 import { data_view_request_reducer } from './data-view-request/reducer'
+import { nostr_identity_reducer } from './nostr-identity'
+import { task_board_reducer } from './task-board'
 
 const rootReducer = (router) =>
   combineReducers({
@@ -35,7 +37,9 @@ const rootReducer = (router) =>
     nanodb: nanodb_reducer,
     api: api_reducer,
     data_views: data_views_reducer,
-    data_view_request: data_view_request_reducer
+    data_view_request: data_view_request_reducer,
+    nostr_identity: nostr_identity_reducer,
+    task_board: task_board_reducer
   })
 
 export default rootReducer

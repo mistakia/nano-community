@@ -1,0 +1,228 @@
+.task-board, .task-detail
+  font-size 14px
+  line-height 1.5
+  color $textColor
+  // clears the site's floating menu button
+  padding 80px 32px 32px
+  width 100%
+  box-sizing border-box
+
+  button
+    cursor pointer
+    padding 4px 10px
+    border 1px solid $borderColor
+    border-radius 4px
+    background white
+    font inherit
+
+    &:disabled
+      cursor default
+      opacity 0.6
+
+  input, textarea, select
+    font inherit
+    padding 6px 8px
+    border 1px solid $borderColor
+    border-radius 4px
+    box-sizing border-box
+
+  code
+    font-family 'Roboto Mono', monospace
+    font-size 12px
+
+.task-board__identity
+  margin-bottom 16px
+  font-size 13px
+
+.task-board__identity-line
+  display flex
+  flex-wrap wrap
+  gap 8px
+  align-items center
+
+.task-board__identity-actions
+  display flex
+  gap 8px
+
+.task-board__notice, .task-board__panel
+  margin-top 8px
+  padding 8px 12px
+  background $nanoLightBlue
+  border 1px solid $borderColor
+  border-radius 4px
+  display flex
+  flex-wrap wrap
+  gap 8px
+  align-items center
+
+.task-board__secret
+  word-break break-all
+  user-select all
+
+.task-board__error
+  color #b00020
+  margin-top 8px
+
+.task-board__hint
+  font-size 12px
+  color $nanoBlueGrey
+
+.task-board__toolbar
+  display flex
+  gap 12px
+  align-items center
+  margin-bottom 16px
+
+.task-board__file-form
+  display flex
+  flex-direction column
+  gap 8px
+  max-width 640px
+  margin-bottom 24px
+
+.task-board__columns
+  display flex
+  gap 16px
+  overflow-x auto
+  align-items flex-start
+
+.task-board__column
+  flex 0 0 280px
+  background $backgroundColor
+  border-radius 4px
+  max-height 70vh
+  display flex
+  flex-direction column
+
+.task-board__column-title
+  display flex
+  justify-content space-between
+  align-items center
+  padding 8px 12px
+
+  h2
+    font-size 15px
+    margin 0
+
+.task-board__count
+  font-size 12px
+  color $nanoBlueGrey
+
+.task-board__column-tasks
+  overflow-y auto
+  padding 0 8px 8px
+  display flex
+  flex-direction column
+  gap 8px
+
+.task-board__card
+  display block
+  background white
+  border 1px solid $borderColor
+  border-radius 4px
+  padding 8px 10px
+  color inherit
+  text-decoration none
+
+  &:hover
+    box-shadow 0 1px 4px $hoverShadow
+
+.task-board__card-subject
+  font-weight 500
+  margin-bottom 6px
+
+.task-board__card-meta, .task-detail__meta
+  display flex
+  flex-wrap wrap
+  gap 6px
+  align-items center
+  font-size 12px
+
+.task-board__chip, .task-board__priority
+  padding 0 6px
+  border-radius 8px
+  background $backgroundColor
+  border 1px solid $borderColor
+
+.task-board__priority--critical
+  background #fde2e1
+.task-board__priority--high
+  background #fff0d6
+.task-board__priority--medium
+  background #e8f2ff
+
+.task-board__age
+  color $nanoBlueGrey
+
+.task-board__empty
+  padding 32px
+  text-align center
+
+.task-detail
+  max-width 860px
+  margin 0 auto
+
+.task-detail__subject
+  font-size 24px
+  margin 16px 0 8px
+
+.task-detail__content, .task-detail__comment-content
+  white-space pre-wrap
+  overflow-wrap anywhere
+
+.task-detail__content
+  margin 16px 0
+  padding 12px
+  background $backgroundColor
+  border-radius 4px
+
+.task-detail__claims, .task-detail__controls, .task-detail__comments
+  margin 16px 0
+  display flex
+  flex-direction column
+  gap 8px
+  align-items flex-start
+
+  h3
+    margin 0
+    font-size 15px
+
+.task-detail__controls
+  flex-direction row
+  flex-wrap wrap
+
+.task-detail__select
+  display flex
+  gap 6px
+  align-items center
+
+.task-detail__comments
+  align-items stretch
+
+  form
+    display flex
+    flex-direction column
+    gap 8px
+    align-items flex-start
+
+  textarea
+    width 100%
+
+.task-detail__comment
+  border-left 3px solid $borderColor
+  padding 4px 10px
+
+.task-detail__comment-meta
+  font-size 12px
+  color $nanoBlueGrey
+
+.task-board__footer
+  padding 32px 0
+  background $backgroundColor
+
+.task-board__header
+  text-align center
+  margin-bottom 16px
+
+  h1
+    margin 0
