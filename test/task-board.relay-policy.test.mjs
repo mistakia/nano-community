@@ -194,6 +194,29 @@ describe('task board relay write policy', () => {
     })
   })
 
+  it('accepts a Nano account binding from a key with no board activity', () => {
+    const proof = `1760054400:${'ab'.repeat(64)}`
+    const account =
+      'nano_3i1aq1cchnmbn9x5rsbap8b15akfh7wj7pwskuzi7ahz8oq6cobd99d4r3b7'
+    const binding = (tags) =>
+      sign(stranger, { kind: 10011, created_at: NOW, tags, content: '' })
+    expect(
+      evaluate(binding([['i', `nano:${account}`, proof]])).action
+    ).to.equal('accept')
+    expect(evaluate(binding([['i', 'github:someone', 'gist']]))).to.deep.equal({
+      action: 'reject',
+      msg: 'blocked: a Nano account binding needs exactly one nano: i tag with a proof'
+    })
+    expect(
+      evaluate(
+        binding([
+          ['i', `nano:${account}`, proof],
+          ['i', `nano:${account}`, proof]
+        ])
+      ).action
+    ).to.equal('reject')
+  })
+
   it('accepts block sets from stewards only, and a block voids vouches', () => {
     evaluate(sign(owner, build_vouch_set({ pubkeys: [member.pubkey] })))
     expect(

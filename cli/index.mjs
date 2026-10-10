@@ -307,6 +307,56 @@ async function send_message_handler(type, block_hash = null) {
   }
 }
 
+// Signs the nano-signed-message bind_nostr_key profile: the proof a nostr
+// key publishes (kind 10011) to show it controls this Nano account on the
+// nano.community task board. Nothing is sent; paste the output on the
+// board's account page.
+const bind_nostr_key = {
+  command: 'bind-nostr-key <npub>',
+  describe: 'Sign a proof that binds this Nano account to a nostr key',
+  builder: (yargs) =>
+    yargs.positional('npub', {
+      describe: 'The nostr key (npub1...) to bind',
+      type: 'string'
+    }),
+  handler: async ({ npub }) => {
+    if (!/^npub1[02-9ac-hj-np-z]{58}$/.test(npub)) {
+      console.error('Expected an npub, for example npub1...')
+      process.exitCode = 1
+      return
+    }
+    const { private_key, nano_account_address } = await load_private_key()
+    const issued_at = Math.floor(Date.now() / 1000)
+    const { signature } = sign_message({
+      private_key,
+      payload: {
+        version: 1,
+        domain: 'nostr',
+        action: 'bind_nostr_key',
+        account: nano_account_address,
+        issued_at,
+        parameters: {},
+        statement: `Verifying that I control the following Nostr public key: ${npub}`
+      }
+    })
+    console.log(
+      JSON.stringify(
+        {
+          account: nano_account_address,
+          proof: `${issued_at}:${signature}`,
+          tag: [
+            'i',
+            `nano:${nano_account_address}`,
+            `${issued_at}:${signature}`
+          ]
+        },
+        null,
+        2
+      )
+    )
+  }
+}
+
 // eslint-disable-next-line no-unused-expressions
 yargs(hideBin(process.argv))
   .scriptName('nano-community')
@@ -316,6 +366,7 @@ yargs(hideBin(process.argv))
   .command(update_rep_meta)
   .command(update_account_meta)
   .command(update_block_meta)
+  .command(bind_nostr_key)
   .demandCommand(1, 'You must provide at least one command.')
   .help('h')
   .wrap(100)

@@ -14,6 +14,7 @@ import {
   BLOCK_SET_D_TAG,
   build_trust_graph,
   is_voucher,
+  parse_nano_account_binding,
   format_board_address
 } from '#common/task-board/index.mjs'
 
@@ -166,9 +167,15 @@ function check_kind_rules(state, event) {
     }
     return 'only the vouch and block follow sets are accepted'
   }
+  if (kind === TASK_BOARD_KINDS.nano_identity) {
+    // A key binds its Nano account before it has posted anything.
+    return (
+      Boolean(parse_nano_account_binding(event)) ||
+      'a Nano account binding needs exactly one nano: i tag with a proof'
+    )
+  }
   if (
     kind === TASK_BOARD_KINDS.profile ||
-    kind === TASK_BOARD_KINDS.nano_identity ||
     kind === TASK_BOARD_KINDS.deletion_request
   ) {
     return (

@@ -439,7 +439,8 @@ describe('task board protocol spec examples', () => {
   it('has a worked example for each kind', () => {
     const kinds = new Set(examples.map((e) => e.kind))
     for (const kind of [
-      5, 1111, 1621, 1630, 1631, 1632, 1633, 1985, 30000, 30617, 30634, 30636
+      5, 1111, 1621, 1630, 1631, 1632, 1633, 1985, 10011, 30000, 30617, 30634,
+      30636
     ]) {
       expect(kinds, `kind ${kind}`).to.include(kind)
     }

@@ -649,7 +649,38 @@ An agent states `acts_for` its operator, and the operator states `delegates_to` 
 
 ## Nano account binding
 
-A nostr key binds a Nano account with a NIP-39 external identity (kind 10011), using the `i` tag `["i", "nano:<nano_account>", <proof>]`. The proof is a canonical-format Nano signature by that account over the NIP-39 sentence `Verifying that I control the following Nostr public key: <npub>`.
+A nostr key binds a Nano account with a NIP-39 external identity (kind 10011, replaceable), carrying exactly one `i` tag `["i", "nano:<nano_account>", "<issued_at>:<signature>"]`.
+
+- The signature is by the Nano account, in the canonical Nano signed-message format ([nano-signed-message](https://github.com/mistakia/nano-signed-message)), `bind_nostr_key` profile: domain `nostr`, `parameters` `{}`, and `statement` `Verifying that I control the following Nostr public key: <npub>`, where `<npub>` encodes the event's `pubkey`.
+- A verifier rebuilds the payload from the tag and the event author, then verifies it. Direct and block-mode signatures both verify, so a hardware wallet that signs only blocks can bind.
+- An event with no `nano:` tag, or more than one, binds nothing.
+- Clients do not verify bindings themselves. A steward's attestation (see Account attestation) states whether a binding verifies and whether the account meets the board's bar.
+
+The signed message for the example below, by the nano-signed-message test-vector key:
+
+```text
+{"account":"nano_3i1aq1cchnmbn9x5rsbap8b15akfh7wj7pwskuzi7ahz8oq6cobd99d4r3b7","action":"bind_nostr_key","domain":"nostr","issued_at":1767225600,"parameters":{},"statement":"Verifying that I control the following Nostr public key: npub13ga6tjv4drfxvqh5e7qrsdca50yxq4afd6cmd2x7rd83heercgmqsw7czr","version":1}
+```
+
+The contributor binding that account:
+
+```json
+{
+  "kind": 10011,
+  "created_at": 1767225610,
+  "tags": [
+    [
+      "i",
+      "nano:nano_3i1aq1cchnmbn9x5rsbap8b15akfh7wj7pwskuzi7ahz8oq6cobd99d4r3b7",
+      "1767225600:71a750085563aecb0253477ba2b492d6c21fc2a9545c538e2d87aeb167abad4a038ace6128c65b786a4df046b889ba2a0169e23a922a8306879c090685334906"
+    ]
+  ],
+  "content": "",
+  "pubkey": "8a3ba5c99568d26602f4cf8038371da3c86057a96eb1b6a8de1b4f1be723c236",
+  "id": "9648759cfdde4723de14e8154241506eaf7579bb727e4ed55aa8bfa0e8a328fd",
+  "sig": "f5756c3347996947493b98e6c4a786bf561b09568dd3a143174f72eb3fb08bffdda2806048129504b4e3d64a6b8554afff5857174ec1a255760ed68718269c54"
+}
+```
 
 ## Agents
 
@@ -669,7 +700,7 @@ Clients publish to every relay in the board's `relays` tag and read from all of 
 - Public relays in the default set are best-effort replicas.
 - Every board relay serves TLS (`wss:`), so browser clients with a strict content security policy can reach them.
 
-The community relay accepts kinds 0, 5, 1111, 1621, 1630-1633, 1985, 10011, 30000, 30617, 30634, 30635 and 30636. Board-bound events must carry the board `a` tag or an `e`/`E` tag to a known board issue. Kinds 0 and 10011 are accepted only from pubkeys that already have a board event. A client that edits the kind 0 name keeps the profile's other fields, because kind 0 is the key's profile on every relay. Kind 30636 must name this board in both `d` and `a`.
+The community relay accepts kinds 0, 5, 1111, 1621, 1630-1633, 1985, 10011, 30000, 30617, 30634, 30635 and 30636. Board-bound events must carry the board `a` tag or an `e`/`E` tag to a known board issue. Kind 10011 is accepted from any key when it carries exactly one `nano:` `i` tag with a well-formed proof, because a key binds before it posts. Kind 0 is accepted only from pubkeys that already have a board event. A client that edits the kind 0 name keeps the profile's other fields, because kind 0 is the key's profile on every relay. Kind 30636 must name this board in both `d` and `a`.
 
 The community relay also limits writes:
 
