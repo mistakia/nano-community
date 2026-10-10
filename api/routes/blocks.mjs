@@ -30,7 +30,13 @@ router.get('/:hash', async (req, res) => {
       hashes: [hash],
       source: true
     })
-    const blockInfo = blocksInfo.blocks[hash]
+    if (!blocksInfo) {
+      return res.status(503).send({ error: 'node unavailable' })
+    }
+    const blockInfo = blocksInfo.blocks && blocksInfo.blocks[hash]
+    if (!blockInfo) {
+      return res.status(404).send({ error: 'block not found' })
+    }
 
     // TODO if unconfirmed get confirmation height
 

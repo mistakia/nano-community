@@ -376,6 +376,16 @@ describe('block notes', function () {
 
     const get_block = (hash) => chai.request(server).get(`/api/blocks/${hash}`)
 
+    it('returns 404 for a block the node does not know', async () => {
+      const stubbed = rpc.blocksInfo
+      rpc.blocksInfo = async () => ({ error: 'Block not found' })
+      try {
+        expect(await get_block(random_hash())).to.have.status(404)
+      } finally {
+        rpc.blocksInfo = stubbed
+      }
+    })
+
     it('returns the note, and a new note at once despite the response cache', async () => {
       const { key, block_hash } = owned_block()
       expect(
