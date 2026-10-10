@@ -1,6 +1,7 @@
 /* global describe it beforeEach */
 import chai from 'chai'
 import { finalizeEvent, getPublicKey } from 'nostr-tools'
+import { minePow } from 'nostr-tools/nip13'
 import { hexToBytes } from 'nostr-tools/utils'
 
 import {
@@ -15,7 +16,8 @@ import {
   build_account_attestation,
   build_deletion_request,
   build_key_properties,
-  format_board_address
+  format_board_address,
+  TASK_UNVOUCHED_POW_DIFFICULTY
 } from '#common/task-board/index.mjs'
 import {
   create_relay_policy_state,
@@ -50,9 +52,11 @@ describe('task board relay write policy', () => {
     })
 
   beforeEach(() => {
+    // Proof of work has its own cases below; the rest test without it.
     state = create_relay_policy_state({
       boards: [board],
-      rate_limits: { per_pubkey: 5, per_ip: 8 }
+      rate_limits: { per_pubkey: 5, per_ip: 8 },
+      pow_difficulty: 0
     })
   })
 
@@ -419,5 +423,71 @@ describe('task board relay write policy', () => {
       }
     )
     expect(later.action).to.equal('accept')
+  })
+
+  describe('proof of work', () => {
+    const D = TASK_UNVOUCHED_POW_DIFFICULTY
+    const mined = (key, template) =>
+      finalizeEvent(
+        minePow({ ...template, pubkey: getPublicKey(key.secret_key) }, D),
+        key.secret_key
+      )
+    let issue
+
+    beforeEach(() => {
+      state.pow_difficulty = D
+      issue = sign(owner, build_task_issue({ board, subject: 'Steward task' }))
+      expect(evaluate(issue).action).to.equal('accept')
+    })
+
+    it('rejects an unmined issue and comment from a key with no standing', () => {
+      const reason = {
+        action: 'reject',
+        msg: `blocked: proof of work below ${D} bits`
+      }
+      expect(
+        evaluate(sign(stranger, build_task_issue({ board, subject: 'Spam' })))
+      ).to.deep.equal(reason)
+      expect(
+        evaluate(sign(stranger, build_task_comment({ issue, content: 'Spam' })))
+      ).to.deep.equal(reason)
+    })
+
+    it('accepts them mined', () => {
+      expect(
+        evaluate(mined(stranger, build_task_issue({ board, subject: 'Real' })))
+          .action
+      ).to.equal('accept')
+      expect(
+        evaluate(mined(stranger, build_task_comment({ issue, content: 'Hi' })))
+          .action
+      ).to.equal('accept')
+    })
+
+    it('exempts trusted keys, established accounts and other kinds', () => {
+      evaluate(sign(owner, build_vouch_set({ pubkeys: [member.pubkey] })))
+      expect(
+        evaluate(sign(member, build_task_comment({ issue, content: 'Hi' })))
+          .action
+      ).to.equal('accept')
+      evaluate(
+        sign(
+          owner,
+          build_account_attestation({
+            pubkey: stranger.pubkey,
+            value: 'established',
+            created_at: NOW
+          })
+        )
+      )
+      expect(
+        evaluate(sign(stranger, build_task_issue({ board, subject: 'Mine' })))
+          .action
+      ).to.equal('accept')
+      const fresh = make_key('7')
+      expect(
+        evaluate(sign(fresh, build_task_claim({ board, issue }))).action
+      ).to.equal('accept')
+    })
   })
 })

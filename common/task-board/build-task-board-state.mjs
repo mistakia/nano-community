@@ -20,7 +20,7 @@ import {
   CLAIM_LIFETIME_SECONDS,
   TASK_UNVOUCHED_POW_DIFFICULTY
 } from './constants.mjs'
-import { get_event_pow } from './count-event-pow.mjs'
+import { get_event_pow, has_standing } from './count-event-pow.mjs'
 import {
   format_board_address,
   now_seconds
@@ -146,9 +146,7 @@ export default function build_task_board_state({
   // work, which holds on relays that do not enforce it. Standing is judged
   // now, so a later vouch makes a key's earlier unmined events count.
   const counts = (event) =>
-    stewards.has(event.pubkey) ||
-    trusted.has(event.pubkey) ||
-    (established.has(event.pubkey) && !blocked.has(event.pubkey)) ||
+    has_standing({ stewards, trusted, established, blocked }, event.pubkey) ||
     get_event_pow(event) >= TASK_UNVOUCHED_POW_DIFFICULTY
 
   // Key relations: each key's latest properties event on this board. A

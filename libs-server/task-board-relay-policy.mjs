@@ -4,7 +4,7 @@
 // maintainers of its latest announcement) skip the per-pubkey limit. Only
 // stewards and step 1 keys publish vouch sets, only stewards publish block
 // sets, and keys outside the web of trust may file a limited number of issues
-// a day.
+// a day. Issues and comments from keys with no standing need proof of work.
 // Rules: docs/design/task-board-protocol.md § Relays.
 
 import {
@@ -19,7 +19,10 @@ import {
   select_established,
   ACCOUNT_ATTESTATION_NAMESPACE,
   ACCOUNT_ATTESTATION_VALUES,
-  format_board_address
+  TASK_UNVOUCHED_POW_DIFFICULTY,
+  format_board_address,
+  get_event_pow,
+  has_standing
 } from '#common/task-board/index.mjs'
 
 const RATE_LIMIT_WINDOW_SECONDS = 60
@@ -36,9 +39,11 @@ const get_tag_value = (event, name) =>
 const get_tag_values = (event, name) =>
   event.tags.filter((tag) => tag[0] === name).map((tag) => tag[1])
 
+// pow_difficulty 0 turns the proof of work rule off, for a staged rollout.
 export function create_relay_policy_state({
   boards,
-  rate_limits = DEFAULT_RATE_LIMITS
+  rate_limits = DEFAULT_RATE_LIMITS,
+  pow_difficulty = TASK_UNVOUCHED_POW_DIFFICULTY
 }) {
   return {
     board_addresses: new Set(boards.map(format_board_address)),
@@ -50,6 +55,7 @@ export function create_relay_policy_state({
     block_sets: new Map(), // pubkey -> latest block set
     account_labels: new Map(), // `${author}:${pubkey}` -> latest attestation
     rate_limits: { ...DEFAULT_RATE_LIMITS, ...rate_limits },
+    pow_difficulty,
     rate_windows: new Map()
   }
 }
@@ -78,13 +84,15 @@ export function get_trust(
     events: state.account_labels.values(),
     stewards
   })
+  const established = select_established({ attestations, now })
   return {
     stewards,
+    established,
     ...build_trust_graph({
       stewards,
       vouch_sets: state.vouch_sets,
       block_sets: state.block_sets,
-      established: select_established({ attestations, now })
+      established
     })
   }
 }
@@ -261,6 +269,18 @@ export function evaluate_relay_event({
 }) {
   const verdict = check_kind_rules(state, event)
   if (verdict !== true) return { action: 'reject', msg: `blocked: ${verdict}` }
+
+  if (
+    (event.kind === TASK_BOARD_KINDS.issue ||
+      event.kind === TASK_BOARD_KINDS.comment) &&
+    get_event_pow(event) < state.pow_difficulty &&
+    !has_standing(get_trust(state, undefined, now), event.pubkey)
+  ) {
+    return {
+      action: 'reject',
+      msg: `blocked: proof of work below ${state.pow_difficulty} bits`
+    }
+  }
 
   if (source_type === 'IP4' || source_type === 'IP6') {
     const { per_pubkey, per_ip, untrusted_issues_per_day } = state.rate_limits

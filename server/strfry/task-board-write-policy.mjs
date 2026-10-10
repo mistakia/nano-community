@@ -2,7 +2,7 @@
 // strfry write-policy plugin for relay.nano.community.
 // strfry runs this once and streams one JSON request per line on stdin.
 // Config: TASK_BOARD_RELAY_CONFIG points at a JSON file with
-//   { boards: [{ owner_pubkey, d_tag }], strfry_bin, strfry_config, rate_limits? }
+//   { boards: [{ owner_pubkey, d_tag }], strfry_bin, strfry_config, rate_limits?, pow_difficulty? }
 
 import fs from 'fs'
 import readline from 'readline'

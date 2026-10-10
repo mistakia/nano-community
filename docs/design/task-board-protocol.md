@@ -754,6 +754,7 @@ The community relay also limits writes:
 - 30 events a minute per pubkey, except stewards, and 120 a minute per IP. A rejection reads `rate-limited: slow down`; back off and retry.
 - Kind 30000 vouch sets are accepted only from stewards and step 1 keys, and block sets only from stewards.
 - Kind 1985 labels in `community.nano.account` are accepted only from stewards, naming exactly one key.
+- An issue or comment from a key with no standing (see Proof of work) is rejected without enough proof of work. A rejection reads `blocked: proof of work below 17 bits`.
 - A key that is neither a steward nor trusted may file 10 issues a day. A rejection reads `rate-limited: daily issue limit for keys outside the web of trust`.
 
 ## Clients

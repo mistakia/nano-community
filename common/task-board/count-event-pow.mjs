@@ -28,11 +28,26 @@ export function get_event_pow(event) {
   return Math.min(leading_zero_bits(event.id), committed)
 }
 
+// Whether a key has standing on the board: a steward, a trusted key, or an
+// unblocked established account. Takes sets (or maps) of keys.
+export const has_standing = (
+  { stewards, trusted, established, blocked },
+  pubkey
+) =>
+  stewards.has(pubkey) ||
+  trusted.has(pubkey) ||
+  (established.has(pubkey) && !blocked.has(pubkey))
+
 // Whether a key must mine an event of this kind for it to count: issues and
-// comments from a key that is not a steward, not trusted, and not an unblocked
-// established account. Reads the board state's key lists.
+// comments from a key with no standing. Reads the board state's key lists.
 export const needs_event_pow = ({ state, pubkey, kind }) =>
   (kind === TASK_BOARD_KINDS.issue || kind === TASK_BOARD_KINDS.comment) &&
-  !state.stewards.includes(pubkey) &&
-  !state.trusted.includes(pubkey) &&
-  !(state.established.includes(pubkey) && !state.blocked.includes(pubkey))
+  !has_standing(
+    {
+      stewards: new Set(state.stewards),
+      trusted: new Set(state.trusted),
+      established: new Set(state.established),
+      blocked: new Set(state.blocked)
+    },
+    pubkey
+  )
