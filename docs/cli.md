@@ -84,7 +84,7 @@ This new signing key can now be used in place of your account key. Replace the `
 
 A key can be linked only once. A key that was ever linked, to any account and whether or not it was later revoked, is refused with "key previously linked; generate a new key". Run `add-signing-key` again to get a new one.
 
-#### Re-linking after the October 2026 update
+#### Re-linking after the CLI 0.1.0 update
 
 Signing keys linked before the CLI 0.1.0 release were revoked when the update was deployed, because the old link signature did not bind the key it linked. If you had a signing key, run `add-signing-key` again with the account private key to link a new one. The old key cannot be linked again.
 
