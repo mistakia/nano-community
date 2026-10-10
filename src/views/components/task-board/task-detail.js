@@ -222,13 +222,13 @@ export default function TaskDetail({ issue_id }) {
                 key={claim.pubkey}
                 title={`Since ${format_date(claim.created_at)}${claim.expiration ? `, lapses ${format_date(claim.expiration)} unless renewed` : ''}`}>
                 {index > 0 && ', '}
-                <PubkeyName pubkey={claim.pubkey} />
+                <PubkeyName pubkey={claim.pubkey} mark_untrusted />
               </span>
             ))
           )}
         </Property>
         <Property label='Filed'>
-          <PubkeyName pubkey={task.pubkey} /> <Age at={task.created_at} />
+          <PubkeyName pubkey={task.pubkey} mark_untrusted /> <Age at={task.created_at} />
         </Property>
         {task.supersedes_issue_id && (
           <Property label='Replaces'>
@@ -323,7 +323,7 @@ export default function TaskDetail({ issue_id }) {
         {comments.map((event) => (
           <div key={event.id} className='task-detail__comment'>
             <div className='task-detail__comment-meta'>
-              <PubkeyName pubkey={event.pubkey} /> <Age at={event.created_at} />
+              <PubkeyName pubkey={event.pubkey} mark_untrusted /> <Age at={event.created_at} />
             </div>
             <TaskText content={event.content} />
           </div>

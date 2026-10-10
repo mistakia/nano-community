@@ -62,7 +62,7 @@ function TaskCard({ task }) {
               : claimants.map((pubkey, index) => (
                   <React.Fragment key={pubkey}>
                     {index > 0 && ', '}
-                    <PubkeyName pubkey={pubkey} />
+                    <PubkeyName pubkey={pubkey} mark_untrusted />
                   </React.Fragment>
                 ))}
           </span>
