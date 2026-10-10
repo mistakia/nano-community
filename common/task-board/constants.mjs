@@ -31,9 +31,11 @@ export const TASK_STATUS_BY_KIND = Object.fromEntries(
 
 export const TASK_BOARD_D_TAG = 'nano-community-tasks'
 
-// The cold board-owner key is generated offline by the operator at cutover.
-// Until then every client must be given a board explicitly.
-export const TASK_BOARD_OWNER_PUBKEY = null
+// The board-owner key signs only the board announcement; the announcement's
+// maintainers are the stewards.
+// npub1vjdpn5rkn93slgqn63njkuj5aec870uyjzmmwquezf4tnwzpd2yqvtatxh
+export const TASK_BOARD_OWNER_PUBKEY =
+  '649a19d07699630fa013d4672b7254ee707f3f8490b7b70399126ab9b8416a88'
 
 // The community relay first, then public replicas that keep kinds 1985 and
 // 30634 and honour NIP-40 (checked 2026-10-10). Completeness is asserted on the
