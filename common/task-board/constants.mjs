@@ -37,15 +37,12 @@ export const TASK_BOARD_D_TAG = 'nano-community-tasks'
 export const TASK_BOARD_OWNER_PUBKEY =
   '649a19d07699630fa013d4672b7254ee707f3f8490b7b70399126ab9b8416a88'
 
-// The community relay first, then public replicas that keep kinds 1985 and
-// 30634 and honour NIP-40 (checked 2026-10-10). Completeness is asserted on the
-// community relay only.
-export const TASK_BOARD_DEFAULT_RELAYS = [
-  'wss://relay.nano.community',
-  'wss://nos.lol',
-  'wss://relay.damus.io',
-  'wss://relay.primal.net'
-]
+// The community relay only while the board soft-launches (operator decision,
+// 2026-10-10). The public replicas join when stewards are recruited:
+// wss://nos.lol, wss://relay.damus.io and wss://relay.primal.net keep kinds 1985
+// and 30634 and honour NIP-40 (checked 2026-10-10). Completeness is asserted on
+// the community relay only.
+export const TASK_BOARD_DEFAULT_RELAYS = ['wss://relay.nano.community']
 
 export const TASK_PRIORITY_NAMESPACE = 'community.nano.priority'
 export const TASK_STATE_NAMESPACE = 'community.nano.state'
