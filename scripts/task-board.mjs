@@ -7,6 +7,8 @@
 //   node scripts/task-board.mjs status <issue_id> <open|resolved|closed|draft> --key-file <file>
 //   node scripts/task-board.mjs file --subject <text> [--content <text>] --key-file <file>
 //   node scripts/task-board.mjs relate <acts_for|delegates_to> <npub> [--remove] --key-file <file>
+//   node scripts/task-board.mjs vouch <npub> --key-file <file>
+//   node scripts/task-board.mjs unvouch <npub> --key-file <file>
 //
 // Output is JSON. The key file holds an nsec or a 64-character hex secret key;
 // `--key-file -` reads it from stdin. It is never read from argv. Every
@@ -38,6 +40,7 @@ import {
   build_task_issue,
   build_task_status,
   edit_key_relation,
+  edit_vouch_set,
   order_claim_after
 } from '#common/task-board/index.mjs'
 
@@ -202,6 +205,21 @@ const builders = {
         role: argv.role,
         pubkey: to_hex_pubkey(argv.other),
         remove: argv.remove
+      }),
+  vouch:
+    ({ argv }) =>
+    ({ state, pubkey }) =>
+      edit_vouch_set({
+        previous: state.vouch_sets[pubkey],
+        pubkey: to_hex_pubkey(argv.other)
+      }),
+  unvouch:
+    ({ argv }) =>
+    ({ state, pubkey }) =>
+      edit_vouch_set({
+        previous: state.vouch_sets[pubkey],
+        pubkey: to_hex_pubkey(argv.other),
+        remove: true
       })
 }
 
@@ -217,6 +235,7 @@ const main = async () => {
   }
   const issue = (y) =>
     y.positional('issue_id', { describe: 'Issue event id', type: 'string' })
+  const other = { describe: 'npub or hex pubkey', type: 'string' }
   const argv = await yargs(hideBin(process.argv))
     .option('relays', {
       describe: 'Comma-separated relays',
@@ -276,6 +295,14 @@ const main = async () => {
             type: 'string'
           })
           .option('remove', { type: 'boolean', default: false })
+    )
+    .command(
+      'vouch <other>',
+      'Vouch for a key; counts when you are a steward or a steward vouches for you',
+      (y) => y.options(key_file).positional('other', other)
+    )
+    .command('unvouch <other>', 'Withdraw a vouch', (y) =>
+      y.options(key_file).positional('other', other)
     )
     .demandCommand(1)
     .strict().argv

@@ -7,7 +7,8 @@ import {
   TASK_LABEL_VALUES,
   CLAIM_STATUSES,
   CLAIM_LIFETIME_SECONDS,
-  TRIAGE_SET_D_TAG,
+  VOUCH_SET_D_TAG,
+  BLOCK_SET_D_TAG,
   KEY_RELATION_COUNTERPARTS,
   BASE_ENTITY_ID_TAG,
   SUPERSEDES_MARKER
@@ -194,22 +195,71 @@ export function build_task_comment({
   }
 }
 
-export function build_triage_set({
+// A key's vouch set: the keys it vouches for, replacing its previous set.
+export function build_vouch_set({
   pubkeys,
   title = 'Nano community trusted contributors',
   created_at = now_seconds()
 }) {
-  return {
-    kind: TASK_BOARD_KINDS.follow_set,
-    created_at,
-    tags: [
-      ['d', TRIAGE_SET_D_TAG],
-      ['title', title],
-      ...pubkeys.map((pubkey) => ['p', pubkey])
-    ],
-    content: ''
-  }
+  return build_follow_set({
+    d_tag: VOUCH_SET_D_TAG,
+    title,
+    pubkeys,
+    created_at
+  })
 }
+
+// Adds or removes one key on top of a previous vouch set. Tags this client
+// does not understand are carried over untouched.
+export function edit_vouch_set({
+  previous,
+  pubkey,
+  remove = false,
+  created_at = now_seconds()
+}) {
+  const previous_tags = previous ? previous.tags : []
+  const vouched = previous_tags
+    .filter((tag) => tag[0] === 'p' && tag[1] !== pubkey)
+    .map((tag) => tag[1])
+  if (!remove) vouched.push(require_value(pubkey, 'pubkey'))
+  // Dated after the set it replaces, so a quick second edit still wins.
+  const event = build_vouch_set({
+    pubkeys: vouched,
+    created_at: previous
+      ? Math.max(created_at, previous.created_at + 1)
+      : created_at
+  })
+  const keep_tags = previous_tags.filter(
+    (tag) => !['d', 'title', 'p'].includes(tag[0])
+  )
+  return { ...event, tags: [...event.tags, ...keep_tags] }
+}
+
+// A steward's block set: keys the board does not trust, whatever vouches
+// they hold.
+export function build_block_set({
+  pubkeys,
+  title = 'Nano community blocked keys',
+  created_at = now_seconds()
+}) {
+  return build_follow_set({
+    d_tag: BLOCK_SET_D_TAG,
+    title,
+    pubkeys,
+    created_at
+  })
+}
+
+const build_follow_set = ({ d_tag, title, pubkeys, created_at }) => ({
+  kind: TASK_BOARD_KINDS.follow_set,
+  created_at,
+  tags: [
+    ['d', d_tag],
+    ['title', title],
+    ...pubkeys.map((pubkey) => ['p', pubkey])
+  ],
+  content: ''
+})
 
 // A key's properties on a board, replacing its previous ones. Relations are
 // `p` tags with the role as marker: [{ role: 'acts_for', pubkey }].
@@ -264,7 +314,15 @@ export function edit_key_relation({
   const keep_tags = previous_tags.filter(
     (tag) => tag[0] !== 'd' && tag[0] !== 'a' && !known(tag)
   )
-  return build_key_properties({ board, relations, keep_tags, created_at })
+  // Dated after the properties it replaces, so a quick second edit still wins.
+  return build_key_properties({
+    board,
+    relations,
+    keep_tags,
+    created_at: previous
+      ? Math.max(created_at, previous.created_at + 1)
+      : created_at
+  })
 }
 
 // A kind 0 profile with a new name. Kind 0 is the key's profile on every

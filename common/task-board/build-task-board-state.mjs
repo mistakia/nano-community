@@ -14,7 +14,6 @@ import {
   TASK_PRIORITIES,
   TASK_LABEL_VALUES,
   TASK_BOARD_COLUMNS,
-  TRIAGE_SET_D_TAG,
   KEY_RELATION_COUNTERPARTS,
   BASE_ENTITY_ID_TAG,
   SUPERSEDES_MARKER,
@@ -24,6 +23,7 @@ import {
   format_board_address,
   now_seconds
 } from './build-task-board-events.mjs'
+import { build_trust_graph, select_trust_sets } from './build-trust-graph.mjs'
 
 const get_tag_value = (event, name) =>
   (event.tags.find((tag) => tag[0] === name) || [])[1]
@@ -119,21 +119,13 @@ export default function build_task_board_state({
     for (const pubkey of (maintainers_tag || []).slice(1)) stewards.add(pubkey)
   }
 
-  // Trusted set: union of every steward's latest triage follow set.
-  const triage_sets = new Map()
-  for (const event of live_events) {
-    if (
-      event.kind === TASK_BOARD_KINDS.follow_set &&
-      stewards.has(event.pubkey) &&
-      get_tag_value(event, 'd') === TRIAGE_SET_D_TAG
-    ) {
-      keep_newest(triage_sets, event.pubkey, event)
-    }
-  }
-  const trusted = new Set()
-  for (const event of triage_sets.values()) {
-    for (const pubkey of get_tag_values(event, 'p')) trusted.add(pubkey)
-  }
+  // Web of trust: stewards' vouches, one step further through step 1 keys.
+  const { vouch_sets, block_sets } = select_trust_sets(live_events)
+  const { trusted, blocked } = build_trust_graph({
+    stewards,
+    vouch_sets,
+    block_sets
+  })
 
   // Key relations: each key's latest properties event on this board. A
   // relation is confirmed when the other key states the counterpart role.
@@ -323,7 +315,10 @@ export default function build_task_board_state({
     board_address,
     announcement,
     stewards: [...stewards],
-    trusted: [...trusted],
+    trusted: [...trusted.keys()],
+    trust: Object.fromEntries(trusted),
+    blocked: [...blocked],
+    vouch_sets: Object.fromEntries(vouch_sets),
     key_relations,
     key_properties: Object.fromEntries(key_properties),
     tasks: Object.fromEntries(tasks),

@@ -1,9 +1,6 @@
 import { createSelector } from 'reselect'
 
-import {
-  build_task_board_state,
-  TRIAGE_SET_D_TAG
-} from '#common/task-board/index.mjs'
+import { build_task_board_state } from '#common/task-board/index.mjs'
 
 export const get_task_board = (state) => state.get('task_board')
 
@@ -43,24 +40,6 @@ export const get_task_comments = (state, issue_id) => {
         event.tags.some((tag) => tag[0] === 'E' && tag[1] === issue_id)
     )
     .sort((a, b) => a.created_at - b.created_at)
-}
-
-// The pubkeys in this steward's own latest triage follow set.
-export const get_own_triage_set = (state, pubkey) => {
-  let latest = null
-  for (const event of get_events(state).values()) {
-    if (
-      event.kind === 30000 &&
-      event.pubkey === pubkey &&
-      event.tags.some((tag) => tag[0] === 'd' && tag[1] === TRIAGE_SET_D_TAG) &&
-      (!latest || event.created_at > latest.created_at)
-    ) {
-      latest = event
-    }
-  }
-  return latest
-    ? latest.tags.filter((tag) => tag[0] === 'p').map((tag) => tag[1])
-    : []
 }
 
 // The profile name a pubkey published in kind 0, or null.

@@ -5,7 +5,6 @@ export {
   get_task_board,
   get_task_board_state,
   get_task_comments,
-  get_own_triage_set,
   get_profile_name,
   get_profile_content,
   has_board_activity

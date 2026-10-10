@@ -8,7 +8,7 @@ import {
   build_task_label,
   build_task_claim,
   build_task_comment,
-  build_triage_set,
+  build_vouch_set,
   build_deletion_request,
   build_profile_name,
   format_board_address,
@@ -204,7 +204,7 @@ describe('task board event templates', () => {
   })
 
   it('builds the triage follow set', () => {
-    const event = build_triage_set({ pubkeys: [AUTHOR, COMMENTER], created_at })
+    const event = build_vouch_set({ pubkeys: [AUTHOR, COMMENTER], created_at })
     expect(event.kind).to.equal(30000)
     expect(event.tags).to.deep.equal([
       ['d', 'nano-community-contributors'],

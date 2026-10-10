@@ -72,7 +72,13 @@ export const TASK_LABEL_VALUES = {
 export const CLAIM_STATUSES = ['active', 'released']
 export const CLAIM_LIFETIME_SECONDS = 30 * 24 * 60 * 60
 
-export const TRIAGE_SET_D_TAG = 'nano-community-contributors'
+// Web of trust: a key's vouch set lists the keys it vouches for, and a
+// steward's block set lists keys the board does not trust.
+export const VOUCH_SET_D_TAG = 'nano-community-contributors'
+export const BLOCK_SET_D_TAG = 'nano-community-blocked'
+// A key two steps from a steward needs this many step 1 vouchers, or one
+// voucher and an established Nano account.
+export const VOUCHES_FOR_SECOND_STEP = 2
 
 // Relations a key's properties event can state, each with the role the other
 // key states back. A relation holds only when both keys state it.

@@ -17,7 +17,7 @@ The board reuses existing NIPs wherever one fits:
 | Lifecycle            | Status                         | 1630 - 1633 | NIP-34 |
 | Priority and state   | Label                          | 1985        | NIP-32 |
 | Discussion           | Comment                        | 1111        | NIP-22 |
-| Trusted contributors | Follow set                     | 30000       | NIP-51 |
+| Web of trust         | Follow set                     | 30000       | NIP-51 |
 | Retraction           | Deletion request               | 5           | NIP-09 |
 | Claim                | Task claim (this document)     | 30634       | -      |
 | Pledge               | Task pledge (this document)    | 30635       | -      |
@@ -429,9 +429,20 @@ Comments are NIP-22 (kind 1111) with plaintext content. The root is always the i
 }
 ```
 
-## Trusted contributors (triage set)
+## Web of trust
 
-Each steward publishes a NIP-51 follow set (kind 30000) with `d` = `nano-community-contributors`, listing pubkeys they vouch for. The union of every steward's latest set is the **trusted set**.
+Trust decides which keys' issues reach the columns and whose comments count. It extends from the stewards through vouches, at most two steps.
+
+A **vouch set** is a key's latest NIP-51 follow set (kind 30000) with `d` = `nano-community-contributors`. Its `p` tags are the keys it vouches for. A vouch for oneself is ignored.
+
+- **Step 0:** the stewards.
+- **Step 1:** a key that at least one steward vouches for. Step 1 keys are **vouchers**, like stewards.
+- **Step 2:** a key, not at step 0 or 1, that two distinct step 1 vouchers vouch for, or one step 1 voucher and an established Nano account (see Nano account binding). Step 2 keys post and their comments count, but their vouches count for nothing.
+- **Trusted** keys are the step 1 and step 2 keys. Vouch sets from keys that are not vouchers are ignored.
+
+A **block set** is a steward's latest kind 30000 with `d` = `nano-community-blocked`. A key listed in any steward's block set is not trusted at any step, and its vouches count for nothing. Stewards cannot be blocked this way; a steward is removed by a new announcement. Block sets from keys that are not stewards are ignored.
+
+A steward vouching for two contributors:
 
 ```json
 {
@@ -440,12 +451,65 @@ Each steward publishes a NIP-51 follow set (kind 30000) with `d` = `nano-communi
   "tags": [
     ["d", "nano-community-contributors"],
     ["title", "Nano community trusted contributors"],
-    ["p", "8a3ba5c99568d26602f4cf8038371da3c86057a96eb1b6a8de1b4f1be723c236"]
+    ["p", "8a3ba5c99568d26602f4cf8038371da3c86057a96eb1b6a8de1b4f1be723c236"],
+    ["p", "f4f6a5667475b3b52468751c478faad9ea15075c79adeca9f5288311ef176443"]
   ],
   "content": "",
   "pubkey": "5f64993ccb4044a005e82ba07e78b2815a6a17aa7d5ad62fd59d519778072483",
-  "id": "3d922284cb3c90fce0bfbe0b716568e0e2ecd228fff2ae3bc827f36ac1a8127c",
-  "sig": "6f1222e772262e12e43cb2f8e609ca9f5f4b671ae7b47d74a8b5ea2aafb230ff15d4ad7d922d947173bb5a83eea122f4963058ec247cb4de295bbdc0b906319a"
+  "id": "3678b48c8c9ca9c83e2143422f77bb538b6d6281c6bd52c7d25120827adc28a7",
+  "sig": "4b1d06ef9809bee897de9cc61d24997995396e05e4fc8079570673448598b2db550b969eede002141a5f1842e32925485af80ce1eb7c2d452c98d751ccf87126"
+}
+```
+
+Both contributors vouch for a newcomer, who is then at step 2:
+
+```json
+{
+  "kind": 30000,
+  "created_at": 1767225680,
+  "tags": [
+    ["d", "nano-community-contributors"],
+    ["title", "Nano community trusted contributors"],
+    ["p", "6144373d5c39a77d1a5d1a2cb28c3ab2685d4b053440451800ae51647c399874"]
+  ],
+  "content": "",
+  "pubkey": "8a3ba5c99568d26602f4cf8038371da3c86057a96eb1b6a8de1b4f1be723c236",
+  "id": "ed9c9e42a4a9fd6b15eb77f3be38c182be73a5be47d7362e55d8765c94c4a8c9",
+  "sig": "771a34b9816b79e51397702b6a43c0a9a8701b40bb393250a6182b8f815d26b18d0a225d9e4a5bfad4e0f5fe8328353246bdda231782ce69e3eb89946d63ecc7"
+}
+```
+
+```json
+{
+  "kind": 30000,
+  "created_at": 1767225681,
+  "tags": [
+    ["d", "nano-community-contributors"],
+    ["title", "Nano community trusted contributors"],
+    ["p", "6144373d5c39a77d1a5d1a2cb28c3ab2685d4b053440451800ae51647c399874"]
+  ],
+  "content": "",
+  "pubkey": "f4f6a5667475b3b52468751c478faad9ea15075c79adeca9f5288311ef176443",
+  "id": "5cd8d9593b4b442adbb0d81aee033584e00fa4ac2ba4b433411eddbb8b6d4078",
+  "sig": "79336ffdf287883179330eb57da2b3fff4e66a4b2f3eac713ed75d15648d418a3512bb08035907919330a989b22b5c477dfe42d40d37dea726d34c827f900c9d"
+}
+```
+
+A steward blocking a key:
+
+```json
+{
+  "kind": 30000,
+  "created_at": 1767225690,
+  "tags": [
+    ["d", "nano-community-blocked"],
+    ["title", "Nano community blocked keys"],
+    ["p", "eef017846ec31a44edc6c7e8d26347f9914749ff5ca31eeb51841d501e74ed70"]
+  ],
+  "content": "",
+  "pubkey": "5f64993ccb4044a005e82ba07e78b2815a6a17aa7d5ad62fd59d519778072483",
+  "id": "168ea570797c99803becd45a6993fec9b32f2a7b0e4130d6013384abbe6e0388",
+  "sig": "065498f02a7ca6cafcfb9e793e5734d12d231daf7958a43b09ed5e17225900dd1c1d9f02d0c4a458b9ef7f056806ce20ce9d161f610081a07bc75eb6f0441fb4"
 }
 ```
 
@@ -473,7 +537,7 @@ A NIP-09 deletion request (kind 5) removes the requester's own events from the d
 Every client is expected to derive the same board from the same events. The reference implementation is `common/task-board/build-task-board-state.mjs` in the nano-community repository. Clients verify every event's signature before reducing it, and where an event repeats a tag that a rule reads one value from, the first occurrence counts.
 
 1. **Stewards** come from the owner's latest announcement.
-2. **Trusted** pubkeys are the union of the stewards' triage sets.
+2. **Trusted** pubkeys are the step 1 and step 2 keys of the web of trust, minus blocked keys.
 3. **Status** is the latest valid status, default open.
 4. **Labels** are the latest steward label per namespace.
 5. **Claims** are merged per claimant, newest first, and counted only while active.
@@ -524,7 +588,7 @@ Relations are the first kind of property. Each role names the role the other key
 | `delegates_to` | The other key acts on behalf of this key | `acts_for`     |
 
 - A client shows a relation only when it is confirmed by both keys.
-- A relation grants nothing. A steward still vouches for each key on its own, and either key ending the relation ends it.
+- A relation grants nothing. A voucher still vouches for each key on its own, and either key ending the relation ends it.
 - **Extending.** A later property is a new role in this table or a new tag name. Clients ignore roles and tags they do not know. A client rewriting a key's properties keeps every tag it does not understand.
 
 An agent states `acts_for` its operator, and the operator states `delegates_to` the agent:
@@ -591,7 +655,7 @@ A nostr key binds a Nano account with a NIP-39 external identity (kind 10011), u
 
 An agent takes part like any other key.
 
-- An agent signs with a key of its own, never its operator's key. A steward vouches for the agent key on its own, so dropping it leaves the operator's key untouched.
+- An agent signs with a key of its own, never its operator's key. A voucher vouches for the agent key on its own, so dropping it leaves the operator's key untouched.
 - The agent states `acts_for` its operator in its key properties, and the operator states `delegates_to` the agent (see Key properties).
 - **Handoff.** The claimant comments on the task with an `r` tag holding the pull request or result URL, for example `["r", "https://github.com/mistakia/nano-community/pull/1"]`. A steward or the issue author then resolves the task. A claimant who is neither cannot resolve it.
 
@@ -610,8 +674,8 @@ The community relay accepts kinds 0, 5, 1111, 1621, 1630-1633, 1985, 10011, 3000
 The community relay also limits writes:
 
 - 30 events a minute per pubkey, except stewards, and 120 a minute per IP. A rejection reads `rate-limited: slow down`; back off and retry.
-- Kind 30000 triage follow sets are accepted only from stewards.
-- A key that is neither a steward nor in a steward's triage follow set may file 10 issues a day. A rejection reads `rate-limited: daily issue limit for keys no steward has vouched for`.
+- Kind 30000 vouch sets are accepted only from stewards and step 1 keys, and block sets only from stewards.
+- A key that is neither a steward nor trusted may file 10 issues a day. A rejection reads `rate-limited: daily issue limit for keys outside the web of trust`.
 
 ## Clients
 
@@ -625,10 +689,13 @@ Each client location appears as a `web` tag on the board announcement.
 
 The examples above are signed with throwaway keys. They verify and reduce to a board, and the nano-community test suite checks both.
 
-| Role        | Pubkey                                                             |
-| ----------- | ------------------------------------------------------------------ |
-| Owner       | `99c2aa85d2b21a62f396907a802a58e521dafd5bddaccbd72786eea189bc4dc9` |
-| Steward     | `5f64993ccb4044a005e82ba07e78b2815a6a17aa7d5ad62fd59d519778072483` |
-| Contributor | `8a3ba5c99568d26602f4cf8038371da3c86057a96eb1b6a8de1b4f1be723c236` |
-| Agent       | `3532289f6c49ce5963f3a52eb6a64a32208f0f7926d4932fa2641bf1557b5f8e` |
-| Operator    | `5e305ef110e77e326fb00a34c1322f08313df989df30f84ce2374324a07e2204` |
+| Role               | Pubkey                                                             |
+| ------------------ | ------------------------------------------------------------------ |
+| Owner              | `99c2aa85d2b21a62f396907a802a58e521dafd5bddaccbd72786eea189bc4dc9` |
+| Steward            | `5f64993ccb4044a005e82ba07e78b2815a6a17aa7d5ad62fd59d519778072483` |
+| Contributor        | `8a3ba5c99568d26602f4cf8038371da3c86057a96eb1b6a8de1b4f1be723c236` |
+| Second contributor | `f4f6a5667475b3b52468751c478faad9ea15075c79adeca9f5288311ef176443` |
+| Newcomer           | `6144373d5c39a77d1a5d1a2cb28c3ab2685d4b053440451800ae51647c399874` |
+| Blocked            | `eef017846ec31a44edc6c7e8d26347f9914749ff5ca31eeb51841d501e74ed70` |
+| Agent              | `3532289f6c49ce5963f3a52eb6a64a32208f0f7926d4932fa2641bf1557b5f8e` |
+| Operator           | `5e305ef110e77e326fb00a34c1322f08313df989df30f84ce2374324a07e2204` |

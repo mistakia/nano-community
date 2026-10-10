@@ -10,7 +10,8 @@ import {
   build_task_label,
   build_task_claim,
   build_task_comment,
-  build_triage_set,
+  build_vouch_set,
+  build_block_set,
   build_deletion_request,
   build_key_properties,
   format_board_address
@@ -162,23 +163,52 @@ describe('task board relay write policy', () => {
     expect(evaluate(sign(stranger, template)).action).to.equal('reject')
   })
 
-  it('accepts only the triage follow set, and only from a steward', () => {
+  it('accepts vouch sets from stewards and step 1 keys only', () => {
     expect(
-      evaluate(sign(owner, build_triage_set({ pubkeys: [] }))).action
-    ).to.equal('accept')
-    expect(
-      evaluate(sign(member, build_triage_set({ pubkeys: [] })))
+      evaluate(sign(member, build_vouch_set({ pubkeys: [] })))
     ).to.deep.equal({
       action: 'reject',
-      msg: 'blocked: only stewards publish the triage follow set'
+      msg: 'blocked: only stewards and keys a steward vouches for publish vouch sets'
     })
+    expect(
+      evaluate(sign(owner, build_vouch_set({ pubkeys: [member.pubkey] })))
+        .action
+    ).to.equal('accept')
+    expect(
+      evaluate(sign(member, build_vouch_set({ pubkeys: [stranger.pubkey] })))
+        .action
+    ).to.equal('accept')
+    // A step 2 key posts but does not vouch.
+    expect(
+      evaluate(sign(stranger, build_vouch_set({ pubkeys: [] }))).action
+    ).to.equal('reject')
     const other_set = sign(owner, {
       kind: 30000,
       created_at: NOW,
       tags: [['d', 'friends']],
       content: ''
     })
-    expect(evaluate(other_set).action).to.equal('reject')
+    expect(evaluate(other_set)).to.deep.equal({
+      action: 'reject',
+      msg: 'blocked: only the vouch and block follow sets are accepted'
+    })
+  })
+
+  it('accepts block sets from stewards only, and a block voids vouches', () => {
+    evaluate(sign(owner, build_vouch_set({ pubkeys: [member.pubkey] })))
+    expect(
+      evaluate(sign(member, build_block_set({ pubkeys: [stranger.pubkey] })))
+    ).to.deep.equal({
+      action: 'reject',
+      msg: 'blocked: only stewards publish block sets'
+    })
+    expect(
+      evaluate(sign(owner, build_block_set({ pubkeys: [member.pubkey] })))
+        .action
+    ).to.equal('accept')
+    expect(
+      evaluate(sign(member, build_vouch_set({ pubkeys: [] }))).action
+    ).to.equal('reject')
   })
 
   it('treats the maintainers of the latest announcement as stewards', () => {
@@ -194,7 +224,7 @@ describe('task board relay write policy', () => {
       })
     )
     expect(
-      evaluate(sign(steward, build_triage_set({ pubkeys: [] }))).action
+      evaluate(sign(steward, build_vouch_set({ pubkeys: [] }))).action
     ).to.equal('accept')
     evaluate(
       sign(owner, {
@@ -203,7 +233,7 @@ describe('task board relay write policy', () => {
       })
     )
     expect(
-      evaluate(sign(steward, build_triage_set({ pubkeys: [] }))).action
+      evaluate(sign(steward, build_vouch_set({ pubkeys: [] }))).action
     ).to.equal('reject')
   })
 
@@ -217,7 +247,7 @@ describe('task board relay write policy', () => {
     expect(results.every((a) => a === 'accept')).to.equal(true)
   })
 
-  it('caps issues a day from keys no steward vouched for', () => {
+  it('caps issues a day from keys outside the web of trust', () => {
     state.rate_limits = {
       per_pubkey: 100,
       per_ip: 100,
@@ -231,14 +261,30 @@ describe('task board relay write policy', () => {
     expect(file(stranger, NOW + 1).action).to.equal('accept')
     expect(file(stranger, NOW + 2)).to.deep.equal({
       action: 'reject',
-      msg: 'rate-limited: daily issue limit for keys no steward has vouched for'
+      msg: 'rate-limited: daily issue limit for keys outside the web of trust'
     })
     expect(file(stranger, NOW + 86400).action).to.equal('accept')
 
-    evaluate(sign(owner, build_triage_set({ pubkeys: [member.pubkey] })))
+    evaluate(sign(owner, build_vouch_set({ pubkeys: [member.pubkey] })))
     for (let i = 0; i < 4; i++) {
       expect(file(member, NOW + 10 + i).action).to.equal('accept')
     }
+
+    // Step 2: two step 1 vouchers lift the cap.
+    const second = make_key('9')
+    const newcomer = make_key('a')
+    evaluate(
+      sign(owner, {
+        ...build_vouch_set({ pubkeys: [member.pubkey, second.pubkey] }),
+        created_at: Math.floor(Date.now() / 1000) + 1
+      })
+    )
+    evaluate(sign(member, build_vouch_set({ pubkeys: [newcomer.pubkey] })))
+    expect(file(newcomer, NOW + 30).action).to.equal('accept')
+    expect(file(newcomer, NOW + 31).action).to.equal('accept')
+    expect(file(newcomer, NOW + 32).action).to.equal('reject')
+    evaluate(sign(second, build_vouch_set({ pubkeys: [newcomer.pubkey] })))
+    expect(file(newcomer, NOW + 33).action).to.equal('accept')
   })
 
   it('derives stewards and trust from seeded events in any order', () => {
@@ -251,7 +297,7 @@ describe('task board relay write policy', () => {
         maintainers: [steward.pubkey]
       })
     )
-    const triage = sign(steward, build_triage_set({ pubkeys: [member.pubkey] }))
+    const triage = sign(steward, build_vouch_set({ pubkeys: [member.pubkey] }))
     seed_relay_policy_state(state, [triage, announcement])
     state.rate_limits = {
       per_pubkey: 100,

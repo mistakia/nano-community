@@ -1,15 +1,19 @@
 // Write policy for the community task board relay (strfry plugin).
 // Accepts only task board events, binds every event to a configured board,
 // and rate-limits per pubkey and per IP. Stewards (each board's owner and the
-// maintainers of its latest announcement) skip the per-pubkey limit, only
-// stewards may publish triage follow sets, and keys no steward has vouched for
-// may file a limited number of issues a day.
+// maintainers of its latest announcement) skip the per-pubkey limit. Only
+// stewards and step 1 keys publish vouch sets, only stewards publish block
+// sets, and keys outside the web of trust may file a limited number of issues
+// a day.
 // Rules: docs/design/task-board-protocol.md § Relays.
 
 import {
   TASK_BOARD_KINDS,
   TASK_STATUS_BY_KIND,
-  TRIAGE_SET_D_TAG,
+  VOUCH_SET_D_TAG,
+  BLOCK_SET_D_TAG,
+  build_trust_graph,
+  is_voucher,
   format_board_address
 } from '#common/task-board/index.mjs'
 
@@ -37,7 +41,8 @@ export function create_relay_policy_state({
     issue_ids: new Set(),
     board_pubkeys: new Set(),
     announcements: new Map(), // d tag -> latest owner announcement
-    triage_sets: new Map(), // pubkey -> latest triage follow set
+    vouch_sets: new Map(), // pubkey -> latest vouch set
+    block_sets: new Map(), // pubkey -> latest block set
     rate_limits: { ...DEFAULT_RATE_LIMITS, ...rate_limits },
     rate_windows: new Map()
   }
@@ -57,14 +62,16 @@ export function get_stewards(state) {
   return stewards
 }
 
-// Keys a steward's latest triage follow set vouches for.
-export function get_trusted(state, stewards = get_stewards(state)) {
-  const trusted = new Set()
-  for (const [pubkey, event] of state.triage_sets) {
-    if (!stewards.has(pubkey)) continue
-    for (const p of get_tag_values(event, 'p')) trusted.add(p)
+// The web of trust as the board derives it.
+export function get_trust(state, stewards = get_stewards(state)) {
+  return {
+    stewards,
+    ...build_trust_graph({
+      stewards,
+      vouch_sets: state.vouch_sets,
+      block_sets: state.block_sets
+    })
   }
-  return trusted
 }
 
 // Seed from events the relay already holds; every stored event was accepted.
@@ -87,9 +94,11 @@ function record_accepted_event(state, event) {
     }
   }
   if (event.kind === TASK_BOARD_KINDS.follow_set) {
-    if (is_newer(event, state.triage_sets.get(event.pubkey))) {
-      state.triage_sets.set(event.pubkey, event)
-    }
+    const sets =
+      get_tag_value(event, 'd') === BLOCK_SET_D_TAG
+        ? state.block_sets
+        : state.vouch_sets
+    if (is_newer(event, sets.get(event.pubkey))) sets.set(event.pubkey, event)
   }
 }
 
@@ -142,13 +151,20 @@ function check_kind_rules(state, event) {
     return owner === event.pubkey || 'not a board announcement from its owner'
   }
   if (kind === TASK_BOARD_KINDS.follow_set) {
-    if (get_tag_value(event, 'd') !== TRIAGE_SET_D_TAG) {
-      return 'only the triage follow set is accepted'
+    const d_tag = get_tag_value(event, 'd')
+    if (d_tag === VOUCH_SET_D_TAG) {
+      return (
+        is_voucher(get_trust(state), event.pubkey) ||
+        'only stewards and keys a steward vouches for publish vouch sets'
+      )
     }
-    return (
-      get_stewards(state).has(event.pubkey) ||
-      'only stewards publish the triage follow set'
-    )
+    if (d_tag === BLOCK_SET_D_TAG) {
+      return (
+        get_stewards(state).has(event.pubkey) ||
+        'only stewards publish block sets'
+      )
+    }
+    return 'only the vouch and block follow sets are accepted'
   }
   if (
     kind === TASK_BOARD_KINDS.profile ||
@@ -208,7 +224,7 @@ export function evaluate_relay_event({
     if (
       event.kind === TASK_BOARD_KINDS.issue &&
       !is_steward &&
-      !get_trusted(state, stewards).has(event.pubkey) &&
+      !get_trust(state, stewards).trusted.has(event.pubkey) &&
       !consume_rate_limit(
         state,
         `issues:${event.pubkey}`,
@@ -219,7 +235,7 @@ export function evaluate_relay_event({
     ) {
       return {
         action: 'reject',
-        msg: 'rate-limited: daily issue limit for keys no steward has vouched for'
+        msg: 'rate-limited: daily issue limit for keys outside the web of trust'
       }
     }
     const pubkey_ok =

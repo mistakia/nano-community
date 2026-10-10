@@ -6,7 +6,12 @@ import path from 'path'
 import { execFile } from 'child_process'
 import { promisify } from 'util'
 import ws from 'ws'
-import { finalizeEvent, generateSecretKey, getPublicKey } from 'nostr-tools'
+import {
+  finalizeEvent,
+  generateSecretKey,
+  getPublicKey,
+  nip19
+} from 'nostr-tools'
 import { matchFilter } from 'nostr-tools/filter'
 import { bytesToHex } from 'nostr-tools/utils'
 
@@ -154,6 +159,28 @@ describe('task board CLI', function () {
     const [{ event }] = result.published
     const state = await cli('read')
     expect(state.tasks[event.id].is_hidden).to.equal(true)
+  })
+
+  it('vouches for a key, keeping the vouch set, and withdraws it', async () => {
+    const owner_file = path.join(path.dirname(key_file), 'owner.key')
+    fs.writeFileSync(owner_file, bytesToHex(owner_key), { mode: 0o600 })
+    const other = getPublicKey(generateSecretKey())
+    await cli('vouch', nip19.npubEncode(other), '--key-file', owner_file)
+    await cli('vouch', nip19.npubEncode(agent_pubkey), '--key-file', owner_file)
+    let state = await cli('read')
+    expect(state.trust[agent_pubkey]).to.deep.equal({
+      step: 1,
+      vouchers: [owner_pubkey]
+    })
+    expect(state.trusted).to.include(other)
+    const filed = Object.values(state.tasks).find(
+      (task) => task.subject === 'Agent filed task'
+    )
+    expect(filed.is_hidden).to.equal(false)
+
+    await cli('unvouch', agent_pubkey, '--key-file', owner_file)
+    state = await cli('read')
+    expect(state.trusted).to.deep.equal([other])
   })
 
   it('ignores a status change from a non-steward who is not the author', async () => {

@@ -1,7 +1,11 @@
 // Relay filters that fetch a board. A client subscribes to the board filters,
 // then to the issue filters for every issue id it has seen.
 
-import { TASK_BOARD_KINDS, TRIAGE_SET_D_TAG } from './constants.mjs'
+import {
+  TASK_BOARD_KINDS,
+  VOUCH_SET_D_TAG,
+  BLOCK_SET_D_TAG
+} from './constants.mjs'
 import { format_board_address } from './build-task-board-events.mjs'
 
 const STATUS_KINDS = [
@@ -23,7 +27,10 @@ export const build_board_filters = (board) => {
     { kinds: STATUS_KINDS, '#a': [address] },
     { kinds: [TASK_BOARD_KINDS.claim], '#a': [address] },
     { kinds: [TASK_BOARD_KINDS.key_properties], '#a': [address] },
-    { kinds: [TASK_BOARD_KINDS.follow_set], '#d': [TRIAGE_SET_D_TAG] }
+    {
+      kinds: [TASK_BOARD_KINDS.follow_set],
+      '#d': [VOUCH_SET_D_TAG, BLOCK_SET_D_TAG]
+    }
   ]
 }
 

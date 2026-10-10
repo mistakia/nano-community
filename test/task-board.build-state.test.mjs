@@ -13,7 +13,7 @@ import {
   build_task_label,
   build_task_claim,
   build_task_comment,
-  build_triage_set,
+  build_vouch_set,
   build_deletion_request,
   build_key_properties,
   edit_key_relation,
@@ -255,11 +255,11 @@ describe('task board view reducer', () => {
     const issue = issue_by(contributor, 'Contribution')
     const triage = sign(
       steward,
-      build_triage_set({ pubkeys: [contributor.pubkey], created_at: T + 2 })
+      build_vouch_set({ pubkeys: [contributor.pubkey], created_at: T + 2 })
     )
     const stranger_set = sign(
       stranger,
-      build_triage_set({ pubkeys: [stranger.pubkey], created_at: T + 2 })
+      build_vouch_set({ pubkeys: [stranger.pubkey], created_at: T + 2 })
     )
     const state = state_of([announcement, issue, triage, stranger_set])
     expect(state.trusted).to.deep.equal([contributor.pubkey])
@@ -362,7 +362,7 @@ describe('task board view reducer: ambiguity rules', () => {
     const issue = issue_by(contributor, 'Mine')
     const triage = sign(
       steward,
-      build_triage_set({ pubkeys: [contributor.pubkey], created_at: T })
+      build_vouch_set({ pubkeys: [contributor.pubkey], created_at: T })
     )
     const comment = (key, created_at) =>
       sign(key, build_task_comment({ issue, content: 'x', created_at }))
@@ -409,7 +409,7 @@ describe('task board view reducer: ambiguity rules', () => {
     const old = issue_by(steward, 'Old')
     const triage = sign(
       steward,
-      build_triage_set({ pubkeys: [contributor.pubkey], created_at: T })
+      build_vouch_set({ pubkeys: [contributor.pubkey], created_at: T })
     )
     const hijack = sign(
       contributor,
@@ -481,6 +481,13 @@ describe('task board protocol spec examples', () => {
     expect(state.key_relations[agent.pubkey].acts_for[0].confirmed).to.equal(
       true
     )
+    const block = examples.find((e) =>
+      e.tags.some((t) => t[0] === 'd' && t[1] === 'nano-community-blocked')
+    )
+    const blocked = block.tags.find((t) => t[0] === 'p')[1]
+    expect(state.blocked).to.deep.equal([blocked])
+    const steps = Object.values(state.trust).map((entry) => entry.step)
+    expect(steps.sort()).to.deep.equal([1, 1, 2])
   })
 })
 

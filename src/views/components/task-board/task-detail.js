@@ -8,7 +8,7 @@ import {
   build_task_label,
   build_task_claim,
   build_task_comment,
-  build_triage_set,
+  edit_vouch_set,
   TASK_PRIORITY_NAMESPACE,
   TASK_STATE_NAMESPACE,
   TASK_PRIORITIES,
@@ -18,8 +18,7 @@ import {
   task_board_actions,
   get_task_board,
   get_task_board_state,
-  get_task_comments,
-  get_own_triage_set
+  get_task_comments
 } from '@core/task-board'
 import { get_nostr_identity } from '@core/nostr-identity'
 import IdentityLink, { use_go_to_account } from './identity-link'
@@ -70,7 +69,6 @@ export default function TaskDetail({ issue_id }) {
   const identity = useSelector(get_nostr_identity)
   const comments = useSelector((s) => get_task_comments(s, issue_id))
   const pubkey = identity.get('pubkey')
-  const own_triage_set = useSelector((s) => get_own_triage_set(s, pubkey))
   const [comment, set_comment] = useState('')
   const go_to_account = use_go_to_account()
   const [staged, set_staged] = useState({})
@@ -98,6 +96,7 @@ export default function TaskDetail({ issue_id }) {
   }
 
   const is_steward = Boolean(pubkey) && state.stewards.includes(pubkey)
+  const is_voucher = is_steward || state.trust[pubkey]?.step === 1
   const is_author = Boolean(pubkey) && pubkey === task.pubkey
   const is_claimant = Boolean(pubkey) && task.active_claimants.includes(pubkey)
   const publishing = (key) => board.getIn(['publishing', `${key}:${issue_id}`])
@@ -263,16 +262,17 @@ export default function TaskDetail({ issue_id }) {
 
       {task.is_hidden && (
         <div className='task-board__notice'>
-          Not on the board yet. A steward shows tasks from new people once they
-          vouch for them.
-          {is_steward && !author_trusted && (
+          Not on the board yet. It shows once a steward vouches for its author,
+          or two people a steward vouches for do.
+          {is_voucher && !author_trusted && (
             <Button
               variant='outlined'
               disabled={publishing('vouch')?.pending}
               onClick={() =>
                 publish('vouch', () =>
-                  build_triage_set({
-                    pubkeys: [...new Set([...own_triage_set, task.pubkey])]
+                  edit_vouch_set({
+                    previous: state.vouch_sets[pubkey],
+                    pubkey: task.pubkey
                   })
                 )
               }>
