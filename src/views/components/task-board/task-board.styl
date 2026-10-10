@@ -173,16 +173,21 @@ for $name, $color in $priorityColors
   .task-new &
     margin 0
 
-.task-account__npub, .task-account__secret
+.task-copy
+  display flex
+  align-items center
+  gap 4px
+  margin 0 0 16px
+
+.task-copy__value
+  min-width 0
   font-family 'Roboto Mono', monospace
   font-size 12px
+  color $nanoBlueGrey
   word-break break-all
 
-.task-account__npub
-  color $taskTertiary
-
-.task-account__secret
-  user-select all
+.task-copy__show
+  font-size 12px
 
 .task-account__form, .task-new__step
   display flex
@@ -212,28 +217,33 @@ for $name, $color in $priorityColors
 // --- board ------------------------------------------------------------------
 
 .task-board__header
-  display flex
-  justify-content space-between
-  align-items flex-start
-  gap 24px
+  position relative
   margin-bottom 24px
+  text-align center
 
   h1
     margin 0 0 4px
     font-size 24px
 
+  // The identity link sits apart from the centred title.
+  .task-identity
+    position absolute
+    top 0
+    right 0
+
 .task-board__intro
   p
-    margin 0
+    margin 0 auto
     max-width 66ch
     color $nanoBlueGrey
     font-size 13px
 
 .task-board__toolbar
   display flex
+  justify-content center
   gap 12px
   align-items center
-  margin-bottom 16px
+  margin-bottom 24px
 
 .task-board__loading
   color $taskTertiary
@@ -454,8 +464,9 @@ for $name, $color in $stageColors
     padding 80px 16px 24px
 
   .task-board__header
-    flex-direction column
-    gap 12px
+    .task-identity
+      position static
+      margin-top 12px
 
   .task-detail__field span
     flex 0 0 64px

@@ -9,6 +9,7 @@ import {
   export_local_key
 } from '@core/nostr-identity'
 import PubkeyName from './pubkey-name'
+import CopyValue from './copy-value'
 import { use_task_board_links } from './task-board-links'
 
 function ImportKey() {
@@ -49,7 +50,7 @@ export default function TaskAccount() {
   const { Link, board_path, navigate } = use_task_board_links()
   const identity = useSelector(get_nostr_identity)
   const [importing, set_importing] = useState(false)
-  const [showing_key, set_showing_key] = useState(false)
+  const [copied_key, set_copied_key] = useState(false)
 
   const method = identity.get('method')
   const pubkey = identity.get('pubkey')
@@ -110,7 +111,7 @@ export default function TaskAccount() {
           <h1 className='task-detail__subject'>
             <PubkeyName pubkey={pubkey} />
           </h1>
-          <p className='task-account__npub'>{nip19.npubEncode(pubkey)}</p>
+          <CopyValue value={nip19.npubEncode(pubkey)} />
           {method === 'nip07' && (
             <p>You post with the key in your browser extension.</p>
           )}
@@ -125,29 +126,22 @@ export default function TaskAccount() {
                   ? 'Your key is only in this browser. Save it to keep your name if browser data is cleared, or to post from another device.'
                   : 'Your key lives in this browser.'}
               </p>
-              {showing_key ? (
-                <>
-                  <p>
-                    Copy it somewhere safe, like a password manager. Anyone who
-                    has it can post as you.
-                  </p>
-                  <p className='task-account__secret'>{export_local_key()}</p>
-                  {needs_backup && (
-                    <Button
-                      variant='outlined'
-                      onClick={() => {
-                        dispatch(nostr_identity_actions.mark_backed_up())
-                        set_showing_key(false)
-                      }}>
-                      I saved it
-                    </Button>
-                  )}
-                </>
-              ) : (
+              <p>
+                Copy it somewhere safe, like a password manager. Anyone who has
+                it can post as you.
+              </p>
+              <CopyValue
+                value={export_local_key()}
+                secret
+                on_copy={() => set_copied_key(true)}
+              />
+              {needs_backup && copied_key && (
                 <Button
                   variant='outlined'
-                  onClick={() => set_showing_key(true)}>
-                  Show my key
+                  onClick={() =>
+                    dispatch(nostr_identity_actions.mark_backed_up())
+                  }>
+                  I saved it
                 </Button>
               )}
             </section>
