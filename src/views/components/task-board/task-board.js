@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import { get_task_board, get_task_board_state } from '@core/task-board'
 import IdentityBar from './identity-bar'
 import FileTaskForm from './file-task-form'
+import PubkeyName from './pubkey-name'
 import { use_task_board_links } from './task-board-links'
 import { COLUMN_TITLES, format_age } from './format'
 
@@ -16,8 +17,11 @@ const BOARD_COLUMNS = [
   'draft'
 ]
 
+const MAX_NAMED_CLAIMANTS = 2
+
 function TaskCard({ task }) {
   const { Link, task_path } = use_task_board_links()
+  const claimants = task.active_claimants
   return (
     <Link className='task-board__card' to={task_path(task.id)}>
       <div className='task-board__card-subject'>{task.subject}</div>
@@ -31,14 +35,23 @@ function TaskCard({ task }) {
         {task.state && task.state !== 'actionable' && (
           <span className='task-board__chip'>{task.state}</span>
         )}
-        {task.active_claimants.length > 0 && (
+        {claimants.length > 0 && (
           <span className='task-board__chip'>
-            {task.active_claimants.length} working
+            {claimants.length > MAX_NAMED_CLAIMANTS
+              ? claimants.length
+              : claimants.map((pubkey, index) => (
+                  <React.Fragment key={pubkey}>
+                    {index > 0 && ', '}
+                    <PubkeyName pubkey={pubkey} />
+                  </React.Fragment>
+                ))}{' '}
+            working
           </span>
         )}
         {task.comment_count > 0 && (
           <span className='task-board__chip'>
-            {task.comment_count} comments
+            {task.comment_count}{' '}
+            {task.comment_count === 1 ? 'comment' : 'comments'}
           </span>
         )}
         <span className='task-board__age'>

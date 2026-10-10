@@ -62,3 +62,7 @@ export const get_own_triage_set = (state, pubkey) => {
     ? latest.tags.filter((tag) => tag[0] === 'p').map((tag) => tag[1])
     : []
 }
+
+// The profile name a pubkey published in kind 0, or null.
+export const get_profile_name = (state, pubkey) =>
+  state.getIn(['task_board', 'profiles', pubkey])?.name || null

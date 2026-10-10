@@ -6,7 +6,7 @@ import {
   get_nostr_identity,
   export_local_key
 } from '@core/nostr-identity'
-import { short_npub } from './format'
+import PubkeyName from './pubkey-name'
 
 // Shows who you act as, prompts to back up a browser-generated key, and moves
 // a key between clients by export and import.
@@ -25,7 +25,7 @@ export default function IdentityBar() {
       <div className='task-board__identity-line'>
         {pubkey ? (
           <span>
-            Acting as <code>{short_npub(pubkey)}</code>
+            Acting as <PubkeyName pubkey={pubkey} />
             {method === 'nip07'
               ? ' (browser extension)'
               : ' (key in this browser)'}

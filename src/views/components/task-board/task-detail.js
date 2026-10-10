@@ -23,7 +23,8 @@ import {
 import { get_nostr_identity } from '@core/nostr-identity'
 import IdentityBar from './identity-bar'
 import { use_task_board_links } from './task-board-links'
-import { COLUMN_TITLES, format_age, short_npub } from './format'
+import PubkeyName from './pubkey-name'
+import { COLUMN_TITLES, format_age } from './format'
 
 const STATUSES = ['open', 'resolved', 'closed', 'draft']
 
@@ -121,7 +122,7 @@ export default function TaskDetail({ issue_id }) {
         )}
         {task.state && <span className='task-board__chip'>{task.state}</span>}
         <span>
-          filed by <code>{short_npub(task.pubkey)}</code>{' '}
+          filed by <PubkeyName pubkey={task.pubkey} />{' '}
           {format_age(task.created_at)}
         </span>
       </div>
@@ -146,7 +147,7 @@ export default function TaskDetail({ issue_id }) {
           .filter((claim) => claim.is_active)
           .map((claim) => (
             <div key={claim.pubkey}>
-              <code>{short_npub(claim.pubkey)}</code> claimed{' '}
+              <PubkeyName pubkey={claim.pubkey} /> claimed{' '}
               {format_age(claim.created_at)}
               {claim.expiration &&
                 `, lapses in ${Math.ceil((claim.expiration - Date.now() / 1000) / 86400)}d unless renewed`}
@@ -243,7 +244,7 @@ export default function TaskDetail({ issue_id }) {
         {comments.map((event) => (
           <div key={event.id} className='task-detail__comment'>
             <div className='task-detail__comment-meta'>
-              <code>{short_npub(event.pubkey)}</code>{' '}
+              <PubkeyName pubkey={event.pubkey} />{' '}
               {format_age(event.created_at)}
             </div>
             <div className='task-detail__comment-content'>{event.content}</div>

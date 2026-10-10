@@ -123,6 +123,47 @@ function* run_subscription({ relays, filters, on_eose }) {
   }
 }
 
+async function query_profiles({ relays, pubkeys }) {
+  return get_pool().querySync(
+    relays,
+    { kinds: [TASK_BOARD_KINDS.profile], authors: pubkeys },
+    { maxWait: EOSE_MAX_WAIT_MS }
+  )
+}
+
+// Names are cosmetic: a failed lookup leaves the npub showing.
+function* load_profiles({ relays, pubkeys }) {
+  try {
+    const events = yield call(query_profiles, { relays, pubkeys })
+    if (events.length) {
+      yield put(task_board_actions.events_received({ events }))
+    }
+  } catch {}
+}
+
+// Looks up the kind 0 profile of every author on the board, and of the
+// visitor's own key, once each.
+function* follow_profiles({ relays }) {
+  const requested = new Set()
+  for (;;) {
+    const events = (yield select(get_task_board)).get('events')
+    const pubkeys = new Set()
+    for (const event of events.values()) pubkeys.add(event.pubkey)
+    const own_pubkey = (yield select(get_nostr_identity)).get('pubkey')
+    if (own_pubkey) pubkeys.add(own_pubkey)
+    const fresh = [...pubkeys].filter((pubkey) => !requested.has(pubkey))
+    if (fresh.length) {
+      for (const pubkey of fresh) requested.add(pubkey)
+      yield fork(load_profiles, { relays, pubkeys: fresh })
+    }
+    yield take([
+      task_board_actions.TASK_BOARD_EVENTS_RECEIVED,
+      task_board_actions.TASK_BOARD_PUBLISH_FULFILLED,
+      nostr_identity_actions.NOSTR_IDENTITY_SET
+    ])
+  }
+}
+
 // Follows the issue set: whenever new issues arrive, re-subscribe to the
 // events that reference them.
 function* follow_issues({ relays }) {
@@ -166,6 +207,7 @@ export function* init({ payload }) {
     return
   }
   let board_loaded = false
+  yield fork(follow_profiles, { relays })
   yield fork(run_subscription, {
     relays,
     filters: board_filters(board),

@@ -5,6 +5,7 @@ export {
   get_task_board,
   get_task_board_state,
   get_task_comments,
-  get_own_triage_set
+  get_own_triage_set,
+  get_profile_name
 } from './selectors'
 export { resolve_board_config } from './board-config'
