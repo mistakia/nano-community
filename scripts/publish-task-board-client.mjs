@@ -22,7 +22,7 @@ import { finalizeEvent, getPublicKey } from 'nostr-tools'
 import { SimplePool, useWebSocketImplementation } from 'nostr-tools/pool'
 import { hexToBytes } from 'nostr-tools/utils'
 
-import { TASK_BOARD_DEFAULT_RELAYS } from '#common/task-board/constants.mjs'
+import { TASK_BOARD_PUBLIC_RELAYS } from '#common/task-board/constants.mjs'
 
 // Node's built-in WebSocket overflows the stack inside nostr-tools when a
 // relay connection fails; the ws package does not.
@@ -37,9 +37,7 @@ export const DEFAULT_BLOSSOM_SERVERS = [
   'https://nostr.download'
 ]
 // Public relays only: the community relay accepts board events alone.
-const DEFAULT_MANIFEST_RELAYS = TASK_BOARD_DEFAULT_RELAYS.filter(
-  (url) => !url.includes('relay.nano.community')
-)
+const DEFAULT_MANIFEST_RELAYS = TASK_BOARD_PUBLIC_RELAYS
 const MIN_SERVERS = 2
 const SOURCE_URL = 'https://github.com/mistakia/nano-community'
 
