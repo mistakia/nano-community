@@ -139,3 +139,28 @@ describe('API /auth/register', () => {
     })
   })
 })
+
+describe('API /auth/register binding regression', () => {
+  before(mochaGlobalSetup)
+
+  it('register_username: registers only the signed username', async () => {
+    const key = create_test_key()
+    const wire = sign_registration({ key, username: 'signed_only' })
+    const response = await post_register({
+      ...wire,
+      username: 'injected_name',
+      public_key: create_test_key().public_key
+    })
+    expect(response).to.have.status(200)
+    expect(response.body.username).to.equal('signed_only')
+
+    const row = await knex('users')
+      .where({ public_key: key.public_key })
+      .first()
+    expect(row.username).to.equal('signed_only')
+    const injected = await knex('users')
+      .where({ username: 'injected_name' })
+      .first()
+    expect(injected).to.equal(undefined)
+  })
+})

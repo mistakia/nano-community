@@ -327,6 +327,7 @@ describe('CLI', function () {
 
         const row = await db('nano_community_messages')
           .where({ operation: 'SET_BLOCK_META', version: 2 })
+          .where({ references: block_hash.toLowerCase() })
           .first()
         expect(row.references).to.equal(block_hash.toLowerCase())
       } catch (err) {

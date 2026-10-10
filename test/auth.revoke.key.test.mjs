@@ -140,3 +140,30 @@ describe('API /auth/revoke/key', () => {
     })
   })
 })
+
+describe('API /auth/revoke/key binding regression', () => {
+  before(mochaGlobalSetup)
+
+  it('revoke_key: revokes only the signed key', async () => {
+    const target = await link()
+    const bystander = await link()
+    const wire = sign_revoke({
+      key: target.linked_key,
+      linked_public_key: target.linked_key.public_key
+    })
+
+    const response = await post_revoke({
+      ...wire,
+      public_key: bystander.linked_key.public_key,
+      linked_public_key: bystander.linked_key.public_key
+    })
+    expect(response).to.have.status(200)
+    expect(response.body.public_key).to.equal(target.linked_key.public_key)
+    expect((await get_row(target.linked_key.public_key)).revoked_at).to.be.a(
+      'number'
+    )
+    expect(
+      (await get_row(bystander.linked_key.public_key)).revoked_at
+    ).to.equal(null)
+  })
+})

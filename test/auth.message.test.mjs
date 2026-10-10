@@ -247,3 +247,84 @@ describe('API /auth/message', function () {
     })
   })
 })
+
+// A route must act only on the signed payload. Each case sends a validly
+// signed unit with conflicting unsigned fields beside it, then a unit whose
+// signed message was altered after signing.
+describe('API /auth/message binding regression', function () {
+  before(mochaGlobalSetup)
+
+  const cases = [
+    {
+      action: 'set_account_meta',
+      content: { alias: 'bound alias' }
+    },
+    {
+      action: 'set_representative_meta',
+      content: { alias: 'bound rep alias', description: 'bound' }
+    },
+    {
+      action: 'set_block_meta',
+      content: { note: 'bound note' },
+      references: ['cd'.repeat(32)]
+    }
+  ]
+
+  for (const { action, content, references = [] } of cases) {
+    it(`${action}: stores and applies only the signed fields`, async () => {
+      const key = create_test_key()
+      const other = create_test_key()
+      const wire = sign_community_request({
+        key,
+        action,
+        parameters: { content, references, tags: ['bound'] }
+      })
+
+      const response = await post_message({
+        ...wire,
+        account: other.account,
+        public_key: other.public_key,
+        operation: 'SET_ACCOUNT_META',
+        content: { alias: 'injected' },
+        parameters: { content: { alias: 'injected' } }
+      })
+      expect(response).to.have.status(200)
+      expect(response.body.account).to.equal(key.account)
+
+      const digest = Buffer.from(hash_signed_message(wire.message)).toString(
+        'hex'
+      )
+      const row = await db('nano_community_messages')
+        .where({ message_digest: digest })
+        .first()
+      expect(row.public_key).to.equal(key.public_key)
+      expect(row.operation).to.equal(action.toUpperCase())
+      expect(JSON.parse(row.content)).to.deep.equal(content)
+      expect(row.references).to.equal(references.join(', ') || null)
+      expect(row.tags).to.equal('bound')
+      expect(await get_alias(other.account)).to.equal(undefined)
+      if (content.alias) {
+        expect(await get_alias(key.account)).to.equal(content.alias)
+      }
+    })
+
+    it(`${action}: rejects a message altered after signing`, async () => {
+      const wire = sign_community_request({
+        key: create_test_key(),
+        action,
+        parameters: { content, references, tags: ['bound'] }
+      })
+      for (const altered of [
+        wire.message.replace('"bound"', '"injected"'),
+        wire.message.replace(
+          `"action":"${action}"`,
+          `"action":"${cases.find((c) => c.action !== action).action}"`
+        )
+      ]) {
+        expect(altered).to.not.equal(wire.message)
+        const response = await post_message({ ...wire, message: altered })
+        expect(response, altered).to.have.status(401)
+      }
+    })
+  }
+})

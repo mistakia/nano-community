@@ -143,3 +143,59 @@ describe('API /auth/register/key', () => {
     })
   })
 })
+
+describe('API /auth/register/key binding regression', () => {
+  before(mochaGlobalSetup)
+
+  it('link_key and accept_link: stores only the signed account and key', async () => {
+    const account_key = create_test_key()
+    const linked_key = create_test_key()
+    const other = create_test_key()
+    const body = sign_link_request({ account_key, linked_key })
+
+    const response = await post_link({
+      ...body,
+      account: other.account,
+      public_key: other.public_key,
+      signature: '00'.repeat(64)
+    })
+    expect(response).to.have.status(200)
+
+    const row = await knex('account_keys')
+      .where({ public_key: linked_key.public_key })
+      .first()
+    expect(row.account).to.equal(account_key.account)
+    const injected = await knex('account_keys')
+      .where({ public_key: other.public_key })
+      .first()
+    expect(injected).to.equal(undefined)
+  })
+
+  it('link_key and accept_link: reject units altered after signing', async () => {
+    const account_key = create_test_key()
+    const linked_key = create_test_key()
+    const other = create_test_key()
+    const body = sign_link_request({ account_key, linked_key })
+
+    const altered_link = await post_link({
+      ...body,
+      link: {
+        ...body.link,
+        message: body.link.message.replace(
+          linked_key.public_key,
+          other.public_key
+        )
+      }
+    })
+    expect(altered_link).to.have.status(401)
+
+    const altered_accept = await post_link({
+      ...body,
+      accept: {
+        ...body.accept,
+        message: body.accept.message.replace(account_key.account, other.account)
+      }
+    })
+    expect(altered_accept).to.have.status(401)
+  })
+})
