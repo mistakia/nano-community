@@ -35,7 +35,15 @@ export const TASK_BOARD_D_TAG = 'nano-community-tasks'
 // Until then every client must be given a board explicitly.
 export const TASK_BOARD_OWNER_PUBKEY = null
 
-export const TASK_BOARD_DEFAULT_RELAYS = ['wss://relay.nano.community']
+// The community relay first, then public replicas that keep kinds 1985 and
+// 30634 and honour NIP-40 (checked 2026-10-10). Completeness is asserted on the
+// community relay only.
+export const TASK_BOARD_DEFAULT_RELAYS = [
+  'wss://relay.nano.community',
+  'wss://nos.lol',
+  'wss://relay.damus.io',
+  'wss://relay.primal.net'
+]
 
 export const TASK_PRIORITY_NAMESPACE = 'community.nano.priority'
 export const TASK_STATE_NAMESPACE = 'community.nano.state'
