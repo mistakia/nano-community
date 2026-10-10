@@ -13,6 +13,9 @@ export const format_age = (created_at) => {
   return `${Math.floor(seconds / 86400)}d ago`
 }
 
+export const format_date = (created_at) =>
+  new Date(created_at * 1000).toLocaleString()
+
 export const COLUMN_TITLES = {
   in_progress: 'In Progress',
   needs_taker: 'Needs a Taker',
@@ -20,4 +23,11 @@ export const COLUMN_TITLES = {
   triage: 'Triage',
   draft: 'Draft',
   closed: 'Closed'
+}
+
+export const STATUS_TITLES = {
+  open: 'Open',
+  resolved: 'Resolved',
+  closed: 'Closed',
+  draft: 'Draft'
 }

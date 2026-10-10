@@ -4,6 +4,7 @@ import { nostr_identity_actions } from './actions'
 import {
   get_nip07,
   read_local_secret_key,
+  generate_local_key,
   get_signer_pubkey,
   import_local_key,
   is_local_key_backed_up,
@@ -48,6 +49,21 @@ export function* init() {
   }
 }
 
+export function* create_key() {
+  try {
+    const pubkey = generate_local_key()
+    yield put(
+      nostr_identity_actions.set({
+        method: 'local',
+        pubkey,
+        needs_backup: true
+      })
+    )
+  } catch (error) {
+    yield put(nostr_identity_actions.import_failed({ error: error.message }))
+  }
+}
+
 export function* import_key({ payload }) {
   try {
     const pubkey = import_local_key(payload.value)
@@ -74,6 +90,10 @@ export function* watch_init() {
   yield takeLatest(nostr_identity_actions.NOSTR_IDENTITY_INIT, init)
 }
 
+export function* watch_create_key() {
+  yield takeLatest(nostr_identity_actions.NOSTR_IDENTITY_CREATE_KEY, create_key)
+}
+
 export function* watch_import_key() {
   yield takeLatest(nostr_identity_actions.NOSTR_IDENTITY_IMPORT_KEY, import_key)
 }
@@ -95,6 +115,7 @@ export function* watch_forget_key() {
 
 export const nostr_identity_sagas = [
   fork(watch_init),
+  fork(watch_create_key),
   fork(watch_import_key),
   fork(watch_mark_backed_up),
   fork(watch_forget_key)

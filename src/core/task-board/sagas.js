@@ -24,7 +24,6 @@ import {
   get_nostr_identity,
   sign_event
 } from '@core/nostr-identity'
-import { generate_local_key } from '@core/nostr-identity/signer'
 import { task_board_actions } from './actions'
 import { get_task_board, get_task_board_state } from './selectors'
 
@@ -184,18 +183,8 @@ export function* init({ payload }) {
 }
 
 function* ensure_signer() {
-  let identity = yield select(get_nostr_identity)
-  if (!identity.get('method')) {
-    const pubkey = generate_local_key()
-    yield put(
-      nostr_identity_actions.set({
-        method: 'local',
-        pubkey,
-        needs_backup: true
-      })
-    )
-    identity = yield select(get_nostr_identity)
-  }
+  const identity = yield select(get_nostr_identity)
+  if (!identity.get('method')) throw new Error('join in before acting')
   return identity
 }
 

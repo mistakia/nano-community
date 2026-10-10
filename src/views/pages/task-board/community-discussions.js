@@ -10,6 +10,8 @@ import {
 } from '@core/github-discussions'
 
 const SKELETON_COUNT = 3
+const SHOWN_COUNT = 5
+const DISCUSSIONS_URL = 'https://github.com/mistakia/nano-community/discussions'
 
 // The planning discussions the GitHub roadmap page showed beside its board.
 export default function CommunityDiscussions() {
@@ -25,6 +27,9 @@ export default function CommunityDiscussions() {
   const items = is_pending
     ? List(Array.from({ length: SKELETON_COUNT }, () => new GithubDiscussion()))
     : discussions
+        .sortBy((item) => item.updated_at || item.created_at)
+        .reverse()
+        .take(SHOWN_COUNT)
 
   return (
     <div className='task-board__discussions'>
@@ -38,6 +43,15 @@ export default function CommunityDiscussions() {
         {items.map((item, key) => (
           <Discussion key={key} discussion={item} />
         ))}
+        {!is_pending && discussions.size > SHOWN_COUNT && (
+          <a
+            className='task-board__discussions-more'
+            href={DISCUSSIONS_URL}
+            target='_blank'
+            rel='noreferrer'>
+            All {discussions.size} discussions on GitHub
+          </a>
+        )}
       </div>
     </div>
   )

@@ -20,22 +20,51 @@ import {
   get_task_comments,
   get_own_triage_set
 } from '@core/task-board'
-import { get_nostr_identity } from '@core/nostr-identity'
-import IdentityBar from './identity-bar'
+import {
+  nostr_identity_actions,
+  get_nostr_identity
+} from '@core/nostr-identity'
+import IdentityControl from './identity-control'
 import { use_task_board_links } from './task-board-links'
 import PubkeyName from './pubkey-name'
-import { COLUMN_TITLES, format_age } from './format'
+import Age from './age'
+import { TaskTitle, TaskText } from './task-text'
+import { COLUMN_TITLES, STATUS_TITLES, format_date } from './format'
 
 const STATUSES = ['open', 'resolved', 'closed', 'draft']
 
-function Select({ label, value, options, on_change, disabled }) {
+const PUBLISH_KEYS = [
+  'status',
+  'priority',
+  'state',
+  'claim',
+  'comment',
+  'vouch'
+]
+
+// An open task's place on the board says more than "open"; any other status
+// is the whole story.
+const stage_of = (task) =>
+  task.status === 'open'
+    ? { key: task.column, title: COLUMN_TITLES[task.column] }
+    : { key: task.status, title: STATUS_TITLES[task.status] }
+
+function Property({ label, children }) {
   return (
-    <label className='task-detail__select'>
-      {label}
-      <select
-        value={value || ''}
-        disabled={disabled}
-        onChange={(event) => on_change(event.target.value)}>
+    <div className='task-detail__property'>
+      <dt>{label}</dt>
+      <dd>{children}</dd>
+    </div>
+  )
+}
+
+Property.propTypes = { label: PropTypes.string, children: PropTypes.node }
+
+function Field({ label, value, options, on_change }) {
+  return (
+    <label className='task-detail__field'>
+      <span>{label}</span>
+      <select value={value || ''} onChange={(e) => on_change(e.target.value)}>
         {!value && <option value=''>none</option>}
         {options.map((option) => (
           <option key={option} value={option}>
@@ -47,12 +76,104 @@ function Select({ label, value, options, on_change, disabled }) {
   )
 }
 
-Select.propTypes = {
+Field.propTypes = {
   label: PropTypes.string,
   value: PropTypes.string,
   options: PropTypes.array,
-  on_change: PropTypes.func,
-  disabled: PropTypes.bool
+  on_change: PropTypes.func
+}
+
+// Every change here signs a permanent event, so edits are staged and go out
+// together on Save rather than on each dropdown change.
+function ManageTask({ task, is_steward, publish, pending }) {
+  const current = {
+    status: task.status,
+    priority: task.priority || '',
+    state: task.state || ''
+  }
+  const [draft, set_draft] = useState(current)
+  const changed = Object.keys(current).filter(
+    (key) => draft[key] !== current[key]
+  )
+  const set = (key) => (value) => set_draft({ ...draft, [key]: value })
+
+  const builds = {
+    status: (b) =>
+      build_task_status({ board: b, issue: task, status: draft.status }),
+    priority: () =>
+      build_task_label({
+        issue: task,
+        namespace: TASK_PRIORITY_NAMESPACE,
+        value: draft.priority
+      }),
+    state: () =>
+      build_task_label({
+        issue: task,
+        namespace: TASK_STATE_NAMESPACE,
+        value: draft.state
+      })
+  }
+  // One at a time: each publish renews the actor's claim, and concurrent
+  // renewals would race each other.
+  const save = (keys = changed) => {
+    if (!keys.length) return
+    const [key, ...rest] = keys
+    publish(key, builds[key], () => save(rest))
+  }
+
+  return (
+    <section className='task-section task-detail__manage'>
+      <h3 className='task-section__title'>Manage</h3>
+      <div className='task-detail__fields'>
+        <Field
+          label='Status'
+          value={draft.status}
+          options={STATUSES}
+          on_change={set('status')}
+        />
+        {is_steward && (
+          <>
+            <Field
+              label='Priority'
+              value={draft.priority}
+              options={TASK_PRIORITIES}
+              on_change={set('priority')}
+            />
+            <Field
+              label='State'
+              value={draft.state}
+              options={TASK_STATES}
+              on_change={set('state')}
+            />
+          </>
+        )}
+      </div>
+      {changed.length > 0 && (
+        <div className='task-detail__save'>
+          <span>
+            Saving publishes {changed.join(', ')} for everyone. It cannot be
+            taken back, only changed again.
+          </span>
+          <button
+            className='task-button--primary'
+            disabled={pending}
+            onClick={() => save()}>
+            Save
+          </button>
+          <button disabled={pending} onClick={() => set_draft(current)}>
+            Cancel
+          </button>
+        </div>
+      )}
+    </section>
+  )
+}
+
+ManageTask.propTypes = {
+  task: PropTypes.object.isRequired,
+  is_steward: PropTypes.bool,
+  publish: PropTypes.func.isRequired,
+  pending: PropTypes.bool
 }
 
 export default function TaskDetail({ issue_id }) {
@@ -66,11 +187,18 @@ export default function TaskDetail({ issue_id }) {
   const own_triage_set = useSelector((s) => get_own_triage_set(s, pubkey))
   const [comment, set_comment] = useState('')
 
+  const top_bar = (
+    <div className='task-detail__top'>
+      <Link to={board_path()}>← Community Tasks</Link>
+      <IdentityControl />
+    </div>
+  )
+
   const task = state?.tasks[issue_id]
   if (!task) {
     return (
       <div className='task-detail'>
-        <Link to={board_path()}>Back to the board</Link>
+        {top_bar}
         <p>
           {board.get('is_loaded')
             ? 'This task is not on this board, or no relay holds it.'
@@ -81,80 +209,111 @@ export default function TaskDetail({ issue_id }) {
   }
 
   const is_steward = Boolean(pubkey) && state.stewards.includes(pubkey)
-  const is_author = pubkey === task.pubkey
+  const is_author = Boolean(pubkey) && pubkey === task.pubkey
   const is_claimant = Boolean(pubkey) && task.active_claimants.includes(pubkey)
   const publishing = (key) => board.getIn(['publishing', `${key}:${issue_id}`])
-  const publish = (key, build) =>
+  const publish = (key, build, on_published) =>
     dispatch(
-      task_board_actions.publish({ key: `${key}:${issue_id}`, build, issue_id })
+      task_board_actions.publish({
+        key: `${key}:${issue_id}`,
+        build,
+        issue_id,
+        on_published
+      })
     )
-
-  const publish_keys = [
-    'status',
-    'priority',
-    'state',
-    'claim',
-    'comment',
-    'vouch'
-  ]
-  const errors = publish_keys
-    .map((key) => publishing(key)?.error)
-    .filter(Boolean)
+  const errors = PUBLISH_KEYS.map((key) => publishing(key)?.error).filter(
+    Boolean
+  )
   // Any action renews the claimant's claim, so a claim change waits for it.
-  const any_pending = publish_keys.some((key) => publishing(key)?.pending)
+  const any_pending = PUBLISH_KEYS.some((key) => publishing(key)?.pending)
 
   const author_trusted =
     state.stewards.includes(task.pubkey) || state.trusted.includes(task.pubkey)
+  const active_claims = task.claims.filter((claim) => claim.is_active)
+  const stage = stage_of(task)
+  const join = () => {
+    dispatch(nostr_identity_actions.set_panel('join'))
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   return (
     <div className='task-detail'>
-      <IdentityBar />
-      <Link to={board_path()}>Back to the board</Link>
-      <h1 className='task-detail__subject'>{task.subject}</h1>
-      <div className='task-detail__meta'>
-        <span className='task-board__chip'>{task.status}</span>
-        <span className='task-board__chip'>{COLUMN_TITLES[task.column]}</span>
-        {task.priority && (
-          <span
-            className={`task-board__priority task-board__priority--${task.priority}`}>
-            {task.priority}
+      {top_bar}
+      <div className='task-detail__type'>Task</div>
+      <h1 className='task-detail__subject'>
+        <TaskTitle subject={task.subject} />
+      </h1>
+
+      <dl className='task-detail__properties'>
+        <Property label='Stage'>
+          <span className='task-stage' data-stage={stage.key}>
+            {stage.title}
           </span>
+        </Property>
+        {task.priority && (
+          <Property label='Priority'>
+            <span className='task-priority' data-priority={task.priority}>
+              {task.priority}
+            </span>
+          </Property>
         )}
-        {task.state && <span className='task-board__chip'>{task.state}</span>}
-        <span>
-          filed by <PubkeyName pubkey={task.pubkey} />{' '}
-          {format_age(task.created_at)}
-        </span>
-      </div>
+        {task.state && task.state !== 'actionable' && (
+          <Property label='State'>
+            <span className='task-state'>{task.state}</span>
+          </Property>
+        )}
+        <Property label='Working on it'>
+          {active_claims.length === 0 ? (
+            <span className='task-muted'>Nobody yet</span>
+          ) : (
+            active_claims.map((claim, index) => (
+              <span
+                key={claim.pubkey}
+                title={`Since ${format_date(claim.created_at)}${claim.expiration ? `, lapses ${format_date(claim.expiration)} unless renewed` : ''}`}>
+                {index > 0 && ', '}
+                <PubkeyName pubkey={claim.pubkey} />
+              </span>
+            ))
+          )}
+        </Property>
+        <Property label='Filed'>
+          <PubkeyName pubkey={task.pubkey} /> <Age at={task.created_at} />
+        </Property>
+        {task.supersedes_issue_id && (
+          <Property label='Replaces'>
+            <Link to={task_path(task.supersedes_issue_id)}>
+              earlier version
+            </Link>
+          </Property>
+        )}
+      </dl>
+
       {task.is_hidden && (
         <div className='task-board__notice'>
-          No steward has vouched for this author yet, so this task is not shown
-          on the board.
+          Not on the board yet. A steward shows tasks from new people once they
+          vouch for them.
+          {is_steward && !author_trusted && (
+            <button
+              disabled={publishing('vouch')?.pending}
+              onClick={() =>
+                publish('vouch', () =>
+                  build_triage_set({
+                    pubkeys: [...new Set([...own_triage_set, task.pubkey])]
+                  })
+                )
+              }>
+              Vouch for <PubkeyName pubkey={task.pubkey} />
+            </button>
+          )}
         </div>
       )}
-      {task.supersedes_issue_id && (
-        <div className='task-board__hint'>
-          Replaces an earlier version:{' '}
-          <Link to={task_path(task.supersedes_issue_id)}>previous issue</Link>
-        </div>
-      )}
-      <div className='task-detail__content'>{task.content}</div>
 
-      <div className='task-detail__claims'>
-        <h3>Working on this</h3>
-        {task.active_claimants.length === 0 && <div>Nobody yet.</div>}
-        {task.claims
-          .filter((claim) => claim.is_active)
-          .map((claim) => (
-            <div key={claim.pubkey}>
-              <PubkeyName pubkey={claim.pubkey} /> claimed{' '}
-              {format_age(claim.created_at)}
-              {claim.expiration &&
-                `, lapses in ${Math.ceil((claim.expiration - Date.now() / 1000) / 86400)}d unless renewed`}
-            </div>
-          ))}
-        {task.status === 'open' && (
+      <TaskText content={task.content} hide_board_line />
+
+      {pubkey && task.status === 'open' && (
+        <div className='task-detail__actions'>
           <button
+            className={is_claimant ? '' : 'task-button--primary'}
             disabled={any_pending}
             onClick={() =>
               publish('claim', (b) =>
@@ -165,72 +324,23 @@ export default function TaskDetail({ issue_id }) {
                 })
               )
             }>
-            {is_claimant ? 'Release my claim' : 'Claim this task'}
+            {is_claimant
+              ? 'Stop working on this'
+              : active_claims.length > 0
+                ? 'Also work on this'
+                : 'Work on this'}
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       {(is_steward || is_author) && (
-        <div className='task-detail__controls'>
-          <Select
-            label='Status'
-            value={task.status}
-            options={STATUSES}
-            disabled={publishing('status')?.pending}
-            on_change={(status) =>
-              publish('status', (b) =>
-                build_task_status({ board: b, issue: task, status })
-              )
-            }
-          />
-          {is_steward && (
-            <>
-              <Select
-                label='Priority'
-                value={task.priority}
-                options={TASK_PRIORITIES}
-                disabled={publishing('priority')?.pending}
-                on_change={(value) =>
-                  publish('priority', () =>
-                    build_task_label({
-                      issue: task,
-                      namespace: TASK_PRIORITY_NAMESPACE,
-                      value
-                    })
-                  )
-                }
-              />
-              <Select
-                label='State'
-                value={task.state}
-                options={TASK_STATES}
-                disabled={publishing('state')?.pending}
-                on_change={(value) =>
-                  publish('state', () =>
-                    build_task_label({
-                      issue: task,
-                      namespace: TASK_STATE_NAMESPACE,
-                      value
-                    })
-                  )
-                }
-              />
-              {!author_trusted && (
-                <button
-                  disabled={publishing('vouch')?.pending}
-                  onClick={() =>
-                    publish('vouch', () =>
-                      build_triage_set({
-                        pubkeys: [...new Set([...own_triage_set, task.pubkey])]
-                      })
-                    )
-                  }>
-                  Vouch for this author
-                </button>
-              )}
-            </>
-          )}
-        </div>
+        <ManageTask
+          key={`${task.status}:${task.priority}:${task.state}`}
+          task={task}
+          is_steward={is_steward}
+          publish={publish}
+          pending={any_pending}
+        />
       )}
 
       {errors.map((error) => (
@@ -239,40 +349,53 @@ export default function TaskDetail({ issue_id }) {
         </div>
       ))}
 
-      <div className='task-detail__comments'>
-        <h3>Discussion</h3>
+      <section className='task-section task-detail__comments'>
+        <h3 className='task-section__title'>
+          Discussion
+          {comments.length > 0 && (
+            <span className='task-section__count'>{comments.length}</span>
+          )}
+        </h3>
         {comments.map((event) => (
           <div key={event.id} className='task-detail__comment'>
             <div className='task-detail__comment-meta'>
-              <PubkeyName pubkey={event.pubkey} />{' '}
-              {format_age(event.created_at)}
+              <PubkeyName pubkey={event.pubkey} /> <Age at={event.created_at} />
             </div>
-            <div className='task-detail__comment-content'>{event.content}</div>
+            <TaskText content={event.content} />
           </div>
         ))}
-        <form
-          onSubmit={(event) => {
-            event.preventDefault()
-            if (!comment.trim()) return
-            const content = comment.trim()
-            publish('comment', () =>
-              build_task_comment({ issue: task, content })
-            )
-            set_comment('')
-          }}>
-          <textarea
-            rows={3}
-            placeholder='Add a comment'
-            value={comment}
-            onChange={(event) => set_comment(event.target.value)}
-          />
-          <button
-            type='submit'
-            disabled={publishing('comment')?.pending || !comment.trim()}>
-            Comment
+        {pubkey ? (
+          <form
+            onSubmit={(event) => {
+              event.preventDefault()
+              if (!comment.trim()) return
+              const content = comment.trim()
+              publish('comment', () =>
+                build_task_comment({ issue: task, content })
+              )
+              set_comment('')
+            }}>
+            <textarea
+              rows={3}
+              placeholder='Add a comment'
+              value={comment}
+              onChange={(event) => set_comment(event.target.value)}
+            />
+            {comment.trim() && (
+              <button
+                type='submit'
+                className='task-button--primary'
+                disabled={publishing('comment')?.pending}>
+                Comment
+              </button>
+            )}
+          </form>
+        ) : (
+          <button className='task-link-button' onClick={join}>
+            Join in to comment or work on this
           </button>
-        </form>
-      </div>
+        )}
+      </section>
     </div>
   )
 }

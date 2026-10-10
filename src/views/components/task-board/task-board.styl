@@ -1,3 +1,27 @@
+// Colours follow Base's task views: the stage and priority are coloured
+// text, not filled chips.
+$taskTertiary = #8a8a9a
+$taskRule = #E4E4E4
+$taskAccent = $nanoSoftBlue
+$taskError = #b00020
+
+$stageColors = {
+  in_progress: #1976d2,
+  needs_taker: #e65100,
+  blocked: #d32f2f,
+  triage: #7b1fa2,
+  draft: #78828c,
+  resolved: #2e7d32,
+  closed: #616161
+}
+
+$priorityColors = {
+  critical: #c62828,
+  high: #e65100,
+  medium: #a67c00,
+  low: #558b2f
+}
+
 .task-board, .task-detail
   font-size 14px
   line-height 1.5
@@ -9,43 +33,89 @@
 
   button
     cursor pointer
-    padding 4px 10px
+    padding 4px 12px
     border 1px solid $borderColor
     border-radius 4px
     background white
+    color $textColor
     font inherit
+    font-size 13px
+
+    &:hover:not(:disabled)
+      border-color $nanoBlueGrey
 
     &:disabled
       cursor default
-      opacity 0.6
+      opacity 0.5
+
+  .task-button--primary
+    background $nanoDarkBlue
+    border-color $nanoDarkBlue
+    color white
+
+    &:hover:not(:disabled)
+      border-color $nanoDarkBlue
+      opacity 0.85
 
   input, textarea, select
     font inherit
+    font-size 13px
     padding 6px 8px
     border 1px solid $borderColor
     border-radius 4px
+    background white
+    color $textColor
     box-sizing border-box
 
   code
     font-family 'Roboto Mono', monospace
-    font-size 12px
+    font-size 0.9em
+    padding 0 3px
+    border-radius 2px
+    background rgba(0, 0, 0, 0.05)
 
-.task-board__identity
-  margin-bottom 16px
-  font-size 13px
+  a
+    color $taskAccent
 
-.task-board__identity-line
-  display flex
-  flex-wrap wrap
-  gap 8px
-  align-items center
+// --- shared labels ----------------------------------------------------------
 
-.task-board__identity-actions
-  display flex
-  gap 8px
+.task-stage, .task-priority, .task-state, .task-kind
+  font-size 11px
+  font-weight 600
+  letter-spacing 0.04em
+  text-transform uppercase
+  white-space nowrap
 
-.task-board__notice, .task-board__panel
+for $name, $color in $stageColors
+  .task-stage[data-stage={$name}]
+    color $color
+
+for $name, $color in $priorityColors
+  .task-priority[data-priority={$name}]
+    color $color
+
+.task-state
+  color $nanoBlueGrey
+
+.task-kind
+  display inline-block
+  margin-right 6px
+  padding 0 4px
+  border 1px solid $taskRule
+  border-radius 2px
+  color $taskTertiary
+  font-weight 500
+  vertical-align 0.12em
+
+.task-age, .task-muted
+  color $taskTertiary
+
+.task-board__error
+  color $taskError
   margin-top 8px
+
+.task-board__notice
+  margin 16px 0
   padding 8px 12px
   background $nanoLightBlue
   border 1px solid $borderColor
@@ -54,18 +124,143 @@
   flex-wrap wrap
   gap 8px
   align-items center
+  font-size 13px
 
-.task-board__secret
-  word-break break-all
+.task-link-button
+  .task-detail &, .task-board &
+    border none
+    background none
+    padding 0
+    color $taskAccent
+
+    &:hover:not(:disabled)
+      text-decoration underline
+
+.task-section
+  margin 24px 0
+  padding-top 16px
+  border-top 1px solid $taskRule
+
+.task-section__title
+  margin 0 0 12px
+  font-size 11px
+  font-weight 600
+  letter-spacing 0.06em
+  text-transform uppercase
+  color $nanoBlueGrey
+
+.task-section__count
+  margin-left 6px
+  color $taskTertiary
+  font-weight 500
+
+// The site is set in a monospace face, so code in a title needs no box.
+.task-detail__subject code, .task-board__card-subject code
+  padding 0
+  background none
+  color $nanoBlueGrey
+
+.task-text
+  white-space pre-wrap
+  overflow-wrap anywhere
+
+// --- identity control -------------------------------------------------------
+
+.task-identity
+  position relative
+  flex none
+
+.task-identity__toggle
+  .task-board &, .task-detail &
+    display inline-flex
+    align-items center
+    gap 6px
+    max-width 220px
+    overflow hidden
+    text-overflow ellipsis
+    white-space nowrap
+
+.task-identity__toggle--join
+  .task-board &, .task-detail &
+    background $nanoDarkBlue
+    border-color $nanoDarkBlue
+    color white
+
+.task-identity__dot
+  width 7px
+  height 7px
+  border-radius 50%
+  background #e65100
+  flex none
+
+.task-identity__panel
+  position absolute
+  right 0
+  top calc(100% + 6px)
+  z-index 10
+  width 320px
+  padding 16px
+  background white
+  border 1px solid $borderColor
+  border-radius 8px
+  box-shadow 0 4px 16px rgba(0, 0, 0, 0.08)
+  font-size 13px
+  text-align left
+
+  p
+    margin 0 0 12px
+
+  input
+    width 100%
+    margin-bottom 12px
+
+.task-identity__actions
+  display flex
+  flex-wrap wrap
+  gap 8px
+
+.task-identity__fine
+  .task-identity__panel &
+    margin 12px 0 0
+    font-size 12px
+    color $taskTertiary
+
+.task-identity__warning
+  .task-identity__panel &
+    padding 8px
+    border-radius 4px
+    background #fff4e5
+
+.task-identity__npub, .task-identity__secret
+  .task-identity__panel &
+    display block
+    margin 0 0 12px
+    padding 6px 8px
+    word-break break-all
+    font-size 11px
+
+.task-identity__secret
   user-select all
 
-.task-board__error
-  color #b00020
-  margin-top 8px
+// --- board ------------------------------------------------------------------
 
-.task-board__hint
-  font-size 12px
-  color $nanoBlueGrey
+.task-board__header
+  display flex
+  justify-content space-between
+  align-items flex-start
+  gap 24px
+  margin-bottom 24px
+
+  h1
+    margin 0 0 4px
+    font-size 24px
+
+.task-board__intro
+  p
+    margin 0
+    max-width 66ch
+    color $nanoBlueGrey
+    font-size 13px
 
 .task-board__toolbar
   display flex
@@ -73,40 +268,65 @@
   align-items center
   margin-bottom 16px
 
+.task-board__loading
+  color $taskTertiary
+  font-size 13px
+
 .task-board__file-form
   display flex
   flex-direction column
   gap 8px
   max-width 640px
-  margin-bottom 24px
+  margin-top 0
+
+.task-board__hint
+  font-size 12px
+  color $taskTertiary
 
 .task-board__columns
   display flex
-  gap 16px
+  gap 12px
   overflow-x auto
   align-items flex-start
 
 .task-board__column
   flex 1 0 220px
+  min-width 0
   background $backgroundColor
-  border-radius 4px
-  max-height 70vh
+  border-radius 8px
+  max-height 75vh
   display flex
   flex-direction column
 
+.task-board__column--collapsed
+  flex 0 0 auto
+
 .task-board__column-title
-  display flex
-  justify-content space-between
-  align-items center
-  padding 8px 12px
+  .task-board &
+    display flex
+    justify-content space-between
+    align-items center
+    gap 8px
+    padding 10px 12px
+    border none
+    border-radius 8px
+    background none
+    text-align left
 
   h2
-    font-size 15px
     margin 0
+    font-size 11px
+    font-weight 600
+    letter-spacing 0.06em
+    text-transform uppercase
+
+for $name, $color in $stageColors
+  .task-board__column[data-column={$name}] h2
+    color $color
 
 .task-board__count
-  font-size 12px
-  color $nanoBlueGrey
+  font-size 11px
+  color $taskTertiary
 
 .task-board__column-tasks
   overflow-y auto
@@ -115,121 +335,176 @@
   flex-direction column
   gap 8px
 
+.task-board__none
+  padding 4px 4px 8px
+  font-size 12px
+  color $taskTertiary
+
 .task-board__card
   display block
   background white
-  border 1px solid $borderColor
+  border 1px solid $taskRule
   border-radius 4px
-  padding 8px 10px
+  padding 10px 12px
   color inherit
   text-decoration none
 
+  .task-board &
+    color $textColor
+
   &:hover
+    border-color $borderColor
     box-shadow 0 1px 4px $hoverShadow
 
 .task-board__card-subject
-  font-weight 500
+  font-size 13px
+  line-height 1.4
   margin-bottom 6px
 
-.task-board__card-meta, .task-detail__meta
+.task-board__card-meta
   display flex
   flex-wrap wrap
-  gap 6px
+  gap 4px 10px
   align-items center
   font-size 12px
-
-.task-board__chip, .task-board__priority
-  padding 0 6px
-  border-radius 8px
-  background $backgroundColor
-  border 1px solid $borderColor
-
-.task-board__priority--critical
-  background #fde2e1
-.task-board__priority--high
-  background #fff0d6
-.task-board__priority--medium
-  background #e8f2ff
-
-.task-board__age
   color $nanoBlueGrey
 
 .task-board__empty
   padding 32px
   text-align center
 
+// --- task page --------------------------------------------------------------
+
 .task-detail
-  max-width 860px
+  max-width calc(66ch + 64px)
   margin 0 auto
 
-.task-detail__subject
-  font-size 24px
-  margin 16px 0 8px
-
-.task-detail__content, .task-detail__comment-content
-  white-space pre-wrap
-  overflow-wrap anywhere
-
-.task-detail__content
-  margin 16px 0
-  padding 12px
-  background $backgroundColor
-  border-radius 4px
-
-.task-detail__claims, .task-detail__controls, .task-detail__comments
-  margin 16px 0
+.task-detail__top
   display flex
-  flex-direction column
-  gap 8px
-  align-items flex-start
-
-  h3
-    margin 0
-    font-size 15px
-
-.task-detail__controls
-  flex-direction row
-  flex-wrap wrap
-
-.task-detail__select
-  display flex
-  gap 6px
+  justify-content space-between
   align-items center
+  gap 16px
+  margin-bottom 24px
+  font-size 13px
+
+  > a
+    text-decoration none
+
+.task-detail__type
+  font-size 11px
+  letter-spacing 0.08em
+  text-transform uppercase
+  color $taskTertiary
+
+.task-detail__subject
+  margin 8px 0 16px
+  font-size 24px
+  line-height 1.25
+  letter-spacing -0.01em
+
+.task-detail__properties
+  display grid
+  grid-template-columns repeat(auto-fill, minmax(240px, 1fr))
+  column-gap 32px
+  margin 0 0 24px
+
+.task-detail__property
+  display flex
+  align-items baseline
+  min-height 28px
+  gap 8px
+
+  dt
+    flex 0 0 96px
+    font-size 12px
+    color $taskTertiary
+
+  dd
+    margin 0
+    font-size 13px
+    min-width 0
+
+.task-detail .task-text
+  margin 0 0 24px
+
+.task-detail__actions
+  display flex
+  gap 8px
+  margin-bottom 24px
+
+.task-detail__fields
+  display flex
+  flex-wrap wrap
+  gap 12px 24px
+
+.task-detail__field
+  display flex
+  gap 8px
+  align-items center
+  font-size 12px
+  color $taskTertiary
+
+.task-detail__save
+  display flex
+  flex-wrap wrap
+  gap 8px
+  align-items center
+  margin-top 12px
+  padding 8px 12px
+  border-radius 4px
+  background #fff4e5
+  font-size 12px
+
+  span
+    flex 1 1 240px
 
 .task-detail__comments
-  align-items stretch
-
   form
     display flex
     flex-direction column
     gap 8px
     align-items flex-start
+    margin-top 16px
 
   textarea
     width 100%
 
 .task-detail__comment
-  border-left 3px solid $borderColor
-  padding 4px 10px
+  padding 8px 0
+  border-bottom 1px solid $taskRule
+
+  &:last-of-type
+    border-bottom none
 
 .task-detail__comment-meta
   font-size 12px
   color $nanoBlueGrey
+  margin-bottom 2px
+
+// --- page chrome ------------------------------------------------------------
 
 .task-board__footer
   padding 32px 0
   background $backgroundColor
 
-.task-board__header
-  text-align center
-  margin-bottom 16px
-
-  h1
-    margin 0
-
 @media (max-width 750px)
   .task-board, .task-detail
     padding 80px 16px 24px
+
+  .task-board__header
+    flex-direction column
+    gap 12px
+
+  .task-board__header .task-identity__panel
+    left 0
+    right auto
+
+  .task-identity__panel
+    width 320px
+    max-width calc(100vw - 32px)
+
+  .task-detail__field span
+    flex 0 0 64px
 
   .task-board__columns
     flex-direction column

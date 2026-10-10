@@ -38,7 +38,7 @@ export default function FileTaskForm({ on_filed }) {
   }
 
   return (
-    <form className='task-board__file-form' onSubmit={submit}>
+    <form className='task-section task-board__file-form' onSubmit={submit}>
       <input
         placeholder='Task title'
         value={subject}
@@ -51,15 +51,18 @@ export default function FileTaskForm({ on_filed }) {
         rows={5}
         onChange={(event) => set_content(event.target.value)}
       />
-      <button type='submit' disabled={publishing?.pending || !subject.trim()}>
+      <button
+        type='submit'
+        className='task-button--primary'
+        disabled={publishing?.pending || !subject.trim()}>
         {publishing?.pending ? 'Publishing…' : 'File task'}
       </button>
       {publishing?.error && (
         <div className='task-board__error'>{publishing.error}</div>
       )}
       <div className='task-board__hint'>
-        A task from someone no steward has vouched for stays off the board,
-        reachable by its link, until a steward adds them to the trusted set.
+        Tasks from people new to the board appear on it once a steward vouches
+        for them. Until then, anyone with the link can see yours.
       </div>
     </form>
   )
