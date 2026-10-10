@@ -47,4 +47,3 @@ export default base({
   ],
   performance: { hints: false }
 })
-
