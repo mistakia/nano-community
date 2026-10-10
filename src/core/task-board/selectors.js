@@ -1,6 +1,10 @@
 import { createSelector } from 'reselect'
 
-import { build_task_board_state } from '#common/task-board/index.mjs'
+import {
+  build_task_board_state,
+  parse_nano_account_binding,
+  TASK_BOARD_KINDS
+} from '#common/task-board/index.mjs'
 
 export const get_task_board = (state) => state.get('task_board')
 
@@ -54,3 +58,34 @@ export const get_profile_content = (state, pubkey) =>
 // a kind 0 only from a key that has one.
 export const has_board_activity = (state, pubkey) =>
   state.getIn(['task_board', 'events']).some((event) => event.pubkey === pubkey)
+
+// A key's latest Nano account binding event and what it states, or null.
+export const get_nano_binding = (state, pubkey) => {
+  const events = [...get_events(state).values()]
+  // An unlink is the author's deletion request for the binding.
+  const deleted = new Set(
+    events
+      .filter(
+        (event) =>
+          event.kind === TASK_BOARD_KINDS.deletion_request &&
+          event.pubkey === pubkey
+      )
+      .flatMap((event) =>
+        event.tags.filter((tag) => tag[0] === 'e').map((tag) => tag[1])
+      )
+  )
+  let latest = null
+  for (const event of events) {
+    if (
+      event.kind === TASK_BOARD_KINDS.nano_identity &&
+      event.pubkey === pubkey &&
+      !deleted.has(event.id) &&
+      (!latest || event.created_at > latest.created_at)
+    ) {
+      latest = event
+    }
+  }
+  return latest
+    ? { event: latest, binding: parse_nano_account_binding(latest) }
+    : null
+}

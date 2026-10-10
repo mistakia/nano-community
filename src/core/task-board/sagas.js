@@ -86,27 +86,31 @@ function* run_subscription({ relays, filters, on_eose }) {
   }
 }
 
-async function query_profiles({ relays, pubkeys }) {
+async function query_key_events({ relays, pubkeys }) {
   return get_pool().querySync(
     relays,
-    { kinds: [TASK_BOARD_KINDS.profile], authors: pubkeys },
+    {
+      kinds: [TASK_BOARD_KINDS.profile, TASK_BOARD_KINDS.nano_identity],
+      authors: pubkeys
+    },
     { maxWait: EOSE_MAX_WAIT_MS }
   )
 }
 
-// Names are cosmetic: a failed lookup leaves the npub showing.
-function* load_profiles({ relays, pubkeys }) {
+// Names and bindings are cosmetic here: a failed lookup leaves the npub
+// showing, and trust comes from steward attestations on the board.
+function* load_key_events({ relays, pubkeys }) {
   try {
-    const events = yield call(query_profiles, { relays, pubkeys })
+    const events = yield call(query_key_events, { relays, pubkeys })
     if (events.length) {
       yield put(task_board_actions.events_received({ events }))
     }
   } catch {}
 }
 
-// Looks up the kind 0 profile of every author on the board, and of the
-// visitor's own key, once each.
-function* follow_profiles({ relays }) {
+// Looks up the kind 0 profile and kind 10011 Nano account binding of every
+// author on the board, and of the visitor's own key, once each.
+function* follow_key_events({ relays }) {
   const requested = new Set()
   for (;;) {
     const events = (yield select(get_task_board)).get('events')
@@ -117,7 +121,7 @@ function* follow_profiles({ relays }) {
     const fresh = [...pubkeys].filter((pubkey) => !requested.has(pubkey))
     if (fresh.length) {
       for (const pubkey of fresh) requested.add(pubkey)
-      yield fork(load_profiles, { relays, pubkeys: fresh })
+      yield fork(load_key_events, { relays, pubkeys: fresh })
     }
     yield take([
       task_board_actions.TASK_BOARD_EVENTS_RECEIVED,
@@ -170,7 +174,7 @@ export function* init({ payload }) {
     return
   }
   let board_loaded = false
-  yield fork(follow_profiles, { relays })
+  yield fork(follow_key_events, { relays })
   yield fork(run_subscription, {
     relays,
     filters: build_board_filters(board),

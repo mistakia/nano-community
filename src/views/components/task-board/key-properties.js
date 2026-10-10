@@ -5,9 +5,19 @@ import Button from '@mui/material/Button'
 import { nip19 } from 'nostr-tools'
 
 import {
+  encode_signed_message,
+  verify_signed_message
+} from 'nano-signed-message'
+
+import {
   KEY_RELATION_COUNTERPARTS,
   edit_key_relation,
-  build_profile_name
+  edit_vouch_set,
+  build_profile_name,
+  build_bind_nostr_key_payload,
+  build_nano_account_binding,
+  BIND_NOSTR_KEY_STATEMENT_PREFIX,
+  build_deletion_request
 } from '#common/task-board/index.mjs'
 import {
   task_board_actions,
@@ -15,12 +25,18 @@ import {
   get_task_board_state,
   get_profile_name,
   get_profile_content,
-  has_board_activity
+  has_board_activity,
+  get_nano_binding
 } from '@core/task-board'
 import PubkeyName from './pubkey-name'
+import CopyValue from './copy-value'
 
 const PUBLISH_KEY = 'key-properties'
 const NAME_PUBLISH_KEY = 'profile-name'
+const VOUCH_PUBLISH_KEY = 'vouch-set'
+const NANO_PUBLISH_KEY = 'nano-binding'
+const NANO_ACCOUNT_BAR =
+  'opened at least 30 days ago and holding at least 1 XNO'
 const MAX_NAME_LENGTH = 40
 
 // One module per relation role. A new property is a new entry here, plus
@@ -205,6 +221,287 @@ NameProperty.propTypes = {
   pubkey: PropTypes.string.isRequired
 }
 
+const short_account = (account) =>
+  `${account.slice(0, 10)}…${account.slice(-4)}`
+
+const list_names = (pubkeys) =>
+  pubkeys.map((pubkey, index) => (
+    <React.Fragment key={pubkey}>
+      {index > 0 && ', '}
+      <PubkeyName pubkey={pubkey} />
+    </React.Fragment>
+  ))
+
+// Where the key stands in the board's web of trust.
+function TrustProperty({ pubkey, state }) {
+  const entry = state.trust[pubkey]
+  let text
+  if (state.stewards.includes(pubkey)) {
+    text = <div>Steward</div>
+  } else if (state.blocked.includes(pubkey)) {
+    text = <div>Blocked by a steward. Your tasks stay off the board.</div>
+  } else if (entry) {
+    text = (
+      <div>
+        Trusted, vouched for by {list_names(entry.vouchers)}
+        {entry.step === 2 && entry.vouchers.length === 1 && (
+          <span className='task-muted'> and your Nano account</span>
+        )}
+      </div>
+    )
+  } else {
+    text = (
+      <div className='task-muted'>
+        Not vouched for yet. A steward can vouch for you, or two people a
+        steward vouches for. With a linked Nano account, one of them is enough.
+      </div>
+    )
+  }
+  return (
+    <div className='task-detail__property'>
+      <dt>Trust</dt>
+      <dd>{text}</dd>
+    </div>
+  )
+}
+
+TrustProperty.propTypes = {
+  pubkey: PropTypes.string.isRequired,
+  state: PropTypes.object.isRequired
+}
+
+// The keys this key vouches for. Only stewards and the keys they vouch for
+// can vouch, so it shows only for them.
+function VouchingProperty({ pubkey, state }) {
+  const dispatch = useDispatch()
+  const publishing = useSelector(get_task_board).getIn([
+    'publishing',
+    VOUCH_PUBLISH_KEY
+  ])
+  const is_voucher =
+    state.stewards.includes(pubkey) || state.trust[pubkey]?.step === 1
+  if (!is_voucher) return null
+  const own = state.vouch_sets[pubkey]
+  const vouched = own
+    ? own.tags.filter((tag) => tag[0] === 'p').map((tag) => tag[1])
+    : []
+  const edit = ({ other, remove = false }) =>
+    dispatch(
+      task_board_actions.publish({
+        key: VOUCH_PUBLISH_KEY,
+        build: () => edit_vouch_set({ previous: own, pubkey: other, remove })
+      })
+    )
+  return (
+    <div className='task-detail__property'>
+      <dt>Vouching for</dt>
+      <dd>
+        {vouched.length === 0 && <div className='task-muted'>Nobody yet.</div>}
+        {vouched.map((other) => (
+          <div key={other} className='task-properties__item'>
+            <PubkeyName pubkey={other} />
+            <a
+              href='#'
+              className='task-properties__remove'
+              onClick={(event) => {
+                event.preventDefault()
+                edit({ other, remove: true })
+              }}>
+              remove
+            </a>
+          </div>
+        ))}
+        <AddRelation
+          label='Vouch for a key'
+          help='Their tasks and comments then count on the board. Vouch only for people you know.'
+          on_add={(other) => edit({ other })}
+        />
+        {publishing?.error && (
+          <div className='task-board__error'>{publishing.error}</div>
+        )}
+      </dd>
+    </div>
+  )
+}
+
+VouchingProperty.propTypes = {
+  pubkey: PropTypes.string.isRequired,
+  state: PropTypes.object.isRequired
+}
+
+// The proof pasted from a signer: the CLI's JSON output, or any text that
+// holds a nano_ account and an <issued_at>:<signature> proof.
+const read_pasted_proof = (text) => {
+  try {
+    const parsed = JSON.parse(text)
+    if (parsed.account && parsed.proof) return parsed
+  } catch {}
+  const account = /nano_[13][13456789abcdefghijkmnopqrstuwxyz]{59}/.exec(text)
+  const proof = /\b(\d+):([0-9a-fA-F]{128})\b/.exec(text)
+  return account && proof ? { account: account[0], proof: proof[0] } : null
+}
+
+// The Nano account this key binds (kind 10011) and the steward verdict on it.
+function NanoAccountProperty({ pubkey, state }) {
+  const dispatch = useDispatch()
+  const nano = useSelector((s) => get_nano_binding(s, pubkey))
+  const publishing = useSelector(get_task_board).getIn([
+    'publishing',
+    NANO_PUBLISH_KEY
+  ])
+  const [linking, set_linking] = useState(false)
+  const [pasted, set_pasted] = useState('')
+  const [error, set_error] = useState(null)
+  const npub = nip19.npubEncode(pubkey)
+  const binding = nano?.binding
+  const attestation = state.account_attestations[pubkey]
+  const now = Math.floor(Date.now() / 1000)
+  const verdict =
+    attestation && attestation.expiration > now ? attestation.value : null
+
+  const publish = (build) =>
+    dispatch(
+      task_board_actions.publish({
+        key: NANO_PUBLISH_KEY,
+        build,
+        on_published: () => {
+          set_linking(false)
+          set_pasted('')
+        }
+      })
+    )
+
+  const link = () => {
+    const proof = read_pasted_proof(pasted.trim())
+    if (!proof) {
+      set_error('Paste the output of the command, or an account and proof.')
+      return
+    }
+    const [issued_at, signature] = proof.proof.split(':')
+    try {
+      verify_signed_message({
+        message: encode_signed_message(
+          build_bind_nostr_key_payload({
+            account: proof.account,
+            npub,
+            issued_at: Number(issued_at)
+          })
+        ),
+        signature,
+        domain: 'nostr',
+        actions: ['bind_nostr_key']
+      })
+    } catch {
+      set_error('That proof does not verify for this key. Sign it for ' + npub)
+      return
+    }
+    set_error(null)
+    publish(() =>
+      build_nano_account_binding({
+        account: proof.account,
+        issued_at: Number(issued_at),
+        signature
+      })
+    )
+  }
+
+  return (
+    <div className='task-detail__property'>
+      <dt>Nano account</dt>
+      <dd>
+        {binding ? (
+          <>
+            <div title={binding.account}>{short_account(binding.account)}</div>
+            <div className='task-muted'>
+              {verdict === 'established'
+                ? 'Established. It counts as one vouch.'
+                : verdict === 'not_established'
+                  ? `Not established. It counts once it is ${NANO_ACCOUNT_BAR}, linked to no other key.`
+                  : 'A steward checks it within the hour.'}
+            </div>
+            <a
+              href='#'
+              className='task-properties__remove'
+              onClick={(event) => {
+                event.preventDefault()
+                publish(() =>
+                  build_deletion_request({
+                    events: [nano.event],
+                    reason: 'unlinked'
+                  })
+                )
+              }}>
+              unlink
+            </a>
+          </>
+        ) : (
+          <div className='task-muted'>
+            None linked. An account {NANO_ACCOUNT_BAR} counts as one vouch.
+          </div>
+        )}
+        {!binding && !linking && (
+          <a
+            href='#'
+            className='task-properties__add'
+            onClick={(event) => {
+              event.preventDefault()
+              set_linking(true)
+            }}>
+            Link a Nano account
+          </a>
+        )}
+        {!binding && linking && (
+          <form
+            className='task-account__form'
+            onSubmit={(event) => {
+              event.preventDefault()
+              link()
+            }}>
+            <p className='task-account__fine'>
+              Sign with your Nano account, then paste the result here. Your Nano
+              key never leaves your machine.
+            </p>
+            <CopyValue
+              value={`npx nano-community-cli bind-nostr-key ${npub}`}
+            />
+            <p className='task-account__fine'>
+              Any tool that implements the Nano signed-message format works:
+              sign the <code>bind_nostr_key</code> statement “
+              {BIND_NOSTR_KEY_STATEMENT_PREFIX}
+              {npub}”.
+            </p>
+            <textarea
+              aria-label='Signed proof'
+              rows={4}
+              value={pasted}
+              onChange={(event) => set_pasted(event.target.value)}
+            />
+            <div className='task-detail__buttons'>
+              <Button
+                variant='outlined'
+                type='submit'
+                disabled={!pasted.trim() || publishing?.pending}>
+                Link
+              </Button>
+              <Button variant='outlined' onClick={() => set_linking(false)}>
+                Cancel
+              </Button>
+            </div>
+          </form>
+        )}
+        {(error || publishing?.error) && (
+          <div className='task-board__error'>{error || publishing.error}</div>
+        )}
+      </dd>
+    </div>
+  )
+}
+
+NanoAccountProperty.propTypes = {
+  pubkey: PropTypes.string.isRequired,
+  state: PropTypes.object.isRequired
+}
+
 // The facts a key states about itself on the board, one module each.
 export default function KeyProperties({ pubkey }) {
   const dispatch = useDispatch()
@@ -261,6 +558,9 @@ export default function KeyProperties({ pubkey }) {
       ))}
       <dl className='task-detail__properties task-properties__list'>
         <NameProperty pubkey={pubkey} />
+        <TrustProperty pubkey={pubkey} state={state} />
+        <NanoAccountProperty pubkey={pubkey} state={state} />
+        <VouchingProperty pubkey={pubkey} state={state} />
         {RELATION_PROPERTIES.map((property) => {
           const list = relations[property.role] || []
           return (

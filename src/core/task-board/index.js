@@ -7,6 +7,7 @@ export {
   get_task_comments,
   get_profile_name,
   get_profile_content,
-  has_board_activity
+  has_board_activity,
+  get_nano_binding
 } from './selectors'
 export { resolve_board_config } from './board-config'

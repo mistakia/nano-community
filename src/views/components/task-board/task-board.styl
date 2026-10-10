@@ -213,6 +213,11 @@ for $name, $color in $priorityColors
 
   input, textarea
     width 100%
+    box-sizing border-box
+
+  // A long command or key wraps inside the column.
+  .task-copy
+    align-self stretch
 
 .task-new__preview-title
   font-size 18px
@@ -417,9 +422,11 @@ for $name, $color in $stageColors
     color $taskTertiary
 
   dd
+    flex 1 1 auto
     margin 0
     font-size 13px
     min-width 0
+    overflow-wrap anywhere
 
 .task-detail .task-text
   margin 0 0 24px
