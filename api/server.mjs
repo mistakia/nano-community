@@ -80,6 +80,11 @@ api.use(
 
 api.use(robots(path.join(__dirname, '..', 'static', 'robots.txt')))
 api.use(favicon(path.join(__dirname, '..', 'static', 'favicon.ico')))
+api.get('/llms.txt', (req, res) =>
+  res
+    .type('text/plain')
+    .sendFile(path.join(__dirname, '..', 'static', 'llms.txt'))
+)
 api.use((req, res, next) => {
   res.set('Cache-Control', 'no-cache, must-revalidate, proxy-revalidate')
   next()

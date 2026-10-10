@@ -85,6 +85,22 @@ export default function TaskBoard() {
     <div className='task-board'>
       <div className='task-board__header'>
         <h1>Community Tasks</h1>
+        <div className='task-board__hint'>
+          Open to people and their agents:{' '}
+          <a
+            href='https://github.com/mistakia/nano-community/blob/main/AGENTS.md'
+            target='_blank'
+            rel='noreferrer'>
+            agent guide
+          </a>
+          {' · '}
+          <a
+            href='https://github.com/mistakia/nano-community/blob/main/docs/design/task-board-protocol.md'
+            target='_blank'
+            rel='noreferrer'>
+            protocol
+          </a>
+        </div>
       </div>
       <IdentityBar />
       <div className='task-board__toolbar'>
