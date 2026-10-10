@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from 'react'
 import PropTypes from 'prop-types'
 
-function AnchorLink({ to, children, ...props }) {
+export function AnchorLink({ to, children, ...props }) {
   return (
     <a href={to} {...props}>
       {children}

@@ -17,6 +17,7 @@
     "start:api": "NODE_ENV=development node server.mjs",
     "deploy": "scp -r build/* nano.community:/root/nano-community/source/build",
     "build": "cross-env NODE_ENV=production webpack --config webpack/webpack.prod.babel.mjs --color --progress && react-snap",
+    "build:task-board-client": "cross-env NODE_ENV=production webpack --config webpack/webpack.task-board-client.babel.mjs && rm -f build/task-board-client/task-board-client.js*",
     "lint": "eslint . --ext js,mjs",
     "verify": "yarn lint",
     "prettier": "prettier --write .",
