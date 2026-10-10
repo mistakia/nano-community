@@ -10,7 +10,13 @@ import { short_npub } from './format'
 // name is self-asserted, so the full npub stays one hover away.
 export default function PubkeyName({ pubkey }) {
   const name = useSelector((state) => get_profile_name(state, pubkey))
-  if (!name) return <code>{short_npub(pubkey)}</code>
+  if (!name) {
+    return (
+      <span className='task-npub' title={nip19.npubEncode(pubkey)}>
+        {short_npub(pubkey)}
+      </span>
+    )
+  }
   return (
     <span className='task-board__name' title={nip19.npubEncode(pubkey)}>
       {name}

@@ -10,6 +10,7 @@ import { Provider, useDispatch } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import { combineReducers } from 'redux-immutable'
 import createSagaMiddleware from 'redux-saga'
+import { ThemeProvider } from '@mui/material/styles'
 import { all } from 'redux-saga/effects'
 
 import {
@@ -29,6 +30,8 @@ import {
   TaskBoardLinks,
   AnchorLink
 } from '@components/task-board'
+
+import theme from './views/theme'
 
 import './task-board-client.styl'
 
@@ -88,6 +91,8 @@ function App() {
 
 createRoot(document.getElementById('app')).render(
   <Provider store={store}>
-    <App />
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
   </Provider>
 )

@@ -1,10 +1,11 @@
 import React from 'react'
 import { Provider } from 'react-redux'
 import { HistoryRouter as Router } from 'redux-first-history/rr6'
-import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { ThemeProvider } from '@mui/material/styles'
 
 import { store, history } from '@core/store'
 import App from '@components/app'
+import theme from './theme'
 
 // Import Language Provider
 // import LanguageProvider from 'containers/LanguageProvider';
@@ -27,45 +28,6 @@ import App from '@components/app'
  *   document.body.classList.add('fontLoaded');
  * });
  *  */
-
-const theme = createTheme({
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          fontFamily: "'IBM Plex Mono', monospace",
-          border: '1px solid rgba(0, 0, 0, 0.23)',
-          color: 'rgba(0, 0, 0, 0.87)',
-          '&:hover': {
-            color: '#4A90E2',
-            backgroundColor: '#ffffff',
-            border: '1px solid rgba(0, 0, 0, 0.23)',
-            boxShadow: '#D0D0D0 4px 4px 0px 0px'
-          }
-        }
-      }
-    },
-    MuiTooltip: {
-      styleOverrides: {
-        tooltip: {
-          color: 'black',
-          backgroundColor: '#ffffff',
-          fontSize: 12,
-          lineHeight: '18px',
-          border: '1px solid rgba(0, 0, 0, 0.23)',
-          boxShadow: '#D0D0D0 4px 4px 0px 0px'
-        }
-      }
-    },
-    MuiAvatarGroup: {
-      styleOverrides: {
-        root: {
-          flexDirection: 'row'
-        }
-      }
-    }
-  }
-})
 
 const Root = () => (
   <Provider store={store}>

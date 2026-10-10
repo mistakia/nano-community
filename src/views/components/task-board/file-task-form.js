@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import Button from '@mui/material/Button'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { build_task_issue } from '#common/task-board/index.mjs'
@@ -51,12 +52,12 @@ export default function FileTaskForm({ on_filed }) {
         rows={5}
         onChange={(event) => set_content(event.target.value)}
       />
-      <button
+      <Button
+        variant='outlined'
         type='submit'
-        className='task-button--primary'
         disabled={publishing?.pending || !subject.trim()}>
         {publishing?.pending ? 'Publishing…' : 'File task'}
-      </button>
+      </Button>
       {publishing?.error && (
         <div className='task-board__error'>{publishing.error}</div>
       )}

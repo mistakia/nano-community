@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { nip19 } from 'nostr-tools'
+import Button from '@mui/material/Button'
 
 import {
   nostr_identity_actions,
@@ -26,7 +27,8 @@ export default function IdentityControl() {
   return (
     <div className='task-identity'>
       {pubkey ? (
-        <button
+        <Button
+          variant='outlined'
           className='task-identity__toggle'
           aria-expanded={Boolean(panel)}
           onClick={() => toggle('account')}>
@@ -34,14 +36,14 @@ export default function IdentityControl() {
             <span className='task-identity__dot' title='Not saved yet' />
           )}
           <PubkeyName pubkey={pubkey} />
-        </button>
+        </Button>
       ) : (
-        <button
-          className='task-identity__toggle task-identity__toggle--join'
+        <Button
+          variant='outlined'
           aria-expanded={Boolean(panel)}
           onClick={() => toggle('join')}>
           Join in
-        </button>
+        </Button>
       )}
 
       {panel && (
@@ -53,14 +55,18 @@ export default function IdentityControl() {
                 This browser keeps a key that signs what you post.
               </p>
               <div className='task-identity__actions'>
-                <button
-                  className='task-button--primary'
+                <Button
+                  variant='outlined'
+                  size='small'
                   onClick={() => dispatch(nostr_identity_actions.create_key())}>
                   Get started
-                </button>
-                <button onClick={() => set_panel('import')}>
+                </Button>
+                <Button
+                  variant='outlined'
+                  size='small'
+                  onClick={() => set_panel('import')}>
                   I have a nostr key
-                </button>
+                </Button>
               </div>
               <p className='task-identity__fine'>
                 A nostr browser extension, if you have one, is used instead.
@@ -86,15 +92,20 @@ export default function IdentityControl() {
                 onChange={(event) => set_import_value(event.target.value)}
               />
               <div className='task-identity__actions'>
-                <button
+                <Button
+                  variant='outlined'
+                  size='small'
                   type='submit'
-                  className='task-button--primary'
                   disabled={!import_value.trim()}>
                   Use this key
-                </button>
-                <button type='button' onClick={() => set_panel(null)}>
+                </Button>
+                <Button
+                  variant='outlined'
+                  size='small'
+                  type='button'
+                  onClick={() => set_panel(null)}>
                   Cancel
-                </button>
+                </Button>
               </div>
             </form>
           )}
@@ -105,26 +116,28 @@ export default function IdentityControl() {
                 You post as <PubkeyName pubkey={pubkey} />
                 {method === 'nip07' && ', signed by your browser extension'}.
               </p>
-              <code className='task-identity__npub'>
-                {nip19.npubEncode(pubkey)}
-              </code>
+              <p className='task-identity__npub'>{nip19.npubEncode(pubkey)}</p>
               {method === 'local' && needs_backup && (
-                <p className='task-identity__warning'>
+                <p>
                   Your key is only in this browser. Save it to keep your name if
                   browser data is cleared, or to use it elsewhere.
                 </p>
               )}
               {method === 'local' && (
                 <div className='task-identity__actions'>
-                  <button
-                    className={needs_backup ? 'task-button--primary' : ''}
+                  <Button
+                    variant='outlined'
+                    size='small'
                     onClick={() => set_panel('export')}>
                     Save my key
-                  </button>
+                  </Button>
                   {!needs_backup && (
-                    <button onClick={() => set_panel('import')}>
+                    <Button
+                      variant='outlined'
+                      size='small'
+                      onClick={() => set_panel('import')}>
                       Use a different key
-                    </button>
+                    </Button>
                   )}
                 </div>
               )}
@@ -137,18 +150,22 @@ export default function IdentityControl() {
                 Copy this somewhere safe, like a password manager. Anyone who
                 has it can post as you.
               </p>
-              <code className='task-identity__secret'>
-                {export_local_key()}
-              </code>
+              <p className='task-identity__secret'>{export_local_key()}</p>
               <div className='task-identity__actions'>
-                <button
-                  className='task-button--primary'
+                <Button
+                  variant='outlined'
+                  size='small'
                   onClick={() =>
                     dispatch(nostr_identity_actions.mark_backed_up())
                   }>
                   I saved it
-                </button>
-                <button onClick={() => set_panel('account')}>Back</button>
+                </Button>
+                <Button
+                  variant='outlined'
+                  size='small'
+                  onClick={() => set_panel('account')}>
+                  Back
+                </Button>
               </div>
             </>
           )}

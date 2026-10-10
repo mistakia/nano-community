@@ -31,37 +31,11 @@ $priorityColors = {
   width 100%
   box-sizing border-box
 
-  button
-    cursor pointer
-    padding 4px 12px
-    border 1px solid $borderColor
-    border-radius 4px
-    background white
-    color $textColor
-    font inherit
-    font-size 13px
-
-    &:hover:not(:disabled)
-      border-color $nanoBlueGrey
-
-    &:disabled
-      cursor default
-      opacity 0.5
-
-  .task-button--primary
-    background $nanoDarkBlue
-    border-color $nanoDarkBlue
-    color white
-
-    &:hover:not(:disabled)
-      border-color $nanoDarkBlue
-      opacity 0.85
-
   input, textarea, select
     font inherit
     font-size 13px
     padding 6px 8px
-    border 1px solid $borderColor
+    border 1px solid $controlBorder
     border-radius 4px
     background white
     color $textColor
@@ -107,6 +81,10 @@ for $name, $color in $priorityColors
   font-weight 500
   vertical-align 0.12em
 
+.task-npub
+  font-family 'Roboto Mono', monospace
+  font-size 0.9em
+
 .task-age, .task-muted
   color $taskTertiary
 
@@ -116,25 +94,12 @@ for $name, $color in $priorityColors
 
 .task-board__notice
   margin 16px 0
-  padding 8px 12px
-  background $nanoLightBlue
-  border 1px solid $borderColor
-  border-radius 4px
   display flex
   flex-wrap wrap
   gap 8px
   align-items center
   font-size 13px
-
-.task-link-button
-  .task-detail &, .task-board &
-    border none
-    background none
-    padding 0
-    color $taskAccent
-
-    &:hover:not(:disabled)
-      text-decoration underline
+  color $nanoBlueGrey
 
 .task-section
   margin 24px 0
@@ -170,21 +135,16 @@ for $name, $color in $priorityColors
   position relative
   flex none
 
-.task-identity__toggle
-  .task-board &, .task-detail &
-    display inline-flex
-    align-items center
-    gap 6px
-    max-width 220px
+// Names keep their own case inside the site's uppercase button.
+.task-identity__toggle.MuiButton-root
+  gap 8px
+  max-width 240px
+  text-transform none
+
+  .task-board__name, .task-npub
     overflow hidden
     text-overflow ellipsis
     white-space nowrap
-
-.task-identity__toggle--join
-  .task-board &, .task-detail &
-    background $nanoDarkBlue
-    border-color $nanoDarkBlue
-    color white
 
 .task-identity__dot
   width 7px
@@ -196,14 +156,14 @@ for $name, $color in $priorityColors
 .task-identity__panel
   position absolute
   right 0
-  top calc(100% + 6px)
+  top calc(100% + 8px)
   z-index 10
   width 320px
   padding 16px
   background white
-  border 1px solid $borderColor
-  border-radius 8px
-  box-shadow 0 4px 16px rgba(0, 0, 0, 0.08)
+  border 1px solid $controlBorder
+  border-radius 4px
+  box-shadow $offsetShadow
   font-size 13px
   text-align left
 
@@ -219,28 +179,23 @@ for $name, $color in $priorityColors
   flex-wrap wrap
   gap 8px
 
-.task-identity__fine
+.task-identity__fine, .task-identity__npub
   .task-identity__panel &
-    margin 12px 0 0
     font-size 12px
     color $taskTertiary
 
-.task-identity__warning
+.task-identity__fine
   .task-identity__panel &
-    padding 8px
-    border-radius 4px
-    background #fff4e5
+    margin 12px 0 0
 
 .task-identity__npub, .task-identity__secret
   .task-identity__panel &
-    display block
-    margin 0 0 12px
-    padding 6px 8px
     word-break break-all
-    font-size 11px
+    font-family 'Roboto Mono', monospace
 
 .task-identity__secret
-  user-select all
+  .task-identity__panel &
+    user-select all
 
 // --- board ------------------------------------------------------------------
 
@@ -307,11 +262,15 @@ for $name, $color in $priorityColors
     justify-content space-between
     align-items center
     gap 8px
+    width 100%
     padding 10px 12px
     border none
     border-radius 8px
     background none
+    color inherit
+    font inherit
     text-align left
+    cursor pointer
 
   h2
     margin 0
@@ -353,8 +312,8 @@ for $name, $color in $stageColors
     color $textColor
 
   &:hover
-    border-color $borderColor
-    box-shadow 0 1px 4px $hoverShadow
+    border-color $controlBorder
+    box-shadow $offsetShadow
 
 .task-board__card-subject
   font-size 13px
@@ -389,6 +348,7 @@ for $name, $color in $stageColors
 
   > a
     text-decoration none
+    white-space nowrap
 
 .task-detail__type
   font-size 11px
@@ -449,21 +409,22 @@ for $name, $color in $stageColors
   flex-wrap wrap
   gap 8px
   align-items center
-  margin-top 12px
-  padding 8px 12px
-  border-radius 4px
-  background #fff4e5
+  margin-top 16px
   font-size 12px
+  color $nanoBlueGrey
 
   span
-    flex 1 1 240px
+    flex 1 1 100%
+
+.task-detail__buttons
+  display flex
+  gap 8px
 
 .task-detail__comments
   form
     display flex
     flex-direction column
     gap 8px
-    align-items flex-start
     margin-top 16px
 
   textarea
@@ -500,7 +461,6 @@ for $name, $color in $stageColors
     right auto
 
   .task-identity__panel
-    width 320px
     max-width calc(100vw - 32px)
 
   .task-detail__field span

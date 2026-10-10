@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import Button from '@mui/material/Button'
 import { useSelector } from 'react-redux'
 
 import { get_task_board, get_task_board_state } from '@core/task-board'
@@ -141,11 +142,11 @@ export default function TaskBoard() {
       {(has_key || !board.get('is_loaded')) && (
         <div className='task-board__toolbar'>
           {has_key && (
-            <button
-              className={show_form ? '' : 'task-button--primary'}
+            <Button
+              variant='outlined'
               onClick={() => set_show_form(!show_form)}>
               {show_form ? 'Cancel' : 'File a task'}
-            </button>
+            </Button>
           )}
           {!board.get('is_loaded') && (
             <span className='task-board__loading'>Loading from relays…</span>

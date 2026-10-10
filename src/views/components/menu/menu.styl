@@ -1,5 +1,4 @@
 $hoverBackground = rgba(255, 255, 255, 0.8)
-$hoverBorder = rgba(0, 0, 0, 0.23)
 
 .menu__dial
   position fixed
@@ -69,9 +68,9 @@ $hoverBorder = rgba(0, 0, 0, 0.23)
   margin 8px
   transition background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms
   &:hover
-    border-color $hoverBorder
+    border-color $controlBorder
     background $hoverBackground
-    box-shadow $hoverShadow 4px 4px 0px 0px
+    box-shadow $offsetShadow
 
 .menu__links
   margin-top 8px

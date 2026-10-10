@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import Button from '@mui/material/Button'
 import { useDispatch, useSelector } from 'react-redux'
 
 import {
@@ -154,15 +155,15 @@ function ManageTask({ task, is_steward, publish, pending }) {
             Saving publishes {changed.join(', ')} for everyone. It cannot be
             taken back, only changed again.
           </span>
-          <button
-            className='task-button--primary'
-            disabled={pending}
-            onClick={() => save()}>
+          <Button variant='outlined' disabled={pending} onClick={() => save()}>
             Save
-          </button>
-          <button disabled={pending} onClick={() => set_draft(current)}>
+          </Button>
+          <Button
+            variant='outlined'
+            disabled={pending}
+            onClick={() => set_draft(current)}>
             Cancel
-          </button>
+          </Button>
         </div>
       )}
     </section>
@@ -186,6 +187,7 @@ export default function TaskDetail({ issue_id }) {
   const pubkey = identity.get('pubkey')
   const own_triage_set = useSelector((s) => get_own_triage_set(s, pubkey))
   const [comment, set_comment] = useState('')
+  const [commenting, set_commenting] = useState(false)
 
   const top_bar = (
     <div className='task-detail__top'>
@@ -293,7 +295,8 @@ export default function TaskDetail({ issue_id }) {
           Not on the board yet. A steward shows tasks from new people once they
           vouch for them.
           {is_steward && !author_trusted && (
-            <button
+            <Button
+              variant='outlined'
               disabled={publishing('vouch')?.pending}
               onClick={() =>
                 publish('vouch', () =>
@@ -303,7 +306,7 @@ export default function TaskDetail({ issue_id }) {
                 )
               }>
               Vouch for <PubkeyName pubkey={task.pubkey} />
-            </button>
+            </Button>
           )}
         </div>
       )}
@@ -312,8 +315,8 @@ export default function TaskDetail({ issue_id }) {
 
       {pubkey && task.status === 'open' && (
         <div className='task-detail__actions'>
-          <button
-            className={is_claimant ? '' : 'task-button--primary'}
+          <Button
+            variant='outlined'
             disabled={any_pending}
             onClick={() =>
               publish('claim', (b) =>
@@ -329,7 +332,7 @@ export default function TaskDetail({ issue_id }) {
               : active_claims.length > 0
                 ? 'Also work on this'
                 : 'Work on this'}
-          </button>
+          </Button>
         </div>
       )}
 
@@ -364,7 +367,7 @@ export default function TaskDetail({ issue_id }) {
             <TaskText content={event.content} />
           </div>
         ))}
-        {pubkey ? (
+        {pubkey && commenting && (
           <form
             onSubmit={(event) => {
               event.preventDefault()
@@ -374,26 +377,42 @@ export default function TaskDetail({ issue_id }) {
                 build_task_comment({ issue: task, content })
               )
               set_comment('')
+              set_commenting(false)
             }}>
             <textarea
-              rows={3}
+              rows={4}
+              autoFocus
               placeholder='Add a comment'
               value={comment}
               onChange={(event) => set_comment(event.target.value)}
             />
-            {comment.trim() && (
-              <button
+            <div className='task-detail__buttons'>
+              <Button
+                variant='outlined'
                 type='submit'
-                className='task-button--primary'
-                disabled={publishing('comment')?.pending}>
+                disabled={publishing('comment')?.pending || !comment.trim()}>
                 Comment
-              </button>
-            )}
+              </Button>
+              <Button
+                variant='outlined'
+                onClick={() => {
+                  set_comment('')
+                  set_commenting(false)
+                }}>
+                Cancel
+              </Button>
+            </div>
           </form>
-        ) : (
-          <button className='task-link-button' onClick={join}>
+        )}
+        {pubkey && !commenting && (
+          <Button variant='outlined' onClick={() => set_commenting(true)}>
+            Add a comment
+          </Button>
+        )}
+        {!pubkey && (
+          <Button variant='outlined' onClick={join}>
             Join in to comment or work on this
-          </button>
+          </Button>
         )}
       </section>
     </div>
