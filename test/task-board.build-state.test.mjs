@@ -318,7 +318,7 @@ describe('task board view reducer', () => {
       label(steward, high_old, PRIORITY, 'high', T + 4),
       label(steward, high_new, PRIORITY, 'high', T + 5),
       sign(
-        contributor,
+        steward,
         build_task_comment({
           issue: high_old,
           content: 'bump',
@@ -333,6 +333,77 @@ describe('task board view reducer', () => {
       low.id
     ])
     expect(state.tasks[high_old.id].comment_count).to.equal(1)
+  })
+})
+
+describe('task board view reducer: ambiguity rules', () => {
+  const announcement = announce({ maintainers: [steward.pubkey] })
+
+  it('counts comments only from stewards, trusted keys and the author', () => {
+    const issue = issue_by(contributor, 'Mine')
+    const triage = sign(
+      steward,
+      build_triage_set({ pubkeys: [contributor.pubkey], created_at: T })
+    )
+    const comment = (key, created_at) =>
+      sign(key, build_task_comment({ issue, content: 'x', created_at }))
+    const state = state_of([
+      announcement,
+      triage,
+      issue,
+      comment(stranger, T + 50),
+      comment(contributor, T + 5),
+      comment(steward, T + 6)
+    ])
+    expect(state.tasks[issue.id].comment_count).to.equal(2)
+    expect(state.tasks[issue.id].latest_activity_at).to.equal(T + 6)
+  })
+
+  it('ignores a deletion request for the announcement', () => {
+    const deletion = sign(
+      owner,
+      build_deletion_request({ events: [announcement], created_at: T + 5 })
+    )
+    const state = state_of([announcement, deletion])
+    expect(state.stewards).to.have.members([owner.pubkey, steward.pubkey])
+  })
+
+  it('takes a superseded issue off the board', () => {
+    const old = issue_by(steward, 'Old')
+    const replacement = sign(
+      steward,
+      build_task_issue({
+        board,
+        subject: 'New',
+        supersedes_issue_id: old.id,
+        created_at: T + 2
+      })
+    )
+    const state = state_of([announcement, old, replacement])
+    expect(state.tasks[old.id].superseded_by).to.equal(replacement.id)
+    const listed = Object.values(state.columns).flat()
+    expect(listed).to.include(replacement.id)
+    expect(listed).to.not.include(old.id)
+  })
+
+  it('ignores a supersede marker from a key that may not replace the issue', () => {
+    const old = issue_by(steward, 'Old')
+    const triage = sign(
+      steward,
+      build_triage_set({ pubkeys: [contributor.pubkey], created_at: T })
+    )
+    const hijack = sign(
+      contributor,
+      build_task_issue({
+        board,
+        subject: 'Hijack',
+        supersedes_issue_id: old.id,
+        created_at: T + 2
+      })
+    )
+    const state = state_of([announcement, triage, old, hijack])
+    expect(state.tasks[old.id].superseded_by).to.equal(null)
+    expect(Object.values(state.columns).flat()).to.include(old.id)
   })
 })
 

@@ -2,8 +2,9 @@
 // expected to derive the same board from the same events; the rules are in
 // docs/design/task-board-protocol.md § Default view rules.
 //
-// Events are assumed signature-verified by the caller (nostr-tools pools
-// verify on receipt).
+// Events must be signature-verified by the caller (nostr-tools pools verify
+// on receipt). Where an event repeats a tag this reducer reads one value
+// from, the first occurrence counts.
 
 import {
   TASK_BOARD_KINDS,
@@ -71,14 +72,22 @@ export default function build_task_board_state({
   const board_address = format_board_address(board)
   const unique_events = [...new Map(events.map((e) => [e.id, e])).values()]
 
-  // Deletion requests only remove the requester's own events.
+  // Deletion requests only remove the requester's own events, by `e` tag.
+  // An announcement is never deleted, only replaced, so the steward set
+  // cannot be emptied.
   const deleted_ids = new Set()
   const event_by_id = new Map(unique_events.map((e) => [e.id, e]))
   for (const event of unique_events) {
     if (event.kind !== TASK_BOARD_KINDS.deletion_request) continue
     for (const id of get_tag_values(event, 'e')) {
       const target = event_by_id.get(id)
-      if (target && target.pubkey === event.pubkey) deleted_ids.add(id)
+      if (
+        target &&
+        target.pubkey === event.pubkey &&
+        target.kind !== TASK_BOARD_KINDS.repository_announcement
+      ) {
+        deleted_ids.add(id)
+      }
     }
   }
   const live_events = unique_events.filter(
@@ -142,9 +151,23 @@ export default function build_task_board_state({
       created_at: event.created_at,
       base_entity_id: get_tag_value(event, BASE_ENTITY_ID_TAG) || null,
       supersedes_issue_id: supersedes ? supersedes[1] : null,
+      superseded_by: null,
       is_hidden: !stewards.has(event.pubkey) && !trusted.has(event.pubkey),
       latest_activity_at: event.created_at
     })
+  }
+
+  // A visible issue supersedes an older one from its own author or, when a
+  // steward signs it, any older one; the older issue leaves the columns.
+  for (const task of tasks.values()) {
+    const old = task.supersedes_issue_id && tasks.get(task.supersedes_issue_id)
+    if (
+      old &&
+      !task.is_hidden &&
+      (task.pubkey === old.pubkey || stewards.has(task.pubkey))
+    ) {
+      old.superseded_by = task.id
+    }
   }
 
   const touch = (task, event) => {
@@ -187,8 +210,18 @@ export default function build_task_board_state({
       keep_newest(claims, `${event.pubkey}:${task.id}`, event)
       touch(task, event)
     } else if (event.kind === TASK_BOARD_KINDS.comment) {
+      // Only comments from stewards, trusted keys and the issue author count
+      // toward the comment count and activity, so others cannot reorder the
+      // board.
       const task = tasks.get(get_tag_value(event, 'E'))
       if (!task) continue
+      if (
+        !stewards.has(event.pubkey) &&
+        !trusted.has(event.pubkey) &&
+        event.pubkey !== task.pubkey
+      ) {
+        continue
+      }
       comment_counts.set(task.id, (comment_counts.get(task.id) || 0) + 1)
       touch(task, event)
     }
@@ -236,7 +269,9 @@ export default function build_task_board_state({
       .map((claim) => claim.pubkey)
     task.comment_count = comment_counts.get(task.id) || 0
     task.column = get_task_column(task)
-    if (!task.is_hidden) columns[task.column].push(task)
+    if (!task.is_hidden && !task.superseded_by) {
+      columns[task.column].push(task)
+    }
   }
 
   for (const column of Object.values(columns)) column.sort(compare_tasks)

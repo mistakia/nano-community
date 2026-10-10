@@ -133,7 +133,8 @@ describe('task board CLI', function () {
     expect(renewal.kind).to.equal(30634)
     expect(renewal.created_at).to.be.greaterThan(before_claim.created_at)
     const task = await read_task()
-    expect(task.comment_count).to.equal(1)
+    // An unvouched key's comment is stored but does not count toward activity.
+    expect(task.comment_count).to.equal(0)
     expect(task.active_claimants).to.deep.equal([agent_pubkey])
   })
 

@@ -449,7 +449,7 @@ Each steward publishes a NIP-51 follow set (kind 30000) with `d` = `nano-communi
 
 ## Retraction
 
-A NIP-09 deletion request (kind 5) removes the requester's own events from the default view. A deletion request for someone else's event is ignored. Relays may keep the event; deletion is a request, not a guarantee.
+A NIP-09 deletion request (kind 5) removes the requester's own events from the default view. Only `e` tags are honoured; a deletion by `a` tag is ignored, so a claim is withdrawn by releasing it. A deletion request for someone else's event is ignored, and so is one for the board announcement, which is only ever replaced by a newer one. Relays may keep the event; deletion is a request, not a guarantee.
 
 ```json
 {
@@ -468,7 +468,7 @@ A NIP-09 deletion request (kind 5) removes the requester's own events from the d
 
 ## Default view rules
 
-Every client is expected to derive the same board from the same events. The reference implementation is `common/task-board/build-task-board-state.mjs` in the nano-community repository.
+Every client is expected to derive the same board from the same events. The reference implementation is `common/task-board/build-task-board-state.mjs` in the nano-community repository. Clients verify every event's signature before reducing it, and where an event repeats a tag that a rule reads one value from, the first occurrence counts.
 
 1. **Stewards** come from the owner's latest announcement.
 2. **Trusted** pubkeys are the union of the stewards' triage sets.
@@ -483,9 +483,10 @@ Every client is expected to derive the same board from the same events. The refe
    - **Triage:** open, with no steward priority label.
    - **Needs a taker:** everything else.
 7. Issues whose author is neither a steward nor trusted are **hidden** from the columns and still reachable by direct link.
-8. Each column is sorted by steward priority (`critical` first, unlabelled last), then by latest activity (newest first), then by id.
+8. An issue is **superseded** when a visible issue carries an `e` tag with marker `supersedes` pointing at it and was signed by its author or by a steward. A superseded issue leaves the columns and stays reachable by direct link.
+9. Each column is sorted by steward priority (`critical` first, unlabelled last), then by latest activity (newest first), then by id.
 
-Latest activity is the newest `created_at` among the issue and its valid statuses, labels, claims and comments.
+Latest activity is the newest `created_at` among the issue and its valid statuses, labels, claims and counted comments. A comment counts toward activity and the comment count only when its author is a steward, a trusted key or the issue author; clients may still display other comments.
 
 ## Pledge (kind 30635)
 
