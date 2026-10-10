@@ -6,6 +6,9 @@ import {
 
 export const COMMUNITY_DOMAIN = 'nano.community'
 export const COMMUNITY_WINDOW_SECONDS = 600
+// The specification's recommended cap, enough for every registered profile.
+// Without it the JSON body parser's 100 KB default was the only bound.
+export const MAX_MESSAGE_BYTES = 64 * 1024
 
 export class CommunityRequestError extends Error {
   constructor(status, message) {
@@ -36,6 +39,15 @@ export default function verify_community_request({
 }) {
   if (!is_plain_object(wire_unit)) {
     throw new CommunityRequestError(400, 'expected a {message, signature} unit')
+  }
+  if (
+    typeof wire_unit.message === 'string' &&
+    Buffer.byteLength(wire_unit.message, 'utf8') > MAX_MESSAGE_BYTES
+  ) {
+    throw new CommunityRequestError(
+      400,
+      `message exceeds ${MAX_MESSAGE_BYTES} bytes`
+    )
   }
 
   let result
