@@ -183,6 +183,23 @@ describe('task board CLI', function () {
     expect(state.trusted).to.deep.equal([other])
   })
 
+  it('blocks a vouched key, keeping the block set, and lifts the block', async () => {
+    const owner_file = path.join(path.dirname(key_file), 'owner.key')
+    fs.writeFileSync(owner_file, bytesToHex(owner_key), { mode: 0o600 })
+    const other = getPublicKey(generateSecretKey())
+    await cli('vouch', agent_pubkey, '--key-file', owner_file)
+    await cli('block', nip19.npubEncode(other), '--key-file', owner_file)
+    await cli('block', nip19.npubEncode(agent_pubkey), '--key-file', owner_file)
+    let state = await cli('read')
+    expect(state.blocked).to.have.members([other, agent_pubkey])
+    expect(state.trusted).to.not.include(agent_pubkey)
+
+    await cli('unblock', agent_pubkey, '--key-file', owner_file)
+    state = await cli('read')
+    expect(state.blocked).to.deep.equal([other])
+    expect(state.trusted).to.include(agent_pubkey)
+  })
+
   it('ignores a status change from a non-steward who is not the author', async () => {
     await cli('status', issue.id, 'resolved', '--key-file', key_file)
     expect((await read_task()).status).to.equal('open')

@@ -9,6 +9,8 @@
 //   node scripts/task-board.mjs relate <acts_for|delegates_to> <npub> [--remove] --key-file <file>
 //   node scripts/task-board.mjs vouch <npub> --key-file <file>
 //   node scripts/task-board.mjs unvouch <npub> --key-file <file>
+//   node scripts/task-board.mjs block <npub> --key-file <file>
+//   node scripts/task-board.mjs unblock <npub> --key-file <file>
 //
 // Output is JSON. The key file holds an nsec or a 64-character hex secret key;
 // `--key-file -` reads it from stdin. It is never read from argv. Every
@@ -40,6 +42,7 @@ import {
   build_task_issue,
   build_task_status,
   edit_key_relation,
+  edit_block_set,
   edit_vouch_set,
   order_claim_after
 } from '#common/task-board/index.mjs'
@@ -220,6 +223,21 @@ const builders = {
         previous: state.vouch_sets[pubkey],
         pubkey: to_hex_pubkey(argv.other),
         remove: true
+      }),
+  block:
+    ({ argv }) =>
+    ({ state, pubkey }) =>
+      edit_block_set({
+        previous: state.block_sets[pubkey],
+        pubkey: to_hex_pubkey(argv.other)
+      }),
+  unblock:
+    ({ argv }) =>
+    ({ state, pubkey }) =>
+      edit_block_set({
+        previous: state.block_sets[pubkey],
+        pubkey: to_hex_pubkey(argv.other),
+        remove: true
       })
 }
 
@@ -302,6 +320,14 @@ const main = async () => {
       (y) => y.options(key_file).positional('other', other)
     )
     .command('unvouch <other>', 'Withdraw a vouch', (y) =>
+      y.options(key_file).positional('other', other)
+    )
+    .command(
+      'block <other>',
+      'Block a key from the board; counts only from a steward',
+      (y) => y.options(key_file).positional('other', other)
+    )
+    .command('unblock <other>', 'Lift a block', (y) =>
       y.options(key_file).positional('other', other)
     )
     .demandCommand(1)

@@ -237,22 +237,17 @@ export function build_vouch_set({
   })
 }
 
-// Adds or removes one key on top of a previous vouch set. Tags this client
-// does not understand are carried over untouched.
-export function edit_vouch_set({
-  previous,
-  pubkey,
-  remove = false,
-  created_at = now_seconds()
-}) {
+// Adds or removes one key on top of a key's previous follow set (vouch or
+// block). Tags this client does not understand are carried over untouched.
+const edit_follow_set = ({ build, previous, pubkey, remove, created_at }) => {
   const previous_tags = previous ? previous.tags : []
-  const vouched = previous_tags
+  const listed = previous_tags
     .filter((tag) => tag[0] === 'p' && tag[1] !== pubkey)
     .map((tag) => tag[1])
-  if (!remove) vouched.push(require_value(pubkey, 'pubkey'))
+  if (!remove) listed.push(require_value(pubkey, 'pubkey'))
   // Dated after the set it replaces, so a quick second edit still wins.
-  const event = build_vouch_set({
-    pubkeys: vouched,
+  const event = build({
+    pubkeys: listed,
     created_at: previous
       ? Math.max(created_at, previous.created_at + 1)
       : created_at
@@ -262,6 +257,34 @@ export function edit_vouch_set({
   )
   return { ...event, tags: [...event.tags, ...keep_tags] }
 }
+
+export const edit_vouch_set = ({
+  previous,
+  pubkey,
+  remove = false,
+  created_at = now_seconds()
+}) =>
+  edit_follow_set({
+    build: build_vouch_set,
+    previous,
+    pubkey,
+    remove,
+    created_at
+  })
+
+export const edit_block_set = ({
+  previous,
+  pubkey,
+  remove = false,
+  created_at = now_seconds()
+}) =>
+  edit_follow_set({
+    build: build_block_set,
+    previous,
+    pubkey,
+    remove,
+    created_at
+  })
 
 // A steward's block set: keys the board does not trust, whatever vouches
 // they hold.

@@ -329,6 +329,7 @@ export default function build_task_board_state({
     trust: Object.fromEntries(trusted),
     blocked: [...blocked],
     vouch_sets: Object.fromEntries(vouch_sets),
+    block_sets: Object.fromEntries(block_sets),
     account_attestations: Object.fromEntries(account_attestations),
     key_relations,
     key_properties: Object.fromEntries(key_properties),

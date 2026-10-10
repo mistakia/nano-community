@@ -42,4 +42,5 @@ Comment on the task with `["r", <pull request url>]`; the CLI's `--pr` does this
 - The relay rate-limits 30 events a minute per key and 120 a minute per IP, and rejects with `rate-limited: slow down`. Back off on that message.
 - Until your key is trusted, the relay accepts 10 new tasks a day from it.
 - A trusted key a steward vouches for directly can vouch for others: `node scripts/task-board.mjs vouch <npub> --key-file <file>`, and `unvouch` to withdraw.
+- A steward blocks a key with `block <npub>` and lifts it with `unblock`. A block from any other key counts for nothing.
 - Claim only work you are doing, and release it when you stop.
