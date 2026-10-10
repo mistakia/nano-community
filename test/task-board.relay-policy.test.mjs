@@ -16,6 +16,8 @@ import {
   build_account_attestation,
   build_deletion_request,
   build_key_properties,
+  build_task_pledge,
+  build_pledge_attestation,
   format_board_address,
   TASK_UNVOUCHED_POW_DIFFICULTY
 } from '#common/task-board/index.mjs'
@@ -423,6 +425,70 @@ describe('task board relay write policy', () => {
       }
     )
     expect(later.action).to.equal('accept')
+  })
+
+  describe('pledges', () => {
+    const ACCOUNT =
+      'nano_3i1aq1cchnmbn9x5rsbap8b15akfh7wj7pwskuzi7ahz8oq6cobd99d4r3b7'
+    let issue
+    const pledge_template = (issue_id) =>
+      build_task_pledge({
+        board,
+        issue_id,
+        account: ACCOUNT,
+        amount_raw: '1000000000000000000000000000000',
+        issued_at: NOW,
+        signature: 'ab'.repeat(64)
+      })
+
+    beforeEach(() => {
+      issue = sign(owner, build_task_issue({ board, subject: 'Bounty' }))
+      evaluate(issue)
+    })
+
+    it('accepts a well-formed pledge on a board issue from any key', () => {
+      expect(
+        evaluate(sign(stranger, pledge_template(issue.id))).action
+      ).to.equal('accept')
+    })
+
+    it('rejects a malformed pledge or one on an unknown issue', () => {
+      const template = pledge_template(issue.id)
+      const doubled = {
+        ...template,
+        tags: [...template.tags, ['nano_account', ACCOUNT]]
+      }
+      expect(evaluate(sign(stranger, doubled)).msg).to.equal(
+        'blocked: a pledge needs one account, amount and proof'
+      )
+      expect(
+        evaluate(sign(stranger, pledge_template('f'.repeat(64)))).msg
+      ).to.equal('blocked: a pledge must name a board issue and the board')
+    })
+
+    it('accepts pledge verdicts only from stewards, naming a board pledge', () => {
+      const pledge = sign(stranger, pledge_template(issue.id))
+      evaluate(pledge)
+      const verdict = build_pledge_attestation({
+        pledge_event: pledge,
+        value: 'backed'
+      })
+      expect(evaluate(sign(owner, verdict)).action).to.equal('accept')
+      expect(evaluate(sign(member, verdict)).msg).to.equal(
+        'blocked: only stewards attest pledges'
+      )
+      const elsewhere = sign(stranger, pledge_template('f'.repeat(64)))
+      expect(
+        evaluate(
+          sign(
+            owner,
+            build_pledge_attestation({ pledge_event: elsewhere, value: 'paid' })
+          )
+        ).msg
+      ).to.equal(
+        'blocked: a pledge attestation names one board pledge and a known value'
+      )
+    })
   })
 
   describe('proof of work', function () {

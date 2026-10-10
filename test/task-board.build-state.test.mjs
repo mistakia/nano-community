@@ -504,7 +504,7 @@ describe('task board protocol spec examples', () => {
     const kinds = new Set(examples.map((e) => e.kind))
     for (const kind of [
       5, 1111, 1621, 1630, 1631, 1632, 1633, 1985, 10011, 30000, 30617, 30634,
-      30636
+      30635, 30636
     ]) {
       expect(kinds, `kind ${kind}`).to.include(kind)
     }
@@ -557,6 +557,9 @@ describe('task board protocol spec examples', () => {
     expect(state.account_attestations[binding.pubkey].value).to.equal(
       'established'
     )
+    const pledge = examples.find((e) => e.kind === 30635)
+    const pledged = state.tasks[pledge.tags.find((t) => t[0] === 'd')[1]]
+    expect(pledged.pledged_raw).to.equal('2000000000000000000000000000000')
   })
 })
 

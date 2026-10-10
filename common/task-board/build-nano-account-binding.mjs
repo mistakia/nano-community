@@ -8,8 +8,10 @@
 import { TASK_BOARD_KINDS } from './constants.mjs'
 
 const NANO_PLATFORM_PREFIX = 'nano:'
-const NANO_ACCOUNT_RE = /^nano_[13][13456789abcdefghijkmnopqrstuwxyz]{59}$/
-const PROOF_RE = /^(0|[1-9][0-9]*):([0-9a-f]{128})$/
+export const NANO_ACCOUNT_RE =
+  /^nano_[13][13456789abcdefghijkmnopqrstuwxyz]{59}$/
+// A compact Nano signed-message proof, `<issued_at>:<signature>`.
+export const NANO_PROOF_RE = /^(0|[1-9][0-9]*):([0-9a-f]{128})$/
 
 export const BIND_NOSTR_KEY_STATEMENT_PREFIX =
   'Verifying that I control the following Nostr public key: '
@@ -33,7 +35,7 @@ export function build_nano_account_binding({
 }) {
   const proof = `${issued_at}:${String(signature).toLowerCase()}`
   if (!NANO_ACCOUNT_RE.test(account)) throw new Error('not a nano_ account')
-  if (!PROOF_RE.test(proof)) throw new Error('not a valid binding proof')
+  if (!NANO_PROOF_RE.test(proof)) throw new Error('not a valid binding proof')
   return {
     kind: TASK_BOARD_KINDS.nano_identity,
     created_at,
@@ -54,7 +56,7 @@ export function parse_nano_account_binding(event) {
   )
   if (tags.length !== 1) return null
   const account = tags[0][1].slice(NANO_PLATFORM_PREFIX.length)
-  const proof = PROOF_RE.exec(tags[0][2] || '')
+  const proof = NANO_PROOF_RE.exec(tags[0][2] || '')
   if (!NANO_ACCOUNT_RE.test(account) || !proof) return null
   return { account, issued_at: Number(proof[1]), signature: proof[2] }
 }

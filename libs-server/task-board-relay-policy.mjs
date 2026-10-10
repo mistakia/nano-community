@@ -19,6 +19,9 @@ import {
   select_established,
   ACCOUNT_ATTESTATION_NAMESPACE,
   ACCOUNT_ATTESTATION_VALUES,
+  PLEDGE_ATTESTATION_NAMESPACE,
+  PLEDGE_ATTESTATION_VALUES,
+  parse_task_pledge,
   TASK_UNVOUCHED_POW_DIFFICULTY,
   format_board_address,
   get_event_pow,
@@ -135,6 +138,14 @@ const is_account_attestation = (event) =>
   event.kind === TASK_BOARD_KINDS.label &&
   get_tag_value(event, 'L') === ACCOUNT_ATTESTATION_NAMESPACE
 
+const is_pledge_attestation = (event) =>
+  event.kind === TASK_BOARD_KINDS.label &&
+  get_tag_value(event, 'L') === PLEDGE_ATTESTATION_NAMESPACE
+
+const PLEDGE_ADDRESS_RE = new RegExp(
+  `^${TASK_BOARD_KINDS.pledge}:[0-9a-f]{64}:([0-9a-f]{64})$`
+)
+
 const has_board_address = (state, event) =>
   get_tag_values(event, 'a').some((a) => state.board_addresses.has(a))
 
@@ -170,6 +181,27 @@ function check_kind_rules(state, event) {
       )
     return valid || 'an account attestation names one key and a known value'
   }
+  if (is_pledge_attestation(event)) {
+    if (!get_stewards(state).has(event.pubkey)) {
+      return 'only stewards attest pledges'
+    }
+    const addresses = get_tag_values(event, 'a')
+    const target =
+      addresses.length === 1 && PLEDGE_ADDRESS_RE.exec(addresses[0])
+    const valid =
+      target &&
+      state.issue_ids.has(target[1]) &&
+      get_tag_values(event, 'e').length === 1 &&
+      event.tags.some(
+        (tag) =>
+          tag[0] === 'l' &&
+          tag[2] === PLEDGE_ATTESTATION_NAMESPACE &&
+          PLEDGE_ATTESTATION_VALUES.includes(tag[1])
+      )
+    return (
+      valid || 'a pledge attestation names one board pledge and a known value'
+    )
+  }
   if (kind === TASK_BOARD_KINDS.label) {
     return (
       references_known_issue(state, event, ['e']) ||
@@ -182,7 +214,16 @@ function check_kind_rules(state, event) {
       'comment root must be a board issue'
     )
   }
-  if (kind === TASK_BOARD_KINDS.claim || kind === TASK_BOARD_KINDS.pledge) {
+  if (kind === TASK_BOARD_KINDS.pledge) {
+    const pledge = parse_task_pledge(event)
+    if (!pledge) return 'a pledge needs one account, amount and proof'
+    return (
+      (has_board_address(state, event) &&
+        state.issue_ids.has(pledge.issue_id)) ||
+      'a pledge must name a board issue and the board'
+    )
+  }
+  if (kind === TASK_BOARD_KINDS.claim) {
     return is_board_bound(state, event) || 'must reference a board issue'
   }
   if (kind === TASK_BOARD_KINDS.key_properties) {

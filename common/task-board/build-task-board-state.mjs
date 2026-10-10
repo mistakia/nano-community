@@ -18,8 +18,13 @@ import {
   BASE_ENTITY_ID_TAG,
   SUPERSEDES_MARKER,
   CLAIM_LIFETIME_SECONDS,
-  TASK_UNVOUCHED_POW_DIFFICULTY
+  TASK_UNVOUCHED_POW_DIFFICULTY,
+  ACCOUNT_ATTESTATION_LIFETIME_SECONDS,
+  PLEDGE_ATTESTATION_NAMESPACE,
+  PLEDGE_ATTESTATION_VALUES,
+  TASK_PLEDGE_PROMOTION_RAW
 } from './constants.mjs'
+import { parse_task_pledge } from './build-task-pledge.mjs'
 import { get_event_pow, has_standing } from './count-event-pow.mjs'
 import {
   format_board_address,
@@ -71,7 +76,13 @@ const get_task_column = (task) => {
   if (task.status !== 'open') return 'closed'
   if (task.active_claimants.length) return 'in_progress'
   if (task.state === 'blocked' || task.state === 'paused') return 'blocked'
-  if (!task.priority) return 'triage'
+  // Enough backed pledges stand in for a steward's priority.
+  if (
+    !task.priority &&
+    BigInt(task.pledged_raw) < BigInt(TASK_PLEDGE_PROMOTION_RAW)
+  ) {
+    return 'triage'
+  }
   return 'needs_taker'
 }
 
@@ -235,6 +246,8 @@ export default function build_task_board_state({
   const labels = new Map()
   const claims = new Map()
   const comment_counts = new Map()
+  const pledges = new Map()
+  const pledge_labels = new Map()
 
   for (const event of live_events) {
     if (TASK_STATUS_BY_KIND[event.kind]) {
@@ -246,6 +259,11 @@ export default function build_task_board_state({
     } else if (event.kind === TASK_BOARD_KINDS.label) {
       if (!stewards.has(event.pubkey)) continue
       const namespace = get_tag_value(event, 'L')
+      if (namespace === PLEDGE_ATTESTATION_NAMESPACE) {
+        const address = get_tag_value(event, 'a')
+        if (address) keep_newest(pledge_labels, address, event)
+        continue
+      }
       const allowed = TASK_LABEL_VALUES[namespace]
       if (!allowed) continue
       const label = event.tags.find(
@@ -259,6 +277,11 @@ export default function build_task_board_state({
         keep_newest(labels, `${issue_id}:${namespace}`, event)
         touch(task, event)
       }
+    } else if (event.kind === TASK_BOARD_KINDS.pledge) {
+      const pledge = parse_task_pledge(event)
+      if (!pledge || get_tag_value(event, 'a') !== board_address) continue
+      if (!tasks.has(pledge.issue_id)) continue
+      keep_newest(pledges, `${event.pubkey}:${pledge.issue_id}`, event)
     } else if (event.kind === TASK_BOARD_KINDS.claim) {
       const task = tasks.get(get_tag_value(event, 'd'))
       if (!task || get_tag_value(event, 'a') !== board_address) continue
@@ -310,6 +333,54 @@ export default function build_task_board_state({
     task_claims.get(issue_id).push(claim)
   }
 
+  // A pledge counts by the newest steward verdict on its address, and only
+  // when the verdict judged this very event, so a republished amount waits
+  // for a new verdict. backed and unbacked lapse; paid stands.
+  const task_pledges = new Map()
+  for (const event of pledges.values()) {
+    const pledge = parse_task_pledge(event)
+    const address = `${TASK_BOARD_KINDS.pledge}:${event.pubkey}:${pledge.issue_id}`
+    const label_event = pledge_labels.get(address)
+    const label =
+      label_event &&
+      get_tag_values(label_event, 'e').includes(event.id) &&
+      label_event.tags.find(
+        (tag) =>
+          tag[0] === 'l' &&
+          tag[2] === PLEDGE_ATTESTATION_NAMESPACE &&
+          PLEDGE_ATTESTATION_VALUES.includes(tag[1])
+      )
+    const max_expiration =
+      label_event &&
+      label_event.created_at + ACCOUNT_ATTESTATION_LIFETIME_SECONDS
+    const expiration =
+      label_event &&
+      Math.min(
+        Number(get_tag_value(label_event, 'expiration')) || max_expiration,
+        max_expiration
+      )
+    const verdict = !label
+      ? 'pending'
+      : label[1] === 'paid' || expiration > now
+        ? label[1]
+        : 'pending'
+    if (!task_pledges.has(pledge.issue_id))
+      task_pledges.set(pledge.issue_id, [])
+    task_pledges.get(pledge.issue_id).push({
+      pubkey: event.pubkey,
+      account: pledge.account,
+      amount_raw: pledge.amount_raw,
+      payout: pledge.payout,
+      created_at: event.created_at,
+      verdict
+    })
+  }
+  const sum_raw = (list, verdict) =>
+    list
+      .filter((pledge) => pledge.verdict === verdict)
+      .reduce((sum, pledge) => sum + BigInt(pledge.amount_raw), 0n)
+      .toString()
+
   const columns = Object.fromEntries(TASK_BOARD_COLUMNS.map((c) => [c, []]))
   for (const task of tasks.values()) {
     const status_event = statuses.get(task.id)
@@ -323,6 +394,11 @@ export default function build_task_board_state({
       .filter((claim) => claim.is_active)
       .map((claim) => claim.pubkey)
     task.comment_count = comment_counts.get(task.id) || 0
+    task.pledges = (task_pledges.get(task.id) || []).sort(
+      (a, b) => b.created_at - a.created_at
+    )
+    task.pledged_raw = sum_raw(task.pledges, 'backed')
+    task.paid_raw = sum_raw(task.pledges, 'paid')
     task.column = get_task_column(task)
     if (!task.is_hidden && !task.superseded_by) {
       columns[task.column].push(task)

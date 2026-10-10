@@ -5,7 +5,8 @@ import {
   TASK_BOARD_KINDS,
   VOUCH_SET_D_TAG,
   BLOCK_SET_D_TAG,
-  ACCOUNT_ATTESTATION_NAMESPACE
+  ACCOUNT_ATTESTATION_NAMESPACE,
+  PLEDGE_ATTESTATION_NAMESPACE
 } from './constants.mjs'
 import { format_board_address } from './build-task-board-events.mjs'
 
@@ -27,12 +28,16 @@ export const build_board_filters = (board) => {
     { kinds: [TASK_BOARD_KINDS.issue], '#a': [address] },
     { kinds: STATUS_KINDS, '#a': [address] },
     { kinds: [TASK_BOARD_KINDS.claim], '#a': [address] },
+    { kinds: [TASK_BOARD_KINDS.pledge], '#a': [address] },
     { kinds: [TASK_BOARD_KINDS.key_properties], '#a': [address] },
     {
       kinds: [TASK_BOARD_KINDS.follow_set],
       '#d': [VOUCH_SET_D_TAG, BLOCK_SET_D_TAG]
     },
-    { kinds: [TASK_BOARD_KINDS.label], '#L': [ACCOUNT_ATTESTATION_NAMESPACE] }
+    {
+      kinds: [TASK_BOARD_KINDS.label],
+      '#L': [ACCOUNT_ATTESTATION_NAMESPACE, PLEDGE_ATTESTATION_NAMESPACE]
+    }
   ]
 }
 

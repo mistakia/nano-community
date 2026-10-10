@@ -565,19 +565,86 @@ Latest activity is the newest `created_at` among the issue and its valid statuse
 
 ## Pledge (kind 30635)
 
-A pledge is a public, non-custodial promise to pay a Nano amount to whoever completes a task. Funds never pass through the board.
+A pledge is a public, non-custodial promise by a Nano account to pay whoever completes a task. Funds never pass through the board. A key keeps one pledge per task, replaced by publishing again.
 
-| Tag            | Meaning                                                            |
-| -------------- | ------------------------------------------------------------------ |
-| `d`            | The issue id                                                       |
-| `e`            | The issue id                                                       |
-| `a`            | The board address                                                  |
-| `amount`       | Amount in raw units                                                |
-| `nano_account` | The pledging Nano account                                          |
-| `nano_sig`     | Signature by that account over the pledge, in the canonical format |
-| `payout`       | Optional. Nano block hash of the payment, verified on chain        |
+| Tag            | Meaning                                                             |
+| -------------- | ------------------------------------------------------------------- |
+| `d`            | The issue id                                                        |
+| `e`            | The issue id                                                        |
+| `a`            | The board address                                                   |
+| `amount`       | The pledged amount in raw, a decimal string with no leading zeros   |
+| `nano_account` | The pledging Nano account                                           |
+| `nano_proof`   | `<issued_at>:<signature>`, the nano-signed-message `pledge` profile |
+| `payout`       | Optional. The hash of the Nano block that paid the pledge           |
 
-The Nano signature uses the canonical Nano signed-message format defined by the nano-community signed-message specification. Pledges are specified here and implemented separately; clients that do not implement them ignore kind 30635.
+The proof signs `{ issue_event_id, amount_raw, nostr_public_key }`, where `nostr_public_key` is the pledge event's author, so a pledge cannot be copied to another key, task or amount. Republishing with a `payout` tag reuses the proof.
+
+A steward states each pledge's standing as a NIP-32 label (kind 1985):
+
+| Tag          | Meaning                                                              |
+| ------------ | -------------------------------------------------------------------- |
+| `L`          | `community.nano.pledge`                                              |
+| `l`          | `backed`, `unbacked` or `paid`, with the namespace as marker         |
+| `a`          | The pledge's address, `30635:<author>:<issue id>`                    |
+| `e`          | The pledge event the verdict judged                                  |
+| `expiration` | NIP-40, at most 7 days after `created_at`. A `paid` verdict has none |
+
+- **Backed:** the proof verifies and the account holds at least the sum of its open pledges, not each pledge separately.
+- **Paid:** the `payout` block is a confirmed send from the pledging account, of at least the amount, to an account bound to a key that claimed the task.
+- A verdict counts only for the pledge event it names, so a replaced pledge waits for a new verdict. `backed` and `unbacked` lapse; `paid` stands.
+- Per task, clients sum backed pledges as **pledged** and paid pledges as **paid**. An open task with no steward priority leaves Triage once 10 XNO is pledged (`TASK_PLEDGE_PROMOTION_RAW`). A steward's priority or state still decides its place.
+- Clients read verdicts; they do not check proofs or the chain themselves.
+
+The contributor pledging 2 XNO to a task, and a steward's verdict:
+
+```json
+{
+  "kind": 30635,
+  "created_at": 1767225810,
+  "tags": [
+    ["d", "5c27f254991224199cfeaa398b2a1c2e1b6fae5efe79cdbc0662f61ee92aa012"],
+    ["e", "5c27f254991224199cfeaa398b2a1c2e1b6fae5efe79cdbc0662f61ee92aa012"],
+    [
+      "a",
+      "30617:99c2aa85d2b21a62f396907a802a58e521dafd5bddaccbd72786eea189bc4dc9:nano-community-tasks"
+    ],
+    ["amount", "2000000000000000000000000000000"],
+    [
+      "nano_account",
+      "nano_3i1aq1cchnmbn9x5rsbap8b15akfh7wj7pwskuzi7ahz8oq6cobd99d4r3b7"
+    ],
+    [
+      "nano_proof",
+      "1767225800:cb06dfb498e0e2302d5a90f93ddecbfecd377612fd437f344709bf456c84f63b471a6e5538f090f02d7291b7e192ab17f529f22210d15fc2589b9f63cf40e600"
+    ]
+  ],
+  "content": "",
+  "pubkey": "8a3ba5c99568d26602f4cf8038371da3c86057a96eb1b6a8de1b4f1be723c236",
+  "id": "d55eae58c1d4dd1c2a22634573e3ab715240fdec451a61d552a91eda542d8544",
+  "sig": "1e3580979eba63d5b5d8673622490b22141798247a44adc5bbe27b65c540f972fd601bf9d68f57748b7ee6cb1cf2480ba7d40f060c67d90be072686eca9930e2"
+}
+```
+
+```json
+{
+  "kind": 1985,
+  "created_at": 1767225900,
+  "tags": [
+    ["L", "community.nano.pledge"],
+    ["l", "backed", "community.nano.pledge"],
+    [
+      "a",
+      "30635:8a3ba5c99568d26602f4cf8038371da3c86057a96eb1b6a8de1b4f1be723c236:5c27f254991224199cfeaa398b2a1c2e1b6fae5efe79cdbc0662f61ee92aa012"
+    ],
+    ["e", "d55eae58c1d4dd1c2a22634573e3ab715240fdec451a61d552a91eda542d8544"],
+    ["expiration", "1767830700"]
+  ],
+  "content": "",
+  "pubkey": "5f64993ccb4044a005e82ba07e78b2815a6a17aa7d5ad62fd59d519778072483",
+  "id": "e3d71edf2f22e727a729dd00dba809baf611d94aaf25f87179fa55e20d9b0258",
+  "sig": "1107afd842fb6344e5ea53846920d0e0251ef081fb6d6c6de0038b166200e12637a7d809f70edf3a9df80a064ffec25a7f35afbeed4fff5499d240649f9c12aa"
+}
+```
 
 ## Key properties (kind 30636)
 
@@ -754,6 +821,7 @@ The community relay also limits writes:
 - 30 events a minute per pubkey, except stewards, and 120 a minute per IP. A rejection reads `rate-limited: slow down`; back off and retry.
 - Kind 30000 vouch sets are accepted only from stewards and step 1 keys, and block sets only from stewards.
 - Kind 1985 labels in `community.nano.account` are accepted only from stewards, naming exactly one key.
+- Kind 1985 labels in `community.nano.pledge` are accepted only from stewards, naming exactly one pledge on a board issue. Kind 30635 must have the shape above.
 - An issue or comment from a key with no standing (see Proof of work) is rejected without enough proof of work. A rejection reads `blocked: proof of work below 17 bits`.
 - A key that is neither a steward nor trusted may file 10 issues a day. A rejection reads `rate-limited: daily issue limit for keys outside the web of trust`.
 
