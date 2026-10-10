@@ -40,6 +40,18 @@ cli/                   # Tooling
 
 Auth: JWT. Integrations: Discord, Twitter. Storage: MySQL or PostgreSQL via knex.
 
+## Task Board (nostr)
+
+The community task board is signed nostr events on relays. nano.community is one client of it. The protocol, with signed worked examples, is `docs/design/task-board-protocol.md`.
+
+- `common/task-board/` holds the protocol constants, event templates and the pure view reducer (`build-task-board-state.mjs`). Every client must derive the same board from it. Tests: `test/task-board.*.test.mjs`. They run without a database: `npx mocha test/task-board.*.test.mjs`.
+- `src/core/task-board/` holds the relay subscription and publishing (SimplePool). `src/core/nostr-identity/` holds the signer: a NIP-07 extension, else a key kept in localStorage.
+- `src/views/components/task-board/` holds the board and task views, shared by the portal pages (`src/views/pages/task-board`, `src/views/pages/task`) and the standalone client.
+- **Standalone client:** `src/task-board-client.js` builds to one reproducible `build/task-board-client/index.html` (`yarn build:task-board-client`). It routes on the URL fragment and makes no `/api` calls. `scripts/publish-task-board-client.mjs` releases it to Blossom as a NIP-5A site.
+- **Board override:** `?board=<owner npub>[:<d>]&relays=<urls>` overrides the board and relays, in the query string or the fragment.
+- **Relay:** strfry at `wss://relay.nano.community`. Its write policy is `server/strfry/task-board-write-policy.mjs` with `libs-server/task-board-relay-policy.mjs`. Host provisioning lives in the bootstrap repo.
+- **Node scripts** that use the nostr-tools pool must call `useWebSocketImplementation(WebSocket)` from `ws`. Node 22's built-in WebSocket overflows the stack inside nostr-tools when a relay connection fails.
+
 ## Configuration
 
 `config.js` is environment-aware. In production it decrypts secrets from `config.production.json` at load time by shelling out to `sops` (age envelope encryption; recipient policy in `.sops.yaml`, private identity host-only at `~/.config/sops/age/keys.txt`) — fail-closed, with no plaintext fallback. Test and development load plaintext `config.${env}.js` unchanged. `config.sample.js` shows the structure (JWT secret, DB credentials, Cloudflare token, GitHub token). To add or edit a production secret, follow [[user:guideline/homelab/sops-age-authoring.md]].
