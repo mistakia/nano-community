@@ -51,10 +51,13 @@ const priority_rank = (priority) => {
   return rank === -1 ? TASK_PRIORITIES.length : rank
 }
 
-export const compare_tasks = (a, b) =>
-  priority_rank(a.priority) - priority_rank(b.priority) ||
+const compare_by_activity = (a, b) =>
   b.latest_activity_at - a.latest_activity_at ||
   (a.id < b.id ? -1 : a.id > b.id ? 1 : 0)
+
+export const compare_tasks = (a, b) =>
+  priority_rank(a.priority) - priority_rank(b.priority) ||
+  compare_by_activity(a, b)
 
 const get_task_column = (task) => {
   if (task.status === 'draft') return 'draft'
@@ -311,7 +314,10 @@ export default function build_task_board_state({
     }
   }
 
-  for (const column of Object.values(columns)) column.sort(compare_tasks)
+  // Finished work is read as a history, so the closed column ignores priority.
+  for (const [name, column] of Object.entries(columns)) {
+    column.sort(name === 'closed' ? compare_by_activity : compare_tasks)
+  }
 
   return {
     board_address,

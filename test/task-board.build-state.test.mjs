@@ -336,6 +336,23 @@ describe('task board view reducer', () => {
     ])
     expect(state.tasks[high_old.id].comment_count).to.equal(1)
   })
+
+  it('sorts the closed column by latest activity alone', () => {
+    const high = issue_by(steward, 'High', T + 1)
+    const low = issue_by(steward, 'Low', T + 2)
+    const close = (issue, status, created_at) =>
+      sign(steward, build_task_status({ board, issue, status, created_at }))
+    const events = [
+      announcement,
+      high,
+      low,
+      label(steward, high, PRIORITY, 'high', T + 3),
+      label(steward, low, PRIORITY, 'low', T + 4),
+      close(high, 'resolved', T + 5),
+      close(low, 'closed', T + 6)
+    ]
+    expect(state_of(events).columns.closed).to.deep.equal([low.id, high.id])
+  })
 })
 
 describe('task board view reducer: ambiguity rules', () => {

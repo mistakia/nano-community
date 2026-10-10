@@ -17,11 +17,16 @@ const BOARD_COLUMNS = [
   'needs_taker',
   'blocked',
   'triage',
-  'draft'
+  'draft',
+  'closed'
 ]
 
-// Drafts are not ready for anyone to take, so they start folded away.
-const COLLAPSED_BY_DEFAULT = ['draft']
+// Drafts are not ready for anyone to take and closed tasks are finished, so
+// both start folded away.
+const COLLAPSED_BY_DEFAULT = ['draft', 'closed']
+
+// The closed column only grows, so it shows the most recent until asked.
+const CLOSED_SHOWN = 20
 
 const MAX_NAMED_CLAIMANTS = 2
 
@@ -42,8 +47,13 @@ function TaskCard({ task }) {
             {task.priority}
           </span>
         )}
-        {task.state && task.state !== 'actionable' && (
-          <span className='task-state'>{task.state}</span>
+        {task.column === 'closed' ? (
+          <span className='task-state'>{task.status}</span>
+        ) : (
+          task.state &&
+          task.state !== 'actionable' && (
+            <span className='task-state'>{task.state}</span>
+          )
         )}
         {claimants.length > 0 && (
           <span>
@@ -77,6 +87,9 @@ function BoardColumn({ column, ids, tasks }) {
   const [collapsed, set_collapsed] = useState(
     COLLAPSED_BY_DEFAULT.includes(column)
   )
+  const [show_all, set_show_all] = useState(false)
+  const shown =
+    column === 'closed' && !show_all ? ids.slice(0, CLOSED_SHOWN) : ids
   return (
     <section
       className={`task-board__column${collapsed ? ' task-board__column--collapsed' : ''}`}
@@ -91,9 +104,17 @@ function BoardColumn({ column, ids, tasks }) {
       {!collapsed && (
         <div className='task-board__column-tasks'>
           {ids.length === 0 && <div className='task-board__none'>None</div>}
-          {ids.map((id) => (
+          {shown.map((id) => (
             <TaskCard key={id} task={tasks[id]} />
           ))}
+          {shown.length < ids.length && (
+            <button
+              type='button'
+              className='task-board__more'
+              onClick={() => set_show_all(true)}>
+              Show all {ids.length}
+            </button>
+          )}
         </div>
       )}
     </section>

@@ -256,7 +256,7 @@ for $name, $color in $priorityColors
   align-items flex-start
 
 .task-board__column
-  flex 1 0 220px
+  flex 1 0 200px
   min-width 0
   background $backgroundColor
   border-radius 8px
@@ -304,6 +304,20 @@ for $name, $color in $stageColors
   display flex
   flex-direction column
   gap 8px
+
+.task-board__more
+  .task-board &
+    padding 6px 4px
+    border none
+    background none
+    color $taskTertiary
+    font inherit
+    font-size 12px
+    text-align left
+    cursor pointer
+
+    &:hover
+      color $textColor
 
 .task-board__none
   padding 4px 4px 8px

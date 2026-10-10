@@ -31,6 +31,15 @@ const theme = createTheme({
         }
       }
     },
+    // Menus render outside the board, so they take the page's own face.
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          fontFamily: 'inherit',
+          fontSize: 13
+        }
+      }
+    },
     MuiAvatarGroup: {
       styleOverrides: {
         root: {

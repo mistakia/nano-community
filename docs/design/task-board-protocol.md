@@ -485,7 +485,7 @@ Every client is expected to derive the same board from the same events. The refe
    - **Needs a taker:** everything else.
 7. Issues whose author is neither a steward nor trusted are **hidden** from the columns and still reachable by direct link.
 8. An issue is **superseded** when a visible issue carries an `e` tag with marker `supersedes` pointing at it and was signed by its author or by a steward. A superseded issue leaves the columns and stays reachable by direct link.
-9. Each column is sorted by steward priority (`critical` first, unlabelled last), then by latest activity (newest first), then by id.
+9. Each column is sorted by steward priority (`critical` first, unlabelled last), then by latest activity (newest first), then by id. The closed column skips priority and is sorted by latest activity, then by id.
 
 Latest activity is the newest `created_at` among the issue and its valid statuses, labels, claims and counted comments. A comment counts toward activity and the comment count only when its author is a steward, a trusted key or the issue author; clients may still display other comments.
 
