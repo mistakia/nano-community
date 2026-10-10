@@ -10,7 +10,7 @@ import webpack from 'webpack'
 
 import base from './webpack.base.babel.mjs'
 
-export default base({
+const config = base({
   mode: 'production',
   entry: [path.join(process.cwd(), 'src/task-board-client.js')],
   output: {
@@ -45,3 +45,10 @@ export default base({
   ],
   performance: { hints: false }
 })
+
+// Module ids hash each module's path relative to the build; resolving through
+// a symlinked node_modules (as worktrees here do) would make them depend on
+// where the real tree lives.
+config.resolve.symlinks = false
+
+export default config
