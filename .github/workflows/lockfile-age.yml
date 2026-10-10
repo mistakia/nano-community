@@ -11,6 +11,7 @@ on:
       - 'bun.lock'
       - 'pnpm-lock.yaml'
       - 'cli/check-lockfile-age.mjs'
+      - '.youngpkg-allow'
       - '.github/workflows/lockfile-age.yml'
   push:
     paths:
@@ -19,6 +20,7 @@ on:
       - 'bun.lock'
       - 'pnpm-lock.yaml'
       - 'cli/check-lockfile-age.mjs'
+      - '.youngpkg-allow'
       - '.github/workflows/lockfile-age.yml'
 
 permissions:
