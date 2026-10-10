@@ -357,6 +357,124 @@ const bind_nostr_key = {
   }
 }
 
+// Converts a decimal XNO amount to raw (10^30 raw per XNO) without floats.
+// Returns null for anything that is not a positive amount with at most 30
+// decimals.
+function xno_to_raw(amount) {
+  const match = /^([0-9]+)(?:\.([0-9]{1,30}))?$/.exec(String(amount).trim())
+  if (!match) return null
+  const raw = BigInt(match[1] + (match[2] || '').padEnd(30, '0'))
+  return raw > 0n ? raw.toString() : null
+}
+
+const NOSTR_PUBLIC_KEY_RE = /^[0-9a-f]{64}$/
+
+// Decodes an npub to its 64-character hex key (NIP-19 bech32), or returns
+// null. No checksum library is needed: the bech32 checksum is verified here.
+function decode_npub(npub) {
+  const CHARSET = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l'
+  const polymod = (values) => {
+    const GEN = [0x3b6a57b2, 0x26508e6d, 0x1ea119fa, 0x3d4233dd, 0x2a1462b3]
+    let chk = 1
+    for (const value of values) {
+      const top = chk >> 25
+      chk = ((chk & 0x1ffffff) << 5) ^ value
+      for (let i = 0; i < 5; i++) if ((top >> i) & 1) chk ^= GEN[i]
+    }
+    return chk
+  }
+  if (!/^npub1[02-9ac-hj-np-z]{58}$/.test(npub)) return null
+  const data = [...npub.slice(5)].map((char) => CHARSET.indexOf(char))
+  const hrp = [...'npub'].map((char) => char.charCodeAt(0))
+  const expanded = [...hrp.map((c) => c >> 5), 0, ...hrp.map((c) => c & 31)]
+  if (polymod([...expanded, ...data]) !== 1) return null
+  let acc = 0
+  let bits = 0
+  const bytes = []
+  for (const value of data.slice(0, -6)) {
+    acc = (acc << 5) | value
+    bits += 5
+    if (bits >= 8) {
+      bits -= 8
+      bytes.push((acc >> bits) & 0xff)
+    }
+  }
+  const hex = Buffer.from(bytes.slice(0, 32)).toString('hex')
+  return NOSTR_PUBLIC_KEY_RE.test(hex) ? hex : null
+}
+
+// Signs the nano-signed-message pledge profile: a public promise by this Nano
+// account to pay whoever completes a task on the nano.community task board.
+// Nothing is sent; paste the output on the task's page.
+const pledge = {
+  command: 'pledge <issue_id> <amount_xno> <npub>',
+  describe: 'Sign a pledge of XNO to a task board task',
+  builder: (yargs) =>
+    yargs
+      .positional('issue_id', {
+        describe: 'The task (issue event id, 64 hex characters)',
+        type: 'string'
+      })
+      .positional('amount_xno', {
+        describe: 'The amount in XNO, for example 2.5',
+        type: 'string'
+      })
+      .positional('npub', {
+        describe: 'The nostr key (npub1...) that publishes the pledge',
+        type: 'string'
+      }),
+  handler: async ({ issue_id, amount_xno, npub }) => {
+    const amount_raw = xno_to_raw(amount_xno)
+    const nostr_public_key = decode_npub(String(npub))
+    if (!/^[0-9a-f]{64}$/.test(String(issue_id))) {
+      console.error('Expected the task id, 64 lowercase hex characters')
+      process.exitCode = 1
+      return
+    }
+    if (!amount_raw) {
+      console.error('Expected a positive XNO amount, for example 2.5')
+      process.exitCode = 1
+      return
+    }
+    if (!nostr_public_key) {
+      console.error('Expected an npub, for example npub1...')
+      process.exitCode = 1
+      return
+    }
+    const { private_key, nano_account_address } = await load_private_key()
+    const issued_at = Math.floor(Date.now() / 1000)
+    const { signature } = sign_message({
+      private_key,
+      payload: {
+        version: 1,
+        domain: 'nostr',
+        action: 'pledge',
+        account: nano_account_address,
+        issued_at,
+        parameters: { issue_event_id: issue_id, amount_raw, nostr_public_key }
+      }
+    })
+    const proof = `${issued_at}:${signature}`
+    console.log(
+      JSON.stringify(
+        {
+          account: nano_account_address,
+          issue_id,
+          amount_raw,
+          proof,
+          tags: [
+            ['amount', amount_raw],
+            ['nano_account', nano_account_address],
+            ['nano_proof', proof]
+          ]
+        },
+        null,
+        2
+      )
+    )
+  }
+}
+
 // eslint-disable-next-line no-unused-expressions
 yargs(hideBin(process.argv))
   .scriptName('nano-community')
@@ -367,6 +485,7 @@ yargs(hideBin(process.argv))
   .command(update_account_meta)
   .command(update_block_meta)
   .command(bind_nostr_key)
+  .command(pledge)
   .demandCommand(1, 'You must provide at least one command.')
   .help('h')
   .wrap(100)
