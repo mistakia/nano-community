@@ -527,6 +527,12 @@ Clients publish to every relay in the board's `relays` tag and read from all of 
 
 The community relay accepts kinds 0, 5, 1111, 1621, 1630-1633, 1985, 10011, 30000, 30617, 30634 and 30635. Board-bound events must carry the board `a` tag or an `e`/`E` tag to a known board issue. Kinds 0 and 10011 are accepted only from pubkeys that already have a board event.
 
+The community relay also limits writes:
+
+- 30 events a minute per pubkey, except stewards, and 120 a minute per IP. A rejection reads `rate-limited: slow down`; back off and retry.
+- Kind 30000 triage follow sets are accepted only from stewards.
+- A key that is neither a steward nor in a steward's triage follow set may file 10 issues a day. A rejection reads `rate-limited: daily issue limit for keys no steward has vouched for`.
+
 ## Clients
 
 Each client location appears as a `web` tag on the board announcement.

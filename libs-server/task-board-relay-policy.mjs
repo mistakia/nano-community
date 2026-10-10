@@ -1,6 +1,10 @@
 // Write policy for the community task board relay (strfry plugin).
 // Accepts only task board events, binds every event to a configured board,
-// and rate-limits per pubkey and per IP. Rules: docs/design/task-board-protocol.md § Relays.
+// and rate-limits per pubkey and per IP. Stewards (each board's owner and the
+// maintainers of its latest announcement) skip the per-pubkey limit, only
+// stewards may publish triage follow sets, and keys no steward has vouched for
+// may file a limited number of issues a day.
+// Rules: docs/design/task-board-protocol.md § Relays.
 
 import {
   TASK_BOARD_KINDS,
@@ -10,7 +14,12 @@ import {
 } from '#common/task-board/index.mjs'
 
 const RATE_LIMIT_WINDOW_SECONDS = 60
-export const DEFAULT_RATE_LIMITS = { per_pubkey: 30, per_ip: 120 }
+const ISSUE_WINDOW_SECONDS = 24 * 60 * 60
+export const DEFAULT_RATE_LIMITS = {
+  per_pubkey: 30,
+  per_ip: 120,
+  untrusted_issues_per_day: 10
+}
 
 const get_tag_value = (event, name) =>
   (event.tags.find((tag) => tag[0] === name) || [])[1]
@@ -27,9 +36,35 @@ export function create_relay_policy_state({
     board_owner_by_d_tag: new Map(boards.map((b) => [b.d_tag, b.owner_pubkey])),
     issue_ids: new Set(),
     board_pubkeys: new Set(),
-    rate_limits,
+    announcements: new Map(), // d tag -> latest owner announcement
+    triage_sets: new Map(), // pubkey -> latest triage follow set
+    rate_limits: { ...DEFAULT_RATE_LIMITS, ...rate_limits },
     rate_windows: new Map()
   }
+}
+
+const is_newer = (event, current) =>
+  !current ||
+  event.created_at > current.created_at ||
+  (event.created_at === current.created_at && event.id < current.id)
+
+export function get_stewards(state) {
+  const stewards = new Set(state.board_owner_by_d_tag.values())
+  for (const announcement of state.announcements.values()) {
+    const maintainers = announcement.tags.find((t) => t[0] === 'maintainers')
+    for (const pubkey of (maintainers || []).slice(1)) stewards.add(pubkey)
+  }
+  return stewards
+}
+
+// Keys a steward's latest triage follow set vouches for.
+export function get_trusted(state, stewards = get_stewards(state)) {
+  const trusted = new Set()
+  for (const [pubkey, event] of state.triage_sets) {
+    if (!stewards.has(pubkey)) continue
+    for (const p of get_tag_values(event, 'p')) trusted.add(p)
+  }
+  return trusted
 }
 
 // Seed from events the relay already holds; every stored event was accepted.
@@ -44,6 +79,17 @@ function record_accepted_event(state, event) {
     state.board_addresses.has(get_tag_value(event, 'a'))
   ) {
     state.issue_ids.add(event.id)
+  }
+  if (event.kind === TASK_BOARD_KINDS.repository_announcement) {
+    const d_tag = get_tag_value(event, 'd')
+    if (is_newer(event, state.announcements.get(d_tag))) {
+      state.announcements.set(d_tag, event)
+    }
+  }
+  if (event.kind === TASK_BOARD_KINDS.follow_set) {
+    if (is_newer(event, state.triage_sets.get(event.pubkey))) {
+      state.triage_sets.set(event.pubkey, event)
+    }
   }
 }
 
@@ -88,9 +134,12 @@ function check_kind_rules(state, event) {
     return owner === event.pubkey || 'not a board announcement from its owner'
   }
   if (kind === TASK_BOARD_KINDS.follow_set) {
+    if (get_tag_value(event, 'd') !== TRIAGE_SET_D_TAG) {
+      return 'only the triage follow set is accepted'
+    }
     return (
-      get_tag_value(event, 'd') === TRIAGE_SET_D_TAG ||
-      'only the triage follow set is accepted'
+      get_stewards(state).has(event.pubkey) ||
+      'only stewards publish the triage follow set'
     )
   }
   if (
@@ -105,8 +154,14 @@ function check_kind_rules(state, event) {
   return `kind ${kind} is not accepted`
 }
 
-function consume_rate_limit(state, key, limit, now) {
-  const window_start = now - (now % RATE_LIMIT_WINDOW_SECONDS)
+function consume_rate_limit(
+  state,
+  key,
+  limit,
+  now,
+  window_seconds = RATE_LIMIT_WINDOW_SECONDS
+) {
+  const window_start = now - (now % window_seconds)
   const window = state.rate_windows.get(key)
   if (!window || window.start !== window_start) {
     state.rate_windows.set(key, { start: window_start, count: 1 })
@@ -118,9 +173,10 @@ function consume_rate_limit(state, key, limit, now) {
 
 export function prune_rate_windows(state, now) {
   for (const [key, window] of state.rate_windows) {
-    if (window.start <= now - RATE_LIMIT_WINDOW_SECONDS) {
-      state.rate_windows.delete(key)
-    }
+    const window_seconds = key.startsWith('issues:')
+      ? ISSUE_WINDOW_SECONDS
+      : RATE_LIMIT_WINDOW_SECONDS
+    if (window.start <= now - window_seconds) state.rate_windows.delete(key)
   }
 }
 
@@ -138,13 +194,29 @@ export function evaluate_relay_event({
   if (verdict !== true) return { action: 'reject', msg: `blocked: ${verdict}` }
 
   if (source_type === 'IP4' || source_type === 'IP6') {
-    const { per_pubkey, per_ip } = state.rate_limits
-    const pubkey_ok = consume_rate_limit(
-      state,
-      `pubkey:${event.pubkey}`,
-      per_pubkey,
-      now
-    )
+    const { per_pubkey, per_ip, untrusted_issues_per_day } = state.rate_limits
+    const stewards = get_stewards(state)
+    const is_steward = stewards.has(event.pubkey)
+    if (
+      event.kind === TASK_BOARD_KINDS.issue &&
+      !is_steward &&
+      !get_trusted(state, stewards).has(event.pubkey) &&
+      !consume_rate_limit(
+        state,
+        `issues:${event.pubkey}`,
+        untrusted_issues_per_day,
+        now,
+        ISSUE_WINDOW_SECONDS
+      )
+    ) {
+      return {
+        action: 'reject',
+        msg: 'rate-limited: daily issue limit for keys no steward has vouched for'
+      }
+    }
+    const pubkey_ok =
+      is_steward ||
+      consume_rate_limit(state, `pubkey:${event.pubkey}`, per_pubkey, now)
     const ip_ok = consume_rate_limit(state, `ip:${source_info}`, per_ip, now)
     if (!pubkey_ok || !ip_ok) {
       return { action: 'reject', msg: 'rate-limited: slow down' }

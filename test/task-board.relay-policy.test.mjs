@@ -137,17 +137,106 @@ describe('task board relay write policy', () => {
     expect(evaluate(sign(stranger, template)).action).to.equal('reject')
   })
 
-  it('accepts only the triage follow set', () => {
+  it('accepts only the triage follow set, and only from a steward', () => {
     expect(
-      evaluate(sign(member, build_triage_set({ pubkeys: [] }))).action
+      evaluate(sign(owner, build_triage_set({ pubkeys: [] }))).action
     ).to.equal('accept')
-    const other_set = sign(member, {
+    expect(
+      evaluate(sign(member, build_triage_set({ pubkeys: [] })))
+    ).to.deep.equal({
+      action: 'reject',
+      msg: 'blocked: only stewards publish the triage follow set'
+    })
+    const other_set = sign(owner, {
       kind: 30000,
       created_at: NOW,
       tags: [['d', 'friends']],
       content: ''
     })
     expect(evaluate(other_set).action).to.equal('reject')
+  })
+
+  it('treats the maintainers of the latest announcement as stewards', () => {
+    const steward = make_key('7')
+    evaluate(
+      sign(owner, {
+        ...build_board_announcement({
+          board,
+          name: 'Board',
+          maintainers: [steward.pubkey]
+        }),
+        created_at: NOW - 10
+      })
+    )
+    expect(
+      evaluate(sign(steward, build_triage_set({ pubkeys: [] }))).action
+    ).to.equal('accept')
+    evaluate(
+      sign(owner, {
+        ...build_board_announcement({ board, name: 'Board' }),
+        created_at: NOW - 5
+      })
+    )
+    expect(
+      evaluate(sign(steward, build_triage_set({ pubkeys: [] }))).action
+    ).to.equal('reject')
+  })
+
+  it('exempts stewards from the per-pubkey limit', () => {
+    const results = Array.from(
+      { length: 7 },
+      (_, i) =>
+        evaluate(sign(owner, build_task_issue({ board, subject: `T${i}` })))
+          .action
+    )
+    expect(results.every((a) => a === 'accept')).to.equal(true)
+  })
+
+  it('caps issues a day from keys no steward vouched for', () => {
+    state.rate_limits = {
+      per_pubkey: 100,
+      per_ip: 100,
+      untrusted_issues_per_day: 2
+    }
+    const file = (key, now = NOW) =>
+      evaluate(sign(key, build_task_issue({ board, subject: `T${now}` })), {
+        now
+      })
+    expect(file(stranger).action).to.equal('accept')
+    expect(file(stranger, NOW + 1).action).to.equal('accept')
+    expect(file(stranger, NOW + 2)).to.deep.equal({
+      action: 'reject',
+      msg: 'rate-limited: daily issue limit for keys no steward has vouched for'
+    })
+    expect(file(stranger, NOW + 86400).action).to.equal('accept')
+
+    evaluate(sign(owner, build_triage_set({ pubkeys: [member.pubkey] })))
+    for (let i = 0; i < 4; i++) {
+      expect(file(member, NOW + 10 + i).action).to.equal('accept')
+    }
+  })
+
+  it('derives stewards and trust from seeded events in any order', () => {
+    const steward = make_key('8')
+    const announcement = sign(
+      owner,
+      build_board_announcement({
+        board,
+        name: 'B',
+        maintainers: [steward.pubkey]
+      })
+    )
+    const triage = sign(steward, build_triage_set({ pubkeys: [member.pubkey] }))
+    seed_relay_policy_state(state, [triage, announcement])
+    state.rate_limits = {
+      per_pubkey: 100,
+      per_ip: 100,
+      untrusted_issues_per_day: 0
+    }
+    expect(
+      evaluate(sign(member, build_task_issue({ board, subject: 'Trusted' })))
+        .action
+    ).to.equal('accept')
   })
 
   it('rate-limits a burst from one pubkey', () => {
