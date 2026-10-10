@@ -459,14 +459,14 @@ __metadata:
 
 "nano-signed-message@file:/Users/trashman/user-base/scratch/nano-signed-message/nano-signed-message-0.1.0.tgz::locator=nano-community-cli%40workspace%3A.":
   version: 0.1.0
-  resolution: "nano-signed-message@file:/Users/trashman/user-base/scratch/nano-signed-message/nano-signed-message-0.1.0.tgz#/Users/trashman/user-base/scratch/nano-signed-message/nano-signed-message-0.1.0.tgz::hash=6f7b3a&locator=nano-community-cli%40workspace%3A."
+  resolution: "nano-signed-message@file:/Users/trashman/user-base/scratch/nano-signed-message/nano-signed-message-0.1.0.tgz#/Users/trashman/user-base/scratch/nano-signed-message/nano-signed-message-0.1.0.tgz::hash=1c82fc&locator=nano-community-cli%40workspace%3A."
   dependencies:
     "@noble/curves": "npm:2.4.0"
     "@noble/hashes": "npm:2.4.0"
   dependenciesMeta:
     "@trashman/ed25519-blake2b":
       built: true
-  checksum: 10/c904e65e70cb0a0a09b84888ac11f0c8c5172f0134a93defb1da3900db561ce2ca097bd279abf7eecae52ccb1c08998e8f54abb3def3c1e6bd2657971191eb1d
+  checksum: 10/8695b72bd1efd65ecbdad828d609b406deaca310afd9bca685cd6e243a45c495f41d7d7dd0dc5d2b46c52dbc67467434ceb2e0eb1290bad6a450a83832a48350
   languageName: node
   linkType: hard
 
