@@ -211,6 +211,36 @@ describe('task board view reducer', () => {
     expect(state.tasks[issue.id].claims).to.have.length(2)
   })
 
+  it('caps a claim at the claim lifetime after signing', () => {
+    const issue = issue_by(steward, 'Task')
+    const lifetime = 30 * 24 * 60 * 60
+    const unbounded = build_task_claim({ board, issue, created_at: T + 2 })
+    unbounded.tags = unbounded.tags.filter((tag) => tag[0] !== 'expiration')
+    const far = build_task_claim({
+      board,
+      issue,
+      created_at: T + 2,
+      expiration: T + 10 * lifetime
+    })
+    const events = [
+      announcement,
+      issue,
+      sign(contributor, unbounded),
+      sign(stranger, far)
+    ]
+    const live = state_of(events).tasks[issue.id]
+    expect(live.active_claimants).to.have.length(2)
+    for (const claim of live.claims) {
+      expect(claim.expiration).to.equal(T + 2 + lifetime)
+    }
+    const later = build_task_board_state({
+      events,
+      board,
+      now: T + 2 + lifetime + 1
+    })
+    expect(later.tasks[issue.id].active_claimants).to.deep.equal([])
+  })
+
   it('hides an issue from outside the steward and trusted sets', () => {
     const issue = issue_by(stranger, 'Spam')
     const state = state_of([announcement, issue])

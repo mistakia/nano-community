@@ -146,12 +146,31 @@ export function build_task_claim({
   }
 }
 
+// A claim replaces the claimant's previous one only if it is strictly newer;
+// on equal created_at the lowest id wins, so a release signed in the same
+// second as a renewal could lose. Dates the claim template after `previous`
+// (the claimant's last claim on the issue), moving its expiration with it.
+export function order_claim_after({ template, previous }) {
+  if (!previous || previous.created_at < template.created_at) return template
+  const created_at = previous.created_at + 1
+  return {
+    ...template,
+    created_at,
+    tags: template.tags.map((tag) =>
+      tag[0] === 'expiration'
+        ? ['expiration', String(created_at + CLAIM_LIFETIME_SECONDS)]
+        : tag
+    )
+  }
+}
+
 // NIP-22 comment. parent defaults to the issue itself; pass a comment event
 // as parent to reply to it.
 export function build_task_comment({
   issue,
   parent = null,
   content,
+  references = [],
   relay_hint = '',
   created_at = now_seconds()
 }) {
@@ -167,7 +186,8 @@ export function build_task_comment({
       ['P', issue.pubkey],
       ['e', reply_to.id, relay_hint, reply_to.pubkey],
       ['k', String(reply_to.kind)],
-      ['p', reply_to.pubkey]
+      ['p', reply_to.pubkey],
+      ...references.map((url) => ['r', url])
     ],
     content: require_value(content, 'content')
   }

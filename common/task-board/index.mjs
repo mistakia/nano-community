@@ -1,5 +1,6 @@
 export * from './constants.mjs'
 export * from './build-task-board-events.mjs'
+export * from './build-task-board-filters.mjs'
 export {
   default as build_task_board_state,
   is_newer_event,

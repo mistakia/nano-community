@@ -15,7 +15,8 @@ import {
   TASK_BOARD_COLUMNS,
   TRIAGE_SET_D_TAG,
   BASE_ENTITY_ID_TAG,
-  SUPERSEDES_MARKER
+  SUPERSEDES_MARKER,
+  CLAIM_LIFETIME_SECONDS
 } from './constants.mjs'
 import {
   format_board_address,
@@ -202,14 +203,20 @@ export default function build_task_board_state({
   const task_claims = new Map()
   for (const event of claims.values()) {
     const issue_id = get_tag_value(event, 'd')
-    const expiration = Number(get_tag_value(event, 'expiration')) || null
+    // A claim lapses at its expiration, capped at the claim lifetime after
+    // signing; a claim without one lapses at the cap.
+    const max_expiration = event.created_at + CLAIM_LIFETIME_SECONDS
+    const expiration = Math.min(
+      Number(get_tag_value(event, 'expiration')) || max_expiration,
+      max_expiration
+    )
     const status = get_tag_value(event, 'status')
     const claim = {
       pubkey: event.pubkey,
       status,
       created_at: event.created_at,
       expiration,
-      is_active: status === 'active' && (!expiration || expiration > now)
+      is_active: status === 'active' && expiration > now
     }
     if (!task_claims.has(issue_id)) task_claims.set(issue_id, [])
     task_claims.get(issue_id).push(claim)

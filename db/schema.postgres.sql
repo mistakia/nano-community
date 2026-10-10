@@ -166,32 +166,6 @@ CREATE TABLE IF NOT EXISTS public.github_events (
   created_at    integer NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS public.github_issues (
-  id               varchar(15) NOT NULL PRIMARY KEY,
-  state            varchar(10) NOT NULL,
-  actor_id         varchar(15) NOT NULL,
-  actor_name       varchar(100) NOT NULL,
-  actor_avatar     varchar(255) NOT NULL,
-  assignee_id      varchar(15),
-  assignee_name    varchar(100),
-  assignee_avatar  varchar(255),
-  ref              varchar(255),
-  title            varchar(255),
-  url              varchar(255),
-  repo             varchar(255) NOT NULL,
-  body             text,
-  created_at       integer NOT NULL,
-  updated_at       integer
-);
-
-CREATE TABLE IF NOT EXISTS public.github_issue_labels (
-  issue_id     varchar(15) NOT NULL,
-  label_id     varchar(255) NOT NULL,
-  label_name   varchar(255) NOT NULL,
-  label_color  varchar(255) NOT NULL,
-  PRIMARY KEY (issue_id, label_id)
-);
-
 CREATE TABLE IF NOT EXISTS public.nano_community_messages (
   version         smallint NOT NULL,
   entry_id        varchar(64),

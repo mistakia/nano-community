@@ -56,8 +56,6 @@ const RUN_ORDER = [
   'representatives_network_index',
   'representatives_network',
   'github_events',
-  'github_issues',
-  'github_issue_labels',
   'github_discussions',
   'github_discussion_labels',
   'nano_community_messages',
@@ -157,24 +155,6 @@ const TABLE_COLUMNS = {
     'event_url',
     'created_at'
   ],
-  github_issues: [
-    'id',
-    'state',
-    'actor_id',
-    'actor_name',
-    'actor_avatar',
-    'assignee_id',
-    'assignee_name',
-    'assignee_avatar',
-    'ref',
-    'title',
-    'url',
-    'repo',
-    'body',
-    'created_at',
-    'updated_at'
-  ],
-  github_issue_labels: ['issue_id', 'label_id', 'label_name', 'label_color'],
   nano_community_messages: [
     'version',
     'entry_id',

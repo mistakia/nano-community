@@ -10,7 +10,6 @@ export {
   getLabelDocCommit,
   getGithubDiscussions,
   getGithubEvents,
-  getGithubIssues,
   getRepresentatives,
   getNetworkStats,
   getWeight,

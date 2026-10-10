@@ -48,6 +48,10 @@ Part of the nano cryptocurrency ecosystem maintained in this user-base. Sibling 
 
 - [[user:guideline/directory-markdown-standards.md]] — structure for this file
 
+## Community Task Board
+
+nano.community is the web portal to the Nano community's nostr task board. The protocol is `docs/design/task-board-protocol.md`. The build and cutover are [[user:task/github/mistakia/nano-community/73-setup-initial-community-project-management-system.md]], and the relay is [[user:text/homelab/nano-community-task-board-relay.md]]. Base publishes the operator's public tasks to the board per [[user:text/base/nostr-integration.md]].
+
 ## Scope
 
 **Belongs in this repo**: site code, API, content pages under `docs/`, monitoring and stats aggregation, schema migrations.

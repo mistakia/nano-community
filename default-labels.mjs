@@ -1,25 +1,5 @@
 export default [
   {
-    name: 'priority/critical',
-    color: 'b60205',
-    description: 'Critical: Tackled by core team ASAP'
-  },
-  {
-    name: 'priority/high',
-    color: 'd93f0b',
-    description: 'High: Likely tackled by core team if no one steps up'
-  },
-  {
-    name: 'priority/medium',
-    color: 'e99695',
-    description: 'Medium: Good to have, but can wait until someone steps up'
-  },
-  {
-    name: 'priority/low',
-    color: 'f9d0c4',
-    description: 'Low: Not priority right now'
-  },
-  {
     name: 'kind/docs',
     color: 'c7def8',
     description: 'Documentation related to the nano.community project or repo'
@@ -144,31 +124,6 @@ export default [
     name: 'effort/weeks',
     color: 'fef2c0',
     description: 'Estimated to take multiple weeks'
-  },
-  {
-    name: 'status/blocked',
-    color: 'b52ed1',
-    description: 'Unable to be worked further until needs are met'
-  },
-  {
-    name: 'status/deferred',
-    color: 'dcc8e0',
-    description: 'Conscious decision to pause or backlog'
-  },
-  {
-    name: 'status/inactive',
-    color: 'dcc8e0',
-    description: 'No significant work in the previous month'
-  },
-  {
-    name: 'status/in-progress',
-    color: 'dcc8e0',
-    description: 'In progress'
-  },
-  {
-    name: 'status/ready',
-    color: 'dcc8e0',
-    description: 'Ready to be worked'
   },
   {
     name: 'status/duplicate',

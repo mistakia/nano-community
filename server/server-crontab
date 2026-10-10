@@ -37,7 +37,6 @@ JOB_PROJECT=nano-community
 */10 * * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/scripts/import-discord.mjs --gid 403628195548495882 >> /var/log/nano-community/import-nano-trade-discord.log 2>&1
 
 ## github
-*/15 * * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/scripts/import-github-issues.mjs --repo mistakia/nano-community >> /var/log/nano-community/import-github-issues.log 2>&1
 */15 * * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/scripts/import-github-discussions.mjs --repo mistakia/nano-community >> /var/log/nano-community/import-github-discussions.log 2>&1
 */15 * * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/scripts/import-github-events.mjs >> /var/log/nano-community/import-github-events.log 2>&1
 

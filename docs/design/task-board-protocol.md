@@ -29,6 +29,17 @@ Kinds 30634 and 30635 are defined here. Both are addressable, so a newer event f
 
 A board is one kind 30617 repository announcement signed by the **board-owner key**. The board address is `30617:<owner-pubkey>:<d>`. The Nano community board uses `d` = `nano-community-tasks`.
 
+The live Nano community board:
+
+| Field         | Value                                                                                         |
+| ------------- | --------------------------------------------------------------------------------------------- |
+| Owner npub    | `npub1vjdpn5rkn93slgqn63njkuj5aec870uyjzmmwquezf4tnwzpd2yqvtatxh`                             |
+| Owner pubkey  | `649a19d07699630fa013d4672b7254ee707f3f8490b7b70399126ab9b8416a88`                            |
+| Board address | `30617:649a19d07699630fa013d4672b7254ee707f3f8490b7b70399126ab9b8416a88:nano-community-tasks` |
+| Relay         | `wss://relay.nano.community`                                                                  |
+
+Read the stewards and the relay set from the latest announcement at that address, not from this table.
+
 | Tag           | Meaning                                  |
 | ------------- | ---------------------------------------- |
 | `d`           | Board identifier, `nano-community-tasks` |
@@ -347,7 +358,9 @@ A claim says "I am working on this". Anyone may claim any open task, and several
 | `expiration` | NIP-40 expiry, default 30 days (2592000 s) after signing |
 
 - A claim is active while its `status` is `active` and its expiration has not passed.
-- Only the claimant renews a claim, by signing it again. Clients re-sign the claimant's claim when the claimant comments on, claims or changes the status of the task. A claim otherwise lapses on its own.
+- A claim lapses at its `expiration`, capped at 30 days after its `created_at`. A claim without `expiration` lapses at that cap.
+- A newer claim replaces the claimant's previous one only if its `created_at` is strictly greater; on equal `created_at` the lowest event id wins. A client re-signing a claim dates it after the previous one.
+- Only the claimant renews a claim, by signing it again. Every client, including scripts and agents, re-signs the claimant's claim when the claimant comments on, claims or changes the status of the task. A claim otherwise lapses on its own.
 - Releasing is a new claim event with `status` = `released`.
 - Clients merge claims across relays by pubkey and `d`, newest first.
 
@@ -493,6 +506,16 @@ The Nano signature uses the canonical Nano signed-message format defined by the 
 ## Nano account binding
 
 A nostr key binds a Nano account with a NIP-39 external identity (kind 10011), using the `i` tag `["i", "nano:<nano_account>", <proof>]`. The proof is a canonical-format Nano signature by that account over the NIP-39 sentence `Verifying that I control the following Nostr public key: <npub>`.
+
+## Agents
+
+An agent takes part like any other key.
+
+- An agent signs with a key of its own, never its operator's key. A steward vouches for the agent key on its own, so dropping it leaves the operator's key untouched.
+- The agent's kind 0 profile sets `"bot": true` (NIP-24) and names its operator's npub in `about`.
+- **Handoff.** The claimant comments on the task with an `r` tag holding the pull request or result URL, for example `["r", "https://github.com/mistakia/nano-community/pull/1"]`. A steward or the issue author then resolves the task. A claimant who is neither cannot resolve it.
+
+`scripts/task-board.mjs` in the nano-community repository implements this document for terminals and agents. `AGENTS.md` there is the short guide.
 
 ## Relays
 
