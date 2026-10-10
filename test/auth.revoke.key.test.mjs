@@ -1,275 +1,169 @@
-/* global describe, before, it */
+/* global describe before it */
 import chai from 'chai'
 import chaiHTTP from 'chai-http'
-import ed25519 from '@trashman/ed25519-blake2b'
 
 import server from '#api/server.mjs'
 import knex from '#db'
-import {
-  sign_nano_community_link_key,
-  sign_nano_community_revoke_key,
-  encode_nano_address
-} from '#common'
 import { mochaGlobalSetup } from './global.mjs'
+import {
+  create_test_key,
+  sign_community_request,
+  sign_link_request
+} from './utils/sign-community-request.mjs'
 
 process.env.NODE_ENV = 'test'
-// chai.should()
 chai.use(chaiHTTP)
 const expect = chai.expect
+
+const link = async () => {
+  const account_key = create_test_key()
+  const linked_key = create_test_key()
+  const response = await chai
+    .request(server)
+    .post('/api/auth/register/key')
+    .send(sign_link_request({ account_key, linked_key }))
+  expect(response).to.have.status(200)
+  return { account_key, linked_key }
+}
+
+const sign_revoke = ({ key, linked_public_key }) =>
+  sign_community_request({
+    key,
+    action: 'revoke_key',
+    parameters: { linked_public_key }
+  })
+
+const post_revoke = (body) =>
+  chai.request(server).post('/api/auth/revoke/key').send(body)
+
+const get_row = (public_key) =>
+  knex('account_keys').where({ public_key }).first()
 
 describe('API /auth/revoke/key', () => {
   before(mochaGlobalSetup)
 
   describe('POST /api/auth/revoke/key', () => {
-    it('should register and then revoke an existing linked public key (using the account private key)', async () => {
-      const nano_account_private_key = Buffer.from(
-        '00000000000000000000000000000000000000000000000000000000000000000',
-        'hex'
-      )
-      const nano_account_public_key = ed25519.publicKey(
-        nano_account_private_key
-      )
-
-      const new_signing_private_key = Buffer.from(
-        '00000000000000000000000000000000000000000000000000000000000000001',
-        'hex'
-      )
-      const new_signing_public_key = ed25519.publicKey(new_signing_private_key)
-      const nano_account = encode_nano_address({
-        public_key_buf: nano_account_public_key
+    it('revokes a key with the key itself', async () => {
+      const { account_key, linked_key } = await link()
+      const wire = sign_revoke({
+        key: linked_key,
+        linked_public_key: linked_key.public_key
       })
 
-      // Register/Link the key
-      const link_signature = sign_nano_community_link_key({
-        linked_public_key: new_signing_public_key.toString('hex'),
-        nano_account,
-        nano_account_private_key,
-        nano_account_public_key
-      })
-
-      await chai
-        .request(server)
-        .post('/api/auth/register/key')
-        .send({
-          public_key: new_signing_public_key.toString('hex'),
-          signature: link_signature.toString('hex'),
-          account: nano_account
-        })
-
-      // Revoke the key
-      const revoke_signature = sign_nano_community_revoke_key({
-        linked_public_key: new_signing_public_key.toString('hex'),
-        either_private_key: nano_account_private_key,
-        either_public_key: nano_account_public_key.toString('hex')
-      })
-
-      const response = await chai
-        .request(server)
-        .post('/api/auth/revoke/key')
-        .send({
-          public_key: new_signing_public_key.toString('hex'),
-          signature: revoke_signature.toString('hex'),
-          account: nano_account
-        })
-
+      const response = await post_revoke(wire)
       expect(response).to.have.status(200)
+      expect(response.body.account).to.equal(account_key.account)
 
-      const revoked_row = await knex('account_keys')
-        .where({ public_key: new_signing_public_key.toString('hex') })
-        .first()
-
-      // eslint-disable-next-line no-unused-expressions
-      expect(revoked_row).to.exist
-      expect(revoked_row.account).to.equal(nano_account)
-      expect(revoked_row.public_key).to.equal(
-        new_signing_public_key.toString('hex')
-      )
-      expect(revoked_row.revoke_signature).to.equal(
-        revoke_signature.toString('hex')
-      )
-      expect(revoked_row.revoked_at).to.be.a('number')
+      const row = await get_row(linked_key.public_key)
+      expect(row.revoked_at).to.be.a('number')
+      expect(row.revoke_message).to.equal(wire.message)
+      expect(row.revoke_signature).to.equal(wire.signature)
     })
 
-    it('should register and then revoke an existing linked public key (using the signing private key)', async () => {
-      const nano_account_private_key = Buffer.from(
-        '000000000000000000000000000000000000000000000000000000000000000FF',
-        'hex'
-      )
-      const nano_account_public_key = ed25519.publicKey(
-        nano_account_private_key
-      )
-
-      const new_signing_private_key = Buffer.from(
-        '00000000000000000000000000000000000000000000000000000000000000FFF',
-        'hex'
-      )
-      const new_signing_public_key = ed25519.publicKey(new_signing_private_key)
-      const nano_account = encode_nano_address({
-        public_key_buf: nano_account_public_key
-      })
-
-      // Register/Link the key
-      const link_signature = sign_nano_community_link_key({
-        linked_public_key: new_signing_public_key.toString('hex'),
-        nano_account,
-        nano_account_private_key,
-        nano_account_public_key
-      })
-
-      await chai
-        .request(server)
-        .post('/api/auth/register/key')
-        .send({
-          public_key: new_signing_public_key.toString('hex'),
-          signature: link_signature.toString('hex'),
-          account: nano_account
+    it('revokes a key with the account key', async () => {
+      const { account_key, linked_key } = await link()
+      const response = await post_revoke(
+        sign_revoke({
+          key: account_key,
+          linked_public_key: linked_key.public_key
         })
-
-      // Revoke the key using the signing private key
-      const revoke_signature = sign_nano_community_revoke_key({
-        linked_public_key: new_signing_public_key.toString('hex'),
-        either_private_key: new_signing_private_key,
-        either_public_key: new_signing_public_key.toString('hex')
-      })
-
-      const response = await chai
-        .request(server)
-        .post('/api/auth/revoke/key')
-        .send({
-          public_key: new_signing_public_key.toString('hex'),
-          signature: revoke_signature.toString('hex'),
-          account: nano_account
-        })
-
+      )
       expect(response).to.have.status(200)
-
-      const revoked_row = await knex('account_keys')
-        .where({ public_key: new_signing_public_key.toString('hex') })
-        .first()
-
-      // eslint-disable-next-line no-unused-expressions
-      expect(revoked_row).to.exist
-      expect(revoked_row.account).to.equal(nano_account)
-      expect(revoked_row.public_key).to.equal(
-        new_signing_public_key.toString('hex')
+      expect((await get_row(linked_key.public_key)).revoked_at).to.be.a(
+        'number'
       )
-      expect(revoked_row.revoke_signature).to.equal(
-        revoke_signature.toString('hex')
-      )
-      expect(revoked_row.revoked_at).to.be.a('number')
     })
   })
 
   describe('errors', () => {
-    it('should return 400 if public_key field is missing', async () => {
-      const response = await chai
-        .request(server)
-        .post('/api/auth/revoke/key')
-        .send({
-          signature: 'somesignature',
-          account: 'someaccount'
-        }) // missing public_key
-      expect(response).to.have.status(400)
-      expect(response.body.error).to.include('missing public_key param')
+    it('rejects a signer that is neither the key nor its account', async () => {
+      const { linked_key } = await link()
+      const response = await post_revoke(
+        sign_revoke({
+          key: create_test_key(),
+          linked_public_key: linked_key.public_key
+        })
+      )
+      expect(response).to.have.status(401)
+      expect((await get_row(linked_key.public_key)).revoked_at).to.equal(null)
     })
 
-    it('should return 400 if signature field is missing', async () => {
-      const response = await chai
-        .request(server)
-        .post('/api/auth/revoke/key')
-        .send({
-          public_key: 'somepub',
-          account: 'someaccount'
-        }) // missing signature
-      expect(response).to.have.status(400)
-      expect(response.body.error).to.include('missing signature param')
-    })
-
-    it('should return 401 if public_key param is invalid', async () => {
-      const nano_account = encode_nano_address({
-        public_key_buf: Buffer.from(
-          '0000000000000000000000000000000000000000000000000000000000000001',
-          'hex'
+    it('rejects a revoke signature reused for another key', async () => {
+      const first = await link()
+      const second = await link()
+      const wire = sign_revoke({
+        key: first.linked_key,
+        linked_public_key: first.linked_key.public_key
+      })
+      const response = await post_revoke({
+        ...wire,
+        message: wire.message.replace(
+          first.linked_key.public_key,
+          second.linked_key.public_key
         )
       })
-      const response = await chai
-        .request(server)
-        .post('/api/auth/revoke/key')
-        .send({
-          public_key: 'invalidpub',
-          signature: 'somesignature',
-          account: nano_account
-        })
       expect(response).to.have.status(401)
-      expect(response.body.error).to.equal('invalid public_key param')
+      expect((await get_row(second.linked_key.public_key)).revoked_at).to.equal(
+        null
+      )
     })
 
-    it('should return 401 if signature is invalid', async () => {
-      // Generate a new account key pair
-      const new_account_private_key = Buffer.from(
-        '3000000000000000000000000000000000000000000000000000000000000000',
-        'hex'
+    it('rejects an unknown key and an already revoked key', async () => {
+      const unknown = create_test_key()
+      const not_found = await post_revoke(
+        sign_revoke({ key: unknown, linked_public_key: unknown.public_key })
       )
-      const new_account_public_key = ed25519.publicKey(new_account_private_key)
-      const new_nano_account = encode_nano_address({
-        public_key_buf: new_account_public_key
+      expect(not_found).to.have.status(401)
+
+      const { linked_key } = await link()
+      const wire = sign_revoke({
+        key: linked_key,
+        linked_public_key: linked_key.public_key
       })
-
-      // Generate a new signing key pair
-      const new_signing_private_key = Buffer.from(
-        '4000000000000000000000000000000000000000000000000000000000000000',
-        'hex'
-      )
-      const new_signing_public_key = ed25519.publicKey(new_signing_private_key)
-
-      // Generate a link signature for the new signing key using the new account key
-      const link_signature = sign_nano_community_link_key({
-        linked_public_key: new_signing_public_key.toString('hex'),
-        nano_account: new_nano_account,
-        nano_account_private_key: new_account_private_key,
-        nano_account_public_key: new_account_public_key
-      })
-
-      // Register the new signing key with the link signature
-      await chai
-        .request(server)
-        .post('/api/auth/register/key')
-        .send({
-          public_key: new_signing_public_key.toString('hex'),
-          signature: link_signature.toString('hex'),
-          account: new_nano_account
+      expect(await post_revoke(wire)).to.have.status(200)
+      const again = await post_revoke(
+        sign_revoke({
+          key: linked_key,
+          linked_public_key: linked_key.public_key
         })
-
-      // Attempt to revoke with an invalid signature
-      const invalid_private_key = Buffer.from(
-        '2000000000000000000000000000000000000000000000000000000000000000',
-        'hex'
       )
-      const invalid_signature = sign_nano_community_revoke_key({
-        linked_public_key: new_signing_public_key.toString('hex'),
-        either_private_key: invalid_private_key,
-        either_public_key: new_signing_public_key.toString('hex')
+      expect(again).to.have.status(401)
+      expect(again.body.error).to.include('already revoked')
+    })
+
+    it('rejects a version 1 revoke request', async () => {
+      const response = await post_revoke({
+        public_key: 'a'.repeat(64),
+        signature: 'a'.repeat(128)
       })
+      expect(response).to.have.status(400)
+    })
+  })
+})
 
-      const response = await chai
-        .request(server)
-        .post('/api/auth/revoke/key')
-        .send({
-          public_key: new_signing_public_key.toString('hex'),
-          signature: invalid_signature.toString('hex'),
-          account: new_nano_account
-        })
+describe('API /auth/revoke/key binding regression', () => {
+  before(mochaGlobalSetup)
 
-      expect(response).to.have.status(401)
-      expect(response.body.error).to.equal('invalid signature')
+  it('revoke_key: revokes only the signed key', async () => {
+    const target = await link()
+    const bystander = await link()
+    const wire = sign_revoke({
+      key: target.linked_key,
+      linked_public_key: target.linked_key.public_key
     })
 
-    it('should return 401 if linked public key is not registered', async () => {
-      // TODO
+    const response = await post_revoke({
+      ...wire,
+      public_key: bystander.linked_key.public_key,
+      linked_public_key: bystander.linked_key.public_key
     })
-
-    it('should return 401 if linked public key is already revoked', async () => {
-      // TODO
-    })
+    expect(response).to.have.status(200)
+    expect(response.body.public_key).to.equal(target.linked_key.public_key)
+    expect((await get_row(target.linked_key.public_key)).revoked_at).to.be.a(
+      'number'
+    )
+    expect(
+      (await get_row(bystander.linked_key.public_key)).revoked_at
+    ).to.equal(null)
   })
 })

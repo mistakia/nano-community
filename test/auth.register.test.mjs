@@ -1,68 +1,111 @@
 /* global describe before it */
 import chai from 'chai'
 import chaiHTTP from 'chai-http'
-import ed25519 from '@trashman/ed25519-blake2b'
 
 import server from '#api/server.mjs'
 import knex from '#db'
 import { mochaGlobalSetup } from './global.mjs'
+import {
+  create_test_key,
+  now_seconds,
+  sign_community_request
+} from './utils/sign-community-request.mjs'
 
 process.env.NODE_ENV = 'test'
-// chai.should()
 chai.use(chaiHTTP)
 const expect = chai.expect
+
+const sign_registration = ({ key, username, issued_at }) =>
+  sign_community_request({
+    key,
+    action: 'register_username',
+    parameters: { username },
+    issued_at
+  })
+
+const post_register = (body) =>
+  chai.request(server).post('/api/auth/register').send(body)
 
 describe('API /auth/register', () => {
   before(mochaGlobalSetup)
 
+  describe('POST /api/auth/register', () => {
+    it('registers the signed username', async () => {
+      const key = create_test_key()
+      const wire = sign_registration({ key, username: 'signed_name' })
+
+      const response = await post_register(wire)
+      expect(response).to.have.status(200)
+      expect(response.body.username).to.equal('signed_name')
+
+      const row = await knex('users')
+        .where({ public_key: key.public_key })
+        .first()
+      expect(row.username).to.equal('signed_name')
+      expect(row.registration_message).to.equal(wire.message)
+      expect(row.signature).to.equal(wire.signature)
+    })
+
+    it('changes the username with a newer registration', async () => {
+      const key = create_test_key()
+      const now = now_seconds()
+      await post_register(
+        sign_registration({ key, username: 'first_name', issued_at: now - 10 })
+      )
+      const response = await post_register(
+        sign_registration({ key, username: 'second_name', issued_at: now })
+      )
+      expect(response).to.have.status(200)
+      const row = await knex('users')
+        .where({ public_key: key.public_key })
+        .first()
+      expect(row.username).to.equal('second_name')
+    })
+  })
+
   describe('errors', () => {
-    it('should return 400 if pub field is missing', async () => {
-      const response = await chai
-        .request(server)
-        .post('/api/auth/register')
-        .send({
-          signature: 'somesignature',
-          username: 'test_username'
-        }) // missing public_key
-      expect(response).to.have.status(400)
-      expect(response.body.error).to.include('missing public_key param')
-    })
-
-    it('should return 400 if signature field is missing', async () => {
-      const response = await chai
-        .request(server)
-        .post('/api/auth/register')
-        .send({
-          public_key: 'somepub',
-          username: 'test_username'
-        }) // missing signature
-      expect(response).to.have.status(400)
-      expect(response.body.error).to.include('missing signature param')
-    })
-
-    it('should return 400 if username field is missing', async () => {
-      const response = await chai
-        .request(server)
-        .post('/api/auth/register')
-        .send({
-          public_key: 'somepub',
-          signature: 'somesignature'
-        }) // missing username
-      expect(response).to.have.status(400)
-      expect(response.body.error).to.include('missing username param')
-    })
-
-    it('should return 401 if pub param is invalid', async () => {
-      const response = await chai
-        .request(server)
-        .post('/api/auth/register')
-        .send({
-          public_key: 'invalidpub',
-          signature: 'somesignature',
-          username: 'test_username'
-        })
+    it('rejects a username signature reused for another username', async () => {
+      const key = create_test_key()
+      const wire = sign_registration({ key, username: 'real_name' })
+      const response = await post_register({
+        ...wire,
+        message: wire.message.replace('real_name', 'other_name')
+      })
       expect(response).to.have.status(401)
-      expect(response.body.error).to.equal('invalid public_key param')
+    })
+
+    it('rejects a replayed older registration', async () => {
+      const key = create_test_key()
+      const now = now_seconds()
+      const old_registration = sign_registration({
+        key,
+        username: 'old_name',
+        issued_at: now - 10
+      })
+      expect(await post_register(old_registration)).to.have.status(200)
+      expect(
+        await post_register(
+          sign_registration({ key, username: 'new_name', issued_at: now })
+        )
+      ).to.have.status(200)
+
+      const replay = await post_register(old_registration)
+      expect(replay).to.have.status(409)
+      const row = await knex('users')
+        .where({ public_key: key.public_key })
+        .first()
+      expect(row.username).to.equal('new_name')
+    })
+
+    it('rejects a username held by another key', async () => {
+      await post_register(
+        sign_registration({ key: create_test_key(), username: 'taken_name' })
+      )
+      const response = await post_register(
+        sign_registration({ key: create_test_key(), username: 'taken_name' })
+      )
+      expect(response).to.have.status(401)
+      expect(response.body.error).to.equal('username exists')
     })
 
     const invalid_usernames = [
@@ -77,87 +120,47 @@ describe('API /auth/register', () => {
     ]
 
     invalid_usernames.forEach((username) => {
-      it(`should return 401 if username param is invalid: ${username}`, async () => {
-        const private_key = Buffer.from(
-          '0000000000000000000000000000000000000000000000000000000000000000',
-          'hex'
+      it(`rejects an invalid username: ${username}`, async () => {
+        const response = await post_register(
+          sign_registration({ key: create_test_key(), username })
         )
-        const public_key = ed25519.publicKey(private_key)
-
-        const response = await chai
-          .request(server)
-          .post('/api/auth/register')
-          .send({
-            public_key: public_key.toString('hex'),
-            signature: 'somesignature',
-            username
-          })
-        expect(response).to.have.status(401)
-        expect(response.body.error).to.equal('invalid username param')
+        expect(response).to.have.status(400)
+        expect(response.body.error).to.equal('invalid username')
       })
     })
 
-    it('should return 401 if signature is invalid', async () => {
-      const private_key = Buffer.from(
-        '0000000000000000000000000000000000000000000000000000000000000000',
-        'hex'
-      )
-      const public_key = ed25519.publicKey(private_key)
-      const signature = ed25519.sign(public_key, private_key, public_key)
-
-      const response = await chai
-        .request(server)
-        .post('/api/auth/register')
-        .send({
-          public_key: public_key.toString('hex'),
-          signature: signature.toString('hex'),
-          username: 'test_username'
-        })
-      expect(response).to.have.status(401)
-      expect(response.body.error).to.equal('invalid signature')
-    })
-
-    it('should return 401 if username already exists', async () => {
-      const private_key_0 = Buffer.from(
-        '0000000000000000000000000000000000000000000000000000000000000000',
-        'hex'
-      )
-      const public_key_0 = ed25519.publicKey(private_key_0)
-      const signature_0 = ed25519.sign(
-        public_key_0.toString('hex'),
-        private_key_0,
-        public_key_0
-      )
-
-      const private_key_1 = Buffer.from(
-        '0000000000000000000000000000000000000000000000000000000000000001',
-        'hex'
-      )
-      const public_key_1 = ed25519.publicKey(private_key_1)
-      const signature_1 = ed25519.sign(
-        public_key_1.toString('hex'),
-        private_key_1,
-        public_key_1
-      )
-
-      await knex('users').insert({
-        id: 1,
-        username: 'existing_username',
-        public_key: public_key_0.toString('hex'),
-        signature: signature_0.toString('hex'),
-        last_visit: Math.floor(Date.now() / 1000)
+    it('rejects a version 1 registration', async () => {
+      const response = await post_register({
+        public_key: 'a'.repeat(64),
+        signature: 'a'.repeat(128),
+        username: 'test_username'
       })
-
-      const response = await chai
-        .request(server)
-        .post('/api/auth/register')
-        .send({
-          public_key: public_key_1.toString('hex'),
-          signature: signature_1.toString('hex'),
-          username: 'existing_username'
-        })
-      expect(response).to.have.status(401)
-      expect(response.body.error).to.equal('username exists')
+      expect(response).to.have.status(400)
     })
+  })
+})
+
+describe('API /auth/register binding regression', () => {
+  before(mochaGlobalSetup)
+
+  it('register_username: registers only the signed username', async () => {
+    const key = create_test_key()
+    const wire = sign_registration({ key, username: 'signed_only' })
+    const response = await post_register({
+      ...wire,
+      username: 'injected_name',
+      public_key: create_test_key().public_key
+    })
+    expect(response).to.have.status(200)
+    expect(response.body.username).to.equal('signed_only')
+
+    const row = await knex('users')
+      .where({ public_key: key.public_key })
+      .first()
+    expect(row.username).to.equal('signed_only')
+    const injected = await knex('users')
+      .where({ username: 'injected_name' })
+      .first()
+    expect(injected).to.equal(undefined)
   })
 })

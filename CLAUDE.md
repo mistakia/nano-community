@@ -19,10 +19,17 @@ yarn test              # Mocha (TZ=America/New_York)
 yarn lint
 ```
 
+`yarn test` needs PostgreSQL with TimescaleDB on 127.0.0.1, database `nano_test`, user `postgres` without a password. The port defaults to 5432 and `NANO_TEST_PG_PORT` overrides it. Drop and recreate `nano_test` before a run.
+
+```bash
+docker run -d --name nano-test-pg -e POSTGRES_DB=nano_test -e POSTGRES_HOST_AUTH_METHOD=trust -p 127.0.0.1:5435:5432 timescale/timescaledb:latest-pg16
+NANO_TEST_PG_PORT=5435 yarn test
+```
+
 ## Deploy
 
 1. Confirm CI (Test and CodeQL) is green on the head commit.
-2. On host `nano.community`, fast-forward `/root/nano-community/source` to `origin/main`.
+2. On host `nano.community`, fast-forward `/root/nano-community/source` to `origin/main`. If `yarn.lock` changed, run `yarn install` there in the same command. The pm2 file watch restarts the server on the fast-forward, and it crashes on any missing dependency until the install lands.
 3. If `api/` or `server/` changed, run `pm2 restart server` there and confirm its uptime reset. The pm2 file watch does not reliably restart it.
 4. Locally, run `yarn build` (react-snap prerender) and then `yarn deploy` (copies `build/` to the host).
 

@@ -2,21 +2,30 @@
 import chai from 'chai'
 import chaiHTTP from 'chai-http'
 import ed25519 from '@trashman/ed25519-blake2b'
-import nock from 'nock'
+import { hash_signed_message } from 'nano-signed-message'
 
 import server from '#api/server.mjs'
-import { sign_nano_community_message } from '#common'
-import { mochaGlobalSetup } from './global.mjs'
 import db from '#db'
+import { mochaGlobalSetup } from './global.mjs'
 import {
-  REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT,
-  ACCOUNT_TRACKING_MINIMUM_BALANCE
-} from '#constants'
+  create_test_key,
+  now_seconds,
+  sign_community_request
+} from './utils/sign-community-request.mjs'
 
 process.env.NODE_ENV = 'test'
-// chai.should()
 chai.use(chaiHTTP)
 const expect = chai.expect
+
+const post_message = (body) =>
+  chai.request(server).post('/api/auth/message').send(body)
+
+const meta_parameters = (content) => ({ content, references: [], tags: [] })
+
+const get_alias = async (account) => {
+  const row = await db('accounts').where({ account }).first()
+  return row && row.alias
+}
 
 describe('API /auth/message', function () {
   before(mochaGlobalSetup)
@@ -24,437 +33,298 @@ describe('API /auth/message', function () {
   this.timeout(10000)
 
   describe('POST /api/auth/message', () => {
-    it('should save message to database for nano account above balance threshold', async () => {
-      const private_key = Buffer.from(
-        '0000000000000000000000000000000000000000000000000000000000000000',
+    it('stores and applies a message from an account of any balance', async () => {
+      const key = create_test_key()
+      const wire = sign_community_request({
+        key,
+        action: 'set_account_meta',
+        parameters: {
+          content: { alias: 'small account' },
+          references: ['ab'.repeat(32)],
+          tags: ['one', 'two']
+        }
+      })
+
+      const response = await post_message(wire)
+      expect(response).to.have.status(200)
+      expect(response.body.stored).to.equal(true)
+      expect(response.body.account).to.equal(key.account)
+
+      const digest = Buffer.from(hash_signed_message(wire.message)).toString(
         'hex'
       )
-      const public_key = ed25519.publicKey(private_key)
-
-      const message = {
-        version: 1,
-        public_key: public_key.toString('hex'),
-        operation: 'SET',
-        content:
-          'should save message to database for nano account above balance threshold',
-        tags: [],
-        references: [],
-        created_at: Math.floor(Date.now() / 1000)
-      }
-
-      const signature = sign_nano_community_message(message, private_key)
-
-      // Mocking the rpc request to simulate an account above the balance threshold
-      nock('http://nano:7076')
-        .post('/', (body) => body.action === 'account_info')
-        .reply(200, {
-          balance: String(ACCOUNT_TRACKING_MINIMUM_BALANCE)
-        })
-
-      const response = await chai
-        .request(server)
-        .post('/api/auth/message')
-        .send({
-          message: {
-            ...message,
-            signature: signature.toString('hex')
-          }
-        })
-
-      expect(response).to.have.status(200)
-
-      const saved_message = await db('nano_community_messages')
-        .where({
-          public_key: message.public_key,
-          created_at: message.created_at,
-          content: message.content
-        })
+      const row = await db('nano_community_messages')
+        .where({ message_digest: digest })
         .first()
-
-      // eslint-disable-next-line no-unused-expressions
-      expect(saved_message).to.exist
-      expect(saved_message.content).to.equal(message.content)
-      expect(saved_message.operation).to.equal(message.operation)
-      expect(saved_message.version).to.equal(message.version)
-      expect(saved_message.public_key).to.equal(message.public_key)
-      expect(saved_message.signature).to.equal(signature.toString('hex'))
-      expect(saved_message.created_at).to.equal(message.created_at)
+      expect(row.version).to.equal(2)
+      expect(row.message).to.equal(wire.message)
+      expect(row.signature).to.equal(wire.signature)
+      expect(row.public_key).to.equal(key.public_key)
+      expect(row.operation).to.equal('SET_ACCOUNT_META')
+      expect(JSON.parse(row.content)).to.deep.equal({ alias: 'small account' })
+      expect(row.tags).to.equal('one, two')
+      expect(row.references).to.equal('ab'.repeat(32))
+      expect(row.created_at).to.equal(JSON.parse(wire.message).issued_at)
+      expect(await get_alias(key.account)).to.equal('small account')
     })
 
-    it('should save message to database for nano representative above weight threshold', async () => {
-      const private_key = Buffer.from(
-        '0000000000000000000000000000000000000000000000000000000000000000',
-        'hex'
-      )
-      const public_key = ed25519.publicKey(private_key)
+    it('accepts a block-envelope signature', async () => {
+      const key = create_test_key()
+      const wire = sign_community_request({
+        key,
+        action: 'set_account_meta',
+        parameters: meta_parameters({ alias: 'block mode' }),
+        mode: 'block'
+      })
 
-      const message = {
-        version: 1,
-        public_key: public_key.toString('hex'),
-        operation: 'SET',
-        content:
-          'should save message to database for nano representative above weight threshold',
-        tags: [],
-        references: [],
-        created_at: Math.floor(Date.now() / 1000)
-      }
-
-      const signature = sign_nano_community_message(message, private_key)
-
-      // Mocking the rpc request to simulate a representative above the weight threshold
-      nock('http://nano:7076')
-        .post('/', (body) => body.action === 'account_info')
-        .reply(200, {
-          weight: String(REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT)
-        })
-
-      const response = await chai
-        .request(server)
-        .post('/api/auth/message')
-        .send({
-          message: {
-            ...message,
-            signature: signature.toString('hex')
-          }
-        })
-
+      const response = await post_message(wire)
       expect(response).to.have.status(200)
+      expect(await get_alias(key.account)).to.equal('block mode')
+    })
 
-      const saved_message = await db('nano_community_messages')
-        .where({
-          public_key: message.public_key,
-          created_at: message.created_at,
-          content: message.content
-        })
-        .first()
+    it('stores and applies a re-signed payload once', async () => {
+      const key = create_test_key()
+      const wire = sign_community_request({
+        key,
+        action: 'set_account_meta',
+        parameters: meta_parameters({ alias: 'first' })
+      })
+      const first = await post_message(wire)
+      expect(first.body.stored).to.equal(true)
 
-      // eslint-disable-next-line no-unused-expressions
-      expect(saved_message).to.exist
-      expect(saved_message.content).to.equal(message.content)
-      expect(saved_message.operation).to.equal(message.operation)
-      expect(saved_message.version).to.equal(message.version)
-      expect(saved_message.public_key).to.equal(message.public_key)
-      expect(saved_message.signature).to.equal(signature.toString('hex'))
-      expect(saved_message.created_at).to.equal(message.created_at)
+      await db('accounts')
+        .update({ alias: 'changed since' })
+        .where({ account: key.account })
+
+      // The native signer is hedged, so the same digest gets a new signature
+      const digest = hash_signed_message(wire.message)
+      const resigned = ed25519
+        .sign(
+          Buffer.from(digest),
+          Buffer.from(key.private_key, 'hex'),
+          Buffer.from(key.public_key, 'hex')
+        )
+        .toString('hex')
+      expect(resigned).to.not.equal(wire.signature)
+
+      const second = await post_message({ ...wire, signature: resigned })
+      expect(second).to.have.status(200)
+      expect(second.body.stored).to.equal(false)
+
+      const replay = await post_message(wire)
+      expect(replay).to.have.status(200)
+      expect(replay.body.stored).to.equal(false)
+
+      const rows = await db('nano_community_messages').where({
+        message_digest: Buffer.from(digest).toString('hex')
+      })
+      expect(rows).to.have.length(1)
+      expect(await get_alias(key.account)).to.equal('changed since')
+    })
+
+    it('applies a message signed by a linked key to its account', async () => {
+      const account_key = create_test_key()
+      const linked_key = create_test_key()
+      await db('account_keys').insert({
+        account: account_key.account,
+        public_key: linked_key.public_key,
+        link_signature: '00'.repeat(64),
+        link_message: '{}',
+        created_at: now_seconds()
+      })
+
+      const wire = sign_community_request({
+        key: linked_key,
+        action: 'set_account_meta',
+        parameters: meta_parameters({ alias: 'via linked key' })
+      })
+      const response = await post_message(wire)
+      expect(response).to.have.status(200)
+      expect(response.body.account).to.equal(account_key.account)
+      expect(await get_alias(account_key.account)).to.equal('via linked key')
+    })
+
+    it('applies a message signed by a revoked key to the key itself', async () => {
+      const account_key = create_test_key()
+      const linked_key = create_test_key()
+      await db('account_keys').insert({
+        account: account_key.account,
+        public_key: linked_key.public_key,
+        link_signature: '00'.repeat(64),
+        link_message: '{}',
+        created_at: now_seconds(),
+        revoked_at: now_seconds()
+      })
+
+      const wire = sign_community_request({
+        key: linked_key,
+        action: 'set_account_meta',
+        parameters: meta_parameters({ alias: 'revoked key' })
+      })
+      const response = await post_message(wire)
+      expect(response).to.have.status(200)
+      expect(response.body.account).to.equal(linked_key.account)
+      expect(await get_alias(account_key.account)).to.equal(undefined)
     })
   })
 
   describe('errors', () => {
-    it('should return 400 for invalid message version', async () => {
-      const response = await chai
-        .request(server)
-        .post('/api/auth/message')
-        .send({
-          message: {
-            version: 2, // invalid version
-            chain_id: 'a'.repeat(64), // valid chain_id length
-            public_key: 'a'.repeat(64), // valid public_key length
-            operation: 'SET',
-            signature: 'a'.repeat(128) // valid signature length
-          }
-        })
-      expect(response).to.have.status(400)
-      expect(response.text).to.include('Invalid message version')
+    const valid_wire = (overrides = {}) =>
+      sign_community_request({
+        key: create_test_key(),
+        action: 'set_account_meta',
+        parameters: meta_parameters({ alias: 'x' }),
+        ...overrides
+      })
+
+    it('rejects tampered content with 401', async () => {
+      const wire = valid_wire()
+      const tampered = wire.message.replace('"alias":"x"', '"alias":"y"')
+      const response = await post_message({ ...wire, message: tampered })
+      expect(response).to.have.status(401)
     })
 
-    it('should return 400 for invalid entry_id length', async () => {
-      const response = await chai
-        .request(server)
-        .post('/api/auth/message')
-        .send({
-          message: {
-            entry_id: '123', // invalid entry_id length
-            version: 1, // valid version
-            chain_id: 'a'.repeat(64), // valid chain_id length
-            public_key: 'a'.repeat(64), // valid public_key length
-            operation: 'SET',
-            signature: 'a'.repeat(128) // valid signature length
-          }
-        })
+    it('rejects a version 1 message with 400', async () => {
+      const response = await post_message({
+        message: {
+          version: 1,
+          public_key: 'a'.repeat(64),
+          operation: 'SET_ACCOUNT_META',
+          content: '{}',
+          tags: [],
+          references: [],
+          created_at: now_seconds(),
+          signature: 'a'.repeat(128)
+        }
+      })
       expect(response).to.have.status(400)
-      expect(response.text).to.include('Invalid entry_id')
     })
 
-    it('should return 400 for invalid chain_id length', async () => {
-      const response = await chai
-        .request(server)
-        .post('/api/auth/message')
-        .send({
-          message: {
-            version: 1,
-            chain_id: '123', // invalid chain_id length
-            public_key: 'a'.repeat(64), // valid public_key length
-            operation: 'SET',
-            signature: 'a'.repeat(128) // valid signature length
-          }
-        })
-      expect(response).to.have.status(400)
-      expect(response.text).to.include('Invalid chain_id')
-    })
-
-    it('should return 400 for negative entry_clock', async () => {
-      const response = await chai
-        .request(server)
-        .post('/api/auth/message')
-        .send({
-          message: {
-            version: 1,
-            entry_clock: -1, // negative entry_clock
-            chain_id: 'a'.repeat(64), // valid chain_id length
-            public_key: 'a'.repeat(64), // valid public_key length
-            operation: 'SET',
-            signature: 'a'.repeat(128) // valid signature length
-          }
-        })
-      expect(response).to.have.status(400)
-      expect(response.text).to.include('Invalid entry_clock')
-    })
-
-    it('should return 400 for negative chain_clock', async () => {
-      const response = await chai
-        .request(server)
-        .post('/api/auth/message')
-        .send({
-          message: {
-            version: 1,
-            chain_clock: -1, // negative chain_clock
-            chain_id: 'a'.repeat(64), // valid chain_id length
-            public_key: 'a'.repeat(64), // valid public_key length
-            operation: 'SET',
-            signature: 'a'.repeat(128) // valid signature length
-          }
-        })
-      expect(response).to.have.status(400)
-      expect(response.text).to.include('Invalid chain_clock')
-    })
-
-    it('should return 400 for invalid public_key length', async () => {
-      const response = await chai
-        .request(server)
-        .post('/api/auth/message')
-        .send({
-          message: {
-            version: 1,
-            public_key: '123', // invalid public_key length
-            chain_id: 'a'.repeat(64), // valid chain_id length
-            operation: 'SET',
-            signature: 'a'.repeat(128) // valid signature length
-          }
-        })
-      expect(response).to.have.status(400)
-      expect(response.text).to.include('Invalid public_key')
-    })
-
-    it('should return 400 for invalid operation', async () => {
-      const response = await chai
-        .request(server)
-        .post('/api/auth/message')
-        .send({
-          message: {
-            version: 1,
-            operation: 'INVALID', // invalid operation
-            chain_id: 'a'.repeat(64), // valid chain_id length
-            public_key: 'a'.repeat(64), // valid public_key length
-            signature: 'a'.repeat(128) // valid signature length
-          }
-        })
-      expect(response).to.have.status(400)
-      expect(response.text).to.include('Invalid operation')
-    })
-
-    it('should return 400 for non-string content', async () => {
-      const response = await chai
-        .request(server)
-        .post('/api/auth/message')
-        .send({
-          message: {
-            version: 1,
-            content: 123, // non-string content
-            chain_id: 'a'.repeat(64), // valid chain_id length
-            public_key: 'a'.repeat(64), // valid public_key length
-            operation: 'SET',
-            signature: 'a'.repeat(128) // valid signature length
-          }
-        })
-      expect(response).to.have.status(400)
-      expect(response.text).to.include('Invalid content')
-    })
-
-    it('should return 400 for invalid tags type', async () => {
-      const response = await chai
-        .request(server)
-        .post('/api/auth/message')
-        .send({
-          message: {
-            version: 1,
-            tags: 'not an array', // invalid tags type
-            chain_id: 'a'.repeat(64), // valid chain_id length
-            public_key: 'a'.repeat(64), // valid public_key length
-            operation: 'SET',
-            signature: 'a'.repeat(128) // valid signature length
-          }
-        })
-      expect(response).to.have.status(400)
-      expect(response.text).to.include('Invalid tags')
-    })
-
-    it('should return 400 for invalid references type', async () => {
-      const response = await chai
-        .request(server)
-        .post('/api/auth/message')
-        .send({
-          message: {
-            version: 1,
-            references: 'not an array', // invalid references type
-            chain_id: 'a'.repeat(64), // valid chain_id length
-            public_key: 'a'.repeat(64), // valid public_key length
-            operation: 'SET',
-            signature: 'a'.repeat(128) // valid signature length
-          }
-        })
-      expect(response).to.have.status(400)
-      expect(response.text).to.include('Invalid references')
-    })
-
-    it('should return 400 for negative created_at', async () => {
-      const response = await chai
-        .request(server)
-        .post('/api/auth/message')
-        .send({
-          message: {
-            version: 1,
-            created_at: -1, // negative created_at
-            chain_id: 'a'.repeat(64), // valid chain_id length
-            public_key: 'a'.repeat(64), // valid public_key length
-            operation: 'SET',
-            signature: 'a'.repeat(128) // valid signature length
-          }
-        })
-      expect(response).to.have.status(400)
-      expect(response.text).to.include('Invalid created_at')
-    })
-
-    it('should return 400 for invalid signature length', async () => {
-      const response = await chai
-        .request(server)
-        .post('/api/auth/message')
-        .send({
-          message: {
-            version: 1,
-            signature: '123', // invalid signature length
-            chain_id: 'a'.repeat(64), // valid chain_id length
-            public_key: 'a'.repeat(64), // valid public_key length
-            operation: 'SET'
-          }
-        })
-      expect(response).to.have.status(400)
-      expect(response.text).to.include('Invalid signature')
-    })
-
-    it('should not save message to database for nano account below balance threshold', async () => {
-      const private_key = Buffer.from(
-        '0000000000000000000000000000000000000000000000000000000000000000',
-        'hex'
-      )
-      const public_key = ed25519.publicKey(private_key)
-
-      const message = {
-        version: 1,
-        public_key: public_key.toString('hex'),
-        operation: 'SET',
-        content:
-          'should not save message to database for nano account below balance threshold',
-        tags: [],
-        references: [],
-        created_at: Math.floor(Date.now() / 1000)
+    it('rejects issued_at eleven minutes in the future or past', async () => {
+      for (const offset of [660, -660]) {
+        const response = await post_message(
+          valid_wire({ issued_at: now_seconds() + offset })
+        )
+        expect(response, String(offset)).to.have.status(400)
+        expect(response.body.error).to.include('window')
       }
-
-      const signature = sign_nano_community_message(message, private_key)
-
-      // Mocking the rpc request to simulate an account below the balance threshold
-      nock('http://nano:7076')
-        .post('/', (body) => body.action === 'account_info')
-        .reply(200, {
-          balance: String(ACCOUNT_TRACKING_MINIMUM_BALANCE - 1n)
-        })
-
-      const response = await chai
-        .request(server)
-        .post('/api/auth/message')
-        .send({
-          message: {
-            ...message,
-            signature: signature.toString('hex')
-          }
-        })
-
-      expect(response).to.have.status(200)
-
-      const saved_message = await db('nano_community_messages')
-        .where({
-          public_key: message.public_key,
-          created_at: message.created_at,
-          content: message.content
-        })
-        .first()
-
-      // eslint-disable-next-line no-unused-expressions
-      expect(saved_message).to.be.undefined
     })
 
-    it('should not save message to database for nano representative below weight threshold', async () => {
-      const private_key = Buffer.from(
-        '0000000000000000000000000000000000000000000000000000000000000000',
-        'hex'
+    it('rejects a message without a nonce', async () => {
+      const response = await post_message(valid_wire({ nonce: null }))
+      expect(response).to.have.status(400)
+      expect(response.body.error).to.include('nonce')
+    })
+
+    it('rejects another domain and a non-message action', async () => {
+      const other_domain = await post_message(
+        valid_wire({ domain: 'evil.example' })
       )
-      const public_key = ed25519.publicKey(private_key)
+      expect(other_domain).to.have.status(400)
 
-      const message = {
-        version: 1,
-        public_key: public_key.toString('hex'),
-        operation: 'SET',
-        content:
-          'should not save message to database for nano representative below weight threshold',
-        tags: [],
-        references: [],
-        created_at: Math.floor(Date.now() / 1000)
-      }
-
-      const signature = sign_nano_community_message(message, private_key)
-
-      // Mocking the rpc request to simulate a representative below the weight threshold
-      nock('http://nano:7076')
-        .post('/', (body) => body.action === 'account_info')
-        .reply(200, {
-          weight: String(REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT - 1n)
-        })
-
-      const response = await chai
-        .request(server)
-        .post('/api/auth/message')
-        .send({
-          message: {
-            ...message,
-            signature: signature.toString('hex')
-          }
-        })
-
-      expect(response).to.have.status(200)
-
-      const saved_message = await db('nano_community_messages')
-        .where({
-          public_key: message.public_key,
-          created_at: message.created_at,
-          content: message.content
-        })
-        .first()
-
-      // eslint-disable-next-line no-unused-expressions
-      expect(saved_message).to.be.undefined
+      const key = create_test_key()
+      const link = sign_community_request({
+        key,
+        action: 'link_key',
+        parameters: { linked_public_key: create_test_key().public_key }
+      })
+      const response = await post_message(link)
+      expect(response).to.have.status(400)
     })
 
-    it('should not save message if linked public key is already revoked', async () => {
-      // TODO
+    it('rejects malformed parameters', async () => {
+      const cases = [
+        { content: { alias: 'x' }, references: [], tags: [], extra: 1 },
+        { content: { alias: 'x' }, references: ['AB'.repeat(32)], tags: [] },
+        { content: 'x', references: [], tags: [] },
+        { content: {}, references: [], tags: [1] },
+        { content: {}, references: [] }
+      ]
+      for (const parameters of cases) {
+        const response = await post_message(valid_wire({ parameters }))
+        expect(response, JSON.stringify(parameters)).to.have.status(400)
+      }
     })
   })
+})
+
+// A route must act only on the signed payload. Each case sends a validly
+// signed unit with conflicting unsigned fields beside it, then a unit whose
+// signed message was altered after signing.
+describe('API /auth/message binding regression', function () {
+  before(mochaGlobalSetup)
+
+  const cases = [
+    {
+      action: 'set_account_meta',
+      content: { alias: 'bound alias' }
+    },
+    {
+      action: 'set_representative_meta',
+      content: { alias: 'bound rep alias', description: 'bound' }
+    },
+    {
+      action: 'set_block_meta',
+      content: { note: 'bound note' },
+      references: ['cd'.repeat(32)]
+    }
+  ]
+
+  for (const { action, content, references = [] } of cases) {
+    it(`${action}: stores and applies only the signed fields`, async () => {
+      const key = create_test_key()
+      const other = create_test_key()
+      const wire = sign_community_request({
+        key,
+        action,
+        parameters: { content, references, tags: ['bound'] }
+      })
+
+      const response = await post_message({
+        ...wire,
+        account: other.account,
+        public_key: other.public_key,
+        operation: 'SET_ACCOUNT_META',
+        content: { alias: 'injected' },
+        parameters: { content: { alias: 'injected' } }
+      })
+      expect(response).to.have.status(200)
+      expect(response.body.account).to.equal(key.account)
+
+      const digest = Buffer.from(hash_signed_message(wire.message)).toString(
+        'hex'
+      )
+      const row = await db('nano_community_messages')
+        .where({ message_digest: digest })
+        .first()
+      expect(row.public_key).to.equal(key.public_key)
+      expect(row.operation).to.equal(action.toUpperCase())
+      expect(JSON.parse(row.content)).to.deep.equal(content)
+      expect(row.references).to.equal(references.join(', ') || null)
+      expect(row.tags).to.equal('bound')
+      expect(await get_alias(other.account)).to.equal(undefined)
+      if (content.alias) {
+        expect(await get_alias(key.account)).to.equal(content.alias)
+      }
+    })
+
+    it(`${action}: rejects a message altered after signing`, async () => {
+      const wire = sign_community_request({
+        key: create_test_key(),
+        action,
+        parameters: { content, references, tags: ['bound'] }
+      })
+      for (const altered of [
+        wire.message.replace('"bound"', '"injected"'),
+        wire.message.replace(
+          `"action":"${action}"`,
+          `"action":"${cases.find((c) => c.action !== action).action}"`
+        )
+      ]) {
+        expect(altered).to.not.equal(wire.message)
+        const response = await post_message({ ...wire, message: altered })
+        expect(response, altered).to.have.status(401)
+      }
+    })
+  }
 })

@@ -5,21 +5,11 @@ import update_representative_meta from './update-representative-meta.mjs'
 
 const log = debug('process-community-message')
 
-const process_set_representative_meta = async ({
-  message_content,
-  message_account
-}) => {
-  if (!message_content) {
-    log(
-      `No message content found for SET_REPRESENTATIVE_META message from ${message_account}`
-    )
-    return
-  }
-
-  const { alias } = message_content
+const process_set_representative_meta = async ({ content, account }) => {
+  const { alias } = content
   if (alias) {
     await update_account({
-      account_address: message_account,
+      account_address: account,
       update: { alias }
     })
   }
@@ -36,10 +26,10 @@ const process_set_representative_meta = async ({
     github,
     email,
     website
-  } = message_content
+  } = content
 
   await update_representative_meta({
-    representative_account_address: message_account,
+    representative_account_address: account,
     update: {
       cpu_cores,
       description,
@@ -56,61 +46,31 @@ const process_set_representative_meta = async ({
   })
 }
 
-const process_set_account_meta = async ({
-  message_content,
-  message_account
-}) => {
-  if (!message_content) {
-    log(
-      `No message content found for SET_ACCOUNT_META message from ${message_account}`
-    )
-    return
-  }
-
-  const { alias } = message_content
+const process_set_account_meta = async ({ content, account }) => {
+  const { alias } = content
   if (alias) {
     await update_account({
-      account_address: message_account,
+      account_address: account,
       update: { alias }
     })
   }
 }
 
+// Applies a verified message. content is parameters.content of the signed
+// payload, and account is the account the signer acts for.
 export default async function process_community_message({
-  message,
-  message_account
+  action,
+  content,
+  account
 }) {
-  let message_content
-  try {
-    message_content = JSON.parse(message.content)
-  } catch (error) {
-    log(`Error parsing message content: ${error}`)
-    return
-  }
+  switch (action) {
+    case 'set_account_meta':
+      return process_set_account_meta({ content, account })
 
-  if (!message_content) {
-    log(
-      `No message content found for ${message.operation} message from ${message_account}`
-    )
-    return
-  }
-
-  switch (message.operation) {
-    case 'SET_ACCOUNT_META':
-      return process_set_account_meta({
-        message,
-        message_content,
-        message_account
-      })
-
-    case 'SET_REPRESENTATIVE_META':
-      return process_set_representative_meta({
-        message,
-        message_content,
-        message_account
-      })
+    case 'set_representative_meta':
+      return process_set_representative_meta({ content, account })
 
     default:
-      log(`Unsupported message operation: ${message.operation}`)
+      log(`Unsupported message action: ${action}`)
   }
 }

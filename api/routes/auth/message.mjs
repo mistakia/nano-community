@@ -1,205 +1,105 @@
 import express from 'express'
-import BigNumber from 'bignumber.js'
 
-import {
-  rpc,
-  verify_nano_community_message_signature,
-  encode_nano_address
-} from '#common'
-import {
-  ACCOUNT_TRACKING_MINIMUM_BALANCE,
-  REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT
-} from '#constants'
 import { process_community_message } from '#libs-server'
+import verify_community_request, {
+  CommunityRequestError,
+  expect_parameter_keys,
+  is_block_hash,
+  is_plain_object,
+  send_request_error
+} from '#libs-server/verify-community-request.mjs'
 
 const router = express.Router()
+
+const MESSAGE_ACTIONS = [
+  'set_account_meta',
+  'set_representative_meta',
+  'set_block_meta'
+]
+const PARAMETER_KEYS = ['content', 'references', 'tags']
+
+const validate_parameters = (parameters) => {
+  expect_parameter_keys({ parameters, keys: PARAMETER_KEYS })
+
+  const { content, references, tags } = parameters
+  if (!is_plain_object(content)) {
+    throw new CommunityRequestError(400, 'content must be an object')
+  }
+  if (!Array.isArray(references) || !references.every(is_block_hash)) {
+    throw new CommunityRequestError(
+      400,
+      'references must be an array of lowercase block hashes'
+    )
+  }
+  if (!Array.isArray(tags) || !tags.every((tag) => typeof tag === 'string')) {
+    throw new CommunityRequestError(400, 'tags must be an array of strings')
+  }
+}
 
 router.post('/?', async (req, res) => {
   const { logger, db } = req.app.locals
   try {
-    const { message } = req.body
-
-    const {
-      version,
-
-      entry_id,
-      chain_id,
-      entry_clock,
-      chain_clock,
-
-      public_key,
-      operation,
-      content,
-      tags = [],
-
-      references = [],
-
-      created_at,
-
-      signature
-    } = message
-
-    if (version !== 1) {
-      return res.status(400).json({ error: 'Invalid message version' })
+    let verified
+    try {
+      verified = verify_community_request({
+        wire_unit: req.body,
+        actions: MESSAGE_ACTIONS
+      })
+      validate_parameters(verified.payload.parameters)
+    } catch (error) {
+      if (error instanceof CommunityRequestError) {
+        return send_request_error({ res, error })
+      }
+      throw error
     }
 
-    // entry_id must be null or 32 byte hash
-    if (entry_id && entry_id.length !== 64) {
-      return res.status(400).json({ error: 'Invalid entry_id' })
-    }
+    const { payload, public_key, message_digest } = verified
+    const { content, references, tags } = payload.parameters
 
-    // chain_id must be null or 32 byte hash
-    if (chain_id && chain_id.length !== 64) {
-      return res.status(400).json({ error: 'Invalid chain_id' })
-    }
-
-    // entry_clock must be null or positive integer
-    if (entry_clock && entry_clock < 0) {
-      return res.status(400).json({ error: 'Invalid entry_clock' })
-    }
-
-    // chain_clock must be null or positive integer
-    if (chain_clock && chain_clock < 0) {
-      return res.status(400).json({ error: 'Invalid chain_clock' })
-    }
-
-    // public_key must be 32 byte hash
-    if (public_key.length !== 64) {
-      return res.status(400).json({ error: 'Invalid public_key' })
-    }
-
-    // operation must be SET or DELETE
-    const allowed_operations = [
-      'SET',
-      'SET_ACCOUNT_META',
-      'SET_REPRESENTATIVE_META',
-      'SET_BLOCK_META'
-    ]
-    if (!allowed_operations.includes(operation)) {
-      return res.status(400).json({ error: 'Invalid operation' })
-    }
-
-    // content must be null or string
-    if (content && typeof content !== 'string') {
-      return res.status(400).json({ error: 'Invalid content' })
-    }
-
-    // tags must be null or array of strings
-    if (tags && !Array.isArray(tags)) {
-      return res.status(400).json({ error: 'Invalid tags' })
-    }
-
-    // references must be null or array of strings
-    if (references && !Array.isArray(references)) {
-      return res.status(400).json({ error: 'Invalid references' })
-    }
-
-    // created_at must be null or positive integer
-    if (created_at && created_at < 0) {
-      return res.status(400).json({ error: 'Invalid created_at' })
-    }
-
-    // signature must be 64 byte hash
-    if (signature.length !== 128) {
-      return res.status(400).json({ error: 'Invalid signature' })
-    }
-
-    // validate signature
-    const is_valid_signature = verify_nano_community_message_signature({
-      entry_id,
-      chain_id,
-      entry_clock,
-      chain_clock,
-      public_key,
-      operation,
-      content,
-      tags,
-      references,
-      created_at,
-      signature
-    })
-    if (!is_valid_signature) {
-      return res.status(400).json({ error: 'Invalid signature' })
-    }
-
-    // public_key can be a linked keypair or an existing nano account
-
-    const linked_account = await db('account_keys')
+    // A linked key acts for the account it is linked to
+    const linked_key = await db('account_keys')
       .select('account')
       .where({ public_key })
       .whereNull('revoked_at')
       .first()
+    const account = linked_key ? linked_key.account : payload.account
 
-    const message_nano_account = linked_account
-      ? linked_account.account
-      : encode_nano_address({
-          public_key_buf: Buffer.from(public_key, 'hex')
-        })
-
-    const account_info = await rpc.accountInfo({
-      account: message_nano_account
-    })
-
-    // check if any of the accounts have a balance beyond the tracking threshold
-    const has_balance = new BigNumber(account_info?.balance || 0).gte(
-      ACCOUNT_TRACKING_MINIMUM_BALANCE
-    )
-
-    // check if any of the accounts have weight beyond the tracking threshold
-    const has_weight = new BigNumber(account_info?.weight || 0).gte(
-      REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT
-    )
-
-    if (has_balance || has_weight) {
-      await db('nano_community_messages')
-        .insert({
-          version,
-
-          entry_id,
-          chain_id,
-          entry_clock,
-          chain_clock,
-
-          public_key,
-          operation,
-          content,
-          tags: tags.length > 0 ? tags.join(', ') : null,
-
-          signature,
-
-          references: references.length > 0 ? references.join(', ') : null,
-
-          created_at
-        })
-        .onConflict('signature')
-        .merge()
-    }
-
-    try {
-      await process_community_message({
-        message,
-        message_account: message_nano_account
+    // Deduplicate by digest: a re-signed payload has a new signature but the
+    // same digest, so it is stored and applied once
+    const inserted = await db('nano_community_messages')
+      .insert({
+        version: 2,
+        message: req.body.message,
+        message_digest,
+        public_key,
+        operation: payload.action.toUpperCase(),
+        content: JSON.stringify(content),
+        tags: tags.length ? tags.join(', ') : null,
+        references: references.length ? references.join(', ') : null,
+        created_at: payload.issued_at,
+        signature: req.body.signature.toLowerCase()
       })
-    } catch (error) {
-      logger(error)
+      .onConflict('message_digest')
+      .ignore()
+      .returning('message_digest')
+
+    if (inserted.length) {
+      try {
+        await process_community_message({
+          action: payload.action,
+          content,
+          account
+        })
+      } catch (error) {
+        logger(error)
+      }
     }
 
     res.status(200).send({
-      version,
-
-      entry_id,
-      chain_id,
-      entry_clock,
-      chain_clock,
-
-      public_key,
-      operation,
-      content,
-      tags,
-
-      references,
-
-      created_at
+      account,
+      message_digest,
+      stored: inserted.length > 0,
+      payload
     })
   } catch (error) {
     console.log(error)

@@ -2,15 +2,10 @@
 import chai from 'chai'
 import { exec, spawn } from 'child_process'
 import util from 'util'
-import nock from 'nock'
 
 import server from '#api/server.mjs'
 import config from '#config'
 import db from '#db'
-import {
-  REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT,
-  ACCOUNT_TRACKING_MINIMUM_BALANCE
-} from '#constants'
 
 const { port } = config
 const exec_promise = util.promisify(exec)
@@ -72,6 +67,13 @@ describe('CLI', function () {
       if (match) {
         new_signing_key = match[1] // Simplified extraction logic
       }
+
+      const row = await db('account_keys')
+        .where({ public_key: new_signing_key })
+        .first()
+      expect(row.account).to.equal(nano_account_address)
+      expect(JSON.parse(row.link_message).action).to.equal('link_key')
+      expect(JSON.parse(row.accept_link_message).action).to.equal('accept_link')
     })
   })
 
@@ -85,7 +87,17 @@ describe('CLI', function () {
       )
       // eslint-disable-next-line no-unused-expressions
       expect(stderr).to.be.empty
+      // the confirmation names the key being revoked, not the signer
+      expect(stdout).to.include(new_signing_key)
       expect(stdout).to.include('Key revocation successful')
+
+      const row = await db('account_keys')
+        .where({ public_key: new_signing_key })
+        .first()
+      expect(row.revoked_at).to.be.a('number')
+      expect(JSON.parse(row.revoke_message).parameters).to.deep.equal({
+        linked_public_key: new_signing_key
+      })
     })
   })
 
@@ -108,13 +120,6 @@ describe('CLI', function () {
       const expected_website = 'https://example.com'
 
       try {
-        // mock the account_info rpc request needed for message storing
-        nock('http://nano:7076')
-          .post('/', (body) => body.action === 'account_info')
-          .reply(200, {
-            weight: String(REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT)
-          })
-
         const child = spawn('node', ['cli/index.mjs', 'update-rep-meta'], {
           stdio: ['pipe', 'pipe', 'pipe']
         })
@@ -224,13 +229,6 @@ describe('CLI', function () {
       let stderr = ''
       let stdout = ''
       try {
-        // mock the account_info rpc request needed for message storing
-        nock('http://nano:7076')
-          .post('/', (body) => body.action === 'account_info')
-          .reply(200, {
-            balance: String(ACCOUNT_TRACKING_MINIMUM_BALANCE)
-          })
-
         const child = spawn('node', ['cli/index.mjs', 'update-account-meta'], {
           stdio: ['pipe', 'pipe', 'pipe']
         })
@@ -266,6 +264,12 @@ describe('CLI', function () {
         // eslint-disable-next-line no-unused-expressions
         expect(stderr).to.be.empty
         expect(exit_code).to.equal(0)
+
+        const row = await db('nano_community_messages')
+          .where({ operation: 'SET_ACCOUNT_META', version: 2 })
+          .whereRaw('message like ?', [`%${nano_account_address}%`])
+          .first()
+        expect(JSON.parse(row.content)).to.deep.equal({ alias: 'Alias' })
       } catch (err) {
         console.log(err)
         console.log(stdout)
@@ -320,6 +324,12 @@ describe('CLI', function () {
         // eslint-disable-next-line no-unused-expressions
         expect(stderr).to.be.empty
         expect(exit_code).to.equal(0)
+
+        const row = await db('nano_community_messages')
+          .where({ operation: 'SET_BLOCK_META', version: 2 })
+          .where({ references: block_hash.toLowerCase() })
+          .first()
+        expect(row.references).to.equal(block_hash.toLowerCase())
       } catch (err) {
         console.log(err)
         console.log(stderr)
