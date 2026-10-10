@@ -17,7 +17,9 @@ import { bytesToHex } from 'nostr-tools/utils'
 
 import {
   build_board_announcement,
-  build_task_issue
+  build_task_issue,
+  get_event_pow,
+  TASK_UNVOUCHED_POW_DIFFICULTY
 } from '#common/task-board/index.mjs'
 
 const expect = chai.expect
@@ -148,7 +150,7 @@ describe('task board CLI', function () {
     expect((await read_task()).active_claimants).to.deep.equal([])
   })
 
-  it('files a task that stays hidden until a steward vouches', async () => {
+  it('mines a task from a key with no standing, which stays hidden until a steward vouches', async () => {
     const result = await cli(
       'file',
       '--subject',
@@ -157,6 +159,7 @@ describe('task board CLI', function () {
       key_file
     )
     const [{ event }] = result.published
+    expect(get_event_pow(event)).to.equal(TASK_UNVOUCHED_POW_DIFFICULTY)
     const state = await cli('read')
     expect(state.tasks[event.id].is_hidden).to.equal(true)
   })

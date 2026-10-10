@@ -2,6 +2,8 @@
 // dependencies. The event id must already be verified as the event's hash.
 // Rules: docs/design/task-board-protocol.md § Proof of work.
 
+import { TASK_BOARD_KINDS } from './constants.mjs'
+
 const leading_zero_bits = (hex) => {
   let count = 0
   for (const char of hex) {
@@ -25,3 +27,12 @@ export function get_event_pow(event) {
   if (!committed || !/^[0-9a-f]{64}$/.test(event.id || '')) return 0
   return Math.min(leading_zero_bits(event.id), committed)
 }
+
+// Whether a key must mine an event of this kind for it to count: issues and
+// comments from a key that is not a steward, not trusted, and not an unblocked
+// established account. Reads the board state's key lists.
+export const needs_event_pow = ({ state, pubkey, kind }) =>
+  (kind === TASK_BOARD_KINDS.issue || kind === TASK_BOARD_KINDS.comment) &&
+  !state.stewards.includes(pubkey) &&
+  !state.trusted.includes(pubkey) &&
+  !(state.established.includes(pubkey) && !state.blocked.includes(pubkey))

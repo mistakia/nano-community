@@ -12,6 +12,9 @@
 //   node scripts/task-board.mjs block <npub> --key-file <file>
 //   node scripts/task-board.mjs unblock <npub> --key-file <file>
 //
+// An issue or comment from a key with no standing on the board is mined to the
+// board's proof of work difficulty first, which takes a few seconds.
+//
 // Output is JSON. The key file holds an nsec or a 64-character hex secret key;
 // `--key-file -` reads it from stdin. It is never read from argv. Every
 // fetched event's signature is verified before it is reduced. Like the portal,
@@ -24,6 +27,7 @@ import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import WebSocket from 'ws'
 import { finalizeEvent, getPublicKey, nip19, verifyEvent } from 'nostr-tools'
+import { minePow } from 'nostr-tools/nip13'
 import { SimplePool, useWebSocketImplementation } from 'nostr-tools/pool'
 import { hexToBytes } from 'nostr-tools/utils'
 
@@ -33,6 +37,7 @@ import {
   TASK_BOARD_D_TAG,
   TASK_BOARD_DEFAULT_RELAYS,
   TASK_STATUS_KINDS,
+  TASK_UNVOUCHED_POW_DIFFICULTY,
   KEY_RELATION_COUNTERPARTS,
   build_board_filters,
   build_issue_filters,
@@ -44,6 +49,7 @@ import {
   edit_key_relation,
   edit_block_set,
   edit_vouch_set,
+  needs_event_pow,
   order_claim_after
 } from '#common/task-board/index.mjs'
 
@@ -132,7 +138,11 @@ async function act({ argv, build }) {
       relays: argv.relays,
       board: argv.board
     })
-    const template = build({ state, pubkey })
+    const built = build({ state, pubkey })
+    // An issue or comment from a key with no standing counts only when mined.
+    const template = needs_event_pow({ state, pubkey, kind: built.kind })
+      ? minePow({ ...built, pubkey }, TASK_UNVOUCHED_POW_DIFFICULTY)
+      : built
     const published = [
       await publish({ pool, relays: argv.relays, template, secret_key })
     ]

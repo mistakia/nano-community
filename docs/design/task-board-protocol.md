@@ -513,6 +513,14 @@ A steward blocking a key:
 }
 ```
 
+## Proof of work
+
+An issue or comment from a key with no standing counts only with NIP-13 proof of work. A key has standing when it is a steward, a trusted key, or an unblocked key with an unexpired `established` account attestation. Standing is judged when the board is read, so a later vouch makes a key's earlier unmined events count.
+
+- The difficulty is 17 bits (`TASK_UNVOUCHED_POW_DIFFICULTY`), which mines in about 2.5 seconds on a phone.
+- An event's proof of work is the leading zero bits of its id, capped at the difficulty committed in its `["nonce", "<n>", "<difficulty>"]` tag. An event with no committed difficulty has none.
+- Clients mine after the pubkey is known and before signing, as NIP-13 describes. The reference is `common/task-board/count-event-pow.mjs`.
+
 ## Retraction
 
 A NIP-09 deletion request (kind 5) removes the requester's own events from the default view. Only `e` tags are honoured; a deletion by `a` tag is ignored, so a claim is withdrawn by releasing it. A deletion request for someone else's event is ignored, and so is one for the board announcement, which is only ever replaced by a newer one. Relays may keep the event; deletion is a request, not a guarantee.
@@ -548,9 +556,10 @@ Every client is expected to derive the same board from the same events. The refe
    - **Blocked or paused:** steward state `blocked` or `paused`.
    - **Triage:** open, with no steward priority label.
    - **Needs a taker:** everything else.
-7. Issues whose author is neither a steward nor trusted are **hidden** from the columns and still reachable by direct link.
-8. An issue is **superseded** when a visible issue carries an `e` tag with marker `supersedes` pointing at it and was signed by its author or by a steward. A superseded issue leaves the columns and stays reachable by direct link.
-9. Each column is sorted by steward priority (`critical` first, unlabelled last), then by latest activity (newest first), then by id. The closed column skips priority and is sorted by latest activity, then by id.
+7. Issues and comments that fall short of the proof of work rule are ignored.
+8. Issues whose author is neither a steward nor trusted are **hidden** from the columns and still reachable by direct link.
+9. An issue is **superseded** when a visible issue carries an `e` tag with marker `supersedes` pointing at it and was signed by its author or by a steward. A superseded issue leaves the columns and stays reachable by direct link.
+10. Each column is sorted by steward priority (`critical` first, unlabelled last), then by latest activity (newest first), then by id. The closed column skips priority and is sorted by latest activity, then by id.
 
 Latest activity is the newest `created_at` among the issue and its valid statuses, labels, claims and counted comments. A comment counts toward activity and the comment count only when its author is a steward, a trusted key or the issue author; clients may still display other comments.
 

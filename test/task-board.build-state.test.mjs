@@ -3,7 +3,12 @@ import chai from 'chai'
 import fs from 'fs'
 import path, { dirname } from 'path'
 import { fileURLToPath } from 'url'
-import { finalizeEvent, getPublicKey, verifyEvent } from 'nostr-tools'
+import {
+  finalizeEvent,
+  getEventHash,
+  getPublicKey,
+  verifyEvent
+} from 'nostr-tools'
 import { hexToBytes } from 'nostr-tools/utils'
 
 import {
@@ -14,10 +19,13 @@ import {
   build_task_claim,
   build_task_comment,
   build_vouch_set,
+  build_account_attestation,
   build_deletion_request,
   build_key_properties,
   edit_key_relation,
-  build_task_board_state
+  build_task_board_state,
+  get_event_pow,
+  TASK_UNVOUCHED_POW_DIFFICULTY
 } from '#common/task-board/index.mjs'
 
 const expect = chai.expect
@@ -45,6 +53,20 @@ const announce = ({ maintainers, created_at = T }) =>
   )
 const issue_by = (key, subject, created_at = T + 1) =>
   sign(key, build_task_issue({ board, subject, created_at }))
+// Mines at the event's own created_at, unlike minePow, so test times hold.
+const mined = (key, template) => {
+  const event = { ...template, pubkey: key.pubkey }
+  const nonce = ['nonce', '0', String(TASK_UNVOUCHED_POW_DIFFICULTY)]
+  event.tags = [...event.tags, nonce]
+  for (let n = 0; ; n++) {
+    nonce[1] = String(n)
+    event.id = getEventHash(event)
+    if (get_event_pow(event) >= TASK_UNVOUCHED_POW_DIFFICULTY)
+      return sign(key, event)
+  }
+}
+const mined_issue_by = (key, subject, created_at = T + 1) =>
+  mined(key, build_task_issue({ board, subject, created_at }))
 const label = (key, issue, namespace, value, created_at) =>
   sign(key, build_task_label({ issue, namespace, value, created_at }))
 const PRIORITY = 'community.nano.priority'
@@ -111,7 +133,7 @@ describe('task board view reducer', () => {
   })
 
   it('honours a status from the issue author', () => {
-    const issue = issue_by(contributor, 'Mine')
+    const issue = mined_issue_by(contributor, 'Mine')
     const status = sign(
       contributor,
       build_task_status({ board, issue, status: 'resolved', created_at: T + 2 })
@@ -244,11 +266,50 @@ describe('task board view reducer', () => {
   })
 
   it('hides an issue from outside the steward and trusted sets', () => {
-    const issue = issue_by(stranger, 'Spam')
+    const issue = mined_issue_by(stranger, 'Spam')
     const state = state_of([announcement, issue])
     expect(state.tasks[issue.id].is_hidden).to.equal(true)
     for (const ids of Object.values(state.columns))
       expect(ids).to.not.include(issue.id)
+  })
+
+  it('drops an unmined issue and comment from a key with no standing until it is vouched for', () => {
+    const issue = issue_by(stranger, 'Unmined')
+    expect(state_of([announcement, issue]).tasks[issue.id]).to.equal(undefined)
+
+    const own = mined_issue_by(stranger, 'Mined')
+    const comment = () =>
+      build_task_comment({ issue: own, content: 'More', created_at: T + 2 })
+    const unmined = sign(stranger, comment())
+    const with_pow = mined(stranger, comment())
+    expect(
+      state_of([announcement, own, unmined]).tasks[own.id].comment_count
+    ).to.equal(0)
+    expect(
+      state_of([announcement, own, with_pow]).tasks[own.id].comment_count
+    ).to.equal(1)
+
+    const vouch = sign(
+      steward,
+      build_vouch_set({ pubkeys: [stranger.pubkey], created_at: T + 3 })
+    )
+    const state = state_of([announcement, issue, vouch])
+    expect(state.tasks[issue.id].is_hidden).to.equal(false)
+  })
+
+  it('counts an unmined issue from an established account', () => {
+    const issue = issue_by(stranger, 'Established')
+    const attestation = sign(
+      steward,
+      build_account_attestation({
+        pubkey: stranger.pubkey,
+        value: 'established',
+        created_at: T
+      })
+    )
+    const state = state_of([announcement, issue, attestation])
+    expect(state.established).to.deep.equal([stranger.pubkey])
+    expect(state.tasks[issue.id].is_hidden).to.equal(true)
   })
 
   it('shows a trusted contributor issue once a steward follows them', () => {

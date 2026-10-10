@@ -17,8 +17,10 @@ import {
   KEY_RELATION_COUNTERPARTS,
   BASE_ENTITY_ID_TAG,
   SUPERSEDES_MARKER,
-  CLAIM_LIFETIME_SECONDS
+  CLAIM_LIFETIME_SECONDS,
+  TASK_UNVOUCHED_POW_DIFFICULTY
 } from './constants.mjs'
+import { get_event_pow } from './count-event-pow.mjs'
 import {
   format_board_address,
   now_seconds
@@ -130,12 +132,24 @@ export default function build_task_board_state({
     events: live_events,
     stewards
   })
+  const established = select_established({
+    attestations: account_attestations,
+    now
+  })
   const { trusted, blocked } = build_trust_graph({
     stewards,
     vouch_sets,
     block_sets,
-    established: select_established({ attestations: account_attestations, now })
+    established
   })
+  // Issues and comments from a key with no standing count only with proof of
+  // work, which holds on relays that do not enforce it. Standing is judged
+  // now, so a later vouch makes a key's earlier unmined events count.
+  const counts = (event) =>
+    stewards.has(event.pubkey) ||
+    trusted.has(event.pubkey) ||
+    (established.has(event.pubkey) && !blocked.has(event.pubkey)) ||
+    get_event_pow(event) >= TASK_UNVOUCHED_POW_DIFFICULTY
 
   // Key relations: each key's latest properties event on this board. A
   // relation is confirmed when the other key states the counterpart role.
@@ -177,7 +191,8 @@ export default function build_task_board_state({
   for (const event of live_events) {
     if (
       event.kind !== TASK_BOARD_KINDS.issue ||
-      get_tag_value(event, 'a') !== board_address
+      get_tag_value(event, 'a') !== board_address ||
+      !counts(event)
     ) {
       continue
     }
@@ -256,7 +271,7 @@ export default function build_task_board_state({
       // toward the comment count and activity, so others cannot reorder the
       // board.
       const task = tasks.get(get_tag_value(event, 'E'))
-      if (!task) continue
+      if (!task || !counts(event)) continue
       if (
         !stewards.has(event.pubkey) &&
         !trusted.has(event.pubkey) &&
@@ -328,6 +343,7 @@ export default function build_task_board_state({
     trusted: [...trusted.keys()],
     trust: Object.fromEntries(trusted),
     blocked: [...blocked],
+    established: [...established],
     vouch_sets: Object.fromEntries(vouch_sets),
     block_sets: Object.fromEntries(block_sets),
     account_attestations: Object.fromEntries(account_attestations),
