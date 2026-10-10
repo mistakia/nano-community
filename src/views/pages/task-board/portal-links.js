@@ -30,7 +30,7 @@ export function use_portal_links() {
   const navigate = useNavigate()
   return {
     task_path: (issue_id) => `/task/${issue_id}${board_query()}`,
-    board_path: () => `/tasks${board_query()}`,
+    board_path: () => `/roadmap${board_query()}`,
     navigate,
     Link: PortalLink
   }

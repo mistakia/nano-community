@@ -12,8 +12,6 @@ import Button from '@mui/material/Button'
 import markdown from 'markdown-it'
 import mdTasks from 'markdown-it-task-checkbox'
 
-// import GithubLabels from '@components/github-labels'
-
 import './github-discussion.styl'
 
 const md = markdown({ html: true }).use(mdTasks)
@@ -54,7 +52,6 @@ export default class GithubDiscussion extends React.Component {
             <div>{discussion.actor_name}</div>
             <div>{timeago.format(discussion.updated_at * 1000)}</div>
           </div>
-          {/* <GithubLabels labels={discussion.labels} /> */}
         </AccordionSummary>
         <AccordionDetails>
           <Box style={{ flex: '0 0 100%' }}>

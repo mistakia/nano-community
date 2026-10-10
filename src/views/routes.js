@@ -4,7 +4,6 @@ import { Route, Routes, useLocation, useParams } from 'react-router-dom'
 import DocPage from '@pages/doc'
 import DynamicPage from '@pages/dynamic'
 import HomePage from '@pages/home'
-import RoadmapPage from '@pages/roadmap'
 import LedgerPage from '@pages/ledger'
 import NotFoundPage from '@pages/not-found'
 import RepresentativesPage from '@pages/representatives'
@@ -29,8 +28,7 @@ const AppRoutes = () => (
   <Routes>
     <Route path='/' element={<HomePage />} />
     <Route path='/live' element={<LivePage />} />
-    <Route path='/roadmap' element={<RoadmapPage />} />
-    <Route path='/tasks' element={<TaskBoardPage />} />
+    <Route path='/roadmap' element={<TaskBoardPage />} />
     <Route path='/task/:issue_event_id' element={<TaskPage />} />
     <Route path='/ledger' element={<LedgerPage />} />
     <Route path='/representatives' element={<RepresentativesPage />} />

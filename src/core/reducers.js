@@ -6,7 +6,6 @@ import { blocksReducer } from './blocks'
 import { docsReducer } from './docs'
 import { githubDiscussionsReducer } from './github-discussions'
 import { githubEventsReducer } from './github-events'
-import { githubIssuesReducer } from './github-issues'
 import { ledgerReducer } from './ledger'
 import { networkReducer } from './network'
 import { notificationReducer } from './notifications'
@@ -28,7 +27,6 @@ const rootReducer = (router) =>
     docs: docsReducer,
     githubDiscussions: githubDiscussionsReducer,
     githubEvents: githubEventsReducer,
-    githubIssues: githubIssuesReducer,
     ledger: ledgerReducer,
     network: networkReducer,
     notification: notificationReducer,

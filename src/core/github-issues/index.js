@@ -1,5 +1,0 @@
-export { githubIssuesActions, githubIssuesRequestActions } from './actions'
-export { githubIssuesReducer } from './reducer'
-export { githubIssuesSagas } from './sagas'
-export { getGithubIssuesState } from './selectors'
-export { GithubIssue } from './github-issue'

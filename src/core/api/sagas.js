@@ -4,7 +4,6 @@ import { api, apiRequest } from '@core/api/service'
 import { getApp } from '@core/app'
 import { githubDiscussionsRequestActions } from '@core/github-discussions/actions'
 import { githubEventsRequestActions } from '@core/github-events/actions'
-import { githubIssuesRequestActions } from '@core/github-issues/actions'
 import { postlistRequestActions } from '@core/postlists/actions'
 import {
   docRequestActions,
@@ -105,11 +104,6 @@ export const getGithubEvents = fetch.bind(
   null,
   api.getGithubEvents,
   githubEventsRequestActions
-)
-export const getGithubIssues = fetch.bind(
-  null,
-  api.getGithubIssues,
-  githubIssuesRequestActions
 )
 export const getNetworkStats = fetch.bind(
   null,
