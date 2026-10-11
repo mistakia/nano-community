@@ -67,8 +67,10 @@ export default async function sync_account_label_sources({
       log(result)
       results.push(result)
     } catch (error) {
-      log(`${source} failed: ${error.message}`)
-      results.push({ source, ok: false, error: error.message })
+      // A failed bulk insert embeds its whole statement; the cause is at the end
+      const message = error.message.slice(-300)
+      log(`${source} failed: ${message}`)
+      results.push({ source, ok: false, error: message })
     }
   }
   return results

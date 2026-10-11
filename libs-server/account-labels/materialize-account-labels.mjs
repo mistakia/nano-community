@@ -20,6 +20,10 @@ export default async function materialize_account_labels({
       'expires_at'
     )
     .where({ account })
+  // expires_at is a bigint, which the driver returns as a string
+  for (const claim of stored_claims) {
+    if (claim.expires_at !== null) claim.expires_at = Number(claim.expires_at)
+  }
   const signed_claims = await load_signed_message_claims({
     account,
     connection

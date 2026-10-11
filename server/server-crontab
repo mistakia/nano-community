@@ -63,7 +63,7 @@ JOB_PROJECT=nano-community
 15 * * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/scripts/import-accounts-rep.mjs >> /var/log/nano-community/import-accounts-rep.log 2>&1
 
 ## account labels
-18 3 * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/scripts/sync-account-labels.mjs >> /var/log/nano-community/sync-account-labels.log 2>&1
+18 3 * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/sync-account-labels.mjs >> /var/log/nano-community/sync-account-labels.log 2>&1
 
 ## site analytics
 45 0 * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/scripts/prune-site-events.mjs >> /var/log/nano-community/prune-site-events.log 2>&1

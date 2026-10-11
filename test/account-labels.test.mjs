@@ -146,7 +146,7 @@ describe('account labels', function () {
           directory({
             source: 'nano.to',
             entries: [
-              { name: 'Alpha', address: a.account },
+              { name: 'Alpha', address: a.account, expires_unix: 2403579600 },
               { name: 'Beta', address: b.account },
               { name: 'Bad', address: 'nano_invalid' }
             ]

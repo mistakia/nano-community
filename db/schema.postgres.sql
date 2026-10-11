@@ -136,7 +136,7 @@ CREATE TABLE IF NOT EXISTS public.account_labels (
   label_type   varchar(16) NOT NULL,
   value        varchar(255) NOT NULL,
   observed_at  integer NOT NULL,
-  expires_at   integer
+  expires_at   bigint
 );
 CREATE UNIQUE INDEX IF NOT EXISTS account_labels_uniq
   ON public.account_labels (account, source, label_type, value);
