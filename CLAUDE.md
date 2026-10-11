@@ -29,7 +29,7 @@ NANO_TEST_PG_PORT=5435 yarn test
 ## Deploy
 
 1. Confirm CI (Test and CodeQL) is green on the head commit.
-2. On host `nano.community`, fast-forward `/root/nano-community/source` to `origin/main`. If `yarn.lock` changed, run `yarn install` there in the same command. The pm2 file watch restarts the server on the fast-forward, and it crashes on any missing dependency until the install lands.
+2. On host `nano.community`, fast-forward `/root/nano-community/source` to `origin/main`. It is the host's only checkout: pm2 serves it and every cron job in `server/server-crontab` runs from `source/scripts`, so a deploy updates both. If `yarn.lock` changed, run `yarn install` there in the same command. The pm2 file watch restarts the server on the fast-forward, and it crashes on any missing dependency until the install lands.
 3. If `api/` or `server/` changed, run `pm2 restart server` there and confirm its uptime reset. The pm2 file watch does not reliably restart it.
 4. Locally, run `yarn build` (react-snap prerender) and then `yarn deploy`. It mirrors `build/` to the host and deletes files the build no longer produces, so a retired prerendered page cannot keep being served. Build from current `origin/main` in a clean worktree (`git worktree add --detach <dir> origin/main`, with `node_modules` symlinked), never from your own older commit or the shared checkout. The deploy replaces the whole client, so an older commit rolls back other sessions' shipped client commits, and the shared checkout can carry a sibling's uncommitted files.
 
