@@ -26,6 +26,7 @@ import { use_task_board_links } from './task-board-links'
 import PubkeyName from './pubkey-name'
 import Age from './age'
 import InlineSelect from './inline-select'
+import TaskPledges from './task-pledges'
 import { TaskTitle, TaskText } from './task-text'
 import { COLUMN_TITLES, STATUS_TITLES, format_date } from './format'
 
@@ -313,6 +314,8 @@ export default function TaskDetail({ issue_id }) {
           {error}
         </div>
       ))}
+
+      <TaskPledges task={task} pubkey={pubkey} />
 
       <section className='task-section task-detail__comments'>
         <h3 className='task-section__title'>

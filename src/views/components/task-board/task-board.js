@@ -10,7 +10,7 @@ import PubkeyName from './pubkey-name'
 import Age from './age'
 import { TaskTitle } from './task-text'
 import { use_task_board_links } from './task-board-links'
-import { COLUMN_TITLES } from './format'
+import { COLUMN_TITLES, format_xno } from './format'
 
 const BOARD_COLUMNS = [
   'in_progress',
@@ -66,6 +66,9 @@ function TaskCard({ task }) {
                   </React.Fragment>
                 ))}
           </span>
+        )}
+        {BigInt(task.pledged_raw) > 0n && (
+          <span>{format_xno(task.pledged_raw)} pledged</span>
         )}
         {task.comment_count > 0 && (
           <span>

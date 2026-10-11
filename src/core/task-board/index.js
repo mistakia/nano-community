@@ -8,6 +8,7 @@ export {
   get_profile_name,
   get_profile_content,
   has_board_activity,
-  get_nano_binding
+  get_nano_binding,
+  get_own_pledge_event
 } from './selectors'
 export { resolve_board_config } from './board-config'

@@ -59,6 +59,22 @@ export const get_task_comments = (state, issue_id) => {
     .sort((a, b) => a.created_at - b.created_at)
 }
 
+// A key's current pledge event on a task, or null. Republishing replaces it.
+export const get_own_pledge_event = (state, pubkey, issue_id) => {
+  let latest = null
+  for (const event of get_events(state).values()) {
+    if (
+      event.kind === TASK_BOARD_KINDS.pledge &&
+      event.pubkey === pubkey &&
+      event.tags.some((tag) => tag[0] === 'd' && tag[1] === issue_id) &&
+      (!latest || event.created_at > latest.created_at)
+    ) {
+      latest = event
+    }
+  }
+  return latest
+}
+
 // The profile name a pubkey published in kind 0, or null.
 export const get_profile_name = (state, pubkey) =>
   state.getIn(['task_board', 'profiles', pubkey])?.name || null
