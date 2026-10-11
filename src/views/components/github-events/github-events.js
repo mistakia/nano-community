@@ -12,10 +12,10 @@ const action = (item) => {
       return 'commented on commit'
 
     case 'CreateEvent':
-      return `created ${item.action}`
+      return `created ${item.action}${item.ref ? ` ${item.ref}` : ''}`
 
     case 'DeleteEvent':
-      return `deleted ${item.action}`
+      return `deleted ${item.action}${item.ref ? ` ${item.ref}` : ''}`
 
     case 'ForkEvent':
       return 'forked'

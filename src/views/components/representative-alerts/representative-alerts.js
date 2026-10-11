@@ -164,6 +164,13 @@ export default class RepresentativeAlerts extends React.Component {
               )}
             </TableBody>
           </Table>
+          <div className='rep__alerts-guide'>
+            Delegated to one of these? Switching is free, and your funds never
+            move.{' '}
+            <Link to='/getting-started-users/choosing-a-representative'>
+              How to choose a representative →
+            </Link>
+          </div>
         </TableContainer>
       </>
     )
