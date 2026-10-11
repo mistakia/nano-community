@@ -142,6 +142,9 @@ CREATE UNIQUE INDEX IF NOT EXISTS account_labels_uniq
   ON public.account_labels (account, source, label_type, value);
 CREATE INDEX IF NOT EXISTS account_labels_source_observed_at
   ON public.account_labels (source, observed_at);
+CREATE INDEX IF NOT EXISTS account_labels_alias_lower
+  ON public.account_labels (lower(value) text_pattern_ops)
+  WHERE label_type = 'alias';
 
 CREATE TABLE IF NOT EXISTS public.github_discussions (
   id             varchar(100) NOT NULL PRIMARY KEY,

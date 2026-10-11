@@ -293,8 +293,26 @@ describe('account labels', function () {
           account: exchange.account,
           alias: 'Zeta Exchange',
           representative: false,
+          names: ['Zeta Exchange'],
           tags: ['type/exchange']
         }
+      ])
+    })
+
+    it('GET /api/account-labels finds a name that does not win the alias', async () => {
+      await db('account_labels').insert(
+        claim({
+          account: exchange.account,
+          source: 'nanotipbot',
+          value: 'Zulu'
+        })
+      )
+      const response = await chai
+        .request(server)
+        .get('/api/account-labels')
+        .query({ name: 'ZULU' })
+      expect(response.body.map((row) => [row.alias, row.names])).to.deep.equal([
+        ['Zeta Exchange', ['Zulu']]
       ])
     })
 
