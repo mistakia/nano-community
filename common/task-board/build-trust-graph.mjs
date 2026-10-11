@@ -9,7 +9,8 @@ import {
   VOUCHES_FOR_SECOND_STEP,
   ACCOUNT_ATTESTATION_NAMESPACE,
   ACCOUNT_ATTESTATION_VALUES,
-  ACCOUNT_ATTESTATION_LIFETIME_SECONDS
+  ACCOUNT_ATTESTATION_LIFETIME_SECONDS,
+  PLEDGE_ATTESTATION_NAMESPACE
 } from './constants.mjs'
 
 const get_tag_value = (event, name) =>
@@ -52,6 +53,43 @@ export function select_trust_sets(events) {
     }
   }
   return { vouch_sets, block_sets }
+}
+
+// Earned vouches: a steward's newest verdict on a pledge is paid and names the
+// key that was paid (p), so the pledge's author vouches for that key. Returns
+// Map<voucher, Set<pubkey>>; build_trust_graph counts them only for vouchers.
+export function select_earned_vouches({ events, stewards }) {
+  const latest = new Map()
+  for (const event of events) {
+    if (
+      event.kind !== TASK_BOARD_KINDS.label ||
+      !stewards.has(event.pubkey) ||
+      get_tag_value(event, 'L') !== PLEDGE_ATTESTATION_NAMESPACE
+    ) {
+      continue
+    }
+    const address = get_tag_value(event, 'a')
+    if (address && is_newer(event, latest.get(address))) {
+      latest.set(address, event)
+    }
+  }
+  const earned = new Map()
+  for (const [address, event] of latest) {
+    const paid = event.tags.some(
+      (tag) =>
+        tag[0] === 'l' &&
+        tag[1] === 'paid' &&
+        tag[2] === PLEDGE_ATTESTATION_NAMESPACE
+    )
+    const paid_pubkeys = event.tags.filter((tag) => tag[0] === 'p')
+    const voucher = address.split(':')[1]
+    if (!paid || paid_pubkeys.length !== 1 || !voucher) continue
+    const pubkey = paid_pubkeys[0][1]
+    if (pubkey === voucher) continue
+    if (!earned.has(voucher)) earned.set(voucher, new Set())
+    earned.get(voucher).add(pubkey)
+  }
+  return earned
 }
 
 // The steward account attestations about each key, as
@@ -111,13 +149,21 @@ export const select_established = ({ attestations, now }) =>
 // Returns { trusted: Map<pubkey, { step, vouchers }>, blocked: Set<pubkey> }.
 // Stewards are step 0 and are not listed. Step 1 keys are vouched for by a
 // steward and may vouch themselves. Step 2 keys have two step 1 vouchers, or
-// one and an established Nano account; they post but do not vouch.
+// one and an established Nano account; they post but do not vouch. A voucher's
+// earned vouches (paid pledges) count like its vouch set.
 export function build_trust_graph({
   stewards,
   vouch_sets,
   block_sets,
-  established = new Set()
+  established = new Set(),
+  earned_vouches = new Map()
 }) {
+  const vouched_by = (voucher) => [
+    ...new Set([
+      ...get_vouched(vouch_sets.get(voucher)),
+      ...(earned_vouches.get(voucher) || [])
+    ])
+  ]
   const blocked = new Set()
   for (const steward of stewards) {
     for (const pubkey of get_vouched(block_sets.get(steward))) {
@@ -128,7 +174,7 @@ export function build_trust_graph({
 
   const trusted = new Map()
   for (const steward of stewards) {
-    for (const pubkey of get_vouched(vouch_sets.get(steward))) {
+    for (const pubkey of vouched_by(steward)) {
       if (!eligible(pubkey)) continue
       const entry = trusted.get(pubkey) || { step: 1, vouchers: [] }
       entry.vouchers.push(steward)
@@ -139,7 +185,7 @@ export function build_trust_graph({
   const second_step = new Map()
   for (const [voucher, entry] of trusted) {
     if (entry.step !== 1) continue
-    for (const pubkey of get_vouched(vouch_sets.get(voucher))) {
+    for (const pubkey of vouched_by(voucher)) {
       if (!eligible(pubkey) || trusted.has(pubkey)) continue
       if (!second_step.has(pubkey)) second_step.set(pubkey, [])
       second_step.get(pubkey).push(voucher)

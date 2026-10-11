@@ -17,6 +17,7 @@ import {
   parse_nano_account_binding,
   select_account_attestations,
   select_established,
+  select_earned_vouches,
   ACCOUNT_ATTESTATION_NAMESPACE,
   ACCOUNT_ATTESTATION_VALUES,
   PLEDGE_ATTESTATION_NAMESPACE,
@@ -57,6 +58,7 @@ export function create_relay_policy_state({
     vouch_sets: new Map(), // pubkey -> latest vouch set
     block_sets: new Map(), // pubkey -> latest block set
     account_labels: new Map(), // `${author}:${pubkey}` -> latest attestation
+    pledge_labels: new Map(), // `${author}:${pledge address}` -> latest verdict
     rate_limits: { ...DEFAULT_RATE_LIMITS, ...rate_limits },
     pow_difficulty,
     rate_windows: new Map()
@@ -95,7 +97,11 @@ export function get_trust(
       stewards,
       vouch_sets: state.vouch_sets,
       block_sets: state.block_sets,
-      established
+      established,
+      earned_vouches: select_earned_vouches({
+        events: state.pledge_labels.values(),
+        stewards
+      })
     })
   }
 }
@@ -123,6 +129,12 @@ function record_accepted_event(state, event) {
     const key = `${event.pubkey}:${get_tag_value(event, 'p')}`
     if (is_newer(event, state.account_labels.get(key))) {
       state.account_labels.set(key, event)
+    }
+  }
+  if (is_pledge_attestation(event)) {
+    const key = `${event.pubkey}:${get_tag_value(event, 'a')}`
+    if (is_newer(event, state.pledge_labels.get(key))) {
+      state.pledge_labels.set(key, event)
     }
   }
   if (event.kind === TASK_BOARD_KINDS.follow_set) {

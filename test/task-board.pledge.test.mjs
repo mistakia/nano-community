@@ -18,6 +18,7 @@ import {
   build_pledge_attestation,
   parse_task_pledge,
   build_task_board_state,
+  build_vouch_set,
   TASK_PLEDGE_PROMOTION_RAW
 } from '#common/task-board/index.mjs'
 
@@ -241,5 +242,69 @@ describe('task board pledges', () => {
       })
     )
     expect(task_of(pledge, forged).pledges[0].verdict).to.equal('pending')
+  })
+
+  describe('earned trust', () => {
+    const worker = make_key('5')
+    const paid_to = (pledge_event, pubkey) =>
+      sign(
+        steward,
+        build_pledge_attestation({
+          pledge_event,
+          value: 'paid',
+          paid_pubkey: pubkey,
+          created_at: T + 3
+        })
+      )
+    const state_of = (...events) =>
+      build_task_board_state({
+        events: [announcement, issue, ...events],
+        board,
+        now
+      })
+
+    it('counts a paid pledge from a voucher as its vouch', () => {
+      const vouch = sign(
+        steward,
+        build_vouch_set({ pubkeys: [backer.pubkey], created_at: T + 1 })
+      )
+      const second = sign(
+        steward,
+        build_vouch_set({
+          pubkeys: [backer.pubkey, other_backer.pubkey],
+          created_at: T + 2
+        })
+      )
+      const pledge = pledge_by(backer, issue, XNO, T + 2, 'AB'.repeat(32))
+      const other = pledge_by(other_backer, issue, XNO, T + 2, 'CD'.repeat(32))
+      const one = state_of(vouch, pledge, paid_to(pledge, worker.pubkey))
+      expect(one.trust[worker.pubkey]).to.equal(undefined)
+      const two = state_of(
+        second,
+        pledge,
+        other,
+        paid_to(pledge, worker.pubkey),
+        paid_to(other, worker.pubkey)
+      )
+      expect(two.trust[worker.pubkey]).to.deep.equal({
+        step: 2,
+        vouchers: [backer.pubkey, other_backer.pubkey].sort()
+      })
+    })
+
+    it('ignores a paid pledge from a key that is not a voucher', () => {
+      const pledge = pledge_by(backer, issue, XNO, T + 2, 'AB'.repeat(32))
+      const state = state_of(pledge, paid_to(pledge, worker.pubkey))
+      expect(state.trust[worker.pubkey]).to.equal(undefined)
+    })
+
+    it('lets a steward pledge paid to a key make it step 1', () => {
+      const pledge = pledge_by(steward, issue, XNO, T + 2, 'AB'.repeat(32))
+      const state = state_of(pledge, paid_to(pledge, worker.pubkey))
+      expect(state.trust[worker.pubkey]).to.deep.equal({
+        step: 1,
+        vouchers: [steward.pubkey]
+      })
+    })
   })
 })

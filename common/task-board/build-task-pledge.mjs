@@ -113,10 +113,12 @@ export function parse_task_pledge(event) {
 }
 
 // A steward's verdict on a pledge (kind 1985), naming the pledge address and
-// the pledge event it judged. paid does not expire.
+// the pledge event it judged. paid does not expire, and names the key that
+// was paid (paid_pubkey), which earns the pledger's vouch for it.
 export function build_pledge_attestation({
   pledge_event,
   value,
+  paid_pubkey = null,
   created_at = now_seconds(),
   expiration = created_at + ACCOUNT_ATTESTATION_LIFETIME_SECONDS
 }) {
@@ -132,6 +134,7 @@ export function build_pledge_attestation({
       ['l', value, PLEDGE_ATTESTATION_NAMESPACE],
       ['a', format_pledge_address({ pubkey: pledge_event.pubkey, issue_id })],
       ['e', pledge_event.id],
+      ...(value === 'paid' && paid_pubkey ? [['p', paid_pubkey]] : []),
       ...(value === 'paid' ? [] : [['expiration', String(expiration)]])
     ],
     content: ''

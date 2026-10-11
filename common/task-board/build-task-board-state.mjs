@@ -34,7 +34,8 @@ import {
   build_trust_graph,
   select_trust_sets,
   select_account_attestations,
-  select_established
+  select_established,
+  select_earned_vouches
 } from './build-trust-graph.mjs'
 
 const get_tag_value = (event, name) =>
@@ -151,7 +152,8 @@ export default function build_task_board_state({
     stewards,
     vouch_sets,
     block_sets,
-    established
+    established,
+    earned_vouches: select_earned_vouches({ events: live_events, stewards })
   })
   // Issues and comments from a key with no standing count only with proof of
   // work, which holds on relays that do not enforce it. Standing is judged

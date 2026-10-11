@@ -24,7 +24,8 @@ import {
 import {
   create_relay_policy_state,
   seed_relay_policy_state,
-  evaluate_relay_event
+  evaluate_relay_event,
+  get_trust
 } from '#libs-server/task-board-relay-policy.mjs'
 
 const expect = chai.expect
@@ -464,6 +465,26 @@ describe('task board relay write policy', () => {
       expect(
         evaluate(sign(stranger, pledge_template('f'.repeat(64)))).msg
       ).to.equal('blocked: a pledge must name a board issue and the board')
+    })
+
+    it('trusts a key a steward pledge paid, as the board does', () => {
+      const pledge = sign(owner, pledge_template(issue.id))
+      evaluate(pledge)
+      expect(get_trust(state).trusted.has(stranger.pubkey)).to.equal(false)
+      evaluate(
+        sign(
+          owner,
+          build_pledge_attestation({
+            pledge_event: pledge,
+            value: 'paid',
+            paid_pubkey: stranger.pubkey
+          })
+        )
+      )
+      expect(get_trust(state).trusted.get(stranger.pubkey)).to.deep.equal({
+        step: 1,
+        vouchers: [owner.pubkey]
+      })
     })
 
     it('accepts pledge verdicts only from stewards, naming a board pledge', () => {
