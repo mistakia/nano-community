@@ -1,6 +1,5 @@
 module.exports = {
   discordAuthorization: '',
-  twitterAuthorization: '',
 
   port: 8085,
 
