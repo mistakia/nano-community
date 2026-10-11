@@ -2,22 +2,18 @@ import debug from 'debug'
 import dayjs from 'dayjs'
 
 import config from '#config'
-import { rpc, getNetworkInfo, wait, median, isMain, getData } from '#common'
+import { rpc, getNetworkInfo, wait, median, isMain } from '#common'
 import report_job from '#libs-server/report-job.mjs'
+import resolve_telemetry_account from '#libs-server/resolve-telemetry-account.mjs'
 import db from '#db'
 
 const log = debug('import-telemetry')
 debug.enable('import-telemetry')
 
 const timestamp = Math.round(Date.now() / 1000)
+const TELEMETRY_HISTORY_WINDOW_SECONDS = 7 * 24 * 60 * 60
 
 const importTelemetry = async () => {
-  const mappings = await getData('representative-mappings')
-  if (!mappings) {
-    log('representative mappings not found')
-    return
-  }
-
   log(`saving telemetry for interval: ${timestamp}`)
 
   // get telemetry from single node
@@ -86,6 +82,18 @@ const importTelemetry = async () => {
     `Found ${Object.keys(node_id_groups).length} unique node_ids from ${telemetry.metrics.length} telemetry entries`
   )
 
+  // account last attributed to each node_id, the fallback when the rep
+  // crawler has no match for a node
+  const history_window_start = timestamp - TELEMETRY_HISTORY_WINDOW_SECONDS
+  const history_rows = await db.raw(
+    'SELECT DISTINCT ON (node_id) node_id, account FROM representatives_telemetry WHERE "timestamp" >= ? AND account IS NOT NULL ORDER BY node_id, "timestamp" DESC',
+    [history_window_start]
+  )
+  const history_account_by_node_id = new Map(
+    history_rows.rows.map((row) => [row.node_id.trim(), row.account.trim()])
+  )
+  const live_node_ids = new Set(Object.keys(node_id_groups))
+
   const nodeInserts = []
   // Create a map to track accounts that have been seen
   const seen_accounts = new Map()
@@ -95,8 +103,8 @@ const importTelemetry = async () => {
     total_nodes: telemetry.metrics.length,
     nodes_with_account: 0,
     mapping_sources: {
-      existing_mapped_rep: 0,
-      repcrawler_mapped_rep: 0,
+      rep_crawler: 0,
+      telemetry_history: 0,
       unknown: 0
     },
     duplicate_accounts: {}
@@ -137,72 +145,20 @@ const importTelemetry = async () => {
       timestamp
     }
 
-    let existing_mapped_rep
-    let telemetry_rep
-    let repcrawler_mapped_rep = null
-
-    // match node_id if using v23.1 or newer (otherwise use address)
-    if (
-      insert.major_version > 23 ||
-      (insert.major_version === 23 && insert.minor_version >= 1)
-    ) {
-      existing_mapped_rep = mappings.find((m) => m.node_id === node.node_id)
-    } else {
-      existing_mapped_rep = mappings.find((m) => m.address === node.address)
-    }
-
-    // associate telemetry using rep mapping
-    if (existing_mapped_rep) {
-      telemetry_rep = rep_peers[existing_mapped_rep.account]
-    }
-
-    // if no mapped rep — associate using rep crawler if there are no conflicts
-    if (!telemetry_rep) {
-      // Try all interfaces for this node_id when matching with rep crawler
-      for (const node_interface of node_id_groups[node_id]) {
-        // map telemetry to rep by matching address to rep crawler (quorum confirmation)
-        repcrawler_mapped_rep = Object.values(rep_peers).find(
-          (p) => p.ip === `[${node_interface.address}]:${node_interface.port}`
-        )
-        if (repcrawler_mapped_rep) {
-          // get any associated mapped addresses for matched rep
-          const mapped_addresses = mappings
-            .filter((m) => m.account === repcrawler_mapped_rep)
-            .map((m) => m.address)
-
-          if (mapped_addresses.length) {
-            log(
-              `DEBUG: Found ${mapped_addresses.length} mapped addresses for account ${repcrawler_mapped_rep.account}`
-            )
-          }
-
-          // make sure no telemetry exists for those mapped addresses
-          const telemetry_exists_for_mapped_addresses = telemetry.metrics.find(
-            (i) => mapped_addresses.includes(i.address)
-          )
-          if (!telemetry_exists_for_mapped_addresses) {
-            telemetry_rep = repcrawler_mapped_rep
-            break // Use the first successful match
-          } else {
-            log(
-              `DEBUG: Rejected match for node ${node.node_id} due to telemetry existing for mapped addresses`
-            )
-          }
-        }
-      }
-    }
+    const { rep: telemetry_rep, source: mapping_source } =
+      resolve_telemetry_account({
+        node_id,
+        node_interfaces: node_id_groups[node_id],
+        rep_peers,
+        history_account_by_node_id,
+        live_node_ids
+      })
+    mapping_stats.mapping_sources[mapping_source]++
 
     if (telemetry_rep) {
       insert.account = telemetry_rep.account
       insert.weight = telemetry_rep.weight
       mapping_stats.nodes_with_account++
-
-      const mapping_source = existing_mapped_rep
-        ? 'existing_mapped_rep'
-        : repcrawler_mapped_rep
-          ? 'repcrawler_mapped_rep'
-          : 'unknown'
-      mapping_stats.mapping_sources[mapping_source]++
 
       // Debug: Check if this account has been seen before
       if (insert.account) {

@@ -40,8 +40,6 @@ JOB_PROJECT=nano-community
 */5 * * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/import-telemetry.mjs >> /var/log/nano-community/import-telemetry.log 2>&1
 */5 * * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/import-uptime.mjs >> /var/log/nano-community/import-uptime.log 2>&1
 */5 * * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/import-accounts-meta.mjs >> /var/log/nano-community/import-accounts-meta.log 2>&1
-8 5 * * 0 NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/generate-rep-observations.mjs >> /var/log/nano-community/generate-rep-observations.log 2>&1
-8 6 * * 4 NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/generate-node-observations.mjs >> /var/log/nano-community/generate-node-observations.log 2>&1
 
 ## Backups are storage-initiated post-2026-05-19: storage runs
 ## ~/bin/nano-community-pg-dump weekly over the existing autossh tunnel.

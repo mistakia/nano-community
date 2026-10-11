@@ -30,11 +30,5 @@ module.exports = {
   nanodbAPI: '',
   nanodbAPI_experimental: '',
   trustedAddresses: ['http://nano:7076'],
-  rpcAddresses: ['http://nano:7076'],
-
-  cloudflare: {
-    zone_id: '',
-    user_email: '',
-    token: ''
-  }
+  rpcAddresses: ['http://nano:7076']
 }

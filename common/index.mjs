@@ -1,13 +1,10 @@
 import { fileURLToPath } from 'url'
-import fs from 'fs-extra'
-import path, { dirname } from 'path'
 
 import config from '#config'
 import { BURN_ACCOUNT } from '#constants'
 import request from './request.mjs'
 import { encode_nano_base32, decode_nano_base32 } from './nano-base-32.mjs'
 
-export * as cloudflare from './cloudflare.mjs'
 export { request }
 export { fetchSubredditListing } from './reddit.mjs'
 export { default as convertToCSV } from './convert-to-csv.mjs'
@@ -26,24 +23,6 @@ const POST = (data) => ({
     'Content-Type': 'application/json'
   }
 })
-
-const __dirname = dirname(fileURLToPath(import.meta.url))
-const data_path = path.join(__dirname, '../data')
-
-export const getData = async (name) => {
-  const file_path = `${data_path}/${name}.json`
-  const exists = await fs.pathExists(file_path)
-  if (!exists) {
-    return null
-  }
-
-  return fs.readJson(file_path, { throws: false })
-}
-
-export const saveData = async (name, data) => {
-  const file_path = `${data_path}/${name}.json`
-  await fs.writeJson(file_path, data, { spaces: 2 })
-}
 
 export const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 export const isMain = (path) => process.argv[1] === fileURLToPath(path)
