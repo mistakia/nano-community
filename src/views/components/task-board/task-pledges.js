@@ -61,6 +61,7 @@ export default function TaskPledges({ task, pubkey }) {
   )
   const own = own_event && parse_task_pledge(own_event)
   const [mode, set_mode] = useState(null) // 'pledge' | 'payout' | null
+  const is_open = task.status === 'open'
   const [amount, set_amount] = useState('')
   const [pasted, set_pasted] = useState('')
   const [payout, set_payout] = useState('')
@@ -178,17 +179,20 @@ export default function TaskPledges({ task, pubkey }) {
         </p>
       )}
 
-      {pubkey && !mode && (
+      {/* New pledges only on open tasks; a payment can be recorded after. */}
+      {pubkey && !mode && (is_open || (own && !own.payout)) && (
         <div className='task-pledges__links'>
-          <a
-            href='#'
-            className='task-properties__add'
-            onClick={(event) => {
-              event.preventDefault()
-              set_mode('pledge')
-            }}>
-            {own ? 'Change your pledge' : 'Pledge XNO'}
-          </a>
+          {is_open && (
+            <a
+              href='#'
+              className='task-properties__add'
+              onClick={(event) => {
+                event.preventDefault()
+                set_mode('pledge')
+              }}>
+              {own ? 'Change your pledge' : 'Pledge XNO'}
+            </a>
+          )}
           {own && !own.payout && (
             <a
               href='#'
