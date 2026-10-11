@@ -438,6 +438,7 @@ A **vouch set** is a key's latest NIP-51 follow set (kind 30000) with `d` = `nan
 - **Step 0:** the stewards.
 - **Step 1:** a key that at least one steward vouches for. Step 1 keys are **vouchers**, like stewards.
 - **Step 2:** a key, not at step 0 or 1, that two distinct step 1 vouchers vouch for, or one step 1 voucher and an established Nano account (see Nano account binding). Step 2 keys post and their comments count, but their vouches count for nothing.
+- **Earned vouches:** a steward's newest verdict on a pledge that is `paid` and names the paid key (`p`) counts as the pledger's vouch for that key, like an entry in its vouch set (see Pledge).
 - **Trusted** keys are the step 1 and step 2 keys. Vouch sets from keys that are not vouchers are ignored.
 
 A **block set** is a steward's latest kind 30000 with `d` = `nano-community-blocked`. A key listed in any steward's block set is not trusted at any step, and its vouches count for nothing. Stewards cannot be blocked this way; a steward is removed by a new announcement. Block sets from keys that are not stewards are ignored.
@@ -587,6 +588,7 @@ A steward states each pledge's standing as a NIP-32 label (kind 1985):
 | `l`          | `backed`, `unbacked` or `paid`, with the namespace as marker         |
 | `a`          | The pledge's address, `30635:<author>:<issue id>`                    |
 | `e`          | The pledge event the verdict judged                                  |
+| `p`          | With `paid`, the key whose bound account was paid                    |
 | `expiration` | NIP-40, at most 7 days after `created_at`. A `paid` verdict has none |
 
 - **Backed:** the proof verifies and the account holds at least the sum of its open pledges, not each pledge separately.
