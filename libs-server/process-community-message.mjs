@@ -1,19 +1,14 @@
 import debug from 'debug'
 
-import update_account from './update-account.mjs'
+import { materialize_account_labels } from './account-labels/index.mjs'
 import update_representative_meta from './update-representative-meta.mjs'
 import process_set_block_meta from './process-set-block-meta.mjs'
 
 const log = debug('process-community-message')
 
 const process_set_representative_meta = async ({ content, account }) => {
-  const { alias } = content
-  if (alias) {
-    await update_account({
-      account_address: account,
-      update: { alias }
-    })
-  }
+  // The message is already stored, so resolving picks up its alias
+  await materialize_account_labels({ account })
 
   const {
     cpu_cores,
@@ -48,13 +43,8 @@ const process_set_representative_meta = async ({ content, account }) => {
 }
 
 const process_set_account_meta = async ({ content, account }) => {
-  const { alias } = content
-  if (alias) {
-    await update_account({
-      account_address: account,
-      update: { alias }
-    })
-  }
+  // The message is already stored, so resolving picks up its alias
+  await materialize_account_labels({ account })
 }
 
 // Applies a verified message. content and references are from the signed

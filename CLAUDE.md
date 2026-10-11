@@ -59,6 +59,16 @@ The community task board is signed nostr events on relays. nano.community is one
 - **Relay:** strfry at `wss://relay.nano.community`. Its write policy is `server/strfry/task-board-write-policy.mjs` with `libs-server/task-board-relay-policy.mjs`. Host provisioning lives in the bootstrap repo.
 - **Node scripts** that use the nostr-tools pool must call `useWebSocketImplementation(WebSocket)` from `ws`. Node 22's built-in WebSocket overflows the stack inside nostr-tools when a relay connection fails.
 
+## Account Labels
+
+Every alias and tag shown for an account is resolved from label claims. `libs-server/account-labels/` holds the subsystem.
+
+- **Claims:** unsigned claims live in `account_labels`, one row per account, source, type and value. Signed claims stay in `nano_community_messages` and are read by `load-signed-message-claims.mjs`.
+- **Resolve:** `resolve-account-labels.mjs` is a pure reducer. The alias is the highest-trust unexpired claim, by `ACCOUNT_LABEL_SOURCE_TRUST` in `constants.mjs`. Tags must be in `ACCOUNT_TAG_VOCABULARY`.
+- **Materialize:** `materialize_account_labels` is the only writer of `accounts.alias` and `accounts_tags`. Never write either directly; add a claim and materialize the account.
+- **Sync:** `scripts/sync-account-labels.mjs` runs daily from `server/server-crontab`. It fetches nano.to and nanolooker, upserts their claims and removes claims a source no longer lists. A failed or empty fetch keeps that source's claims.
+- **API:** `GET /api/accounts/:address` includes `tags`. `GET /api/account-labels?name=` finds accounts by alias prefix. `POST /api/account-labels/resolve` takes `{ addresses }` and returns each address's alias and tags.
+
 ## Configuration
 
 `config.js` is environment-aware. In production it decrypts secrets from `config.production.json` at load time by shelling out to `sops` (age envelope encryption; recipient policy in `.sops.yaml`, private identity host-only at `~/.config/sops/age/keys.txt`) — fail-closed, with no plaintext fallback. Test and development load plaintext `config.${env}.js` unchanged. `config.sample.js` shows the structure (JWT secret, DB credentials, Cloudflare token, GitHub token). To add or edit a production secret, follow [[user:guideline/homelab/sops-age-authoring.md]].

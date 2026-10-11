@@ -5,30 +5,11 @@ import { hideBin } from 'yargs/helpers'
 import db from '#db'
 import { isMain } from '#common'
 import { process_set_block_meta } from '#libs-server'
-import {
-  CommunityRequestError,
-  COMMUNITY_WINDOW_SECONDS
-} from '#libs-server/verify-community-request.mjs'
+import resolve_signer_account from '#libs-server/resolve-signer-account.mjs'
+import { CommunityRequestError } from '#libs-server/verify-community-request.mjs'
 
 const log = debug('rebuild-blocks-meta')
 debug.enable('rebuild-blocks-meta')
-
-// The account a key acted for when it signed: a link in force at issued_at,
-// otherwise the key's own account. A link counts from COMMUNITY_WINDOW_SECONDS
-// before its server-time created_at, since issued_at is signer time.
-const resolve_account = async ({ connection, public_key, payload }) => {
-  const link = await connection('account_keys')
-    .select('account')
-    .where({ public_key })
-    .where('created_at', '<=', payload.issued_at + COMMUNITY_WINDOW_SECONDS)
-    .where((query) =>
-      query
-        .whereNull('revoked_at')
-        .orWhere('revoked_at', '>', payload.issued_at)
-    )
-    .first()
-  return link ? link.account : payload.account
-}
 
 const note_key = (row) => `${row.note}\u0000${row.message_digest}`
 
@@ -64,10 +45,11 @@ export default async function rebuild_blocks_meta({
     for (const row of messages) {
       counts.messages += 1
       const payload = JSON.parse(row.message)
-      const account = await resolve_account({
+      const account = await resolve_signer_account({
         connection: trx,
         public_key: row.public_key,
-        payload
+        issued_at: payload.issued_at,
+        account: payload.account
       })
       try {
         const applied = await process_set_block_meta({

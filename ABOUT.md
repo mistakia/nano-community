@@ -56,6 +56,10 @@ nano.community is the web portal to the Nano community's nostr task board. The p
 
 An account owner signs a `set_block_meta` message to attach a public note to a confirmed block it published, shown on the block page. `blocks_meta` is a projection of `nano_community_messages`, rebuilt by `scripts/rebuild-blocks-meta.mjs`. The operator hides a note with `scripts/hide-block-note.mjs`.
 
+## Account Labels
+
+Account aliases and tags are resolved from claims by trusted source: signed messages, admin, nano.to, nanolooker and two retired tipbot imports. The design and plan are [[user:task/nano-cryptocurrency/nano-community/build-universal-account-label-system.md]], and `CLAUDE.md` maps the code.
+
 ## Scope
 
 **Belongs in this repo**: site code, API, content pages under `docs/`, monitoring and stats aggregation, schema migrations.

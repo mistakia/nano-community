@@ -58,6 +58,8 @@ CREATE TABLE IF NOT EXISTS public.accounts (
 );
 CREATE UNIQUE INDEX IF NOT EXISTS accounts_account_uniq
   ON public.accounts (account);
+CREATE INDEX IF NOT EXISTS accounts_alias_lower
+  ON public.accounts (lower(alias) text_pattern_ops);
 
 CREATE TABLE IF NOT EXISTS public.accounts_changelog (
   account         char(65) NOT NULL,
@@ -117,12 +119,29 @@ CREATE TABLE IF NOT EXISTS public.accounts_meta_index (
 CREATE UNIQUE INDEX IF NOT EXISTS accounts_meta_index_account_uniq
   ON public.accounts_meta_index (account);
 
+-- Resolved account tags, written only by materialize_account_labels
 CREATE TABLE IF NOT EXISTS public.accounts_tags (
   account  char(65) NOT NULL,
-  tag      char(65) NOT NULL
+  tag      varchar(255) NOT NULL
 );
 CREATE UNIQUE INDEX IF NOT EXISTS accounts_tags_account_tag_uniq
   ON public.accounts_tags (account, tag);
+
+-- Unsigned label claims (aliases and tags) by source. Signed claims stay in
+-- nano_community_messages. accounts.alias and accounts_tags are resolved from
+-- both by libs-server/account-labels.
+CREATE TABLE IF NOT EXISTS public.account_labels (
+  account      char(65) NOT NULL,
+  source       varchar(32) NOT NULL,
+  label_type   varchar(16) NOT NULL,
+  value        varchar(255) NOT NULL,
+  observed_at  integer NOT NULL,
+  expires_at   integer
+);
+CREATE UNIQUE INDEX IF NOT EXISTS account_labels_uniq
+  ON public.account_labels (account, source, label_type, value);
+CREATE INDEX IF NOT EXISTS account_labels_source_observed_at
+  ON public.account_labels (source, observed_at);
 
 CREATE TABLE IF NOT EXISTS public.github_discussions (
   id             varchar(100) NOT NULL PRIMARY KEY,

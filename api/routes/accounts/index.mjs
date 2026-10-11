@@ -8,6 +8,11 @@ import open from './open.mjs'
 
 const router = express.Router()
 
+const get_tags = async ({ db, account }) =>
+  (
+    await db('accounts_tags').select('tag').where({ account }).orderBy('tag')
+  ).map((row) => row.tag)
+
 router.get('/:address', async (req, res) => {
   const { logger, cache, db } = req.app.locals
   try {
@@ -43,9 +48,14 @@ router.get('/:address', async (req, res) => {
     // database lookups (the address can't be a representative if it has
     // never published a block).
     if (is_terminal_rpc_error(accountInfo)) {
+      const labelled = await db('accounts')
+        .select('alias')
+        .where({ account: address })
+        .first()
       const unopened = {
         account: address,
-        alias: null,
+        alias: labelled ? labelled.alias : null,
+        tags: await get_tags({ db, account: address }),
         representative: false,
         representative_meta: {},
         uptime: [],
@@ -98,12 +108,16 @@ router.get('/:address', async (req, res) => {
       }
     }
 
-    const representatives = await db('accounts').where({ account: address })
+    const [representatives, tags] = await Promise.all([
+      db('accounts').where({ account: address }),
+      get_tags({ db, account: address })
+    ])
 
     // if not a representative
     if (!representatives.length || !representatives[0].representative) {
       const account = {
         alias: representatives.length ? representatives[0].alias : null,
+        tags,
         representative: false,
         representative_meta: {},
         uptime: [],
@@ -170,6 +184,7 @@ router.get('/:address', async (req, res) => {
       ...representatives[0],
       ...data
     }
+    rep.tags = tags
     rep.representative_meta = repMeta[0] || {}
     rep.uptime = uptime
     rep.telemetry = telemetry[0] || {}

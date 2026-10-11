@@ -1,5 +1,6 @@
 export { default as auth } from './auth/index.mjs'
 export { default as accounts } from './accounts/index.mjs'
+export { default as account_labels } from './account-labels.mjs'
 export { default as blocks } from './blocks.mjs'
 export { default as posts } from './posts.mjs'
 export { default as network } from './network.mjs'
