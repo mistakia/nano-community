@@ -14,7 +14,10 @@ if (IS_PROD) {
 }
 
 const main = async () => {
-  server.listen(port, () => logger(`API listening on port ${port}`))
+  // loopback only: the public reaches the app through the Cloudflare Tunnel
+  server.listen(port, '127.0.0.1', () =>
+    logger(`API listening on 127.0.0.1:${port}`)
+  )
 }
 
 try {

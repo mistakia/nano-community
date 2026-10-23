@@ -11,9 +11,6 @@ module.exports = {
     credentialsRequired: false
   },
 
-  ssl: false,
-  key: '',
-  cert: '',
   url: '',
 
   production_postgres: {

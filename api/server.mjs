@@ -1,6 +1,5 @@
-import https from 'https'
 import http from 'http'
-import fs, { promises as fsPromise } from 'fs'
+import { promises as fsPromise } from 'fs'
 import url, { fileURLToPath } from 'url'
 import path, { dirname } from 'path'
 
@@ -8,7 +7,6 @@ import WebSocket from 'ws'
 import express from 'express'
 import morgan from 'morgan'
 import morganDebug from 'morgan-debug'
-import extend from 'deep-extend'
 import bodyParser from 'body-parser'
 import jwt from 'jsonwebtoken'
 import { expressjwt } from 'express-jwt'
@@ -31,11 +29,9 @@ setupCron()
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const logger = debug('api')
-const defaults = {}
-const options = extend(defaults, config)
 const IS_DEV = process.env.NODE_ENV === 'development'
-// node serves port 80 directly behind Cloudflare without trust proxy, so
-// req.ip is the shared edge address; key each limiter on the visitor IP
+// node serves on loopback behind a Cloudflare Tunnel without trust proxy, so
+// req.ip is the tunnel's loopback address; key each limiter on the visitor IP
 // Cloudflare forwards instead
 const visitor_key = (req) => req.headers['cf-connecting-ip'] || req.ip
 const speedLimiter = slowDown({
@@ -171,19 +167,7 @@ if (IS_DEV) {
   // res.redirect(307, `${config.url}${req.path}`)
 }
 
-const createServer = () => {
-  if (!options.ssl) {
-    return http.createServer(api)
-  }
-
-  const sslOptions = {
-    key: fs.readFileSync(config.key),
-    cert: fs.readFileSync(config.cert)
-  }
-  return https.createServer(sslOptions, api)
-}
-
-const server = createServer()
+const server = http.createServer(api)
 const wss = new WebSocket.Server({ noServer: true })
 
 server.on('upgrade', async (request, socket, head) => {

@@ -108,7 +108,6 @@
     "dayjs": "^1.11.13",
     "debug": "^4.3.4",
     "deep-diff": "^1.0.2",
-    "deep-extend": "^0.6.0",
     "esm": "^3.2.25",
     "express": "^4.19.2",
     "express-favicon": "^2.0.4",

@@ -12,9 +12,6 @@ module.exports = {
     credentials_required: false
   },
 
-  ssl: false, // enable ssl, make sure key & cert exist
-  key: '', // ssl key
-  cert: '', // ssl cert
   url: '', // url
 
   // VPS production database -- consumed by db/index.mjs (the app's single
