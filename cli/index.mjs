@@ -59,9 +59,9 @@ async function request(options) {
 async function load_private_key() {
   let private_key = process.env.NC_CLI_NANO_PRIVATE_KEY
   if (private_key) {
-    console.log('Private key found in environment variable.')
+    console.error('Private key found in environment variable.')
   } else {
-    console.log(
+    console.error(
       'No private key found in environment variable (NC_CLI_NANO_PRIVATE_KEY).'
     )
     // Restore stdin for inquirer

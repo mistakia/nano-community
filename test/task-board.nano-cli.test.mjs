@@ -27,7 +27,6 @@ const run = (...args) =>
   exec_file('node', ['cli/index.mjs', ...args], {
     env: { ...process.env, NC_CLI_NANO_PRIVATE_KEY: PRIVATE_KEY }
   })
-const json_of = (stdout) => JSON.parse(stdout.slice(stdout.indexOf('{')))
 
 describe('Nano CLI pledge', function () {
   this.timeout(30000)
@@ -40,7 +39,7 @@ describe('Nano CLI pledge', function () {
       '2.5',
       nip19.npubEncode(pubkey)
     )
-    const output = json_of(stdout)
+    const output = JSON.parse(stdout)
     expect(output.amount_raw).to.equal('2500000000000000000000000000000')
     const [issued_at, signature] = output.proof.split(':')
     const event = {
@@ -77,7 +76,8 @@ describe('Nano CLI pledge', function () {
   it('converts amounts exactly and refuses bad input', async () => {
     const npub = nip19.npubEncode(getPublicKey(generateSecretKey()))
     const raw = async (amount) =>
-      json_of((await run('pledge', ISSUE_ID, amount, npub)).stdout).amount_raw
+      JSON.parse((await run('pledge', ISSUE_ID, amount, npub)).stdout)
+        .amount_raw
     expect(await raw('10')).to.equal('10000000000000000000000000000000')
     expect(await raw('0.000000000000000000000000000001')).to.equal('1')
     for (const args of [
