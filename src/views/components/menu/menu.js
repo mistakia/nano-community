@@ -83,6 +83,7 @@ export function MenuSections() {
           <NavLink to='/getting-started-devs/documentation'>
             Documentation
           </NavLink>
+          <NavLink to='/getting-started-devs/tools'>Tools</NavLink>
           <NavLink to='/getting-started-devs/protocol-reference'>
             Protocol
           </NavLink>
