@@ -14,6 +14,9 @@ const exec_promise = util.promisify(exec)
 process.env.NODE_ENV = 'test'
 const expect = chai.expect
 
+// The CLI prints its private key status line on stderr, so stdout stays machine-readable
+const private_key_status = 'Private key found in environment variable.\n'
+
 function strip_ansi_escape_codes(str) {
   const last_newline_index = str.lastIndexOf('\n')
   if (last_newline_index !== -1) {
@@ -59,8 +62,7 @@ describe('CLI', function () {
         'node cli/index.mjs add-signing-key'
       )
 
-      // eslint-disable-next-line no-unused-expressions
-      expect(stderr).to.be.empty
+      expect(stderr).to.equal(private_key_status)
       expect(stdout).to.include('Key registration successful')
 
       // Extract the new signing key from stdout
@@ -86,8 +88,7 @@ describe('CLI', function () {
       const { stdout, stderr } = await exec_promise(
         `echo y | node cli/index.mjs revoke-signing-key ${new_signing_key}`
       )
-      // eslint-disable-next-line no-unused-expressions
-      expect(stderr).to.be.empty
+      expect(stderr).to.equal(private_key_status)
       // the confirmation names the key being revoked, not the signer
       expect(stdout).to.include(new_signing_key)
       expect(stdout).to.include('Key revocation successful')
@@ -187,8 +188,7 @@ describe('CLI', function () {
           child.on('close', resolve)
         })
 
-        // eslint-disable-next-line no-unused-expressions
-        expect(stderr).to.be.empty
+        expect(stderr).to.equal(private_key_status)
         expect(exit_code).to.equal(0)
 
         // Check database for updated columns
@@ -262,8 +262,7 @@ describe('CLI', function () {
           child.on('close', resolve)
         })
 
-        // eslint-disable-next-line no-unused-expressions
-        expect(stderr).to.be.empty
+        expect(stderr).to.equal(private_key_status)
         expect(exit_code).to.equal(0)
 
         const row = await db('nano_community_messages')
@@ -331,8 +330,7 @@ describe('CLI', function () {
           child.on('close', resolve)
         })
 
-        // eslint-disable-next-line no-unused-expressions
-        expect(stderr).to.be.empty
+        expect(stderr).to.equal(private_key_status)
         expect(exit_code).to.equal(0)
 
         const row = await db('nano_community_messages')
