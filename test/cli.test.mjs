@@ -1,3 +1,7 @@
+// base-secret-scan: declared-fixture
+// The nano private key below is a synthetic repeated-byte test key; it is not a
+// real credential.
+
 /* global describe, before, after, it */
 import chai from 'chai'
 import { exec, spawn } from 'child_process'
