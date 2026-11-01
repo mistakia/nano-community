@@ -1,9 +1,9 @@
 import debug from 'debug'
 
 import db from '#db'
+import { isMain } from '#common'
 
 const logger = debug('calculate-behind')
-debug.enable('calculate-behind')
 
 const getMaxBlockCount = (arr) => {
   const blockCounts = arr.map((p) => p.block_count)
@@ -46,22 +46,11 @@ const calculateBehind = async () => {
   }
 }
 
-if (!module.parent) {
-  const main = async () => {
-    try {
-      await calculateBehind()
-    } catch (err) {
-      console.log(err)
-    }
-    process.exit()
-  }
-
-  try {
-    main()
-  } catch (err) {
-    console.log(err)
-    process.exit()
-  }
+if (isMain(import.meta.url)) {
+  debug.enable('calculate-behind')
+  calculateBehind()
+    .catch((err) => console.log(err))
+    .finally(() => process.exit())
 }
 
 export default calculateBehind

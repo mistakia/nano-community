@@ -12,7 +12,6 @@ const argv = yargs(hideBin(process.argv)).argv
 const storage_mysql = Knex(config.storage_mysql)
 
 const logger = debug('archive')
-debug.enable('archive')
 
 const archive_table = async ({
   table,
@@ -147,6 +146,7 @@ const archive_mysql = async ({ batch_size = 20000 }) => {
 }
 
 if (isMain(import.meta.url)) {
+  debug.enable('archive')
   const main = async () => {
     try {
       const batch_size = argv.batch_size || 20000

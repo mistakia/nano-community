@@ -6,7 +6,6 @@ import { isMain } from '#common'
 import report_job from '#libs-server/report-job.mjs'
 
 const logger = debug('calculate-uptime')
-debug.enable('calculate-uptime')
 
 const now = dayjs()
 const getUpdate = async ({ account, days }) => {
@@ -58,6 +57,7 @@ const calculateUptime = async () => {
 }
 
 if (isMain(import.meta.url)) {
+  debug.enable('calculate-uptime')
   const main = async () => {
     const start_time = Date.now()
     let error

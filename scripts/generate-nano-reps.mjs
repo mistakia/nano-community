@@ -19,7 +19,6 @@ import { REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT } from '#constants'
 
 // const argv = yargs(hideBin(process.argv)).argv
 const log = debug('generate-nano-reps')
-debug.enable('generate-nano-reps')
 
 const generate_nano_reps = async () => {
   // Fetch nano representatives data from GitHub and save to temp file
@@ -213,6 +212,7 @@ const main = async () => {
 }
 
 if (isMain(import.meta.url)) {
+  debug.enable('generate-nano-reps')
   main()
 }
 

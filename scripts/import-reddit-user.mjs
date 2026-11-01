@@ -13,7 +13,6 @@ import db from '#db'
 
 const argv = yargs(hideBin(process.argv)).argv
 const logger = debug('import-reddit-user')
-debug.enable('import-reddit-user')
 
 const subreddits = ['nanocurrency', 'nanotrade', 'raiblocks']
 
@@ -96,6 +95,7 @@ const importRedditUser = async (
 }
 
 if (isMain(import.meta.url)) {
+  debug.enable('import-reddit-user')
   if (!argv.user) {
     logger('missing user')
     process.exit()

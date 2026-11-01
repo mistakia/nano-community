@@ -11,7 +11,6 @@ import report_job from '#libs-server/report-job.mjs'
 dayjs.extend(utc)
 const argv = yargs(hideBin(process.argv)).argv
 const logger = debug('rollup-uptime')
-debug.enable('rollup-uptime')
 
 const rollupUptime = async (days = 1) => {
   // calculate rollup
@@ -94,6 +93,7 @@ const rollupUptime = async (days = 1) => {
 }
 
 if (isMain(import.meta.url)) {
+  debug.enable('rollup-uptime')
   const main = async () => {
     const start_time = Date.now()
     let error

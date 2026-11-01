@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
 import crypto from 'crypto'
+import { realpathSync } from 'fs'
 import process from 'process'
+import { fileURLToPath } from 'url'
 
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
@@ -20,6 +22,20 @@ const base_url =
   (is_test ? 'http://localhost:8085' : 'https://nano.community')
 
 const PUBLIC_KEY_RE = /^[0-9a-f]{64}$/
+
+// The published bin cannot import the repo's #common, so it carries its own
+// isMain. Resolving both sides keeps an npm-bin symlink invocation main.
+const isMain = (import_meta_url) => {
+  if (!process.argv[1]) return false
+  try {
+    return (
+      realpathSync(process.argv[1]) ===
+      realpathSync(fileURLToPath(import_meta_url))
+    )
+  } catch {
+    return false
+  }
+}
 
 // Signs a nano.community request in the canonical Nano signed-message format
 // (https://github.com/mistakia/nano-signed-message), with a fresh nonce
@@ -475,18 +491,20 @@ const pledge = {
   }
 }
 
-// eslint-disable-next-line no-unused-expressions
-yargs(hideBin(process.argv))
-  .scriptName('nano-community')
-  .usage('$0 <cmd> [args]')
-  .command(add_signing_key)
-  .command(revoke_signing_key)
-  .command(update_rep_meta)
-  .command(update_account_meta)
-  .command(update_block_meta)
-  .command(bind_nostr_key)
-  .command(pledge)
-  .demandCommand(1, 'You must provide at least one command.')
-  .help('h')
-  .wrap(100)
-  .alias('h', 'help').argv
+if (isMain(import.meta.url)) {
+  // eslint-disable-next-line no-unused-expressions
+  yargs(hideBin(process.argv))
+    .scriptName('nano-community')
+    .usage('$0 <cmd> [args]')
+    .command(add_signing_key)
+    .command(revoke_signing_key)
+    .command(update_rep_meta)
+    .command(update_account_meta)
+    .command(update_block_meta)
+    .command(bind_nostr_key)
+    .command(pledge)
+    .demandCommand(1, 'You must provide at least one command.')
+    .help('h')
+    .wrap(100)
+    .alias('h', 'help').argv
+}

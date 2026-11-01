@@ -9,7 +9,6 @@ import resolve_signer_account from '#libs-server/resolve-signer-account.mjs'
 import { CommunityRequestError } from '#libs-server/verify-community-request.mjs'
 
 const log = debug('rebuild-blocks-meta')
-debug.enable('rebuild-blocks-meta')
 
 const note_key = (row) => `${row.note}\u0000${row.message_digest}`
 
@@ -109,6 +108,7 @@ export default async function rebuild_blocks_meta({
 }
 
 if (isMain(import.meta.url)) {
+  debug.enable('rebuild-blocks-meta')
   const main = async () => {
     const argv = yargs(hideBin(process.argv))
       .option('dry-run', {

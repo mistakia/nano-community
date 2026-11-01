@@ -14,7 +14,6 @@
 
 import crypto from 'crypto'
 import fs from 'fs'
-import { fileURLToPath } from 'url'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import WebSocket from 'ws'
@@ -22,6 +21,7 @@ import { finalizeEvent, getPublicKey } from 'nostr-tools'
 import { SimplePool, useWebSocketImplementation } from 'nostr-tools/pool'
 import { hexToBytes } from 'nostr-tools/utils'
 
+import { isMain } from '#common/is-main.mjs'
 import { TASK_BOARD_PUBLIC_RELAYS } from '#common/task-board/constants.mjs'
 
 // Node's built-in WebSocket overflows the stack inside nostr-tools when a
@@ -180,7 +180,7 @@ export async function publish_task_board_client({
   return { sha256, pubkey, manifest, servers: accepted, relays: published }
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+if (isMain(import.meta.url)) {
   const argv = yargs(hideBin(process.argv))
     .option('file', {
       type: 'string',

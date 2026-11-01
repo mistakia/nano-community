@@ -12,7 +12,6 @@ import report_job from '#libs-server/report-job.mjs'
 const { github_access_token } = config
 const argv = yargs(hideBin(process.argv)).argv
 const log = debug('import-github-discussions')
-debug.enable('import-github-discussions')
 
 const getDiscussions = async ({ repo, query }) => {
   const paths = repo.split('/')
@@ -183,6 +182,7 @@ const importGithubDiscussions = async ({ repo, all = false }) => {
 }
 
 if (isMain(import.meta.url)) {
+  debug.enable('import-github-discussions')
   const main = async () => {
     const start_time = Date.now()
     let error

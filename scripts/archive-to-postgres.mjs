@@ -36,7 +36,6 @@ import { isMain } from '#common'
 import config from '#config'
 
 const logger = debug('archive-to-pg')
-debug.enable('archive-to-pg')
 
 const RUN_ORDER = [
   'posts',
@@ -590,6 +589,7 @@ async function main() {
 }
 
 if (isMain(import.meta.url)) {
+  debug.enable('archive-to-pg')
   main().catch((err) => {
     console.error(err)
     process.exitCode = 1

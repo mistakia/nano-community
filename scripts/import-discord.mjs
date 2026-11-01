@@ -11,7 +11,6 @@ import report_job from '#libs-server/report-job.mjs'
 const { discordAuthorization } = config
 const argv = yargs(hideBin(process.argv)).argv
 const logger = debug('import-discord')
-debug.enable('import-discord')
 
 const headers = {
   authorization: discordAuthorization
@@ -248,6 +247,7 @@ const importDiscord = async (guildId, { getFullHistory = false } = {}) => {
 }
 
 if (isMain(import.meta.url)) {
+  debug.enable('import-discord')
   if (!argv.gid) {
     logger('missing gid')
     process.exit()

@@ -36,7 +36,6 @@ import { isMain } from '#common'
 import config from '#config'
 
 const logger = debug('vps-to-pg')
-debug.enable('vps-to-pg')
 
 // Size-ascending: smallest first so transform/escape bugs surface cheaply.
 // Hot tables (telemetry, accounts_meta, uptime) trail. Exact ordering is
@@ -626,6 +625,7 @@ async function main() {
 }
 
 if (isMain(import.meta.url)) {
+  debug.enable('vps-to-pg')
   main().catch((err) => {
     console.error(err)
     process.exitCode = 1

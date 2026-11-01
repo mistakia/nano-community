@@ -7,7 +7,6 @@ import db from '#db'
 
 const argv = yargs(hideBin(process.argv)).argv
 const logger = debug('prune-site-events')
-debug.enable('prune-site-events')
 
 // Raw site events are retained 180 days per user:text/analytics/product-analytics.md.
 const RETENTION_DAYS = 180
@@ -40,6 +39,7 @@ const prune_site_events = async () => {
 }
 
 if (isMain(import.meta.url)) {
+  debug.enable('prune-site-events')
   const main = async () => {
     let error
     try {

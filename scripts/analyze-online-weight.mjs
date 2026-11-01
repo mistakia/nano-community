@@ -7,15 +7,15 @@ import { isMain } from '#common'
 
 const queue = new PQueue({ concurrency: 10 })
 const log = debug('analyze-online-weight')
-debug.enable('analyze-online-weight')
 
 const percentiles = [0, 25, 50, 75, 100]
-const results = {}
 const value_types = ['online_weight', 'trended_weight']
-value_types.forEach((i) => {
-  results[i] = {}
-  percentiles.forEach((p) => (results[i][`p${p}`] = Infinity))
-})
+const results = Object.fromEntries(
+  value_types.map((i) => [
+    i,
+    Object.fromEntries(percentiles.map((p) => [`p${p}`, Infinity]))
+  ])
+)
 
 const analyzeOnlineWeight = async () => {
   const rows = await db('voting_weight')
@@ -66,6 +66,7 @@ const analyzeOnlineWeight = async () => {
 }
 
 if (isMain(import.meta.url)) {
+  debug.enable('analyze-online-weight')
   const main = async () => {
     try {
       await analyzeOnlineWeight()

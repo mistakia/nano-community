@@ -6,7 +6,6 @@ import report_job from '#libs-server/report-job.mjs'
 import db from '#db'
 
 const logger = debug('import-github-events')
-debug.enable('import-github-events')
 
 const formatEvent = (item) => {
   switch (item.type) {
@@ -181,6 +180,7 @@ const importGithubEvents = async () => {
 }
 
 if (isMain(import.meta.url)) {
+  debug.enable('import-github-events')
   const main = async () => {
     const start_time = Date.now()
     let error

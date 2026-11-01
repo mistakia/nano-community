@@ -7,7 +7,6 @@ import db from '#db'
 import { isMain } from '#common'
 
 const logger = debug('import-open-rpc')
-debug.enable('import-open-rpc')
 const ipRe = /::ffff:([0-9.]+)/
 
 const checkPort = async (port, { timeout = 1000, host } = {}) => {
@@ -80,6 +79,7 @@ const importOpenRPC = async () => {
 }
 
 if (isMain(import.meta.url)) {
+  debug.enable('import-open-rpc')
   const main = async () => {
     try {
       await importOpenRPC()
