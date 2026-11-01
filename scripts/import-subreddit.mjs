@@ -7,7 +7,6 @@ import db from '#db'
 
 const argv = yargs(hideBin(process.argv)).argv
 const logger = debug('import-subreddit')
-debug.enable('import-subreddit')
 
 const importSubreddit = async (subreddit, { getFullHistory = false } = {}) => {
   logger(
@@ -70,6 +69,7 @@ const importSubreddit = async (subreddit, { getFullHistory = false } = {}) => {
 }
 
 if (isMain(import.meta.url)) {
+  debug.enable('import-subreddit')
   if (!argv.r) {
     logger('missing r')
     process.exit()

@@ -8,7 +8,6 @@ import db from '#db'
 import { REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT } from '#constants'
 
 const logger = debug('import-uptime')
-debug.enable('import-uptime')
 
 const timestamp = Math.round(Date.now() / 1000)
 const now = dayjs()
@@ -181,6 +180,7 @@ const importUptime = async () => {
 }
 
 if (isMain(import.meta.url)) {
+  debug.enable('import-uptime')
   const main = async () => {
     const start_time = Date.now()
     let error

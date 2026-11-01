@@ -1,11 +1,10 @@
-import { fileURLToPath } from 'url'
-
 import config from '#config'
 import { BURN_ACCOUNT } from '#constants'
 import request from './request.mjs'
 import { encode_nano_base32, decode_nano_base32 } from './nano-base-32.mjs'
 
 export { request }
+export { isMain } from './is-main.mjs'
 export { fetchSubredditListing } from './reddit.mjs'
 export { default as convertToCSV } from './convert-to-csv.mjs'
 export { default as read_csv } from './read-csv.mjs'
@@ -25,7 +24,6 @@ const POST = (data) => ({
 })
 
 export const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
-export const isMain = (path) => process.argv[1] === fileURLToPath(path)
 export const median = (arr) => {
   const mid = Math.floor(arr.length / 2)
   const nums = [...arr].sort((a, b) => a - b)

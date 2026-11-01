@@ -24,6 +24,7 @@ import {
   TASK_BOARD_DEFAULT_RELAYS,
   build_board_announcement
 } from '#common/task-board/index.mjs'
+import { isMain } from '#common/is-main.mjs'
 
 // Node's built-in WebSocket overflows the stack inside nostr-tools when a
 // relay connection fails; the ws package does not.
@@ -113,7 +114,9 @@ const main = async () => {
   if (!accepted) process.exit(1)
 }
 
-main().catch((error) => {
-  console.error(error.message)
-  process.exit(1)
-})
+if (isMain(import.meta.url)) {
+  main().catch((error) => {
+    console.error(error.message)
+    process.exit(1)
+  })
+}

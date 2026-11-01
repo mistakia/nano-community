@@ -7,7 +7,6 @@ import { BURN_ACCOUNT } from '#constants'
 import db from '#db'
 
 const logger = debug('import-accounts-rep')
-debug.enable('import-accounts-rep')
 
 const timestamp = Math.round(Date.now() / 1000)
 
@@ -114,6 +113,7 @@ const importAccountsRep = async ({
 }
 
 if (isMain(import.meta.url)) {
+  debug.enable('import-accounts-rep')
   const main = async () => {
     const start_time = Date.now()
     let error

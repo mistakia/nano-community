@@ -9,7 +9,6 @@ import { request, isMain } from '#common'
 
 // const argv = yargs(hideBin(process.argv)).argv
 const log = debug('template')
-debug.enable('template')
 
 const script = async () => {}
 const main = async () => {
@@ -32,6 +31,7 @@ const main = async () => {
 }
 
 if (isMain(import.meta.url)) {
+  debug.enable('template')
   main()
 }
 

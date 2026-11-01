@@ -6,7 +6,6 @@ import db from '#db'
 import { isMain } from '#common'
 
 const log = debug('hide-block-note')
-debug.enable('hide-block-note')
 
 // Hides a block note from the block page, or unhides it. The note stays in
 // blocks_meta and in the message log; the block API stops returning it once
@@ -22,6 +21,7 @@ export default async function hide_block_note({ block_hash, reason, unhide }) {
 }
 
 if (isMain(import.meta.url)) {
+  debug.enable('hide-block-note')
   const main = async () => {
     const argv = yargs(hideBin(process.argv))
       .option('hash', { type: 'string', demandOption: true })

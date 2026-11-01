@@ -5,9 +5,9 @@ import report_job from '#libs-server/report-job.mjs'
 import { sync_account_label_sources } from '#libs-server/account-labels/index.mjs'
 
 const log = debug('sync-account-labels')
-debug.enable('sync-account-labels,sync-account-label-sources')
 
 if (isMain(import.meta.url)) {
+  debug.enable('sync-account-labels,sync-account-label-sources')
   const main = async () => {
     const start_time = Date.now()
     let reason = null

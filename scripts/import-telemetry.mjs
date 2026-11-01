@@ -8,7 +8,6 @@ import resolve_telemetry_account from '#libs-server/resolve-telemetry-account.mj
 import db from '#db'
 
 const log = debug('import-telemetry')
-debug.enable('import-telemetry')
 
 const timestamp = Math.round(Date.now() / 1000)
 const TELEMETRY_HISTORY_WINDOW_SECONDS = 7 * 24 * 60 * 60
@@ -304,6 +303,7 @@ const importTelemetry = async () => {
 }
 
 if (isMain(import.meta.url)) {
+  debug.enable('import-telemetry')
   const main = async () => {
     const start_time = Date.now()
     let error

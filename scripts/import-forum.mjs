@@ -11,7 +11,6 @@ import db from '#db'
 
 const argv = yargs(hideBin(process.argv)).argv
 const logger = debug('import-forum')
-debug.enable('import-forum')
 
 const importForum = async ({
   getFullHistory = false,
@@ -112,6 +111,7 @@ const importForum = async ({
 }
 
 if (isMain(import.meta.url)) {
+  debug.enable('import-forum')
   const getFullHistory = argv.full
   const main = async () => {
     try {

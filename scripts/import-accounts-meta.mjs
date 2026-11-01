@@ -6,7 +6,6 @@ import report_job from '#libs-server/report-job.mjs'
 import db from '#db'
 
 const logger = debug('import-accounts-meta')
-debug.enable('import-accounts-meta')
 
 const timestamp = Math.round(Date.now() / 1000)
 
@@ -84,6 +83,7 @@ const importAccountsMeta = async () => {
 }
 
 if (isMain(import.meta.url)) {
+  debug.enable('import-accounts-meta')
   const main = async () => {
     const start_time = Date.now()
     let error

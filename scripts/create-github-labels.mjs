@@ -9,7 +9,6 @@ import labels from '#root/default-labels.mjs'
 const { github_access_token } = config
 const argv = yargs(hideBin(process.argv)).argv
 const logger = debug('create-github-labels')
-debug.enable('create-github-labels')
 
 const createLabel = async ({ repo, name, color, description }) => {
   const body = {
@@ -53,6 +52,7 @@ const createGithubLabels = async ({ repo }) => {
 }
 
 if (isMain(import.meta.url)) {
+  debug.enable('create-github-labels')
   const main = async () => {
     try {
       if (!argv.repo) {

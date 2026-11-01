@@ -52,6 +52,7 @@ import {
   needs_event_pow,
   order_claim_after
 } from '#common/task-board/index.mjs'
+import { isMain } from '#common/is-main.mjs'
 
 // Node's built-in WebSocket overflows the stack inside nostr-tools when a
 // relay connection fails; the ws package does not.
@@ -361,11 +362,13 @@ const main = async () => {
   print(await act({ argv, build: builders[command]({ argv }) }))
 }
 
-main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(
-      JSON.stringify({ error: error.message, relays: error.relay_results })
-    )
-    process.exit(1)
-  })
+if (isMain(import.meta.url)) {
+  main()
+    .then(() => process.exit(0))
+    .catch((error) => {
+      console.error(
+        JSON.stringify({ error: error.message, relays: error.relay_results })
+      )
+      process.exit(1)
+    })
+}
