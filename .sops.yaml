@@ -1,13 +1,23 @@
 # sops/age recipient policy for nano-community config secrets.
 #
-# config.production.json holds this site's production secrets, encrypted to this
-# single host's age recipient (nano.community VPS, .104). The private identity
-# lives on that host (plus a hot-vault recovery copy) at ~/.config/sops/age/keys.txt; this file records only
-# the PUBLIC recipient, which is safe to commit. To re-encrypt after editing:
-# `sops config.production.json` (sops reads this policy for the recipient set).
+# Each production host keeps its own gitignored config.production.json holding
+# only the stanzas it uses, encrypted to that host's age recipient alone, so a
+# host reads only what its own identity unwraps. The private identity lives on
+# the host (plus a hot-vault recovery copy) at ~/.config/sops/age/keys.txt; this
+# file records only the PUBLIC recipients, which are safe to commit.
 #
-# nano-community is a single-host domain — one recipient. Adding a host = add its
-# public recipient here and `sops updatekeys config.production.json`.
+# Both hosts' files share one path, and sops matches rules against the path
+# relative to this file, so a path cannot tell the hosts apart. base-storage's
+# file is therefore authored with --filename-override, which selects its rule:
+#   ... | sops --config .sops.yaml encrypt --filename-override \
+#     base-storage/config.production.json --input-type json --output-type json
+# Edit either file in place with `sops config.production.json`, which keeps the
+# file's own recipient. Never run `sops updatekeys` on base-storage's file: it
+# matches the VPS rule and would re-wrap it to the VPS.
 creation_rules:
+  # base-storage (.22): archive delta and subreddit imports.
+  - path_regex: ^base-storage/config\.production\.json$
+    age: age1gmhatmnl7f28yz4nhz6y527uxzrelg39s05ex2tvyfsumr45tvss40nm4a
+  # nano.community VPS (.104): the app server and its import crons.
   - path_regex: config\.production\.json$
     age: age1q22xdnajanceptca57llluzyg7xzvjayr60y9j44xfyzvvc9495qg5g2sp

@@ -1,8 +1,3 @@
-import os from 'os'
-import path, { dirname } from 'path'
-import { fileURLToPath } from 'url'
-import { spawnSync } from 'child_process'
-
 import config from '#config'
 import request from './request.mjs'
 
@@ -11,65 +6,22 @@ import request from './request.mjs'
 // (client_credentials) plus a descriptive User-Agent, and go through
 // https://oauth.reddit.com rather than www.reddit.com.
 //
-// Credentials resolve lazily (never at module load) so importing this file on a
-// host without the credential does not throw -- only the actual import job that
-// runs on the storage host touches them. Order: config.reddit if present (a dev
-// override or a future sops config.production.json stanza), else the host-local
-// sops file config.reddit.sops.json in the checkout root (age; base-storage
-// holds the identity). The token is memoized until shortly before it expires.
+// Credentials come from the config.reddit stanza ({ client_id, client_secret,
+// user_agent }), which only base-storage's sealed config.production.json holds.
+// They resolve lazily (never at module load), so importing this file on a host
+// without the stanza does not throw; only the import job that uses it does. The
+// token is memoized until shortly before it expires.
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
-const REDDIT_SOPS_FILE = path.join(__dirname, '..', 'config.reddit.sops.json')
-
-let _creds
 let _token // { value, expires_at }
 
-const resolve_age_key_file = () =>
-  process.env.SOPS_AGE_KEY_FILE ||
-  path.join(os.homedir(), '.config', 'sops', 'age', 'keys.txt')
-
 const resolve_creds = () => {
-  if (_creds) return _creds
-
-  if (config.reddit && config.reddit.client_id && config.reddit.client_secret) {
-    _creds = config.reddit
-    return _creds
-  }
-
-  const result = spawnSync(
-    'sops',
-    [
-      '--decrypt',
-      '--input-type',
-      'json',
-      '--output-type',
-      'json',
-      REDDIT_SOPS_FILE
-    ],
-    {
-      encoding: 'utf8',
-      maxBuffer: 1024 * 1024,
-      env: { ...process.env, SOPS_AGE_KEY_FILE: resolve_age_key_file() }
-    }
-  )
-  if (result.error) {
+  const creds = config.reddit
+  if (!creds || !creds.client_id || !creds.client_secret) {
     throw new Error(
-      `reddit credentials: sops not runnable (${result.error.message})`
+      'reddit credentials: config.reddit is missing client_id/client_secret'
     )
   }
-  if (result.status !== 0) {
-    const detail = (result.stderr || '').trim() || `exit ${result.status}`
-    throw new Error(`reddit credentials: sops decrypt failed: ${detail}`)
-  }
-
-  const parsed = JSON.parse(result.stdout)
-  if (!parsed.client_id || !parsed.client_secret) {
-    throw new Error(
-      'reddit credentials: config.reddit.sops.json missing client_id/client_secret'
-    )
-  }
-  _creds = parsed
-  return _creds
+  return creds
 }
 
 const get_token = async () => {
