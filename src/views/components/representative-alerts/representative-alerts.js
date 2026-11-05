@@ -14,6 +14,7 @@ import Skeleton from '@mui/material/Skeleton'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 
 import { timeago } from '@core/utils'
+import { REPRESENTATIVE_CEMENTED_BEHIND_BLOCKS } from '#common/network-event-types.mjs'
 
 import './representative-alerts.styl'
 
@@ -25,13 +26,13 @@ const getTooltipText = (type) => {
       return 'Representative has stopped voting and appears offline.'
 
     case 'behind':
-      return 'Representative has fallen behind or is bootstrapping. The cutoff is a cemented count beyond the 95th percentile. (via telemetry)'
+      return `Representative has fallen behind or is bootstrapping. The cutoff is a cemented count more than ${REPRESENTATIVE_CEMENTED_BEHIND_BLOCKS.toLocaleString()} blocks behind. (via telemetry)`
 
     case 'overweight':
       return "Representative has beyond 3M Nano voting weight. Delegators should consider distributing the weight to improve the network's resilience and value."
 
     case 'low uptime':
-      return 'Representative has been offline more than 25% in the last 28 days.'
+      return 'Representative has been offline more than 25% in the last 14 days.'
   }
 }
 

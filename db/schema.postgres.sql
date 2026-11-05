@@ -483,8 +483,11 @@ SELECT add_retention_policy('public.representatives_uptime',          BIGINT '72
 SELECT add_retention_policy('public.representatives_telemetry',       BIGINT '3628800', if_not_exists => TRUE); -- 6w
 
 -- 10. ETL state table. Populated by the one-shot scripts/vps-to-postgres.mjs
---     bulk migrator only. Independent of database-server's
---     nano_community_archive.etl_state which the archive delta cron uses.
+--     bulk migrator, and by scripts/detect-telemetry-network-events.mjs, which
+--     keeps its representatives_telemetry watermark in last_max_ts under
+--     table_name 'detect-telemetry-network-events'. Independent of
+--     database-server's nano_community_archive.etl_state which the archive
+--     delta cron uses.
 CREATE TABLE IF NOT EXISTS public.etl_state (
   table_name      text PRIMARY KEY,
   rows_extracted  bigint NOT NULL DEFAULT 0,
@@ -557,3 +560,46 @@ CREATE TABLE IF NOT EXISTS public.site_client_hash_keys (
 -- so this file stays re-appliable in order. The app and backup roles get the
 -- new tables through their ALTER DEFAULT PRIVILEGES above.
 GRANT SELECT ON public.site_events TO nano_production_reader;
+
+-- 13. Network events feed. One row per representative network event, written
+--     by the detectors through libs-server/network-events/insert-network-events.mjs
+--     and validated against the type registry in common/network-event-types.mjs.
+--     network_event_id is a sha256 over the type, phase and identity keys, so a
+--     replayed event dedupes on insert. Times are epoch seconds: observed_at is
+--     when the event happened, recorded_at when it was inserted and is the
+--     archive delta watermark. Operator-only types stay here and are never
+--     served by the API.
+CREATE TABLE IF NOT EXISTS public.network_events (
+  network_event_id       text PRIMARY KEY,
+  network_event_type     text NOT NULL,
+  network_event_phase    text NOT NULL
+    CHECK (network_event_phase IN ('began', 'ended', 'occurred')),
+  severity               text NOT NULL
+    CHECK (severity IN ('info', 'warning', 'critical')),
+  representative_account char(65),
+  peer_address           varchar(65),
+  node_id                char(65),
+  evidence               jsonb NOT NULL DEFAULT '{}'::jsonb,
+  observed_at            integer NOT NULL,
+  recorded_at            integer NOT NULL DEFAULT extract(epoch from now())::integer
+);
+CREATE INDEX IF NOT EXISTS network_events_observed_at_idx
+  ON public.network_events (observed_at DESC);
+CREATE INDEX IF NOT EXISTS network_events_representative_observed_at_idx
+  ON public.network_events (representative_account, observed_at DESC);
+CREATE INDEX IF NOT EXISTS network_events_recorded_at_idx
+  ON public.network_events (recorded_at);
+
+-- Working state of each detector: the prior settled value or open condition
+-- per subject. Re-derivable from telemetry, so it is not archived.
+CREATE TABLE IF NOT EXISTS public.network_event_detector_state (
+  detector_name  text NOT NULL,
+  subject_key    text NOT NULL,
+  detector_state jsonb NOT NULL,
+  updated_at     integer NOT NULL,
+  PRIMARY KEY (detector_name, subject_key)
+);
+
+-- Reader read on network_events for the archive delta cron; detector state
+-- stays unreadable by reader roles.
+GRANT SELECT ON public.network_events TO nano_production_reader;

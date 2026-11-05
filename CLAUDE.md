@@ -69,6 +69,21 @@ Every alias and tag shown for an account is resolved from label claims. `libs-se
 - **Sync:** `scripts/sync-account-labels.mjs` runs daily from `server/server-crontab`. It fetches nano.to and nanolooker, upserts their claims and removes claims a source no longer lists. A failed or empty fetch keeps that source's claims.
 - **API:** `GET /api/accounts/:address` includes `tags`. `GET /api/account-labels?name=` finds accounts whose alias or any live alias claim starts with the name. `POST /api/account-labels/resolve` takes `{ addresses }` and returns each address's alias and tags.
 
+## Network Events
+
+`/network-events` is a dated feed of representative network events. The store is `network_events` in `db/schema.postgres.sql`.
+
+- **Registry:** `common/network-event-types.mjs` defines each type: label, kind (condition or occurrence), default severity, `public` and the identity keys. It also holds the thresholds. It is shared with the client, so it takes no node-only imports. Add a type only in the change that produces it.
+- **Phases:** conditions emit `began` and `ended`, and occurrences emit `occurred`. `network_event_id` is a sha256 over the type, phase and identity keys, so a replayed event dedupes. An `ended` row reuses its `began` keys.
+- **Writer:** `libs-server/network-events/insert-network-events.mjs` validates against the registry. It writes events, detector state (`network_event_detector_state`) and the watermark in one transaction. Never insert into `network_events` directly.
+- **Producers** (cron in `server/server-crontab`):
+  - `scripts/detect-telemetry-network-events.mjs` runs every 5 minutes, 2 minutes after the telemetry import. It reads `representatives_telemetry` after its `etl_state` watermark and emits peer-address, node, version and cemented-behind events. A field counts only once it is settled, meaning one value in every snapshot of the 60-minute window. The first run seeds state and marks present conditions `first_observation`.
+  - `scripts/probe-representative-rpc.mjs` runs hourly. It calls `version` and `work_peers` on port 7076 of each rep's settled addresses and emits `representative_rpc_control_enabled`. Both scripts take `--dry-run`.
+- **Operator-only:** a type with `public: false` stays in the database. `GET /api/network/events` and `/:network_event_id` select only public types. Any public dump must exclude the operator-only rows.
+- **Archive:** `scripts/archive-to-postgres.mjs --delta` copies `network_events` by `recorded_at`.
+- **Alerts tab:** it shares `common/representative-alert-rules.mjs` with the detector, so "cemented behind" has one definition.
+- **Tests:** `test/network-event*.test.mjs` and `test/archive-to-postgres.pg-escape.test.mjs`.
+
 ## Configuration
 
 `config.js` is environment-aware. In production it decrypts secrets from `config.production.json` at load time by shelling out to `sops` (age envelope encryption; recipient policy in `.sops.yaml`, private identity host-only at `~/.config/sops/age/keys.txt`) — fail-closed, with no plaintext fallback. Test and development load plaintext `config.${env}.js` unchanged. `config.sample.js` shows the structure (JWT secret, DB credentials, Cloudflare token, GitHub token). To add or edit a production secret, follow [[user:guideline/homelab/sops-age-authoring.md]].

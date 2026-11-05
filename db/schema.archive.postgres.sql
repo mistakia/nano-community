@@ -258,3 +258,28 @@ GRANT USAGE ON SCHEMA public TO nano_archive_writer;
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO nano_archive_writer;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public
   GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO nano_archive_writer;
+
+-- 13. Network events, copied by the archive delta cron from the VPS
+--     network_events table with recorded_at as the watermark. A plain table
+--     with no retention: events are low volume and the history is the point.
+--     Operator-only event types are archived too; any public dump must
+--     exclude them (see the registry in common/network-event-types.mjs).
+CREATE TABLE IF NOT EXISTS public.network_events (
+  network_event_id       text PRIMARY KEY,
+  network_event_type     text NOT NULL,
+  network_event_phase    text NOT NULL
+    CHECK (network_event_phase IN ('began', 'ended', 'occurred')),
+  severity               text NOT NULL
+    CHECK (severity IN ('info', 'warning', 'critical')),
+  representative_account char(65),
+  peer_address           varchar(65),
+  node_id                char(65),
+  evidence               jsonb NOT NULL DEFAULT '{}'::jsonb,
+  observed_at            integer NOT NULL,
+  recorded_at            integer NOT NULL
+);
+CREATE INDEX IF NOT EXISTS network_events_observed_at_idx
+  ON public.network_events (observed_at DESC);
+CREATE INDEX IF NOT EXISTS network_events_recorded_at_idx
+  ON public.network_events (recorded_at);
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.network_events TO nano_archive_writer;

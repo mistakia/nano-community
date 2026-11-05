@@ -4,6 +4,7 @@ import { api, apiRequest } from '@core/api/service'
 import { getApp } from '@core/app'
 import { githubDiscussionsRequestActions } from '@core/github-discussions/actions'
 import { githubEventsRequestActions } from '@core/github-events/actions'
+import { network_events_request_actions } from '@core/network-events/actions'
 import { postlistRequestActions } from '@core/postlists/actions'
 import {
   docRequestActions,
@@ -109,6 +110,11 @@ export const getNetworkStats = fetch.bind(
   null,
   api.getNetworkStats,
   networkStatsRequestActions
+)
+export const get_network_events = fetch.bind(
+  null,
+  api.get_network_events,
+  network_events_request_actions
 )
 export const getRepresentatives = fetch.bind(
   null,

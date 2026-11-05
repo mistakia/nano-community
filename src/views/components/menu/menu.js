@@ -106,6 +106,7 @@ export function MenuSections() {
         <div className='menu__links'>
           <NavLink to='/representatives'>Representatives</NavLink>
           <NavLink to='/telemetry'>Telemetry</NavLink>
+          <NavLink to='/network-events'>Network Events</NavLink>
           <NavLink to='/ledger'>Ledger</NavLink>
         </div>
       </div>
