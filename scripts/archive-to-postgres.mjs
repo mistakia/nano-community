@@ -81,6 +81,18 @@ const TABLE_COLUMNS = {
     'delegators',
     'timestamp'
   ],
+  network_events: [
+    'network_event_id',
+    'network_event_type',
+    'network_event_phase',
+    'severity',
+    'representative_account',
+    'peer_address',
+    'node_id',
+    'evidence',
+    'observed_at',
+    'recorded_at'
+  ],
   posts: [
     'id',
     'pid',
@@ -113,13 +125,24 @@ const LOCKFILE = '/tmp/nano-community-archive.lock' // operator wraps invocation
 const DELTA_RUN_ORDER = [
   'posts',
   'representatives_telemetry',
-  'representatives_uptime'
+  'representatives_uptime',
+  'network_events'
 ]
 
+// network_events uses recorded_at (insert time, not event time), so a late
+// event is still archived.
 const TIME_COLUMN = {
   posts: 'created_at',
   representatives_telemetry: 'timestamp',
-  representatives_uptime: 'timestamp'
+  representatives_uptime: 'timestamp',
+  network_events: 'recorded_at'
+}
+
+// Re-read this many seconds behind the watermark. recorded_at is set at
+// transaction start, so a row can commit after a delta has already advanced
+// past its second; the overlap catches it and ON CONFLICT drops the repeats.
+const DELTA_OVERLAP_SECONDS = {
+  network_events: 300
 }
 
 // Retention on VPS PG is handled by TimescaleDB retention policies declared
@@ -134,11 +157,18 @@ const TIME_COLUMN = {
 // cannot store it -- some posts.text/html rows from upstream reddit imports
 // carry stray NULs from corrupted source text.
 let _nul_strip_count = 0
-function pgEscape(v) {
+const isPlainObject = (v) =>
+  v !== null &&
+  typeof v === 'object' &&
+  Object.getPrototypeOf(v) === Object.prototype
+
+// A plain object is a jsonb value (pg returns jsonb parsed), so it is written
+// back as JSON text rather than String(v)'s "[object Object]".
+export function pgEscape(v) {
   if (v === null || v === undefined) return '\\N'
   if (typeof v === 'number') return String(v)
   if (Buffer.isBuffer(v)) v = v.toString('utf8')
-  let s = String(v)
+  let s = isPlainObject(v) ? JSON.stringify(v) : String(v)
   if (s.indexOf('\u0000') >= 0) {
     _nul_strip_count++
     s = s.split('\u0000').join('')
@@ -379,7 +409,7 @@ async function runTableDelta(table, vpsPg, pgClient, opts) {
     const vpsSrcCols = cols.map((c) => `"${c}"`).join(',')
     const vpsRes = await vpsPg.query(
       `SELECT ${vpsSrcCols} FROM public."${table}" WHERE "${timeCol}" > $1 ORDER BY "${timeCol}" ASC`,
-      [watermark]
+      [watermark - (DELTA_OVERLAP_SECONDS[table] || 0)]
     )
     const sourceStream = Readable.from(vpsRes.rows, { objectMode: true })
 

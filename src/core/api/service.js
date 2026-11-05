@@ -52,6 +52,10 @@ export const api = {
     const url = `${API_URL}/network`
     return { url }
   },
+  get_network_events(params) {
+    const url = `${API_URL}/network/events?${queryString.stringify(params)}`
+    return { url }
+  },
   getRepresentatives() {
     const url = `${API_URL}/representatives`
     return { url }

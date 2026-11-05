@@ -12,6 +12,7 @@ export {
   getGithubEvents,
   getRepresentatives,
   getNetworkStats,
+  get_network_events,
   getWeight,
   getWeightHistory,
   getDaily,

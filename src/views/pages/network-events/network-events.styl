@@ -1,0 +1,95 @@
+.network-events
+  max-width 1000px
+  margin 0 auto
+  padding 48px 16px 16px
+
+  h1
+    margin 0 0 16px
+
+.network-events__filters
+  display flex
+  flex-wrap wrap
+  gap 12px
+  margin-bottom 16px
+
+  .MuiTextField-root
+    min-width 200px
+    background white
+
+.network-events__list
+  background white
+  border 1px solid $borderColor
+
+.network-events__empty
+  padding 24px 16px
+  color #666
+
+.network-event
+  border-bottom 1px solid $borderColor
+
+  &:last-child
+    border-bottom none
+
+.network-event__summary
+  display flex
+  align-items center
+  gap 12px
+  padding 8px 16px
+  cursor pointer
+
+  &:hover
+    background #fafafa
+
+.network-event__severity
+  .MuiChip-label
+    text-transform capitalize
+    font-size 12px
+    font-weight 600
+    font-family 'IBM Plex Mono', monospace !important
+
+  &.info
+    background #E5F0F9
+
+  &.warning
+    background darken(#FEF8EA, 10%)
+
+  &.critical
+    background lighten(#FFEFE2, 20%)
+    color #bf4f4f
+    border 1px solid #bf4f4f
+
+.network-event__title
+  flex 1
+
+.network-event__first-observation
+  margin-left 8px
+  font-size 12px
+  color #666
+
+.network-event__account
+.network-event__time
+  font-family 'IBM Plex Mono', monospace
+  font-size 13px
+
+.network-event__time
+  min-width 48px
+  text-align right
+  color #666
+
+.network-event__evidence
+  padding 0 16px 12px
+  font-size 13px
+  color #666
+
+  pre
+    margin 8px 0 0
+    padding 8px
+    overflow auto
+    background $backgroundColor
+    font-size 12px
+
+.network-events__paging
+  display flex
+  justify-content flex-end
+  gap 8px
+  padding 8px 0

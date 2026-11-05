@@ -8,6 +8,7 @@ import { githubDiscussionsSagas } from './github-discussions'
 import { githubEventsSagas } from './github-events'
 import { ledgerSagas } from './ledger'
 import { networkSagas } from './network'
+import { network_events_sagas } from './network-events'
 import { postlistSagas } from './postlists'
 import { nanodb_sagas } from './nanodb'
 import { data_views_sagas } from './data-views'
@@ -24,6 +25,7 @@ export default function* rootSage() {
     ...githubEventsSagas,
     ...ledgerSagas,
     ...networkSagas,
+    ...network_events_sagas,
     ...postlistSagas,
     ...nanodb_sagas,
     ...data_views_sagas,

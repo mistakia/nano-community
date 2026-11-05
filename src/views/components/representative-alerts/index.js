@@ -2,11 +2,14 @@ import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
 import dayjs from 'dayjs'
 import BigNumber from 'bignumber.js'
-import percentile from 'percentile'
 
 import { getRepresentatives, getAccounts } from '@core/accounts'
 import { REP_MAX_WEIGHT } from '@core/constants'
 import { getNetwork } from '@core/network'
+import {
+  is_representative_low_uptime,
+  is_representative_cemented_behind
+} from '#common/representative-alert-rules.mjs'
 
 import RepresentativeAlerts from './representative-alerts'
 
@@ -33,20 +36,19 @@ const mapStateToProps = createSelector(
     const lowUptime = reps.filter((a) => {
       const uptime = a.get('uptime')
       const online = uptime.filter((u) => u.online)
-      const total = uptime.size
-      const pct = online / total
-      return pct < 0.75
+      return is_representative_low_uptime({
+        online_count: online.size,
+        total_count: uptime.size
+      })
     })
     lowUptime.forEach((account) => {
       items[account.account] = { account, type: 'low uptime', severity: 2 }
     })
 
-    const confirmationDifferentials = reps
-      .map((a) => a.getIn(['telemetry', 'cemented_behind']))
-      .toJS()
-    const p95 = percentile([95], confirmationDifferentials.filter(Boolean))
-    const behind = reps.filter(
-      (a) => a.getIn(['telemetry', 'cemented_behind'], 0) > p95
+    const behind = reps.filter((a) =>
+      is_representative_cemented_behind(
+        a.getIn(['telemetry', 'cemented_behind'], 0)
+      )
     )
     behind.forEach((account) => {
       items[account.account] = { account, type: 'behind', severity: 2 }

@@ -8,6 +8,7 @@ import LedgerPage from '@pages/ledger'
 import NotFoundPage from '@pages/not-found'
 import RepresentativesPage from '@pages/representatives'
 import TelemetryPage from '@pages/telemetry'
+import NetworkEventsPage from '@pages/network-events'
 import LabelPage from '@pages/label'
 import LivePage from '@pages/live'
 import TaskBoardPage from '@pages/task-board'
@@ -37,6 +38,7 @@ const AppRoutes = () => (
     <Route path='/ledger' element={<LedgerPage />} />
     <Route path='/representatives' element={<RepresentativesPage />} />
     <Route path='/telemetry' element={<TelemetryPage />} />
+    <Route path='/network-events' element={<NetworkEventsPage />} />
     <Route path='/labels/:label' element={<LabelPageWrapper />} />
     <Route path='/404.html' element={<NotFoundPage />} />
     <Route path='/:id' element={<DynamicPage />} />

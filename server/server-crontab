@@ -41,6 +41,11 @@ JOB_PROJECT=nano-community
 */5 * * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/import-uptime.mjs >> /var/log/nano-community/import-uptime.log 2>&1
 */5 * * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/import-accounts-meta.mjs >> /var/log/nano-community/import-accounts-meta.log 2>&1
 
+## network events
+## The detector runs 2 minutes after each telemetry import; see CLAUDE.md Network Events.
+2-59/5 * * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/detect-telemetry-network-events.mjs >> /var/log/nano-community/detect-telemetry-network-events.log 2>&1
+25 * * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/probe-representative-rpc.mjs >> /var/log/nano-community/probe-representative-rpc.log 2>&1
+
 ## Backups are storage-initiated post-2026-05-19: storage runs
 ## ~/bin/nano-community-pg-dump weekly over the existing autossh tunnel.
 ## No backup cron on VPS. See repository/active/bootstrap/server/storage/

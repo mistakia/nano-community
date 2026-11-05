@@ -8,6 +8,7 @@ import { githubDiscussionsReducer } from './github-discussions'
 import { githubEventsReducer } from './github-events'
 import { ledgerReducer } from './ledger'
 import { networkReducer } from './network'
+import { network_events_reducer } from './network-events'
 import { notificationReducer } from './notifications'
 import { postsReducer } from './posts'
 import { postlistsReducer } from './postlists'
@@ -29,6 +30,7 @@ const rootReducer = (router) =>
     githubEvents: githubEventsReducer,
     ledger: ledgerReducer,
     network: networkReducer,
+    network_events: network_events_reducer,
     notification: notificationReducer,
     posts: postsReducer,
     postlists: postlistsReducer,
