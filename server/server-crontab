@@ -29,22 +29,22 @@
 
 JOB_PROJECT=nano-community
 
-*/15 * * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/import-discord.mjs --gid 370266023905198083 >> /var/log/nano-community/import-nano-discord.log 2>&1
-*/10 * * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/import-discord.mjs --gid 403628195548495882 >> /var/log/nano-community/import-nano-trade-discord.log 2>&1
+*/15 * * * * NODE_ENV=production /root/.local/share/fleet-node/bin/node /root/nano-community/source/scripts/import-discord.mjs --gid 370266023905198083 >> /var/log/nano-community/import-nano-discord.log 2>&1
+*/10 * * * * NODE_ENV=production /root/.local/share/fleet-node/bin/node /root/nano-community/source/scripts/import-discord.mjs --gid 403628195548495882 >> /var/log/nano-community/import-nano-trade-discord.log 2>&1
 
 ## github
-*/15 * * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/import-github-discussions.mjs --repo mistakia/nano-community >> /var/log/nano-community/import-github-discussions.log 2>&1
-*/15 * * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/import-github-events.mjs >> /var/log/nano-community/import-github-events.log 2>&1
+*/15 * * * * NODE_ENV=production /root/.local/share/fleet-node/bin/node /root/nano-community/source/scripts/import-github-discussions.mjs --repo mistakia/nano-community >> /var/log/nano-community/import-github-discussions.log 2>&1
+*/15 * * * * NODE_ENV=production /root/.local/share/fleet-node/bin/node /root/nano-community/source/scripts/import-github-events.mjs >> /var/log/nano-community/import-github-events.log 2>&1
 
 ## representatives
-*/5 * * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/import-telemetry.mjs >> /var/log/nano-community/import-telemetry.log 2>&1
-*/5 * * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/import-uptime.mjs >> /var/log/nano-community/import-uptime.log 2>&1
-*/5 * * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/import-accounts-meta.mjs >> /var/log/nano-community/import-accounts-meta.log 2>&1
+*/5 * * * * NODE_ENV=production /root/.local/share/fleet-node/bin/node /root/nano-community/source/scripts/import-telemetry.mjs >> /var/log/nano-community/import-telemetry.log 2>&1
+*/5 * * * * NODE_ENV=production /root/.local/share/fleet-node/bin/node /root/nano-community/source/scripts/import-uptime.mjs >> /var/log/nano-community/import-uptime.log 2>&1
+*/5 * * * * NODE_ENV=production /root/.local/share/fleet-node/bin/node /root/nano-community/source/scripts/import-accounts-meta.mjs >> /var/log/nano-community/import-accounts-meta.log 2>&1
 
 ## network events
 ## The detector runs 2 minutes after each telemetry import; see CLAUDE.md Network Events.
-2-59/5 * * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/detect-telemetry-network-events.mjs >> /var/log/nano-community/detect-telemetry-network-events.log 2>&1
-25 * * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/probe-representative-rpc.mjs >> /var/log/nano-community/probe-representative-rpc.log 2>&1
+2-59/5 * * * * NODE_ENV=production /root/.local/share/fleet-node/bin/node /root/nano-community/source/scripts/detect-telemetry-network-events.mjs >> /var/log/nano-community/detect-telemetry-network-events.log 2>&1
+25 * * * * NODE_ENV=production /root/.local/share/fleet-node/bin/node /root/nano-community/source/scripts/probe-representative-rpc.mjs >> /var/log/nano-community/probe-representative-rpc.log 2>&1
 
 ## Backups are storage-initiated post-2026-05-19: storage runs
 ## ~/bin/nano-community-pg-dump weekly over the existing autossh tunnel.
@@ -55,14 +55,14 @@ JOB_PROJECT=nano-community
 0 * * * * crontab -l > /tmp/nano-community-crontab.txt
 
 ## rollups
-0 0 * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/rollup-uptime.mjs --days 2 >> /var/log/nano-community/rollup-uptime.log 2>&1
-0 */6 * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/calculate-uptime.mjs >> /var/log/nano-community/calculate-uptime.log 2>&1
+0 0 * * * NODE_ENV=production /root/.local/share/fleet-node/bin/node /root/nano-community/source/scripts/rollup-uptime.mjs --days 2 >> /var/log/nano-community/rollup-uptime.log 2>&1
+0 */6 * * * NODE_ENV=production /root/.local/share/fleet-node/bin/node /root/nano-community/source/scripts/calculate-uptime.mjs >> /var/log/nano-community/calculate-uptime.log 2>&1
 
 ## delegators
-15 * * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/import-accounts-rep.mjs >> /var/log/nano-community/import-accounts-rep.log 2>&1
+15 * * * * NODE_ENV=production /root/.local/share/fleet-node/bin/node /root/nano-community/source/scripts/import-accounts-rep.mjs >> /var/log/nano-community/import-accounts-rep.log 2>&1
 
 ## account labels
-18 3 * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/sync-account-labels.mjs >> /var/log/nano-community/sync-account-labels.log 2>&1
+18 3 * * * NODE_ENV=production /root/.local/share/fleet-node/bin/node /root/nano-community/source/scripts/sync-account-labels.mjs >> /var/log/nano-community/sync-account-labels.log 2>&1
 
 ## site analytics
-45 0 * * * NODE_ENV=production /root/.nvm/versions/node/current/bin/node /root/nano-community/source/scripts/prune-site-events.mjs >> /var/log/nano-community/prune-site-events.log 2>&1
+45 0 * * * NODE_ENV=production /root/.local/share/fleet-node/bin/node /root/nano-community/source/scripts/prune-site-events.mjs >> /var/log/nano-community/prune-site-events.log 2>&1
