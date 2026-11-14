@@ -2,7 +2,7 @@
 import chai from 'chai'
 import chaiHTTP from 'chai-http'
 import ed25519 from '@trashman/ed25519-blake2b'
-import { hash_signed_message } from 'nano-signed-message'
+import { encode_signed_message, hash_signed_message } from 'nano-signed-message'
 
 import server from '#api/server.mjs'
 import db from '#db'
@@ -273,13 +273,26 @@ describe('API /auth/message binding regression', function () {
       action: 'set_block_meta',
       content: { note: 'bound note' },
       references: ['cd'.repeat(32)]
+    },
+    {
+      action: 'set_representative_power_reading',
+      content: {
+        energy_watt_hours: 1681,
+        measurement_method: 'wall_meter',
+        measurement_started_at: now_seconds() - 60 - 24 * 60 * 60,
+        measurement_ended_at: now_seconds() - 60
+      },
+      representative: true
     }
   ]
 
-  for (const { action, content, references = [] } of cases) {
+  for (const { action, content, references = [], representative } of cases) {
     it(`${action}: stores and applies only the signed fields`, async () => {
       const key = create_test_key()
       const other = create_test_key()
+      if (representative) {
+        await db('accounts').insert({ account: key.account, representative })
+      }
       for (const block_hash of references) {
         blocks.set(block_hash, { block_account: key.account })
       }
@@ -336,4 +349,44 @@ describe('API /auth/message binding regression', function () {
       }
     })
   }
+
+  it('set_representative_power_reading: rejects a key unlinked to the representative it names', async () => {
+    const representative_key = create_test_key()
+    await db('accounts').insert({
+      account: representative_key.account,
+      representative: true
+    })
+    const { content } = cases.find(
+      (c) => c.action === 'set_representative_power_reading'
+    )
+    // The library signer refuses a mismatched account, so sign the digest
+    // directly with a key the representative never linked
+    const other = create_test_key()
+    const message = encode_signed_message({
+      version: 1,
+      domain: 'nano.community',
+      action: 'set_representative_power_reading',
+      account: representative_key.account,
+      issued_at: now_seconds(),
+      nonce: 'ef'.repeat(16),
+      parameters: { content, references: [], tags: [] }
+    })
+    const signature = ed25519
+      .sign(
+        Buffer.from(hash_signed_message(message)),
+        Buffer.from(other.private_key, 'hex'),
+        Buffer.from(other.public_key, 'hex')
+      )
+      .toString('hex')
+    const wire = { message, signature }
+
+    const response = await post_message(wire)
+    expect(response).to.have.status(401)
+    const rows = await db('nano_community_messages').where({
+      message_digest: Buffer.from(hash_signed_message(wire.message)).toString(
+        'hex'
+      )
+    })
+    expect(rows).to.have.length(0)
+  })
 })

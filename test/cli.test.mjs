@@ -48,6 +48,8 @@ describe('CLI', function () {
     () =>
       new Promise((resolve) => {
         process.env.NC_CLI_NANO_PRIVATE_KEY = nano_private_key
+        // The CLI children call the test server on its configured port
+        process.env.NC_CLI_API_URL = `http://localhost:${port}`
 
         server.listen(port, () => {
           console.log(`API listening on port ${port}`)
@@ -349,6 +351,95 @@ describe('CLI', function () {
           .where({ references: block_hash.toLowerCase() })
           .first()
         expect(row.references).to.equal(block_hash.toLowerCase())
+      } catch (err) {
+        console.log(err)
+        console.log(stderr)
+        console.log(stdout)
+        throw err
+      }
+    })
+  })
+
+  describe('update-representative-power-reading operation', () => {
+    before(() =>
+      db('accounts')
+        .insert({ account: nano_account_address, representative: true })
+        .onConflict('account')
+        .merge(['representative'])
+    )
+
+    it('signs a number and integer epoch seconds after an edited field', async () => {
+      let stdout = ''
+      let stderr = ''
+      const ended_at = Math.floor(Date.now() / 1000) - 3600
+      const started_at = ended_at - 2 * 24 * 60 * 60
+      const iso = (seconds) => new Date(seconds * 1000).toISOString()
+
+      try {
+        const child = spawn(
+          'node',
+          ['cli/index.mjs', 'update-representative-power-reading'],
+          { stdio: ['pipe', 'pipe', 'pipe'] }
+        )
+        child.stdin.setDefaultEncoding('utf-8')
+        // Each prompt re-renders as its answer is echoed, so answer each one
+        // once: the edit question once per review of the content
+        const answered = new Set()
+        const answer_once = (key, text) => {
+          if (!answered.has(key)) {
+            answered.add(key)
+            child.stdin.write(text)
+          }
+        }
+        child.stdout.on('data', (data) => {
+          const chunk = data.toString()
+          stdout += chunk
+          const reviews =
+            stdout.split('Please review your message content').length - 1
+          // A chunk can end one prompt and start the next, so match the
+          // prompt on its last line; the field list ends in its choices
+          const output = chunk.slice(chunk.lastIndexOf('\n') + 1)
+          if (chunk.includes('Which field would you like to edit?')) {
+            // The fourth choice, measurement_ended_at
+            answer_once('field', '\u001b[B\u001b[B\u001b[B\n')
+          } else if (output.includes('? Energy used over the window')) {
+            answer_once('energy', '2000\n')
+          } else if (output.includes('? Measurement method')) {
+            answer_once('method', 'wall_meter\n')
+          } else if (output.includes('? Measurement start')) {
+            answer_once('start', `${iso(started_at)}\n`)
+          } else if (output.includes('? Measurement end')) {
+            // A first answer the edit below replaces
+            answer_once('end', `${iso(ended_at - 60)}\n`)
+          } else if (output.includes('Would you like to edit any field?')) {
+            answer_once(`edit-${reviews}`, reviews === 1 ? 'y\n' : 'n\n')
+          } else if (output.includes('Enter new value for')) {
+            answer_once('new value', `${iso(ended_at)}\n`)
+          }
+        })
+
+        child.stderr.on('data', (data) => {
+          stderr += data.toString()
+        })
+
+        const exit_code = await new Promise((resolve) => {
+          child.on('close', resolve)
+        })
+
+        expect(stderr).to.equal(private_key_status)
+        expect(exit_code).to.equal(0)
+        expect(stdout).to.include('Enter new value for measurement_ended_at')
+
+        const row = await db('nano_community_messages')
+          .where({ operation: 'SET_REPRESENTATIVE_POWER_READING', version: 2 })
+          .whereRaw('message like ?', [`%${nano_account_address}%`])
+          .first()
+        expect(JSON.parse(row.message).parameters.content).to.deep.equal({
+          energy_watt_hours: 2000,
+          measurement_method: 'wall_meter',
+          measurement_started_at: started_at,
+          measurement_ended_at: ended_at
+        })
       } catch (err) {
         console.log(err)
         console.log(stderr)
