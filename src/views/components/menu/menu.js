@@ -119,6 +119,7 @@ export function MenuSections() {
           <NavLink to='/telemetry'>Telemetry</NavLink>
           <NavLink to='/network-events'>Network Events</NavLink>
           <NavLink to='/ledger'>Ledger</NavLink>
+          <NavLink to='/network-energy-usage'>Energy Usage</NavLink>
         </div>
       </div>
       <div className='menu__section'>
