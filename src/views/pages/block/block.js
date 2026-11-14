@@ -13,7 +13,7 @@ import BlockInfo from '@components/block-info'
 import BlockNote from '@components/block-note'
 import DisplayNano from '@components/display-nano'
 import DisplayRaw from '@components/display-raw'
-import Menu from '@components/menu'
+import PageNavigation from '@components/page-navigation'
 
 import './block.styl'
 
@@ -222,7 +222,7 @@ export default class BlockPage extends React.Component {
         </div>
         {!isLoading && (
           <div className='block__footer'>
-            <Menu />
+            <PageNavigation />
           </div>
         )}
       </>

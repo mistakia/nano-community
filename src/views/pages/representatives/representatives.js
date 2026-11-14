@@ -4,7 +4,7 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 
 import Seo from '@components/seo'
-import Menu from '@components/menu'
+import PageNavigation from '@components/page-navigation'
 import Representatives from '@components/representatives'
 import RepresentativesOffline from '@components/representatives-offline'
 import RepresentativeAlerts from '@components/representative-alerts'
@@ -122,7 +122,7 @@ export default class RepresentativesPage extends React.Component {
           </div>
         </div>
         <div className='representatives__footer'>
-          <Menu />
+          <PageNavigation />
         </div>
       </>
     )

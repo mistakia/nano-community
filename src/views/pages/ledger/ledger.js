@@ -18,7 +18,7 @@ import LedgerChartUSDTransferred from '@components/ledger-chart-usd-transferred'
 import LedgerChartDistribution from '@components/ledger-chart-distribution'
 import LedgerChartAddressesWithBalance from '@components/ledger-chart-addresses-with-balance'
 import Seo from '@components/seo'
-import Menu from '@components/menu'
+import PageNavigation from '@components/page-navigation'
 import {
   base_ranges,
   base_range_labels,
@@ -319,7 +319,7 @@ export default function LedgerPage({ load, data, isLoading }) {
         </div>
       </div>
       <div className='ledger__footer'>
-        <Menu />
+        <PageNavigation />
       </div>
     </>
   )

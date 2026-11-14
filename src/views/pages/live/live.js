@@ -6,7 +6,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import percentile from 'percentile'
 
 import Seo from '@components/seo'
-import Menu from '@components/menu'
+import PageNavigation from '@components/page-navigation'
 import MetricCard from '@components/metric-card'
 
 import './live.styl'
@@ -301,7 +301,7 @@ export default function LivePage({
           })}
         </div>
       </div>
-      <Menu />
+      <PageNavigation />
     </>
   )
 }

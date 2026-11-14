@@ -1,0 +1,13 @@
+// A table page is the table: the container fills the screen and scrolls on both
+// axes, so a wide table never widens the page. Same contract as league's
+// app/styles/table.styl, which react-table is built against.
+.page-table__container
+  position fixed
+  inset 0
+  overflow scroll
+
+// on desktop react-table's left gutter clears the top-left menu trigger; on
+// mobile the trigger sits bottom-right and the gutter is wasted width
+@media (max-width 749px)
+  .page-table__container .table
+    padding-left 0

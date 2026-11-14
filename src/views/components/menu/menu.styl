@@ -1,48 +1,92 @@
 $hoverBackground = rgba(255, 255, 255, 0.8)
 
-.menu__dial
+$triggerHeight = 40px
+$triggerOffset = 16px
+$transition = 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms
+
+// a labeled pill reads as a menu control, not a logo
+.menu__trigger
   position fixed
-  left 16px
+  left $triggerOffset
   top 28px
-  z-index 99999 !important
-
-  // a labeled pill reads as a menu control, not a logo
-  .MuiFab-root
-    height 40px
-    padding 0 16px 0 12px
-    border-radius 4px
-    background black
-    color white
-    box-shadow 0 2px 8px rgba(0, 0, 0, 0.18)
-    transition background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms
-
-    &:hover
-      background lighten(black, 25%)
-
-.menu__dial-label
+  z-index 1001
   display flex
   align-items center
   gap 8px
+  height $triggerHeight
+  padding 0 16px 0 12px
+  border 1px solid black
+  border-radius 4px
+  background black
+  color white
+  cursor pointer
   font-family 'IBM Plex Mono', monospace
   font-size 12px
   font-weight 600
   letter-spacing 0.12em
   text-transform uppercase
+  transition background-color $transition, box-shadow $transition
 
-  .MuiSvgIcon-root
-    font-size 20px
+  // a tap leaves :hover applied on touch screens, so only pointers that hover get it
+  @media (hover hover)
+    &:hover
+      background lighten(black, 25%)
+      box-shadow $offsetShadow
 
-.menu__container
-  margin-bottom 32px
-  padding-top 35px
-  flex 1
-  width 100%
+  &:focus-visible
+    outline 2px solid $nanoSoftBlue
+    outline-offset 2px
 
-.menu__body
-  flex 1 0 100%
+.menu__trigger-icon
+  width 20px
+  height 20px
+  fill none
+  stroke currentColor
+  stroke-width 2
+  stroke-linecap round
+
+.menu__backdrop
+  position fixed
+  inset 0
+  z-index 999
+  background rgba(0, 0, 0, 0.5)
+
+.menu__panel
+  position fixed
+  top 0
+  left 0
+  right 0
+  z-index 1000
+  max-height 100vh
+  overflow-y auto
+  overscroll-behavior contain
+  background $backgroundColor
+  border-radius 0 0 32px 32px
+  padding 16px 32px 32px
+
+  .menu__sections
+    max-width 1100px
+    margin 0 auto
+
+.menu__panel-header
   display flex
-  flex-direction column
   align-items center
+  gap 24px
+  max-width 1100px
+  margin 0 auto
+  padding 8px 8px 16px 136px
+
+  .menu__wordmark
+    font-family 'Montserrat', sans-serif
+    font-size 24px
+    letter-spacing 0.1em
+    transition color $transition
+
+    &:hover
+      color $nanoSoftBlue
+
+  .search__bar
+    flex 1
 
 .menu__sections
   flex 1 0 100%
@@ -51,14 +95,6 @@ $hoverBackground = rgba(255, 255, 255, 0.8)
   align-content flex-start
   font-family 'Inter', sans-serif
 
-.menu__drawer .MuiDrawer-paper.MuiPaper-root
-  background $backgroundColor
-  border-radius 0 0 32px 32px
-  .menu__sections
-    max-width 1100px
-    margin 0 auto
-    padding 16px 32px
-
 .menu__section
   padding 16px
   border-radius 4px
@@ -66,7 +102,7 @@ $hoverBackground = rgba(255, 255, 255, 0.8)
   border 1px solid lighten($borderColor, 40%)
   flex 1
   margin 8px
-  transition background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms
+  transition background-color $transition, box-shadow $transition, border $transition
   &:hover
     border-color $controlBorder
     background $hoverBackground
@@ -89,19 +125,28 @@ $hoverBackground = rgba(255, 255, 255, 0.8)
   text-transform capitalize
   font-family 'IBM Plex Mono', monospace
 
-.menu__text
-  font-family 'Montserrat', sans-serif
-  font-size 32px
-  letter-spacing 0.1em
-  margin 48px auto 32px
-  transition color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms
-
-a.menu__text:hover
-  color $nanoSoftBlue
-
 @media (max-width 749px)
-  .menu__dial
+  .menu__trigger
     top auto
     left auto
-    right 16px
-    bottom calc(16px + env(safe-area-inset-bottom))
+    right $triggerOffset
+    bottom 'calc(%s + env(safe-area-inset-bottom))' % $triggerOffset
+
+  // the panel fills the screen and leaves room for the trigger at the bottom
+  .menu__panel
+    bottom 0
+    border-radius 0
+    padding 16px 8px 'calc(%s + %s * 2 + env(safe-area-inset-bottom))' % ($triggerHeight $triggerOffset)
+
+  .menu__panel-header
+    flex-wrap wrap
+    gap 16px
+    padding 8px 8px 16px
+
+    .search__bar
+      flex 1 0 100%
+
+  // every page renders the menu, so the trigger reserves room for itself
+  // below the last content of the page
+  body
+    padding-bottom 'calc(%s + %s * 2 + env(safe-area-inset-bottom))' % ($triggerHeight $triggerOffset)

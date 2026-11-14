@@ -6,7 +6,8 @@ import CommunityFeed from '@components/community-feed'
 import Network from '@components/network'
 import NetworkHighlights from '@components/network-highlights'
 import GithubEvents from '@components/github-events'
-import Menu, { MenuSections } from '@components/menu'
+import { MenuSections } from '@components/menu'
+import PageNavigation from '@components/page-navigation'
 import Seo from '@components/seo'
 
 import './home.styl'
@@ -51,7 +52,7 @@ export default class HomePage extends React.Component {
             'sustainable'
           ]}
         />
-        <Menu hide />
+        <PageNavigation hideSections />
         <div className='home__intro'>
           <h1 className='home__intro-title'>Send money like a message.</h1>
           <div className='home__intro-actions'>
