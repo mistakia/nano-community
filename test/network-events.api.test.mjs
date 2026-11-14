@@ -105,6 +105,7 @@ describe('API /network', () => {
     expect((await get_events({ after: 1, before: 5 })).status).to.equal(400)
     expect((await get_events({ after: -1 })).status).to.equal(400)
     expect((await get_events({ before: 'x' })).status).to.equal(400)
+    expect((await get_events({ after: '1e20' })).status).to.equal(400)
     expect((await get_events({ limit: 0 })).status).to.equal(400)
     expect((await get_events({ limit: 1000 })).body).to.have.length(
       PUBLIC_EVENTS.length

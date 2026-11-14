@@ -30,8 +30,9 @@ export const NETWORK_EVENT_COLUMNS = [
 
 const parse_non_negative_integer = (value, fallback) => {
   if (value === undefined) return fallback
+  if (typeof value !== 'string') return null
   const parsed = Number(value)
-  return Number.isInteger(parsed) && parsed >= 0 ? parsed : null
+  return Number.isSafeInteger(parsed) && parsed >= 0 ? parsed : null
 }
 
 // Only public types are ever selected: operator-only events stay in the
