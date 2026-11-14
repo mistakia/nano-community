@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { getOnlineRepresentatives } from '@core/accounts'
+import { get_representative_power } from '#common/representative-power.mjs'
 
 export function getNetwork(state) {
   return state.get('network')
@@ -31,18 +32,48 @@ export function get_online_principal_representatives(state) {
     .sortBy((rep) => -rep.getIn(['account_meta', 'weight'], 0))
 }
 
+// The summed current power of the online principal representatives that have
+// one, with the coverage behind it. A representative with neither a signed
+// reading nor a CPU TDP specification counts as not reporting: nothing is
+// estimated for it. Null while the principal representative set is unknown.
 export function getNetworkWattHour(state) {
-  const network = getNetwork(state)
   const prs = get_online_principal_representatives(state)
-  if (!prs || prs.size === 0) {
-    return 0
+  if (!prs) {
+    return null
   }
 
-  const average_watt_hour = network.get('averageWattHour') || 0
-  return prs.reduce(
-    (sum, rep) => sum + (rep.get('watt_hour') || average_watt_hour),
-    0
-  )
+  let watts = 0
+  let reporting_count = 0
+  let measured_count = 0
+  let oldest_measured_at = null
+  for (const rep of prs) {
+    const power = get_representative_power({
+      power_reading: rep.get('power_reading'),
+      watt_hour: rep.get('watt_hour')
+    })
+    if (!power) {
+      continue
+    }
+    watts += power.power_watts
+    reporting_count += 1
+    if (power.measured_at) {
+      measured_count += 1
+      if (
+        oldest_measured_at === null ||
+        power.measured_at < oldest_measured_at
+      ) {
+        oldest_measured_at = power.measured_at
+      }
+    }
+  }
+
+  return {
+    watts,
+    reporting_count,
+    measured_count,
+    principal_representative_count: prs.size,
+    oldest_measured_at
+  }
 }
 
 export function getNetworkStats(state) {

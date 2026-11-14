@@ -20,8 +20,6 @@ export const median = (arr) => {
   return arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2
 }
 
-export const average = (arr) => arr.reduce((p, c) => p + c, 0) / arr.length
-
 export const format_value = ({ prefix = '', value }) => {
   const format_value = (number, divisor, suffix) => {
     const result = number / divisor

@@ -3,7 +3,6 @@ import BigNumber from 'bignumber.js'
 
 import { networkActions } from './actions'
 import { accountsActions } from '@core/accounts'
-import { average } from '@core/utils'
 
 export function networkReducer(state = new Map(), { payload, type }) {
   switch (type) {
@@ -16,12 +15,10 @@ export function networkReducer(state = new Map(), { payload, type }) {
     case accountsActions.GET_REPRESENTATIVES_FULFILLED: {
       const { data } = payload
       const dayAgo = Math.round(Date.now() / 1000) - 60 * 60 * 24
-      const watts = data.map((d) => d.watt_hour).filter((d) => Boolean(d))
       const totalReps = data.filter(
         (d) => d.representative && d.last_seen > dayAgo
       )
       return state.merge({
-        averageWattHour: average(watts),
         totalReps: totalReps.length
       })
     }
