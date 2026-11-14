@@ -617,7 +617,8 @@ GRANT SELECT ON public.network_events TO nano_production_reader;
 --     cheap; the refresh policy only covers the last 3 days, so a new database
 --     with history needs one full refresh after apply:
 --       CALL refresh_continuous_aggregate('public.accounts_meta_rollup_day', NULL, unix_now_seconds() - 86400);
---     Re-derivable from accounts_meta, so it is not archived.
+--     Re-derivable from accounts_meta, so it is not archived. Readers get SELECT
+--     through the section 11 default privileges.
 CREATE MATERIALIZED VIEW IF NOT EXISTS public.accounts_meta_rollup_day
 WITH (timescaledb.continuous, timescaledb.materialized_only = false) AS
 SELECT
@@ -635,5 +636,3 @@ SELECT add_continuous_aggregate_policy('public.accounts_meta_rollup_day',
   schedule_interval => INTERVAL '1 hour',
   if_not_exists => TRUE
 );
-
-GRANT SELECT ON public.accounts_meta_rollup_day TO nano_production_app;
