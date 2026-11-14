@@ -620,6 +620,13 @@ GRANT SELECT ON public.network_events TO nano_production_reader;
 --     began row, set by the writer on began and ended rows and null on
 --     occurrences. network_event_coverage holds the observed_at ranges each
 --     producer has fully written.
+-- Adds the columns and the coverage table, backfills rows stored before the
+-- sequence existed in recorded order, then installs the triggers, all in one
+-- transaction under a bounded lock wait. The table locks keep writers out
+-- while the triggers are absent. A re-apply matches no rows.
+BEGIN;
+-- Fail rather than queue every reader behind a slow one; re-apply on failure.
+SET LOCAL lock_timeout = '10s';
 CREATE SEQUENCE IF NOT EXISTS public.network_event_sequence_generator;
 
 ALTER TABLE public.network_events
@@ -636,12 +643,6 @@ CREATE TABLE IF NOT EXISTS public.network_event_coverage (
   CHECK (coverage_ended_at >= coverage_began_at)
 );
 
--- Backfills rows stored before the sequence existed, in recorded order, then
--- installs the triggers. The table locks keep writers out while the triggers
--- are absent. A re-apply matches no rows.
-BEGIN;
--- Fail rather than queue every reader behind a slow one; re-apply on failure.
-SET LOCAL lock_timeout = '10s';
 LOCK TABLE public.network_events, public.network_event_coverage IN EXCLUSIVE MODE;
 DROP TRIGGER IF EXISTS assign_network_event_sequence ON public.network_events;
 DROP TRIGGER IF EXISTS refuse_network_event_update ON public.network_events;
