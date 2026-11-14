@@ -1,5 +1,7 @@
 import default_db from '#db'
 import {
+  NETWORK_EVENT_KINDS,
+  NETWORK_EVENT_PHASES,
   NETWORK_EVENT_SEVERITIES,
   get_network_event_type,
   is_valid_network_event_phase,
@@ -8,6 +10,10 @@ import {
 import build_network_event_id from './build-network-event-id.mjs'
 
 const INSERT_BATCH_SIZE = 500
+
+// The sequence trigger serializes every producer behind one advisory lock, so
+// a writer stuck behind it fails instead of stalling the rest.
+const LOCK_TIMEOUT = '30s'
 
 const is_plain_object = (value) =>
   value !== null && typeof value === 'object' && !Array.isArray(value)
@@ -29,6 +35,7 @@ export const build_network_event_row = (network_event) => {
       `invalid network_event_phase ${network_event_phase} for ${network_event_type}`
     )
   }
+  const event_type = get_network_event_type(network_event_type)
   const severity = resolve_network_event_severity(network_event)
   if (!NETWORK_EVENT_SEVERITIES.includes(severity)) {
     throw new Error(`invalid severity ${severity} for ${network_event_type}`)
@@ -43,8 +50,22 @@ export const build_network_event_row = (network_event) => {
     throw new Error(`evidence must be an object for ${network_event_type}`)
   }
 
+  const network_event_id = build_network_event_id(network_event)
+  // A condition's id is its began row's network_event_id, which pairs the
+  // began and ended rows of one episode.
+  const network_event_condition_id =
+    event_type.kind !== NETWORK_EVENT_KINDS.condition
+      ? null
+      : network_event_phase === NETWORK_EVENT_PHASES.began
+        ? network_event_id
+        : build_network_event_id({
+            ...network_event,
+            network_event_phase: NETWORK_EVENT_PHASES.began
+          })
+
   return {
-    network_event_id: build_network_event_id(network_event),
+    network_event_id,
+    network_event_condition_id,
     network_event_type,
     network_event_phase,
     severity,
@@ -56,14 +77,18 @@ export const build_network_event_row = (network_event) => {
   }
 }
 
-// Inserts events, deduping on network_event_id, and writes the detector state
-// and the watermark in the same transaction, so a failed run leaves all three
-// where they were and the next run replays the same window.
+// Inserts events, deduping on network_event_id, and writes the detector
+// state, the watermark and the producer's coverage windows in the same
+// transaction, so a failed run leaves all four where they were and the next
+// run replays the same window. The order is detector state, etl_state, events,
+// coverage: the first event or coverage row takes the sequence lock, which is
+// held to commit, so the lock is taken last and held as briefly as possible.
 const insert_network_events = async ({
   network_events = [],
   detector_name,
   detector_states = [],
   watermark = null,
+  coverage_windows = [],
   db = default_db
 }) => {
   const rows = network_events.map(build_network_event_row)
@@ -71,6 +96,8 @@ const insert_network_events = async ({
   let inserted_count = 0
 
   await db.transaction(async (trx) => {
+    await trx.raw(`SET LOCAL lock_timeout = '${LOCK_TIMEOUT}'`)
+
     if (detector_states.length) {
       if (!detector_name) {
         throw new Error('detector_name is required to write detector state')
@@ -106,6 +133,18 @@ const insert_network_events = async ({
         .ignore()
         .returning('network_event_id')
       inserted_count += inserted.length
+    }
+
+    if (coverage_windows.length) {
+      await trx('network_event_coverage').insert(
+        coverage_windows.map(
+          ({ producer, coverage_began_at, coverage_ended_at }) => ({
+            producer,
+            coverage_began_at,
+            coverage_ended_at
+          })
+        )
+      )
     }
   })
 

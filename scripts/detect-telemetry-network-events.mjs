@@ -5,6 +5,7 @@ import { isMain } from '#common'
 import report_job from '#libs-server/report-job.mjs'
 import insert_network_events from '#libs-server/network-events/insert-network-events.mjs'
 import {
+  MAX_SNAPSHOT_GAP_SECONDS,
   REPRESENTATIVE_TELEMETRY_SETTLE_SECONDS,
   load_representative_telemetry,
   group_telemetry_by_timestamp,
@@ -21,6 +22,25 @@ export const DETECTOR_NAME = 'detect-telemetry-network-events'
 // Catch-up bound per run: one day of 5-minute snapshots. A longer backlog
 // drains over the following runs.
 const MAX_SNAPSHOTS_PER_RUN = 288
+
+export const COVERAGE_PRODUCER = 'telemetry_detector'
+
+// Coverage is on the observed_at axis, and an evaluated window's events are
+// observed at its window_start. A window therefore covers from the snapshot
+// before its window_start (exclusive) to its window_start (inclusive), so
+// consecutive evaluated windows tile and a skipped window leaves a gap.
+const build_coverage_window = ({ snapshot_timestamps, window_start }) => {
+  const preceding_timestamps = snapshot_timestamps.filter(
+    (timestamp) => timestamp < window_start
+  )
+  return {
+    producer: COVERAGE_PRODUCER,
+    coverage_began_at: preceding_timestamps.length
+      ? preceding_timestamps[preceding_timestamps.length - 1]
+      : window_start,
+    coverage_ended_at: window_start
+  }
+}
 
 const open_condition = ({
   representative_state,
@@ -258,10 +278,14 @@ export const detect_telemetry_network_events = async ({
     return { network_events: [], evaluated_count: 0, inserted_count: 0 }
   }
 
+  // One snapshot gap beyond the first window, so the snapshot preceding its
+  // window_start is loaded for its coverage window.
   const rows = await load_representative_telemetry({
     db,
     after_timestamp:
-      target_timestamps[0] - REPRESENTATIVE_TELEMETRY_SETTLE_SECONDS,
+      target_timestamps[0] -
+      REPRESENTATIVE_TELEMETRY_SETTLE_SECONDS -
+      MAX_SNAPSHOT_GAP_SECONDS,
     through_timestamp: target_timestamps[target_timestamps.length - 1]
   })
   const rows_by_timestamp = group_telemetry_by_timestamp(rows)
@@ -272,6 +296,7 @@ export const detect_telemetry_network_events = async ({
   const detector_states = await load_detector_states({ db })
   const changed_subject_keys = new Set()
   const network_events = []
+  const coverage_windows = []
   let evaluated_count = 0
 
   for (const window_end of target_timestamps) {
@@ -284,6 +309,12 @@ export const detect_telemetry_network_events = async ({
       continue
     }
     evaluated_count += 1
+    coverage_windows.push(
+      build_coverage_window({
+        snapshot_timestamps,
+        window_start: window_timestamps[0]
+      })
+    )
 
     const majority_major_version_by_maker = get_majority_major_version_by_maker(
       rows_by_timestamp.get(window_end)
@@ -317,11 +348,21 @@ export const detect_telemetry_network_events = async ({
   // A first run without a full window writes nothing, so the next run retries.
   if (is_first_run && !evaluated_count) {
     log('first run has no full settle window yet')
-    return { network_events, evaluated_count, inserted_count: 0 }
+    return {
+      network_events,
+      coverage_windows,
+      evaluated_count,
+      inserted_count: 0
+    }
   }
 
   if (dry_run) {
-    return { network_events, evaluated_count, inserted_count: 0 }
+    return {
+      network_events,
+      coverage_windows,
+      evaluated_count,
+      inserted_count: 0
+    }
   }
 
   const { inserted_count } = await insert_network_events({
@@ -335,13 +376,14 @@ export const detect_telemetry_network_events = async ({
     watermark: {
       table_name: DETECTOR_NAME,
       last_max_ts: target_timestamps[target_timestamps.length - 1]
-    }
+    },
+    coverage_windows
   })
 
   log(
     `evaluated ${evaluated_count} snapshots, inserted ${inserted_count} of ${network_events.length} events`
   )
-  return { network_events, evaluated_count, inserted_count }
+  return { network_events, coverage_windows, evaluated_count, inserted_count }
 }
 
 if (isMain(import.meta.url)) {

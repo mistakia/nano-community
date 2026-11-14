@@ -82,7 +82,9 @@ const TABLE_COLUMNS = {
     'timestamp'
   ],
   network_events: [
+    'network_event_sequence',
     'network_event_id',
+    'network_event_condition_id',
     'network_event_type',
     'network_event_phase',
     'severity',
@@ -91,6 +93,13 @@ const TABLE_COLUMNS = {
     'node_id',
     'evidence',
     'observed_at',
+    'recorded_at'
+  ],
+  network_event_coverage: [
+    'network_event_coverage_sequence',
+    'producer',
+    'coverage_began_at',
+    'coverage_ended_at',
     'recorded_at'
   ],
   posts: [
@@ -126,23 +135,19 @@ const DELTA_RUN_ORDER = [
   'posts',
   'representatives_telemetry',
   'representatives_uptime',
-  'network_events'
+  'network_events',
+  'network_event_coverage'
 ]
 
-// network_events uses recorded_at (insert time, not event time), so a late
-// event is still archived.
+// network_events and network_event_coverage use their delivery sequence,
+// which the VPS assigns in commit order, so no row can commit behind a
+// watermark the delta has already passed.
 const TIME_COLUMN = {
   posts: 'created_at',
   representatives_telemetry: 'timestamp',
   representatives_uptime: 'timestamp',
-  network_events: 'recorded_at'
-}
-
-// Re-read this many seconds behind the watermark. recorded_at is set at
-// transaction start, so a row can commit after a delta has already advanced
-// past its second; the overlap catches it and ON CONFLICT drops the repeats.
-const DELTA_OVERLAP_SECONDS = {
-  network_events: 300
+  network_events: 'network_event_sequence',
+  network_event_coverage: 'network_event_coverage_sequence'
 }
 
 // Retention on VPS PG is handled by TimescaleDB retention policies declared
@@ -409,7 +414,7 @@ async function runTableDelta(table, vpsPg, pgClient, opts) {
     const vpsSrcCols = cols.map((c) => `"${c}"`).join(',')
     const vpsRes = await vpsPg.query(
       `SELECT ${vpsSrcCols} FROM public."${table}" WHERE "${timeCol}" > $1 ORDER BY "${timeCol}" ASC`,
-      [watermark - (DELTA_OVERLAP_SECONDS[table] || 0)]
+      [watermark]
     )
     const sourceStream = Readable.from(vpsRes.rows, { objectMode: true })
 

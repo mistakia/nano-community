@@ -13,8 +13,10 @@ const CACHE_SECONDS = 60
 const ACCOUNT_RE = /^nano_[13][13456789abcdefghijkmnopqrstuwxyz]{59}$/
 const NETWORK_EVENT_ID_RE = /^[0-9a-f]{64}$/
 
-const NETWORK_EVENT_COLUMNS = [
+export const NETWORK_EVENT_COLUMNS = [
+  'network_event_sequence',
   'network_event_id',
+  'network_event_condition_id',
   'network_event_type',
   'network_event_phase',
   'severity',
@@ -34,7 +36,7 @@ const parse_non_negative_integer = (value, fallback) => {
 
 // Only public types are ever selected: operator-only events stay in the
 // database and no route or filter can reach them.
-const select_public_network_events = (db) =>
+export const select_public_network_events = (db) =>
   db('network_events')
     .select(NETWORK_EVENT_COLUMNS)
     .whereIn('network_event_type', PUBLIC_NETWORK_EVENT_TYPES)
@@ -48,9 +50,19 @@ router.get('/', async (req, res) => {
     if (limit === null || limit < 1) {
       return res.status(400).send({ error: 'invalid limit' })
     }
-    const offset = parse_non_negative_integer(req.query.offset, 0)
-    if (offset === null) {
-      return res.status(400).send({ error: 'invalid offset' })
+    // Cursors on network_event_sequence, which is assigned in commit order:
+    // after reads forward and loses nothing, before reads back from the
+    // newest page.
+    const after = parse_non_negative_integer(req.query.after, null)
+    const before = parse_non_negative_integer(req.query.before, null)
+    if (after === null && req.query.after !== undefined) {
+      return res.status(400).send({ error: 'invalid after' })
+    }
+    if (before === null && req.query.before !== undefined) {
+      return res.status(400).send({ error: 'invalid before' })
+    }
+    if (after !== null && before !== null) {
+      return res.status(400).send({ error: 'use either after or before' })
     }
     if (
       network_event_type !== undefined &&
@@ -77,7 +89,8 @@ router.get('/', async (req, res) => {
       representative_account,
       severity,
       page_limit,
-      offset
+      after,
+      before
     ].join(',')}`
     const cached_events = cache.get(cache_key)
     if (cached_events) {
@@ -85,12 +98,10 @@ router.get('/', async (req, res) => {
     }
 
     const query = select_public_network_events(db)
-      .orderBy([
-        { column: 'observed_at', order: 'desc' },
-        { column: 'network_event_id', order: 'asc' }
-      ])
+      .orderBy('network_event_sequence', after === null ? 'desc' : 'asc')
       .limit(page_limit)
-      .offset(offset)
+    if (after !== null) query.where('network_event_sequence', '>', after)
+    if (before !== null) query.where('network_event_sequence', '<', before)
     if (network_event_type) query.where({ network_event_type })
     if (representative_account) query.where({ representative_account })
     if (severity) query.where({ severity })

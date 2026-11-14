@@ -6,7 +6,7 @@ export const REPRESENTATIVE_TELEMETRY_SETTLE_SECONDS =
 
 // The collector runs every 5 minutes. A window whose snapshots leave a larger
 // gap (a collector outage) is not full, so nothing settles inside it.
-const MAX_SNAPSHOT_GAP_SECONDS = 600
+export const MAX_SNAPSHOT_GAP_SECONDS = 600
 
 const trim = (value) => (typeof value === 'string' ? value.trim() : value)
 
