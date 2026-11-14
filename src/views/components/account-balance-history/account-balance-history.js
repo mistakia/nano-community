@@ -1,11 +1,24 @@
 import React, { useEffect, useMemo } from 'react'
-import BigNumber from 'bignumber.js'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import PropTypes from 'prop-types'
 import ReactEChartsCore from 'echarts-for-react/lib/core'
 import * as echarts from 'echarts/core'
 
 import { format_value } from '@core/utils'
+import { build_account_balance_history_series } from '#common/build-account-balance-history-series.mjs'
+
+// The latest point at or before the timestamp, as a step line shows it; the
+// first point when the timestamp precedes the series. Points are ascending.
+const find_point_at_or_before = ({ series_data, timestamp }) => {
+  let found_point = series_data[0]
+  for (const point of series_data) {
+    if (new Date(point[0]).valueOf() > timestamp) {
+      break
+    }
+    found_point = point
+  }
+  return found_point
+}
 
 export default function AccountBalanceHistory({
   account,
@@ -24,60 +37,21 @@ export default function AccountBalanceHistory({
     get_price_history()
   }, [get_price_history])
 
-  const balance_history = account.get('balance_history').toJS()
+  const balance_history = account.get('balance_history')
   const is_loading = account.get('account_is_loading_balance_history')
-  const [series_data, series_data_usd, series_data_usd_price] = useMemo(() => {
-    const balance_data = balance_history.map((entry) => [
-      entry.date,
-      new BigNumber(entry.balance).shiftedBy(-30).toNumber()
-    ])
-
-    let balance_data_usd = []
-    const balance_data_usd_price = []
-    if (balance_history.length > 0) {
-      const min_date_entry = balance_history[0]
-      const max_date_entry = balance_history[balance_history.length - 1]
-      const filled_dates = []
-      for (
-        let day = min_date_entry.date_unix * 1000;
-        day <= max_date_entry.date_unix * 1000;
-        day += 86400000
-      ) {
-        filled_dates.push(new Date(day).toISOString().split('T')[0])
-      }
-
-      const reversed_balance_history = balance_history.reverse()
-
-      balance_data_usd = filled_dates.map((date) => {
-        const balance_entry = reversed_balance_history.find(
-          (entry) => entry.date_unix * 1000 < new Date(date).getTime()
-        )
-        const price_entry = price_history.find(
-          (entry) => entry.timestamp_utc === `${date}T00:00:00.000Z`
-        )
-        const balance = new BigNumber(
-          balance_entry ? balance_entry.balance : 0
-        ).shiftedBy(-30)
-        const usd_value = price_entry
-          ? balance.multipliedBy(price_entry.price).toFixed(2)
-          : null
-
-        if (price_entry) {
-          balance_data_usd_price.push([
-            date,
-            new BigNumber(price_entry.price).toFixed(2)
-          ])
-        }
-        return [date, usd_value]
-      })
-    }
-
-    return [balance_data, balance_data_usd, balance_data_usd_price]
-  }, [balance_history, price_history])
+  const { balance_series, usd_value_series, usd_price_series } = useMemo(
+    () =>
+      build_account_balance_history_series({
+        balance_history: balance_history.toJS(),
+        price_history,
+        now: new Date()
+      }),
+    [balance_history, price_history]
+  )
 
   const series = [
     {
-      data: series_data,
+      data: balance_series,
       name: 'Balance (Nano)',
       type: 'line',
       step: 'end',
@@ -87,7 +61,7 @@ export default function AccountBalanceHistory({
       color: '#4A90E2'
     },
     {
-      data: series_data_usd,
+      data: usd_value_series,
       name: 'USD Value',
       type: 'line',
       yAxisIndex: 1,
@@ -95,7 +69,7 @@ export default function AccountBalanceHistory({
       color: '#da1e28'
     },
     {
-      data: series_data_usd_price,
+      data: usd_price_series,
       name: 'USD Price',
       type: 'line',
       yAxisIndex: 2,
@@ -124,13 +98,11 @@ export default function AccountBalanceHistory({
 
         let tooltip = `<p>${x_time.toDateString()}</p> `
         series.forEach((serie) => {
-          // find the closest value
-          const value = serie.data.reduce((prev, curr) =>
-            Math.abs(new Date(curr[0]).valueOf() - x_time.valueOf()) <
-            Math.abs(new Date(prev[0]).valueOf() - x_time.valueOf())
-              ? curr
-              : prev
-          )[1]
+          const point = find_point_at_or_before({
+            series_data: serie.data,
+            timestamp: x_time.valueOf()
+          })
+          const value = point ? point[1] : '-'
 
           // add the colored circle at the beginning of the line
           tooltip += `<p><span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color: ${serie.color}"></span>`
