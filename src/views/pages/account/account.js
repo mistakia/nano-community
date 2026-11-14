@@ -13,6 +13,7 @@ import Tooltip from '@mui/material/Tooltip'
 
 import RepresentativeTelemetryChart from '@components/representative-telemetry-chart'
 import RepresentativeDelegators from '@components/representative-delegators'
+import RepresentativeDelegationHistory from '@components/representative-delegation-history'
 import RepresentativeUptime from '@components/representative-uptime'
 import RepresentativeInfo from '@components/representative-info'
 import RepresentativeNetwork from '@components/representative-network'
@@ -202,6 +203,9 @@ export default function AccountPage({
                   </TabPanel>
                 </div>
               )}
+            </Collapsible>
+            <Collapsible title='Delegation History' only_render_when_visible>
+              <RepresentativeDelegationHistory account={account} />
             </Collapsible>
             <Collapsible title='Delegators'>
               <RepresentativeDelegators

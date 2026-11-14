@@ -11,7 +11,9 @@
 -- telemetry 6w, telemetry_index 6w, accounts_meta no retention (compression
 -- alone shrinks 23 GB to ~5 GB), posts plain table (NOT a hypertable; the
 -- "exclude rows referenced by post_labels" rule cannot be expressed via
--- drop_chunks).
+-- drop_chunks). accounts_meta feeds the continuous aggregate
+-- accounts_meta_rollup_day (section 14), which needs one full refresh after
+-- its first apply.
 --
 -- Apply with:
 --   sudo -n -u postgres psql -d nano_production -f db/schema.postgres.sql
@@ -604,3 +606,33 @@ CREATE TABLE IF NOT EXISTS public.network_event_detector_state (
 -- Reader read on network_events for the archive delta cron; detector state
 -- stays unreadable by reader roles.
 GRANT SELECT ON public.network_events TO nano_production_reader;
+
+-- 14. Daily delegation rollup. One row per representative per UTC day with the
+--     last weight and delegator count sampled by scripts/import-accounts-meta.mjs,
+--     served by GET /api/accounts/:address/delegation_history. delegators counts
+--     delegating accounts holding at least 1 Nano (accounts_delegators); it is
+--     the day's last recorded count, so a stale-snapshot sample does not blank
+--     the day, and null before it was first recorded. Real-time, so today's bucket is read
+--     live from accounts_meta. Created WITH NO DATA so applying this file stays
+--     cheap; the refresh policy only covers the last 3 days, so a new database
+--     with history needs one full refresh after apply:
+--       CALL refresh_continuous_aggregate('public.accounts_meta_rollup_day', NULL, unix_now_seconds() - 86400);
+--     Re-derivable from accounts_meta, so it is not archived. Readers get SELECT
+--     through the section 11 default privileges.
+CREATE MATERIALIZED VIEW IF NOT EXISTS public.accounts_meta_rollup_day
+WITH (timescaledb.continuous, timescaledb.materialized_only = false) AS
+SELECT
+  account,
+  time_bucket(86400, "timestamp") AS "timestamp",
+  last(weight, "timestamp") AS weight,
+  last(delegators, "timestamp") FILTER (WHERE delegators IS NOT NULL) AS delegators
+FROM public.accounts_meta
+GROUP BY account, time_bucket(86400, "timestamp")
+WITH NO DATA;
+
+SELECT add_continuous_aggregate_policy('public.accounts_meta_rollup_day',
+  start_offset => 259200,
+  end_offset => 86400,
+  schedule_interval => INTERVAL '1 hour',
+  if_not_exists => TRUE
+);
