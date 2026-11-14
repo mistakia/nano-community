@@ -64,5 +64,8 @@ JOB_PROJECT=nano-community
 ## account labels
 18 3 * * * NODE_ENV=production /root/.local/share/fleet-node/bin/node /root/nano-community/source/scripts/sync-account-labels.mjs >> /var/log/nano-community/sync-account-labels.log 2>&1
 
+## representative discord identity
+48 3 * * * NODE_ENV=production /root/.local/share/fleet-node/bin/node /root/nano-community/source/scripts/sync-representative-discord-identity.mjs >> /var/log/nano-community/sync-representative-discord-identity.log 2>&1
+
 ## site analytics
 45 0 * * * NODE_ENV=production /root/.local/share/fleet-node/bin/node /root/nano-community/source/scripts/prune-site-events.mjs >> /var/log/nano-community/prune-site-events.log 2>&1

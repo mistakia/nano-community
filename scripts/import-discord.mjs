@@ -156,6 +156,15 @@ const getChannelsForGuildId = async (guildId) => {
   return res.map(({ name, id }) => ({ name, id }))
 }
 
+// A re-fetched message keeps the author name first seen for it, so posts
+// stay a record of each Discord user's past usernames.
+export const save_discord_posts = async (posts) => {
+  await db('posts')
+    .insert(posts)
+    .onConflict('url')
+    .merge(['text', 'updated_at', 'score'])
+}
+
 const importDiscord = async (guildId, { getFullHistory = false } = {}) => {
   logger(`importing discord server: ${guildId}`)
 
@@ -218,7 +227,7 @@ const importDiscord = async (guildId, { getFullHistory = false } = {}) => {
       }))
 
       if (posts.length) {
-        await db('posts').insert(posts).onConflict('url').merge()
+        await save_discord_posts(posts)
         logger(`saved ${posts.length} posts from ${channel.name}`)
       }
 

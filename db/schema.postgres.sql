@@ -283,6 +283,7 @@ CREATE TABLE IF NOT EXISTS public.representatives_meta_index (
   reddit                  varchar(255),
   twitter                 varchar(255),
   discord                 varchar(255),
+  discord_user_id         varchar(32),
   github                  varchar(255),
   website                 varchar(255),
   email                   varchar(255),

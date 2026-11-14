@@ -121,6 +121,7 @@ describe('CLI', function () {
       const expected_reddit = 'test_reddit_user'
       const expected_twitter = 'test_twitter_user'
       const expected_discord = 'test_discord_user#1234'
+      const expected_discord_user_id = '123456789012345678'
       const expected_github = 'test_github_user'
       const expected_email = 'test@example.com'
       const expected_website = 'https://example.com'
@@ -160,6 +161,9 @@ describe('CLI', function () {
               break
             case '? Discord Username:':
               child.stdin.write(`${expected_discord}\n`)
+              break
+            case '? Discord User ID:':
+              child.stdin.write(`${expected_discord_user_id}\n`)
               break
             case '? GitHub Username:':
               child.stdin.write(`${expected_github}\n`)
@@ -217,6 +221,9 @@ describe('CLI', function () {
         expect(updated_representative.reddit).to.equal(expected_reddit)
         expect(updated_representative.twitter).to.equal(expected_twitter)
         expect(updated_representative.discord).to.equal(expected_discord)
+        expect(updated_representative.discord_user_id).to.equal(
+          expected_discord_user_id
+        )
         expect(updated_representative.github).to.equal(expected_github)
         expect(updated_representative.email).to.equal(expected_email)
         expect(updated_representative.website).to.equal(expected_website)

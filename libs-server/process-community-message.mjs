@@ -19,6 +19,7 @@ const process_set_representative_meta = async ({ content, account }) => {
     reddit,
     twitter,
     discord,
+    discord_user_id,
     github,
     email,
     website
@@ -35,6 +36,7 @@ const process_set_representative_meta = async ({ content, account }) => {
       reddit,
       twitter,
       discord,
+      discord_user_id,
       github,
       email,
       website
