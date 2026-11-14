@@ -1,7 +1,7 @@
 module.exports = {
   discordAuthorization: '',
 
-  port: 8085,
+  port: Number(process.env.NANO_TEST_API_PORT || 8085),
 
   github_access_token: '',
 

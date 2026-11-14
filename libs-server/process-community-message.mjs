@@ -78,6 +78,10 @@ export default async function process_community_message({
         get_block_account
       })
 
+    case 'set_representative_power_reading':
+      // The stored message is the record; loadRepresentatives reads it
+      return
+
     default:
       log(`Unsupported message action: ${action}`)
   }

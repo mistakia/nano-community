@@ -71,7 +71,8 @@
       "/faqs",
       "/privacy",
       "/representatives",
-      "/labels/privacy"
+      "/labels/privacy",
+      "/network-energy-usage"
     ],
     "preconnectThirdParty": false,
     "excludedThirdPartyRequests": [

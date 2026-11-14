@@ -8,7 +8,8 @@ import {
   get_account_balance_history,
   get_request_history,
   get_account_stats,
-  get_account_blocks_per_day
+  get_account_blocks_per_day,
+  get_account_delegation_history
 } from '@core/api'
 import { Account } from './account'
 import { getAccountItems } from './selectors'
@@ -63,6 +64,15 @@ export function* loadAccountBlocksPerDay({ payload }) {
   yield call(get_account_blocks_per_day, { account })
 }
 
+export function* load_account_delegation_history({ payload }) {
+  const { account } = payload
+  const request_history = yield select(get_request_history)
+  if (request_history.has(`GET_ACCOUNT_DELEGATION_HISTORY_${account}`)) {
+    return
+  }
+  yield call(get_account_delegation_history, { account })
+}
+
 //= ====================================
 //  WATCHERS
 // -------------------------------------
@@ -93,6 +103,15 @@ export function* watchGetAccountBlocksPerDay() {
   )
 }
 
+// takeEvery, not takeLatest: a fetch cancelled by navigating to another rep
+// would leave its request_history entry set, and the chart stuck loading.
+export function* watch_get_account_delegation_history() {
+  yield takeEvery(
+    accountsActions.GET_ACCOUNT_DELEGATION_HISTORY,
+    load_account_delegation_history
+  )
+}
+
 //= ====================================
 //  ROOT
 // -------------------------------------
@@ -102,5 +121,6 @@ export const accountSagas = [
   fork(watchGetAccount),
   fork(watchGetAccountBalanceHistory),
   fork(watchGetAccountStats),
-  fork(watchGetAccountBlocksPerDay)
+  fork(watchGetAccountBlocksPerDay),
+  fork(watch_get_account_delegation_history)
 ]

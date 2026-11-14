@@ -9,6 +9,40 @@ const logger = debug('import-accounts-meta')
 
 const timestamp = Math.round(Date.now() / 1000)
 
+// accounts_delegators is refreshed hourly by import-accounts-rep.mjs. A newest
+// row older than this means that import has stalled, so its counts are not
+// recorded rather than written as current.
+const DELEGATORS_SNAPSHOT_MAX_AGE_SECONDS = 3 * 60 * 60
+
+// Delegating accounts holding at least 1 Nano per representative, 0 for a
+// representative with none, or null when the accounts_delegators snapshot is
+// stale.
+export const get_delegator_counts = async ({ accounts, now = timestamp }) => {
+  const { newest_timestamp } = await db('accounts_delegators')
+    .max('timestamp as newest_timestamp')
+    .first()
+  if (
+    !newest_timestamp ||
+    now - newest_timestamp > DELEGATORS_SNAPSHOT_MAX_AGE_SECONDS
+  ) {
+    logger(
+      `accounts_delegators snapshot is stale (newest ${newest_timestamp}), not recording delegator counts`
+    )
+    return null
+  }
+
+  const rows = await db('accounts_delegators')
+    .select('representative')
+    .count('* as delegators')
+    .whereIn('representative', accounts)
+    .groupBy('representative')
+  const counts = new Map(accounts.map((account) => [account, 0]))
+  for (const row of rows) {
+    counts.set(row.representative, Number(row.delegators))
+  }
+  return counts
+}
+
 const importAccountsMeta = async () => {
   const rows = await db('accounts')
     .join(
@@ -22,6 +56,9 @@ const importAccountsMeta = async () => {
     .andWhere('accounts.last_seen', '>', dayjs().subtract(1, 'month').unix())
     .orderByRaw('accounts_meta_index.weight desc nulls last')
   const accounts = rows.map((r) => r.account)
+  const delegator_counts = await get_delegator_counts({ accounts })
+  const get_delegators = (account) =>
+    delegator_counts ? delegator_counts.get(account) : null
 
   const inserts = []
   const startTime = process.hrtime()
@@ -53,18 +90,19 @@ const importAccountsMeta = async () => {
       inserts.push({
         account,
         weight: account_weight_response.weight,
+        delegators: get_delegators(account),
         timestamp
       })
 
       continue
     }
 
-    // TODO - get delegators
     inserts.push({
       account,
       balance: accountInfo.balance,
       block_count: accountInfo.block_count,
       weight: accountInfo.weight,
+      delegators: get_delegators(account),
       timestamp
     })
   }

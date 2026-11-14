@@ -8,9 +8,9 @@ import NetworkHighlights from './network-highlights'
 const mapStateToProps = createSelector(
   getNetwork,
   getNetworkWattHour,
-  (network, wattHour) => ({
+  (network, energy) => ({
     nanodb_stats: network.getIn(['stats', 'nanodb']) || null,
-    wattHour
+    energy
   })
 )
 

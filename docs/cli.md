@@ -156,3 +156,21 @@ Supported metadata fields:
 - note — plain text up to 500 characters. Line breaks are kept, other control characters are removed, and a longer note is rejected rather than shortened. An empty note clears the block's note.
 
 The block must be confirmed and published by your account, or by the account your signing key is linked to. Otherwise the message is rejected and nothing is stored. When several notes are signed for one block, the one with the latest signing time is shown.
+
+### Submitting a Representative Power Reading
+
+A representative operator can sign a measured power reading with the `update-representative-power-reading` command. It needs CLI 0.5.0 or later. The reading feeds the energy figure on the homepage, as described in [Network Energy Usage](/network-energy-usage).
+
+```bash
+nano-community update-representative-power-reading
+```
+
+Sign with a signing key linked to the representative account, not the account private key. The account must be a representative known to nano.community, or the reading is rejected and nothing is stored.
+
+Supported fields:
+
+- energy_watt_hours — the energy the whole host used over the window, in whole watt-hours. Take it as the difference between two readings of a cumulative energy counter.
+- measurement_method — `wall_meter` for a meter between the wall and the host's power supply, or `baseboard_management_controller` for the host's own power sensor through IPMI or Redfish.
+- measurement_started_at and measurement_ended_at — when the window began and ended, as ISO 8601 datetimes such as `2026-11-13T00:00:00Z`. The window must be at least 24 hours and must end before you sign. The CLI sends both as epoch seconds.
+
+The reading whose window ends latest is your current one, and every reading you sign is kept. To correct a reading, sign one over a later window.

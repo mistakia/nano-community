@@ -26,7 +26,7 @@ import diff from 'highlight.js/lib/languages/diff'
 import 'highlight.js/styles/github.css'
 
 import { BASE_URL } from '@core/constants'
-import Menu from '@components/menu'
+import PageNavigation from '@components/page-navigation'
 import Seo from '@components/seo'
 
 hljs.registerLanguage('diff', diff)
@@ -150,7 +150,7 @@ export default class DocPage extends React.Component {
           </div>
           <div className='doc__content-side'>
             <div className='doc__content-side-head' />
-            <Menu hideSearch />
+            <PageNavigation hideSearch />
           </div>
         </div>
       )
@@ -165,7 +165,7 @@ export default class DocPage extends React.Component {
           </div>
           <div className='doc__content-side'>
             <div className='doc__content-side-head' />
-            <Menu hideSearch />
+            <PageNavigation hideSearch />
           </div>
         </div>
       )
@@ -228,7 +228,7 @@ export default class DocPage extends React.Component {
               Edit Page
             </Button>
           </div>
-          <Menu hideSearch />
+          <PageNavigation hideSearch />
         </div>
       </div>
     )

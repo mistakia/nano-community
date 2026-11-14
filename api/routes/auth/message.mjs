@@ -12,13 +12,18 @@ import {
   assert_block_owner,
   parse_block_note
 } from '#libs-server/process-set-block-meta.mjs'
+import {
+  assert_representative,
+  parse_representative_power_reading
+} from '#libs-server/parse-representative-power-reading.mjs'
 
 const router = express.Router()
 
 const MESSAGE_ACTIONS = [
   'set_account_meta',
   'set_representative_meta',
-  'set_block_meta'
+  'set_block_meta',
+  'set_representative_power_reading'
 ]
 const PARAMETER_KEYS = ['content', 'references', 'tags']
 
@@ -74,6 +79,24 @@ router.post('/?', async (req, res) => {
       try {
         block_hash = parse_block_note({ content, references }).block_hash
         await assert_block_owner({ block_hash, account })
+      } catch (error) {
+        if (error instanceof CommunityRequestError) {
+          return send_request_error({ res, error })
+        }
+        throw error
+      }
+    }
+
+    // A power reading is stored only when well-formed and signed for a
+    // representative. The stored message is the record, so nothing applies it.
+    if (payload.action === 'set_representative_power_reading') {
+      try {
+        parse_representative_power_reading({
+          content,
+          references,
+          issued_at: payload.issued_at
+        })
+        await assert_representative({ account, connection: db })
       } catch (error) {
         if (error instanceof CommunityRequestError) {
           return send_request_error({ res, error })

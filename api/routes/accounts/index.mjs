@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js'
 
 import { rpc, is_terminal_rpc_error } from '#common'
 import delegators from './delegators.mjs'
+import delegation_history from './delegation-history.mjs'
 import blocks from './blocks.mjs'
 import open from './open.mjs'
 
@@ -208,6 +209,7 @@ router.get('/:address', async (req, res) => {
 
 router.use('/:address/blocks', blocks)
 router.use('/:address/delegators', delegators)
+router.use('/:address/delegation_history', delegation_history)
 router.use('/:address/open', open)
 
 export default router

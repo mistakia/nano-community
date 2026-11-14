@@ -13,6 +13,7 @@ import Tooltip from '@mui/material/Tooltip'
 
 import RepresentativeTelemetryChart from '@components/representative-telemetry-chart'
 import RepresentativeDelegators from '@components/representative-delegators'
+import RepresentativeDelegationHistory from '@components/representative-delegation-history'
 import RepresentativeUptime from '@components/representative-uptime'
 import RepresentativeInfo from '@components/representative-info'
 import RepresentativeNetwork from '@components/representative-network'
@@ -25,7 +26,7 @@ import AccountBlocksSummary from '@components/account-blocks-summary'
 import AccountActivityCalendar from '@components/account-activity-calendar'
 
 import Seo from '@components/seo'
-import Menu from '@components/menu'
+import PageNavigation from '@components/page-navigation'
 
 import './account.styl'
 
@@ -203,6 +204,9 @@ export default function AccountPage({
                 </div>
               )}
             </Collapsible>
+            <Collapsible title='Delegation History' only_render_when_visible>
+              <RepresentativeDelegationHistory account={account} />
+            </Collapsible>
             <Collapsible title='Delegators'>
               <RepresentativeDelegators
                 account={account}
@@ -262,7 +266,7 @@ export default function AccountPage({
       </div>
       {is_loaded && (
         <div className='account__footer'>
-          <Menu />
+          <PageNavigation />
         </div>
       )}
     </>

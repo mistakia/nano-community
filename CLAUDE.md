@@ -19,7 +19,7 @@ yarn test              # Mocha (TZ=America/New_York)
 yarn lint
 ```
 
-`yarn test` needs PostgreSQL with TimescaleDB on 127.0.0.1, database `nano_test`, user `postgres` without a password. The port defaults to 5432 and `NANO_TEST_PG_PORT` overrides it. Drop and recreate `nano_test` before a run.
+`yarn test` needs PostgreSQL with TimescaleDB on 127.0.0.1, database `nano_test`, user `postgres` without a password. The port defaults to 5432 and `NANO_TEST_PG_PORT` overrides it. The test API server listens on 8085, and `NANO_TEST_API_PORT` overrides it where that port is taken. Drop and recreate `nano_test` before a run.
 
 ```bash
 docker run -d --name nano-test-pg -e POSTGRES_DB=nano_test -e POSTGRES_HOST_AUTH_METHOD=trust -p 127.0.0.1:5435:5432 timescale/timescaledb:latest-pg16
@@ -40,13 +40,13 @@ NANO_TEST_PG_PORT=5435 yarn test
 api/                   # REST endpoints
 server/                # Node backend (Express)
 common/                # Shared client/server logic
-db/                    # knex migrations (MySQL + PostgreSQL supported)
+db/                    # schema.postgres.sql: idempotent sections applied by hand with psql
 docs/                  # Markdown content (introduction, getting-started, design)
 static/                # Assets
 cli/                   # Tooling
 ```
 
-Auth: JWT. Integrations: Discord, Twitter. Storage: MySQL or PostgreSQL via knex.
+Auth: JWT. Integrations: Discord, Twitter. Storage: PostgreSQL 15 + TimescaleDB via knex.
 
 ## Task Board (nostr)
 
@@ -89,6 +89,18 @@ Every alias and tag shown for an account is resolved from label claims. `libs-se
 - **Alerts tab:** it shares `common/representative-alert-rules.mjs` with the detector, so "cemented behind" has one definition.
 - **Tests:** `test/network-event*.test.mjs` and `test/archive-to-postgres.pg-escape.test.mjs`.
 
+## Representative Power Readings
+
+The homepage "Energy a day" figure, the representatives table's Power column and the hardware data view all come from signed, operator-measured readings. The methodology page is `docs/network-energy-usage.md`.
+
+- **Action:** a representative signs `set_representative_power_reading` with exactly `energy_watt_hours` (a positive integer: the signed-message format carries only safe integers), `measurement_method` (`wall_meter` or `baseboard_management_controller`), and `measurement_started_at`/`measurement_ended_at` in epoch seconds. The CLI command is `update-representative-power-reading`.
+- **Validation:** `libs-server/parse-representative-power-reading.mjs`, called from `api/routes/auth/message.mjs` before the insert. It requires a window of at least 24 hours that ends by `issued_at`, and a signer whose resolved account has `accounts.representative = true`. A rejected reading gets a 400 and leaves no row. There is no plausibility ceiling and no age cutoff: an operator corrects a reading by signing one over a later window.
+- **Store:** the message in `nano_community_messages` is the record. There is no projection and nothing applies it.
+- **Read path:** `libs-server/load-representative-power-readings.mjs` picks each account's latest reading by `measurement_ended_at`, then `issued_at`, then digest, resolving the signer through `resolve-signer-account.mjs`. `loadRepresentatives` attaches it as `power_reading`, with `average_power_watts`, or null.
+- **Per-rep power:** `get_representative_power` in `common/representative-power.mjs` returns the reading's average power, else `accounts.watt_hour` labeled as a CPU TDP specification, else null. The `getNetworkWattHour` selector, the `watt_hour` table column and the data-view field all call it. `accounts.watt_hour` is hand-entered and nothing writes it. The `watt_hour` key and selector name are kept, but the values are watts.
+- **Figure:** `getNetworkWattHour` sums over online principal representatives and returns the reporting, measured and principal representative counts and the oldest reading's date. A rep with no value counts as not reporting: nothing is estimated for it.
+- **Tests:** `test/representative-power-readings.test.mjs` and `test/representative-power.test.mjs`.
+
 ## Configuration
 
 `config.js` is environment-aware. In production it decrypts secrets from `config.production.json` at load time by shelling out to `sops` (age envelope encryption; recipient policy in `.sops.yaml`, private identity host-only at `~/.config/sops/age/keys.txt`) — fail-closed, with no plaintext fallback. Each production host has its own gitignored `config.production.json` holding only the stanzas it uses, sealed to that host's recipient alone. The VPS holds the app's. base-storage holds `production_postgres`, `vps_postgres`, `archive_postgres` and `reddit`, with database passwords in its `~/.pgpass`. `.sops.yaml` explains how to author each. Test and development load plaintext `config.${env}.js` unchanged. `config.sample.js` shows the structure (JWT secret, DB credentials, Cloudflare token, GitHub token). To add or edit a production secret, follow [[user:guideline/homelab/sops-age-authoring.md]].
@@ -96,5 +108,6 @@ Every alias and tag shown for an account is resolved from label claims. `libs-se
 ## Conventions
 
 - ESM throughout; `#libs-server/*` import aliases.
-- MyISAM-aware key-prefix lengths in migrations (see recent CI fix).
 - Node 22 LTS target; SlowBuffer polyfill needed for Node 25.
+- The site menu (`src/views/components/menu/`) renders once in the app shell; a page places its inline wordmark, search and sections with `PageNavigation`.
+- A react-table page wraps `<Table>` in `.page-table__container` (`src/styles/table.styl`), the full-screen both-axes scroll box league uses. react-table attaches row loading and pinned-column sizing to that container, and an unbounded table widens the mobile layout viewport and pushes the fixed menu trigger off screen.

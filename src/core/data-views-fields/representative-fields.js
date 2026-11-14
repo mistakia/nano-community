@@ -6,6 +6,7 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 import Uptime from '@components/uptime'
 import { timeago } from '@core/utils'
 import { REPRESENTATIVE_COLUMN_IDS } from '#common/representative-table-columns.mjs'
+import { format_representative_power } from '#common/representative-power.mjs'
 import * as table_constants from 'react-table/src/constants.mjs'
 
 const COLUMN_GROUPS = {
@@ -76,6 +77,23 @@ LastSeenCell.propTypes = {
     original: PropTypes.shape({
       _is_online: PropTypes.bool,
       last_seen: PropTypes.number
+    })
+  })
+}
+
+// The power figure with the source and date it comes from
+const PowerCell = React.memo(({ row }) =>
+  format_representative_power(row.original._power)
+)
+PowerCell.displayName = 'PowerCell'
+PowerCell.propTypes = {
+  row: PropTypes.shape({
+    original: PropTypes.shape({
+      _power: PropTypes.shape({
+        power_watts: PropTypes.number,
+        power_source: PropTypes.string,
+        measured_at: PropTypes.number
+      })
     })
   })
 }
@@ -260,10 +278,12 @@ export default function get_representative_fields() {
       column_groups: [COLUMN_GROUPS.SYSTEM]
     },
     [ids.WATT_HOUR]: {
-      column_title: 'TDP (wH)',
-      header_label: 'TDP (wH)',
-      size: 90,
+      column_title: 'Power (W)',
+      header_label: 'Power (W)',
+      size: 240,
       data_type: table_constants.TABLE_DATA_TYPES.NUMBER,
+      component: PowerCell,
+      export_value: ({ row }) => format_representative_power(row._power),
       operators: number_operators,
       column_groups: [COLUMN_GROUPS.SYSTEM]
     },

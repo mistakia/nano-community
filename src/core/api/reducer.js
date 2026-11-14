@@ -84,6 +84,21 @@ export function api_reducer(state = initialState, { payload, type }) {
         `GET_ACCOUNT_BLOCKS_PER_DAY_${payload.params.account}`
       ])
 
+    case accountsActions.GET_ACCOUNT_DELEGATION_HISTORY_PENDING:
+      return state.setIn(
+        [
+          'request_history',
+          `GET_ACCOUNT_DELEGATION_HISTORY_${payload.params.account}`
+        ],
+        true
+      )
+
+    case accountsActions.GET_ACCOUNT_DELEGATION_HISTORY_FAILED:
+      return state.deleteIn([
+        'request_history',
+        `GET_ACCOUNT_DELEGATION_HISTORY_${payload.params.account}`
+      ])
+
     default:
       return state
   }
