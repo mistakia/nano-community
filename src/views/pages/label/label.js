@@ -13,7 +13,7 @@ import markdown from 'markdown-it'
 import * as timeago from 'timeago.js'
 
 import Seo from '@components/seo'
-import Menu from '@components/menu'
+import PageNavigation from '@components/page-navigation'
 import Posts from '@components/posts'
 import Network from '@components/network'
 import GithubEvents from '@components/github-events'
@@ -65,7 +65,7 @@ export default class LabelPage extends React.Component {
           </div>
           <div className='doc__content-side'>
             <div className='doc__content-side-head' />
-            <Menu />
+            <PageNavigation />
           </div>
         </div>
       )
@@ -80,7 +80,7 @@ export default class LabelPage extends React.Component {
           </div>
           <div className='doc__content-side'>
             <div className='doc__content-side-head' />
-            <Menu />
+            <PageNavigation />
           </div>
         </div>
       )
@@ -139,7 +139,7 @@ export default class LabelPage extends React.Component {
               Edit Page
             </Button>
           </div>
-          <Menu />
+          <PageNavigation />
           <Network />
           <GithubEvents />
         </div>

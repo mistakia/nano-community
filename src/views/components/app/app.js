@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { localStorageAdapter } from '@core/utils'
 import Routes from '@views/routes'
 import Notification from '@components/notification'
+import Menu from '@components/menu'
 
 import '@styles/normalize.css'
 import '@styles/typography.styl'
@@ -11,6 +12,7 @@ import '@styles/doc.styl'
 import '@styles/header.styl'
 import '@styles/markdown.styl'
 import '@styles/toggle-button-group.styl'
+import '@styles/table.styl'
 
 export default class App extends React.Component {
   async componentDidMount() {
@@ -27,6 +29,7 @@ export default class App extends React.Component {
     return (
       <>
         <Routes />
+        <Menu />
         <Notification />
       </>
     )

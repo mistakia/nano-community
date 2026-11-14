@@ -8,7 +8,7 @@ import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
 
 import Seo from '@components/seo'
-import Menu from '@components/menu'
+import PageNavigation from '@components/page-navigation'
 import { timeago } from '@core/utils'
 import {
   NETWORK_EVENT_SEVERITIES,
@@ -212,7 +212,7 @@ export default function NetworkEventsPage({
           </Button>
         </div>
       </div>
-      <Menu />
+      <PageNavigation />
     </>
   )
 }

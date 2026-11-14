@@ -1,18 +1,29 @@
-import React, { useState } from 'react'
-import { NavLink, useNavigate, useLocation } from 'react-router-dom'
-import PropTypes from 'prop-types'
-import SwipeableDrawer from '@mui/material/SwipeableDrawer'
-import CloseIcon from '@mui/icons-material/Close'
-import SpeedDial from '@mui/material/SpeedDial'
-import SpeedDialAction from '@mui/material/SpeedDialAction'
-import HomeIcon from '@mui/icons-material/Home'
-import MenuIcon from '@mui/icons-material/Menu'
+import React, { useState, useEffect, useRef } from 'react'
+import { NavLink, useLocation } from 'react-router-dom'
 
 import SearchBar from '@components/search-bar'
 
 import './menu.styl'
 
-const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
+const PANEL_ID = 'menu-panel'
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+
+function MenuIcon() {
+  return (
+    <svg viewBox='0 0 24 24' aria-hidden='true' className='menu__trigger-icon'>
+      <path d='M3 6h18M3 12h18M3 18h18' />
+    </svg>
+  )
+}
+
+function CloseIcon() {
+  return (
+    <svg viewBox='0 0 24 24' aria-hidden='true' className='menu__trigger-icon'>
+      <path d='M6 6l12 12M18 6L6 18' />
+    </svg>
+  )
+}
 
 export function MenuSections() {
   return (
@@ -121,73 +132,99 @@ export function MenuSections() {
   )
 }
 
-export default function Menu({ hide, hideSearch, hide_speed_dial }) {
+export default function Menu() {
   const [open, setOpen] = useState(false)
-  const navigate = useNavigate()
   const location = useLocation()
+  const trigger_ref = useRef(null)
+  const panel_ref = useRef(null)
 
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
-  const handleClick = () => setOpen(!open)
-  const handleHomeClick = () => navigate('/')
+  useEffect(() => {
+    setOpen(false)
+  }, [location.pathname])
 
-  const isHome = location.pathname === '/'
-  const isMobile = window.innerWidth < 750
+  useEffect(() => {
+    if (!open) {
+      return
+    }
+
+    const trigger = trigger_ref.current
+    const previous_body_overflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    const first_panel_control =
+      panel_ref.current.querySelector(FOCUSABLE_SELECTOR)
+    if (first_panel_control) {
+      first_panel_control.focus()
+    }
+
+    const handle_key_down = (event) => {
+      if (event.key === 'Escape') {
+        setOpen(false)
+        return
+      }
+
+      if (event.key !== 'Tab') {
+        return
+      }
+
+      // keep focus cycling through the trigger and the panel while open
+      const focusable_controls = [
+        trigger,
+        ...panel_ref.current.querySelectorAll(FOCUSABLE_SELECTOR)
+      ]
+      const first_control = focusable_controls[0]
+      const last_control = focusable_controls[focusable_controls.length - 1]
+
+      if (event.shiftKey && document.activeElement === first_control) {
+        event.preventDefault()
+        last_control.focus()
+      } else if (!event.shiftKey && document.activeElement === last_control) {
+        event.preventDefault()
+        first_control.focus()
+      }
+    }
+
+    document.addEventListener('keydown', handle_key_down)
+
+    return () => {
+      document.removeEventListener('keydown', handle_key_down)
+      document.body.style.overflow = previous_body_overflow
+      trigger.focus()
+    }
+  }, [open])
 
   return (
-    <div className='menu__container'>
-      <SwipeableDrawer
-        open={open}
-        className='menu__drawer'
-        onOpen={handleOpen}
-        onClose={handleClose}
-        disableBackdropTransition={!iOS}
-        disableDiscovery={iOS}
-        anchor='top'>
-        <MenuSections />
-      </SwipeableDrawer>
-      {!hide_speed_dial && (
-        <SpeedDial
-          className='menu__dial'
-          ariaLabel='menu dial'
-          transitionDuration={0}
-          direction={isMobile ? 'up' : 'down'}
-          onClick={handleClick}
-          open={open}
-          FabProps={{ variant: 'extended', size: 'medium' }}
-          icon={
-            <span className='menu__dial-label'>
-              {open ? <CloseIcon /> : <MenuIcon />}
-              {open ? 'Close' : 'Menu'}
-            </span>
-          }>
-          {!isHome && (
-            <SpeedDialAction
-              icon={<HomeIcon />}
-              tooltipTitle='Home'
-              tooltipPlacement={isMobile ? 'left' : 'right'}
-              onClick={handleHomeClick}
-            />
-          )}
-        </SpeedDial>
+    <>
+      <button
+        ref={trigger_ref}
+        type='button'
+        className='menu__trigger'
+        aria-expanded={open}
+        aria-controls={PANEL_ID}
+        onClick={() => setOpen(!open)}>
+        {open ? <CloseIcon /> : <MenuIcon />}
+        {open ? 'Close' : 'Menu'}
+      </button>
+      {open && (
+        <>
+          <div className='menu__backdrop' onClick={() => setOpen(false)} />
+          <div
+            ref={panel_ref}
+            id={PANEL_ID}
+            className='menu__panel'
+            role='dialog'
+            aria-modal='true'
+            aria-label='Site menu'>
+            <div className='menu__panel-header'>
+              <NavLink to='/' className='menu__wordmark'>
+                NANO
+              </NavLink>
+              <SearchBar />
+            </div>
+            <MenuSections />
+          </div>
+        </>
       )}
-      <div className='menu__body'>
-        {isHome ? (
-          <div className='menu__text'>NANO</div>
-        ) : (
-          <NavLink to='/' className='menu__text'>
-            NANO
-          </NavLink>
-        )}
-        {!hideSearch && <SearchBar />}
-        {!hide && <MenuSections />}
-      </div>
-    </div>
+    </>
   )
-}
-
-Menu.propTypes = {
-  hide: PropTypes.bool,
-  hideSearch: PropTypes.bool,
-  hide_speed_dial: PropTypes.bool
 }

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import Seo from '@components/seo'
-import Menu from '@components/menu'
+import PageNavigation from '@components/page-navigation'
 import { TaskBoardLinks } from '@components/task-board'
 import use_task_board_init from './use-task-board-init'
 import { use_portal_links } from './portal-links'
@@ -24,7 +24,7 @@ export default function TaskBoardPortalPage({
         {children}
       </TaskBoardLinks.Provider>
       <div className='task-board__footer'>
-        <Menu hideSearch />
+        <PageNavigation hideSearch />
       </div>
     </>
   )

@@ -11,11 +11,11 @@ $home_gutter_narrow = 16px
   background white
 
 // the header is one slim bar on the content edge, so the headline is the only centered focus
-.home__container > .menu__container
+.home__container > .page-navigation
   margin 0
   padding-top 20px
 
-  .menu__body
+  .page-navigation__body
     flex-direction row
     justify-content space-between
     max-width $home_width
@@ -23,7 +23,7 @@ $home_gutter_narrow = 16px
     margin 0 auto
     padding 0 16px
 
-  .menu__text
+  .page-navigation__wordmark
     font-size 24px
     margin 0
 
@@ -153,12 +153,12 @@ $home_gutter_narrow = 16px
 
 // clear the fixed menu button until the content edge moves past it
 @media (min-width 750px) and (max-width 1150px)
-  .home__container > .menu__container .menu__body
+  .home__container > .page-navigation .page-navigation__body
     padding-left 88px
 
 @media (max-width 749px)
-  .home__container > .menu__container
-    .menu__body
+  .home__container > .page-navigation
+    .page-navigation__body
       flex-wrap wrap
       padding 0 $home_gutter_narrow
 

@@ -25,7 +25,7 @@ import AccountBlocksSummary from '@components/account-blocks-summary'
 import AccountActivityCalendar from '@components/account-activity-calendar'
 
 import Seo from '@components/seo'
-import Menu from '@components/menu'
+import PageNavigation from '@components/page-navigation'
 
 import './account.styl'
 
@@ -262,7 +262,7 @@ export default function AccountPage({
       </div>
       {is_loaded && (
         <div className='account__footer'>
-          <Menu />
+          <PageNavigation />
         </div>
       )}
     </>
