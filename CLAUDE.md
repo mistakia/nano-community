@@ -105,3 +105,5 @@ The homepage "Energy a day" figure, the representatives table's Power column and
 
 - ESM throughout; `#libs-server/*` import aliases.
 - Node 22 LTS target; SlowBuffer polyfill needed for Node 25.
+- The site menu (`src/views/components/menu/`) renders once in the app shell; a page places its inline wordmark, search and sections with `PageNavigation`.
+- A react-table page wraps `<Table>` in `.page-table__container` (`src/styles/table.styl`), the full-screen both-axes scroll box league uses. react-table attaches row loading and pinned-column sizing to that container, and an unbounded table widens the mobile layout viewport and pushes the fixed menu trigger off screen.
