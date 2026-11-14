@@ -40,13 +40,13 @@ NANO_TEST_PG_PORT=5435 yarn test
 api/                   # REST endpoints
 server/                # Node backend (Express)
 common/                # Shared client/server logic
-db/                    # knex migrations (MySQL + PostgreSQL supported)
+db/                    # schema.postgres.sql: idempotent sections applied by hand with psql
 docs/                  # Markdown content (introduction, getting-started, design)
 static/                # Assets
 cli/                   # Tooling
 ```
 
-Auth: JWT. Integrations: Discord, Twitter. Storage: MySQL or PostgreSQL via knex.
+Auth: JWT. Integrations: Discord, Twitter. Storage: PostgreSQL 15 + TimescaleDB via knex.
 
 ## Task Board (nostr)
 
@@ -92,5 +92,4 @@ Every alias and tag shown for an account is resolved from label claims. `libs-se
 ## Conventions
 
 - ESM throughout; `#libs-server/*` import aliases.
-- MyISAM-aware key-prefix lengths in migrations (see recent CI fix).
 - Node 22 LTS target; SlowBuffer polyfill needed for Node 25.

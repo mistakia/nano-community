@@ -23,6 +23,7 @@ export {
   get_price_history,
   get_account_stats,
   get_account_blocks_per_day,
+  get_account_delegation_history,
   post_representatives_data_view
 } from './sagas'
 
