@@ -3,6 +3,8 @@
  * Used by both backend (filtering/sorting) and frontend (react-table column config).
  */
 
+import { get_representative_power } from './representative-power.mjs'
+
 // react-table TABLE_DATA_TYPES values (from @mistakia/react-table constants)
 const DATA_TYPES = {
   NUMBER: 1,
@@ -122,8 +124,10 @@ export function get_representative_value(row, column_id) {
     case REPRESENTATIVE_COLUMN_IDS.CPU_MODEL:
       return row.representative_meta ? row.representative_meta.cpu_model : null
 
-    case REPRESENTATIVE_COLUMN_IDS.WATT_HOUR:
-      return row.watt_hour
+    case REPRESENTATIVE_COLUMN_IDS.WATT_HOUR: {
+      const power = get_representative_power(row)
+      return power ? power.power_watts : null
+    }
 
     case REPRESENTATIVE_COLUMN_IDS.PROTOCOL_VERSION:
       return row.telemetry ? row.telemetry.protocol_version : null

@@ -7,6 +7,7 @@ import {
   REPRESENTATIVE_COLUMN_IDS,
   REPRESENTATIVE_COLUMN_DATA_TYPES
 } from '#common/representative-table-columns.mjs'
+import { get_representative_power } from '#common/representative-power.mjs'
 
 const router = express.Router()
 
@@ -173,6 +174,8 @@ function flatten_representative(rep) {
   // Include uptime array for the Uptime cell renderer (prefixed to avoid
   // overwriting the computed numeric 'uptime' column value)
   flat._uptime_data = rep.uptime || []
+  // Include the power source and date for the Power cell renderer
+  flat._power = get_representative_power(rep)
   // Include is_online for the LastSeen cell renderer
   flat._is_online = rep.is_online || rep.last_online > (rep.last_offline || 0)
   return flat

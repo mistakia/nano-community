@@ -223,6 +223,42 @@ const update_block_meta = {
     await send_message_handler('update-block-meta', block_hash)
 }
 
+const update_representative_power_reading = {
+  command: 'update-representative-power-reading',
+  describe:
+    'Sign a measured power reading for a representative (see /network-energy-usage)',
+  handler: async () =>
+    await send_message_handler('update-representative-power-reading')
+}
+
+// Answers are strings, so a power reading's fields become a number and epoch
+// seconds after the edit loop, which an edited answer goes through too
+const parse_epoch_seconds = (value) => {
+  const milliseconds = Date.parse(value)
+  if (Number.isNaN(milliseconds)) {
+    throw new Error(`not an ISO 8601 datetime: ${value}`)
+  }
+  return Math.floor(milliseconds / 1000)
+}
+
+const parse_power_reading_content = ({
+  energy_watt_hours,
+  measurement_method,
+  measurement_started_at,
+  measurement_ended_at
+}) => {
+  const energy = Number(energy_watt_hours)
+  if (!Number.isSafeInteger(energy)) {
+    throw new Error(`not a whole number of watt-hours: ${energy_watt_hours}`)
+  }
+  return {
+    energy_watt_hours: energy,
+    measurement_method: measurement_method.trim(),
+    measurement_started_at: parse_epoch_seconds(measurement_started_at),
+    measurement_ended_at: parse_epoch_seconds(measurement_ended_at)
+  }
+}
+
 async function send_message_handler(type, block_hash = null) {
   const { private_key } = await load_private_key()
 
@@ -256,6 +292,27 @@ async function send_message_handler(type, block_hash = null) {
         return
       }
       message_content_prompts = [{ name: 'note', message: 'Note:' }]
+      break
+    case 'update-representative-power-reading':
+      message_content_prompts = [
+        {
+          name: 'energy_watt_hours',
+          message: 'Energy used over the window (whole watt-hours):'
+        },
+        {
+          name: 'measurement_method',
+          message:
+            'Measurement method (wall_meter or baseboard_management_controller):'
+        },
+        {
+          name: 'measurement_started_at',
+          message: 'Measurement start (ISO 8601, e.g. 2026-11-13T00:00:00Z):'
+        },
+        {
+          name: 'measurement_ended_at',
+          message: 'Measurement end, at least 24 hours later (ISO 8601):'
+        }
+      ]
       break
     default:
       console.error('Unknown message type')
@@ -294,16 +351,27 @@ async function send_message_handler(type, block_hash = null) {
     }
   } while (confirm_edit)
 
+  let content = message_content
+  if (type === 'update-representative-power-reading') {
+    try {
+      content = parse_power_reading_content(message_content)
+    } catch (error) {
+      console.error(error.message)
+      return
+    }
+  }
+
   const actions = {
     'update-rep-meta': 'set_representative_meta',
     'update-account-meta': 'set_account_meta',
-    'update-block-meta': 'set_block_meta'
+    'update-block-meta': 'set_block_meta',
+    'update-representative-power-reading': 'set_representative_power_reading'
   }
   const payload = sign_request({
     private_key,
     action: actions[type],
     parameters: {
-      content: message_content,
+      content,
       references: type === 'update-block-meta' ? [block_hash] : [],
       tags: []
     }
@@ -502,6 +570,7 @@ if (isMain(import.meta.url)) {
     .command(update_rep_meta)
     .command(update_account_meta)
     .command(update_block_meta)
+    .command(update_representative_power_reading)
     .command(bind_nostr_key)
     .command(pledge)
     .demandCommand(1, 'You must provide at least one command.')

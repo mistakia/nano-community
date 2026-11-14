@@ -108,9 +108,9 @@ Nano can scale horizontally or by increasing whatever the limiting factor is amo
 
 ### Nano is energy-efficient
 
-The network runs on standard hardware, where security is achieved through cooperation, not competition. As a result, the average node uses ~25-140W.
+The network runs on standard hardware, where security is achieved through cooperation, not competition. As a result, the average node was put at ~25-140W in 2021, a figure with no known source. The [live figure](/network-energy-usage) sums power readings measured and signed by representative operators.
 
-For each transaction, it is estimated that Nano uses only 0.000112 kWh, compared to <a href="https://digiconomist.net/bitcoin-energy-consumption/" target="_blank">1121.71 kWh</a> for Bitcoin as of May 15th, 2021.
+For each transaction, <a href="https://nano.org/blog/what-if-money-worked-like-email" target="_blank">nano.org</a> estimates that Nano uses only 0.000112 kWh, with no method published (see [how the live figure is measured](/network-energy-usage)), compared to <a href="https://digiconomist.net/bitcoin-energy-consumption/" target="_blank">1121.71 kWh</a> for Bitcoin as of May 15th, 2021.
 
 ### Nano is fully distributed
 

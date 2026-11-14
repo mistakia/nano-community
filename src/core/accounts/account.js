@@ -14,6 +14,7 @@ export const Account = new Record({
   account: null,
   alias: null,
   watt_hour: null,
+  power_reading: null,
   representative: false,
   last_seen: null,
   account_meta: new Map(),

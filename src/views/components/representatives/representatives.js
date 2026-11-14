@@ -9,6 +9,10 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 
 import Uptime from '@components/uptime'
 import { timeago } from '@core/utils'
+import {
+  format_representative_power,
+  get_representative_power
+} from '#common/representative-power.mjs'
 
 import './representatives.styl'
 
@@ -223,8 +227,14 @@ export default class Representatives extends React.Component {
       },
       {
         field: 'watt_hour',
-        width: 120,
-        headerName: 'TDP (wH)',
+        width: 260,
+        headerName: 'Power (W)',
+        renderCell: (p) =>
+          format_representative_power(get_representative_power(p.row)),
+        valueGetter: (value, row) => {
+          const power = get_representative_power(row)
+          return power ? power.power_watts : null
+        },
         sortComparator: sort_comparator
       },
       {
