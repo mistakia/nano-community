@@ -235,6 +235,40 @@ export function accounts_reducer(state = initial_state, { payload, type }) {
         state.setIn(account_key, updated_account)
       })
 
+    case accountsActions.GET_ACCOUNT_DELEGATION_HISTORY_PENDING:
+      return state.withMutations((state) => {
+        const account_key = ['items', payload.params.account]
+        const existing_account = state.getIn(account_key, new Account())
+        const updated_account = createAccount({
+          ...existing_account.toJS(),
+          account_is_loading_delegation_history: true
+        })
+        state.setIn(account_key, updated_account)
+      })
+
+    case accountsActions.GET_ACCOUNT_DELEGATION_HISTORY_FAILED:
+      return state.withMutations((state) => {
+        const account_key = ['items', payload.params.account]
+        const existing_account = state.getIn(account_key, new Account())
+        const updated_account = createAccount({
+          ...existing_account.toJS(),
+          account_is_loading_delegation_history: false
+        })
+        state.setIn(account_key, updated_account)
+      })
+
+    case accountsActions.GET_ACCOUNT_DELEGATION_HISTORY_FULFILLED:
+      return state.withMutations((state) => {
+        const account_key = ['items', payload.params.account]
+        const existing_account = state.getIn(account_key, new Account())
+        const updated_account = createAccount({
+          ...existing_account.toJS(),
+          delegation_history: List(payload.data),
+          account_is_loading_delegation_history: false
+        })
+        state.setIn(account_key, updated_account)
+      })
+
     default:
       return state
   }

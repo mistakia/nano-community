@@ -118,6 +118,10 @@ export const api = {
   get_account_blocks_per_day({ account }) {
     const url = `${API_URL}/nanodb/accounts/${account}/blocks_per_day`
     return { url }
+  },
+  get_account_delegation_history({ account }) {
+    const url = `${API_URL}/accounts/${account}/delegation_history`
+    return { url }
   }
 }
 

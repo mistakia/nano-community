@@ -9,6 +9,7 @@ export const Account = new Record({
   account_is_loading_blocks_send_summary: true,
   account_is_loading_balance_history: false,
   account_is_loading_blocks_per_day: false,
+  account_is_loading_delegation_history: false,
 
   account: null,
   alias: null,
@@ -27,6 +28,7 @@ export const Account = new Record({
   open: new Map(),
   balance_history: new List(),
   blocks_per_day: new List(),
+  delegation_history: new List(),
 
   blocks_summary: new Map(),
 
@@ -50,6 +52,7 @@ export function createAccount({
   open,
   balance_history,
   blocks_per_day,
+  delegation_history,
   blocks_summary,
   ...data
 }) {
@@ -76,6 +79,7 @@ export function createAccount({
     open: new Map(open),
     balance_history: new List(balance_history),
     blocks_per_day: new List(blocks_per_day),
+    delegation_history: new List(delegation_history),
     blocks_summary: new Map(blocks_summary),
     is_online,
     version

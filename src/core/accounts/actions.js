@@ -37,6 +37,14 @@ export const accountsActions = {
   GET_ACCOUNT_BLOCKS_PER_DAY_PENDING: 'GET_ACCOUNT_BLOCKS_PER_DAY_PENDING',
   GET_ACCOUNT_BLOCKS_PER_DAY_FULFILLED: 'GET_ACCOUNT_BLOCKS_PER_DAY_FULFILLED',
 
+  GET_ACCOUNT_DELEGATION_HISTORY: 'GET_ACCOUNT_DELEGATION_HISTORY',
+  GET_ACCOUNT_DELEGATION_HISTORY_FAILED:
+    'GET_ACCOUNT_DELEGATION_HISTORY_FAILED',
+  GET_ACCOUNT_DELEGATION_HISTORY_PENDING:
+    'GET_ACCOUNT_DELEGATION_HISTORY_PENDING',
+  GET_ACCOUNT_DELEGATION_HISTORY_FULFILLED:
+    'GET_ACCOUNT_DELEGATION_HISTORY_FULFILLED',
+
   filter: ({ field, value, label } = {}) => ({
     type: accountsActions.FILTER_REPRESENTATIVES,
     payload: {
@@ -244,6 +252,36 @@ export const accountsActions = {
       params,
       data
     }
+  }),
+
+  get_account_delegation_history: (account) => ({
+    type: accountsActions.GET_ACCOUNT_DELEGATION_HISTORY,
+    payload: {
+      account
+    }
+  }),
+
+  get_account_delegation_history_failed: (params, error) => ({
+    type: accountsActions.GET_ACCOUNT_DELEGATION_HISTORY_FAILED,
+    payload: {
+      params,
+      error
+    }
+  }),
+
+  get_account_delegation_history_pending: (params) => ({
+    type: accountsActions.GET_ACCOUNT_DELEGATION_HISTORY_PENDING,
+    payload: {
+      params
+    }
+  }),
+
+  get_account_delegation_history_fulfilled: (params, data) => ({
+    type: accountsActions.GET_ACCOUNT_DELEGATION_HISTORY_FULFILLED,
+    payload: {
+      params,
+      data
+    }
   })
 }
 
@@ -287,4 +325,10 @@ export const accountBlocksPerDayRequestActions = {
   failed: accountsActions.getAccountBlocksPerDayFailed,
   pending: accountsActions.getAccountBlocksPerDayPending,
   fulfilled: accountsActions.getAccountBlocksPerDayFulfilled
+}
+
+export const account_delegation_history_request_actions = {
+  failed: accountsActions.get_account_delegation_history_failed,
+  pending: accountsActions.get_account_delegation_history_pending,
+  fulfilled: accountsActions.get_account_delegation_history_fulfilled
 }

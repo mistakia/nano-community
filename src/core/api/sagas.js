@@ -25,7 +25,8 @@ import {
   accountBlocksSummaryRequestActions,
   accountBalanceHistoryRequestActions,
   accountStatsRequestActions,
-  accountBlocksPerDayRequestActions
+  accountBlocksPerDayRequestActions,
+  account_delegation_history_request_actions
 } from '@core/accounts/actions'
 import { blockRequestActions } from '@core/blocks/actions'
 import { dailyRequestActions } from '@core/ledger/actions'
@@ -169,6 +170,12 @@ export const get_account_blocks_per_day = fetch.bind(
   null,
   api.get_account_blocks_per_day,
   accountBlocksPerDayRequestActions
+)
+
+export const get_account_delegation_history = fetch.bind(
+  null,
+  api.get_account_delegation_history,
+  account_delegation_history_request_actions
 )
 
 export const post_representatives_data_view = fetch.bind(
