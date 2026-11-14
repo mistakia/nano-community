@@ -260,7 +260,7 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public
   GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO nano_archive_writer;
 
 -- 13. Network events, copied by the archive delta cron from the VPS
---     network_events table with recorded_at as the watermark. A plain table
+--     network_events table with network_event_sequence as the watermark. A plain table
 --     with no retention: events are low volume and the history is the point.
 --     Operator-only event types are archived too; any public dump must
 --     exclude them (see the registry in common/network-event-types.mjs).
@@ -283,3 +283,20 @@ CREATE INDEX IF NOT EXISTS network_events_observed_at_idx
 CREATE INDEX IF NOT EXISTS network_events_recorded_at_idx
   ON public.network_events (recorded_at);
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.network_events TO nano_archive_writer;
+ALTER TABLE public.network_events
+  ADD COLUMN IF NOT EXISTS network_event_sequence bigint,
+  ADD COLUMN IF NOT EXISTS network_event_condition_id text;
+CREATE INDEX IF NOT EXISTS network_events_sequence_idx
+  ON public.network_events (network_event_sequence);
+
+-- Producer coverage, copied with network_event_coverage_sequence as the
+-- watermark. The VPS triggers that assign sequences and refuse updates are
+-- not mirrored; the archive stores the VPS values as plain columns.
+CREATE TABLE IF NOT EXISTS public.network_event_coverage (
+  network_event_coverage_sequence bigint PRIMARY KEY,
+  producer          text NOT NULL,
+  coverage_began_at integer NOT NULL,
+  coverage_ended_at integer NOT NULL,
+  recorded_at       integer NOT NULL
+);
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.network_event_coverage TO nano_archive_writer;

@@ -71,36 +71,69 @@ describe('API /network', () => {
     expect(response.body).to.deep.equal(stats)
   })
 
-  it('lists public events newest first', async () => {
+  it('lists public events newest first by sequence', async () => {
     const response = await get_events()
     expect(response).to.have.status(200)
     expect(response.body).to.have.length(PUBLIC_EVENTS.length)
     expect(response.body.map((e) => e.observed_at)).to.deep.equal(
       PUBLIC_EVENTS.map((e) => e.observed_at).reverse()
     )
+    const sequences = response.body.map((e) => e.network_event_sequence)
+    expect(sequences).to.deep.equal([...sequences].sort((a, b) => b - a))
   })
 
-  it('pages with limit and offset, capping limit at 100', async () => {
-    const first_page = await get_events({ limit: 5 })
-    const last_page = await get_events({ limit: 5, offset: 10 })
-    const past_end = await get_events({ limit: 5, offset: 12 })
-    const capped = await get_events({ limit: 1000 })
-    expect(first_page.body.map((e) => e.observed_at)).to.deep.equal([
-      1011, 1010, 1009, 1008, 1007
-    ])
-    expect(last_page.body.map((e) => e.observed_at)).to.deep.equal([1001, 1000])
-    expect(past_end.body).to.deep.equal([])
-    expect(capped).to.have.status(200)
-    expect(capped.body).to.have.length(PUBLIC_EVENTS.length)
+  it('reads forward with after and back with before', async () => {
+    const newest = await get_events({ limit: 12 })
+    const sequences = newest.body.map((e) => e.network_event_sequence)
+    const middle = sequences[6]
+
+    const after = await get_events({ after: middle, limit: 3 })
+    expect(after.body.map((e) => e.network_event_sequence)).to.deep.equal(
+      sequences
+        .filter((sequence) => sequence > middle)
+        .reverse()
+        .slice(0, 3)
+    )
+
+    const before = await get_events({ before: middle, limit: 3 })
+    expect(before.body.map((e) => e.network_event_sequence)).to.deep.equal(
+      sequences.filter((sequence) => sequence < middle).slice(0, 3)
+    )
+  })
+
+  it('rejects invalid cursors and both cursors together with 400', async () => {
+    expect((await get_events({ after: 1, before: 5 })).status).to.equal(400)
+    expect((await get_events({ after: -1 })).status).to.equal(400)
+    expect((await get_events({ before: 'x' })).status).to.equal(400)
+    expect((await get_events({ after: '1e20' })).status).to.equal(400)
     expect((await get_events({ limit: 0 })).status).to.equal(400)
-    expect((await get_events({ offset: -1 })).status).to.equal(400)
+    expect((await get_events({ limit: 1000 })).body).to.have.length(
+      PUBLIC_EVENTS.length
+    )
   })
 
-  it('returns different pages for requests differing only in offset', async () => {
-    const first = await get_events({ limit: 3, offset: 0 })
-    const second = await get_events({ limit: 3, offset: 3 })
-    expect(first.body[0].network_event_id).to.not.equal(
-      second.body[0].network_event_id
+  it('returns every public event exactly once paging by after', async () => {
+    const read_all = async (filters) => {
+      const network_events = []
+      let after = 0
+      for (;;) {
+        const page = await get_events({ ...filters, after, limit: 5 })
+        if (!page.body.length) return network_events
+        network_events.push(...page.body)
+        after = page.body[page.body.length - 1].network_event_sequence
+      }
+    }
+
+    const all = await read_all({})
+    expect(all.map((e) => e.network_event_id).sort()).to.deep.equal(
+      PUBLIC_EVENTS.map(build_network_event_id).sort()
+    )
+
+    const for_rep_b = await read_all({ representative_account: REP_B })
+    expect(for_rep_b.map((e) => e.network_event_id).sort()).to.deep.equal(
+      PUBLIC_EVENTS.filter((e) => e.representative_account === REP_B)
+        .map(build_network_event_id)
+        .sort()
     )
   })
 
@@ -157,6 +190,8 @@ describe('API /network', () => {
     expect(response).to.have.status(200)
     expect(response.body.network_event_id).to.equal(network_event_id)
     expect(response.body.evidence).to.deep.equal({ began_at: 1000 })
+    expect(response.body.network_event_sequence).to.be.a('number')
+    expect(response.body.network_event_condition_id).to.equal(network_event_id)
   })
 
   it('returns 404 for an operator-only event by id', async () => {

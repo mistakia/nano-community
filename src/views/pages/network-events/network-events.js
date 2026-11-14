@@ -101,7 +101,9 @@ export default function NetworkEventsPage({
   const [network_event_type, set_network_event_type] = useState('')
   const [severity, set_severity] = useState('')
   const [account_input, set_account_input] = useState('')
-  const [offset, set_offset] = useState(0)
+  // {} is the newest page; { before } and { after } are network_event_sequence
+  // cursors from the last and first row on screen.
+  const [cursor, set_cursor] = useState({})
 
   const representative_account = ACCOUNT_RE.test(account_input.trim())
     ? account_input.trim()
@@ -110,19 +112,26 @@ export default function NetworkEventsPage({
     Boolean(account_input.trim()) && !representative_account
 
   useEffect(() => {
-    const params = { limit: PAGE_SIZE, offset }
+    const params = { limit: PAGE_SIZE, ...cursor }
     if (network_event_type) params.network_event_type = network_event_type
     if (severity) params.severity = severity
     if (representative_account) {
       params.representative_account = representative_account
     }
     get_network_events(params)
-  }, [network_event_type, severity, representative_account, offset])
+  }, [network_event_type, severity, representative_account, cursor])
 
   const on_filter_change = (setter) => (event) => {
     setter(event.target.value)
-    set_offset(0)
+    set_cursor({})
   }
+
+  const is_full_page = network_events.length === PAGE_SIZE
+  const has_newer =
+    cursor.after !== undefined ? is_full_page : Boolean(cursor.before)
+  const has_older = cursor.after !== undefined || is_full_page
+  const first_row = network_events[0]
+  const last_row = network_events[network_events.length - 1]
 
   return (
     <>
@@ -200,14 +209,25 @@ export default function NetworkEventsPage({
         <div className='network-events__paging'>
           <Button
             size='small'
-            disabled={!offset || is_loading}
-            onClick={() => set_offset(Math.max(0, offset - PAGE_SIZE))}>
+            disabled={!has_newer || is_loading}
+            onClick={() =>
+              set_cursor(
+                first_row ? { after: first_row.network_event_sequence } : {}
+              )
+            }>
             Newer
           </Button>
           <Button
             size='small'
-            disabled={network_events.length < PAGE_SIZE || is_loading}
-            onClick={() => set_offset(offset + PAGE_SIZE)}>
+            disabled={!has_older || is_loading}
+            onClick={() =>
+              // an empty after page reads back from its own cursor
+              set_cursor({
+                before: last_row
+                  ? last_row.network_event_sequence
+                  : cursor.after + 1
+              })
+            }>
             Older
           </Button>
         </div>

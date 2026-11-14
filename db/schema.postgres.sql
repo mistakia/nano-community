@@ -636,3 +636,124 @@ SELECT add_continuous_aggregate_policy('public.accounts_meta_rollup_day',
   schedule_interval => INTERVAL '1 hour',
   if_not_exists => TRUE
 );
+
+-- 15. Network event delivery. network_event_sequence is a consumer cursor in
+--     commit order: assign_network_event_sequence takes the transaction-scoped
+--     advisory lock 7311042026 before nextval and holds it until commit, so no
+--     row can commit behind a higher sequence. Rows dropped by ON CONFLICT
+--     burn a value, so the sequence has gaps but never runs out of order.
+--     network_event_coverage shares the generator and the lock, so coverage
+--     and its events interleave on one axis. Rows are immutable;
+--     refuse_network_event_update raises on any UPDATE, and DELETE stays
+--     allowed for retention. Both triggers are ordinary triggers, so a restore
+--     under session_replication_role = replica bypasses them and must then
+--     advance the generator past the restored maximum.
+--     network_event_condition_id is the network_event_id of a condition's
+--     began row, set by the writer on began and ended rows and null on
+--     occurrences. network_event_coverage holds the observed_at ranges each
+--     producer has fully written.
+-- Adds the columns and the coverage table, backfills rows stored before the
+-- sequence existed in recorded order, then installs the triggers, all in one
+-- transaction under a bounded lock wait. The table locks keep writers out
+-- while the triggers are absent. A re-apply matches no rows.
+BEGIN;
+-- Fail rather than queue every reader behind a slow one; re-apply on failure.
+SET LOCAL lock_timeout = '10s';
+CREATE SEQUENCE IF NOT EXISTS public.network_event_sequence_generator;
+
+ALTER TABLE public.network_events
+  ADD COLUMN IF NOT EXISTS network_event_sequence bigint,
+  ADD COLUMN IF NOT EXISTS network_event_condition_id text;
+
+CREATE TABLE IF NOT EXISTS public.network_event_coverage (
+  network_event_coverage_sequence bigint PRIMARY KEY,
+  producer          text NOT NULL
+    CHECK (producer IN ('telemetry_detector', 'network_observer')),
+  coverage_began_at integer NOT NULL,
+  coverage_ended_at integer NOT NULL,
+  recorded_at       integer NOT NULL DEFAULT extract(epoch from now())::integer,
+  CHECK (coverage_ended_at >= coverage_began_at)
+);
+
+LOCK TABLE public.network_events, public.network_event_coverage IN EXCLUSIVE MODE;
+DROP TRIGGER IF EXISTS assign_network_event_sequence ON public.network_events;
+DROP TRIGGER IF EXISTS refuse_network_event_update ON public.network_events;
+DROP TRIGGER IF EXISTS assign_network_event_sequence ON public.network_event_coverage;
+DROP TRIGGER IF EXISTS refuse_network_event_update ON public.network_event_coverage;
+
+WITH unsequenced AS (
+  SELECT network_event_id,
+    row_number() OVER (
+      ORDER BY recorded_at, observed_at, network_event_id
+    ) + (
+      SELECT CASE WHEN is_called THEN last_value ELSE last_value - 1 END
+      FROM public.network_event_sequence_generator
+    ) AS network_event_sequence
+  FROM public.network_events
+  WHERE network_event_sequence IS NULL
+)
+UPDATE public.network_events e
+SET network_event_sequence = unsequenced.network_event_sequence
+FROM unsequenced
+WHERE e.network_event_id = unsequenced.network_event_id;
+
+UPDATE public.network_events
+SET network_event_condition_id = network_event_id
+WHERE network_event_phase = 'began' AND network_event_condition_id IS NULL;
+
+SELECT setval('public.network_event_sequence_generator', stored.maximum)
+FROM (SELECT max(network_event_sequence) AS maximum FROM public.network_events) stored,
+  (
+    SELECT CASE WHEN is_called THEN last_value ELSE last_value - 1 END AS issued
+    FROM public.network_event_sequence_generator
+  ) generator
+WHERE stored.maximum > generator.issued;
+
+CREATE OR REPLACE FUNCTION public.assign_network_event_sequence()
+  RETURNS trigger LANGUAGE plpgsql AS
+$$
+BEGIN
+  PERFORM pg_advisory_xact_lock(7311042026);
+  IF TG_TABLE_NAME = 'network_events' THEN
+    NEW.network_event_sequence := nextval('public.network_event_sequence_generator');
+  ELSE
+    NEW.network_event_coverage_sequence := nextval('public.network_event_sequence_generator');
+  END IF;
+  RETURN NEW;
+END
+$$;
+
+CREATE OR REPLACE FUNCTION public.refuse_network_event_update()
+  RETURNS trigger LANGUAGE plpgsql AS
+$$
+BEGIN
+  RAISE EXCEPTION '% rows are immutable', TG_TABLE_NAME;
+END
+$$;
+
+CREATE TRIGGER assign_network_event_sequence
+  BEFORE INSERT ON public.network_events
+  FOR EACH ROW EXECUTE FUNCTION public.assign_network_event_sequence();
+CREATE TRIGGER refuse_network_event_update
+  BEFORE UPDATE ON public.network_events
+  FOR EACH ROW EXECUTE FUNCTION public.refuse_network_event_update();
+CREATE TRIGGER assign_network_event_sequence
+  BEFORE INSERT ON public.network_event_coverage
+  FOR EACH ROW EXECUTE FUNCTION public.assign_network_event_sequence();
+CREATE TRIGGER refuse_network_event_update
+  BEFORE UPDATE ON public.network_event_coverage
+  FOR EACH ROW EXECUTE FUNCTION public.refuse_network_event_update();
+
+ALTER TABLE public.network_events ALTER COLUMN network_event_sequence SET NOT NULL;
+COMMIT;
+
+CREATE UNIQUE INDEX IF NOT EXISTS network_events_sequence_uniq
+  ON public.network_events (network_event_sequence);
+CREATE INDEX IF NOT EXISTS network_events_representative_sequence_idx
+  ON public.network_events (representative_account, network_event_sequence);
+CREATE INDEX IF NOT EXISTS network_events_condition_id_idx
+  ON public.network_events (network_event_condition_id);
+CREATE INDEX IF NOT EXISTS network_event_coverage_producer_ended_at_idx
+  ON public.network_event_coverage (producer, coverage_ended_at DESC);
+
+GRANT SELECT ON public.network_event_coverage TO nano_production_reader;

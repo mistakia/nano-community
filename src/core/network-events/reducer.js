@@ -28,8 +28,13 @@ export function network_events_reducer(
 
     case network_events_actions.GET_NETWORK_EVENTS_FULFILLED:
       if (!is_current_request(state, payload.params)) return state
+      // an after page arrives oldest first; the page shows newest first
       return state.merge({
-        network_events: new List(payload.data),
+        network_events: new List(
+          payload.params?.after !== undefined
+            ? [...payload.data].reverse()
+            : payload.data
+        ),
         is_loading: false
       })
 

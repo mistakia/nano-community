@@ -79,6 +79,7 @@ const list_events = (network_event_type) =>
 const clear_tables = async () => {
   await knex('representatives_telemetry').del()
   await knex('network_events').del()
+  await knex('network_event_coverage').del()
   await knex('network_event_detector_state').del()
   await knex('etl_state').where({ table_name: DETECTOR_NAME }).del()
 }
@@ -303,5 +304,53 @@ describe('telemetry network event detector', () => {
     expect(
       await knex('etl_state').where({ table_name: DETECTOR_NAME })
     ).to.have.length(0)
+  })
+
+  it('writes contiguous coverage for consecutive evaluated windows', async () => {
+    const rows_at = () => [{ representative_account: REP_A }]
+    await insert_snapshots({ first: 0, last: WINDOW_SNAPSHOTS - 1, rows_at })
+    await detect_telemetry_network_events()
+    await insert_snapshots({
+      first: WINDOW_SNAPSHOTS,
+      last: WINDOW_SNAPSHOTS + 1,
+      rows_at
+    })
+    await detect_telemetry_network_events()
+
+    const coverage = await knex('network_event_coverage').orderBy(
+      'network_event_coverage_sequence',
+      'asc'
+    )
+    expect(
+      coverage.map((row) => [
+        row.producer,
+        row.coverage_began_at,
+        row.coverage_ended_at
+      ])
+    ).to.deep.equal([
+      ['telemetry_detector', snapshot_timestamp(0), snapshot_timestamp(1)],
+      ['telemetry_detector', snapshot_timestamp(1), snapshot_timestamp(2)],
+      ['telemetry_detector', snapshot_timestamp(2), snapshot_timestamp(3)]
+    ])
+  })
+
+  it('leaves a coverage gap where windows are not full', async () => {
+    const rows_at = () => [{ representative_account: REP_A }]
+    await insert_snapshots({ first: 0, last: WINDOW_SNAPSHOTS, rows_at })
+    await detect_telemetry_network_events()
+    // a collector outage drops snapshots 14 and 15
+    await insert_snapshots({ first: 16, last: 26, rows_at })
+    await detect_telemetry_network_events()
+
+    const coverage = await knex('network_event_coverage').orderBy(
+      'network_event_coverage_sequence',
+      'asc'
+    )
+    expect(
+      coverage.map((row) => [row.coverage_began_at, row.coverage_ended_at])
+    ).to.deep.equal([
+      [snapshot_timestamp(1), snapshot_timestamp(2)],
+      [snapshot_timestamp(13), snapshot_timestamp(16)]
+    ])
   })
 })
