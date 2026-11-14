@@ -17,6 +17,7 @@ const editable_columns = [
   'reddit',
   'twitter',
   'discord',
+  'discord_user_id',
   'github',
   'email',
   'website'

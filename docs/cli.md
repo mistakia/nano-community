@@ -126,6 +126,7 @@ Supported metadata fields:
 - reddit
 - twitter
 - discord
+- discord_user_id — the numeric id of your Discord account, shown by Copy User ID in Discord once Developer Mode is on. It keeps your representative linked to your account when you change your username.
 - github
 - email
 - website

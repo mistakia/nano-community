@@ -240,6 +240,7 @@ async function send_message_handler(type, block_hash = null) {
         { name: 'reddit', message: 'Reddit Username:' },
         { name: 'twitter', message: 'Twitter Username:' },
         { name: 'discord', message: 'Discord Username:' },
+        { name: 'discord_user_id', message: 'Discord User ID:' },
         { name: 'github', message: 'GitHub Username:' },
         { name: 'email', message: 'Email:' },
         { name: 'website', message: 'Website URL:' }

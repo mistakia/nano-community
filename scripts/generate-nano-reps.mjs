@@ -70,6 +70,7 @@ const generate_nano_reps = async () => {
       'representatives_meta_index.account',
       'reddit',
       'discord',
+      'discord_user_id',
       'twitter',
       'github',
       'website',
@@ -122,6 +123,10 @@ const generate_nano_reps = async () => {
       alias: nano_rep.alias || db_rep_without_weight_field.alias,
       account: nano_rep.account || db_rep_without_weight_field.account,
       discord: nano_rep.discord || db_rep_without_weight_field.discord || '',
+      discord_user_id:
+        nano_rep.discord_user_id ||
+        db_rep_without_weight_field.discord_user_id ||
+        '',
       reddit: nano_rep.reddit || db_rep_without_weight_field.reddit || '',
       twitter: nano_rep.twitter || db_rep_without_weight_field.twitter || '',
       website: nano_rep.website || db_rep_without_weight_field.website || '',
@@ -151,6 +156,7 @@ const generate_nano_reps = async () => {
           alias: db_rep_without_weight_field.alias,
           account: db_rep_account,
           discord: db_rep_without_weight_field.discord || '',
+          discord_user_id: db_rep_without_weight_field.discord_user_id || '',
           reddit: db_rep_without_weight_field.reddit || '',
           twitter: db_rep_without_weight_field.twitter || '',
           website: db_rep_without_weight_field.website || '',
