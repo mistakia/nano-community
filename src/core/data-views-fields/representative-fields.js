@@ -92,7 +92,7 @@ PowerCell.propTypes = {
       _power: PropTypes.shape({
         power_watts: PropTypes.number,
         power_source: PropTypes.string,
-        measured_at: PropTypes.number
+        as_of: PropTypes.number
       })
     })
   })

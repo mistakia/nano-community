@@ -12,6 +12,12 @@ import {
 
 const expect = chai.expect
 
+const hardware_report = {
+  estimated_power_watts: 12.5,
+  cpu_generation: 'epyc_2nd_gen',
+  issued_at: 1763164800
+}
+
 const power_reading = {
   energy_watt_hours: 1681,
   average_power_watts: 1681 / 24,
@@ -30,7 +36,7 @@ describe('get_representative_power', () => {
       {
         power_watts: 1681 / 24,
         power_source: 'baseboard_management_controller',
-        measured_at: 1763078400
+        as_of: 1763078400
       },
       '70 W (Baseboard management controller, 2025-11-14)'
     ],
@@ -40,7 +46,7 @@ describe('get_representative_power', () => {
       {
         power_watts: 90,
         power_source: 'cpu_tdp_specification',
-        measured_at: null
+        as_of: null
       },
       '90 W (CPU TDP specification)'
     ],
@@ -50,11 +56,41 @@ describe('get_representative_power', () => {
       {
         power_watts: 1681 / 24,
         power_source: 'baseboard_management_controller',
-        measured_at: 1763078400
+        as_of: 1763078400
       },
       '70 W (Baseboard management controller, 2025-11-14)'
     ],
-    ['neither', { power_reading: null, watt_hour: null }, null, '']
+    [
+      'a hardware report and a CPU TDP specification, where the estimate wins',
+      { power_reading: null, hardware_report, watt_hour: 90 },
+      {
+        power_watts: 12.5,
+        power_source: 'hardware_estimate',
+        as_of: 1763164800
+      },
+      '13 W (Estimated from hardware, 2025-11-15)'
+    ],
+    [
+      'a signed reading and a hardware report, where the reading wins',
+      { power_reading, hardware_report, watt_hour: null },
+      {
+        power_watts: 1681 / 24,
+        power_source: 'baseboard_management_controller',
+        as_of: 1763078400
+      },
+      '70 W (Baseboard management controller, 2025-11-14)'
+    ],
+    [
+      'a hardware report whose CPU generation is unknown',
+      {
+        power_reading: null,
+        hardware_report: { estimated_power_watts: null, issued_at: 1 },
+        watt_hour: null
+      },
+      null,
+      ''
+    ],
+    ['none', { power_reading: null, watt_hour: null }, null, '']
   ]
 
   for (const [label, row, expected, formatted] of cases) {

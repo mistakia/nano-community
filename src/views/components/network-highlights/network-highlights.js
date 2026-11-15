@@ -5,19 +5,19 @@ import { Link } from 'react-router-dom'
 import './network-highlights.styl'
 
 // the four figures that prove the properties above, live
-// "from 2 of 38 principal reps (0 measured)", dated by the oldest reading
+// "from 30 of 49 principal reps (2 measured, 27 estimated), oldest 2026-11-13"
 const format_energy_coverage = ({
   reporting_count,
   principal_representative_count,
   measured_count,
-  oldest_measured_at
+  estimated_count,
+  oldest_as_of
 }) => {
-  const coverage = `from ${reporting_count} of ${principal_representative_count} principal reps (${measured_count} measured)`
-  if (!oldest_measured_at) {
+  const coverage = `from ${reporting_count} of ${principal_representative_count} principal reps (${measured_count} measured, ${estimated_count} estimated)`
+  if (!oldest_as_of) {
     return coverage
   }
-  const oldest = new Date(oldest_measured_at * 1000).toISOString().slice(0, 10)
-  return `${coverage}, oldest reading ${oldest}`
+  return `${coverage}, oldest ${new Date(oldest_as_of * 1000).toISOString().slice(0, 10)}`
 }
 
 export default function NetworkHighlights({ nanodb_stats, energy }) {
@@ -69,7 +69,8 @@ NetworkHighlights.propTypes = {
     watts: PropTypes.number,
     reporting_count: PropTypes.number,
     measured_count: PropTypes.number,
+    estimated_count: PropTypes.number,
     principal_representative_count: PropTypes.number,
-    oldest_measured_at: PropTypes.number
+    oldest_as_of: PropTypes.number
   })
 }
