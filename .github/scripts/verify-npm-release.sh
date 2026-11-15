@@ -26,10 +26,10 @@ name=$(node -p "require('./package.json').name")
 version=$(node -p "require('./package.json').version")
 work=$(mktemp -d)
 
-retry curl -sf "https://registry.npmjs.org/${name}/${version}" -o "$work/manifest.json" ||
+retry curl -sf --max-time 30 "https://registry.npmjs.org/${name}/${version}" -o "$work/manifest.json" ||
   fail "the registry does not serve ${name}@${version}"
 
-retry curl -sf "$(jq -r .dist.tarball "$work/manifest.json")" -o "$work/package.tgz" ||
+retry curl -sf --max-time 30 "$(jq -r .dist.tarball "$work/manifest.json")" -o "$work/package.tgz" ||
   fail "the registry does not serve the ${name}@${version} tarball"
 integrity="sha512-$(openssl dgst -sha512 -binary "$work/package.tgz" | base64 -w0)"
 [ "$integrity" = "$(jq -r .dist.integrity "$work/manifest.json")" ] ||
@@ -48,7 +48,7 @@ for file in $expected; do
     fail "the published ${file} differs from ${GITHUB_SHA}'s"
 done
 
-retry curl -sf "https://registry.npmjs.org/-/npm/v1/attestations/${name}@${version}" \
+retry curl -sf --max-time 30 "https://registry.npmjs.org/-/npm/v1/attestations/${name}@${version}" \
   -o "$work/attestations.json" || fail "${name}@${version} has no attestations"
 jq -r '.attestations[] | select(.predicateType == "https://slsa.dev/provenance/v1")
   | .bundle.dsseEnvelope.payload' "$work/attestations.json" | base64 -d >"$work/provenance.json"
@@ -63,10 +63,11 @@ jq -e --arg sha "$GITHUB_SHA" --arg digest "$digest" --arg subject "pkg:npm/${na
   fail "the provenance does not name ${GITHUB_SHA}, publish-npm.yml on main and this tarball"
 
 # A clean install, as an operator's: npm checks the registry signature and
-# the attestation's Sigstore bundle, and the bin runs
+# the attestation's Sigstore bundle, and the bin runs. --prefer-online skips
+# a cached package document from before the publish.
 cd "$work" && mkdir install && cd install
 npm init -y >/dev/null
-retry npm install --ignore-scripts --no-audit --no-fund "${name}@${version}" >/dev/null ||
+retry npm install --prefer-online --ignore-scripts --no-audit --no-fund "${name}@${version}" >/dev/null ||
   fail "npm cannot install ${name}@${version}"
 npm audit signatures
 [ "$(npx --no-install nano-community --version)" = "$version" ] ||
