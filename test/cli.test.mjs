@@ -257,6 +257,11 @@ describe('CLI', function () {
         ['2000', no_zone, 'not an ISO 8601 datetime with a Z or offset'],
         ['2000', '11/13/2026', 'not an ISO 8601 datetime with a Z or offset'],
         ['2000', 'yesterday', 'not an ISO 8601 datetime with a Z or offset'],
+        [
+          '2000',
+          '2026-02-30T00:00:00Z',
+          'not an ISO 8601 datetime with a Z or offset'
+        ],
         ['2.5', iso(started_at), 'not a whole number of watt-hours'],
         ['', iso(started_at), 'not a whole number of watt-hours'],
         ['0x10', iso(started_at), 'not a whole number of watt-hours'],
@@ -342,15 +347,22 @@ describe('CLI', function () {
     })
 
     it('shows invisible and format characters escaped in the review', async () => {
-      const alias = 'a\u200bb\u202ec\u2028d\u{e0041}'
+      const alias = 'a\u200bb\u202ec\u2028d\u{e0041}e\u3164f\u00a0g'
       const { code, stdout } = await run_cli(['update-account-meta'], {
         input: lines(alias, 'n', 'n')
       })
       expect(code).to.equal(0)
-      for (const escaped of ['\\u200b', '\\u202e', '\\u2028', '\\u{e0041}']) {
+      for (const escaped of [
+        '\\u200b',
+        '\\u202e',
+        '\\u2028',
+        '\\u{e0041}',
+        '\\u3164',
+        '\\u00a0'
+      ]) {
         expect(stdout).to.include(escaped)
       }
-      expect(stdout).to.not.match(/[\u200b\u202e\u2028]|\u{e0041}/u)
+      expect(stdout).to.not.match(/[\u200b\u202e\u2028\u3164\u00a0]|\u{e0041}/u)
     })
 
     it('prints a server response with its control characters escaped', async () => {
@@ -416,7 +428,7 @@ describe('CLI', function () {
             { input: lines('y'), env: { NANO_TEST_CLI_API_URL: url } }
           )
           expect(code).to.equal(1)
-          expect(stderr).to.equal(`${private_key_status}no[2Jpe\n`)
+          expect(stderr).to.equal(`${private_key_status}no[2J\\u009bpe\n`)
           expect(stdout).to.not.include('successful')
         }
       )

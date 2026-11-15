@@ -96,7 +96,7 @@ The CLI asks you to confirm and shows the key that will be revoked.
 
 Every command signs a [canonical Nano signed message](https://github.com/mistakia/nano-signed-message/blob/main/SPECIFICATION.md). A command that sends signs for the domain `nano.community`, and the signature binds the action, every field you entered, the signing account, the time and a one-time nonce. The API accepts a message only within ten minutes of its signing time, so the clock on your computer needs to be roughly right. `bind-nostr-key` and `pledge` sign for the domain `nostr` and send nothing; see [Task board proofs](#task-board-proofs).
 
-Before a command sends anything, it prints the exact message it will sign and the address it will send it to, and asks `Sign and send?`. Only `y` or `yes` signs. Any other answer sends nothing, and input that ends before an answer is a failure. Invisible and direction-changing characters in the message show escaped, so what you review is what is signed. Messages go only to `https://nano.community`: the CLI has no setting that changes that, and it refuses a redirect.
+Before a command sends anything, it prints the exact message it will sign and the address it will send it to, and asks `Sign and send?`. Only `y` or `yes` signs. Any other answer sends nothing, and input that ends before an answer is a failure. Control, direction-changing, zero-width and blank characters in the message show escaped, so what you review is what is signed. Messages go only to `https://nano.community`: the CLI has no setting that changes that, and it refuses a redirect.
 
 ### Updating Nano Representative Metadata
 

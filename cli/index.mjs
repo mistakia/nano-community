@@ -35,24 +35,31 @@ const isMain = (import_meta_url) => {
   }
 }
 
-// Server text is printed to a terminal, so control characters are removed
+// Characters that could reorder, hide or disguise part of what is shown: C1
+// controls, format characters (bidirectional overrides, zero-width and tag
+// characters), line separators, spaces other than U+0020, and characters
+// that render blank (the grapheme joiner, variation selectors, Hangul
+// fillers and the braille blank)
+const DISGUISING_RE =
+  // Each character matches alone, so a combining one in the class is meant
+  // eslint-disable-next-line no-control-regex, no-misleading-character-class
+  /[\u0080-\u009f\p{Cf}\p{Zl}\p{Zp}\u00a0\u034f\u115f\u1160\u1680\u2000-\u200a\u202f\u205f\u2800\u3000\u3164\ufe00-\ufe0f\uffa0\u{e0100}-\u{e01ef}]/gu
+
+const escape_disguising = (text) =>
+  text.replace(DISGUISING_RE, (char) => {
+    const hex = char.codePointAt(0).toString(16)
+    return hex.length > 4 ? `\\u{${hex}}` : `\\u${hex.padStart(4, '0')}`
+  })
+
+// Server text and echoed input are printed to a terminal, so C0 controls are
+// removed and disguising characters show escaped
 const printable = (text) =>
   // eslint-disable-next-line no-control-regex
-  String(text).replace(/[\u0000-\u001f\u007f-\u009f]/g, '')
+  escape_disguising(String(text).replace(/[\u0000-\u001f\u007f]/g, ''))
 
-// JSON.stringify escapes C0 controls. C1 controls, line separators and
-// format characters (bidirectional overrides, zero-width and tag
-// characters) could still reorder or hide part of what is shown, so they
-// show escaped.
-const reviewable = (value) =>
-  JSON.stringify(value, null, 2).replace(
-    // eslint-disable-next-line no-control-regex
-    /[\u0080-\u009f\p{Cf}\p{Zl}\p{Zp}]/gu,
-    (char) => {
-      const hex = char.codePointAt(0).toString(16)
-      return hex.length > 4 ? `\\u{${hex}}` : `\\u${hex.padStart(4, '0')}`
-    }
-  )
+// JSON.stringify escapes C0 controls, and the rest show escaped, so what the
+// operator reviews is what is signed
+const reviewable = (value) => escape_disguising(JSON.stringify(value, null, 2))
 
 // The response body as text, refused past MAX_RESPONSE_BYTES so a hostile
 // server cannot fill a small host's memory
@@ -360,13 +367,24 @@ const report_representative_hardware = {
 // An ISO 8601 datetime with an explicit Z or offset, so a reading's window
 // cannot shift by the host's time zone
 const ISO_DATETIME_RE =
-  /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:\d{2})$/i
+  /^(\d{4})-(\d{2})-(\d{2})T\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:\d{2})$/i
 
 // Answers are strings, so a power reading's fields become a number and epoch
-// seconds after the edit loop, which an edited answer goes through too
+// seconds after the edit loop, which an edited answer goes through too. A
+// date that does not exist is refused, since Date.parse would roll
+// 2026-02-30 over to March 2.
 const parse_epoch_seconds = (value) => {
+  const match = ISO_DATETIME_RE.exec(value.trim())
   const milliseconds = Date.parse(value.trim())
-  if (!ISO_DATETIME_RE.test(value.trim()) || Number.isNaN(milliseconds)) {
+  const [year, month, day] = (match || []).slice(1, 4).map(Number)
+  const date = new Date(Date.UTC(year, month - 1, day))
+  if (
+    !match ||
+    Number.isNaN(milliseconds) ||
+    date.getUTCFullYear() !== year ||
+    date.getUTCMonth() !== month - 1 ||
+    date.getUTCDate() !== day
+  ) {
     throw new Error(`not an ISO 8601 datetime with a Z or offset: ${value}`)
   }
   return Math.floor(milliseconds / 1000)

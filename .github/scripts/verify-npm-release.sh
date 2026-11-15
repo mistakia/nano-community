@@ -12,18 +12,25 @@ fail() {
   exit 1
 }
 
+# Runs a command until it succeeds, for up to five minutes: the registry and
+# its CDN can take that long to serve a new version everywhere
+retry() {
+  for attempt in $(seq 1 30); do
+    "$@" && return 0
+    sleep 10
+  done
+  return 1
+}
+
 name=$(node -p "require('./package.json').name")
 version=$(node -p "require('./package.json').version")
 work=$(mktemp -d)
 
-# The registry can take a few minutes to serve a new version
-for attempt in $(seq 1 30); do
-  curl -sf "https://registry.npmjs.org/${name}/${version}" -o "$work/manifest.json" && break
-  sleep 10
-done
-[ -s "$work/manifest.json" ] || fail "the registry does not serve ${name}@${version}"
+retry curl -sf "https://registry.npmjs.org/${name}/${version}" -o "$work/manifest.json" ||
+  fail "the registry does not serve ${name}@${version}"
 
-curl -sf "$(jq -r .dist.tarball "$work/manifest.json")" -o "$work/package.tgz"
+retry curl -sf "$(jq -r .dist.tarball "$work/manifest.json")" -o "$work/package.tgz" ||
+  fail "the registry does not serve the ${name}@${version} tarball"
 integrity="sha512-$(openssl dgst -sha512 -binary "$work/package.tgz" | base64 -w0)"
 [ "$integrity" = "$(jq -r .dist.integrity "$work/manifest.json")" ] ||
   fail "the tarball does not match the integrity the registry states"
@@ -41,7 +48,7 @@ for file in $expected; do
     fail "the published ${file} differs from ${GITHUB_SHA}'s"
 done
 
-curl -sf "https://registry.npmjs.org/-/npm/v1/attestations/${name}@${version}" \
+retry curl -sf "https://registry.npmjs.org/-/npm/v1/attestations/${name}@${version}" \
   -o "$work/attestations.json" || fail "${name}@${version} has no attestations"
 jq -r '.attestations[] | select(.predicateType == "https://slsa.dev/provenance/v1")
   | .bundle.dsseEnvelope.payload' "$work/attestations.json" | base64 -d >"$work/provenance.json"
@@ -59,7 +66,8 @@ jq -e --arg sha "$GITHUB_SHA" --arg digest "$digest" --arg subject "pkg:npm/${na
 # the attestation's Sigstore bundle, and the bin runs
 cd "$work" && mkdir install && cd install
 npm init -y >/dev/null
-npm install --ignore-scripts --no-audit --no-fund "${name}@${version}" >/dev/null
+retry npm install --ignore-scripts --no-audit --no-fund "${name}@${version}" >/dev/null ||
+  fail "npm cannot install ${name}@${version}"
 npm audit signatures
 [ "$(npx --no-install nano-community --version)" = "$version" ] ||
   fail "the installed bin does not report ${version}"
