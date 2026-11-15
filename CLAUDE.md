@@ -35,6 +35,14 @@ NANO_TEST_PG_PORT=5435 yarn test
 5. If `scripts/` or `server/storage-crontab` changed, fast-forward `/home/user/nano-community` on base-storage to `origin/main` the same way, with `yarn install` if `yarn.lock` changed. That checkout runs the storage-side crons: the archive delta and the subreddit imports. Load a changed crontab with `yarn load:crontab:storage`, and a changed `server/server-crontab` with `yarn load:crontab`.
 6. If `db/schema.postgres.sql` changed, apply the whole file on `nano-community` as `postgres` with a session lock timeout: `PGOPTIONS='-c lock_timeout=10s' sudo -n --preserve-env=PGOPTIONS -u postgres psql -d nano_production -v ON_ERROR_STOP=1 -f <file>`. The file re-runs ALTERs that take an exclusive lock on the hypertables, and without the timeout one long reader queues every site read behind it. Never apply during the weekly backup dump, Sunday 00:00 UTC for about 25 minutes: on 2026-11-15 an apply queued behind it stalled `representatives_uptime` for 5 minutes. Re-apply if the timeout fires.
 
+## Release the CLI
+
+`.github/workflows/publish-npm.yml` publishes `cli/` to npm as `nano-community-cli` by Trusted Publishing (OIDC). No npm token exists, and the package disallows tokens.
+
+1. Bump `version` in `cli/package.json` and commit to `main`. The workflow publishes only a version npm does not have yet.
+2. The operator approves the `npm-release` deployment on GitHub.
+3. Confirm with `curl -s https://registry.npmjs.org/nano-community-cli | jq -r '."dist-tags".latest'`.
+
 ## Architecture
 
 ```

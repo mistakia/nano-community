@@ -1,0 +1,84 @@
+name: Publish to npm
+
+# Publishes nano-community-cli (cli/) when main carries a version npm does
+# not have yet. npm Trusted Publishing authenticates the publish by OIDC, so
+# no npm token exists, and the publish job waits for approval in the npm-release
+# environment. The trusted publisher on npmjs.com names this file and that
+# environment.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'cli/package.json'
+      - '.github/workflows/publish-npm.yml'
+  workflow_dispatch:
+
+permissions: {}
+
+defaults:
+  run:
+    working-directory: cli
+
+concurrency:
+  group: publish-npm
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      unpublished: ${{ steps.registry.outputs.unpublished }}
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+
+      - name: Check whether npm has this version
+        id: registry
+        run: |
+          name=$(node -p "require('./package.json').name")
+          version=$(node -p "require('./package.json').version")
+          status=$(curl -s --retry 3 -o /dev/null -w '%{http_code}' \
+            "https://registry.npmjs.org/${name/\//%2f}/${version}")
+          case "$status" in
+            200) echo "${name}@${version} is already published"; unpublished=false ;;
+            404) echo "${name}@${version} is not published yet"; unpublished=true ;;
+            *) echo "registry returned HTTP ${status} for ${name}@${version}" >&2; exit 1 ;;
+          esac
+          echo "unpublished=${unpublished}" >> "$GITHUB_OUTPUT"
+
+  publish:
+    needs: check
+    if: needs.check.outputs.unpublished == 'true'
+    runs-on: ubuntu-latest
+    environment: npm-release
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+
+      - name: Require npm 11.5.1 or later for Trusted Publishing
+        run: |
+          npm_version=$(npm --version)
+          echo "npm ${npm_version}"
+          if ! printf '11.5.1\n%s\n' "$npm_version" | sort -V -C; then
+            echo "npm ${npm_version} is older than 11.5.1 and cannot publish by OIDC" >&2
+            exit 1
+          fi
+
+      - name: List the tarball contents
+        run: npm pack --dry-run
+
+      - name: Publish
+        run: npm publish --ignore-scripts

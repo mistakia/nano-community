@@ -18,6 +18,11 @@
   ],
   "author": "Nano Community",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mistakia/nano-community.git",
+    "directory": "cli"
+  },
   "dependencies": {
     "inquirer": "9.2.23",
     "nano-signed-message": "0.1.0",
