@@ -174,3 +174,22 @@ Supported fields:
 - measurement_started_at and measurement_ended_at — when the window began and ended, as ISO 8601 datetimes such as `2026-11-13T00:00:00Z`. The window must be at least 24 hours and must end before you sign. The CLI sends both as epoch seconds.
 
 The reading whose window ends latest is your current one, and every reading you sign is kept. To correct a reading, sign one over a later window.
+
+### Reporting Representative Hardware
+
+A representative operator can sign the details of the host the node runs on with the `report-representative-hardware` command. It needs CLI 0.5.0 or later and a Linux host. The site estimates the representative's power from the report, as described in [Network Energy Usage](/network-energy-usage).
+
+```bash
+nano-community report-representative-hardware
+```
+
+Run it on the host that runs the node, signed with a key linked to the representative account. It reads the following, shows them, and sends nothing until you confirm:
+
+- cpu_model — the CPU name from `/proc/cpuinfo`
+- logical_cpus and memory_bytes — the host's logical CPUs and memory
+- storage — each physical disk, as `ssd` or `hdd` with its size, from `lsblk`
+- virtualization — the virtualization `systemd-detect-virt` reports, or `none`
+- cpu_utilization_basis_points and utilization_window_seconds — the host's average CPU use since boot, from `/proc/stat`, in hundredths of a percent, and the uptime it covers. The host must have been up at least 24 hours.
+- node_cpu_utilization_basis_points — the `nano_node` process's average share of the host's CPU since it started, or null if no node process is found
+
+The latest report is current. Run it again after any hardware change or move to another host. A measured reading from `update-representative-power-reading` takes precedence over the estimate.
