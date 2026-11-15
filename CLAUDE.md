@@ -39,11 +39,13 @@ NANO_TEST_PG_PORT=5435 yarn test
 
 `.github/workflows/publish-npm.yml` publishes `cli/` to npm as `nano-community-cli` by Trusted Publishing (OIDC). No npm token exists, and the package disallows tokens.
 
-The CLI is installed on strangers' representative hosts, so it has no dependencies. It uses Node built-ins for prompts, arguments and requests, and signs with `cli/sign-message.mjs`, which carries the nano-signed-message format over a vendored `@noble/ed25519` (`cli/vendor/`, upgraded by replacing the file under its header). `test/cli.package.test.mjs` fails on any dependency or on an import outside the `files` list, and `test/cli.sign-message.test.mjs` holds the signer to the nano-signed-message test vectors.
+The CLI is installed on strangers' representative hosts, so it has no dependencies. It uses Node built-ins for prompts, arguments and requests, and signs with `cli/sign-message.mjs`, which carries the nano-signed-message format over a vendored `@noble/ed25519` (`cli/vendor/`, upgraded by replacing the file under its header). `test/cli.package.test.mjs` fails on any dependency or on an import outside the `files` list, and `test/cli.sign-message.test.mjs` holds the signer to the nano-signed-message test vectors. The published bin always sends to `https://nano.community`; the CLI tests reach their local API through `test/utils/run-cli-against-test-api.mjs`, which calls `main` with another URL. Test runs the CLI suites (`yarn test:cli`) a second time on Node 20.19, the `engines` floor.
 
-1. Bump `version` in `cli/package.json` and commit to `main`. The workflow publishes only a version npm does not have yet.
-2. The operator approves the `npm-release` deployment on GitHub.
-3. Confirm with `curl -s https://registry.npmjs.org/nano-community-cli | jq -r '."dist-tags".latest'`.
+The workflow fails closed. It publishes only after Test passed on the commit, from `main`, with a tarball holding exactly the `files` list, and with `--provenance`. Its verify job then runs `.github/scripts/verify-npm-release.sh`, which checks from outside that the published tarball equals the commit's `cli/` files, its provenance names that commit and workflow, and `npm audit signatures` passes on a clean install.
+
+1. Bump `version` in `cli/package.json`, and the pinned `npx` version in `docs/cli.md`, and commit to `main`. The workflow publishes only a version npm does not have yet.
+2. The operator approves the `npm-release` deployment on GitHub. A push touching `cli/package.json` right after a release can read npm's processing lag as unpublished and ask for a no-op approval; decline it.
+3. Confirm the verify job passed, and `curl -s https://registry.npmjs.org/nano-community-cli | jq -r '."dist-tags".latest'`.
 
 ## Architecture
 
