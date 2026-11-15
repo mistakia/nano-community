@@ -101,7 +101,7 @@ describe('CLI', function () {
         throw new Error('No new signing key found for revocation test')
       }
       const { code, stdout, stderr } = await run_cli(
-        ['revoke-signing-key', new_signing_key],
+        ['revoke-signing-key', new_signing_key.toUpperCase()],
         { input: lines('y') }
       )
       expect(code).to.equal(0)
@@ -226,8 +226,8 @@ describe('CLI', function () {
       // value, then no further edit and a yes to send
       const { code, stdout, stderr } = await run_reading(
         '2000',
-        'wall_meter',
-        iso(started_at),
+        '  wall_meter  ',
+        iso(started_at).replace('.000Z', '.900Z'),
         iso(ended_at - 60),
         'y',
         'measurement_ended_at',
@@ -256,6 +256,8 @@ describe('CLI', function () {
       for (const [energy, start, error] of [
         ['2000', no_zone, 'not an ISO 8601 datetime with a Z or offset'],
         ['2000', '11/13/2026', 'not an ISO 8601 datetime with a Z or offset'],
+        ['2000', 'yesterday', 'not an ISO 8601 datetime with a Z or offset'],
+        ['2.5', iso(started_at), 'not a whole number of watt-hours'],
         ['', iso(started_at), 'not a whole number of watt-hours'],
         ['0x10', iso(started_at), 'not a whole number of watt-hours'],
         ['1e3', iso(started_at), 'not a whole number of watt-hours']
@@ -383,6 +385,105 @@ describe('CLI', function () {
       )
     })
 
+    it('exits 1 with usage on a bad option, command or argument', async () => {
+      const npub_bad = 'npub1bad'
+      for (const [args, error] of [
+        [['--bogus'], 'Usage: nano-community'],
+        [['nope'], 'Unknown command: nope'],
+        [['update-account-meta', 'extra'], 'Usage: nano-community'],
+        [['revoke-signing-key'], 'Usage: nano-community'],
+        [['revoke-signing-key', 'xyz'], 'linked_public_key must be 64 hex'],
+        [['update-block-meta', 'abc'], 'A 64 hex character block hash'],
+        [['bind-nostr-key', npub_bad], 'Expected an npub']
+      ]) {
+        const { code, stdout, stderr } = await run({ args })
+        expect(code, args.join(' ')).to.equal(1)
+        expect(stderr, args.join(' ')).to.include(error)
+        // refused before the key is read or a prompt is shown
+        expect(stderr + stdout, args.join(' ')).to.not.include('Private key')
+      }
+    })
+
+    it('reports a server rejection as one printable line and exits 1', async () => {
+      await with_server(
+        (req, res) => {
+          res.writeHead(400)
+          res.end(JSON.stringify({ error: 'no\u001b[2J\u009bpe' }))
+        },
+        async (url) => {
+          const { code, stdout, stderr } = await run_cli(
+            ['revoke-signing-key', linked_public_key],
+            { input: lines('y'), env: { NANO_TEST_CLI_API_URL: url } }
+          )
+          expect(code).to.equal(1)
+          expect(stderr).to.equal(`${private_key_status}no[2Jpe\n`)
+          expect(stdout).to.not.include('successful')
+        }
+      )
+    })
+
+    it('sends nothing unless the answer is y or yes', async () => {
+      let hits = 0
+      await with_server(
+        (req, res) => {
+          hits += 1
+          res.end('{}')
+        },
+        async (url) => {
+          const env = { NANO_TEST_CLI_API_URL: url }
+          for (const [answer, sends] of [
+            ['yeah', false],
+            ['', false],
+            ['n', false],
+            ['YES', true],
+            [' y ', true]
+          ]) {
+            const before = hits
+            const { code } = await run_cli(
+              ['revoke-signing-key', linked_public_key],
+              { input: lines(answer), env }
+            )
+            expect(code, answer).to.equal(0)
+            expect(hits - before, `answer '${answer}'`).to.equal(sends ? 1 : 0)
+          }
+          // add-signing-key shows both payloads, and a no prints no key
+          const before = hits
+          const { code, stdout, stderr } = await run_cli(['add-signing-key'], {
+            input: lines('n'),
+            env
+          })
+          expect(code).to.equal(0)
+          expect(hits).to.equal(before)
+          expect(stdout).to.include('"action": "link_key"')
+          expect(stdout).to.include('"action": "accept_link"')
+          expect(stdout).to.not.include('Signing public key')
+          expect(stderr).to.equal(private_key_status)
+        }
+      )
+    })
+
+    it('fails when input ends before a field or an edited value', async () => {
+      for (const [input, error] of [
+        ['', 'Input ended before every field'],
+        [lines('Alias', 'y', 'alias'), 'Input ended before the new value']
+      ]) {
+        const { code, stderr } = await run_cli(['update-account-meta'], {
+          input
+        })
+        expect(code).to.equal(1)
+        expect(stderr).to.include(error)
+      }
+    })
+
+    it('asks again for a field name it does not know', async () => {
+      const { code, stdout } = await run_cli(['update-account-meta'], {
+        input: lines('Alias', 'y', 'bogus', 'n', 'n')
+      })
+      expect(code).to.equal(0)
+      expect(stdout).to.include('No field named bogus')
+      expect(stdout).to.not.include('"bogus"')
+    })
+
     it('rejects a malformed private key without printing it', async () => {
       const malformed_key = 'z'.repeat(64)
       const { code, stdout, stderr } = await run(
@@ -432,6 +533,42 @@ describe('CLI', function () {
         const code = await new Promise((resolve) => child.on('close', resolve))
         expect(code).to.equal(0)
         expect(output).to.include(nano_account_address)
+        expect(output).to.not.include(nano_private_key.slice(0, 8))
+      }
+    )
+
+    ;(process.platform === 'linux' ? it : it.skip)(
+      'shows the prompts again after the hidden key prompt',
+      async () => {
+        const env = { ...process.env }
+        delete env.NC_CLI_NANO_PRIVATE_KEY
+        const child = spawn(
+          'script',
+          [
+            '-qfec',
+            `node ${PUBLISHED_BIN} revoke-signing-key ${linked_public_key}`,
+            '/dev/null'
+          ],
+          { env, stdio: ['pipe', 'pipe', 'pipe'] }
+        )
+        let output = ''
+        let typed_key = false
+        let answered = false
+        child.stdout.on('data', (data) => {
+          output += data.toString()
+          if (!typed_key && output.includes('Private key (64 hex characters')) {
+            typed_key = true
+            child.stdin.write(`${nano_private_key}\r`)
+          }
+          if (!answered && output.includes('Sign and send? (y/N)')) {
+            answered = true
+            child.stdin.write('n\r')
+          }
+        })
+        const code = await new Promise((resolve) => child.on('close', resolve))
+        expect(code).to.equal(0)
+        expect(answered, output).to.equal(true)
+        expect(output).to.include('Cancelled. Nothing was signed or sent.')
         expect(output).to.not.include(nano_private_key.slice(0, 8))
       }
     )

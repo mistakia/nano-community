@@ -27,6 +27,9 @@ describe('collect-host-hardware parsers', () => {
         'processor\t: 0\nModel\t\t: Raspberry Pi 4 Model B Rev 1.4\n'
       )
     ).to.equal('Raspberry Pi 4 Model B Rev 1.4')
+    expect(parse_cpu_model('processor\t: 0\nHardware\t: BCM2835\n')).to.equal(
+      'BCM2835'
+    )
     expect(parse_cpu_model('processor\t: 0\n')).to.equal(null)
   })
 
@@ -34,6 +37,10 @@ describe('collect-host-hardware parsers', () => {
     // user nice system idle iowait irq softirq steal
     const stat = 'cpu  200 0 100 600 100 0 0 1000 0 0\ncpu0 1 2 3 4\n'
     expect(parse_cpu_utilization_basis_points(stat)).to.equal(3000)
+    // irq and softirq are busy time too
+    expect(
+      parse_cpu_utilization_basis_points('cpu  100 0 100 600 0 100 100 0\n')
+    ).to.equal(4000)
   })
 
   it('lists physical disks by kind from /sys/block', () => {
@@ -98,6 +105,23 @@ describe('collect-host-hardware parsers', () => {
         host({ '/proc/1/environ': 'HOME=/\0container=Weird Value\0' })
       )
     ).to.equal('container-other')
+    // A DMI vendor names a hypervisor only by its start
+    expect(
+      detect_virtualization(
+        host({ '/sys/class/dmi/id/sys_vendor': 'Not KVM Inc' })
+      )
+    ).to.equal('none')
+    expect(
+      detect_virtualization(
+        host(
+          {
+            '/sys/devices/system/clocksource/clocksource0/available_clocksource':
+              'hyperv_clocksource_tsc_page acpi_pm'
+          },
+          'arm64'
+        )
+      )
+    ).to.equal('microsoft')
     expect(
       detect_virtualization(
         host({
@@ -197,5 +221,21 @@ describe('collect-host-hardware parsers', () => {
         logical_cpus: 4
       })
     ).to.equal(100)
+    // More CPU time than capacity caps at all of it, and a process that
+    // started at or after the uptime has no window
+    expect(
+      parse_node_cpu_utilization_basis_points({
+        process_stat,
+        uptime_seconds: 101,
+        logical_cpus: 1
+      })
+    ).to.equal(10000)
+    expect(
+      parse_node_cpu_utilization_basis_points({
+        process_stat,
+        uptime_seconds: 100,
+        logical_cpus: 4
+      })
+    ).to.equal(null)
   })
 })

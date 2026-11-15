@@ -108,13 +108,20 @@ describe('Nano CLI pledge', function () {
     expect(encode_npub_data(data)).to.equal(npub)
     data[data.length - 1] |= 1
     const padded_npub = encode_npub_data(data)
+    // One more data character, still checksummed: 33 bytes is not a key
+    const long_npub = encode_npub_data([
+      ...data.slice(0, -1),
+      data.at(-1) & ~1,
+      0
+    ])
     for (const args of [
       [ISSUE_ID, '0', npub],
       [ISSUE_ID, '1e3', npub],
       [ISSUE_ID, '0.0000000000000000000000000000001', npub],
       ['xyz', '1', npub],
       [ISSUE_ID, '1', npub.slice(0, -1) + (npub.endsWith('q') ? 'p' : 'q')],
-      [ISSUE_ID, '1', padded_npub]
+      [ISSUE_ID, '1', padded_npub],
+      [ISSUE_ID, '1', long_npub]
     ]) {
       const result = await run('pledge', ...args).catch((error) => error)
       expect(result.code, args.join(' ')).to.equal(1)

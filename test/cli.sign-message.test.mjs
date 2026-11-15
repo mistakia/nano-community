@@ -134,5 +134,8 @@ describe('CLI signer', () => {
     ]) {
       expect(() => canonicalize_json(value)).to.throw(TypeError)
     }
+    expect(() => canonicalize_json({ a: undefined })).to.throw(
+      'member a is undefined'
+    )
   })
 })
