@@ -1,6 +1,6 @@
 {
   "name": "nano-community-cli",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "CLI for Nano.Community Messages",
   "scripts": {
     "test": "echo 'Tested from the repository root'"
