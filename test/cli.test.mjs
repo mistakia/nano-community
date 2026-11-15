@@ -448,4 +448,25 @@ describe('CLI', function () {
       }
     })
   })
+
+  describe('report-representative-hardware operation', () => {
+    it('collects the host details and sends nothing when cancelled', async () => {
+      const { stdout } = await exec_promise(
+        'echo n | node cli/index.mjs report-representative-hardware'
+      )
+      const report = JSON.parse(
+        stdout.slice(stdout.indexOf('{'), stdout.lastIndexOf('}') + 1)
+      )
+      expect(report.logical_cpus).to.be.a('number').above(0)
+      expect(report.memory_bytes).to.be.a('number').above(0)
+      expect(report.storage).to.be.an('array')
+      expect(report.cpu_utilization_basis_points).to.be.within(0, 10000)
+      expect(stdout).to.include('Hardware report cancelled.')
+
+      const rows = await db('nano_community_messages')
+        .where({ operation: 'SET_REPRESENTATIVE_HARDWARE' })
+        .whereRaw('message like ?', [`%${nano_account_address}%`])
+      expect(rows).to.have.length(0)
+    })
+  })
 })

@@ -16,6 +16,7 @@ import {
   assert_representative,
   parse_representative_power_reading
 } from '#libs-server/parse-representative-power-reading.mjs'
+import { parse_representative_hardware } from '#libs-server/parse-representative-hardware.mjs'
 
 const router = express.Router()
 
@@ -23,7 +24,8 @@ const MESSAGE_ACTIONS = [
   'set_account_meta',
   'set_representative_meta',
   'set_block_meta',
-  'set_representative_power_reading'
+  'set_representative_power_reading',
+  'set_representative_hardware'
 ]
 const PARAMETER_KEYS = ['content', 'references', 'tags']
 
@@ -87,15 +89,23 @@ router.post('/?', async (req, res) => {
       }
     }
 
-    // A power reading is stored only when well-formed and signed for a
-    // representative. The stored message is the record, so nothing applies it.
-    if (payload.action === 'set_representative_power_reading') {
+    // A power reading or hardware report is stored only when well-formed and
+    // signed for a representative. The stored message is the record, so
+    // nothing applies it.
+    if (
+      payload.action === 'set_representative_power_reading' ||
+      payload.action === 'set_representative_hardware'
+    ) {
       try {
-        parse_representative_power_reading({
-          content,
-          references,
-          issued_at: payload.issued_at
-        })
+        if (payload.action === 'set_representative_power_reading') {
+          parse_representative_power_reading({
+            content,
+            references,
+            issued_at: payload.issued_at
+          })
+        } else {
+          parse_representative_hardware({ content, references })
+        }
         await assert_representative({ account, connection: db })
       } catch (error) {
         if (error instanceof CommunityRequestError) {

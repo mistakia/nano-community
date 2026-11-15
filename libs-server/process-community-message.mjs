@@ -79,6 +79,7 @@ export default async function process_community_message({
       })
 
     case 'set_representative_power_reading':
+    case 'set_representative_hardware':
       // The stored message is the record; loadRepresentatives reads it
       return
 
