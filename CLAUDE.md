@@ -39,6 +39,8 @@ NANO_TEST_PG_PORT=5435 yarn test
 
 `.github/workflows/publish-npm.yml` publishes `cli/` to npm as `nano-community-cli` by Trusted Publishing (OIDC). No npm token exists, and the package disallows tokens.
 
+The CLI is installed on strangers' representative hosts, so it has no dependencies. It uses Node built-ins for prompts, arguments and requests, and signs with `cli/sign-message.mjs`, which carries the nano-signed-message format over a vendored `@noble/ed25519` (`cli/vendor/`, upgraded by replacing the file under its header). `test/cli.package.test.mjs` fails on any dependency or on an import outside the `files` list, and `test/cli.sign-message.test.mjs` holds the signer to the nano-signed-message test vectors.
+
 1. Bump `version` in `cli/package.json` and commit to `main`. The workflow publishes only a version npm does not have yet.
 2. The operator approves the `npm-release` deployment on GitHub.
 3. Confirm with `curl -s https://registry.npmjs.org/nano-community-cli | jq -r '."dist-tags".latest'`.

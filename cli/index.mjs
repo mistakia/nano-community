@@ -1,29 +1,22 @@
 #!/usr/bin/env node
 
 import crypto from 'crypto'
-import { realpathSync } from 'fs'
+import { readFileSync, realpathSync } from 'fs'
 import process from 'process'
 import { fileURLToPath } from 'url'
+import { parseArgs } from 'util'
 
-import yargs from 'yargs'
-import { hideBin } from 'yargs/helpers'
-import inquirer from 'inquirer'
-import fetch, { Request } from 'node-fetch'
+import collect_host_hardware from './collect-host-hardware.mjs'
+import { ask, ask_hidden, close_prompts, confirm } from './prompt.mjs'
 import {
   encode_nano_account,
   get_public_key,
   sign_message
-} from 'nano-signed-message'
+} from './sign-message.mjs'
 
-import collect_host_hardware from './collect-host-hardware.mjs'
-
-const is_test = process.env.NODE_ENV === 'test'
-
-const base_url =
-  process.env.NC_CLI_API_URL ||
-  (is_test ? 'http://localhost:8085' : 'https://nano.community')
-
-const PUBLIC_KEY_RE = /^[0-9a-f]{64}$/
+const DEFAULT_API_URL = 'https://nano.community'
+const REQUEST_TIMEOUT_MS = 20000
+const HEX_64_RE = /^[0-9a-f]{64}$/
 
 // The published bin cannot import the repo's #common, so it carries its own
 // isMain. Resolving both sides keeps an npm-bin symlink invocation main.
@@ -39,252 +32,330 @@ const isMain = (import_meta_url) => {
   }
 }
 
-// Signs a nano.community request in the canonical Nano signed-message format
-// (https://github.com/mistakia/nano-signed-message), with a fresh nonce
-function sign_request({ private_key, action, parameters }) {
-  const public_key = get_public_key(Buffer.from(private_key, 'hex'))
-  return sign_message({
-    private_key,
-    payload: {
-      version: 1,
-      domain: 'nano.community',
-      action,
-      account: encode_nano_account(public_key),
-      issued_at: Math.floor(Date.now() / 1000),
-      nonce: crypto.randomBytes(16).toString('hex'),
-      parameters
-    }
-  })
-}
+// A failure the CLI reports as one line, without a stack
+class CliError extends Error {}
 
-async function request(options) {
-  const request = new Request(options.url, {
-    timeout: 20000,
-    ...options
-  })
-  const response = await fetch(request)
+// Server text is printed to a terminal, so control characters are removed
+const printable = (text) =>
+  // eslint-disable-next-line no-control-regex
+  String(text).replace(/[\u0000-\u001f\u007f-\u009f]/g, '')
 
-  if (response.status >= 200 && response.status < 300) {
-    return response.json()
-  } else {
-    const res = await response.json()
-    const error = new Error(res.error || response.statusText)
-    error.response = response
-    throw error
+// JSON.stringify escapes C0 controls; C1 controls and bidirectional overrides
+// could still reorder or hide part of the review, so they show escaped
+const reviewable = (text) =>
+  text.replace(
+    // eslint-disable-next-line no-control-regex
+    /[\u0080-\u009f\u200e\u200f\u202a-\u202e\u2066-\u2069]/g,
+    (char) => `\\u${char.charCodeAt(0).toString(16).padStart(4, '0')}`
+  )
+
+// The API every signed message goes to. NC_CLI_API_URL overrides it, for a
+// local server only over http, and the override is announced on stderr.
+let api_url = null
+function get_api_url() {
+  if (api_url) return api_url
+  const override = process.env.NC_CLI_API_URL
+  if (!override) {
+    api_url = DEFAULT_API_URL
+    return api_url
   }
+  let url
+  try {
+    url = new URL(override)
+  } catch {
+    throw new CliError('NC_CLI_API_URL is not a URL')
+  }
+  const is_loopback = ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname)
+  if (url.protocol !== 'https:' && !(url.protocol === 'http:' && is_loopback)) {
+    throw new CliError('NC_CLI_API_URL must be https, or http to localhost')
+  }
+  api_url = url.origin
+  if (api_url !== DEFAULT_API_URL) {
+    console.error(
+      `Warning: NC_CLI_API_URL sends to ${api_url}, not ${DEFAULT_API_URL}`
+    )
+  }
+  return api_url
 }
 
+// Posts a signed body. A redirect is refused rather than followed, so a
+// signed message reaches only the origin the operator confirmed.
+async function post({ path, body }) {
+  let response
+  try {
+    response = await fetch(`${get_api_url()}${path}`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json' },
+      redirect: 'error',
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS)
+    })
+  } catch (error) {
+    throw new CliError(
+      `request failed: ${printable(error.cause?.message || error.cause?.code || error.message)}`
+    )
+  }
+  let result = null
+  try {
+    result = await response.json()
+  } catch {
+    // a body that is not JSON reports by its status
+  }
+  if (!response.ok) {
+    throw new CliError(printable(result?.error || `HTTP ${response.status}`))
+  }
+  return result
+}
+
+// The private key from NC_CLI_NANO_PRIVATE_KEY, else a hidden prompt. It is
+// removed from the environment once read, and never printed or written.
 async function load_private_key() {
   let private_key = process.env.NC_CLI_NANO_PRIVATE_KEY
   if (private_key) {
+    delete process.env.NC_CLI_NANO_PRIVATE_KEY
     console.error('Private key found in environment variable.')
   } else {
     console.error(
       'No private key found in environment variable (NC_CLI_NANO_PRIVATE_KEY).'
     )
-    // Restore stdin for inquirer
-    const answers = await inquirer.prompt([
-      {
-        type: 'password',
-        name: 'private_key',
-        message: 'Please enter your private key:'
-      }
-    ])
-    private_key = answers.private_key
+    private_key = await ask_hidden('Private key (64 hex characters, hidden):')
   }
-
-  const public_key = Buffer.from(
-    get_public_key(Buffer.from(private_key, 'hex'))
-  ).toString('hex')
+  private_key = (private_key || '').trim()
+  if (!HEX_64_RE.test(private_key.toLowerCase())) {
+    throw new CliError('The private key must be 64 hex characters')
+  }
+  const public_key = get_public_key(private_key)
   return {
     private_key,
     public_key,
-    nano_account_address: encode_nano_account(public_key)
+    nano_account_address: encode_nano_account(Buffer.from(public_key, 'hex'))
   }
 }
 
+// A nano.community payload with a fresh nonce. The nonce and time are set
+// before the review, so the operator sees exactly what is signed.
+const create_payload = ({ account, action, parameters }) => ({
+  version: 1,
+  domain: 'nano.community',
+  action,
+  account,
+  issued_at: Math.floor(Date.now() / 1000),
+  nonce: crypto.randomBytes(16).toString('hex'),
+  parameters
+})
+
+// Shows every payload that will be signed and where it goes, and asks once
+const confirm_send = async ({ payloads, path }) => {
+  const url = `${get_api_url()}${path}`
+  console.log(`This will be signed and sent to ${url}:`)
+  for (const payload of payloads) {
+    console.log(reviewable(JSON.stringify(payload, null, 2)))
+  }
+  return confirm('Sign and send?')
+}
+
 const add_signing_key = {
-  command: 'add-signing-key',
+  name: 'add-signing-key',
   describe: 'Add a new signing key',
   handler: async () => {
     const { private_key, nano_account_address } = await load_private_key()
 
     const linked_private_key = crypto.randomBytes(32).toString('hex')
-    const linked_public_key = Buffer.from(
-      get_public_key(Buffer.from(linked_private_key, 'hex'))
-    ).toString('hex')
+    const linked_public_key = get_public_key(linked_private_key)
 
     // The account consents to the key, and the key consents to the account
-    const payload = {
-      link: sign_request({
-        private_key,
-        action: 'link_key',
-        parameters: { linked_public_key }
-      }),
-      accept: sign_request({
-        private_key: linked_private_key,
-        action: 'accept_link',
-        parameters: { linked_account: nano_account_address }
-      })
-    }
-
-    try {
-      const response = await request({
-        url: `${base_url}/api/auth/register/key`,
-        method: 'POST',
-        body: JSON.stringify(payload),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      console.log('Key registration successful:', response)
-    } catch (error) {
-      console.error(`Failed to register key: ${error.message || error}`)
+    const link = create_payload({
+      account: nano_account_address,
+      action: 'link_key',
+      parameters: { linked_public_key }
+    })
+    const accept = create_payload({
+      account: encode_nano_account(Buffer.from(linked_public_key, 'hex')),
+      action: 'accept_link',
+      parameters: { linked_account: nano_account_address }
+    })
+    if (
+      !(await confirm_send({
+        payloads: [link, accept],
+        path: '/api/auth/register/key'
+      }))
+    ) {
+      console.log('Signing key registration cancelled.')
       return
     }
 
+    const response = await post({
+      path: '/api/auth/register/key',
+      body: {
+        link: sign_message({ payload: link, private_key }),
+        accept: sign_message({
+          payload: accept,
+          private_key: linked_private_key
+        })
+      }
+    })
+    console.log('Key registration successful:', response)
+    console.log(
+      'Store the signing private key now. It is shown once and saved nowhere:'
+    )
     console.log({ linked_public_key, linked_private_key })
   }
 }
 
 const revoke_signing_key = {
-  command: 'revoke-signing-key <linked_public_key>',
+  name: 'revoke-signing-key',
+  args: ['linked_public_key'],
   describe: 'Revoke an existing signing key',
-  builder: (yargs) =>
-    yargs.positional('linked_public_key', {
-      describe: 'Public key of the signing key to revoke',
-      type: 'string'
-    }),
-  handler: async ({ linked_public_key }) => {
-    linked_public_key = String(linked_public_key).toLowerCase()
-    if (!PUBLIC_KEY_RE.test(linked_public_key)) {
-      console.error('linked_public_key must be 64 hex characters')
+  handler: async ([linked_public_key]) => {
+    linked_public_key = linked_public_key.toLowerCase()
+    if (!HEX_64_RE.test(linked_public_key)) {
+      throw new CliError('linked_public_key must be 64 hex characters')
+    }
+
+    const { nano_account_address, private_key } = await load_private_key()
+    const payload = create_payload({
+      account: nano_account_address,
+      action: 'revoke_key',
+      parameters: { linked_public_key }
+    })
+    console.log(`Revoking the signing key ${linked_public_key}`)
+    if (
+      !(await confirm_send({
+        payloads: [payload],
+        path: '/api/auth/revoke/key'
+      }))
+    ) {
+      console.log('Signing key revocation cancelled.')
       return
     }
 
-    const { private_key } = await load_private_key()
-
-    // Confirm revocation
-    const answers = await inquirer.prompt([
-      {
-        type: 'confirm',
-        name: 'confirm_revoke',
-        message: `Are you sure you want to revoke the signing key: ${linked_public_key}?`,
-        default: false
-      }
-    ])
-
-    if (answers.confirm_revoke) {
-      console.log('Revoking signing key...')
-      const payload = sign_request({
-        private_key,
-        action: 'revoke_key',
-        parameters: { linked_public_key }
-      })
-
-      try {
-        const response = await request({
-          url: `${base_url}/api/auth/revoke/key`,
-          method: 'POST',
-          body: JSON.stringify(payload),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        console.log('Key revocation successful:', response)
-      } catch (error) {
-        console.error(`Failed to revoke key: ${error.message || error}`)
-      }
-    } else {
-      console.log('Signing key revocation cancelled.')
-    }
+    const response = await post({
+      path: '/api/auth/revoke/key',
+      body: sign_message({ payload, private_key })
+    })
+    console.log('Key revocation successful:', response)
   }
 }
 
+// Signs one message to /api/auth/message after the operator reviews it
+const send_message = async ({
+  key: { private_key, nano_account_address },
+  action,
+  content,
+  references = []
+}) => {
+  const payload = create_payload({
+    account: nano_account_address,
+    action,
+    parameters: { content, references, tags: [] }
+  })
+  if (
+    !(await confirm_send({ payloads: [payload], path: '/api/auth/message' }))
+  ) {
+    console.log('Message cancelled.')
+    return
+  }
+  const response = await post({
+    path: '/api/auth/message',
+    body: sign_message({ payload, private_key })
+  })
+  console.log('Message sent successful:', response)
+}
+
+// Asks for each field, then lets the operator change any before signing.
+// Answers are strings.
+const ask_fields = async (fields) => {
+  const content = {}
+  for (const { name, message } of fields) {
+    const answer = await ask(message)
+    if (answer === null) throw new CliError('Input ended before every field')
+    content[name] = answer
+  }
+  const names = fields.map(({ name }) => name)
+  for (;;) {
+    console.log('Please review your message content:', content)
+    if (!(await confirm('Would you like to edit any field?'))) return content
+    const field = (
+      (await ask(`Which field? (${names.join(', ')})`)) || ''
+    ).trim()
+    if (!names.includes(field)) {
+      console.log(`No field named ${printable(field)}`)
+      continue
+    }
+    const value = await ask(`Enter new value for ${field}:`)
+    if (value === null) throw new CliError('Input ended before the new value')
+    content[field] = value
+  }
+}
+
+const REP_META_FIELDS = [
+  { name: 'alias', message: 'Alias:' },
+  { name: 'description', message: 'Description:' },
+  { name: 'donation_address', message: 'Donation Address:' },
+  { name: 'cpu_model', message: 'CPU Model:' },
+  { name: 'cpu_cores', message: 'CPU Cores:' },
+  { name: 'ram', message: 'RAM Amount (GB):' },
+  { name: 'reddit', message: 'Reddit Username:' },
+  { name: 'twitter', message: 'Twitter Username:' },
+  { name: 'discord', message: 'Discord Username:' },
+  { name: 'discord_user_id', message: 'Discord User ID:' },
+  { name: 'github', message: 'GitHub Username:' },
+  { name: 'email', message: 'Email:' },
+  { name: 'website', message: 'Website URL:' }
+]
+
 const update_rep_meta = {
-  command: 'update-rep-meta',
+  name: 'update-rep-meta',
   describe: 'Update representative metadata',
-  handler: async () => await send_message_handler('update-rep-meta')
+  handler: async () =>
+    send_message({
+      key: await load_private_key(),
+      action: 'set_representative_meta',
+      content: await ask_fields(REP_META_FIELDS)
+    })
 }
 
 const update_account_meta = {
-  command: 'update-account-meta',
+  name: 'update-account-meta',
   describe: 'Update account metadata',
-  handler: async () => await send_message_handler('update-account-meta')
+  handler: async () =>
+    send_message({
+      key: await load_private_key(),
+      action: 'set_account_meta',
+      content: await ask_fields([{ name: 'alias', message: 'Alias:' }])
+    })
 }
 
 const update_block_meta = {
-  command: 'update-block-meta <block_hash>',
+  name: 'update-block-meta',
+  args: ['block_hash'],
   describe: 'Update block metadata',
-  builder: (yargs) =>
-    yargs.positional('block_hash', {
-      describe: 'Block hash for update-block-meta type',
-      type: 'string'
-    }),
-  handler: async ({ block_hash }) =>
-    await send_message_handler('update-block-meta', block_hash)
-}
-
-const report_representative_hardware = {
-  command: 'report-representative-hardware',
-  describe:
-    'Sign the details of the host this representative runs on, for its power estimate (see /network-energy-usage)',
-  handler: async () => {
-    const { private_key } = await load_private_key()
-    let content
-    try {
-      content = collect_host_hardware()
-    } catch (error) {
-      console.error(error.message)
-      return
+  handler: async ([block_hash]) => {
+    block_hash = block_hash.toLowerCase()
+    if (!HEX_64_RE.test(block_hash)) {
+      throw new CliError('A 64 hex character block hash is required')
     }
-    if (!content.cpu_model) {
-      console.error('No CPU model found in /proc/cpuinfo')
-      return
-    }
-
-    console.log(
-      'This report will be signed and published with your representative:'
-    )
-    console.log(JSON.stringify(content, null, 2))
-    const { confirm } = await inquirer.prompt([
-      {
-        type: 'confirm',
-        name: 'confirm',
-        message: 'Sign and send this hardware report?',
-        default: false
-      }
-    ])
-    if (!confirm) {
-      console.log('Hardware report cancelled.')
-      return
-    }
-
-    const payload = sign_request({
-      private_key,
-      action: 'set_representative_hardware',
-      parameters: { content, references: [], tags: [] }
+    await send_message({
+      key: await load_private_key(),
+      action: 'set_block_meta',
+      content: await ask_fields([{ name: 'note', message: 'Note:' }]),
+      references: [block_hash]
     })
-    try {
-      const response = await request({
-        url: `${base_url}/api/auth/message`,
-        method: 'POST',
-        body: JSON.stringify(payload),
-        headers: { 'Content-Type': 'application/json' }
-      })
-      console.log('Hardware report sent:', response)
-    } catch (error) {
-      console.error(`Failed to send hardware report: ${error.message || error}`)
-    }
   }
 }
 
-const update_representative_power_reading = {
-  command: 'update-representative-power-reading',
+const report_representative_hardware = {
+  name: 'report-representative-hardware',
   describe:
-    'Sign a measured power reading for a representative (see /network-energy-usage)',
-  handler: async () =>
-    await send_message_handler('update-representative-power-reading')
+    'Sign the details of the host this representative runs on, for its power estimate (see /network-energy-usage)',
+  handler: async () => {
+    const key = await load_private_key()
+    const content = collect_host_hardware()
+    if (!content.cpu_model) {
+      throw new CliError('No CPU model found in /proc/cpuinfo')
+    }
+    await send_message({ key, action: 'set_representative_hardware', content })
+  }
 }
 
 // Answers are strings, so a power reading's fields become a number and epoch
@@ -292,7 +363,7 @@ const update_representative_power_reading = {
 const parse_epoch_seconds = (value) => {
   const milliseconds = Date.parse(value)
   if (Number.isNaN(milliseconds)) {
-    throw new Error(`not an ISO 8601 datetime: ${value}`)
+    throw new CliError(`not an ISO 8601 datetime: ${printable(value)}`)
   }
   return Math.floor(milliseconds / 1000)
 }
@@ -305,7 +376,9 @@ const parse_power_reading_content = ({
 }) => {
   const energy = Number(energy_watt_hours)
   if (!Number.isSafeInteger(energy)) {
-    throw new Error(`not a whole number of watt-hours: ${energy_watt_hours}`)
+    throw new CliError(
+      `not a whole number of watt-hours: ${printable(energy_watt_hours)}`
+    )
   }
   return {
     energy_watt_hours: energy,
@@ -315,137 +388,52 @@ const parse_power_reading_content = ({
   }
 }
 
-async function send_message_handler(type, block_hash = null) {
-  const { private_key } = await load_private_key()
-
-  let message_content_prompts = []
-  console.log(`Sending message of type: ${type}`)
-  switch (type) {
-    case 'update-rep-meta':
-      message_content_prompts = [
-        { name: 'alias', message: 'Alias:' },
-        { name: 'description', message: 'Description:' },
-        { name: 'donation_address', message: 'Donation Address:' },
-        { name: 'cpu_model', message: 'CPU Model:' },
-        { name: 'cpu_cores', message: 'CPU Cores:' },
-        { name: 'ram', message: 'RAM Amount (GB):' },
-        { name: 'reddit', message: 'Reddit Username:' },
-        { name: 'twitter', message: 'Twitter Username:' },
-        { name: 'discord', message: 'Discord Username:' },
-        { name: 'discord_user_id', message: 'Discord User ID:' },
-        { name: 'github', message: 'GitHub Username:' },
-        { name: 'email', message: 'Email:' },
-        { name: 'website', message: 'Website URL:' }
-      ]
-      break
-    case 'update-account-meta':
-      message_content_prompts = [{ name: 'alias', message: 'Alias:' }]
-      break
-    case 'update-block-meta':
-      block_hash = String(block_hash || '').toLowerCase()
-      if (!PUBLIC_KEY_RE.test(block_hash)) {
-        console.error('A 64 hex character block hash is required')
-        return
-      }
-      message_content_prompts = [{ name: 'note', message: 'Note:' }]
-      break
-    case 'update-representative-power-reading':
-      message_content_prompts = [
-        {
-          name: 'energy_watt_hours',
-          message: 'Energy used over the window (whole watt-hours):'
-        },
-        {
-          name: 'measurement_method',
-          message:
-            'Measurement method (wall_meter or baseboard_management_controller):'
-        },
-        {
-          name: 'measurement_started_at',
-          message: 'Measurement start (ISO 8601, e.g. 2026-11-13T00:00:00Z):'
-        },
-        {
-          name: 'measurement_ended_at',
-          message: 'Measurement end, at least 24 hours later (ISO 8601):'
-        }
-      ]
-      break
-    default:
-      console.error('Unknown message type')
-      return
-  }
-
-  const message_content = await inquirer.prompt(message_content_prompts)
-  let confirm_edit = false
-  do {
-    console.log('Please review your message content:', message_content)
-    confirm_edit = await inquirer.prompt([
+const update_representative_power_reading = {
+  name: 'update-representative-power-reading',
+  describe:
+    'Sign a measured power reading for a representative (see /network-energy-usage)',
+  handler: async () => {
+    const key = await load_private_key()
+    const answers = await ask_fields([
       {
-        type: 'confirm',
-        name: 'edit',
-        message: 'Would you like to edit any field?',
-        default: false
+        name: 'energy_watt_hours',
+        message: 'Energy used over the window (whole watt-hours):'
+      },
+      {
+        name: 'measurement_method',
+        message:
+          'Measurement method (wall_meter or baseboard_management_controller):'
+      },
+      {
+        name: 'measurement_started_at',
+        message: 'Measurement start (ISO 8601, e.g. 2026-11-13T00:00:00Z):'
+      },
+      {
+        name: 'measurement_ended_at',
+        message: 'Measurement end, at least 24 hours later (ISO 8601):'
       }
     ])
-    confirm_edit = confirm_edit.edit
-    if (confirm_edit) {
-      const field_to_edit = await inquirer.prompt([
-        {
-          type: 'list',
-          name: 'field',
-          message: 'Which field would you like to edit?',
-          choices: message_content_prompts.map((prompt) => prompt.name)
-        }
-      ])
-      const new_value = await inquirer.prompt([
-        {
-          name: 'new_value',
-          message: `Enter new value for ${field_to_edit.field}:`
-        }
-      ])
-      message_content[field_to_edit.field] = new_value.new_value
-    }
-  } while (confirm_edit)
-
-  let content = message_content
-  if (type === 'update-representative-power-reading') {
-    try {
-      content = parse_power_reading_content(message_content)
-    } catch (error) {
-      console.error(error.message)
-      return
-    }
-  }
-
-  const actions = {
-    'update-rep-meta': 'set_representative_meta',
-    'update-account-meta': 'set_account_meta',
-    'update-block-meta': 'set_block_meta',
-    'update-representative-power-reading': 'set_representative_power_reading'
-  }
-  const payload = sign_request({
-    private_key,
-    action: actions[type],
-    parameters: {
-      content,
-      references: type === 'update-block-meta' ? [block_hash] : [],
-      tags: []
-    }
-  })
-
-  try {
-    const response = await request({
-      url: `${base_url}/api/auth/message`,
-      method: 'POST',
-      body: JSON.stringify(payload),
-      headers: {
-        'Content-Type': 'application/json'
-      }
+    await send_message({
+      key,
+      action: 'set_representative_power_reading',
+      content: parse_power_reading_content(answers)
     })
-    console.log('Message sent successful:', response)
-  } catch (error) {
-    console.error(`Failed to send message: ${error.message || error}`)
   }
+}
+
+// A nostr-domain payload, for a proof printed to paste elsewhere
+const create_nostr_payload = ({ action, account, parameters, statement }) => {
+  const issued_at = Math.floor(Date.now() / 1000)
+  const payload = {
+    version: 1,
+    domain: 'nostr',
+    action,
+    account,
+    issued_at,
+    parameters
+  }
+  if (statement) payload.statement = statement
+  return payload
 }
 
 // Signs the nano-signed-message bind_nostr_key profile: the proof a nostr
@@ -453,43 +441,28 @@ async function send_message_handler(type, block_hash = null) {
 // nano.community task board. Nothing is sent; paste the output on the
 // board's account page.
 const bind_nostr_key = {
-  command: 'bind-nostr-key <npub>',
+  name: 'bind-nostr-key',
+  args: ['npub'],
   describe: 'Sign a proof that binds this Nano account to a nostr key',
-  builder: (yargs) =>
-    yargs.positional('npub', {
-      describe: 'The nostr key (npub1...) to bind',
-      type: 'string'
-    }),
-  handler: async ({ npub }) => {
-    if (!/^npub1[02-9ac-hj-np-z]{58}$/.test(npub)) {
-      console.error('Expected an npub, for example npub1...')
-      process.exitCode = 1
-      return
+  handler: async ([npub]) => {
+    if (!decode_npub(npub)) {
+      throw new CliError('Expected an npub, for example npub1...')
     }
     const { private_key, nano_account_address } = await load_private_key()
-    const issued_at = Math.floor(Date.now() / 1000)
-    const { signature } = sign_message({
-      private_key,
-      payload: {
-        version: 1,
-        domain: 'nostr',
-        action: 'bind_nostr_key',
-        account: nano_account_address,
-        issued_at,
-        parameters: {},
-        statement: `Verifying that I control the following Nostr public key: ${npub}`
-      }
+    const payload = create_nostr_payload({
+      action: 'bind_nostr_key',
+      account: nano_account_address,
+      parameters: {},
+      statement: `Verifying that I control the following Nostr public key: ${npub}`
     })
+    const { signature } = sign_message({ payload, private_key })
+    const proof = `${payload.issued_at}:${signature}`
     console.log(
       JSON.stringify(
         {
           account: nano_account_address,
-          proof: `${issued_at}:${signature}`,
-          tag: [
-            'i',
-            `nano:${nano_account_address}`,
-            `${issued_at}:${signature}`
-          ]
+          proof,
+          tag: ['i', `nano:${nano_account_address}`, proof]
         },
         null,
         2
@@ -507,8 +480,6 @@ function xno_to_raw(amount) {
   const raw = BigInt(match[1] + (match[2] || '').padEnd(30, '0'))
   return raw > 0n ? raw.toString() : null
 }
-
-const NOSTR_PUBLIC_KEY_RE = /^[0-9a-f]{64}$/
 
 // Decodes an npub to its 64-character hex key (NIP-19 bech32), or returns
 // null. No checksum library is needed: the bech32 checksum is verified here.
@@ -541,61 +512,36 @@ function decode_npub(npub) {
     }
   }
   const hex = Buffer.from(bytes.slice(0, 32)).toString('hex')
-  return NOSTR_PUBLIC_KEY_RE.test(hex) ? hex : null
+  return HEX_64_RE.test(hex) ? hex : null
 }
 
 // Signs the nano-signed-message pledge profile: a public promise by this Nano
 // account to pay whoever completes a task on the nano.community task board.
 // Nothing is sent; paste the output on the task's page.
 const pledge = {
-  command: 'pledge <issue_id> <amount_xno> <npub>',
+  name: 'pledge',
+  args: ['issue_id', 'amount_xno', 'npub'],
   describe: 'Sign a pledge of XNO to a task board task',
-  builder: (yargs) =>
-    yargs
-      .positional('issue_id', {
-        describe: 'The task (issue event id, 64 hex characters)',
-        type: 'string'
-      })
-      .positional('amount_xno', {
-        describe: 'The amount in XNO, for example 2.5',
-        type: 'string'
-      })
-      .positional('npub', {
-        describe: 'The nostr key (npub1...) that publishes the pledge',
-        type: 'string'
-      }),
-  handler: async ({ issue_id, amount_xno, npub }) => {
+  handler: async ([issue_id, amount_xno, npub]) => {
     const amount_raw = xno_to_raw(amount_xno)
-    const nostr_public_key = decode_npub(String(npub))
-    if (!/^[0-9a-f]{64}$/.test(String(issue_id))) {
-      console.error('Expected the task id, 64 lowercase hex characters')
-      process.exitCode = 1
-      return
+    const nostr_public_key = decode_npub(npub)
+    if (!HEX_64_RE.test(issue_id)) {
+      throw new CliError('Expected the task id, 64 lowercase hex characters')
     }
     if (!amount_raw) {
-      console.error('Expected a positive XNO amount, for example 2.5')
-      process.exitCode = 1
-      return
+      throw new CliError('Expected a positive XNO amount, for example 2.5')
     }
     if (!nostr_public_key) {
-      console.error('Expected an npub, for example npub1...')
-      process.exitCode = 1
-      return
+      throw new CliError('Expected an npub, for example npub1...')
     }
     const { private_key, nano_account_address } = await load_private_key()
-    const issued_at = Math.floor(Date.now() / 1000)
-    const { signature } = sign_message({
-      private_key,
-      payload: {
-        version: 1,
-        domain: 'nostr',
-        action: 'pledge',
-        account: nano_account_address,
-        issued_at,
-        parameters: { issue_event_id: issue_id, amount_raw, nostr_public_key }
-      }
+    const payload = create_nostr_payload({
+      action: 'pledge',
+      account: nano_account_address,
+      parameters: { issue_event_id: issue_id, amount_raw, nostr_public_key }
     })
-    const proof = `${issued_at}:${signature}`
+    const { signature } = sign_message({ payload, private_key })
+    const proof = `${payload.issued_at}:${signature}`
     console.log(
       JSON.stringify(
         {
@@ -616,22 +562,89 @@ const pledge = {
   }
 }
 
+const COMMANDS = [
+  add_signing_key,
+  revoke_signing_key,
+  update_rep_meta,
+  update_account_meta,
+  update_block_meta,
+  update_representative_power_reading,
+  report_representative_hardware,
+  bind_nostr_key,
+  pledge
+]
+
+const usage = (command) => {
+  const line = ({ name, args = [] }) =>
+    [name, ...args.map((arg) => `<${arg}>`)].join(' ')
+  if (command)
+    return `Usage: nano-community ${line(command)}\n\n${command.describe}`
+  const width = Math.max(...COMMANDS.map((c) => line(c).length))
+  return [
+    'Usage: nano-community <command> [args]',
+    '',
+    'Commands:',
+    ...COMMANDS.map((c) => `  ${line(c).padEnd(width)}  ${c.describe}`),
+    '',
+    'Options:',
+    '  -h, --help     Show help',
+    '  -v, --version  Show the version',
+    '',
+    'The private key comes from NC_CLI_NANO_PRIVATE_KEY, else a hidden prompt.'
+  ].join('\n')
+}
+
+async function main(argv) {
+  let parsed
+  try {
+    parsed = parseArgs({
+      args: argv,
+      options: {
+        help: { type: 'boolean', short: 'h' },
+        version: { type: 'boolean', short: 'v' }
+      },
+      allowPositionals: true
+    })
+  } catch (error) {
+    console.error(`${error.message}\n\n${usage()}`)
+    return 1
+  }
+  const { values, positionals } = parsed
+  if (values.version) {
+    const { version } = JSON.parse(
+      readFileSync(new URL('./package.json', import.meta.url), 'utf8')
+    )
+    console.log(version)
+    return 0
+  }
+  const [name, ...args] = positionals
+  const command = COMMANDS.find((c) => c.name === name)
+  if (values.help) {
+    console.log(usage(command))
+    return 0
+  }
+  if (!command) {
+    if (name) console.error(`Unknown command: ${printable(name)}\n`)
+    console.error(usage())
+    return 1
+  }
+  if (args.length !== (command.args || []).length) {
+    console.error(usage(command))
+    return 1
+  }
+
+  try {
+    await command.handler(args)
+    return 0
+  } catch (error) {
+    // One line for any failure: a stack trace tells an operator nothing
+    console.error(printable(error.message))
+    return 1
+  } finally {
+    close_prompts()
+  }
+}
+
 if (isMain(import.meta.url)) {
-  // eslint-disable-next-line no-unused-expressions
-  yargs(hideBin(process.argv))
-    .scriptName('nano-community')
-    .usage('$0 <cmd> [args]')
-    .command(add_signing_key)
-    .command(revoke_signing_key)
-    .command(update_rep_meta)
-    .command(update_account_meta)
-    .command(update_block_meta)
-    .command(update_representative_power_reading)
-    .command(report_representative_hardware)
-    .command(bind_nostr_key)
-    .command(pledge)
-    .demandCommand(1, 'You must provide at least one command.')
-    .help('h')
-    .wrap(100)
-    .alias('h', 'help').argv
+  process.exitCode = await main(process.argv.slice(2))
 }

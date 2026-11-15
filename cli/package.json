@@ -1,10 +1,9 @@
 {
   "name": "nano-community-cli",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "CLI for Nano.Community Messages",
-  "main": "index.mjs",
   "scripts": {
-    "test": "echo 'No operation'"
+    "test": "echo 'Tested from the repository root'"
   },
   "bin": {
     "nano-community": "index.mjs"
@@ -23,18 +22,14 @@
     "url": "git+https://github.com/mistakia/nano-community.git",
     "directory": "cli"
   },
-  "dependencies": {
-    "inquirer": "9.2.23",
-    "nano-signed-message": "0.1.0",
-    "node-fetch": "3.3.2",
-    "yargs": "17.7.2"
-  },
   "engines": {
     "node": ">=20.19.0"
   },
-  "packageManager": "yarn@3.2.1",
   "files": [
     "index.mjs",
-    "collect-host-hardware.mjs"
+    "collect-host-hardware.mjs",
+    "prompt.mjs",
+    "sign-message.mjs",
+    "vendor/noble-ed25519.mjs"
   ]
 }
