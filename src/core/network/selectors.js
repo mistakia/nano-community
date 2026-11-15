@@ -1,6 +1,9 @@
 import BigNumber from 'bignumber.js'
 import { getOnlineRepresentatives } from '@core/accounts'
-import { get_representative_power } from '#common/representative-power.mjs'
+import {
+  get_representative_power,
+  is_measured_power
+} from '#common/representative-power.mjs'
 
 export function getNetwork(state) {
   return state.get('network')
@@ -33,9 +36,11 @@ export function get_online_principal_representatives(state) {
 }
 
 // The summed current power of the online principal representatives that have
-// one, with the coverage behind it. A representative with neither a signed
-// reading nor a CPU TDP specification counts as not reporting: nothing is
-// estimated for it. Null while the principal representative set is unknown.
+// one, with the coverage behind it: how many are measured, how many estimated
+// from their own hardware, and the oldest dated input. A representative with
+// no reading, hardware report or CPU TDP specification counts as not
+// reporting: no general estimate stands in for it. Null while the principal
+// representative set is unknown.
 export function getNetworkWattHour(state) {
   const prs = get_online_principal_representatives(state)
   if (!prs) {
@@ -45,10 +50,12 @@ export function getNetworkWattHour(state) {
   let watts = 0
   let reporting_count = 0
   let measured_count = 0
-  let oldest_measured_at = null
+  let estimated_count = 0
+  let oldest_as_of = null
   for (const rep of prs) {
     const power = get_representative_power({
       power_reading: rep.get('power_reading'),
+      hardware_report: rep.get('hardware_report'),
       watt_hour: rep.get('watt_hour')
     })
     if (!power) {
@@ -56,14 +63,13 @@ export function getNetworkWattHour(state) {
     }
     watts += power.power_watts
     reporting_count += 1
-    if (power.measured_at) {
+    if (is_measured_power(power)) {
       measured_count += 1
-      if (
-        oldest_measured_at === null ||
-        power.measured_at < oldest_measured_at
-      ) {
-        oldest_measured_at = power.measured_at
-      }
+    } else if (power.power_source === 'hardware_estimate') {
+      estimated_count += 1
+    }
+    if (power.as_of && (oldest_as_of === null || power.as_of < oldest_as_of)) {
+      oldest_as_of = power.as_of
     }
   }
 
@@ -71,8 +77,9 @@ export function getNetworkWattHour(state) {
     watts,
     reporting_count,
     measured_count,
+    estimated_count,
     principal_representative_count: prs.size,
-    oldest_measured_at
+    oldest_as_of
   }
 }
 

@@ -6,7 +6,10 @@ import { hash_signed_message } from 'nano-signed-message'
 import server from '#api/server.mjs'
 import db from '#db'
 import { loadRepresentatives } from '#api/routes/representatives/index.mjs'
-import load_representative_power_readings from '#libs-server/load-representative-power-readings.mjs'
+import {
+  load_representative_hardware_reports,
+  load_representative_power_readings
+} from '#libs-server/load-representative-power-inputs.mjs'
 import { mochaGlobalSetup } from './global.mjs'
 import {
   create_test_key,
@@ -345,6 +348,130 @@ describe('representative power readings', function () {
         message_digest: digest_of(wire)
       })
       expect(row(unmeasured).power_reading).to.equal(null)
+    })
+  })
+
+  describe('POST /api/auth/message set_representative_hardware', () => {
+    const hardware_content = (overrides = {}) => ({
+      cpu_model: 'AMD EPYC-Rome Processor',
+      logical_cpus: 8,
+      memory_bytes: 16 * 1024 ** 3,
+      storage: [{ kind: 'ssd', bytes: 400 * 1000 ** 3 }],
+      virtualization: 'kvm',
+      cpu_utilization_basis_points: 2000,
+      utilization_window_seconds: 3 * DAY_SECONDS,
+      node_cpu_utilization_basis_points: 1500,
+      ...overrides
+    })
+    const sign_hardware = ({
+      key,
+      content = hardware_content(),
+      references = []
+    }) =>
+      sign_community_request({
+        key,
+        action: 'set_representative_hardware',
+        parameters: { content, references, tags: [] }
+      })
+
+    it('stores a valid report once and attaches its estimate', async () => {
+      const key = await create_representative()
+      const wire = sign_hardware({ key })
+      const response = await post_message(wire)
+      expect(response).to.have.status(200)
+      expect(response.body.stored).to.equal(true)
+      expect((await post_message(wire)).body.stored).to.equal(false)
+      expect(await stored_messages(wire)).to.have.length(1)
+
+      const reports = await load_representative_hardware_reports({
+        accounts: [key.account]
+      })
+      const report = reports.get(key.account)
+      expect(report.cpu_generation).to.equal('epyc_2nd_gen')
+      expect(report.estimated_power_watts).to.be.a('number').above(0)
+      expect(report.message_digest).to.equal(digest_of(wire))
+    })
+
+    it('stores a report whose CPU it cannot place, with no estimate', async () => {
+      const key = await create_representative()
+      const wire = sign_hardware({
+        key,
+        content: hardware_content({
+          cpu_model: 'QEMU Virtual CPU version 2.5+',
+          node_cpu_utilization_basis_points: null
+        })
+      })
+      expect(await post_message(wire)).to.have.status(200)
+      const reports = await load_representative_hardware_reports({
+        accounts: [key.account]
+      })
+      expect(reports.get(key.account).estimated_power_watts).to.equal(null)
+    })
+
+    const rejected = [
+      [
+        'a missing key',
+        () => {
+          const { virtualization, ...content } = hardware_content()
+          return { content }
+        }
+      ],
+      [
+        'an empty CPU model',
+        () => ({ content: hardware_content({ cpu_model: ' ' }) })
+      ],
+      ['zero CPUs', () => ({ content: hardware_content({ logical_cpus: 0 }) })],
+      [
+        'an unknown storage kind',
+        () => ({
+          content: hardware_content({ storage: [{ kind: 'tape', bytes: 1 }] })
+        })
+      ],
+      [
+        'an extra storage key',
+        () => ({
+          content: hardware_content({
+            storage: [{ kind: 'ssd', bytes: 1, model: 'x' }]
+          })
+        })
+      ],
+      [
+        'utilization over 100%',
+        () => ({
+          content: hardware_content({ cpu_utilization_basis_points: 10001 })
+        })
+      ],
+      [
+        'under a day of uptime',
+        () => ({
+          content: hardware_content({
+            utilization_window_seconds: DAY_SECONDS - 1
+          })
+        })
+      ],
+      [
+        'a free-text virtualization',
+        () => ({
+          content: hardware_content({ virtualization: 'Some VPS' })
+        })
+      ],
+      ['a block reference', () => ({ references: ['ab'.repeat(32)] })]
+    ]
+    for (const [label, build] of rejected) {
+      it(`rejects ${label} and stores nothing`, async () => {
+        const key = await create_representative()
+        const wire = sign_hardware({ key, ...build() })
+        expect(await post_message(wire)).to.have.status(400)
+        expect(await stored_messages(wire)).to.have.length(0)
+      })
+    }
+
+    it('rejects a report for an account that is not a representative', async () => {
+      const wire = sign_hardware({
+        key: await create_representative({ representative: false })
+      })
+      expect(await post_message(wire)).to.have.status(400)
+      expect(await stored_messages(wire)).to.have.length(0)
     })
   })
 })

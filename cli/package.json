@@ -34,6 +34,7 @@
   },
   "packageManager": "yarn@3.2.1",
   "files": [
-    "index.mjs"
+    "index.mjs",
+    "collect-host-hardware.mjs"
   ]
 }

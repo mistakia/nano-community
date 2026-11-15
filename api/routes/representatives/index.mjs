@@ -3,7 +3,10 @@ import dayjs from 'dayjs'
 import cron from 'node-cron'
 
 import db from '#db'
-import load_representative_power_readings from '#libs-server/load-representative-power-readings.mjs'
+import {
+  load_representative_hardware_reports,
+  load_representative_power_readings
+} from '#libs-server/load-representative-power-inputs.mjs'
 import cache from '#api/cache.mjs'
 import top from './top.mjs'
 import data_view_route from './data-view.mjs'
@@ -81,7 +84,8 @@ export const loadRepresentatives = async () => {
     network, // 3
     rep_meta, // 4
     latest_uptime, // 5
-    load_representative_power_readings({ accounts }) // 6
+    load_representative_power_readings({ accounts }), // 6
+    load_representative_hardware_reports({ accounts }) // 7
   ])
 
   for (const rep of representatives) {
@@ -95,6 +99,7 @@ export const loadRepresentatives = async () => {
     rep.telemetry = queryResults[1].find((a) => a.account === rep.account) || {}
     rep.network = queryResults[3].find((a) => a.account === rep.account) || {}
     rep.power_reading = queryResults[6].get(rep.account) || null
+    rep.hardware_report = queryResults[7].get(rep.account) || null
 
     // Original semantic: latest observation timestamp; bucketed into
     // last_online/last_offline by that observation's online flag.

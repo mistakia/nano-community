@@ -15,6 +15,8 @@ import {
   sign_message
 } from 'nano-signed-message'
 
+import collect_host_hardware from './collect-host-hardware.mjs'
+
 const is_test = process.env.NODE_ENV === 'test'
 
 const base_url =
@@ -221,6 +223,60 @@ const update_block_meta = {
     }),
   handler: async ({ block_hash }) =>
     await send_message_handler('update-block-meta', block_hash)
+}
+
+const report_representative_hardware = {
+  command: 'report-representative-hardware',
+  describe:
+    'Sign the details of the host this representative runs on, for its power estimate (see /network-energy-usage)',
+  handler: async () => {
+    const { private_key } = await load_private_key()
+    let content
+    try {
+      content = collect_host_hardware()
+    } catch (error) {
+      console.error(error.message)
+      return
+    }
+    if (!content.cpu_model) {
+      console.error('No CPU model found in /proc/cpuinfo')
+      return
+    }
+
+    console.log(
+      'This report will be signed and published with your representative:'
+    )
+    console.log(JSON.stringify(content, null, 2))
+    const { confirm } = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'confirm',
+        message: 'Sign and send this hardware report?',
+        default: false
+      }
+    ])
+    if (!confirm) {
+      console.log('Hardware report cancelled.')
+      return
+    }
+
+    const payload = sign_request({
+      private_key,
+      action: 'set_representative_hardware',
+      parameters: { content, references: [], tags: [] }
+    })
+    try {
+      const response = await request({
+        url: `${base_url}/api/auth/message`,
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      console.log('Hardware report sent:', response)
+    } catch (error) {
+      console.error(`Failed to send hardware report: ${error.message || error}`)
+    }
+  }
 }
 
 const update_representative_power_reading = {
@@ -571,6 +627,7 @@ if (isMain(import.meta.url)) {
     .command(update_account_meta)
     .command(update_block_meta)
     .command(update_representative_power_reading)
+    .command(report_representative_hardware)
     .command(bind_nostr_key)
     .command(pledge)
     .demandCommand(1, 'You must provide at least one command.')

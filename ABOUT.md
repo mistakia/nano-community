@@ -58,7 +58,7 @@ An account owner signs a `set_block_meta` message to attach a public note to a c
 
 ## Representative Power Readings
 
-A representative operator signs `set_representative_power_reading` with a measured energy reading of the whole host. The latest reading per representative, else its hand-entered CPU TDP value, feeds the homepage energy figure and the representatives table. No figure is estimated. The method is `docs/network-energy-usage.md`, and the plan is [[user:task/github/mistakia/nano-community/102-docs-document-how-the-network-tdp-energy-usage-is-calculated.md]]. Gathering readings is [[user:task/nano-cryptocurrency/nano-community/collect-principal-representative-power-readings.md]].
+A representative operator signs a measured energy reading of the host (`set_representative_power_reading`), or a report of its hardware (`set_representative_hardware`) that the site turns into an estimate with the Cloud Carbon Footprint model. The latest reading, else the hardware estimate, else a hand-entered CPU TDP value, feeds the homepage energy figure and the representatives table. No general estimate stands in for a representative that reports nothing. The method is `docs/network-energy-usage.md`, and the plan is [[user:task/github/mistakia/nano-community/102-docs-document-how-the-network-tdp-energy-usage-is-calculated.md]]. Gathering readings is [[user:task/nano-cryptocurrency/nano-community/collect-principal-representative-power-readings.md]].
 
 ## Account Labels
 
