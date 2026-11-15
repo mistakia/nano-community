@@ -22,7 +22,7 @@ describe('nano-community-cli package', () => {
     ]) {
       expect(manifest, field).to.not.have.property(field)
     }
-    expect(manifest.scripts).to.not.have.any.keys(
+    expect(manifest.scripts ?? {}).to.not.have.any.keys(
       'preinstall',
       'install',
       'postinstall',

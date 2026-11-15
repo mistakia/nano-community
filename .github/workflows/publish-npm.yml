@@ -1,10 +1,13 @@
 name: Publish to npm
 
 # Publishes nano-community-cli (cli/) when main carries a version npm does
-# not have yet. npm Trusted Publishing authenticates the publish by OIDC, so
-# no npm token exists, and the publish job waits for approval in the npm-release
-# environment. The trusted publisher on npmjs.com names this file and that
-# environment.
+# not have yet and the Test workflow passed on that commit. npm Trusted
+# Publishing authenticates the publish by OIDC, so no npm token exists, and the
+# publish job waits for approval in the npm-release environment. The trusted
+# publisher on npmjs.com names this file and that environment. Every step
+# fails closed: the tarball must hold exactly the files list, the publish must
+# carry provenance, and the verify job checks the published version against
+# this commit from outside.
 
 on:
   push:
@@ -29,6 +32,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     permissions:
+      actions: read
       contents: read
     outputs:
       unpublished: ${{ steps.registry.outputs.unpublished }}
@@ -51,9 +55,30 @@ jobs:
           esac
           echo "unpublished=${unpublished}" >> "$GITHUB_OUTPUT"
 
+      # Test runs the package guards (no dependencies, imports within files)
+      # and the CLI suites, on Node 24 and on the engines floor
+      # Test runs on pushes to main only, and only main may publish
+      - name: Require the Test workflow to pass on this commit
+        if: steps.registry.outputs.unpublished == 'true' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for attempt in $(seq 1 60); do
+            # A failed API call is retried like a run still in progress
+            run=$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/test.yml/runs?head_sha=${GITHUB_SHA}&event=push" \
+              --jq '.workflow_runs[0] | "\(.status) \(.conclusion)"') || run=unavailable
+            case "$run" in
+              "completed success") echo "Test passed on ${GITHUB_SHA}"; exit 0 ;;
+              completed*) echo "Test finished ${run#completed } on ${GITHUB_SHA}" >&2; exit 1 ;;
+            esac
+            sleep 30
+          done
+          echo "Test did not pass on ${GITHUB_SHA} within 30 minutes" >&2
+          exit 1
+
   publish:
     needs: check
-    if: needs.check.outputs.unpublished == 'true'
+    if: needs.check.outputs.unpublished == 'true' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: npm-release
     permissions:
@@ -77,8 +102,35 @@ jobs:
             exit 1
           fi
 
-      - name: List the tarball contents
-        run: npm pack --dry-run
+      - name: Require the tarball to hold exactly the files list
+        run: |
+          expected=$({ echo package.json; jq -r '.files[]' package.json; } | sort)
+          actual=$(npm pack --dry-run --json | jq -r '.[0].files[].path' | sort)
+          echo "$actual"
+          if [ "$expected" != "$actual" ]; then
+            diff <(echo "$expected") <(echo "$actual") >&2 || true
+            echo "the tarball's files are not the package.json files list" >&2
+            exit 1
+          fi
 
+      # --provenance fails the publish when no attestation can be made, rather
+      # than relying on Trusted Publishing to add one
       - name: Publish
-        run: npm publish --ignore-scripts
+        run: npm publish --provenance --ignore-scripts
+
+  verify:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+
+      - name: Verify the published package against this commit
+        run: ../.github/scripts/verify-npm-release.sh

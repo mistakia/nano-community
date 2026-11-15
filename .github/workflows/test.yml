@@ -61,3 +61,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn test
+
+      # cli/package.json declares node >=20.19.0, so the CLI suites also run
+      # on that floor, against a fresh database
+      - name: Install Node.js 20.19, the CLI's engines floor
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 20.19.0
+
+      - name: CLI tests on Node 20.19
+        run: |
+          node --version
+          psql -h 127.0.0.1 -U postgres -d postgres -c 'DROP DATABASE nano_test' -c 'CREATE DATABASE nano_test'
+          npm run test:cli

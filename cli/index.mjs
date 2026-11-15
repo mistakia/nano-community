@@ -14,8 +14,11 @@ import {
   sign_message
 } from './sign-message.mjs'
 
-const DEFAULT_API_URL = 'https://nano.community'
+// Every signed message goes here. The published bin has no setting that
+// changes it; only a caller importing main, as the tests do, can.
+const API_URL = 'https://nano.community'
 const REQUEST_TIMEOUT_MS = 20000
+const MAX_RESPONSE_BYTES = 1024 * 1024
 const HEX_64_RE = /^[0-9a-f]{64}$/
 
 // The published bin cannot import the repo's #common, so it carries its own
@@ -32,87 +35,83 @@ const isMain = (import_meta_url) => {
   }
 }
 
-// A failure the CLI reports as one line, without a stack
-class CliError extends Error {}
+// Characters that could reorder, hide or disguise part of what is shown: C1
+// controls, format characters (bidirectional overrides, zero-width and tag
+// characters), line separators, spaces other than U+0020, and characters
+// that render blank (the grapheme joiner, variation selectors, Hangul
+// fillers and the braille blank)
+const DISGUISING_RE =
+  // Each character matches alone, so a combining one in the class is meant
+  // eslint-disable-next-line no-control-regex, no-misleading-character-class
+  /[\u0080-\u009f\p{Cf}\p{Zl}\p{Zp}\u00a0\u034f\u115f\u1160\u1680\u2000-\u200a\u202f\u205f\u2800\u3000\u3164\ufe00-\ufe0f\uffa0\u{e0100}-\u{e01ef}]/gu
 
-// Server text is printed to a terminal, so control characters are removed
+const escape_disguising = (text) =>
+  text.replace(DISGUISING_RE, (char) => {
+    const hex = char.codePointAt(0).toString(16)
+    return hex.length > 4 ? `\\u{${hex}}` : `\\u${hex.padStart(4, '0')}`
+  })
+
+// Server text and echoed input are printed to a terminal, so C0 controls are
+// removed and disguising characters show escaped
 const printable = (text) =>
   // eslint-disable-next-line no-control-regex
-  String(text).replace(/[\u0000-\u001f\u007f-\u009f]/g, '')
+  escape_disguising(String(text).replace(/[\u0000-\u001f\u007f]/g, ''))
 
-// JSON.stringify escapes C0 controls; C1 controls and bidirectional overrides
-// could still reorder or hide part of the review, so they show escaped
-const reviewable = (text) =>
-  text.replace(
-    // eslint-disable-next-line no-control-regex
-    /[\u0080-\u009f\u200e\u200f\u202a-\u202e\u2066-\u2069]/g,
-    (char) => `\\u${char.charCodeAt(0).toString(16).padStart(4, '0')}`
-  )
+// JSON.stringify escapes C0 controls, and the rest show escaped, so what the
+// operator reviews is what is signed
+const reviewable = (value) => escape_disguising(JSON.stringify(value, null, 2))
 
-// The API every signed message goes to. NC_CLI_API_URL overrides it, for a
-// local server only over http, and the override is announced on stderr.
-let api_url = null
-function get_api_url() {
-  if (api_url) return api_url
-  const override = process.env.NC_CLI_API_URL
-  if (!override) {
-    api_url = DEFAULT_API_URL
-    return api_url
+// The response body as text, refused past MAX_RESPONSE_BYTES so a hostile
+// server cannot fill a small host's memory
+const read_body = async (response) => {
+  const chunks = []
+  let size = 0
+  for await (const chunk of response.body ?? []) {
+    size += chunk.length
+    if (size > MAX_RESPONSE_BYTES) {
+      throw new Error('the response is larger than 1 MiB')
+    }
+    chunks.push(chunk)
   }
-  let url
-  try {
-    url = new URL(override)
-  } catch {
-    throw new CliError('NC_CLI_API_URL is not a URL')
-  }
-  const is_loopback = ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname)
-  if (url.protocol !== 'https:' && !(url.protocol === 'http:' && is_loopback)) {
-    throw new CliError('NC_CLI_API_URL must be https, or http to localhost')
-  }
-  api_url = url.origin
-  if (api_url !== DEFAULT_API_URL) {
-    console.error(
-      `Warning: NC_CLI_API_URL sends to ${api_url}, not ${DEFAULT_API_URL}`
-    )
-  }
-  return api_url
+  return Buffer.concat(chunks).toString('utf8')
 }
 
 // Posts a signed body. A redirect is refused rather than followed, so a
 // signed message reaches only the origin the operator confirmed.
-async function post({ path, body }) {
+async function post({ api_url, path, body }) {
   let response
+  let text
   try {
-    response = await fetch(`${get_api_url()}${path}`, {
+    response = await fetch(`${api_url}${path}`, {
       method: 'POST',
       body: JSON.stringify(body),
       headers: { 'Content-Type': 'application/json' },
       redirect: 'error',
       signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS)
     })
+    text = await read_body(response)
   } catch (error) {
-    throw new CliError(
-      `request failed: ${printable(error.cause?.message || error.cause?.code || error.message)}`
+    throw new Error(
+      `request failed: ${error.cause?.message || error.cause?.code || error.message}`
     )
   }
   let result = null
   try {
-    result = await response.json()
+    result = JSON.parse(text)
   } catch {
     // a body that is not JSON reports by its status
   }
   if (!response.ok) {
-    throw new CliError(printable(result?.error || `HTTP ${response.status}`))
+    throw new Error(result?.error || `HTTP ${response.status}`)
   }
   return result
 }
 
 // The private key from NC_CLI_NANO_PRIVATE_KEY, else a hidden prompt. It is
-// removed from the environment once read, and never printed or written.
+// never printed or written.
 async function load_private_key() {
   let private_key = process.env.NC_CLI_NANO_PRIVATE_KEY
   if (private_key) {
-    delete process.env.NC_CLI_NANO_PRIVATE_KEY
     console.error('Private key found in environment variable.')
   } else {
     console.error(
@@ -121,9 +120,7 @@ async function load_private_key() {
     private_key = await ask_hidden('Private key (64 hex characters, hidden):')
   }
   private_key = (private_key || '').trim()
-  if (!HEX_64_RE.test(private_key.toLowerCase())) {
-    throw new CliError('The private key must be 64 hex characters')
-  }
+  // get_public_key refuses anything but 64 hex characters, without echoing it
   const public_key = get_public_key(private_key)
   return {
     private_key,
@@ -132,32 +129,47 @@ async function load_private_key() {
   }
 }
 
-// A nano.community payload with a fresh nonce. The nonce and time are set
-// before the review, so the operator sees exactly what is signed.
-const create_payload = ({ account, action, parameters }) => ({
+// A payload signed now. A nano.community message carries a one-time nonce;
+// the nostr profiles, printed rather than sent, have none. The time and
+// nonce are set before the review, so the operator sees exactly what is
+// signed.
+const create_payload = ({
+  domain = 'nano.community',
+  account,
+  action,
+  parameters,
+  statement
+}) => ({
   version: 1,
-  domain: 'nano.community',
+  domain,
   action,
   account,
   issued_at: Math.floor(Date.now() / 1000),
-  nonce: crypto.randomBytes(16).toString('hex'),
+  ...(domain === 'nano.community' && {
+    nonce: crypto.randomBytes(16).toString('hex')
+  }),
+  ...(statement && { statement }),
   parameters
 })
 
-// Shows every payload that will be signed and where it goes, and asks once
-const confirm_send = async ({ payloads, path }) => {
-  const url = `${get_api_url()}${path}`
-  console.log(`This will be signed and sent to ${url}:`)
-  for (const payload of payloads) {
-    console.log(reviewable(JSON.stringify(payload, null, 2)))
+// Shows every payload that will be signed and where it goes, then signs and
+// posts only on y. Returns whether it sent.
+const confirm_and_post = async ({ api_url, path, payloads, sign, sent }) => {
+  console.log(`This will be signed and sent to ${api_url}${path}:`)
+  for (const payload of payloads) console.log(reviewable(payload))
+  if (!(await confirm('Sign and send?'))) {
+    console.log('Cancelled. Nothing was signed or sent.')
+    return false
   }
-  return confirm('Sign and send?')
+  const response = await post({ api_url, path, body: sign() })
+  console.log(`${sent}:`, reviewable(response))
+  return true
 }
 
 const add_signing_key = {
   name: 'add-signing-key',
   describe: 'Add a new signing key',
-  handler: async () => {
+  handler: async ({ api_url }) => {
     const { private_key, nano_account_address } = await load_private_key()
 
     const linked_private_key = crypto.randomBytes(32).toString('hex')
@@ -174,31 +186,27 @@ const add_signing_key = {
       action: 'accept_link',
       parameters: { linked_account: nano_account_address }
     })
-    if (
-      !(await confirm_send({
-        payloads: [link, accept],
-        path: '/api/auth/register/key'
-      }))
-    ) {
-      console.log('Signing key registration cancelled.')
-      return
-    }
-
-    const response = await post({
+    const sent = await confirm_and_post({
+      api_url,
       path: '/api/auth/register/key',
-      body: {
+      payloads: [link, accept],
+      sign: () => ({
         link: sign_message({ payload: link, private_key }),
         accept: sign_message({
           payload: accept,
           private_key: linked_private_key
         })
-      }
+      }),
+      sent: 'Key registration successful'
     })
-    console.log('Key registration successful:', response)
-    console.log(
+    if (!sent) return
+    console.log(`Signing public key: ${linked_public_key}`)
+    // The private key goes to stderr, so output piped or redirected to a
+    // file does not carry it
+    console.error(
       'Store the signing private key now. It is shown once and saved nowhere:'
     )
-    console.log({ linked_public_key, linked_private_key })
+    console.error(linked_private_key)
   }
 }
 
@@ -206,10 +214,10 @@ const revoke_signing_key = {
   name: 'revoke-signing-key',
   args: ['linked_public_key'],
   describe: 'Revoke an existing signing key',
-  handler: async ([linked_public_key]) => {
+  handler: async ({ api_url, args: [linked_public_key] }) => {
     linked_public_key = linked_public_key.toLowerCase()
     if (!HEX_64_RE.test(linked_public_key)) {
-      throw new CliError('linked_public_key must be 64 hex characters')
+      throw new Error('linked_public_key must be 64 hex characters')
     }
 
     const { nano_account_address, private_key } = await load_private_key()
@@ -219,26 +227,19 @@ const revoke_signing_key = {
       parameters: { linked_public_key }
     })
     console.log(`Revoking the signing key ${linked_public_key}`)
-    if (
-      !(await confirm_send({
-        payloads: [payload],
-        path: '/api/auth/revoke/key'
-      }))
-    ) {
-      console.log('Signing key revocation cancelled.')
-      return
-    }
-
-    const response = await post({
+    await confirm_and_post({
+      api_url,
       path: '/api/auth/revoke/key',
-      body: sign_message({ payload, private_key })
+      payloads: [payload],
+      sign: () => sign_message({ payload, private_key }),
+      sent: 'Key revocation successful'
     })
-    console.log('Key revocation successful:', response)
   }
 }
 
 // Signs one message to /api/auth/message after the operator reviews it
 const send_message = async ({
+  api_url,
   key: { private_key, nano_account_address },
   action,
   content,
@@ -249,17 +250,13 @@ const send_message = async ({
     action,
     parameters: { content, references, tags: [] }
   })
-  if (
-    !(await confirm_send({ payloads: [payload], path: '/api/auth/message' }))
-  ) {
-    console.log('Message cancelled.')
-    return
-  }
-  const response = await post({
+  await confirm_and_post({
+    api_url,
     path: '/api/auth/message',
-    body: sign_message({ payload, private_key })
+    payloads: [payload],
+    sign: () => sign_message({ payload, private_key }),
+    sent: 'Message sent'
   })
-  console.log('Message sent successful:', response)
 }
 
 // Asks for each field, then lets the operator change any before signing.
@@ -268,12 +265,13 @@ const ask_fields = async (fields) => {
   const content = {}
   for (const { name, message } of fields) {
     const answer = await ask(message)
-    if (answer === null) throw new CliError('Input ended before every field')
+    if (answer === null) throw new Error('Input ended before every field')
     content[name] = answer
   }
   const names = fields.map(({ name }) => name)
   for (;;) {
-    console.log('Please review your message content:', content)
+    console.log('Please review your message content:')
+    console.log(reviewable(content))
     if (!(await confirm('Would you like to edit any field?'))) return content
     const field = (
       (await ask(`Which field? (${names.join(', ')})`)) || ''
@@ -283,7 +281,7 @@ const ask_fields = async (fields) => {
       continue
     }
     const value = await ask(`Enter new value for ${field}:`)
-    if (value === null) throw new CliError('Input ended before the new value')
+    if (value === null) throw new Error('Input ended before the new value')
     content[field] = value
   }
 }
@@ -307,8 +305,9 @@ const REP_META_FIELDS = [
 const update_rep_meta = {
   name: 'update-rep-meta',
   describe: 'Update representative metadata',
-  handler: async () =>
+  handler: async ({ api_url }) =>
     send_message({
+      api_url,
       key: await load_private_key(),
       action: 'set_representative_meta',
       content: await ask_fields(REP_META_FIELDS)
@@ -318,8 +317,9 @@ const update_rep_meta = {
 const update_account_meta = {
   name: 'update-account-meta',
   describe: 'Update account metadata',
-  handler: async () =>
+  handler: async ({ api_url }) =>
     send_message({
+      api_url,
       key: await load_private_key(),
       action: 'set_account_meta',
       content: await ask_fields([{ name: 'alias', message: 'Alias:' }])
@@ -330,12 +330,13 @@ const update_block_meta = {
   name: 'update-block-meta',
   args: ['block_hash'],
   describe: 'Update block metadata',
-  handler: async ([block_hash]) => {
+  handler: async ({ api_url, args: [block_hash] }) => {
     block_hash = block_hash.toLowerCase()
     if (!HEX_64_RE.test(block_hash)) {
-      throw new CliError('A 64 hex character block hash is required')
+      throw new Error('A 64 hex character block hash is required')
     }
     await send_message({
+      api_url,
       key: await load_private_key(),
       action: 'set_block_meta',
       content: await ask_fields([{ name: 'note', message: 'Note:' }]),
@@ -348,22 +349,43 @@ const report_representative_hardware = {
   name: 'report-representative-hardware',
   describe:
     'Sign the details of the host this representative runs on, for its power estimate (see /network-energy-usage)',
-  handler: async () => {
+  handler: async ({ api_url }) => {
     const key = await load_private_key()
     const content = collect_host_hardware()
     if (!content.cpu_model) {
-      throw new CliError('No CPU model found in /proc/cpuinfo')
+      throw new Error('No CPU model found in /proc/cpuinfo')
     }
-    await send_message({ key, action: 'set_representative_hardware', content })
+    await send_message({
+      api_url,
+      key,
+      action: 'set_representative_hardware',
+      content
+    })
   }
 }
 
+// An ISO 8601 datetime with an explicit Z or offset, so a reading's window
+// cannot shift by the host's time zone
+const ISO_DATETIME_RE =
+  /^(\d{4})-(\d{2})-(\d{2})T\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:\d{2})$/i
+
 // Answers are strings, so a power reading's fields become a number and epoch
-// seconds after the edit loop, which an edited answer goes through too
+// seconds after the edit loop, which an edited answer goes through too. A
+// date that does not exist is refused, since Date.parse would roll
+// 2026-02-30 over to March 2.
 const parse_epoch_seconds = (value) => {
-  const milliseconds = Date.parse(value)
-  if (Number.isNaN(milliseconds)) {
-    throw new CliError(`not an ISO 8601 datetime: ${printable(value)}`)
+  const match = ISO_DATETIME_RE.exec(value.trim())
+  const milliseconds = Date.parse(value.trim())
+  const [year, month, day] = (match || []).slice(1, 4).map(Number)
+  const date = new Date(Date.UTC(year, month - 1, day))
+  if (
+    !match ||
+    Number.isNaN(milliseconds) ||
+    date.getUTCFullYear() !== year ||
+    date.getUTCMonth() !== month - 1 ||
+    date.getUTCDate() !== day
+  ) {
+    throw new Error(`not an ISO 8601 datetime with a Z or offset: ${value}`)
   }
   return Math.floor(milliseconds / 1000)
 }
@@ -374,11 +396,12 @@ const parse_power_reading_content = ({
   measurement_started_at,
   measurement_ended_at
 }) => {
-  const energy = Number(energy_watt_hours)
-  if (!Number.isSafeInteger(energy)) {
-    throw new CliError(
-      `not a whole number of watt-hours: ${printable(energy_watt_hours)}`
-    )
+  const energy = Number(energy_watt_hours.trim())
+  if (
+    !/^[0-9]+$/.test(energy_watt_hours.trim()) ||
+    !Number.isSafeInteger(energy)
+  ) {
+    throw new Error(`not a whole number of watt-hours: ${energy_watt_hours}`)
   }
   return {
     energy_watt_hours: energy,
@@ -392,7 +415,7 @@ const update_representative_power_reading = {
   name: 'update-representative-power-reading',
   describe:
     'Sign a measured power reading for a representative (see /network-energy-usage)',
-  handler: async () => {
+  handler: async ({ api_url }) => {
     const key = await load_private_key()
     const answers = await ask_fields([
       {
@@ -414,6 +437,7 @@ const update_representative_power_reading = {
       }
     ])
     await send_message({
+      api_url,
       key,
       action: 'set_representative_power_reading',
       content: parse_power_reading_content(answers)
@@ -421,53 +445,41 @@ const update_representative_power_reading = {
   }
 }
 
-// A nostr-domain payload, for a proof printed to paste elsewhere
-const create_nostr_payload = ({ action, account, parameters, statement }) => {
-  const issued_at = Math.floor(Date.now() / 1000)
-  const payload = {
-    version: 1,
-    domain: 'nostr',
-    action,
-    account,
-    issued_at,
-    parameters
-  }
-  if (statement) payload.statement = statement
-  return payload
+// Signs a nostr-domain payload and prints the issued_at:signature proof the
+// task board reads, with the tags that carry it. Nothing is sent.
+const print_proof = ({ payload, private_key, output }) => {
+  const { signature } = sign_message({ payload, private_key })
+  const proof = `${payload.issued_at}:${signature}`
+  console.log(JSON.stringify(output(proof), null, 2))
 }
 
 // Signs the nano-signed-message bind_nostr_key profile: the proof a nostr
 // key publishes (kind 10011) to show it controls this Nano account on the
-// nano.community task board. Nothing is sent; paste the output on the
-// board's account page.
+// nano.community task board. Paste the output on the board's account page.
 const bind_nostr_key = {
   name: 'bind-nostr-key',
   args: ['npub'],
   describe: 'Sign a proof that binds this Nano account to a nostr key',
-  handler: async ([npub]) => {
+  handler: async ({ args: [npub] }) => {
     if (!decode_npub(npub)) {
-      throw new CliError('Expected an npub, for example npub1...')
+      throw new Error('Expected an npub, for example npub1...')
     }
     const { private_key, nano_account_address } = await load_private_key()
-    const payload = create_nostr_payload({
-      action: 'bind_nostr_key',
-      account: nano_account_address,
-      parameters: {},
-      statement: `Verifying that I control the following Nostr public key: ${npub}`
+    print_proof({
+      payload: create_payload({
+        domain: 'nostr',
+        action: 'bind_nostr_key',
+        account: nano_account_address,
+        parameters: {},
+        statement: `Verifying that I control the following Nostr public key: ${npub}`
+      }),
+      private_key,
+      output: (proof) => ({
+        account: nano_account_address,
+        proof,
+        tag: ['i', `nano:${nano_account_address}`, proof]
+      })
     })
-    const { signature } = sign_message({ payload, private_key })
-    const proof = `${payload.issued_at}:${signature}`
-    console.log(
-      JSON.stringify(
-        {
-          account: nano_account_address,
-          proof,
-          tag: ['i', `nano:${nano_account_address}`, proof]
-        },
-        null,
-        2
-      )
-    )
   }
 }
 
@@ -482,7 +494,8 @@ function xno_to_raw(amount) {
 }
 
 // Decodes an npub to its 64-character hex key (NIP-19 bech32), or returns
-// null. No checksum library is needed: the bech32 checksum is verified here.
+// null. No checksum library is needed: the bech32 checksum is verified here,
+// and the padding bits must be zero, so one key has one npub.
 function decode_npub(npub) {
   const CHARSET = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l'
   const polymod = (values) => {
@@ -511,54 +524,50 @@ function decode_npub(npub) {
       bytes.push((acc >> bits) & 0xff)
     }
   }
-  const hex = Buffer.from(bytes.slice(0, 32)).toString('hex')
-  return HEX_64_RE.test(hex) ? hex : null
+  if (acc & ((1 << bits) - 1)) return null
+  return Buffer.from(bytes).toString('hex')
 }
 
 // Signs the nano-signed-message pledge profile: a public promise by this Nano
 // account to pay whoever completes a task on the nano.community task board.
-// Nothing is sent; paste the output on the task's page.
+// Paste the output on the task's page.
 const pledge = {
   name: 'pledge',
   args: ['issue_id', 'amount_xno', 'npub'],
   describe: 'Sign a pledge of XNO to a task board task',
-  handler: async ([issue_id, amount_xno, npub]) => {
+  handler: async ({ args: [issue_id, amount_xno, npub] }) => {
     const amount_raw = xno_to_raw(amount_xno)
     const nostr_public_key = decode_npub(npub)
     if (!HEX_64_RE.test(issue_id)) {
-      throw new CliError('Expected the task id, 64 lowercase hex characters')
+      throw new Error('Expected the task id, 64 lowercase hex characters')
     }
     if (!amount_raw) {
-      throw new CliError('Expected a positive XNO amount, for example 2.5')
+      throw new Error('Expected a positive XNO amount, for example 2.5')
     }
     if (!nostr_public_key) {
-      throw new CliError('Expected an npub, for example npub1...')
+      throw new Error('Expected an npub, for example npub1...')
     }
     const { private_key, nano_account_address } = await load_private_key()
-    const payload = create_nostr_payload({
-      action: 'pledge',
-      account: nano_account_address,
-      parameters: { issue_event_id: issue_id, amount_raw, nostr_public_key }
+    print_proof({
+      payload: create_payload({
+        domain: 'nostr',
+        action: 'pledge',
+        account: nano_account_address,
+        parameters: { issue_event_id: issue_id, amount_raw, nostr_public_key }
+      }),
+      private_key,
+      output: (proof) => ({
+        account: nano_account_address,
+        issue_id,
+        amount_raw,
+        proof,
+        tags: [
+          ['amount', amount_raw],
+          ['nano_account', nano_account_address],
+          ['nano_proof', proof]
+        ]
+      })
     })
-    const { signature } = sign_message({ payload, private_key })
-    const proof = `${payload.issued_at}:${signature}`
-    console.log(
-      JSON.stringify(
-        {
-          account: nano_account_address,
-          issue_id,
-          amount_raw,
-          proof,
-          tags: [
-            ['amount', amount_raw],
-            ['nano_account', nano_account_address],
-            ['nano_proof', proof]
-          ]
-        },
-        null,
-        2
-      )
-    )
   }
 }
 
@@ -594,7 +603,7 @@ const usage = (command) => {
   ].join('\n')
 }
 
-async function main(argv) {
+export async function main(argv, { api_url = API_URL } = {}) {
   let parsed
   try {
     parsed = parseArgs({
@@ -606,7 +615,7 @@ async function main(argv) {
       allowPositionals: true
     })
   } catch (error) {
-    console.error(`${error.message}\n\n${usage()}`)
+    console.error(`${printable(error.message)}\n\n${usage()}`)
     return 1
   }
   const { values, positionals } = parsed
@@ -634,10 +643,11 @@ async function main(argv) {
   }
 
   try {
-    await command.handler(args)
+    await command.handler({ api_url, args })
     return 0
   } catch (error) {
-    // One line for any failure: a stack trace tells an operator nothing
+    // One line for any failure: a stack trace tells an operator nothing,
+    // and server text and echoed input lose their control characters
     console.error(printable(error.message))
     return 1
   } finally {

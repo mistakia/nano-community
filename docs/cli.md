@@ -22,9 +22,9 @@ yarn global add nano-community-cli
 
 Version 0.1.0 or later is required. Earlier versions sign in a format the API no longer accepts.
 
-The CLI needs Node.js 20.19 or later. From 0.7.0 it has no dependencies: installing it fetches only its own files, and it signs with code it carries. Every version is published from this repository's GitHub workflow with npm provenance, which links the package to the commit it was built from. `npm view nano-community-cli dist.attestations` shows it.
+The CLI needs Node.js 20.19 or later. From 0.7.0 it has no dependencies: installing it fetches only its own files, and it signs with code it carries. Every version from 0.5.0 on is published from this repository's GitHub workflow with npm provenance, which links the package to the commit it was built from. `npm view nano-community-cli dist.attestations` shows it, and `npm audit signatures` in a project that installs it verifies it.
 
-To run it once without installing, use `npx nano-community-cli@0.7.0 <command>`.
+To run it once without installing, use `npx nano-community-cli@0.8.0 <command>`.
 
 ### Obtaining your account private key
 
@@ -34,9 +34,9 @@ Use the account private key once, to link a signing key, and use the signing key
 
 ### Setting Environment Variables (optional)
 
-The CLI prompts for the private key if it is not set as an environment variable, and does not show what you type. This is the safest way: the key is not stored in your command history or in a file. The CLI never takes the key as an argument, never writes it to disk and never prints it.
+The CLI prompts for the private key if it is not set as an environment variable, and does not show what you type. A script can pipe the key in instead: the prompt reads the first line of standard input, as in `pass show nano/signing-key | nano-community bind-nostr-key <npub>`. This is the safest way: the key is not stored in your command history or in a file. The CLI never takes the key as an argument, never writes it to disk and never prints it.
 
-If you prefer the environment variable, set it for a single command or a single session. Either may store the key in your command history. Do not save it in a shell startup file such as `.bashrc`, where it sits in plain text. The CLI removes the variable from its own environment once it has read it.
+If you prefer the environment variable, set it for a single command or a single session. Either may store the key in your command history. Do not save it in a shell startup file such as `.bashrc`, where it sits in plain text.
 
 #### Setting the environment variable for a single command
 
@@ -72,7 +72,7 @@ The purpose of a signing key is to sign messages to manage metadata related to a
 nano-community add-signing-key
 ```
 
-Run it with the account private key. The CLI generates a new signing key and links it to the account. Linking takes both keys' consent: the account signs a message naming the new key, and the new key signs a message naming the account. The CLI prints the new key's public and private keys. Store the private key securely.
+Run it with the account private key. The CLI generates a new signing key and links it to the account. Linking takes both keys' consent: the account signs a message naming the new key, and the new key signs a message naming the account. The CLI prints the new key's public key, and its private key once on standard error, so output piped or redirected to a file does not carry it. Store the private key securely.
 
 This new signing key can now be used in place of your account key. Replace the `NC_CLI_NANO_PRIVATE_KEY` environment variable with the signing key's private key. Messages it signs apply to the linked account.
 
@@ -94,9 +94,9 @@ The CLI asks you to confirm and shows the key that will be revoked.
 
 ### How messages are signed
 
-Every command signs a [canonical Nano signed message](https://github.com/mistakia/nano-signed-message/blob/main/SPECIFICATION.md) for the domain `nano.community`. The signature binds the action, every field you entered, the signing account, the time and a one-time nonce. The API accepts a message only within ten minutes of its signing time, so the clock on your computer needs to be roughly right.
+Every command signs a [canonical Nano signed message](https://github.com/mistakia/nano-signed-message/blob/main/SPECIFICATION.md). A command that sends signs for the domain `nano.community`, and the signature binds the action, every field you entered, the signing account, the time and a one-time nonce. The API accepts a message only within ten minutes of its signing time, so the clock on your computer needs to be roughly right. `bind-nostr-key` and `pledge` sign for the domain `nostr` and send nothing; see [Task board proofs](#task-board-proofs).
 
-Before a command sends anything, it prints the exact message it will sign and the address it will send it to, and asks `Sign and send?`. Only `y` or `yes` signs; anything else sends nothing. Messages go to `https://nano.community`. The `NC_CLI_API_URL` environment variable changes that, for testing against a local server. The CLI warns whenever it is set to anything else, and refuses a value that is not an `https` address or an `http` address on `localhost`.
+Before a command sends anything, it prints the exact message it will sign and the address it will send it to, and asks `Sign and send?`. Only `y` or `yes` signs. Any other answer sends nothing, and input that ends before an answer is a failure. Control, direction-changing, zero-width and blank characters in the message show escaped, so what you review is what is signed. Messages go only to `https://nano.community`: the CLI has no setting that changes that, and it refuses a redirect.
 
 ### Updating Nano Representative Metadata
 
@@ -165,9 +165,9 @@ Sign with a signing key linked to the representative account, not the account pr
 
 Supported fields:
 
-- energy_watt_hours — the energy the whole host used over the window, in whole watt-hours. Take it as the difference between two readings of a cumulative energy counter.
+- energy_watt_hours — the energy the whole host used over the window, in whole watt-hours, written as digits. Take it as the difference between two readings of a cumulative energy counter.
 - measurement_method — `wall_meter` for a meter between the wall and the host's power supply, or `baseboard_management_controller` for the host's own power sensor through IPMI or Redfish.
-- measurement_started_at and measurement_ended_at — when the window began and ended, as ISO 8601 datetimes such as `2026-11-13T00:00:00Z`. The window must be at least 24 hours and must end before you sign. The CLI sends both as epoch seconds.
+- measurement_started_at and measurement_ended_at — when the window began and ended, as ISO 8601 datetimes with `Z` or an offset, such as `2026-11-13T00:00:00Z`. A time with no zone is refused rather than read as local time. The window must be at least 24 hours and must end before you sign. The CLI sends both as epoch seconds.
 
 The reading whose window ends latest is your current one, and every reading you sign is kept. To correct a reading, sign one over a later window.
 
@@ -189,3 +189,14 @@ Run it on the host that runs the node, signed with a key linked to the represent
 - node_cpu_utilization_basis_points — the `nano_node` process's average share of the host's CPU since it started, or null if no node process is found
 
 The latest report is current. Run it again after any hardware change or move to another host. A measured reading from `update-representative-power-reading` takes precedence over the estimate.
+
+### Task board proofs
+
+Two commands sign proofs for the nano.community [task board](/roadmap) and print them to paste there. They send nothing and do not ask to confirm.
+
+```bash
+nano-community bind-nostr-key <npub>
+nano-community pledge <issue_id> <amount_xno> <npub>
+```
+
+`bind-nostr-key` signs a statement that your nano account controls the nostr key `npub`. Paste the printed tag on the board's [account page](/roadmap/account). `pledge` signs a promise to pay `amount_xno` to whoever completes the task `issue_id`, the task's 64-character event id, with `npub` as the pledging nostr key. Paste the printed tags on the task's page.
