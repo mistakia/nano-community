@@ -194,7 +194,6 @@ describe('collect-host-hardware parsers', () => {
       parse_node_cpu_utilization_basis_points({
         process_stat,
         uptime_seconds: 1100,
-        clock_ticks_per_second: 100,
         logical_cpus: 4
       })
     ).to.equal(100)

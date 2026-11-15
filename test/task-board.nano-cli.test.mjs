@@ -28,6 +28,27 @@ const run = (...args) =>
     env: { ...process.env, NC_CLI_NANO_PRIVATE_KEY: PRIVATE_KEY }
   })
 
+// Re-encodes an npub's data characters with a fresh bech32 checksum, so a
+// test can set the padding bits and still pass the checksum
+const BECH32_CHARSET = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l'
+const encode_npub_data = (data) => {
+  const polymod = (values) => {
+    const GEN = [0x3b6a57b2, 0x26508e6d, 0x1ea119fa, 0x3d4233dd, 0x2a1462b3]
+    let chk = 1
+    for (const value of values) {
+      const top = chk >> 25
+      chk = ((chk & 0x1ffffff) << 5) ^ value
+      for (let i = 0; i < 5; i++) if ((top >> i) & 1) chk ^= GEN[i]
+    }
+    return chk
+  }
+  const hrp = [...'npub'].map((c) => c.charCodeAt(0))
+  const expanded = [...hrp.map((c) => c >> 5), 0, ...hrp.map((c) => c & 31)]
+  const mod = polymod([...expanded, ...data, 0, 0, 0, 0, 0, 0]) ^ 1
+  const checksum = [0, 1, 2, 3, 4, 5].map((i) => (mod >> (5 * (5 - i))) & 31)
+  return `npub1${[...data, ...checksum].map((v) => BECH32_CHARSET[v]).join('')}`
+}
+
 describe('Nano CLI pledge', function () {
   this.timeout(30000)
 
@@ -80,12 +101,20 @@ describe('Nano CLI pledge', function () {
         .amount_raw
     expect(await raw('10')).to.equal('10000000000000000000000000000000')
     expect(await raw('0.000000000000000000000000000001')).to.equal('1')
+
+    // The same key with a padding bit set: the checksum holds, but one key
+    // must have one npub
+    const data = [...npub.slice(5, -6)].map((c) => BECH32_CHARSET.indexOf(c))
+    expect(encode_npub_data(data)).to.equal(npub)
+    data[data.length - 1] |= 1
+    const padded_npub = encode_npub_data(data)
     for (const args of [
       [ISSUE_ID, '0', npub],
       [ISSUE_ID, '1e3', npub],
       [ISSUE_ID, '0.0000000000000000000000000000001', npub],
       ['xyz', '1', npub],
-      [ISSUE_ID, '1', npub.slice(0, -1) + (npub.endsWith('q') ? 'p' : 'q')]
+      [ISSUE_ID, '1', npub.slice(0, -1) + (npub.endsWith('q') ? 'p' : 'q')],
+      [ISSUE_ID, '1', padded_npub]
     ]) {
       const result = await run('pledge', ...args).catch((error) => error)
       expect(result.code, args.join(' ')).to.equal(1)

@@ -1,15 +1,13 @@
 import readline from 'readline'
 import { Writable } from 'stream'
 
-// Line prompts on node:readline. One interface reads stdin for the whole run
-// and queues its lines, so answers piped in before a prompt is asked are kept
-// rather than dropped. A hidden prompt mutes the terminal echo.
+// Line prompts on node:readline. One interface reads stdin for the whole run,
+// and its line iterator buffers, so answers piped in before a prompt is asked
+// are kept rather than dropped. A hidden prompt mutes the terminal echo.
 
 let rl = null
+let line_iterator = null
 let echo_muted = false
-let input_closed = false
-const lines = []
-const waiting = []
 
 const terminal_output = new Writable({
   write(chunk, encoding, callback) {
@@ -28,15 +26,7 @@ const open = () => {
     historySize: 0,
     terminal: Boolean(process.stdin.isTTY)
   })
-  rl.on('line', (line) => {
-    const resolve = waiting.shift()
-    if (resolve) resolve(line)
-    else lines.push(line)
-  })
-  rl.on('close', () => {
-    input_closed = true
-    for (const resolve of waiting.splice(0)) resolve(null)
-  })
+  line_iterator = rl[Symbol.asyncIterator]()
   rl.on('SIGINT', () => {
     echo_muted = false
     process.stdout.write('\n')
@@ -46,11 +36,7 @@ const open = () => {
 }
 
 // The next line of input, or null once stdin has ended
-const next_line = () => {
-  if (lines.length) return Promise.resolve(lines.shift())
-  if (input_closed) return Promise.resolve(null)
-  return new Promise((resolve) => waiting.push(resolve))
-}
+const next_line = async () => (await line_iterator.next()).value ?? null
 
 // The prompt goes through readline, which redraws it on a line edit
 const show_prompt = (question) => {
@@ -76,10 +62,12 @@ export async function ask_hidden(question) {
   }
 }
 
-// Only y or yes confirms: an empty answer or ended input is a no
+// Only y or yes confirms, and an empty answer is a no. Input that ends before
+// the answer is a failure, so a script one answer short does not exit 0.
 export async function confirm(question) {
   const answer = await ask(`${question} (y/N)`)
-  return /^y(es)?$/i.test((answer || '').trim())
+  if (answer === null) throw new Error('Input ended before the confirmation')
+  return /^y(es)?$/i.test(answer.trim())
 }
 
 export function close_prompts() {

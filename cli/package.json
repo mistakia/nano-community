@@ -2,9 +2,6 @@
   "name": "nano-community-cli",
   "version": "0.7.0",
   "description": "CLI for Nano.Community Messages",
-  "scripts": {
-    "test": "echo 'Tested from the repository root'"
-  },
   "bin": {
     "nano-community": "index.mjs"
   },

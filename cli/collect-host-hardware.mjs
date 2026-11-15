@@ -42,7 +42,6 @@ export function parse_cpu_utilization_basis_points(stat) {
 export function parse_node_cpu_utilization_basis_points({
   process_stat,
   uptime_seconds,
-  clock_ticks_per_second = CLOCK_TICKS_PER_SECOND,
   logical_cpus
 }) {
   // Fields after the parenthesized command name; utime and stime are fields
@@ -51,9 +50,9 @@ export function parse_node_cpu_utilization_basis_points({
     .slice(process_stat.lastIndexOf(')') + 2)
     .split(' ')
   const cpu_seconds =
-    (Number(fields[11]) + Number(fields[12])) / clock_ticks_per_second
+    (Number(fields[11]) + Number(fields[12])) / CLOCK_TICKS_PER_SECOND
   const elapsed_seconds =
-    uptime_seconds - Number(fields[19]) / clock_ticks_per_second
+    uptime_seconds - Number(fields[19]) / CLOCK_TICKS_PER_SECOND
   if (!(elapsed_seconds > 0)) {
     return null
   }
@@ -77,7 +76,6 @@ const read_file = (path) => {
 // and zram devices lack. A SCSI optical drive (type 5) is not storage. The
 // size file counts 512-byte sectors whatever the disk's block size.
 export function read_storage({ sys_block = '/sys/block' } = {}) {
-  const read = read_file
   let names
   try {
     names = readdirSync(sys_block)
@@ -85,12 +83,14 @@ export function read_storage({ sys_block = '/sys/block' } = {}) {
     return []
   }
   return names
-    .filter((name) => read(`${sys_block}/${name}/device/uevent`) !== null)
-    .filter((name) => read(`${sys_block}/${name}/device/type`) !== '5')
+    .filter((name) => read_file(`${sys_block}/${name}/device/uevent`) !== null)
+    .filter((name) => read_file(`${sys_block}/${name}/device/type`) !== '5')
     .map((name) => ({
       kind:
-        read(`${sys_block}/${name}/queue/rotational`) === '1' ? 'hdd' : 'ssd',
-      bytes: Number(read(`${sys_block}/${name}/size`)) * 512
+        read_file(`${sys_block}/${name}/queue/rotational`) === '1'
+          ? 'hdd'
+          : 'ssd',
+      bytes: Number(read_file(`${sys_block}/${name}/size`)) * 512
     }))
     .filter(({ bytes }) => Number.isSafeInteger(bytes) && bytes > 0)
 }
