@@ -41,11 +41,7 @@ jobs:
           node-version-file: .nvmrc
 
       - name: yarn install
-        run: |
-          yarn install --immutable
-          cd cli
-          yarn install --immutable
-          cd ..
+        run: yarn install --immutable
 
       # THE HERMETIC SET, and the ONE definition of it. `yarn verify` is
       # `yarn lint` -- everything in this workflow that runs without the

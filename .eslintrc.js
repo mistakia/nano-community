@@ -1,6 +1,6 @@
 module.exports = {
   parser: '@babel/eslint-parser',
-  ignorePatterns: ['build/*'],
+  ignorePatterns: ['build/*', 'cli/vendor/*'],
   env: {
     browser: true,
     es2021: true

@@ -22,6 +22,10 @@ yarn global add nano-community-cli
 
 Version 0.1.0 or later is required. Earlier versions sign in a format the API no longer accepts.
 
+The CLI needs Node.js 20.19 or later. From 0.7.0 it has no dependencies: installing it fetches only its own files, and it signs with code it carries. Every version is published from this repository's GitHub workflow with npm provenance, which links the package to the commit it was built from. `npm view nano-community-cli dist.attestations` shows it.
+
+To run it once without installing, use `npx nano-community-cli@0.7.0 <command>`.
+
 ### Obtaining your account private key
 
 The CLI signs with the 32-byte private key of a nano account, as 64 hex characters. Wallets usually show a seed or a mnemonic rather than an account private key. A seed and an account index derive the private key, as described in the nano documentation's [key management guide](https://docs.nano.org/integration-guides/key-management/#backing-up-seed). Back up the seed before you export any key from it.
@@ -30,19 +34,13 @@ Use the account private key once, to link a signing key, and use the signing key
 
 ### Setting Environment Variables (optional)
 
-The CLI will prompt you for the private key if it is not already set as an environment variable. Using the CLI in this way is simple and secure, as the private key will neither be stored in command history nor saved to a file.
+The CLI prompts for the private key if it is not set as an environment variable, and does not show what you type. This is the safest way: the key is not stored in your command history or in a file. The CLI never takes the key as an argument, never writes it to disk and never prints it.
 
-If you prefer setting the environment variable, you have three options:
-
-- **For a single command:** Use this method for one-time CLI calls. Note that using this in the terminal may store the private key in your command history, so it's better suited for programmatic use.
-- **For a single session:** This temporarily sets the private key for the duration of the terminal session. Be aware that the key may still be recorded in your command history.
-- **For all sessions:** This method saves the private key in a file within your home directory, ensuring it's available for all sessions.
-
-Choose the method that best suits your security and convenience needs.
+If you prefer the environment variable, set it for a single command or a single session. Either may store the key in your command history. Do not save it in a shell startup file such as `.bashrc`, where it sits in plain text. The CLI removes the variable from its own environment once it has read it.
 
 #### Setting the environment variable for a single command
 
-You can set the environment variable for a single command by passing it as an argument.
+You can set the environment variable for a single command by putting it before the command.
 
 ```bash
 NC_CLI_NANO_PRIVATE_KEY='<private_key>' nano-community update-rep-meta
@@ -63,10 +61,6 @@ set NC_CLI_NANO_PRIVATE_KEY=<private_key>
 ```
 
 This will persist for the duration of the current session in the terminal. You can now run commands without having to set the environment variable for each command.
-
-#### Setting the environment variable for all sessions
-
-You can persist the environment variable for all sessions by adding it to your `.bashrc`, `.zshrc`, or `.bash_profile` file in your home directory.
 
 ## Usage
 
@@ -101,6 +95,8 @@ The CLI asks you to confirm and shows the key that will be revoked.
 ### How messages are signed
 
 Every command signs a [canonical Nano signed message](https://github.com/mistakia/nano-signed-message/blob/main/SPECIFICATION.md) for the domain `nano.community`. The signature binds the action, every field you entered, the signing account, the time and a one-time nonce. The API accepts a message only within ten minutes of its signing time, so the clock on your computer needs to be roughly right.
+
+Before a command sends anything, it prints the exact message it will sign and the address it will send it to, and asks `Sign and send?`. Only `y` or `yes` signs; anything else sends nothing. Messages go to `https://nano.community`. The `NC_CLI_API_URL` environment variable changes that, for testing against a local server. The CLI warns whenever it is set to anything else, and refuses a value that is not an `https` address or an `http` address on `localhost`.
 
 ### Updating Nano Representative Metadata
 
@@ -183,12 +179,12 @@ A representative operator can sign the details of the host the node runs on with
 nano-community report-representative-hardware
 ```
 
-Run it on the host that runs the node, signed with a key linked to the representative account. It reads the following, shows them, and sends nothing until you confirm:
+Run it on the host that runs the node, signed with a key linked to the representative account. It only reads files, under `/proc` and `/sys` and the container marker files, and runs no other program. It reads the following, shows them, and sends nothing until you confirm:
 
 - cpu_model — the CPU name from `/proc/cpuinfo`
 - logical_cpus and memory_bytes — the host's logical CPUs and memory
-- storage — each physical disk, as `ssd` or `hdd` with its size, from `lsblk`
-- virtualization — the virtualization `systemd-detect-virt` reports, or `none`
+- storage — each physical disk, as `ssd` or `hdd` with its size, from `/sys/block`
+- virtualization — the container or hypervisor the host runs in, named as `systemd-detect-virt` names it. It is `none` on bare metal, and `unknown` on a non-x86 host that shows no sign either way.
 - cpu_utilization_basis_points and utilization_window_seconds — the host's average CPU use since boot, from `/proc/stat`, in hundredths of a percent, and the uptime it covers. The host must have been up at least 24 hours.
 - node_cpu_utilization_basis_points — the `nano_node` process's average share of the host's CPU since it started, or null if no node process is found
 

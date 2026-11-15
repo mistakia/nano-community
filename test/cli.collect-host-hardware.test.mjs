@@ -1,11 +1,16 @@
 /* global describe it */
 import chai from 'chai'
 
+import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'fs'
+import os from 'os'
+import path from 'path'
+
 import {
+  detect_virtualization,
   parse_cpu_model,
   parse_cpu_utilization_basis_points,
-  parse_lsblk,
-  parse_node_cpu_utilization_basis_points
+  parse_node_cpu_utilization_basis_points,
+  read_storage
 } from '#root/cli/collect-host-hardware.mjs'
 
 const expect = chai.expect
@@ -31,13 +36,148 @@ describe('collect-host-hardware parsers', () => {
     expect(parse_cpu_utilization_basis_points(stat)).to.equal(3000)
   })
 
-  it('lists physical disks by kind', () => {
-    const output =
-      '400088457216 0 disk\n2000398934016 1 disk\n524288 0 rom\n0 0 disk\n'
-    expect(parse_lsblk(output)).to.deep.equal([
-      { kind: 'ssd', bytes: 400088457216 },
-      { kind: 'hdd', bytes: 2000398934016 }
-    ])
+  it('lists physical disks by kind from /sys/block', () => {
+    const sys_block = mkdtempSync(path.join(os.tmpdir(), 'sys-block-'))
+    const device = (
+      name,
+      { sectors, rotational, scsi_type, hardware = true }
+    ) => {
+      mkdirSync(path.join(sys_block, name, 'queue'), { recursive: true })
+      writeFileSync(path.join(sys_block, name, 'size'), `${sectors}\n`)
+      writeFileSync(
+        path.join(sys_block, name, 'queue', 'rotational'),
+        `${rotational}\n`
+      )
+      if (hardware) {
+        mkdirSync(path.join(sys_block, name, 'device'))
+        writeFileSync(path.join(sys_block, name, 'device', 'uevent'), '')
+        if (scsi_type !== undefined) {
+          writeFileSync(
+            path.join(sys_block, name, 'device', 'type'),
+            `${scsi_type}\n`
+          )
+        }
+      }
+    }
+    expect(
+      read_storage({ sys_block: path.join(sys_block, 'absent') })
+    ).to.deep.equal([])
+    try {
+      device('nvme0n1', { sectors: 781422768, rotational: 0 })
+      device('sda', { sectors: 3907029168, rotational: 1, scsi_type: 0 })
+      device('sr0', { sectors: 2097151, rotational: 1, scsi_type: 5 })
+      device('loop0', { sectors: 204800, rotational: 0, hardware: false })
+      device('dm-0', { sectors: 781422768, rotational: 0, hardware: false })
+      device('zram0', { sectors: 8388608, rotational: 0, hardware: false })
+      device('sdb', { sectors: 0, rotational: 1, scsi_type: 0 })
+      expect(
+        read_storage({ sys_block }).sort((a, b) => a.bytes - b.bytes)
+      ).to.deep.equal([
+        { kind: 'ssd', bytes: 400088457216 },
+        { kind: 'hdd', bytes: 2000398934016 }
+      ])
+    } finally {
+      rmSync(sys_block, { recursive: true })
+    }
+  })
+
+  it('names the virtualization as systemd-detect-virt does', () => {
+    const host = (files, arch = 'x64') => ({
+      read: (file) => files[file] ?? null,
+      arch
+    })
+    const cpuinfo = (flags) => `processor\t: 0\nflags\t\t: fpu ${flags}\n`
+    expect(detect_virtualization(host({ '/.dockerenv': '' }))).to.equal(
+      'docker'
+    )
+    expect(
+      detect_virtualization(host({ '/run/systemd/container': 'lxc' }))
+    ).to.equal('lxc')
+    expect(
+      detect_virtualization(
+        host({ '/proc/1/environ': 'HOME=/\0container=Weird Value\0' })
+      )
+    ).to.equal('container-other')
+    expect(
+      detect_virtualization(
+        host({
+          '/sys/class/dmi/id/sys_vendor': 'QEMU',
+          '/sys/class/dmi/id/product_name': 'Standard PC (Q35 + ICH9, 2009)',
+          '/proc/cpuinfo': cpuinfo('hypervisor')
+        })
+      )
+    ).to.equal('qemu')
+    expect(
+      detect_virtualization(
+        host({
+          '/sys/class/dmi/id/sys_vendor': 'Amazon EC2',
+          '/sys/class/dmi/id/product_name': 'c5.metal'
+        })
+      )
+    ).to.equal('none')
+    expect(
+      detect_virtualization(
+        host({
+          '/sys/class/dmi/id/sys_vendor': 'DigitalOcean',
+          '/sys/devices/system/clocksource/clocksource0/available_clocksource':
+            'kvm-clock tsc acpi_pm',
+          '/proc/cpuinfo': cpuinfo('hypervisor')
+        })
+      )
+    ).to.equal('kvm')
+    expect(
+      detect_virtualization(host({ '/proc/cpuinfo': cpuinfo('hypervisor') }))
+    ).to.equal('vm-other')
+    expect(detect_virtualization(host({ '/run/.containerenv': '' }))).to.equal(
+      'podman'
+    )
+    expect(
+      detect_virtualization(
+        host({
+          '/proc/sys/kernel/osrelease': '5.15.153.1-microsoft-standard-WSL2'
+        })
+      )
+    ).to.equal('wsl')
+    expect(
+      detect_virtualization(host({ '/sys/hypervisor/type': 'xen' }))
+    ).to.equal('xen')
+    expect(
+      detect_virtualization(
+        host({
+          '/sys/class/dmi/id/sys_vendor': 'Microsoft Corporation',
+          '/sys/class/dmi/id/product_name': 'Virtual Machine'
+        })
+      )
+    ).to.equal('microsoft')
+    expect(
+      detect_virtualization(
+        host({
+          '/sys/class/dmi/id/sys_vendor': 'Microsoft Corporation',
+          '/sys/class/dmi/id/product_name': 'Surface Laptop 5',
+          '/proc/cpuinfo': cpuinfo('sse2')
+        })
+      )
+    ).to.equal('none')
+    expect(
+      detect_virtualization(host({ '/sys/class/dmi/id/bios_vendor': 'Xen' }))
+    ).to.equal('xen')
+    expect(
+      detect_virtualization(
+        host(
+          { '/proc/device-tree/hypervisor/compatible': 'linux,kvm' },
+          'arm64'
+        )
+      )
+    ).to.equal('kvm')
+    expect(detect_virtualization(host({}, 'arm64'))).to.equal('unknown')
+    expect(
+      detect_virtualization(
+        host({
+          '/sys/class/dmi/id/sys_vendor': 'Supermicro',
+          '/proc/cpuinfo': cpuinfo('sse2')
+        })
+      )
+    ).to.equal('none')
   })
 
   it("reads the node process's share of the host's CPU capacity", () => {

@@ -5,6 +5,7 @@
 /* global describe, before, after, it */
 import chai from 'chai'
 import { exec, spawn } from 'child_process'
+import http from 'http'
 import util from 'util'
 
 import server from '#api/server.mjs'
@@ -18,8 +19,11 @@ const exec_promise = util.promisify(exec)
 process.env.NODE_ENV = 'test'
 const expect = chai.expect
 
-// The CLI prints its private key status line on stderr, so stdout stays machine-readable
+// The CLI prints its private key status line on stderr, so stdout stays
+// machine-readable, and before a send it warns that NC_CLI_API_URL points
+// away from nano.community
 const private_key_status = 'Private key found in environment variable.\n'
+const send_stderr = `${private_key_status}Warning: NC_CLI_API_URL sends to http://localhost:${port}, not https://nano.community\n`
 
 function strip_ansi_escape_codes(str) {
   const last_newline_index = str.lastIndexOf('\n')
@@ -65,11 +69,12 @@ describe('CLI', function () {
   describe('add-signing-key command', () => {
     it('should add a new signing key', async () => {
       const { stdout, stderr } = await exec_promise(
-        'node cli/index.mjs add-signing-key'
+        'echo y | node cli/index.mjs add-signing-key'
       )
 
-      expect(stderr).to.equal(private_key_status)
+      expect(stderr).to.equal(send_stderr)
       expect(stdout).to.include('Key registration successful')
+      expect(stdout).to.not.include(nano_private_key)
 
       // Extract the new signing key from stdout
       const match = stdout.match(/linked_public_key: '([a-f0-9]+)'/)
@@ -94,10 +99,11 @@ describe('CLI', function () {
       const { stdout, stderr } = await exec_promise(
         `echo y | node cli/index.mjs revoke-signing-key ${new_signing_key}`
       )
-      expect(stderr).to.equal(private_key_status)
+      expect(stderr).to.equal(send_stderr)
       // the confirmation names the key being revoked, not the signer
       expect(stdout).to.include(new_signing_key)
       expect(stdout).to.include('Key revocation successful')
+      expect(stdout).to.not.include(nano_private_key)
 
       const row = await db('account_keys')
         .where({ public_key: new_signing_key })
@@ -179,7 +185,7 @@ describe('CLI', function () {
             case '? Would you like to edit any field? (y/N)':
               child.stdin.write('N\n')
               break
-            case '? Confirm? (y/n)':
+            case '? Sign and send? (y/N)':
               child.stdin.write('y\n')
               child.stdin.end()
               break
@@ -198,7 +204,7 @@ describe('CLI', function () {
           child.on('close', resolve)
         })
 
-        expect(stderr).to.equal(private_key_status)
+        expect(stderr).to.equal(send_stderr)
         expect(exit_code).to.equal(0)
 
         // Check database for updated columns
@@ -256,8 +262,8 @@ describe('CLI', function () {
             case '? Would you like to edit any field? (y/N)':
               child.stdin.write('n\n')
               break
-            case '? Confirm? (y/n)':
-              child.stdin.write('n\n')
+            case '? Sign and send? (y/N)':
+              child.stdin.write('y\n')
               child.stdin.end()
               break
           }
@@ -275,7 +281,7 @@ describe('CLI', function () {
           child.on('close', resolve)
         })
 
-        expect(stderr).to.equal(private_key_status)
+        expect(stderr).to.equal(send_stderr)
         expect(exit_code).to.equal(0)
 
         const row = await db('nano_community_messages')
@@ -324,8 +330,8 @@ describe('CLI', function () {
             case '? Would you like to edit any field? (y/N)':
               child.stdin.write('n\n')
               break
-            case '? Confirm? (y/n)':
-              child.stdin.write('n\n')
+            case '? Sign and send? (y/N)':
+              child.stdin.write('y\n')
               child.stdin.end()
               break
           }
@@ -343,7 +349,7 @@ describe('CLI', function () {
           child.on('close', resolve)
         })
 
-        expect(stderr).to.equal(private_key_status)
+        expect(stderr).to.equal(send_stderr)
         expect(exit_code).to.equal(0)
 
         const row = await db('nano_community_messages')
@@ -397,11 +403,10 @@ describe('CLI', function () {
           const reviews =
             stdout.split('Please review your message content').length - 1
           // A chunk can end one prompt and start the next, so match the
-          // prompt on its last line; the field list ends in its choices
+          // prompt on its last line
           const output = chunk.slice(chunk.lastIndexOf('\n') + 1)
-          if (chunk.includes('Which field would you like to edit?')) {
-            // The fourth choice, measurement_ended_at
-            answer_once('field', '\u001b[B\u001b[B\u001b[B\n')
+          if (output.includes('? Which field?')) {
+            answer_once('field', 'measurement_ended_at\n')
           } else if (output.includes('? Energy used over the window')) {
             answer_once('energy', '2000\n')
           } else if (output.includes('? Measurement method')) {
@@ -415,6 +420,8 @@ describe('CLI', function () {
             answer_once(`edit-${reviews}`, reviews === 1 ? 'y\n' : 'n\n')
           } else if (output.includes('Enter new value for')) {
             answer_once('new value', `${iso(ended_at)}\n`)
+          } else if (output.includes('? Sign and send?')) {
+            answer_once('send', 'y\n')
           }
         })
 
@@ -426,7 +433,7 @@ describe('CLI', function () {
           child.on('close', resolve)
         })
 
-        expect(stderr).to.equal(private_key_status)
+        expect(stderr).to.equal(send_stderr)
         expect(exit_code).to.equal(0)
         expect(stdout).to.include('Enter new value for measurement_ended_at')
 
@@ -454,19 +461,134 @@ describe('CLI', function () {
       const { stdout } = await exec_promise(
         'echo n | node cli/index.mjs report-representative-hardware'
       )
-      const report = JSON.parse(
+      // The reviewed payload is the one JSON block printed
+      const payload = JSON.parse(
         stdout.slice(stdout.indexOf('{'), stdout.lastIndexOf('}') + 1)
       )
+      expect(payload.action).to.equal('set_representative_hardware')
+      expect(payload.account).to.equal(nano_account_address)
+      const report = payload.parameters.content
       expect(report.logical_cpus).to.be.a('number').above(0)
       expect(report.memory_bytes).to.be.a('number').above(0)
       expect(report.storage).to.be.an('array')
       expect(report.cpu_utilization_basis_points).to.be.within(0, 10000)
-      expect(stdout).to.include('Hardware report cancelled.')
+      expect(stdout).to.include('Message cancelled.')
 
       const rows = await db('nano_community_messages')
         .where({ operation: 'SET_REPRESENTATIVE_HARDWARE' })
         .whereRaw('message like ?', [`%${nano_account_address}%`])
       expect(rows).to.have.length(0)
+    })
+  })
+  describe('safety', () => {
+    const run = async (command, env = {}) => {
+      try {
+        const { stdout, stderr } = await exec_promise(command, {
+          env: { ...process.env, ...env }
+        })
+        return { code: 0, stdout, stderr }
+      } catch (error) {
+        return { code: error.code, stdout: error.stdout, stderr: error.stderr }
+      }
+    }
+    const linked_public_key = 'ab'.repeat(32)
+
+    it('refuses an API URL that is not https or a local http server', async () => {
+      const { code, stdout, stderr } = await run(
+        `echo y | node cli/index.mjs revoke-signing-key ${linked_public_key}`,
+        { NC_CLI_API_URL: 'http://example.com' }
+      )
+      expect(code).to.equal(1)
+      expect(stderr).to.include('NC_CLI_API_URL must be https')
+      expect(stdout).to.not.include('Key revocation successful')
+      for (const url of ['http://localhost.example.com', 'ftp://localhost']) {
+        const refused = await run(
+          `echo y | node cli/index.mjs revoke-signing-key ${linked_public_key}`,
+          { NC_CLI_API_URL: url }
+        )
+        expect(refused.code, url).to.equal(1)
+      }
+    })
+
+    it('rejects a malformed private key without printing it', async () => {
+      const malformed_key = 'z'.repeat(64)
+      const { code, stdout, stderr } = await run(
+        `node cli/index.mjs revoke-signing-key ${linked_public_key}`,
+        { NC_CLI_NANO_PRIVATE_KEY: malformed_key }
+      )
+      expect(code).to.equal(1)
+      expect(stderr).to.include('must be 64 hex characters')
+      expect(stdout + stderr).to.not.include(malformed_key)
+    })
+
+    it('reads the private key from the prompt and never echoes it', async () => {
+      const npub =
+        'npub10elfcs4fr0l0r8af98jlmgdh9c8tcxjvz9qkw038js35mp4dma8qzvjptg'
+      const { code, stdout, stderr } = await run(
+        `echo ${nano_private_key} | node cli/index.mjs bind-nostr-key ${npub}`,
+        { NC_CLI_NANO_PRIVATE_KEY: '' }
+      )
+      expect(code).to.equal(0)
+      expect(stdout).to.include(nano_account_address)
+      expect(stdout + stderr).to.not.include(nano_private_key)
+    })
+
+    // A terminal echoes what is typed unless the prompt mutes it. util-linux
+    // script gives the CLI a pseudo-terminal; it is Linux only.
+    ;(process.platform === 'linux' ? it : it.skip)(
+      'does not echo a private key typed at a terminal',
+      async () => {
+        const npub =
+          'npub10elfcs4fr0l0r8af98jlmgdh9c8tcxjvz9qkw038js35mp4dma8qzvjptg'
+        const env = { ...process.env }
+        delete env.NC_CLI_NANO_PRIVATE_KEY
+        const child = spawn(
+          'script',
+          ['-qfec', `node cli/index.mjs bind-nostr-key ${npub}`, '/dev/null'],
+          { env, stdio: ['pipe', 'pipe', 'pipe'] }
+        )
+        let output = ''
+        let typed = false
+        child.stdout.on('data', (data) => {
+          output += data.toString()
+          if (!typed && output.includes('Private key (64 hex characters')) {
+            typed = true
+            child.stdin.write(`${nano_private_key}\r`)
+          }
+        })
+        const code = await new Promise((resolve) => child.on('close', resolve))
+        expect(code).to.equal(0)
+        expect(output).to.include(nano_account_address)
+        expect(output).to.not.include(nano_private_key.slice(0, 8))
+      }
+    )
+
+    it('refuses a redirect rather than resend the signed message', async () => {
+      let target_hits = 0
+      const target = http.createServer((req, res) => {
+        target_hits += 1
+        res.end('{}')
+      })
+      const redirector = http.createServer((req, res) => {
+        res.writeHead(307, {
+          Location: `http://127.0.0.1:${target.address().port}${req.url}`
+        })
+        res.end()
+      })
+      await new Promise((resolve) => target.listen(0, '127.0.0.1', resolve))
+      await new Promise((resolve) => redirector.listen(0, '127.0.0.1', resolve))
+      try {
+        const { code, stderr } = await run(
+          `echo y | node cli/index.mjs revoke-signing-key ${linked_public_key}`,
+          { NC_CLI_API_URL: `http://127.0.0.1:${redirector.address().port}` }
+        )
+        expect(code).to.equal(1)
+        expect(stderr).to.include('request failed: unexpected redirect')
+        expect(target_hits).to.equal(0)
+      } finally {
+        target.close()
+        redirector.close()
+      }
     })
   })
 })
