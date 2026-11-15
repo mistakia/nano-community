@@ -1,6 +1,6 @@
 {
   "name": "nano-community-cli",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "CLI for Nano.Community Messages",
   "main": "index.mjs",
   "scripts": {

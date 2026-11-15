@@ -177,7 +177,7 @@ The reading whose window ends latest is your current one, and every reading you 
 
 ### Reporting Representative Hardware
 
-A representative operator can sign the details of the host the node runs on with the `report-representative-hardware` command. It needs CLI 0.5.0 or later and a Linux host. The site estimates the representative's power from the report, as described in [Network Energy Usage](/network-energy-usage).
+A representative operator can sign the details of the host the node runs on with the `report-representative-hardware` command. It needs CLI 0.6.0 or later and a Linux host. The site estimates the representative's power from the report, as described in [Network Energy Usage](/network-energy-usage).
 
 ```bash
 nano-community report-representative-hardware
