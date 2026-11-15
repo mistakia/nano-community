@@ -23,10 +23,12 @@ const PRIVATE_KEY =
 const ISSUE_ID = 'd1'.repeat(32)
 const board = { owner_pubkey: 'a'.repeat(64), d_tag: 'nano-community-tasks' }
 
-const run = (...args) =>
-  exec_file('node', ['cli/index.mjs', ...args], {
-    env: { ...process.env, NC_CLI_NANO_PRIVATE_KEY: PRIVATE_KEY }
-  })
+// The key goes in on stdin, as the CLI's hidden prompt reads it
+const run = (...args) => {
+  const result = exec_file('node', ['cli/index.mjs', ...args])
+  result.child.stdin.end(`${PRIVATE_KEY}\n`)
+  return result
+}
 
 // Re-encodes an npub's data characters with a fresh bech32 checksum, so a
 // test can set the padding bits and still pass the checksum

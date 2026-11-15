@@ -107,19 +107,20 @@ async function post({ api_url, path, body }) {
   return result
 }
 
-// The private key from NC_CLI_NANO_PRIVATE_KEY, else a hidden prompt. It is
-// never printed or written.
+// The private key from a hidden prompt, which a script feeds as the first
+// line of stdin. An environment variable would leave it in
+// /proc/<pid>/environ, the shell, its history and every program the shell
+// starts, so the variable earlier versions read is refused while it is set.
+// The key is never printed or written.
 async function load_private_key() {
-  let private_key = process.env.NC_CLI_NANO_PRIVATE_KEY
-  if (private_key) {
-    console.error('Private key found in environment variable.')
-  } else {
-    console.error(
-      'No private key found in environment variable (NC_CLI_NANO_PRIVATE_KEY).'
+  if (process.env.NC_CLI_NANO_PRIVATE_KEY !== undefined) {
+    throw new Error(
+      'NC_CLI_NANO_PRIVATE_KEY is no longer read. Unset it, and enter the key at the prompt or pipe it on stdin.'
     )
-    private_key = await ask_hidden('Private key (64 hex characters, hidden):')
   }
-  private_key = (private_key || '').trim()
+  const private_key = (
+    (await ask_hidden('Private key (64 hex characters, hidden):')) || ''
+  ).trim()
   // get_public_key refuses anything but 64 hex characters, without echoing it
   const public_key = get_public_key(private_key)
   return {
@@ -599,7 +600,7 @@ const usage = (command) => {
     '  -h, --help     Show help',
     '  -v, --version  Show the version',
     '',
-    'The private key comes from NC_CLI_NANO_PRIVATE_KEY, else a hidden prompt.'
+    'The private key is read at a hidden prompt, or from the first line of stdin.'
   ].join('\n')
 }
 

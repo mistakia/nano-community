@@ -50,15 +50,19 @@ export async function ask(question) {
   return next_line()
 }
 
-// For a secret: what is typed is not echoed to the terminal
+// For a secret: what is typed is not echoed to the terminal. The prompt goes
+// to stderr, so a command's stdout stays its output alone when a script
+// pipes the key in.
 export async function ask_hidden(question) {
-  show_prompt(question)
+  open()
+  rl.setPrompt('')
+  process.stderr.write(`? ${question} `)
   echo_muted = true
   try {
     return await next_line()
   } finally {
     echo_muted = false
-    if (process.stdin.isTTY) process.stdout.write('\n')
+    if (process.stdin.isTTY) process.stderr.write('\n')
   }
 }
 
