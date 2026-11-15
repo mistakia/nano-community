@@ -17,16 +17,23 @@ const { port } = config
 process.env.NODE_ENV = 'test'
 const expect = chai.expect
 
-// The CLI prints its private key status line on stderr, so stdout stays
-// machine-readable
-const private_key_status = 'Private key found in environment variable.\n'
+const nano_private_key =
+  '1111111111111111111111111111111111111111111111111111111111111111'
+
+// The hidden key prompt is the CLI's only stderr output on success, so
+// stdout stays the command's output alone
+const key_prompt = '? Private key (64 hex characters, hidden): '
 
 const PUBLISHED_BIN = 'cli/index.mjs'
 const TEST_API_BIN = 'test/utils/run-cli-against-test-api.mjs'
 
-// Runs the CLI with these lines on stdin. The prompts buffer piped lines, so
-// every answer can be written before the first prompt is asked.
-const run_cli = (args, { input = '', env = {}, bin = TEST_API_BIN } = {}) =>
+// Runs the CLI with the private key and then these lines on stdin. The
+// prompts buffer piped lines, so every answer can be written before the first
+// prompt is asked.
+const run_cli = (
+  args,
+  { key = nano_private_key, input = '', env = {}, bin = TEST_API_BIN } = {}
+) =>
   new Promise((resolve) => {
     const child = spawn('node', [bin, ...args], {
       env: { ...process.env, ...env }
@@ -36,7 +43,7 @@ const run_cli = (args, { input = '', env = {}, bin = TEST_API_BIN } = {}) =>
     child.stdout.on('data', (data) => (stdout += data))
     child.stderr.on('data', (data) => (stderr += data))
     child.on('close', (code) => resolve({ code, stdout, stderr }))
-    child.stdin.end(input)
+    child.stdin.end(key === null ? input : `${key}\n${input}`)
   })
 
 const lines = (...answers) => answers.map((answer) => `${answer}\n`).join('')
@@ -45,15 +52,12 @@ describe('CLI', function () {
   this.timeout(30000)
 
   let new_signing_key
-  const nano_private_key =
-    '1111111111111111111111111111111111111111111111111111111111111111'
   const nano_account_address =
     'nano_3d78japo7ziqqcsptk47eonzwzwjyaydcywq5ebzowjpxgyehynnjc9pd5zj'
 
   before(
     () =>
       new Promise((resolve) => {
-        process.env.NC_CLI_NANO_PRIVATE_KEY = nano_private_key
         // The CLI children call the test server on its configured port
         process.env.NANO_TEST_CLI_API_URL = `http://localhost:${port}`
 
@@ -105,7 +109,7 @@ describe('CLI', function () {
         { input: lines('y') }
       )
       expect(code).to.equal(0)
-      expect(stderr).to.equal(private_key_status)
+      expect(stderr).to.equal(key_prompt)
       // the confirmation names the key being revoked, not the signer
       expect(stdout).to.include(new_signing_key)
       expect(stdout).to.include('Key revocation successful')
@@ -143,7 +147,7 @@ describe('CLI', function () {
       const { code, stdout, stderr } = await run_cli(['update-rep-meta'], {
         input: lines(...Object.values(expected), 'N', 'y')
       })
-      expect(stderr, stdout).to.equal(private_key_status)
+      expect(stderr, stdout).to.equal(key_prompt)
       expect(code).to.equal(0)
 
       const updated_account = await db('accounts')
@@ -166,7 +170,7 @@ describe('CLI', function () {
       const { code, stdout, stderr } = await run_cli(['update-account-meta'], {
         input: lines('Alias', 'n', 'y')
       })
-      expect(stderr, stdout).to.equal(private_key_status)
+      expect(stderr, stdout).to.equal(key_prompt)
       expect(code).to.equal(0)
       expect(stdout).to.include('Message sent:')
 
@@ -195,7 +199,7 @@ describe('CLI', function () {
         ['update-block-meta', block_hash],
         { input: lines('Test note for update-block-meta operation', 'n', 'y') }
       )
-      expect(stderr, stdout).to.equal(private_key_status)
+      expect(stderr, stdout).to.equal(key_prompt)
       expect(code).to.equal(0)
 
       const row = await db('nano_community_messages')
@@ -235,7 +239,7 @@ describe('CLI', function () {
         'n',
         'y'
       )
-      expect(stderr, stdout).to.equal(private_key_status)
+      expect(stderr, stdout).to.equal(key_prompt)
       expect(code).to.equal(0)
       expect(stdout).to.include('Enter new value for measurement_ended_at')
 
@@ -333,7 +337,7 @@ describe('CLI', function () {
         'This will be signed and sent to https://nano.community/api/auth/revoke/key:'
       )
       expect(stdout).to.include('Cancelled. Nothing was signed or sent.')
-      expect(stderr).to.equal(private_key_status)
+      expect(stderr).to.equal(key_prompt)
     })
 
     it('fails, sending nothing, when input ends before the confirmation', async () => {
@@ -428,7 +432,7 @@ describe('CLI', function () {
             { input: lines('y'), env: { NANO_TEST_CLI_API_URL: url } }
           )
           expect(code).to.equal(1)
-          expect(stderr).to.equal(`${private_key_status}no[2J\\u009bpe\n`)
+          expect(stderr).to.equal(`${key_prompt}no[2J\\u009bpe\n`)
           expect(stdout).to.not.include('successful')
         }
       )
@@ -469,7 +473,7 @@ describe('CLI', function () {
           expect(stdout).to.include('"action": "link_key"')
           expect(stdout).to.include('"action": "accept_link"')
           expect(stdout).to.not.include('Signing public key')
-          expect(stderr).to.equal(private_key_status)
+          expect(stderr).to.equal(key_prompt)
         }
       )
     })
@@ -498,25 +502,40 @@ describe('CLI', function () {
 
     it('rejects a malformed private key without printing it', async () => {
       const malformed_key = 'z'.repeat(64)
-      const { code, stdout, stderr } = await run(
-        { args: ['revoke-signing-key', linked_public_key] },
-        { NC_CLI_NANO_PRIVATE_KEY: malformed_key }
-      )
+      const { code, stdout, stderr } = await run({
+        args: ['revoke-signing-key', linked_public_key],
+        key: malformed_key
+      })
       expect(code).to.equal(1)
       expect(stderr).to.include('must be 64 hex characters')
       expect(stdout + stderr).to.not.include(malformed_key)
     })
 
-    it('reads the private key from the prompt and never echoes it', async () => {
+    it('reads the private key from stdin and never echoes it', async () => {
       const npub =
         'npub10elfcs4fr0l0r8af98jlmgdh9c8tcxjvz9qkw038js35mp4dma8qzvjptg'
-      const { code, stdout, stderr } = await run(
-        { args: ['bind-nostr-key', npub], input: lines(nano_private_key) },
-        { NC_CLI_NANO_PRIVATE_KEY: '' }
-      )
+      const { code, stdout, stderr } = await run({
+        args: ['bind-nostr-key', npub]
+      })
       expect(code).to.equal(0)
       expect(stdout).to.include(nano_account_address)
       expect(stdout + stderr).to.not.include(nano_private_key)
+    })
+
+    it('refuses to run while the old key variable is set', async () => {
+      for (const value of [nano_private_key, '']) {
+        const { code, stdout, stderr } = await run(
+          {
+            args: ['revoke-signing-key', linked_public_key],
+            input: lines('y')
+          },
+          { NC_CLI_NANO_PRIVATE_KEY: value }
+        )
+        expect(code).to.equal(1)
+        expect(stderr).to.include('NC_CLI_NANO_PRIVATE_KEY is no longer read')
+        expect(stdout).to.not.include('Sign and send?')
+        expect(stdout + stderr).to.not.include(nano_private_key)
+      }
     })
 
     // A terminal echoes what is typed unless the prompt mutes it. util-linux
@@ -526,12 +545,10 @@ describe('CLI', function () {
       async () => {
         const npub =
           'npub10elfcs4fr0l0r8af98jlmgdh9c8tcxjvz9qkw038js35mp4dma8qzvjptg'
-        const env = { ...process.env }
-        delete env.NC_CLI_NANO_PRIVATE_KEY
         const child = spawn(
           'script',
           ['-qfec', `node cli/index.mjs bind-nostr-key ${npub}`, '/dev/null'],
-          { env, stdio: ['pipe', 'pipe', 'pipe'] }
+          { stdio: ['pipe', 'pipe', 'pipe'] }
         )
         let output = ''
         let typed = false
@@ -552,8 +569,6 @@ describe('CLI', function () {
     ;(process.platform === 'linux' ? it : it.skip)(
       'shows the prompts again after the hidden key prompt',
       async () => {
-        const env = { ...process.env }
-        delete env.NC_CLI_NANO_PRIVATE_KEY
         const child = spawn(
           'script',
           [
@@ -561,7 +576,7 @@ describe('CLI', function () {
             `node ${PUBLISHED_BIN} revoke-signing-key ${linked_public_key}`,
             '/dev/null'
           ],
-          { env, stdio: ['pipe', 'pipe', 'pipe'] }
+          { stdio: ['pipe', 'pipe', 'pipe'] }
         )
         let output = ''
         let typed_key = false

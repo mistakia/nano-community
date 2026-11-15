@@ -67,7 +67,7 @@ For a virtual machine, the CPUs, memory and disks are the machine's own, so the 
 Install the [Nano.Community CLI](/cli), version 0.6.0 or later, and link a signing key to the representative account with `add-signing-key`. With the signing key set, on the host that runs the node:
 
 - **Hardware report:** run `nano-community report-representative-hardware`. It shows every value it read before you confirm. Run it again after the host has been up for a while if it reports under 24 hours of uptime.
-- **Measured reading:** run `nano-community update-representative-power-reading`, then enter the energy in whole watt-hours, the method, and the start and end of the window as ISO 8601 datetimes such as `2026-11-13T00:00:00Z`.
+- **Measured reading:** run `nano-community update-representative-power-reading`, then enter the energy in whole watt-hours, the method, and the start and end of the window as ISO 8601 datetimes with `Z` or an offset, such as `2026-11-13T00:00:00Z`.
 
 The site rejects a report or reading that is malformed or not signed for a representative account. Every one you sign is kept: the latest hardware report, and the reading whose window ends latest, are current.
 

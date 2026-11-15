@@ -24,7 +24,7 @@ Version 0.1.0 or later is required. Earlier versions sign in a format the API no
 
 The CLI needs Node.js 20.19 or later. From 0.7.0 it has no dependencies: installing it fetches only its own files, and it signs with code it carries. Every version from 0.5.0 on is published from this repository's GitHub workflow with npm provenance, which links the package to the commit it was built from. `npm view nano-community-cli dist.attestations` shows it, and `npm audit signatures` in a project that installs it verifies it.
 
-To run it once without installing, use `npx nano-community-cli@0.8.0 <command>`.
+To run it once without installing, use `npx nano-community-cli@0.9.0 <command>`.
 
 ### Obtaining your account private key
 
@@ -32,35 +32,13 @@ The CLI signs with the 32-byte private key of a nano account, as 64 hex characte
 
 Use the account private key once, to link a signing key, and use the signing key for everything after that.
 
-### Setting Environment Variables (optional)
+### Entering the private key
 
-The CLI prompts for the private key if it is not set as an environment variable, and does not show what you type. A script can pipe the key in instead: the prompt reads the first line of standard input, as in `pass show nano/signing-key | nano-community bind-nostr-key <npub>`. This is the safest way: the key is not stored in your command history or in a file. The CLI never takes the key as an argument, never writes it to disk and never prints it.
+Every command that signs asks for the private key at a prompt and does not show what you type. The key is then not in your command history, in your environment or in a file. The CLI never takes the key as an argument or from an environment variable, never writes it to disk and never prints it.
 
-If you prefer the environment variable, set it for a single command or a single session. Either may store the key in your command history. Do not save it in a shell startup file such as `.bashrc`, where it sits in plain text.
+A script can pipe the key in instead: the prompt reads the first line of standard input, and any answers follow it. For example, `pass show nano/signing-key | nano-community bind-nostr-key <npub>`. The prompt goes to standard error, so the command's output on standard output stays clean.
 
-#### Setting the environment variable for a single command
-
-You can set the environment variable for a single command by putting it before the command.
-
-```bash
-NC_CLI_NANO_PRIVATE_KEY='<private_key>' nano-community update-rep-meta
-```
-
-#### Setting the environment variable for a single session
-
-##### Linux/Mac:
-
-```bash
-export NC_CLI_NANO_PRIVATE_KEY='<private_key>'
-```
-
-##### Windows:
-
-```cmd
-set NC_CLI_NANO_PRIVATE_KEY=<private_key>
-```
-
-This will persist for the duration of the current session in the terminal. You can now run commands without having to set the environment variable for each command.
+Versions before 0.9.0 also read the key from `NC_CLI_NANO_PRIVATE_KEY`. That left it readable by other programs while the CLI ran, and in the shell and every program the shell started once it was exported. The CLI now refuses to run while that variable is set. Unset it, and remove it from your shell history and any startup file such as `.bashrc`.
 
 ## Usage
 
@@ -74,7 +52,7 @@ nano-community add-signing-key
 
 Run it with the account private key. The CLI generates a new signing key and links it to the account. Linking takes both keys' consent: the account signs a message naming the new key, and the new key signs a message naming the account. The CLI prints the new key's public key, and its private key once on standard error, so output piped or redirected to a file does not carry it. Store the private key securely.
 
-This new signing key can now be used in place of your account key. Replace the `NC_CLI_NANO_PRIVATE_KEY` environment variable with the signing key's private key. Messages it signs apply to the linked account.
+This new signing key can now be used in place of your account key: enter its private key at the prompt instead. Messages it signs apply to the linked account.
 
 A key can be linked only once. A key that was ever linked, to any account and whether or not it was later revoked, is refused with "key previously linked; generate a new key". Run `add-signing-key` again to get a new one.
 
@@ -106,7 +84,7 @@ To update the metadata for a Nano representative use the `update-rep-meta` comma
    ```bash
    nano-community update-rep-meta
    ```
-2. The CLI will prompt you for the private key if one is not set in an environment variable.
+2. The CLI will prompt you for the private key.
 3. You will be prompted to enter various metadata fields such as alias, description, donation address, etc. Fill these out as required.
 4. Review the entered data when prompted, and confirm to proceed.
 5. The CLI will sign and send the metadata update to the nano.community API, confirming the request in the console output.
