@@ -26,5 +26,6 @@ module.exports = {
   nanodbAPI: '',
   nanodbAPI_experimental: '',
   trustedAddresses: ['http://nano:7076'],
-  rpcAddresses: ['http://nano:7076']
+  rpcAddresses: ['http://nano:7076'],
+  network_observer_data_directory: '/tmp/nano-community-network-observer-test'
 }

@@ -72,5 +72,10 @@ module.exports = {
   nanodb_api: '',
   nanodb_api_experimental: '',
   trusted_addresses: [],
-  rpc_addresses: []
+  rpc_addresses: [],
+
+  // Spool, saved detector state and cached inputs of network-observer.mjs.
+  // Keep it outside the checkout: the site server's pm2 file watch restarts
+  // it on any write inside.
+  network_observer_data_directory: '/var/lib/nano-community/network-observer'
 }

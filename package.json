@@ -133,6 +133,7 @@
     "morgan": "^1.10.0",
     "morgan-debug": "^2.0.0",
     "mysql2": "^3.9.7",
+    "nano-node-light": "mistakia/nano-node-light#5051f0b61d2e600049a5adfc9057b9cf940abae3",
     "nano-signed-message": "0.1.0",
     "node-cache": "^5.1.2",
     "node-cron": "^3.0.3",

@@ -11,6 +11,19 @@ export const REPRESENTATIVE_TELEMETRY_SETTLE_MINUTES = 60
 // with the Alerts tab through common/representative-alert-rules.mjs.
 export const REPRESENTATIVE_CEMENTED_BEHIND_BLOCKS = 1000
 
+// Network observer thresholds. A principal representative whose last vote is
+// older than this is not voting.
+export const REPRESENTATIVE_NOT_VOTING_MINUTES = 5
+
+// How long the fork index keeps a published block's root.
+export const BLOCK_FORK_INDEX_RETENTION_MINUTES = 60
+
+// Invalid signatures from one peer are grouped into one event per window.
+export const PEER_SIGNATURE_INVALID_WINDOW_MINUTES = 60
+
+// Below this many handshaken peers the observer is degraded.
+export const NETWORK_OBSERVER_MINIMUM_PEER_COUNT = 20
+
 export const NETWORK_EVENT_KINDS = {
   condition: 'condition',
   occurrence: 'occurrence'
@@ -87,6 +100,52 @@ export const NETWORK_EVENT_TYPES = {
     severity: 'critical',
     public: false,
     network_event_id_keys: ['representative_account', 'began_at']
+  },
+  // The remaining types come from the network observer, which sees them on
+  // the wire: no table or RPC call shows them.
+  representative_not_voting: {
+    label: 'Not voting',
+    kind: NETWORK_EVENT_KINDS.condition,
+    severity: 'warning',
+    public: true,
+    network_event_id_keys: ['representative_account', 'began_at']
+  },
+  node_hosts_multiple_representatives: {
+    label: 'Node hosts several representatives',
+    kind: NETWORK_EVENT_KINDS.condition,
+    severity: 'info',
+    public: true,
+    network_event_id_keys: ['node_id', 'began_at']
+  },
+  // Each further block on a forked root is its own occurrence.
+  block_fork_detected: {
+    label: 'Block fork',
+    kind: NETWORK_EVENT_KINDS.occurrence,
+    severity: 'warning',
+    public: true,
+    network_event_id_keys: ['root', 'block_hash']
+  },
+  // critical when both votes are final, warning otherwise.
+  representative_votes_conflicting: {
+    label: 'Conflicting votes',
+    kind: NETWORK_EVENT_KINDS.occurrence,
+    severity: 'warning',
+    public: true,
+    network_event_id_keys: [
+      'representative_account',
+      'root',
+      'conflicting_block_hashes',
+      'is_final'
+    ]
+  },
+  // Operator-only: a peer's invalid signatures are as likely a decoding gap
+  // on our side as misbehavior, so they are checked before anything is shown.
+  peer_signature_invalid: {
+    label: 'Invalid peer signatures',
+    kind: NETWORK_EVENT_KINDS.occurrence,
+    severity: 'warning',
+    public: false,
+    network_event_id_keys: ['peer_address', 'window_began_at']
   }
 }
 
