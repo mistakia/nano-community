@@ -7,6 +7,10 @@ import { fileURLToPath } from 'url'
 import {
   NETWORK_EVENT_TYPES,
   NETWORK_EVENT_KINDS,
+  REPRESENTATIVE_NOT_VOTING_MINUTES,
+  BLOCK_FORK_INDEX_RETENTION_MINUTES,
+  PEER_SIGNATURE_INVALID_WINDOW_MINUTES,
+  NETWORK_OBSERVER_MINIMUM_PEER_COUNT,
   NETWORK_EVENT_SEVERITIES,
   PUBLIC_NETWORK_EVENT_TYPES,
   is_valid_network_event_phase,
@@ -71,6 +75,28 @@ describe('network event types registry', () => {
     expect(PUBLIC_NETWORK_EVENT_TYPES).to.include(
       'representative_cemented_behind'
     )
+  })
+
+  it('registers the network observer types', () => {
+    expect(NETWORK_EVENT_TYPES.representative_not_voting.kind).to.equal(
+      'condition'
+    )
+    expect(
+      NETWORK_EVENT_TYPES.node_hosts_multiple_representatives.kind
+    ).to.equal('condition')
+    expect(NETWORK_EVENT_TYPES.block_fork_detected.kind).to.equal('occurrence')
+    expect(NETWORK_EVENT_TYPES.representative_votes_conflicting.kind).to.equal(
+      'occurrence'
+    )
+    expect(NETWORK_EVENT_TYPES.peer_signature_invalid.kind).to.equal(
+      'occurrence'
+    )
+    expect(PUBLIC_NETWORK_EVENT_TYPES).to.include('representative_not_voting')
+    expect(PUBLIC_NETWORK_EVENT_TYPES).to.not.include('peer_signature_invalid')
+    expect(REPRESENTATIVE_NOT_VOTING_MINUTES).to.equal(5)
+    expect(BLOCK_FORK_INDEX_RETENTION_MINUTES).to.equal(60)
+    expect(PEER_SIGNATURE_INVALID_WINDOW_MINUTES).to.equal(60)
+    expect(NETWORK_OBSERVER_MINIMUM_PEER_COUNT).to.equal(20)
   })
 
   it('resolves severity from the registry unless one is given', () => {
