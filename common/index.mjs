@@ -172,7 +172,8 @@ const rpcLedger = ({
   modified_since,
   representative = false,
   pending = false,
-  weight = false
+  weight = false,
+  timeout
 } = {}) => {
   const data = {
     action: 'ledger',
@@ -184,7 +185,7 @@ const rpcLedger = ({
     count,
     modified_since
   }
-  return rpcRequest(data, { url, trusted: true })
+  return rpcRequest(data, { url, trusted: true, timeout })
 }
 
 const rpcBlockInfo = ({ url, hash } = {}) => {

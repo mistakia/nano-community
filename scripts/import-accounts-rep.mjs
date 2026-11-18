@@ -11,16 +11,29 @@ const logger = debug('import-accounts-rep')
 const timestamp = Math.round(Date.now() / 1000)
 
 // `ledger` is served only by the trusted full node (rpc.ledger uses
-// trustedAddresses) -- there is no proxy fallback, so a single transient blip
-// on any one paginated page would otherwise abort the whole import and fire a
-// false pipeline_failure. Absorb a sub-minute node hiccup with a bounded
-// backoff; a sustained outage still throws once the retries are exhausted.
-const LEDGER_RETRY_BACKOFF_MS = [2000, 5000, 15000]
+// trustedAddresses) -- there is no proxy fallback. That node's disk is
+// contended, so under load a 5000-account page can be slow to answer or slow
+// to send its multi-MB body, well past the 20s RPC default. Give each page a
+// long per-phase timeout (node-fetch applies it to the headers and again to
+// the body), retry a failed page with a bounded backoff so a refused
+// connection still throws within ~100s, and cap the whole run in main so a
+// degraded node can never stack overlapping hourly runs.
+const LEDGER_REQUEST_TIMEOUT_MS = 90000
+const LEDGER_RETRY_BACKOFF_MS = [10000, 30000, 60000]
+const LEDGER_IMPORT_TIMEOUT_MS = 40 * 60 * 1000
 
-const fetchLedgerPage = async (params) => {
+export const fetch_ledger_page = async ({
+  ledger_request_params,
+  request_ledger_page = rpc.ledger,
+  wait_before_retry = wait
+}) => {
   let response
   for (let attempt = 0; attempt <= LEDGER_RETRY_BACKOFF_MS.length; attempt++) {
-    response = await rpc.ledger(params)
+    const attempt_started_at = Date.now()
+    response = await request_ledger_page({
+      ...ledger_request_params,
+      timeout: LEDGER_REQUEST_TIMEOUT_MS
+    })
     if (response && !response.error) {
       return response
     }
@@ -28,11 +41,13 @@ const fetchLedgerPage = async (params) => {
     if (attempt < LEDGER_RETRY_BACKOFF_MS.length) {
       const delay = LEDGER_RETRY_BACKOFF_MS[attempt]
       logger(
-        `ledger request failed (${
-          response ? response.error : 'Empty RPC Response'
-        }); retry ${attempt + 1}/${LEDGER_RETRY_BACKOFF_MS.length} in ${delay}ms`
+        `ledger page at ${ledger_request_params.account} failed after ${
+          Date.now() - attempt_started_at
+        }ms (${response ? response.error : 'Empty RPC Response'}); retry ${
+          attempt + 1
+        }/${LEDGER_RETRY_BACKOFF_MS.length} in ${delay}ms`
       )
-      await wait(delay)
+      await wait_before_retry(delay)
     }
   }
 
@@ -67,10 +82,12 @@ const importAccountsRep = async ({
       `Fetching accounts from ${index} to ${index + batchSize} (${account})`
     )
 
-    const rpcResponse = await fetchLedgerPage({
-      ...opts,
-      account,
-      representative: true
+    const rpcResponse = await fetch_ledger_page({
+      ledger_request_params: {
+        ...opts,
+        account,
+        representative: true
+      }
     })
 
     const { accounts } = rpcResponse
@@ -117,11 +134,29 @@ if (isMain(import.meta.url)) {
   const main = async () => {
     const start_time = Date.now()
     let error
+    let import_timer
     try {
-      await importAccountsRep()
+      await Promise.race([
+        importAccountsRep(),
+        new Promise((resolve, reject) => {
+          import_timer = setTimeout(
+            () =>
+              reject(
+                new Error(
+                  `ledger import passed its ${
+                    LEDGER_IMPORT_TIMEOUT_MS / 60000
+                  } minute timeout`
+                )
+              ),
+            LEDGER_IMPORT_TIMEOUT_MS
+          )
+        })
+      ])
     } catch (err) {
       error = err
       console.log(err)
+    } finally {
+      clearTimeout(import_timer)
     }
 
     await report_job({
