@@ -22,9 +22,12 @@ yarn lint
 `yarn test` needs PostgreSQL with TimescaleDB on 127.0.0.1, database `nano_test`, user `postgres` without a password. The port defaults to 5432 and `NANO_TEST_PG_PORT` overrides it. The test API server listens on 8085, and `NANO_TEST_API_PORT` overrides it where that port is taken. Drop and recreate `nano_test` before a run.
 
 ```bash
-docker run -d --name nano-test-pg -e POSTGRES_DB=nano_test -e POSTGRES_HOST_AUTH_METHOD=trust -p 127.0.0.1:5435:5432 timescale/timescaledb:latest-pg16
+docker run -d --rm --name nano-test-pg --tmpfs /var/lib/postgresql/data -e POSTGRES_DB=nano_test -e POSTGRES_HOST_AUTH_METHOD=trust -p 127.0.0.1:5435:5432 timescale/timescaledb:latest-pg16
 NANO_TEST_PG_PORT=5435 yarn test
+docker stop nano-test-pg
 ```
+
+Keep `--rm` and `--tmpfs`. The image declares a data VOLUME, so a container started without them leaves an anonymous volume behind every time it is removed and re-created.
 
 ## Deploy
 
