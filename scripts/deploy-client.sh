@@ -10,10 +10,12 @@
 #    mtime, so a file still produced by a recent build is kept.
 set -euo pipefail
 
+# DEPLOY_DRY_RUN=1 lists what both passes would change and skips the prune.
 remote_host="${DEPLOY_HOST:-nano-community}"
 remote_build="${DEPLOY_PATH:-/root/nano-community/source/build}"
 retention_days=30
-rsync_flags=(-a ${DEPLOY_RSYNC_FLAGS:-})
+rsync_flags=(-a)
+if [ "${DEPLOY_DRY_RUN:-}" = 1 ]; then rsync_flags+=(--dry-run --itemize-changes); fi
 
 cd "$(dirname "$0")/.."
 
@@ -24,6 +26,6 @@ fi
 
 rsync "${rsync_flags[@]}" build/assets/ "${remote_host}:${remote_build}/assets/"
 rsync "${rsync_flags[@]}" --delete --exclude /assets/ build/ "${remote_host}:${remote_build}/"
-if [[ " ${rsync_flags[*]} " != *" --dry-run "* ]]; then
+if [ "${DEPLOY_DRY_RUN:-}" != 1 ]; then
   ssh "$remote_host" "find '${remote_build}/assets' -type f -mtime +${retention_days} -delete"
 fi

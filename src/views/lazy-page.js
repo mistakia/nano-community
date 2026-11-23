@@ -14,11 +14,16 @@ const read_reload_flag = () => {
   }
 }
 
+// Returns whether the flag was stored. Without storage (site data blocked)
+// the boundary never reloads, since it could not stop a reload loop.
 const write_reload_flag = (value) => {
   try {
     if (value) window.sessionStorage.setItem(CHUNK_RELOAD_FLAG, 'true')
     else window.sessionStorage.removeItem(CHUNK_RELOAD_FLAG)
-  } catch {}
+    return true
+  } catch {
+    return false
+  }
 }
 
 const is_chunk_load_error = (error) =>
@@ -65,9 +70,15 @@ export class ChunkLoadBoundary extends React.Component {
 
   componentDidCatch(error) {
     if (!is_chunk_load_error(error) || read_reload_flag()) return
-    write_reload_flag(true)
+    if (!write_reload_flag(true) || !read_reload_flag()) return
     this.setState({ reloading: true })
     window.location.reload()
+  }
+
+  // A navigation to another page clears the error so its chunk can load.
+  componentDidUpdate(previous_props) {
+    if (this.state.error && previous_props.pathname !== this.props.pathname)
+      this.setState({ error: null })
   }
 
   render() {
@@ -84,5 +95,6 @@ export class ChunkLoadBoundary extends React.Component {
 }
 
 ChunkLoadBoundary.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
+  pathname: PropTypes.string
 }

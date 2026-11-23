@@ -91,18 +91,21 @@ export const preload_route = (pathname) => {
   return DocPage.preload()
 }
 
-const AppRoutes = () => (
-  <ChunkLoadBoundary>
-    <Suspense fallback={null}>
-      <Routes>
-        {ROUTES.map(([path, Page, Element = Page]) => (
-          <Route key={path} path={path} element={<Element />} />
-        ))}
-        <Route path='/:id' element={<DynamicPage />} />
-        <Route path='/*' element={<DocPageWrapper />} />
-      </Routes>
-    </Suspense>
-  </ChunkLoadBoundary>
-)
+const AppRoutes = () => {
+  const { pathname } = useLocation()
+  return (
+    <ChunkLoadBoundary pathname={pathname}>
+      <Suspense fallback={null}>
+        <Routes>
+          {ROUTES.map(([path, Page, Element = Page]) => (
+            <Route key={path} path={path} element={<Element />} />
+          ))}
+          <Route path='/:id' element={<DynamicPage />} />
+          <Route path='/*' element={<DocPageWrapper />} />
+        </Routes>
+      </Suspense>
+    </ChunkLoadBoundary>
+  )
+}
 
 export default AppRoutes

@@ -146,6 +146,11 @@ if (IS_DEV) {
     res.redirect(307, `http://localhost:8094${req.path}`)
   })
 } else {
+  // An API or data request no route answered is a 404 here, never the
+  // edge-cacheable app shell carrying the CORS headers set above.
+  api.use(['/api', '/data'], (req, res) =>
+    res.status(404).type('text/plain').send('Not found')
+  )
   api.use(serve_client({ build_path: path.join(__dirname, '..', 'build') }))
 }
 

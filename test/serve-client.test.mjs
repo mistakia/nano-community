@@ -181,6 +181,14 @@ describe('serve_client', () => {
       expect(res).to.have.status(403)
     })
 
+    it('drops the immutable class on a send error', async () => {
+      const res = await get('/assets/main.0123456789abcdef0123.js')
+        .set('Accept-Encoding', 'identity')
+        .set('Range', 'bytes=999999-')
+      expect(res).to.have.status(416)
+      expect(res).to.have.header('cache-control', 'no-store')
+    })
+
     it('answers HEAD without a body', async () => {
       const res = await chai.request(app).head('/design/basics')
       expect(res).to.have.status(200)

@@ -127,6 +127,9 @@ export default function serve_client({ build_path }) {
         for (const header of ['Content-Encoding', 'Vary', 'CDN-Cache-Control'])
           res.removeHeader(header)
         if (error.status === 404) return respond_missing(res)
+        // a failed read or an unsatisfiable range must not inherit the
+        // year-long immutable class
+        res.set('Cache-Control', 'no-store')
         next(error)
       })
       .pipe(res)
