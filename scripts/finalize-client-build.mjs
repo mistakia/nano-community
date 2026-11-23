@@ -8,6 +8,8 @@ import path from 'path'
 import zlib from 'zlib'
 import { promisify } from 'util'
 
+import { isMain } from '#common/is-main.mjs'
+
 const brotli = promisify(zlib.brotliCompress)
 const gzip = promisify(zlib.gzip)
 
@@ -174,7 +176,9 @@ const main = async () => {
   }
 }
 
-main().catch((error) => {
-  console.error(error)
-  process.exit(1)
-})
+if (isMain(import.meta.url)) {
+  main().catch((error) => {
+    console.error(error)
+    process.exit(1)
+  })
+}
