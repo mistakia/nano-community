@@ -8,6 +8,16 @@ For graph context (related task dir, tags, sibling nano repos), see [ABOUT.md](A
 
 [nano.community](https://nano.community) — community-driven documentation, representative monitoring, and stats aggregation site for the nano cryptocurrency. React 19 + Redux + Material-UI on the client; Express on the server. Webpack dev/prod builds; static export via react-snap.
 
+### Client build and serving
+
+- `yarn build` runs three steps: webpack (`webpack/webpack.prod.babel.mjs`), react-snap prerendering, then `scripts/finalize-client-build.mjs`.
+- Webpack emits every script, stylesheet, font and media file under `build/assets/`, named by content hash. CSS is extracted with `mini-css-extract-plugin`. Pages load through `src/views/lazy-page.js`, so each route has its own chunk, and `src/index.js` loads the current route's chunk before the first render.
+- The finalize step writes `.br` and `.gz` siblings for every compressible file, then fails the build when any page's HTML or JS exceeds its brotli budget. It prints the per-page table it checked. No CI builds the client, so this is the regression check for inlining drift and bundle growth.
+- `api/serve-client.mjs` serves `build/`. It picks the precompressed sibling from `Accept-Encoding` and has two cache classes:
+  - `assets/` is `public, max-age=31536000, immutable`. A miss is 404 `no-store`.
+  - Everything else is `public, max-age=0, must-revalidate` with `CDN-Cache-Control: max-age=300`. An extensionless path with no prerendered page gets the `404.html` app shell with 200, which is how account and block pages render. Any other miss is 404 `no-store`.
+- Only `/api` and `/data` compress per request and carry CORS. `/static` is `max-age=86400`.
+
 ## Build / Run
 
 ```bash
@@ -34,7 +44,12 @@ Keep `--rm` and `--tmpfs`. The image declares a data VOLUME, so a container star
 1. Confirm CI (Test and CodeQL) is green on the head commit.
 2. On host `nano-community` (the ssh alias for the origin server, since `nano.community` resolves to Cloudflare), fast-forward `/root/nano-community/source` to `origin/main`. It is the host's only checkout: pm2 serves it and every cron job in `server/server-crontab` runs from `source/scripts`, so a deploy updates both. If `yarn.lock` changed, run `yarn install` there in the same command. The pm2 file watch restarts the server on the fast-forward, and it crashes on any missing dependency until the install lands.
 3. If `api/` or `server/` changed, run `pm2 restart server` there and confirm its uptime reset. If `network-observer.mjs`, `libs-server/network-observer/`, `libs-server/network-events/` or `common/` changed, run `pm2 restart network-observer`: it has no file watch. The pm2 file watch does not reliably restart it. `pm2` is only on the login shell's PATH, so over ssh run it as `ssh nano-community "bash -lc 'pm2 restart server'"`.
-4. On the MacBook, run `yarn build` (react-snap prerender) and then `yarn deploy`. The storage-server containers cannot build: react-snap's bundled Chromium needs X11 libraries they lack. It mirrors `build/` to the host and deletes files the build no longer produces, so a retired prerendered page cannot keep being served. Build from current `origin/main` in a clean worktree (`git worktree add --detach <dir> origin/main`, with `node_modules` symlinked), never from your own older commit or the shared checkout. The deploy replaces the whole client, so an older commit rolls back other sessions' shipped client commits, and the shared checkout can carry a sibling's uncommitted files.
+4. On the MacBook, run `yarn build` (webpack, react-snap prerender, finalize) and then `yarn deploy`. The storage-server containers cannot build: react-snap's bundled Chromium needs X11 libraries they lack. The build fails when a page exceeds its HTML or JS budget in `scripts/finalize-client-build.mjs`. `yarn deploy` runs `scripts/deploy-client.sh` in three passes:
+   - `build/assets/` first, without delete, so new HTML never lands before its assets.
+   - The rest of `build/` with delete, so a retired prerendered page cannot keep being served.
+   - Remote assets older than 30 days are pruned. A page cached at the edge (up to 5 minutes) or open in a tab therefore keeps loading the chunks it references.
+
+   A client-only deploy needs no server restart. New HTML is visible within 5 minutes, the edge TTL, without a purge. Build from current `origin/main` in a clean worktree (`git worktree add --detach <dir> origin/main`, with `node_modules` symlinked), never from your own older commit or the shared checkout. The deploy replaces the whole client, so an older commit rolls back other sessions' shipped client commits, and the shared checkout can carry a sibling's uncommitted files.
 5. If `scripts/` or `server/storage-crontab` changed, fast-forward `/home/user/nano-community` on base-storage to `origin/main` the same way, with `yarn install` if `yarn.lock` changed. That checkout runs the storage-side crons: the archive delta and the subreddit imports. Load a changed crontab with `yarn load:crontab:storage`, and a changed `server/server-crontab` with `yarn load:crontab`.
 6. If `db/schema.postgres.sql` changed, apply the whole file on `nano-community` as `postgres` with a session lock timeout: `PGOPTIONS='-c lock_timeout=10s' sudo -n --preserve-env=PGOPTIONS -u postgres psql -d nano_production -v ON_ERROR_STOP=1 -f <file>`. The file re-runs ALTERs that take an exclusive lock on the hypertables, and without the timeout one long reader queues every site read behind it. Never apply during the weekly backup dump, Sunday 00:00 UTC for about 25 minutes: on 2026-11-15 an apply queued behind it stalled `representatives_uptime` for 5 minutes. Re-apply if the timeout fires.
 
