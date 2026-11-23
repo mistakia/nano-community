@@ -15,6 +15,7 @@ const to_seconds = (ms) => Math.floor(ms / 1000)
 //   principal_accounts   accounts in the principal set
 //   last_vote_at_ms      last vote seen per account, principal or not
 //   open_conditions      account -> { began_at, last_vote_at, observing_since }
+//                        plus recovering_since_ms once votes resume
 //   observing_since_ms   when this run began watching, for warm-up
 export const create_liveness_state = ({ observing_since_ms }) => ({
   principal_accounts: [],
@@ -29,7 +30,10 @@ const end_condition = ({
   ended_at_ms,
   evidence
 }) => {
-  const opened = state.open_conditions[representative_account]
+  // recovering_since_ms is detector state, not began evidence
+  // eslint-disable-next-line no-unused-vars
+  const { recovering_since_ms, ...opened } =
+    state.open_conditions[representative_account]
   delete state.open_conditions[representative_account]
   return {
     network_event_type: NETWORK_EVENT_TYPE,
@@ -77,8 +81,11 @@ export const update_principal_set = ({
   return network_events
 }
 
-// Records one vote and ends the account's open condition, if any, at the
-// vote's time.
+// Records one vote. An open condition ends only once the account has voted
+// for a full threshold with no silence longer than the threshold, so a stalled
+// node that still casts a vote every few minutes stays one open condition
+// instead of a begin and end per vote. The ended event is dated to the vote
+// that started the recovery.
 export const record_representative_vote = ({
   state,
   representative_account,
@@ -93,15 +100,32 @@ export const record_representative_vote = ({
   }
   const opened = state.open_conditions[representative_account]
   if (!opened) return []
+
+  const is_recovery_broken =
+    opened.recovering_since_ms === undefined ||
+    previous_vote_at_ms === undefined ||
+    received_at_ms - previous_vote_at_ms > REPRESENTATIVE_NOT_VOTING_MS
+  if (is_recovery_broken) {
+    opened.recovering_since_ms = received_at_ms
+    return []
+  }
+  if (
+    received_at_ms - opened.recovering_since_ms <
+    REPRESENTATIVE_NOT_VOTING_MS
+  )
+    return []
+
+  const recovered_at_ms = opened.recovering_since_ms
   const silent_since = opened.last_vote_at ?? opened.observing_since
   return [
     end_condition({
       state,
       representative_account,
-      ended_at_ms: received_at_ms,
+      ended_at_ms: recovered_at_ms,
       evidence: {
         reason: 'voted',
-        not_voting_seconds: to_seconds(received_at_ms) - silent_since
+        not_voting_seconds: to_seconds(recovered_at_ms) - silent_since,
+        confirmed_at: to_seconds(received_at_ms)
       }
     })
   ]
@@ -164,7 +188,8 @@ export const get_principal_voting_share = ({ state, now_ms, window_ms }) => {
 // Restores saved state. When the observer was down longer than the threshold,
 // its last-vote times say nothing about the gap, so they are dropped and the
 // warm-up rule applies again. Open conditions are kept: they began on evidence
-// and end on the next vote.
+// and end on sustained voting. A recovery in progress is dropped across such a
+// gap, since the gap may hide silence.
 export const restore_liveness_state = ({
   saved_state,
   saved_at_ms,
@@ -175,7 +200,14 @@ export const restore_liveness_state = ({
   return {
     principal_accounts: saved_state.principal_accounts ?? [],
     last_vote_at_ms: is_continuous ? (saved_state.last_vote_at_ms ?? {}) : {},
-    open_conditions: saved_state.open_conditions ?? {},
+    open_conditions: is_continuous
+      ? (saved_state.open_conditions ?? {})
+      : Object.fromEntries(
+          Object.entries(saved_state.open_conditions ?? {}).map(
+            // eslint-disable-next-line no-unused-vars
+            ([account, { recovering_since_ms, ...opened }]) => [account, opened]
+          )
+        ),
     observing_since_ms: is_continuous ? saved_state.observing_since_ms : now_ms
   }
 }

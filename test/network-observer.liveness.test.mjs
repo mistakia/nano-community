@@ -116,6 +116,64 @@ describe('network observer representative liveness', () => {
     )
   })
 
+  it('keeps one open condition for a stalled node that votes every few minutes', () => {
+    // The 2026-11 mainnet case: a node far behind the ledger stays online and
+    // casts a lone vote every 7 to 90 minutes.
+    const state = build_state()
+    const gaps_minutes = [7, 23, 88, 12, 40, 9, 24]
+    const sparse_votes = []
+    let time_ms = START_MS
+    for (const gap of gaps_minutes) {
+      time_ms += gap * MINUTE_MS
+      sparse_votes.push([time_ms, ACCOUNT])
+    }
+    const until_ms = time_ms + MINUTE_MS
+    const votes = [
+      ...steady_votes({
+        from_ms: START_MS,
+        to_ms: until_ms,
+        skip: ({ account }) => account === ACCOUNT
+      }),
+      ...sparse_votes
+    ].sort((a, b) => a[0] - b[0])
+    const network_events = replay({ state, votes, until_ms })
+    const own = network_events.filter(
+      (event) => event.representative_account === ACCOUNT
+    )
+    expect(own.map((event) => event.network_event_phase)).to.deep.equal([
+      'began'
+    ])
+    expect(state.open_conditions[ACCOUNT]).to.not.equal(undefined)
+  })
+
+  it('restarts the recovery when a resumed representative falls silent again', () => {
+    const state = build_state()
+    const network_events = replay({
+      state,
+      votes: [
+        [START_MS + 10 * MINUTE_MS, ACCOUNT],
+        [START_MS + 12 * MINUTE_MS, ACCOUNT],
+        // silent past the threshold, so the recovery starts over here
+        [START_MS + 20 * MINUTE_MS, ACCOUNT],
+        [START_MS + 23 * MINUTE_MS, ACCOUNT],
+        [START_MS + 26 * MINUTE_MS, ACCOUNT]
+      ],
+      until_ms: START_MS + 30 * MINUTE_MS
+    })
+    const own = network_events.filter(
+      (event) => event.representative_account === ACCOUNT
+    )
+    expect(own.map((event) => event.network_event_phase)).to.deep.equal([
+      'began',
+      'ended'
+    ])
+    expect(own[1].observed_at).to.equal((START_MS + 20 * MINUTE_MS) / 1000)
+    expect(own[1].evidence.confirmed_at).to.equal(
+      (START_MS + 26 * MINUTE_MS) / 1000
+    )
+    expect(own[1].evidence).to.not.have.property('recovering_since_ms')
+  })
+
   it('gives no spurious events across a restart with saved state', () => {
     const state = build_state()
     const votes = steady_votes({
@@ -196,6 +254,24 @@ describe('network observer representative liveness', () => {
       now_ms: START_MS + 60 * MINUTE_MS
     })
     expect(restored.last_vote_at_ms).to.deep.equal({})
+
+    const recovering = build_state()
+    recovering.open_conditions[ACCOUNT] = {
+      began_at: START_MS / 1000,
+      last_vote_at: START_MS / 1000,
+      observing_since: START_MS / 1000,
+      recovering_since_ms: START_MS + 10 * MINUTE_MS
+    }
+    const restored_open = restore_liveness_state({
+      saved_state: JSON.parse(JSON.stringify(recovering)),
+      saved_at_ms: START_MS + 10 * MINUTE_MS,
+      now_ms: START_MS + 60 * MINUTE_MS
+    })
+    expect(restored_open.open_conditions[ACCOUNT]).to.deep.equal({
+      began_at: START_MS / 1000,
+      last_vote_at: START_MS / 1000,
+      observing_since: START_MS / 1000
+    })
     expect(
       evaluate_representative_liveness({
         state: restored,
