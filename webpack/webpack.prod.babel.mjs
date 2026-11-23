@@ -106,9 +106,9 @@ export default base({
       // ordered it: page styles lose to the global styles in main.css and to
       // the MUI styles emotion appends at runtime. Appended at the end of
       // head, a stylesheet loaded on client-side navigation would override
-      // both. Runs in the browser as written, so it stays ES5.
+      // both.
       insert: function (link_tag) {
-        var main_css = document.querySelector('link[href*="/assets/main."]')
+        const main_css = document.querySelector('link[href*="/assets/main."]')
         if (main_css) main_css.parentNode.insertBefore(link_tag, main_css)
         else document.head.appendChild(link_tag)
       }
