@@ -1,24 +1,60 @@
-// Important modules this config uses
+// Production site build. Every script, stylesheet, font and media file is
+// emitted under build/assets/ named by content hash, so the server can send it
+// as immutable. HTML is the only mutable output; scripts/finalize-client-build.mjs
+// compresses everything after react-snap prerenders the pages.
 import path from 'path'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
-import HtmlInlineScriptPlugin from 'html-inline-script-webpack-plugin'
+import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import webpack from 'webpack'
-import CompressionPlugin from 'compression-webpack-plugin'
 
 import base from './webpack.base.babel.mjs'
 
 import * as constants from '#constants'
 
+// node_modules/<name> or node_modules/@<scope>/<name>
+const PACKAGE_NAME_REGEX = /[\\/]node_modules[\\/]((?:@[^\\/]+[\\/])?[^\\/]+)/
+
+// Writes chunk-groups.json: each named chunk group (the entry and every
+// webpackChunkName route page) with the JS files it loads. The finalize step
+// reads it to budget each page's route chunk, then deletes it.
+class ChunkGroupManifestPlugin {
+  apply(compiler) {
+    compiler.hooks.thisCompilation.tap(
+      'ChunkGroupManifestPlugin',
+      (compilation) => {
+        compilation.hooks.processAssets.tap(
+          {
+            name: 'ChunkGroupManifestPlugin',
+            stage: webpack.Compilation.PROCESS_ASSETS_STAGE_REPORT
+          },
+          () => {
+            const groups = {}
+            for (const [name, group] of compilation.namedChunkGroups) {
+              groups[name] = group
+                .getFiles()
+                .filter((file) => file.endsWith('.js'))
+            }
+            compilation.emitAsset(
+              'chunk-groups.json',
+              new webpack.sources.RawSource(JSON.stringify(groups, null, 2))
+            )
+          }
+        )
+      }
+    )
+  }
+}
+
 export default base({
   mode: 'production',
+  style_loader: MiniCssExtractPlugin.loader,
+  asset_filename: 'assets/[name].[contenthash][ext]',
 
-  // In production, we skip all hot-reloading stuff
   entry: [path.join(process.cwd(), 'src/index.js')],
 
-  // Utilize long-term caching by adding content hashes (not compilation hashes) to compiled assets
   output: {
-    filename: '[name].[chunkhash].js',
-    chunkFilename: '[name].[chunkhash].chunk.js'
+    filename: 'assets/[name].[contenthash].js',
+    chunkFilename: 'assets/[name].[contenthash].chunk.js'
   },
 
   optimization: {
@@ -28,16 +64,15 @@ export default base({
     runtimeChunk: 'single',
     splitChunks: {
       chunks: 'all',
-      maxInitialRequests: 10,
-      minSize: 0,
       cacheGroups: {
         vendor: {
           test: /[\\/]node_modules[\\/]/,
+          // JavaScript only: vendor CSS stays with the chunk that imports it
+          // rather than becoming one render-blocking stylesheet per package.
+          type: /javascript/,
           name(module) {
-            const packageName = module.context.match(
-              /[\\/]node_modules[\\/](.*?)([\\/]|$)/
-            )[1]
-            return `npm.${packageName.replace('@', '')}`
+            const package_name = module.context.match(PACKAGE_NAME_REGEX)[1]
+            return `npm.${package_name.replace('@', '').replace(/[\\/]/, '.')}`
           }
         }
       }
@@ -64,29 +99,23 @@ export default base({
       inject: true
     }),
 
-    new HtmlInlineScriptPlugin(),
-
-    new CompressionPlugin({
-      algorithm: 'gzip',
-      test: /\.js$|\.css$|\.html$/,
-      threshold: 10240,
-      minRatio: 0.8
+    new MiniCssExtractPlugin({
+      filename: 'assets/[name].[contenthash].css',
+      chunkFilename: 'assets/[name].[contenthash].chunk.css'
     }),
+
+    new ChunkGroupManifestPlugin(),
 
     new webpack.DefinePlugin({
       IS_DEV: false,
       REPO: JSON.stringify(constants.repo)
-    }),
-
-    new webpack.ids.HashedModuleIdsPlugin({
-      hashFunction: 'sha256',
-      hashDigest: 'hex',
-      hashDigestLength: 20
     })
   ],
 
   performance: {
     assetFilter: (assetFilename) =>
-      !/(\.map$)|(^(main\.|favicon\.))/.test(assetFilename)
+      !/(\.map$)|(^assets\/(main\.|favicon\.))|chunk-groups\.json$/.test(
+        assetFilename
+      )
   }
 })

@@ -1,5 +1,4 @@
 import http from 'http'
-import { promises as fsPromise } from 'fs'
 import url, { fileURLToPath } from 'url'
 import path, { dirname } from 'path'
 
@@ -23,6 +22,7 @@ import * as routes from '#api/routes/index.mjs'
 import cache from '#api/cache.mjs'
 import db from '#db'
 import { setupCron } from '#api/cron.mjs'
+import serve_client from '#api/serve-client.mjs'
 // import sockets from './sockets'
 
 setupCron()
@@ -70,9 +70,13 @@ api.use(morganDebug('api', 'combined'))
 
 api.enable('etag')
 api.disable('x-powered-by')
-api.use(compression())
 api.use(bodyParser.json())
+// Only API and data responses compress per request and carry CORS. Client
+// build responses are precompressed, and a reflected Access-Control-Allow-Origin
+// must never reach a response Cloudflare caches.
 api.use(
+  ['/api', '/data'],
+  compression(),
   cors({
     origin: true,
     credentials: true
@@ -86,13 +90,14 @@ api.get('/llms.txt', (req, res) =>
     .type('text/plain')
     .sendFile(path.join(__dirname, '..', 'static', 'llms.txt'))
 )
-api.use((req, res, next) => {
+api.use(['/api', '/data'], (req, res, next) => {
   res.set('Cache-Control', 'no-cache, must-revalidate, proxy-revalidate')
   next()
 })
 
+// Stable, externally linked URLs (social card, whitepapers, tools)
 const static_path = path.join(__dirname, '..', 'static')
-api.use('/static', serveStatic(static_path))
+api.use('/static', serveStatic(static_path, { maxAge: '1d' }))
 
 const dataPath = path.join(__dirname, '..', 'data')
 api.use('/data', serveStatic(dataPath))
@@ -141,30 +146,12 @@ if (IS_DEV) {
     res.redirect(307, `http://localhost:8094${req.path}`)
   })
 } else {
-  const buildPath = path.join(__dirname, '..', 'build')
-  api.use('/', async (req, res, next) => {
-    const filepath = req.url.replace(/\/$/, '')
-    const filename = `${filepath}/index.html`
-    const fullpath = path.join(buildPath, filename)
-    try {
-      const filestat = await fsPromise.stat(fullpath)
-      if (filestat.isFile()) {
-        return res.sendFile(fullpath, { cacheControl: false })
-      }
-      next()
-    } catch (error) {
-      logger(error)
-      next()
-    }
-  })
-  api.use('/', serveStatic(buildPath))
-  api.get('*', (req, res) => {
-    const notFoundPath = path.join(__dirname, '../', 'build', '404.html')
-    res.sendFile(notFoundPath, { cacheControl: false })
-  })
-
-  // redirect to ipfs page
-  // res.redirect(307, `${config.url}${req.path}`)
+  // An API or data request no route answered is a 404 here, never the
+  // edge-cacheable app shell carrying the CORS headers set above.
+  api.use(['/api', '/data'], (req, res) =>
+    res.status(404).type('text/plain').send('Not found')
+  )
+  api.use(serve_client({ build_path: path.join(__dirname, '..', 'build') }))
 }
 
 const server = http.createServer(api)
