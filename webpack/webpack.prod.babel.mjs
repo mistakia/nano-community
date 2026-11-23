@@ -101,7 +101,17 @@ export default base({
 
     new MiniCssExtractPlugin({
       filename: 'assets/[name].[contenthash].css',
-      chunkFilename: 'assets/[name].[contenthash].chunk.css'
+      chunkFilename: 'assets/[name].[contenthash].chunk.css',
+      // A route chunk's stylesheet goes before main.css, as style-loader
+      // ordered it: page styles lose to the global styles in main.css and to
+      // the MUI styles emotion appends at runtime. Appended at the end of
+      // head, a stylesheet loaded on client-side navigation would override
+      // both. Runs in the browser as written, so it stays ES5.
+      insert: function (link_tag) {
+        var main_css = document.querySelector('link[href*="/assets/main."]')
+        if (main_css) main_css.parentNode.insertBefore(link_tag, main_css)
+        else document.head.appendChild(link_tag)
+      }
     }),
 
     new ChunkGroupManifestPlugin(),
