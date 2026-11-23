@@ -9,7 +9,19 @@ import path, { dirname } from 'path'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-const base = (options) => ({
+// SVGs under the inline limit become URL-encoded data URIs, which are smaller
+// than base64 for text markup.
+const svg_data_url = (content) =>
+  `data:image/svg+xml,${encodeURIComponent(content.toString())}`
+
+// style_loader: 'style-loader' injects CSS from the script (development and
+// the self-contained task board client); the production site passes
+// MiniCssExtractPlugin.loader. asset_filename names emitted fonts and media.
+const base = ({
+  style_loader = 'style-loader',
+  asset_filename = '[contenthash][ext]',
+  ...options
+}) => ({
   mode: options.mode,
   entry: options.entry,
   output: Object.assign(
@@ -17,6 +29,7 @@ const base = (options) => ({
       // Compile into js/build.js
       path: path.resolve(process.cwd(), 'build'),
       publicPath: '/',
+      assetModuleFilename: asset_filename,
       clean: true
     },
     options.output
@@ -38,14 +51,12 @@ const base = (options) => ({
         // for a list of loaders, see https://webpack.js.org/loaders/#styling
         test: /\.css$/,
         exclude: /node_modules/,
-        use: ['style-loader', 'css-loader']
+        use: [style_loader, 'css-loader']
       },
       {
         test: /\.styl$/,
         use: [
-          {
-            loader: 'style-loader'
-          },
+          style_loader,
           {
             loader: 'css-loader',
             options: {
@@ -71,24 +82,17 @@ const base = (options) => ({
         // Preprocess 3rd party .css files located in node_modules
         test: /\.css$/,
         include: /node_modules/,
-        use: ['style-loader', 'css-loader']
+        use: [style_loader, 'css-loader']
       },
       {
         test: /\.(eot|otf|ttf|woff|woff2)$/,
-        use: 'file-loader'
+        type: 'asset/resource'
       },
       {
         test: /\.svg$/,
-        use: [
-          {
-            loader: 'svg-url-loader',
-            options: {
-              // Inline files smaller than 10 kB
-              limit: 10 * 1024,
-              noquotes: true
-            }
-          }
-        ]
+        type: 'asset',
+        parser: { dataUrlCondition: { maxSize: 10 * 1024 } },
+        generator: { dataUrl: svg_data_url }
       },
       {
         test: /\.html$/,
@@ -96,12 +100,8 @@ const base = (options) => ({
       },
       {
         test: /\.(mp4|webm)$/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            limit: 10000
-          }
-        }
+        type: 'asset',
+        parser: { dataUrlCondition: { maxSize: 10000 } }
       }
     ]
   },
