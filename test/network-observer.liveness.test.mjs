@@ -337,6 +337,124 @@ describe('network observer representative liveness', () => {
     ).to.deep.equal([])
   })
 
+  it('ends an open condition with fell_behind and judges nothing while behind', () => {
+    const state = build_state()
+    const silent = replay({
+      state,
+      votes: [[START_MS, OTHER_ACCOUNT]],
+      until_ms: START_MS + 10 * MINUTE_MS
+    }).filter((event) => event.representative_account === ACCOUNT)
+    expect(silent.map((event) => event.network_event_phase)).to.deep.equal([
+      'began'
+    ])
+
+    const ended = update_principal_set({
+      state,
+      online_weight: ONLINE_WEIGHT,
+      weights_by_account: principal_weights,
+      behind_accounts: [ACCOUNT],
+      now_ms: START_MS + 11 * MINUTE_MS
+    })
+    expect(ended).to.have.length(1)
+    expect(ended[0].network_event_phase).to.equal('ended')
+    expect(ended[0].evidence.reason).to.equal('fell_behind')
+    expect(
+      build_network_event_row(ended[0]).network_event_condition_id
+    ).to.equal(build_network_event_row(silent[0]).network_event_id)
+
+    // a node behind the frontier voting in short bursts hours apart
+    const burst_votes = []
+    for (let hour = 1; hour <= 6; hour++) {
+      for (let second = 0; second <= 8 * 60; second += 30) {
+        burst_votes.push([
+          START_MS + hour * 60 * MINUTE_MS + second * 1000,
+          ACCOUNT
+        ])
+      }
+    }
+    const behind_events = replay({
+      state,
+      votes: burst_votes,
+      from_ms: START_MS + 12 * MINUTE_MS,
+      until_ms: START_MS + 7 * 60 * MINUTE_MS
+    }).filter((event) => event.representative_account === ACCOUNT)
+    expect(behind_events).to.deep.equal([])
+  })
+
+  it('judges a representative that catches up from its return to sync', () => {
+    const state = build_state()
+    update_principal_set({
+      state,
+      online_weight: ONLINE_WEIGHT,
+      weights_by_account: principal_weights,
+      behind_accounts: [ACCOUNT],
+      now_ms: START_MS
+    })
+    record_representative_vote({
+      state,
+      representative_account: ACCOUNT,
+      received_at_ms: START_MS
+    })
+    expect(
+      replay({
+        state,
+        votes: [],
+        until_ms: START_MS + 60 * MINUTE_MS
+      }).filter((event) => event.representative_account === ACCOUNT)
+    ).to.deep.equal([])
+
+    const caught_up_at_ms = START_MS + 61 * MINUTE_MS
+    update_principal_set({
+      state,
+      online_weight: ONLINE_WEIGHT,
+      weights_by_account: principal_weights,
+      behind_accounts: [],
+      now_ms: caught_up_at_ms
+    })
+    const network_events = replay({
+      state,
+      votes: [],
+      from_ms: caught_up_at_ms,
+      until_ms: caught_up_at_ms + 10 * MINUTE_MS
+    }).filter((event) => event.representative_account === ACCOUNT)
+    expect(network_events).to.have.length(1)
+    expect(network_events[0].network_event_phase).to.equal('began')
+    expect(network_events[0].observed_at).to.equal(
+      Math.floor(caught_up_at_ms / 1000)
+    )
+    expect(network_events[0].evidence.last_vote_at).to.equal(
+      Math.floor(START_MS / 1000)
+    )
+  })
+
+  it('judges a caught-up representative that votes again from that vote', () => {
+    const state = build_state()
+    update_principal_set({
+      state,
+      online_weight: ONLINE_WEIGHT,
+      weights_by_account: principal_weights,
+      behind_accounts: [ACCOUNT],
+      now_ms: START_MS
+    })
+    update_principal_set({
+      state,
+      online_weight: ONLINE_WEIGHT,
+      weights_by_account: principal_weights,
+      behind_accounts: [],
+      now_ms: START_MS + MINUTE_MS
+    })
+    const network_events = replay({
+      state,
+      votes: [
+        [START_MS + 2 * MINUTE_MS, ACCOUNT],
+        [START_MS + 2 * MINUTE_MS, OTHER_ACCOUNT]
+      ],
+      until_ms: START_MS + 3 * MINUTE_MS
+    })
+    expect(network_events).to.deep.equal([])
+    expect(state.caught_up_at_ms).to.deep.equal({})
+  })
+
   it('emits no not-voting begins while degraded', () => {
     const state = build_state()
     const network_events = replay({
@@ -363,6 +481,56 @@ describe('network observer representative liveness', () => {
       })
     ).to.equal(0.5)
   })
+
+  it('leaves representatives behind the frontier out of the voting share', () => {
+    const state = build_state()
+    update_principal_set({
+      state,
+      online_weight: ONLINE_WEIGHT,
+      weights_by_account: principal_weights,
+      behind_accounts: [OTHER_ACCOUNT],
+      now_ms: START_MS
+    })
+    record_representative_vote({
+      state,
+      representative_account: ACCOUNT,
+      received_at_ms: START_MS
+    })
+    expect(
+      get_principal_voting_share({
+        state,
+        now_ms: START_MS + MINUTE_MS,
+        window_ms: REPRESENTATIVE_NOT_VOTING_MS
+      })
+    ).to.equal(1)
+  })
+
+  it('keeps the behind set and a pending return to sync across a restart', () => {
+    const state = build_state()
+    update_principal_set({
+      state,
+      online_weight: ONLINE_WEIGHT,
+      weights_by_account: principal_weights,
+      behind_accounts: [ACCOUNT, OTHER_ACCOUNT],
+      now_ms: START_MS
+    })
+    update_principal_set({
+      state,
+      online_weight: ONLINE_WEIGHT,
+      weights_by_account: principal_weights,
+      behind_accounts: [OTHER_ACCOUNT],
+      now_ms: START_MS + MINUTE_MS
+    })
+    const restored = restore_liveness_state({
+      saved_state: JSON.parse(JSON.stringify(state)),
+      saved_at_ms: START_MS + MINUTE_MS,
+      now_ms: START_MS + 2 * MINUTE_MS
+    })
+    expect(restored.behind_accounts).to.deep.equal([OTHER_ACCOUNT])
+    expect(restored.caught_up_at_ms).to.deep.equal({
+      [ACCOUNT]: START_MS + MINUTE_MS
+    })
+  })
 })
 
 describe('network observer principal representative inputs', () => {
@@ -374,11 +542,24 @@ describe('network observer principal representative inputs', () => {
     `nano_3${'8'.repeat(59)}`
   ]
 
+  const behind_condition = ({ account, phase, began_at }) =>
+    build_network_event_row({
+      network_event_type: 'representative_cemented_behind',
+      network_event_phase: phase,
+      representative_account: account,
+      evidence: { began_at },
+      observed_at: began_at
+    })
+
   const clear_rows = async () => {
     await knex('voting_weight')
       .where('timestamp', '>=', NOW_S - 3600)
       .del()
     await knex('accounts_meta_index').whereIn('account', LOADER_ACCOUNTS).del()
+    await knex('network_events')
+      .where({ network_event_type: 'representative_cemented_behind' })
+      .whereIn('representative_account', LOADER_ACCOUNTS)
+      .del()
   }
 
   before(async () => {
@@ -412,6 +593,25 @@ describe('network observer principal representative inputs', () => {
         timestamp: NOW_S - 2 * 86400
       }
     ])
+    await knex('network_events').insert([
+      // open: behind
+      behind_condition({
+        account: OTHER_ACCOUNT,
+        phase: 'began',
+        began_at: NOW_S - 600
+      }),
+      // ended: back in sync
+      behind_condition({
+        account: ACCOUNT,
+        phase: 'began',
+        began_at: NOW_S - 900
+      }),
+      behind_condition({
+        account: ACCOUNT,
+        phase: 'ended',
+        began_at: NOW_S - 900
+      })
+    ])
   })
 
   after(clear_rows)
@@ -423,6 +623,7 @@ describe('network observer principal representative inputs', () => {
       [ACCOUNT]: '900',
       [OTHER_ACCOUNT]: '5000'
     })
+    expect(principal_inputs.behind_accounts).to.deep.equal([OTHER_ACCOUNT])
   })
 
   it('keeps every digit of mainnet-sized weights', async () => {

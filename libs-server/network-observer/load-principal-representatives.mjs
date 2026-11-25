@@ -23,7 +23,10 @@ const WEIGHT_MAXIMUM_AGE_SECONDS = 24 * 60 * 60
 // leave threshold, as raw decimal strings: both are cast to text in SQL
 // because db/index.mjs parses numeric as a float, which cannot hold 39 digits.
 // An account missing from weights_by_account is below the leave threshold.
-// Returns null when no voting_weight row is recent enough to judge.
+// behind_accounts are the representatives with an open
+// representative_cemented_behind condition: a began row with no ended row for
+// its condition id. Returns null when no voting_weight row is recent enough to
+// judge.
 export const load_principal_inputs = async ({
   db = default_db,
   now_seconds = Math.floor(Date.now() / 1000)
@@ -50,7 +53,30 @@ export const load_principal_inputs = async ({
   for (const { account, weight } of rows) {
     weights_by_account[account.trim()] = weight
   }
-  return { online_weight, weights_by_account, loaded_at: now_seconds }
+
+  const behind_rows = await db('network_events')
+    .where({
+      network_event_type: 'representative_cemented_behind',
+      network_event_phase: 'began'
+    })
+    .whereNotExists(
+      db('network_events as ended_events')
+        .where('ended_events.network_event_phase', 'ended')
+        .whereRaw(
+          'ended_events.network_event_condition_id = network_events.network_event_condition_id'
+        )
+    )
+    .distinct('representative_account')
+  const behind_accounts = behind_rows
+    .map(({ representative_account }) => representative_account.trim())
+    .sort()
+
+  return {
+    online_weight,
+    weights_by_account,
+    behind_accounts,
+    loaded_at: now_seconds
+  }
 }
 
 // Loads from the database and keeps a copy on disk, so a restart during a

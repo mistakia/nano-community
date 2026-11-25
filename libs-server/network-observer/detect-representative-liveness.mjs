@@ -11,14 +11,25 @@ const NETWORK_EVENT_TYPE = 'representative_not_voting'
 
 const to_seconds = (ms) => Math.floor(ms / 1000)
 
+// Not voting is judged only for principal representatives in sync with the
+// frontier. A representative behind it has an open
+// representative_cemented_behind condition, which names the real problem: a
+// node that has fallen behind votes only now and then, so judging its votes
+// would flap.
+//
 // State is plain JSON so it can be saved and restored:
 //   principal_accounts   accounts in the principal set
+//   behind_accounts      principal or not, accounts behind the frontier
+//   caught_up_at_ms      account -> when it came back in sync, until it votes
+//                        again or a condition begins
 //   last_vote_at_ms      last vote seen per account, principal or not
 //   open_conditions      account -> { began_at, last_vote_at, observing_since }
 //                        plus recovering_since_ms once votes resume
 //   observing_since_ms   when this run began watching, for warm-up
 export const create_liveness_state = ({ observing_since_ms }) => ({
   principal_accounts: [],
+  behind_accounts: [],
+  caught_up_at_ms: {},
   last_vote_at_ms: {},
   open_conditions: {},
   observing_since_ms
@@ -45,12 +56,15 @@ const end_condition = ({
   }
 }
 
-// Applies fresh weights with hysteresis. A representative that leaves ends its
-// open condition and never starts a new one.
+// Applies fresh weights with hysteresis and the accounts behind the frontier.
+// A representative that leaves the principal set or falls behind ends its open
+// condition and starts no new one until it is back. One that comes back in
+// sync is judged from that moment, not from its last vote while behind.
 export const update_principal_set = ({
   state,
   online_weight,
   weights_by_account,
+  behind_accounts = [],
   now_ms
 }) => {
   const online = BigInt(online_weight)
@@ -64,22 +78,39 @@ export const update_principal_set = ({
     if (scaled_weight >= online * threshold) next.add(account)
   }
 
+  const behind = new Set(behind_accounts)
+  for (const account of state.behind_accounts) {
+    if (!behind.has(account)) state.caught_up_at_ms[account] = now_ms
+  }
+  for (const account of behind) delete state.caught_up_at_ms[account]
+
   const network_events = []
-  for (const account of current) {
-    if (!next.has(account) && state.open_conditions[account]) {
-      network_events.push(
-        end_condition({
-          state,
-          representative_account: account,
-          ended_at_ms: now_ms,
-          evidence: { reason: 'left_principal_set' }
-        })
-      )
-    }
+  for (const account of Object.keys(state.open_conditions)) {
+    const reason = !next.has(account)
+      ? 'left_principal_set'
+      : behind.has(account)
+        ? 'fell_behind'
+        : null
+    if (!reason) continue
+    network_events.push(
+      end_condition({
+        state,
+        representative_account: account,
+        ended_at_ms: now_ms,
+        evidence: { reason }
+      })
+    )
+  }
+  for (const account of Object.keys(state.caught_up_at_ms)) {
+    if (!next.has(account)) delete state.caught_up_at_ms[account]
   }
   state.principal_accounts = [...next].sort()
+  state.behind_accounts = [...behind].sort()
   return network_events
 }
+
+const is_in_sync = ({ state, account }) =>
+  !state.behind_accounts.includes(account)
 
 // Records one vote. An open condition ends only once the account has voted
 // for a full threshold with no silence longer than the threshold, so a stalled
@@ -97,6 +128,9 @@ export const record_representative_vote = ({
     received_at_ms > previous_vote_at_ms
   ) {
     state.last_vote_at_ms[representative_account] = received_at_ms
+  }
+  if (received_at_ms >= state.caught_up_at_ms[representative_account]) {
+    delete state.caught_up_at_ms[representative_account]
   }
   const opened = state.open_conditions[representative_account]
   if (!opened) return []
@@ -131,10 +165,10 @@ export const record_representative_vote = ({
   ]
 }
 
-// Begins a condition for each principal representative silent longer than the
-// threshold. A representative never seen voting is judged only once the
-// observer has watched for a full threshold, and nothing begins while the
-// observer is degraded.
+// Begins a condition for each in-sync principal representative silent longer
+// than the threshold. A representative never seen voting is judged only once
+// the observer has watched for a full threshold, one that came back in sync is
+// judged from that moment, and nothing begins while the observer is degraded.
 export const evaluate_representative_liveness = ({
   state,
   now_ms,
@@ -146,13 +180,18 @@ export const evaluate_representative_liveness = ({
     now_ms - state.observing_since_ms >= REPRESENTATIVE_NOT_VOTING_MS
   for (const account of state.principal_accounts) {
     if (state.open_conditions[account]) continue
+    if (!is_in_sync({ state, account })) continue
     const last_vote_at_ms = state.last_vote_at_ms[account]
-    const silent_since_ms = last_vote_at_ms ?? state.observing_since_ms
     if (last_vote_at_ms === undefined && !is_warmed_up) continue
+    const silent_since_ms = Math.max(
+      last_vote_at_ms ?? state.observing_since_ms,
+      state.caught_up_at_ms[account] ?? -Infinity
+    )
     if (now_ms - silent_since_ms <= REPRESENTATIVE_NOT_VOTING_MS) continue
 
-    // observed_at is the last vote, or the start of observation when no vote
-    // has been seen.
+    // observed_at is the last vote, the start of observation when no vote has
+    // been seen, or the return to sync when that came later.
+    delete state.caught_up_at_ms[account]
     const began_at = to_seconds(silent_since_ms)
     const opened = {
       began_at,
@@ -175,14 +214,19 @@ export const evaluate_representative_liveness = ({
   return network_events
 }
 
-// The share of principal representatives seen voting within window_ms.
+// The share of in-sync principal representatives seen voting within
+// window_ms. A representative behind the frontier votes only now and then, so
+// counting it would read as the observer missing votes.
 export const get_principal_voting_share = ({ state, now_ms, window_ms }) => {
-  if (!state.principal_accounts.length) return null
-  const voted_count = state.principal_accounts.filter(
+  const in_sync_accounts = state.principal_accounts.filter((account) =>
+    is_in_sync({ state, account })
+  )
+  if (!in_sync_accounts.length) return null
+  const voted_count = in_sync_accounts.filter(
     (account) =>
       now_ms - (state.last_vote_at_ms[account] ?? -Infinity) <= window_ms
   ).length
-  return voted_count / state.principal_accounts.length
+  return voted_count / in_sync_accounts.length
 }
 
 // Restores saved state. When the observer was down longer than the threshold,
@@ -199,6 +243,8 @@ export const restore_liveness_state = ({
   const is_continuous = now_ms - saved_at_ms <= REPRESENTATIVE_NOT_VOTING_MS
   return {
     principal_accounts: saved_state.principal_accounts ?? [],
+    behind_accounts: saved_state.behind_accounts ?? [],
+    caught_up_at_ms: saved_state.caught_up_at_ms ?? {},
     last_vote_at_ms: is_continuous ? (saved_state.last_vote_at_ms ?? {}) : {},
     open_conditions: is_continuous
       ? (saved_state.open_conditions ?? {})

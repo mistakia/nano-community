@@ -168,6 +168,7 @@ const main = async () => {
         state: liveness,
         online_weight: principal_inputs.online_weight,
         weights_by_account: principal_inputs.weights_by_account,
+        behind_accounts: principal_inputs.behind_accounts,
         now_ms: Date.now()
       })
     )
