@@ -2,17 +2,19 @@ import { epoch_seconds_sql } from '#libs-server/epoch-seconds.mjs'
 
 // SELECT lists for tables whose rows the API serves whole. Each instant is
 // stored as timestamptz and served as epoch seconds under its long-standing
-// response name, so the response shape does not change with the column.
+// response name, so the response shape does not change with the column. Every
+// column is qualified with its table, so a list stays unambiguous in a join.
 
-const select_sql = (value_columns, instant_columns) =>
+const select_sql = (table, value_columns, instant_columns) =>
   [
-    ...value_columns.map((column) => `"${column}"`),
+    ...value_columns.map((column) => `"${table}"."${column}"`),
     ...instant_columns.map(([column, alias]) =>
-      epoch_seconds_sql(column, alias)
+      epoch_seconds_sql(`"${table}"."${column}"`, alias)
     )
   ].join(', ')
 
 export const VOTING_WEIGHT_SELECT_SQL = select_sql(
+  'voting_weight',
   [
     'address',
     'quorum_delta',
@@ -26,11 +28,13 @@ export const VOTING_WEIGHT_SELECT_SQL = select_sql(
 )
 
 export const ACCOUNT_META_INDEX_SELECT_SQL = select_sql(
+  'accounts_meta_index',
   ['account', 'balance', 'block_count', 'weight', 'delegators'],
   [['observed_at', 'timestamp']]
 )
 
 export const REPRESENTATIVE_META_INDEX_SELECT_SQL = select_sql(
+  'representatives_meta_index',
   [
     'account',
     'cpu_cores',
@@ -67,6 +71,7 @@ export const REPRESENTATIVE_META_INDEX_SELECT_SQL = select_sql(
 )
 
 export const REPRESENTATIVE_NETWORK_SELECT_SQL = select_sql(
+  'representatives_network',
   [
     'account',
     'address',
@@ -90,6 +95,7 @@ export const REPRESENTATIVE_NETWORK_SELECT_SQL = select_sql(
 )
 
 export const GITHUB_EVENT_SELECT_SQL = select_sql(
+  'github_events',
   [
     'id',
     'type',
@@ -106,6 +112,7 @@ export const GITHUB_EVENT_SELECT_SQL = select_sql(
 )
 
 export const GITHUB_DISCUSSION_SELECT_SQL = select_sql(
+  'github_discussions',
   [
     'id',
     'author_id',
@@ -130,6 +137,7 @@ export const GITHUB_DISCUSSION_SELECT_SQL = select_sql(
 )
 
 export const ACCOUNT_SELECT_SQL = select_sql(
+  'accounts',
   ['account', 'alias', 'monitor_url', 'watt_hour', 'representative'],
   [['last_seen_at', 'last_seen']]
 )

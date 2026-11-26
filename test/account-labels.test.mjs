@@ -34,6 +34,16 @@ const claim = (overrides) => ({
   ...overrides
 })
 
+// A claim as stored in account_labels, whose instants are timestamptz
+const stored_claim = (overrides) => {
+  const row = claim(overrides)
+  return {
+    ...row,
+    observed_at: new Date(row.observed_at * 1000),
+    expires_at: row.expires_at === null ? null : new Date(row.expires_at * 1000)
+  }
+}
+
 const get_account = (account) => db('accounts').where({ account }).first()
 const get_tags = async (account) =>
   (await db('accounts_tags').where({ account }).orderBy('tag')).map(
@@ -248,14 +258,13 @@ describe('account labels', function () {
 
     it('leave an existing alias alone when they carry none', async () => {
       const key = create_test_key()
-      await db('account_labels').insert({
-        ...claim({
+      await db('account_labels').insert(
+        stored_claim({
           account: key.account,
           source: 'admin',
           value: 'Admin Name'
-        }),
-        observed_at: new Date(100 * 1000)
-      })
+        })
+      )
       await materialize_account_labels({ account: key.account })
       const wire = sign_community_request({
         key,
@@ -276,8 +285,8 @@ describe('account labels', function () {
     before(async () => {
       exchange = create_test_key()
       await db('account_labels').insert([
-        claim({ account: exchange.account, value: 'Zeta Exchange' }),
-        claim({
+        stored_claim({ account: exchange.account, value: 'Zeta Exchange' }),
+        stored_claim({
           account: exchange.account,
           label_type: 'tag',
           value: 'type/exchange'
@@ -306,7 +315,7 @@ describe('account labels', function () {
 
     it('GET /api/account-labels finds a name that does not win the alias', async () => {
       await db('account_labels').insert(
-        claim({
+        stored_claim({
           account: exchange.account,
           source: 'nanotipbot',
           value: 'Zulu'

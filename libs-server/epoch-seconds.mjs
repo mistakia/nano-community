@@ -2,9 +2,10 @@
 // API and the detector windows work in epoch seconds, so a reader converts
 // with epoch_seconds_sql on the way out and a writer with to_date on the way in.
 
-// SQL expression for a timestamptz column as integer epoch seconds.
+// SQL expression for a timestamptz column as integer epoch seconds. bigint,
+// because an expiry can lie past 2038; db/index.mjs parses it to a Number.
 export const epoch_seconds_sql = (column, alias) =>
-  `extract(epoch from ${column})::integer${alias ? ` as "${alias}"` : ''}`
+  `extract(epoch from ${column})::bigint${alias ? ` as "${alias}"` : ''}`
 
 // Epoch seconds to the Date a timestamptz column takes. Null stays null.
 export const seconds_to_date = (seconds) =>
