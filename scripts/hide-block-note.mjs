@@ -13,7 +13,7 @@ const log = debug('hide-block-note')
 export default async function hide_block_note({ block_hash, reason, unhide }) {
   const update = unhide
     ? { hidden_at: null, hidden_reason: null }
-    : { hidden_at: Math.floor(Date.now() / 1000), hidden_reason: reason }
+    : { hidden_at: new Date(), hidden_reason: reason }
   const updated = await db('blocks_meta')
     .where({ block_hash: block_hash.toLowerCase() })
     .update(update)

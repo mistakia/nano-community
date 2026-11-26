@@ -45,7 +45,7 @@ export default async function update_representative_meta({
     if (!representative_row) {
       await db('representatives_meta_index').insert({
         account: representative_account_address,
-        timestamp: Math.floor(Date.now() / 1000)
+        recorded_at: new Date()
       })
       representative_row = await db('representatives_meta_index')
         .where({ account: representative_account_address })
@@ -104,14 +104,14 @@ export default async function update_representative_meta({
           column: prop,
           previous_value: edit.lhs,
           new_value: edit.rhs,
-          timestamp: Math.floor(Date.now() / 1000)
+          changed_at: new Date()
         })
         .onConflict([
           'account',
           'column',
           'previous_value',
           'new_value',
-          'timestamp'
+          'changed_at'
         ])
         .ignore()
     }

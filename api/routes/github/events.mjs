@@ -1,5 +1,7 @@
 import express from 'express'
 
+import { GITHUB_EVENT_SELECT_SQL } from '#libs-server/epoch-response-columns.mjs'
+
 const router = express.Router()
 
 // automated reviewers and CI bots that drown out contributor activity
@@ -20,6 +22,7 @@ router.get('/nano-node', async (req, res) => {
     }
 
     let query = db('github_events')
+      .select(db.raw(GITHUB_EVENT_SELECT_SQL))
       .whereNotIn('actor_name', bot_actors)
       .whereNot('actor_name', 'like', '%[bot]')
       .orderBy('created_at', 'desc')

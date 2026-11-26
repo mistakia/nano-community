@@ -6,6 +6,7 @@ import verify_community_request, {
   is_public_key,
   send_request_error
 } from '#libs-server/verify-community-request.mjs'
+import { seconds_to_date } from '#libs-server/epoch-seconds.mjs'
 
 const router = express.Router()
 const USERNAME_RE = /^[A-Za-z][a-zA-Z0-9_]+$/
@@ -156,7 +157,7 @@ router.post('/key/?', async (req, res) => {
       link_message: req.body.link.message,
       accept_link_signature: req.body.accept.signature.toLowerCase(),
       accept_link_message: req.body.accept.message,
-      created_at
+      created_at: seconds_to_date(created_at)
     })
 
     res.send({

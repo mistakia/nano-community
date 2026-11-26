@@ -97,7 +97,7 @@ describe('block notes', function () {
         public_key: linked_key.public_key,
         link_signature: '00'.repeat(64),
         link_message: '{}',
-        created_at: now_seconds()
+        created_at: new Date()
       })
 
       const wire = sign_note({ key: linked_key, block_hash, note: 'via link' })
@@ -113,8 +113,8 @@ describe('block notes', function () {
         public_key: linked_key.public_key,
         link_signature: '00'.repeat(64),
         link_message: '{}',
-        created_at: now_seconds(),
-        revoked_at: now_seconds()
+        created_at: new Date(),
+        revoked_at: new Date()
       })
 
       const wire = sign_note({ key: linked_key, block_hash, note: 'revoked' })
@@ -325,7 +325,7 @@ describe('block notes', function () {
       })
       await db('blocks_meta')
         .where({ block_hash })
-        .update({ hidden_at: 1, hidden_reason: 'spam' })
+        .update({ hidden_at: new Date(1000), hidden_reason: 'spam' })
       await apply({
         key,
         block_hash,

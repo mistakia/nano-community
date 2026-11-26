@@ -5,6 +5,10 @@ import verify_community_request, {
   expect_parameter_keys,
   send_request_error
 } from '#libs-server/verify-community-request.mjs'
+import {
+  date_to_seconds,
+  seconds_to_date
+} from '#libs-server/epoch-seconds.mjs'
 
 const router = express.Router()
 
@@ -60,7 +64,7 @@ router.post('/key/?', async (req, res) => {
     const revoked_at = Math.floor(Date.now() / 1000)
     await db('account_keys')
       .update({
-        revoked_at,
+        revoked_at: seconds_to_date(revoked_at),
         revoke_signature: req.body.signature.toLowerCase(),
         revoke_message: req.body.message
       })
@@ -69,7 +73,7 @@ router.post('/key/?', async (req, res) => {
     res.status(200).send({
       account: linked_key.account,
       public_key: linked_public_key,
-      created_at: linked_key.created_at,
+      created_at: date_to_seconds(linked_key.created_at),
       revoked_at
     })
   } catch (error) {

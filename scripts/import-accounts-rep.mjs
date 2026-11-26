@@ -3,12 +3,13 @@ import dayjs from 'dayjs'
 
 import { rpc, isMain, wait } from '#common'
 import report_job from '#libs-server/report-job.mjs'
+import { seconds_to_date } from '#libs-server/epoch-seconds.mjs'
 import { BURN_ACCOUNT } from '#constants'
 import db from '#db'
 
 const logger = debug('import-accounts-rep')
 
-const timestamp = Math.round(Date.now() / 1000)
+const observed_at = seconds_to_date(Math.round(Date.now() / 1000))
 
 // `ledger` is served only by the trusted full node (rpc.ledger uses
 // trustedAddresses) -- there is no proxy fallback. That node's disk is
@@ -103,7 +104,7 @@ const importAccountsRep = async ({
         account: address,
         representative,
         balance,
-        timestamp
+        observed_at
       })
     }
 
@@ -122,7 +123,7 @@ const importAccountsRep = async ({
     for (let i = 0; i < returnedAddresses.length; i = i + batchSize) {
       const addresses = returnedAddresses.slice(i, i + batchSize)
       await db('accounts_delegators')
-        .whereNot({ timestamp })
+        .whereNot({ observed_at })
         .whereNotIn('account', addresses)
         .del()
     }

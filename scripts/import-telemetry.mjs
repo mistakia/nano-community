@@ -42,7 +42,7 @@ const importTelemetry = async () => {
         online_stake_total: res.value.online_stake_total,
         trended_stake_total: res.value.trended_stake_total,
         peers_stake_total: res.value.peers_stake_total,
-        timestamp
+        observed_at: seconds_to_date(timestamp)
       })
 
       for (const peer of res.value.peers) {
@@ -260,12 +260,12 @@ const importTelemetry = async () => {
         address: item.address
       })
       .limit(1)
-      .orderBy('timestamp', 'desc')
+      .orderBy('observed_at', 'desc')
 
     // ignore any ip / address combos fetched within the last three days
     if (
       result.length &&
-      dayjs.unix(result[0].timestamp).add('3', 'day').isAfter(now)
+      dayjs(result[0].observed_at).add('3', 'day').isAfter(now)
     ) {
       continue
     }
@@ -293,7 +293,7 @@ const importTelemetry = async () => {
         asname: network.asname,
         hosted: network.hosting,
 
-        timestamp
+        observed_at: seconds_to_date(timestamp)
       }
 
       await db('representatives_network').insert(rep_network_insert)

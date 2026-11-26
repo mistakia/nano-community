@@ -8,6 +8,11 @@ import {
   load_representative_power_readings
 } from '#libs-server/load-representative-power-inputs.mjs'
 import { REPRESENTATIVE_TELEMETRY_SELECT_SQL } from '#libs-server/representative-telemetry-columns.mjs'
+import {
+  ACCOUNT_META_INDEX_SELECT_SQL,
+  REPRESENTATIVE_META_INDEX_SELECT_SQL,
+  REPRESENTATIVE_NETWORK_SELECT_SQL
+} from '#libs-server/epoch-response-columns.mjs'
 import cache from '#api/cache.mjs'
 import top from './top.mjs'
 import data_view_route from './data-view.mjs'
@@ -46,24 +51,22 @@ export const loadRepresentatives = async () => {
     .whereIn('account', accounts)
     .orderBy('interval', 'asc')
 
-  const account_meta = db('accounts_meta_index').whereIn('account', accounts)
+  const account_meta = db('accounts_meta_index')
+    .select(db.raw(ACCOUNT_META_INDEX_SELECT_SQL))
+    .whereIn('account', accounts)
 
-  const rep_meta = db('representatives_meta_index').whereIn('account', accounts)
+  const rep_meta = db('representatives_meta_index')
+    .select(db.raw(REPRESENTATIVE_META_INDEX_SELECT_SQL))
+    .whereIn('account', accounts)
 
   /***********************************************************/
-  const networkQuery = db('representatives_network')
-    .select(db.raw('max(timestamp) AS maxtime, account AS aid'))
-    .groupBy('account')
+  // Latest network row per account
   const network = db
-    .select('representatives_network.*')
-    .from(db.raw('(' + networkQuery.toString() + ') AS X'))
-    .innerJoin('representatives_network', function () {
-      this.on(function () {
-        this.on('account', '=', 'aid')
-        this.andOn('timestamp', '=', 'maxtime')
-      })
-    })
-    .whereIn('account', accounts)
+    .raw(
+      `SELECT DISTINCT ON (account) ${REPRESENTATIVE_NETWORK_SELECT_SQL} FROM representatives_network WHERE account = ANY(?) ORDER BY account, observed_at DESC`,
+      [accounts]
+    )
+    .then((r) => r.rows)
 
   /***********************************************************/
   // Latest uptime observation per account from the representatives_uptime

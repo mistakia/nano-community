@@ -97,7 +97,7 @@ describe('network events writer', () => {
         detector_states: [
           { subject_key: REPRESENTATIVE_ACCOUNT, detector_state: { open: {} } }
         ],
-        watermark: { table_name: WATERMARK_KEY, last_max_ts: 1000 },
+        watermark: { table_name: WATERMARK_KEY, watermark_seconds: 1000 },
         network_events: [
           {
             ...cemented_behind_began,
@@ -123,7 +123,7 @@ describe('network events writer', () => {
       detector_states: [
         { subject_key: REPRESENTATIVE_ACCOUNT, detector_state: { open: {} } }
       ],
-      watermark: { table_name: WATERMARK_KEY, last_max_ts: 1000 },
+      watermark: { table_name: WATERMARK_KEY, watermark_seconds: 1000 },
       network_events: [cemented_behind_began]
     })
     await insert_network_events({
@@ -134,7 +134,7 @@ describe('network events writer', () => {
           detector_state: { open: { representative_cemented_behind: {} } }
         }
       ],
-      watermark: { table_name: WATERMARK_KEY, last_max_ts: 2000 }
+      watermark: { table_name: WATERMARK_KEY, watermark_seconds: 2000 }
     })
     const state = await knex('network_event_detector_state').first()
     expect(state.detector_state).to.deep.equal({
@@ -143,7 +143,7 @@ describe('network events writer', () => {
     const watermark = await knex('etl_state')
       .where({ table_name: WATERMARK_KEY })
       .first()
-    expect(watermark.last_max_ts).to.equal(2000)
+    expect(watermark.watermark_at.getTime()).to.equal(2000 * 1000)
   })
 
   it('assigns sequences in commit order across overlapping transactions', async () => {

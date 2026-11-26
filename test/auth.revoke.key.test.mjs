@@ -55,7 +55,7 @@ describe('API /auth/revoke/key', () => {
       expect(response.body.account).to.equal(account_key.account)
 
       const row = await get_row(linked_key.public_key)
-      expect(row.revoked_at).to.be.a('number')
+      expect(row.revoked_at).to.be.an.instanceof(Date)
       expect(row.revoke_message).to.equal(wire.message)
       expect(row.revoke_signature).to.equal(wire.signature)
     })
@@ -69,9 +69,9 @@ describe('API /auth/revoke/key', () => {
         })
       )
       expect(response).to.have.status(200)
-      expect((await get_row(linked_key.public_key)).revoked_at).to.be.a(
-        'number'
-      )
+      expect(
+        (await get_row(linked_key.public_key)).revoked_at
+      ).to.be.an.instanceof(Date)
     })
   })
 
@@ -159,9 +159,9 @@ describe('API /auth/revoke/key binding regression', () => {
     })
     expect(response).to.have.status(200)
     expect(response.body.public_key).to.equal(target.linked_key.public_key)
-    expect((await get_row(target.linked_key.public_key)).revoked_at).to.be.a(
-      'number'
-    )
+    expect(
+      (await get_row(target.linked_key.public_key)).revoked_at
+    ).to.be.an.instanceof(Date)
     expect(
       (await get_row(bystander.linked_key.public_key)).revoked_at
     ).to.equal(null)

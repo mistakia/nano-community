@@ -19,9 +19,9 @@ const results = Object.fromEntries(
 
 const analyzeOnlineWeight = async () => {
   const rows = await db('voting_weight')
-    .select('timestamp')
-    .groupBy('timestamp')
-  const timestamps = rows.map((r) => r.timestamp)
+    .select('observed_at')
+    .groupBy('observed_at')
+  const observed_ats = rows.map((r) => r.observed_at)
 
   const update = (values, value_type) => {
     const r = results[value_type]
@@ -34,17 +34,17 @@ const analyzeOnlineWeight = async () => {
   }
 
   let count = 0
-  for (const timestamp of timestamps) {
+  for (const observed_at of observed_ats) {
     queue.add(async () => {
       if (process.stdout.clearLine) {
         process.stdout.clearLine()
         process.stdout.cursorTo(0)
-        process.stdout.write(`Processing: ${count++}/${timestamps.length}`)
+        process.stdout.write(`Processing: ${count++}/${observed_ats.length}`)
       }
 
       const measurements = await db('voting_weight').where(
-        'timestamp',
-        timestamp
+        'observed_at',
+        observed_at
       )
       const online_weight = percentile(
         percentiles,

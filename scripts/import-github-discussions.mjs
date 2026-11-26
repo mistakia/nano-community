@@ -92,10 +92,10 @@ const formatDiscussion = ({ item, repo }) => ({
   upvotes: item.upvoteCount,
   category_id: item.category.id,
   category_name: item.category.name,
-  created_at: dayjs(item.publishedAt).unix(),
-  updated_at: item.updatedAt ? dayjs(item.updatedAt).unix() : null,
+  created_at: dayjs(item.publishedAt).toDate(),
+  updated_at: item.updatedAt ? dayjs(item.updatedAt).toDate() : null,
   closed: item.closed,
-  closed_at: item.closedAt ? dayjs(item.closedAt).unix() : null,
+  closed_at: item.closedAt ? dayjs(item.closedAt).toDate() : null,
   state_reason: item.stateReason
 })
 
@@ -155,7 +155,7 @@ const importGithubDiscussions = async ({ repo, all = false }) => {
       .where({ repo })
       .orderBy('updated_at', 'desc')
       .limit(1)
-    lastUpdated = rows.length ? rows[0].updated_at : undefined
+    lastUpdated = rows.length ? dayjs(rows[0].updated_at).unix() : undefined
     log(`importing discussions updated since: ${lastUpdated}`)
   }
 

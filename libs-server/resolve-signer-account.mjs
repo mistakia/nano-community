@@ -1,3 +1,4 @@
+import { seconds_to_date } from './epoch-seconds.mjs'
 import { COMMUNITY_WINDOW_SECONDS } from './verify-community-request.mjs'
 
 // The account a key acted for when it signed: a link in force at issued_at,
@@ -13,9 +14,15 @@ export default async function resolve_signer_account({
   const link = await connection('account_keys')
     .select('account')
     .where({ public_key })
-    .where('created_at', '<=', issued_at + COMMUNITY_WINDOW_SECONDS)
+    .where(
+      'created_at',
+      '<=',
+      seconds_to_date(issued_at + COMMUNITY_WINDOW_SECONDS)
+    )
     .where((query) =>
-      query.whereNull('revoked_at').orWhere('revoked_at', '>', issued_at)
+      query
+        .whereNull('revoked_at')
+        .orWhere('revoked_at', '>', seconds_to_date(issued_at))
     )
     .first()
   return link ? link.account : account

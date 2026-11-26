@@ -34,7 +34,7 @@ const discord_post = ({ author, authorid, created_at, text = 'gm' }) => {
 const add_representative = (account, fields) =>
   db('representatives_meta_index').insert({
     account,
-    timestamp: 1,
+    recorded_at: new Date(1000),
     ...fields
   })
 
@@ -44,7 +44,7 @@ const get_representative = (account) =>
 const get_changelog = (account, column) =>
   db('representatives_meta_index_changelog')
     .where({ account, column })
-    .orderBy('timestamp')
+    .orderBy('changed_at')
 
 describe('Representative Discord identity', () => {
   before(mochaGlobalSetup)

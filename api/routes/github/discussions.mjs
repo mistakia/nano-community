@@ -1,4 +1,7 @@
 import express from 'express'
+
+import { GITHUB_DISCUSSION_SELECT_SQL } from '#libs-server/epoch-response-columns.mjs'
+
 const router = express.Router()
 
 router.get('/nano-community', async (req, res) => {
@@ -11,6 +14,7 @@ router.get('/nano-community', async (req, res) => {
     }
 
     const discussions = await db('github_discussions')
+      .select(db.raw(GITHUB_DISCUSSION_SELECT_SQL))
       .where('category_id', 'MDE4OkRpc2N1c3Npb25DYXRlZ29yeTMyOTA1MTIz') // proposals category
       .where('closed', false)
       .orderBy('created_at', 'desc')

@@ -79,7 +79,7 @@ const rollupUptime = async (days = 1) => {
         online_count,
         offline_count,
         longest_downtime,
-        timestamp: time.unix()
+        day_began_at: time.toDate()
       })
       /* eslint-enable camelcase */
     }
@@ -88,7 +88,7 @@ const rollupUptime = async (days = 1) => {
       logger(`saving ${inserts.length} rollups`)
       await db('representatives_uptime_rollup_day')
         .insert(inserts)
-        .onConflict(['account', 'timestamp'])
+        .onConflict(['account', 'day_began_at'])
         .merge()
     }
 

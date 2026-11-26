@@ -16,6 +16,7 @@ import {
   restore_liveness_state
 } from '#libs-server/network-observer/detect-representative-liveness.mjs'
 import { build_network_event_row } from '#libs-server/network-events/insert-network-events.mjs'
+import { seconds_to_date } from '#libs-server/epoch-seconds.mjs'
 import {
   load_principal_inputs,
   load_principal_inputs_with_cache
@@ -553,7 +554,7 @@ describe('network observer principal representative inputs', () => {
 
   const clear_rows = async () => {
     await knex('voting_weight')
-      .where('timestamp', '>=', NOW_S - 3600)
+      .where('observed_at', '>=', seconds_to_date(NOW_S - 3600))
       .del()
     await knex('accounts_meta_index').whereIn('account', LOADER_ACCOUNTS).del()
     await knex('network_events')
@@ -565,7 +566,7 @@ describe('network observer principal representative inputs', () => {
   before(async () => {
     await mochaGlobalSetup()
     await clear_rows()
-    const voting_weight_row = (address, online_stake_total, timestamp) => ({
+    const voting_weight_row = (address, online_stake_total, observed_at) => ({
       address,
       quorum_delta: '0',
       online_weight_quorum_percent: 67,
@@ -573,7 +574,7 @@ describe('network observer principal representative inputs', () => {
       online_stake_total,
       trended_stake_total: '0',
       peers_stake_total: '0',
-      timestamp
+      observed_at: seconds_to_date(observed_at)
     })
     await knex('voting_weight').insert([
       voting_weight_row('a', '1000000', NOW_S - 60),
@@ -583,14 +584,22 @@ describe('network observer principal representative inputs', () => {
       voting_weight_row('d', '9000000', NOW_S - 3000)
     ])
     await knex('accounts_meta_index').insert([
-      { account: ACCOUNT, weight: '900', timestamp: NOW_S },
-      { account: OTHER_ACCOUNT, weight: '5000', timestamp: NOW_S },
-      { account: LOADER_ACCOUNTS[2], weight: '899', timestamp: NOW_S },
+      { account: ACCOUNT, weight: '900', observed_at: seconds_to_date(NOW_S) },
+      {
+        account: OTHER_ACCOUNT,
+        weight: '5000',
+        observed_at: seconds_to_date(NOW_S)
+      },
+      {
+        account: LOADER_ACCOUNTS[2],
+        weight: '899',
+        observed_at: seconds_to_date(NOW_S)
+      },
       // a heavy weight not refreshed for two days is stale
       {
         account: LOADER_ACCOUNTS[3],
         weight: '900000',
-        timestamp: NOW_S - 2 * 86400
+        observed_at: seconds_to_date(NOW_S - 2 * 86400)
       }
     ])
     await knex('network_events').insert([
@@ -639,7 +648,7 @@ describe('network observer principal representative inputs', () => {
       online_stake_total: online_weight,
       trended_stake_total: '0',
       peers_stake_total: '0',
-      timestamp: now_seconds - 30
+      observed_at: seconds_to_date(now_seconds - 30)
     })
     await knex('accounts_meta_index')
       .where({ account: ACCOUNT })

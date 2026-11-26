@@ -118,7 +118,7 @@ describe('CLI', function () {
       const row = await db('account_keys')
         .where({ public_key: new_signing_key })
         .first()
-      expect(row.revoked_at).to.be.a('number')
+      expect(row.revoked_at).to.be.an.instanceof(Date)
       expect(JSON.parse(row.revoke_message).parameters).to.deep.equal({
         linked_public_key: new_signing_key
       })

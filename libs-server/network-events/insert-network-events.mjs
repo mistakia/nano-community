@@ -93,7 +93,7 @@ const insert_network_events = async ({
   db = default_db
 }) => {
   const rows = network_events.map(build_network_event_row)
-  const updated_at = Math.round(Date.now() / 1000)
+  const updated_at = new Date()
   let inserted_count = 0
 
   await db.transaction(async (trx) => {
@@ -120,11 +120,11 @@ const insert_network_events = async ({
       await trx('etl_state')
         .insert({
           table_name: watermark.table_name,
-          last_max_ts: watermark.last_max_ts,
+          watermark_at: seconds_to_date(watermark.watermark_seconds),
           completed_at: new Date()
         })
         .onConflict('table_name')
-        .merge(['last_max_ts', 'completed_at'])
+        .merge(['watermark_at', 'completed_at'])
     }
 
     for (let i = 0; i < rows.length; i += INSERT_BATCH_SIZE) {

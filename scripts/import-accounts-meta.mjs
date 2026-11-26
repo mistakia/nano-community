@@ -3,7 +3,10 @@ import dayjs from 'dayjs'
 
 import { rpc, isMain } from '#common'
 import report_job from '#libs-server/report-job.mjs'
-import { seconds_to_date } from '#libs-server/epoch-seconds.mjs'
+import {
+  epoch_seconds_sql,
+  seconds_to_date
+} from '#libs-server/epoch-seconds.mjs'
 import db from '#db'
 
 const logger = debug('import-accounts-meta')
@@ -19,15 +22,15 @@ const DELEGATORS_SNAPSHOT_MAX_AGE_SECONDS = 3 * 60 * 60
 // representative with none, or null when the accounts_delegators snapshot is
 // stale.
 export const get_delegator_counts = async ({ accounts, now = timestamp }) => {
-  const { newest_timestamp } = await db('accounts_delegators')
-    .max('timestamp as newest_timestamp')
+  const { newest_observed_at } = await db('accounts_delegators')
+    .select(db.raw(epoch_seconds_sql('max(observed_at)', 'newest_observed_at')))
     .first()
   if (
-    !newest_timestamp ||
-    now - newest_timestamp > DELEGATORS_SNAPSHOT_MAX_AGE_SECONDS
+    !newest_observed_at ||
+    now - newest_observed_at > DELEGATORS_SNAPSHOT_MAX_AGE_SECONDS
   ) {
     logger(
-      `accounts_delegators snapshot is stale (newest ${newest_timestamp}), not recording delegator counts`
+      `accounts_delegators snapshot is stale (newest ${newest_observed_at}), not recording delegator counts`
     )
     return null
   }
@@ -114,14 +117,8 @@ const importAccountsMeta = async () => {
       .insert(inserts)
       .onConflict(['account', 'observed_at'])
       .merge()
-    // accounts_meta_index keeps its epoch-seconds timestamp column
     await db('accounts_meta_index')
-      .insert(
-        inserts.map(({ observed_at, ...row }) => ({
-          ...row,
-          timestamp: Math.round(observed_at.getTime() / 1000)
-        }))
-      )
+      .insert(inserts)
       .onConflict('account')
       .merge()
   }

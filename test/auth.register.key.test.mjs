@@ -125,7 +125,7 @@ describe('API /auth/register/key', () => {
       )
 
       await knex('account_keys')
-        .update({ revoked_at: 1 })
+        .update({ revoked_at: new Date(1000) })
         .where({ public_key: linked_key.public_key })
       const other_account = await post_link(
         sign_link_request({ account_key: create_test_key(), linked_key })

@@ -1,4 +1,8 @@
 import db from '#db'
+import {
+  epoch_seconds_sql,
+  seconds_to_date
+} from '#libs-server/epoch-seconds.mjs'
 import resolve_account_labels from './resolve-account-labels.mjs'
 import load_signed_message_claims from './load-signed-message-claims.mjs'
 
@@ -16,14 +20,10 @@ export default async function materialize_account_labels({
       'source',
       'label_type',
       'value',
-      'observed_at',
-      'expires_at'
+      connection.raw(epoch_seconds_sql('observed_at', 'observed_at')),
+      connection.raw(epoch_seconds_sql('expires_at', 'expires_at'))
     )
     .where({ account })
-  // expires_at is a bigint, which the driver returns as a string
-  for (const claim of stored_claims) {
-    if (claim.expires_at !== null) claim.expires_at = Number(claim.expires_at)
-  }
   const signed_claims = await load_signed_message_claims({
     account,
     connection
@@ -49,14 +49,14 @@ export default async function materialize_account_labels({
           column: 'alias',
           previous_value: previous_alias,
           new_value: alias || '',
-          timestamp: now
+          changed_at: seconds_to_date(now)
         })
         .onConflict([
           'account',
           'column',
           'previous_value',
           'new_value',
-          'timestamp'
+          'changed_at'
         ])
         .ignore()
     }

@@ -2,6 +2,7 @@ import debug from 'debug'
 
 import db from '#db'
 import { request } from '#common'
+import { seconds_to_date } from '#libs-server/epoch-seconds.mjs'
 import { DIRECTORY_SOURCES, is_valid_claim } from './directory-sources.mjs'
 import materialize_account_labels from './materialize-account-labels.mjs'
 
@@ -18,7 +19,12 @@ const sync_source = async ({ source, url, parse, fetch_json, now }) => {
     throw new Error(`${source}: no valid claims in ${parsed.length} entries`)
   }
 
-  const rows = claims.map((claim) => ({ ...claim, source, observed_at: now }))
+  const rows = claims.map((claim) => ({
+    ...claim,
+    source,
+    observed_at: seconds_to_date(now),
+    expires_at: seconds_to_date(claim.expires_at)
+  }))
   for (let i = 0; i < rows.length; i += BATCH_SIZE) {
     await db('account_labels')
       .insert(rows.slice(i, i + BATCH_SIZE))
@@ -28,7 +34,7 @@ const sync_source = async ({ source, url, parse, fetch_json, now }) => {
 
   const swept = await db('account_labels')
     .where({ source })
-    .where('observed_at', '<', now)
+    .where('observed_at', '<', seconds_to_date(now))
     .del()
     .returning(['account'])
 

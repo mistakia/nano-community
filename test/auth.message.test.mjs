@@ -131,7 +131,7 @@ describe('API /auth/message', function () {
         public_key: linked_key.public_key,
         link_signature: '00'.repeat(64),
         link_message: '{}',
-        created_at: now_seconds()
+        created_at: new Date()
       })
 
       const wire = sign_community_request({
@@ -153,8 +153,8 @@ describe('API /auth/message', function () {
         public_key: linked_key.public_key,
         link_signature: '00'.repeat(64),
         link_message: '{}',
-        created_at: now_seconds(),
-        revoked_at: now_seconds()
+        created_at: new Date(),
+        revoked_at: new Date()
       })
 
       const wire = sign_community_request({

@@ -92,7 +92,7 @@ describe('representative power readings', function () {
         public_key: linked_key.public_key,
         link_signature: '00'.repeat(64),
         link_message: '{}',
-        created_at: now_seconds()
+        created_at: new Date()
       })
 
       const wire = sign_reading({ key: linked_key })
@@ -304,7 +304,7 @@ describe('representative power readings', function () {
         public_key: linked_key.public_key,
         link_signature: '00'.repeat(64),
         link_message: '{}',
-        created_at: now_seconds() - 3600
+        created_at: new Date(Date.now() - 3600 * 1000)
       })
       const wire = sign_at({
         key: linked_key,

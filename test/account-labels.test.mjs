@@ -248,9 +248,14 @@ describe('account labels', function () {
 
     it('leave an existing alias alone when they carry none', async () => {
       const key = create_test_key()
-      await db('account_labels').insert(
-        claim({ account: key.account, source: 'admin', value: 'Admin Name' })
-      )
+      await db('account_labels').insert({
+        ...claim({
+          account: key.account,
+          source: 'admin',
+          value: 'Admin Name'
+        }),
+        observed_at: new Date(100 * 1000)
+      })
       await materialize_account_labels({ account: key.account })
       const wire = sign_community_request({
         key,

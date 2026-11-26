@@ -2,6 +2,7 @@ import fs from 'fs/promises'
 import debug from 'debug'
 
 import default_db from '#db'
+import { seconds_to_date } from '#libs-server/epoch-seconds.mjs'
 
 const log = debug('network-observer:principal-representatives')
 
@@ -32,7 +33,11 @@ export const load_principal_inputs = async ({
   now_seconds = Math.floor(Date.now() / 1000)
 } = {}) => {
   const [online_row] = await db('voting_weight')
-    .where('timestamp', '>', now_seconds - ONLINE_WEIGHT_WINDOW_SECONDS)
+    .where(
+      'observed_at',
+      '>',
+      seconds_to_date(now_seconds - ONLINE_WEIGHT_WINDOW_SECONDS)
+    )
     .select(
       db.raw(
         'percentile_disc(0.5) within group (order by online_stake_total)::text as online_weight'
@@ -42,7 +47,11 @@ export const load_principal_inputs = async ({
   const { online_weight } = online_row
 
   const rows = await db('accounts_meta_index')
-    .where('timestamp', '>', now_seconds - WEIGHT_MAXIMUM_AGE_SECONDS)
+    .where(
+      'observed_at',
+      '>',
+      seconds_to_date(now_seconds - WEIGHT_MAXIMUM_AGE_SECONDS)
+    )
     .whereRaw('weight * 10000 >= ?::numeric * ?', [
       online_weight,
       String(PRINCIPAL_LEAVE_BASIS_POINTS)

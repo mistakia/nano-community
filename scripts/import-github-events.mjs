@@ -116,7 +116,7 @@ const format = (item) => {
     actor_id: item.actor.id,
     actor_name: item.actor.display_login,
     actor_avatar: item.actor.avatar_url,
-    created_at: dayjs(item.created_at).unix()
+    created_at: dayjs(item.created_at).toDate()
   }
 }
 

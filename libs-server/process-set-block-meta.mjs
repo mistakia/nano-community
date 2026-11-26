@@ -104,7 +104,7 @@ export default async function process_set_block_meta({
       note,
       message_digest,
       issued_at,
-      updated_at: Math.floor(Date.now() / 1000)
+      updated_at: new Date()
     })
     .onConflict('block_hash')
     .merge(['account', 'note', 'message_digest', 'issued_at', 'updated_at'])

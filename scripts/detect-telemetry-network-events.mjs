@@ -3,7 +3,10 @@ import debug from 'debug'
 import default_db from '#db'
 import { isMain } from '#common'
 import report_job from '#libs-server/report-job.mjs'
-import { seconds_to_date } from '#libs-server/epoch-seconds.mjs'
+import {
+  epoch_seconds_sql,
+  seconds_to_date
+} from '#libs-server/epoch-seconds.mjs'
 import insert_network_events from '#libs-server/network-events/insert-network-events.mjs'
 import {
   MAX_SNAPSHOT_GAP_SECONDS,
@@ -270,9 +273,10 @@ export const detect_telemetry_network_events = async ({
   dry_run = false
 } = {}) => {
   const watermark_row = await db('etl_state')
+    .select(db.raw(epoch_seconds_sql('watermark_at', 'watermark_seconds')))
     .where({ table_name: DETECTOR_NAME })
     .first()
-  const watermark = watermark_row?.last_max_ts ?? null
+  const watermark = watermark_row?.watermark_seconds ?? null
   const is_first_run = watermark === null
 
   const target_timestamps = await list_snapshot_timestamps({ db, watermark })
@@ -378,7 +382,7 @@ export const detect_telemetry_network_events = async ({
     })),
     watermark: {
       table_name: DETECTOR_NAME,
-      last_max_ts: target_timestamps[target_timestamps.length - 1]
+      watermark_seconds: target_timestamps[target_timestamps.length - 1]
     },
     coverage_windows
   })

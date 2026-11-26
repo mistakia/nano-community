@@ -4,6 +4,10 @@ import BigNumber from 'bignumber.js'
 import { rpc, is_terminal_rpc_error } from '#common'
 import { epoch_seconds_sql } from '#libs-server/epoch-seconds.mjs'
 import { REPRESENTATIVE_TELEMETRY_SELECT_SQL } from '#libs-server/representative-telemetry-columns.mjs'
+import {
+  REPRESENTATIVE_META_INDEX_SELECT_SQL,
+  REPRESENTATIVE_NETWORK_SELECT_SQL
+} from '#libs-server/epoch-response-columns.mjs'
 import delegators from './delegators.mjs'
 import delegation_history from './delegation-history.mjs'
 import blocks from './blocks.mjs'
@@ -156,13 +160,14 @@ router.get('/:address', async (req, res) => {
       .where({ account: address })
       .orderBy('interval', 'asc')
 
-    const repMeta = await db('representatives_meta_index').where({
-      account: address
-    })
+    const repMeta = await db('representatives_meta_index')
+      .select(db.raw(REPRESENTATIVE_META_INDEX_SELECT_SQL))
+      .where({ account: address })
 
     const network = await db('representatives_network')
+      .select(db.raw(REPRESENTATIVE_NETWORK_SELECT_SQL))
       .where({ account: address })
-      .orderBy('timestamp', 'desc')
+      .orderBy('observed_at', 'desc')
       .limit(1)
 
     const telemetry = await db('representatives_telemetry')

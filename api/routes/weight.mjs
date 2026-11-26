@@ -1,6 +1,8 @@
 import express from 'express'
 import dayjs from 'dayjs'
 
+import { VOTING_WEIGHT_SELECT_SQL } from '#libs-server/epoch-response-columns.mjs'
+
 const router = express.Router()
 
 const median = (arr) => {
@@ -34,8 +36,8 @@ router.get('/', async (req, res) => {
     }
 
     const weights = await db('voting_weight')
-      .where('timestamp', '>', dayjs().subtract(15, 'minutes').unix())
-      .orderBy('timestamp', 'asc')
+      .where('observed_at', '>', dayjs().subtract(15, 'minutes').toDate())
+      .orderBy('observed_at', 'asc')
 
     const onlineWeight = []
     const trendedWeight = []
@@ -68,8 +70,9 @@ router.get('/history', async (req, res) => {
     }
 
     const weights = await db('voting_weight')
-      .where('timestamp', '>', dayjs().subtract(3, 'days').unix())
-      .orderBy('timestamp', 'asc')
+      .select(db.raw(VOTING_WEIGHT_SELECT_SQL))
+      .where('observed_at', '>', dayjs().subtract(3, 'days').toDate())
+      .orderBy('observed_at', 'asc')
 
     cache.set('weightHistory', weights, 120)
     res.status(200).send(weights)

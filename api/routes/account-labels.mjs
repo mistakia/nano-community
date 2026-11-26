@@ -41,7 +41,6 @@ router.get('/', async (req, res) => {
 
     const lower_name = name.toLowerCase()
     const prefix = lower_name.replace(/[\\%_]/g, '\\$&') + '%'
-    const now = Math.floor(Date.now() / 1000)
     const { rows } = await db.raw(
       `select accounts.account, accounts.alias, accounts.representative,
           array_agg(distinct names.name order by names.name) as names
@@ -51,14 +50,14 @@ router.get('/', async (req, res) => {
           union
           select account, value as name from account_labels
             where label_type = 'alias' and lower(value) like :prefix
-              and (expires_at is null or expires_at > :now)
+              and (expires_at is null or expires_at > now())
         ) names
         join accounts on accounts.account = names.account
         group by accounts.account, accounts.alias, accounts.representative
         order by bool_or(lower(names.name) = :lower_name) desc,
           accounts.representative desc, accounts.alias
         limit :limit`,
-      { prefix, now, lower_name, limit: MAX_NAME_RESULTS }
+      { prefix, lower_name, limit: MAX_NAME_RESULTS }
     )
 
     const accounts = await attach_tags({ db, rows })
