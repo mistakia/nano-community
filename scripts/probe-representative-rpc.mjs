@@ -149,20 +149,21 @@ const map_with_concurrency = async (items, concurrency, fn) => {
 // settle window.
 const load_settled_representative_addresses = async ({ db }) => {
   const latest = await db('representatives_telemetry')
-    .max('timestamp as timestamp')
+    .max('observed_at as observed_at')
     .whereNotNull('account')
     .first()
-  if (!latest?.timestamp) return []
+  if (!latest?.observed_at) return []
+  const latest_seconds = Math.floor(latest.observed_at.getTime() / 1000)
 
   const rows = await load_representative_telemetry({
     db,
-    after_timestamp: latest.timestamp - REPRESENTATIVE_TELEMETRY_SETTLE_SECONDS,
-    through_timestamp: latest.timestamp
+    after_timestamp: latest_seconds - REPRESENTATIVE_TELEMETRY_SETTLE_SECONDS,
+    through_timestamp: latest_seconds
   })
   const rows_by_timestamp = group_telemetry_by_timestamp(rows)
   const window_timestamps = get_full_window_timestamps({
     snapshot_timestamps: [...rows_by_timestamp.keys()].sort((a, b) => a - b),
-    window_end: latest.timestamp
+    window_end: latest_seconds
   })
   if (!window_timestamps) return []
 

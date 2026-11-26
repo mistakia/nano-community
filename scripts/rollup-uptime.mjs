@@ -7,6 +7,7 @@ import { hideBin } from 'yargs/helpers'
 import db from '#db'
 import { groupBy, isMain } from '#common'
 import report_job from '#libs-server/report-job.mjs'
+import { epoch_seconds_sql } from '#libs-server/epoch-seconds.mjs'
 
 dayjs.extend(utc)
 const argv = yargs(hideBin(process.argv)).argv
@@ -21,8 +22,13 @@ const rollupUptime = async (days = 1) => {
   do {
     // calculate rollup
     const uptime = await db('representatives_uptime')
-      .where('timestamp', '>=', time.unix())
-      .where('timestamp', '<', time.add('1', 'day').unix())
+      .select(
+        'account',
+        'online',
+        db.raw(epoch_seconds_sql('observed_at', 'timestamp'))
+      )
+      .where('observed_at', '>=', time.toDate())
+      .where('observed_at', '<', time.add('1', 'day').toDate())
 
     // group by account
     const grouped = groupBy(uptime, 'account')

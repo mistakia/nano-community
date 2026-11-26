@@ -41,12 +41,10 @@ BEGIN
 END
 $do$;
 
--- 2. Shared integer-now function for hypertable policies. Return type
---    INTEGER matches the int4 timestamp columns; STABLE because now()
---    varies per txn.
-CREATE OR REPLACE FUNCTION public.unix_now_seconds()
-  RETURNS INTEGER LANGUAGE SQL STABLE AS
-$$ SELECT EXTRACT(EPOCH FROM now())::INTEGER $$;
+-- 2. (retired) The integer-now function public.unix_now_seconds() served the
+--    int4 hypertable time columns. The hypertables are partitioned on
+--    timestamptz now, so none is needed. Instants are timestamptz named
+--    <event>_at; see db/migrations/2026-11-26-conform-epoch-instants.sql.
 
 -- 3. Tables
 
@@ -107,7 +105,7 @@ CREATE TABLE IF NOT EXISTS public.accounts_meta (
   block_count  integer,
   weight       numeric(39,0),
   delegators   integer,
-  "timestamp"  integer NOT NULL
+  observed_at  timestamptz NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS public.accounts_meta_index (
@@ -241,8 +239,8 @@ CREATE TABLE IF NOT EXISTS public.posts (
   summary       integer,
   score         numeric(7,1) NOT NULL DEFAULT 1.0,
   social_score  numeric(7,1) NOT NULL DEFAULT 1.0,
-  created_at    integer NOT NULL,
-  updated_at    integer
+  created_at    timestamptz NOT NULL,
+  updated_at    timestamptz
 );
 CREATE UNIQUE INDEX IF NOT EXISTS posts_url_uniq
   ON public.posts (url);
@@ -326,8 +324,8 @@ CREATE TABLE IF NOT EXISTS public.representatives_telemetry (
   node_id              char(65) NOT NULL,
   address              char(65) NOT NULL,
   port                 integer NOT NULL,
-  telemetry_timestamp  integer NOT NULL,
-  "timestamp"          integer NOT NULL
+  reported_at          timestamptz NOT NULL,
+  observed_at          timestamptz NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS public.representatives_network (
@@ -356,7 +354,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS representatives_network_account_ts_uniq
 CREATE TABLE IF NOT EXISTS public.representatives_uptime (
   account     char(65) NOT NULL,
   online      smallint NOT NULL,
-  "timestamp" integer NOT NULL
+  observed_at timestamptz NOT NULL
 );
 CREATE INDEX IF NOT EXISTS representatives_uptime_online
   ON public.representatives_uptime (online);
@@ -428,62 +426,55 @@ CREATE UNIQUE INDEX IF NOT EXISTS voting_weight_address_ts_uniq
 --    the archive's 30d/90d because VPS retention windows are much shorter:
 --    uptime 12w, telemetry 6w).
 SELECT create_hypertable(
-  'public.representatives_uptime', 'timestamp',
-  chunk_time_interval => 86400,
+  'public.representatives_uptime', 'observed_at',
+  chunk_time_interval => INTERVAL '1 day',
   if_not_exists => TRUE
 );
 SELECT create_hypertable(
-  'public.representatives_telemetry', 'timestamp',
-  chunk_time_interval => 86400,
+  'public.representatives_telemetry', 'observed_at',
+  chunk_time_interval => INTERVAL '1 day',
   if_not_exists => TRUE
 );
 SELECT create_hypertable(
-  'public.accounts_meta', 'timestamp',
-  chunk_time_interval => 86400,
+  'public.accounts_meta', 'observed_at',
+  chunk_time_interval => INTERVAL '1 day',
   if_not_exists => TRUE
 );
 
 -- 5. Hypertable unique constraints (must include the time column).
 CREATE UNIQUE INDEX IF NOT EXISTS representatives_uptime_account_ts_uniq
-  ON public.representatives_uptime (account, "timestamp");
+  ON public.representatives_uptime (account, observed_at);
 CREATE UNIQUE INDEX IF NOT EXISTS representatives_telemetry_account_node_ts_uniq
-  ON public.representatives_telemetry (account, node_id, "timestamp");
+  ON public.representatives_telemetry (account, node_id, observed_at);
 CREATE UNIQUE INDEX IF NOT EXISTS accounts_meta_account_ts_uniq
-  ON public.accounts_meta (account, "timestamp");
+  ON public.accounts_meta (account, observed_at);
 
--- 6. Integer-now registration. Required by add_compression_policy /
---    add_retention_policy on int4-time hypertables. Gap that broke
---    compression in the archive migration; declared up-front here.
-SELECT set_integer_now_func('public.representatives_uptime',          'public.unix_now_seconds', replace_if_exists => TRUE);
-SELECT set_integer_now_func('public.representatives_telemetry',       'public.unix_now_seconds', replace_if_exists => TRUE);
-SELECT set_integer_now_func('public.accounts_meta',                   'public.unix_now_seconds', replace_if_exists => TRUE);
-
--- 7. Compression configuration.
+-- 6. Compression configuration.
 ALTER TABLE public.representatives_uptime SET (
   timescaledb.compress = true,
-  timescaledb.compress_orderby = '"timestamp" DESC',
+  timescaledb.compress_orderby = 'observed_at DESC',
   timescaledb.compress_segmentby = 'account'
 );
 ALTER TABLE public.representatives_telemetry SET (
   timescaledb.compress = true,
-  timescaledb.compress_orderby = '"timestamp" DESC',
+  timescaledb.compress_orderby = 'observed_at DESC',
   timescaledb.compress_segmentby = 'account'
 );
 ALTER TABLE public.accounts_meta SET (
   timescaledb.compress = true,
-  timescaledb.compress_orderby = '"timestamp" DESC',
+  timescaledb.compress_orderby = 'observed_at DESC',
   timescaledb.compress_segmentby = 'account'
 );
 
--- 8. Compression policies: compress chunks older than 7 days (604800 s).
-SELECT add_compression_policy('public.representatives_uptime',          BIGINT '604800', if_not_exists => TRUE);
-SELECT add_compression_policy('public.representatives_telemetry',       BIGINT '604800', if_not_exists => TRUE);
-SELECT add_compression_policy('public.accounts_meta',                   BIGINT '604800', if_not_exists => TRUE);
+-- 8. Compression policies: compress chunks older than 7 days.
+SELECT add_compression_policy('public.representatives_uptime',          INTERVAL '7 days', if_not_exists => TRUE);
+SELECT add_compression_policy('public.representatives_telemetry',       INTERVAL '7 days', if_not_exists => TRUE);
+SELECT add_compression_policy('public.accounts_meta',                   INTERVAL '7 days', if_not_exists => TRUE);
 
--- 9. Retention policies (drop_after in seconds). Per scripts/archive-mysql.mjs:
+-- 9. Retention policies. Per scripts/archive-mysql.mjs:
 --    uptime 12 weeks, telemetry 6 weeks. accounts_meta and posts: no retention.
-SELECT add_retention_policy('public.representatives_uptime',          BIGINT '7257600', if_not_exists => TRUE); -- 12w
-SELECT add_retention_policy('public.representatives_telemetry',       BIGINT '3628800', if_not_exists => TRUE); -- 6w
+SELECT add_retention_policy('public.representatives_uptime',          INTERVAL '12 weeks', if_not_exists => TRUE);
+SELECT add_retention_policy('public.representatives_telemetry',       INTERVAL '6 weeks', if_not_exists => TRUE);
 
 -- 10. ETL state table. Populated by the one-shot scripts/vps-to-postgres.mjs
 --     bulk migrator, and by scripts/detect-telemetry-network-events.mjs, which
@@ -568,7 +559,7 @@ GRANT SELECT ON public.site_events TO nano_production_reader;
 --     by the detectors through libs-server/network-events/insert-network-events.mjs
 --     and validated against the type registry in common/network-event-types.mjs.
 --     network_event_id is a sha256 over the type, phase and identity keys, so a
---     replayed event dedupes on insert. Times are epoch seconds: observed_at is
+--     replayed event dedupes on insert. Times are timestamptz: observed_at is
 --     when the event happened, recorded_at when it was inserted and is the
 --     archive delta watermark. Operator-only types stay here and are never
 --     served by the API.
@@ -583,8 +574,8 @@ CREATE TABLE IF NOT EXISTS public.network_events (
   peer_address           varchar(65),
   node_id                char(65),
   evidence               jsonb NOT NULL DEFAULT '{}'::jsonb,
-  observed_at            integer NOT NULL,
-  recorded_at            integer NOT NULL DEFAULT extract(epoch from now())::integer
+  observed_at            timestamptz NOT NULL,
+  recorded_at            timestamptz NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS network_events_observed_at_idx
   ON public.network_events (observed_at DESC);
@@ -616,23 +607,23 @@ GRANT SELECT ON public.network_events TO nano_production_reader;
 --     live from accounts_meta. Created WITH NO DATA so applying this file stays
 --     cheap; the refresh policy only covers the last 3 days, so a new database
 --     with history needs one full refresh after apply:
---       CALL refresh_continuous_aggregate('public.accounts_meta_rollup_day', NULL, unix_now_seconds() - 86400);
+--       CALL refresh_continuous_aggregate('public.accounts_meta_rollup_day', NULL, now() - INTERVAL '1 day');
 --     Re-derivable from accounts_meta, so it is not archived. Readers get SELECT
 --     through the section 11 default privileges.
 CREATE MATERIALIZED VIEW IF NOT EXISTS public.accounts_meta_rollup_day
 WITH (timescaledb.continuous, timescaledb.materialized_only = false) AS
 SELECT
   account,
-  time_bucket(86400, "timestamp") AS "timestamp",
-  last(weight, "timestamp") AS weight,
-  last(delegators, "timestamp") FILTER (WHERE delegators IS NOT NULL) AS delegators
+  time_bucket(INTERVAL '1 day', observed_at) AS day_began_at,
+  last(weight, observed_at) AS weight,
+  last(delegators, observed_at) FILTER (WHERE delegators IS NOT NULL) AS delegators
 FROM public.accounts_meta
-GROUP BY account, time_bucket(86400, "timestamp")
+GROUP BY account, time_bucket(INTERVAL '1 day', observed_at)
 WITH NO DATA;
 
 SELECT add_continuous_aggregate_policy('public.accounts_meta_rollup_day',
-  start_offset => 259200,
-  end_offset => 86400,
+  start_offset => INTERVAL '3 days',
+  end_offset => INTERVAL '1 day',
   schedule_interval => INTERVAL '1 hour',
   if_not_exists => TRUE
 );
@@ -669,9 +660,9 @@ CREATE TABLE IF NOT EXISTS public.network_event_coverage (
   network_event_coverage_sequence bigint PRIMARY KEY,
   producer          text NOT NULL
     CHECK (producer IN ('telemetry_detector', 'network_observer')),
-  coverage_began_at integer NOT NULL,
-  coverage_ended_at integer NOT NULL,
-  recorded_at       integer NOT NULL DEFAULT extract(epoch from now())::integer,
+  coverage_began_at timestamptz NOT NULL,
+  coverage_ended_at timestamptz NOT NULL,
+  recorded_at       timestamptz NOT NULL DEFAULT now(),
   CHECK (coverage_ended_at >= coverage_began_at)
 );
 

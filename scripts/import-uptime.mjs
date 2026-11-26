@@ -3,6 +3,10 @@ import dayjs from 'dayjs'
 
 import { rpc, groupBy, isMain } from '#common'
 import report_job from '#libs-server/report-job.mjs'
+import {
+  epoch_seconds_sql,
+  seconds_to_date
+} from '#libs-server/epoch-seconds.mjs'
 import config from '#config'
 import db from '#db'
 import { REPRESENTATIVE_TRACKING_MINIMUM_VOTING_WEIGHT } from '#constants'
@@ -80,14 +84,14 @@ const importUptime = async () => {
     uptimeInserts.push({
       account: rep,
       online: 1,
-      timestamp
+      observed_at: seconds_to_date(timestamp)
     })
   }
   for (const rep of offlineReps) {
     uptimeInserts.push({
       account: rep.account,
       online: 0,
-      timestamp
+      observed_at: seconds_to_date(timestamp)
     })
   }
 
@@ -98,7 +102,13 @@ const importUptime = async () => {
 
   // calculate rollup
   const uptime = await db('representatives_uptime')
-    .select('representatives_uptime.*')
+    .select(
+      'representatives_uptime.account',
+      'representatives_uptime.online',
+      db.raw(
+        epoch_seconds_sql('representatives_uptime.observed_at', 'timestamp')
+      )
+    )
     .leftJoin(
       'accounts_meta_index',
       'representatives_uptime.account',
@@ -106,9 +116,9 @@ const importUptime = async () => {
       'accounts_meta_index.account'
     )
     .where(
-      'representatives_uptime.timestamp',
+      'representatives_uptime.observed_at',
       '>',
-      dayjs().subtract('14', 'days').unix()
+      dayjs().subtract('14', 'days').toDate()
     )
     .where(
       'accounts_meta_index.weight',

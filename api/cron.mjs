@@ -16,9 +16,7 @@ const updateSourceScore = async (sid) => {
   query.select(db.raw('avg(score) as score_avg'))
   query.where('sid', sid)
   query.where('score', '>', 1.0)
-  query.whereRaw(
-    'created_at >= (EXTRACT(EPOCH FROM NOW())::INTEGER - (86400 * 14))'
-  )
+  query.whereRaw("created_at >= now() - interval '14 days'")
   const result = await query
   const { score_avg } = result[0]
   if (score_avg) {

@@ -7,6 +7,15 @@ import cache from '#api/cache.mjs'
 
 const router = express.Router()
 
+// Posts are stored with timestamptz created_at and updated_at; the response
+// keeps them as epoch seconds.
+const POST_COLUMNS =
+  'posts.id, posts.pid, posts.sid, posts.title, posts.url, posts.content_url, ' +
+  'posts.author, posts.authorid, posts.text, posts.html, posts.summary, ' +
+  'posts.score, posts.social_score, ' +
+  'EXTRACT(EPOCH FROM posts.created_at)::INTEGER AS created_at, ' +
+  'EXTRACT(EPOCH FROM posts.updated_at)::INTEGER AS updated_at'
+
 // Shared SQL fragment for the deduplication key: collapses to content_url
 // when set, falling back to url. Used as the DISTINCT ON target and as the
 // matching leading-ORDER-BY column. Inlined (not a CTE/computed column) so
@@ -41,7 +50,7 @@ router.get('/labels', async (req, res) => {
     const inner = db('sources')
     inner.select(
       db.raw(
-        `DISTINCT ON (${MAIN_URL_EXPR}) posts.*, sources.score_avg, ` +
+        `DISTINCT ON (${MAIN_URL_EXPR}) ${POST_COLUMNS}, sources.score_avg, ` +
           `${MAIN_URL_EXPR} AS main_url, ` +
           'sources.title AS source_title, sources.logo_url AS source_logo_url, ' +
           '(posts.score / sources.score_avg) AS strength'
@@ -97,11 +106,11 @@ const load_trending_posts = async ({
   // single posts row; the dedup is what picks the winning row per group.
   const strength_expr =
     '(LOG10(posts.score / sources.score_avg) - ' +
-    '((EXTRACT(EPOCH FROM NOW())::INTEGER - posts.created_at) / ?))'
+    '((EXTRACT(EPOCH FROM NOW())::INTEGER - EXTRACT(EPOCH FROM posts.created_at)::INTEGER) / ?))'
   const inner = db('sources')
   inner.select(
     db.raw(
-      `DISTINCT ON (${MAIN_URL_EXPR}) posts.*, sources.score_avg, ` +
+      `DISTINCT ON (${MAIN_URL_EXPR}) ${POST_COLUMNS}, sources.score_avg, ` +
         `${MAIN_URL_EXPR} AS main_url, ` +
         'sources.title AS source_title, sources.logo_url AS source_logo_url, ' +
         `${strength_expr} AS strength`,
@@ -110,7 +119,7 @@ const load_trending_posts = async ({
   )
   inner.join('posts', 'posts.sid', 'sources.id')
   inner.whereRaw(
-    'posts.created_at > (EXTRACT(EPOCH FROM NOW())::INTEGER - ?)',
+    'posts.created_at > now() - make_interval(secs => ?)',
     age * 60 * 60
   )
   inner.whereNotNull('posts.text')
@@ -170,7 +179,7 @@ router.get('/announcements', async (req, res) => {
     const inner = db('sources')
     inner.select(
       db.raw(
-        `DISTINCT ON (${MAIN_URL_EXPR}) posts.*, sources.score_avg, ` +
+        `DISTINCT ON (${MAIN_URL_EXPR}) ${POST_COLUMNS}, sources.score_avg, ` +
           `${MAIN_URL_EXPR} AS main_url, ` +
           'sources.title AS source_title, sources.logo_url AS source_logo_url'
       )
@@ -183,7 +192,7 @@ router.get('/announcements', async (req, res) => {
       this.orWhere('posts.pid', 'like', 'discord:644987172935565335:%') // rep-announcements
     })
     inner.whereRaw(
-      'posts.created_at > (EXTRACT(EPOCH FROM NOW())::INTEGER - ?)',
+      'posts.created_at > now() - make_interval(secs => ?)',
       age * 60 * 60
     )
     // DISTINCT ON winner per main_url: newest post (created_at DESC).
@@ -213,7 +222,7 @@ const load_top_posts = async ({ offset = 0, age = 168, limit = 5 } = {}) => {
   const inner = db('sources')
   inner.select(
     db.raw(
-      `DISTINCT ON (${MAIN_URL_EXPR}) posts.*, sources.score_avg, ` +
+      `DISTINCT ON (${MAIN_URL_EXPR}) ${POST_COLUMNS}, sources.score_avg, ` +
         `${MAIN_URL_EXPR} AS main_url, ` +
         'sources.title AS source_title, sources.logo_url AS source_logo_url, ' +
         '(posts.score / sources.score_avg) AS strength'
@@ -221,7 +230,7 @@ const load_top_posts = async ({ offset = 0, age = 168, limit = 5 } = {}) => {
   )
   inner.join('posts', 'posts.sid', 'sources.id')
   inner.whereRaw(
-    'posts.created_at > (EXTRACT(EPOCH FROM NOW())::INTEGER - ?)',
+    'posts.created_at > now() - make_interval(secs => ?)',
     age * 60 * 60
   )
   inner.whereNotNull('posts.text')

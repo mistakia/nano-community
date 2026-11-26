@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import config from '#config'
 import { rpc, getNetworkInfo, wait, median, isMain } from '#common'
 import report_job from '#libs-server/report-job.mjs'
+import { seconds_to_date } from '#libs-server/epoch-seconds.mjs'
 import resolve_telemetry_account from '#libs-server/resolve-telemetry-account.mjs'
 import db from '#db'
 
@@ -85,8 +86,8 @@ const importTelemetry = async () => {
   // crawler has no match for a node
   const history_window_start = timestamp - TELEMETRY_HISTORY_WINDOW_SECONDS
   const history_rows = await db.raw(
-    'SELECT DISTINCT ON (node_id) node_id, account FROM representatives_telemetry WHERE "timestamp" >= ? AND account IS NOT NULL ORDER BY node_id, "timestamp" DESC',
-    [history_window_start]
+    'SELECT DISTINCT ON (node_id) node_id, account FROM representatives_telemetry WHERE observed_at >= ? AND account IS NOT NULL ORDER BY node_id, observed_at DESC',
+    [seconds_to_date(history_window_start)]
   )
   const history_account_by_node_id = new Map(
     history_rows.rows.map((row) => [row.node_id.trim(), row.account.trim()])
@@ -139,9 +140,9 @@ const importTelemetry = async () => {
       node_id: node.node_id,
       address: node.address,
       port: node.port,
-      telemetry_timestamp: dayjs(parseInt(node.timestamp, 10)).unix(),
+      reported_at: dayjs(parseInt(node.timestamp, 10)).toDate(),
 
-      timestamp
+      observed_at: seconds_to_date(timestamp)
     }
 
     const { rep: telemetry_rep, source: mapping_source } =

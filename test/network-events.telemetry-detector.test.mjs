@@ -54,8 +54,8 @@ const telemetry_row = ({
   node_id: node,
   address,
   port: 7075,
-  telemetry_timestamp: timestamp,
-  timestamp
+  reported_at: new Date(timestamp * 1000),
+  observed_at: new Date(timestamp * 1000)
 })
 
 // Inserts snapshots first..last (inclusive), with rows built per snapshot index.
@@ -131,7 +131,9 @@ describe('telemetry network event detector', () => {
     const events = await list_events('representative_multiple_peer_addresses')
     expect(events).to.have.length(1)
     expect(events[0].network_event_phase).to.equal('began')
-    expect(events[0].observed_at).to.equal(snapshot_timestamp(WINDOW_SNAPSHOTS))
+    expect(events[0].observed_at.getTime() / 1000).to.equal(
+      snapshot_timestamp(WINDOW_SNAPSHOTS)
+    )
     expect(events[0].evidence.first_observation).to.equal(undefined)
     expect(events[0].evidence.peer_addresses).to.deep.equal([
       '::ffff:10.0.0.1',
@@ -324,8 +326,8 @@ describe('telemetry network event detector', () => {
     expect(
       coverage.map((row) => [
         row.producer,
-        row.coverage_began_at,
-        row.coverage_ended_at
+        row.coverage_began_at.getTime() / 1000,
+        row.coverage_ended_at.getTime() / 1000
       ])
     ).to.deep.equal([
       ['telemetry_detector', snapshot_timestamp(0), snapshot_timestamp(1)],
@@ -347,7 +349,10 @@ describe('telemetry network event detector', () => {
       'asc'
     )
     expect(
-      coverage.map((row) => [row.coverage_began_at, row.coverage_ended_at])
+      coverage.map((row) => [
+        row.coverage_began_at.getTime() / 1000,
+        row.coverage_ended_at.getTime() / 1000
+      ])
     ).to.deep.equal([
       [snapshot_timestamp(1), snapshot_timestamp(2)],
       [snapshot_timestamp(13), snapshot_timestamp(16)]

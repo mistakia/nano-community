@@ -1,5 +1,7 @@
 import express from 'express'
 
+import { epoch_seconds_sql } from '#libs-server/epoch-seconds.mjs'
+
 const router = express.Router({ mergeParams: true })
 
 // Daily weight and delegator count (accounts holding at least 1 Nano) for a
@@ -25,9 +27,13 @@ router.get('/?', async (req, res) => {
     }
 
     const delegation_history = await db('accounts_meta_rollup_day')
-      .select('timestamp', 'weight', 'delegators')
+      .select(
+        db.raw(epoch_seconds_sql('day_began_at', 'timestamp')),
+        'weight',
+        'delegators'
+      )
       .where({ account: address })
-      .orderBy('timestamp', 'asc')
+      .orderBy('day_began_at', 'asc')
 
     cache.set(cache_key, delegation_history, 600)
     res.send(delegation_history)

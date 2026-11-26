@@ -1,5 +1,6 @@
 import express from 'express'
 
+import { epoch_seconds_sql } from '#libs-server/epoch-seconds.mjs'
 import { select_public_network_events } from './network-events.mjs'
 
 const router = express.Router()
@@ -43,7 +44,11 @@ router.get('/', async (req, res) => {
       query,
       db('network_event_coverage')
         .select('producer')
-        .max('coverage_ended_at as coverage_ended_at')
+        .select(
+          db.raw(
+            epoch_seconds_sql('max(coverage_ended_at)', 'coverage_ended_at')
+          )
+        )
         .groupBy('producer')
         .orderBy('producer')
     ])

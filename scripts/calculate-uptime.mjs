@@ -12,11 +12,19 @@ const getUpdate = async ({ account, days }) => {
   const query1 = await db('representatives_uptime')
     .count('* as count')
     .where({ online: 1, account })
-    .where('timestamp', '>=', now.subtract(days, 'day').startOf('day').unix())
+    .where(
+      'observed_at',
+      '>=',
+      now.subtract(days, 'day').startOf('day').toDate()
+    )
   const query2 = await db('representatives_uptime')
     .count('* as count')
     .where({ online: 0, account })
-    .where('timestamp', '>=', now.subtract(days, 'day').startOf('day').unix())
+    .where(
+      'observed_at',
+      '>=',
+      now.subtract(days, 'day').startOf('day').toDate()
+    )
 
   return {
     account,

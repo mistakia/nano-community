@@ -23,7 +23,7 @@ const discord_post = ({ author, authorid, created_at, text = 'gm' }) => {
     url: `https://discord.com/channels/${guild_id}/1/${message_id}`,
     author,
     authorid,
-    created_at,
+    created_at: new Date(created_at * 1000),
     updated_at: null,
     html: null,
     text,
@@ -88,13 +88,18 @@ describe('Representative Discord identity', () => {
       })
       await save_discord_posts([post])
       await save_discord_posts([
-        { ...post, author: 'newname', text: 'edited', updated_at: 200 }
+        {
+          ...post,
+          author: 'newname',
+          text: 'edited',
+          updated_at: new Date(200 * 1000)
+        }
       ])
 
       const row = await db('posts').where({ url: post.url }).first()
       expect(row.author).to.equal('oldname')
       expect(row.text).to.equal('edited')
-      expect(row.updated_at).to.equal(200)
+      expect(row.updated_at.getTime()).to.equal(200 * 1000)
     })
   })
 

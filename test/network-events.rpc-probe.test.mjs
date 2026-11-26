@@ -125,8 +125,8 @@ describe('representative RPC probe', () => {
           node_id: `node_${'1'.repeat(60)}`,
           address: '::ffff:192.0.2.1',
           port: 7075,
-          telemetry_timestamp: timestamp,
-          timestamp
+          reported_at: new Date(timestamp * 1000),
+          observed_at: new Date(timestamp * 1000)
         })
       }
       await knex('representatives_telemetry').insert(rows)

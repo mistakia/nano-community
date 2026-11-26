@@ -1,5 +1,9 @@
 import { REPRESENTATIVE_TELEMETRY_SETTLE_MINUTES } from '#common/network-event-types.mjs'
 import { is_representative_cemented_behind } from '#common/representative-alert-rules.mjs'
+import {
+  epoch_seconds_sql,
+  seconds_to_date
+} from '#libs-server/epoch-seconds.mjs'
 
 export const REPRESENTATIVE_TELEMETRY_SETTLE_SECONDS =
   REPRESENTATIVE_TELEMETRY_SETTLE_MINUTES * 60
@@ -24,12 +28,12 @@ export const load_representative_telemetry = ({
       'major_version',
       'cemented_behind',
       'weight',
-      'timestamp'
+      db.raw(epoch_seconds_sql('observed_at', 'timestamp'))
     )
     .whereNotNull('account')
-    .where('timestamp', '>', after_timestamp)
-    .where('timestamp', '<=', through_timestamp)
-    .orderBy('timestamp', 'asc')
+    .where('observed_at', '>', seconds_to_date(after_timestamp))
+    .where('observed_at', '<=', seconds_to_date(through_timestamp))
+    .orderBy('observed_at', 'asc')
     .then((rows) =>
       rows.map((row) => ({
         ...row,

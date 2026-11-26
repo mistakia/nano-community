@@ -2,6 +2,8 @@ import express from 'express'
 import BigNumber from 'bignumber.js'
 
 import { rpc, is_terminal_rpc_error } from '#common'
+import { epoch_seconds_sql } from '#libs-server/epoch-seconds.mjs'
+import { REPRESENTATIVE_TELEMETRY_SELECT_SQL } from '#libs-server/representative-telemetry-columns.mjs'
 import delegators from './delegators.mjs'
 import delegation_history from './delegation-history.mjs'
 import blocks from './blocks.mjs'
@@ -133,19 +135,21 @@ router.get('/:address', async (req, res) => {
     }
 
     const lastOnline = await db('representatives_uptime')
+      .select(db.raw(epoch_seconds_sql('observed_at', 'timestamp')))
       .where({
         account: address,
         online: 1
       })
-      .orderBy('timestamp', 'desc')
+      .orderBy('observed_at', 'desc')
       .limit(1)
 
     const lastOffline = await db('representatives_uptime')
+      .select(db.raw(epoch_seconds_sql('observed_at', 'timestamp')))
       .where({
         account: address,
         online: 0
       })
-      .orderBy('timestamp', 'desc')
+      .orderBy('observed_at', 'desc')
       .limit(1)
 
     const uptime = await db('representatives_uptime_rollup_hour')
@@ -162,8 +166,9 @@ router.get('/:address', async (req, res) => {
       .limit(1)
 
     const telemetry = await db('representatives_telemetry')
+      .select(db.raw(REPRESENTATIVE_TELEMETRY_SELECT_SQL))
       .where({ account: address })
-      .orderBy('timestamp', 'desc')
+      .orderBy('observed_at', 'desc')
       .limit(1000)
 
     const uptimeSummary = await db('representatives_uptime_summary').where({

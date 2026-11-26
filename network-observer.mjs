@@ -98,9 +98,9 @@ const load_bootstrap_peers = async () => {
   try {
     const rows = await db('representatives_telemetry')
       .where(
-        'timestamp',
+        'observed_at',
         '>',
-        Math.floor(Date.now() / 1000) - BOOTSTRAP_PEER_LOOKBACK_SECONDS
+        new Date(Date.now() - BOOTSTRAP_PEER_LOOKBACK_SECONDS * 1000)
       )
       .distinct('address')
     const bootstrap_peers = rows.map(

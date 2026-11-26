@@ -121,7 +121,9 @@ describe('network observer spool', () => {
     spool.rotate()
     await spool.drain()
     const rows = await knex('network_events').orderBy('observed_at')
-    expect(rows.map((row) => row.observed_at)).to.deep.equal([1000, 2000, 3000])
+    expect(rows.map((row) => row.observed_at.getTime() / 1000)).to.deep.equal([
+      1000, 2000, 3000
+    ])
     expect(spool.get_status().spool_entry_count).to.equal(0)
   })
 

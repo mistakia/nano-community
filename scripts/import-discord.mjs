@@ -217,9 +217,9 @@ const importDiscord = async (guildId, { getFullHistory = false } = {}) => {
         url: `https://discord.com/channels/${guildId}/${p.channel_id}/${p.id}`,
         author: p.author.username,
         authorid: p.author.id,
-        created_at: dayjs(p.timestamp).unix(),
+        created_at: dayjs(p.timestamp).toDate(),
         updated_at: p.edited_timestamp
-          ? dayjs(p.edited_timestamp).unix()
+          ? dayjs(p.edited_timestamp).toDate()
           : null,
         html: null,
         text: p.content,

@@ -2,6 +2,7 @@ import express from 'express'
 import dayjs from 'dayjs'
 
 import { groupBy } from '#common'
+import { epoch_seconds_sql } from '#libs-server/epoch-seconds.mjs'
 
 const router = express.Router()
 
@@ -11,7 +12,12 @@ router.get('/', async (req, res) => {
     const rows = await db('representatives_telemetry')
       .select(
         'representatives_telemetry.account',
-        'representatives_telemetry.timestamp',
+        db.raw(
+          epoch_seconds_sql(
+            'representatives_telemetry.observed_at',
+            'timestamp'
+          )
+        ),
         'representatives_telemetry.cemented_behind'
       )
       .innerJoin(
@@ -19,7 +25,7 @@ router.get('/', async (req, res) => {
         'representatives_telemetry.account',
         'accounts.account'
       )
-      .where('timestamp', '>', dayjs().subtract('1', 'week').unix())
+      .where('observed_at', '>', dayjs().subtract('1', 'week').toDate())
 
     const grouped = groupBy(rows, 'account')
 

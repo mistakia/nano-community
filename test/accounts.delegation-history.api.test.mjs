@@ -25,7 +25,7 @@ const meta_row = ({
   account,
   weight,
   delegators,
-  timestamp
+  observed_at: new Date(timestamp * 1000)
 })
 
 const get_delegation_history = (address) =>

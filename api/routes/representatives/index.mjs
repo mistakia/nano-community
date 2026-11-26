@@ -7,6 +7,7 @@ import {
   load_representative_hardware_reports,
   load_representative_power_readings
 } from '#libs-server/load-representative-power-inputs.mjs'
+import { REPRESENTATIVE_TELEMETRY_SELECT_SQL } from '#libs-server/representative-telemetry-columns.mjs'
 import cache from '#api/cache.mjs'
 import top from './top.mjs'
 import data_view_route from './data-view.mjs'
@@ -33,9 +34,10 @@ export const loadRepresentatives = async () => {
   // Latest telemetry row per account, derived directly from the
   // representatives_telemetry hypertable. Supersedes the
   // representatives_telemetry_index denormalized cache that existed for MyISAM.
+  // The response keeps epoch-seconds telemetry_timestamp and timestamp fields.
   const telemetry = db
     .raw(
-      'SELECT DISTINCT ON (account) * FROM representatives_telemetry WHERE account = ANY(?) ORDER BY account, "timestamp" DESC',
+      `SELECT DISTINCT ON (account) ${REPRESENTATIVE_TELEMETRY_SELECT_SQL} FROM representatives_telemetry WHERE account = ANY(?) ORDER BY account, observed_at DESC`,
       [accounts]
     )
     .then((r) => r.rows)
@@ -72,7 +74,7 @@ export const loadRepresentatives = async () => {
   // the rep list has an observation within the bound.
   const latest_uptime = db
     .raw(
-      'SELECT u.account, u.online, u."timestamp" FROM unnest(?::char(65)[]) AS reps(account), LATERAL (SELECT account, online, "timestamp" FROM representatives_uptime WHERE account = reps.account AND "timestamp" > (EXTRACT(EPOCH FROM now()) - 7*86400)::int ORDER BY "timestamp" DESC LIMIT 1) u',
+      'SELECT u.account, u.online, extract(epoch from u.observed_at)::integer AS "timestamp" FROM unnest(?::char(65)[]) AS reps(account), LATERAL (SELECT account, online, observed_at FROM representatives_uptime WHERE account = reps.account AND observed_at > now() - interval \'7 days\' ORDER BY observed_at DESC LIMIT 1) u',
       [accounts]
     )
     .then((r) => r.rows)

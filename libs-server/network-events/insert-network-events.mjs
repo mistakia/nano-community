@@ -7,6 +7,7 @@ import {
   is_valid_network_event_phase,
   resolve_network_event_severity
 } from '#common/network-event-types.mjs'
+import { seconds_to_date } from '#libs-server/epoch-seconds.mjs'
 import build_network_event_id from './build-network-event-id.mjs'
 
 const INSERT_BATCH_SIZE = 500
@@ -73,7 +74,7 @@ export const build_network_event_row = (network_event) => {
     peer_address: trim_or_null(network_event.peer_address),
     node_id: trim_or_null(network_event.node_id),
     evidence,
-    observed_at: network_event.observed_at
+    observed_at: seconds_to_date(network_event.observed_at)
   }
 }
 
@@ -140,8 +141,8 @@ const insert_network_events = async ({
         coverage_windows.map(
           ({ producer, coverage_began_at, coverage_ended_at }) => ({
             producer,
-            coverage_began_at,
-            coverage_ended_at
+            coverage_began_at: seconds_to_date(coverage_began_at),
+            coverage_ended_at: seconds_to_date(coverage_ended_at)
           })
         )
       )

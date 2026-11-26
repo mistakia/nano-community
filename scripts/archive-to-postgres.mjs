@@ -150,6 +150,38 @@ const TIME_COLUMN = {
   network_event_coverage: 'network_event_coverage_sequence'
 }
 
+// The VPS stores instants as timestamptz under <event>_at names; the archive
+// database still holds epoch seconds under the older names. The delta projects
+// each VPS instant column to epoch seconds under its archive name, so the
+// archive schema and its readers do not change with the VPS conform.
+// archive column -> VPS column, per table.
+const VPS_INSTANT_COLUMNS = {
+  posts: { created_at: 'created_at', updated_at: 'updated_at' },
+  representatives_telemetry: {
+    timestamp: 'observed_at',
+    telemetry_timestamp: 'reported_at'
+  },
+  representatives_uptime: { timestamp: 'observed_at' },
+  network_events: { observed_at: 'observed_at', recorded_at: 'recorded_at' },
+  network_event_coverage: {
+    coverage_began_at: 'coverage_began_at',
+    coverage_ended_at: 'coverage_ended_at',
+    recorded_at: 'recorded_at'
+  }
+}
+
+// SELECT expression for one archive column read from the VPS.
+export const vps_select_expression = (table, column) => {
+  const vps_column = VPS_INSTANT_COLUMNS[table]?.[column]
+  return vps_column
+    ? `extract(epoch from "${vps_column}")::integer AS "${column}"`
+    : `"${column}"`
+}
+
+// The VPS column the delta watermark compares and orders on.
+export const vps_time_column = (table) =>
+  VPS_INSTANT_COLUMNS[table]?.[TIME_COLUMN[table]] ?? TIME_COLUMN[table]
+
 // Retention on VPS PG is handled by TimescaleDB retention policies declared
 // in db/schema.postgres.sql (uptime 12w, telemetry 6w, telemetry_index 6w).
 // The delta cron no longer needs to issue DELETEs against the source --
@@ -411,9 +443,13 @@ async function runTableDelta(table, vpsPg, pgClient, opts) {
     // gap (typically minutes-to-hours of accumulation between cron ticks),
     // so a single in-memory query is acceptable. If a future stall causes
     // backlog growth, swap to a server-side cursor (pg-cursor) here.
-    const vpsSrcCols = cols.map((c) => `"${c}"`).join(',')
+    const vpsSrcCols = cols
+      .map((c) => vps_select_expression(table, c))
+      .join(',')
+    const vpsTimeCol = vps_time_column(table)
+    const vpsIsInstant = Boolean(VPS_INSTANT_COLUMNS[table]?.[timeCol])
     const vpsRes = await vpsPg.query(
-      `SELECT ${vpsSrcCols} FROM public."${table}" WHERE "${timeCol}" > $1 ORDER BY "${timeCol}" ASC`,
+      `SELECT ${vpsSrcCols} FROM public."${table}" WHERE "${vpsTimeCol}" > ${vpsIsInstant ? 'to_timestamp($1::double precision)' : '$1'} ORDER BY "${vpsTimeCol}" ASC`,
       [watermark]
     )
     const sourceStream = Readable.from(vpsRes.rows, { objectMode: true })

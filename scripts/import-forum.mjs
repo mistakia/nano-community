@@ -58,8 +58,8 @@ const importForum = async ({
       url: `https://forum.nano.org/t/${p.topic_slug}/${p.topic_id}/${p.post_number}`,
       author: p.username,
       authorid: p.username,
-      created_at: dayjs(p.created_at).unix(),
-      updated_at: dayjs(p.updated_at).unix(),
+      created_at: dayjs(p.created_at).toDate(),
+      updated_at: dayjs(p.updated_at).toDate(),
       html: p.cooked,
       text: p.raw,
       score: p.score

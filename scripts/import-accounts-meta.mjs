@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 
 import { rpc, isMain } from '#common'
 import report_job from '#libs-server/report-job.mjs'
+import { seconds_to_date } from '#libs-server/epoch-seconds.mjs'
 import db from '#db'
 
 const logger = debug('import-accounts-meta')
@@ -91,7 +92,7 @@ const importAccountsMeta = async () => {
         account,
         weight: account_weight_response.weight,
         delegators: get_delegators(account),
-        timestamp
+        observed_at: seconds_to_date(timestamp)
       })
 
       continue
@@ -103,7 +104,7 @@ const importAccountsMeta = async () => {
       block_count: accountInfo.block_count,
       weight: accountInfo.weight,
       delegators: get_delegators(account),
-      timestamp
+      observed_at: seconds_to_date(timestamp)
     })
   }
 
@@ -111,10 +112,16 @@ const importAccountsMeta = async () => {
     logger(`saving meta for ${inserts.length} accounts`)
     await db('accounts_meta')
       .insert(inserts)
-      .onConflict(['account', 'timestamp'])
+      .onConflict(['account', 'observed_at'])
       .merge()
+    // accounts_meta_index keeps its epoch-seconds timestamp column
     await db('accounts_meta_index')
-      .insert(inserts)
+      .insert(
+        inserts.map(({ observed_at, ...row }) => ({
+          ...row,
+          timestamp: Math.round(observed_at.getTime() / 1000)
+        }))
+      )
       .onConflict('account')
       .merge()
   }

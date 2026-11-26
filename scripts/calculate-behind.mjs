@@ -17,15 +17,15 @@ const getMaxCementedCount = (arr) => {
 
 const calculateBehind = async () => {
   const rows = await db('representatives_telemetry')
-    .select('timestamp')
-    .groupBy('timestamp')
-  const timestamps = rows.map((p) => p.timestamp)
+    .select('observed_at')
+    .groupBy('observed_at')
+  const timestamps = rows.map((p) => p.observed_at)
 
   logger(`timestamps to process: ${timestamps.length}`)
 
-  for (const timestamp of timestamps) {
+  for (const observed_at of timestamps) {
     const telemetries = await db('representatives_telemetry').where({
-      timestamp
+      observed_at
     })
 
     logger(`updating telemetry for ${telemetries.length} nodes`)
@@ -38,7 +38,7 @@ const calculateBehind = async () => {
           cemented_behind: maxCementedCount - telemetry.cemented_count
         })
         .where({
-          timestamp,
+          observed_at,
           node_id: telemetry.node_id,
           account: telemetry.account
         })

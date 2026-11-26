@@ -1,5 +1,7 @@
 import express from 'express'
 
+import { epoch_seconds_sql } from '#libs-server/epoch-seconds.mjs'
+
 import {
   NETWORK_EVENT_SEVERITIES,
   PUBLIC_NETWORK_EVENT_TYPES
@@ -23,9 +25,7 @@ export const NETWORK_EVENT_COLUMNS = [
   'representative_account',
   'peer_address',
   'node_id',
-  'evidence',
-  'observed_at',
-  'recorded_at'
+  'evidence'
 ]
 
 const parse_non_negative_integer = (value, fallback) => {
@@ -40,6 +40,11 @@ const parse_non_negative_integer = (value, fallback) => {
 export const select_public_network_events = (db) =>
   db('network_events')
     .select(NETWORK_EVENT_COLUMNS)
+    // The response keeps epoch-seconds observed_at and recorded_at
+    .select(
+      db.raw(epoch_seconds_sql('network_events.observed_at', 'observed_at')),
+      db.raw(epoch_seconds_sql('network_events.recorded_at', 'recorded_at'))
+    )
     .whereIn('network_event_type', PUBLIC_NETWORK_EVENT_TYPES)
 
 router.get('/', async (req, res) => {

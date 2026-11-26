@@ -3,6 +3,7 @@ import debug from 'debug'
 import default_db from '#db'
 import { isMain } from '#common'
 import report_job from '#libs-server/report-job.mjs'
+import { seconds_to_date } from '#libs-server/epoch-seconds.mjs'
 import insert_network_events from '#libs-server/network-events/insert-network-events.mjs'
 import {
   MAX_SNAPSHOT_GAP_SECONDS,
@@ -245,18 +246,20 @@ const load_detector_states = async ({ db }) => {
 const list_snapshot_timestamps = async ({ db, watermark }) => {
   if (watermark === null) {
     const latest = await db('representatives_telemetry')
-      .max('timestamp as timestamp')
+      .max('observed_at as observed_at')
       .whereNotNull('account')
       .first()
-    return latest?.timestamp ? [latest.timestamp] : []
+    return latest?.observed_at
+      ? [Math.floor(latest.observed_at.getTime() / 1000)]
+      : []
   }
   const rows = await db('representatives_telemetry')
-    .distinct('timestamp')
+    .distinct('observed_at')
     .whereNotNull('account')
-    .where('timestamp', '>', watermark)
-    .orderBy('timestamp', 'asc')
+    .where('observed_at', '>', seconds_to_date(watermark))
+    .orderBy('observed_at', 'asc')
     .limit(MAX_SNAPSHOTS_PER_RUN)
-  return rows.map((row) => row.timestamp)
+  return rows.map((row) => Math.floor(row.observed_at.getTime() / 1000))
 }
 
 // Evaluates every snapshot after the watermark. The first run (no watermark)

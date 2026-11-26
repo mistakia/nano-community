@@ -51,7 +51,7 @@ describe('network events writer', () => {
     expect(rows).to.have.length(1)
     expect(rows[0].severity).to.equal('warning')
     expect(rows[0].evidence).to.deep.equal(cemented_behind_began.evidence)
-    expect(rows[0].recorded_at).to.be.a('number')
+    expect(rows[0].recorded_at).to.be.instanceOf(Date)
   })
 
   it('links an ended event to its began event through the began keys', () => {
@@ -186,8 +186,8 @@ describe('network events writer', () => {
     await insert_network_events({ network_events: [cemented_behind_began] })
     await knex('network_event_coverage').insert({
       producer: 'telemetry_detector',
-      coverage_began_at: 1000,
-      coverage_ended_at: 1300
+      coverage_began_at: new Date(1000 * 1000),
+      coverage_ended_at: new Date(1300 * 1000)
     })
 
     let event_error
@@ -200,7 +200,9 @@ describe('network events writer', () => {
 
     let coverage_error
     try {
-      await knex('network_event_coverage').update({ coverage_ended_at: 2000 })
+      await knex('network_event_coverage').update({
+        coverage_ended_at: new Date(2000 * 1000)
+      })
     } catch (err) {
       coverage_error = err
     }
@@ -259,11 +261,9 @@ describe('network events writer', () => {
     })
     const [event] = await knex('network_events')
     const [coverage] = await knex('network_event_coverage')
-    expect(coverage).to.include({
-      producer: 'telemetry_detector',
-      coverage_began_at: 700,
-      coverage_ended_at: 1000
-    })
+    expect(coverage.producer).to.equal('telemetry_detector')
+    expect(coverage.coverage_began_at.getTime()).to.equal(700 * 1000)
+    expect(coverage.coverage_ended_at.getTime()).to.equal(1000 * 1000)
     expect(coverage.network_event_coverage_sequence).to.be.above(
       event.network_event_sequence
     )
