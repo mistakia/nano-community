@@ -7,7 +7,7 @@
 --
 -- Engine decision: see text/homelab/nano-community-database-architecture-decision.md
 -- (locked 2026-05-06). Compression policy compress_after = 7 days.
--- Retention windows mirror scripts/archive-mysql.mjs:104-126: uptime 12w,
+-- Retention windows carry over from the retired MySQL archive: uptime 12w,
 -- telemetry 6w, telemetry_index 6w, accounts_meta no retention (compression
 -- alone shrinks 23 GB to ~5 GB), posts plain table (NOT a hypertable; the
 -- "exclude rows referenced by post_labels" rule cannot be expressed via
@@ -475,14 +475,13 @@ SELECT add_compression_policy('public.representatives_uptime',          INTERVAL
 SELECT add_compression_policy('public.representatives_telemetry',       INTERVAL '7 days', if_not_exists => TRUE);
 SELECT add_compression_policy('public.accounts_meta',                   INTERVAL '7 days', if_not_exists => TRUE);
 
--- 9. Retention policies. Per scripts/archive-mysql.mjs:
---    uptime 12 weeks, telemetry 6 weeks. accounts_meta and posts: no retention.
+-- 9. Retention policies: uptime 12 weeks, telemetry 6 weeks. accounts_meta
+--    and posts: no retention.
 SELECT add_retention_policy('public.representatives_uptime',          INTERVAL '12 weeks', if_not_exists => TRUE);
 SELECT add_retention_policy('public.representatives_telemetry',       INTERVAL '6 weeks', if_not_exists => TRUE);
 
--- 10. ETL state table. Populated by the one-shot scripts/vps-to-postgres.mjs
---     bulk migrator, and by scripts/detect-telemetry-network-events.mjs, which
---     keeps its representatives_telemetry watermark in watermark_at under
+-- 10. ETL state table. Written by scripts/detect-telemetry-network-events.mjs,
+--     which keeps its representatives_telemetry watermark in watermark_at under
 --     table_name 'detect-telemetry-network-events'. Independent of
 --     database-server's nano_community_archive.etl_state which the archive
 --     delta cron uses.

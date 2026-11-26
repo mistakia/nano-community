@@ -15,7 +15,7 @@ module.exports = {
   url: '', // url
 
   // VPS production database -- consumed by db/index.mjs (the app's single
-  // Knex instance) and scripts/vps-to-postgres.mjs (one-shot bulk migrator).
+  // Knex instance).
   production_postgres: {
     client: 'pg',
     connection: {
@@ -46,7 +46,7 @@ module.exports = {
   },
 
   // Archive PG on database-server (see schema.archive.postgres.sql). Consumed
-  // by scripts/archive-to-postgres.mjs writer and bin/verify-common.mjs.
+  // by the scripts/archive-to-postgres.mjs writer.
   archive_postgres: {
     client: 'pg',
     connection: {
