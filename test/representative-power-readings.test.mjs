@@ -326,7 +326,7 @@ describe('representative power readings', function () {
       const measured = await create_representative()
       const unmeasured = await create_representative()
       await db('accounts')
-        .update({ last_seen: now_seconds() })
+        .update({ last_seen_at: new Date() })
         .whereIn('account', [measured.account, unmeasured.account])
       const wire = sign_at({
         key: measured,

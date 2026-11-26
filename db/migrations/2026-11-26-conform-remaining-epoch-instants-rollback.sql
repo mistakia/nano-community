@@ -13,7 +13,8 @@
 BEGIN;
 SET LOCAL lock_timeout = '30s';
 
-LOCK TABLE public.account_keys, public.account_labels,
+LOCK TABLE public.accounts, public.users, public.account_keys,
+  public.account_labels,
   public.accounts_changelog, public.accounts_delegators,
   public.accounts_meta_index, public.blocks_meta, public.etl_state,
   public.github_discussions, public.github_events,
@@ -85,6 +86,14 @@ ALTER TABLE public.representatives_network RENAME COLUMN observed_at TO "timesta
 ALTER TABLE public.representatives_uptime_rollup_day
   ALTER COLUMN day_began_at TYPE integer USING floor(extract(epoch FROM day_began_at))::integer;
 ALTER TABLE public.representatives_uptime_rollup_day RENAME COLUMN day_began_at TO "timestamp";
+
+ALTER TABLE public.accounts
+  ALTER COLUMN last_seen_at TYPE integer USING floor(extract(epoch FROM last_seen_at))::integer;
+ALTER TABLE public.accounts RENAME COLUMN last_seen_at TO last_seen;
+
+ALTER TABLE public.users
+  ALTER COLUMN last_visited_at TYPE integer USING floor(extract(epoch FROM last_visited_at))::integer;
+ALTER TABLE public.users RENAME COLUMN last_visited_at TO last_visit;
 
 ALTER TABLE public.voting_weight
   ALTER COLUMN observed_at TYPE integer USING floor(extract(epoch FROM observed_at))::integer;

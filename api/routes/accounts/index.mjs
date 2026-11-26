@@ -5,6 +5,7 @@ import { rpc, is_terminal_rpc_error } from '#common'
 import { epoch_seconds_sql } from '#libs-server/epoch-seconds.mjs'
 import { REPRESENTATIVE_TELEMETRY_SELECT_SQL } from '#libs-server/representative-telemetry-columns.mjs'
 import {
+  ACCOUNT_SELECT_SQL,
   REPRESENTATIVE_META_INDEX_SELECT_SQL,
   REPRESENTATIVE_NETWORK_SELECT_SQL
 } from '#libs-server/epoch-response-columns.mjs'
@@ -116,7 +117,9 @@ router.get('/:address', async (req, res) => {
     }
 
     const [representatives, tags] = await Promise.all([
-      db('accounts').where({ account: address }),
+      db('accounts')
+        .select(db.raw(ACCOUNT_SELECT_SQL))
+        .where({ account: address }),
       get_tags({ db, account: address })
     ])
 

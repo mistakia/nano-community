@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS public.accounts (
   monitor_url   varchar(255),
   watt_hour     integer,
   representative boolean DEFAULT false,
-  last_seen     integer
+  last_seen_at  timestamptz
 );
 CREATE UNIQUE INDEX IF NOT EXISTS accounts_account_uniq
   ON public.accounts (account);
@@ -407,7 +407,7 @@ CREATE TABLE IF NOT EXISTS public.users (
   username              varchar(32) NOT NULL,
   public_key            varchar(64) NOT NULL,
   signature             varchar(128) NOT NULL,
-  last_visit            integer NOT NULL,
+  last_visited_at       timestamptz NOT NULL,
   registration_message  text
 );
 CREATE UNIQUE INDEX IF NOT EXISTS users_public_key_uniq

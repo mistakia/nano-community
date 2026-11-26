@@ -57,7 +57,11 @@ const importAccountsMeta = async () => {
     )
     .select('accounts.account')
     .where('accounts.representative', true)
-    .andWhere('accounts.last_seen', '>', dayjs().subtract(1, 'month').unix())
+    .andWhere(
+      'accounts.last_seen_at',
+      '>',
+      dayjs().subtract(1, 'month').toDate()
+    )
     .orderByRaw('accounts_meta_index.weight desc nulls last')
   const accounts = rows.map((r) => r.account)
   const delegator_counts = await get_delegator_counts({ accounts })

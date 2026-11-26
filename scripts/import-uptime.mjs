@@ -46,7 +46,7 @@ const importUptime = async () => {
     accountInserts.push({
       account: rep,
       representative: true,
-      last_seen: timestamp
+      last_seen_at: seconds_to_date(timestamp)
     })
   }
 

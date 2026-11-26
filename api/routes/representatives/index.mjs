@@ -9,6 +9,7 @@ import {
 } from '#libs-server/load-representative-power-inputs.mjs'
 import { REPRESENTATIVE_TELEMETRY_SELECT_SQL } from '#libs-server/representative-telemetry-columns.mjs'
 import {
+  ACCOUNT_SELECT_SQL,
   ACCOUNT_META_INDEX_SELECT_SQL,
   REPRESENTATIVE_META_INDEX_SELECT_SQL,
   REPRESENTATIVE_NETWORK_SELECT_SQL
@@ -22,9 +23,9 @@ const router = express.Router()
 export const loadRepresentatives = async () => {
   // get reps seen in the last month
   const representatives = await db('accounts')
-    .select('accounts.*')
+    .select(db.raw(ACCOUNT_SELECT_SQL))
     .where({ representative: true })
-    .where('last_seen', '>', dayjs().subtract('1', 'month').unix())
+    .where('last_seen_at', '>', dayjs().subtract('1', 'month').toDate())
     .leftJoin(
       'accounts_meta_index',
       'accounts.account',

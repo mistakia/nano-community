@@ -128,3 +128,8 @@ export const GITHUB_DISCUSSION_SELECT_SQL = select_sql(
     ['closed_at', 'closed_at']
   ]
 )
+
+export const ACCOUNT_SELECT_SQL = select_sql(
+  ['account', 'alias', 'monitor_url', 'watt_hour', 'representative'],
+  [['last_seen_at', 'last_seen']]
+)

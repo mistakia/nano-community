@@ -71,7 +71,7 @@ router.post('/?', async (req, res) => {
         username,
         signature: req.body.signature.toLowerCase(),
         registration_message: req.body.message,
-        last_visit: Math.round(Date.now() / 1000)
+        last_visited_at: new Date()
       })
       .onConflict('public_key')
       .merge()

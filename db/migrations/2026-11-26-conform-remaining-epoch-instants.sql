@@ -14,7 +14,8 @@
 --   - pm2 stop network-observer (reads voting_weight, accounts_meta_index)
 --   - crons in server/server-crontab: import-telemetry (voting_weight,
 --     representatives_network), import-accounts-meta (accounts_meta_index),
---     import-accounts-rep (accounts_delegators),
+--     import-accounts-rep (accounts_delegators), import-uptime
+--     (accounts.last_seen_at), calculate-uptime (reads accounts),
 --     detect-telemetry-network-events and probe-representative-rpc
 --     (etl_state, network_event_detector_state), rollup-uptime
 --     (representatives_uptime_rollup_day), import-github-discussions,
@@ -29,14 +30,15 @@
 --     -f db/migrations/2026-11-26-conform-remaining-epoch-instants.sql
 -- Not during the weekly backup dump (Sunday 00:00 UTC, about 25 minutes).
 --
--- Sizes on 2026-11-26: voting_weight 4.85 M rows and 1.2 GB, accounts_delegators
--- 138 k rows and 82 MB, account_labels 234 k rows and 80 MB,
--- representatives_network 52 k rows and 19 MB, representatives_uptime_rollup_day
--- 73 k rows and 18 MB, github_events 15 k rows and 10 MB, the rest under 1 k
+-- Sizes on 2026-11-26: voting_weight 4.85 M rows and 1.2 GB, accounts 273 k
+-- rows and 78 MB, accounts_delegators 138 k rows and 82 MB, account_labels
+-- 234 k rows and 80 MB, representatives_network 52 k rows and 19 MB,
+-- representatives_uptime_rollup_day 73 k rows and 18 MB, github_events 15 k
+-- rows and 10 MB, users empty, the rest under 1 k
 -- rows. Each table holds an ACCESS EXCLUSIVE lock from the LOCK below to the
 -- commit. The voting_weight rewrite and its unique index rebuild dominate: on
 -- the order of a minute. Free disk needed: about one more copy of each table,
--- 1.5 GB in all, released at commit.
+-- 1.6 GB in all, released at commit.
 --
 -- Kept as epoch integers, by design, with a column comment saying why:
 --   nano_community_messages.created_at and blocks_meta.issued_at hold the
@@ -49,7 +51,8 @@
 BEGIN;
 SET LOCAL lock_timeout = '30s';
 
-LOCK TABLE public.account_keys, public.account_labels,
+LOCK TABLE public.accounts, public.users, public.account_keys,
+  public.account_labels,
   public.accounts_changelog, public.accounts_delegators,
   public.accounts_meta_index, public.blocks_meta, public.etl_state,
   public.github_discussions, public.github_events,
@@ -123,6 +126,14 @@ ALTER TABLE public.representatives_network
 ALTER TABLE public.representatives_uptime_rollup_day RENAME COLUMN "timestamp" TO day_began_at;
 ALTER TABLE public.representatives_uptime_rollup_day
   ALTER COLUMN day_began_at TYPE timestamptz USING to_timestamp(day_began_at);
+
+ALTER TABLE public.accounts RENAME COLUMN last_seen TO last_seen_at;
+ALTER TABLE public.accounts
+  ALTER COLUMN last_seen_at TYPE timestamptz USING to_timestamp(last_seen_at);
+
+ALTER TABLE public.users RENAME COLUMN last_visit TO last_visited_at;
+ALTER TABLE public.users
+  ALTER COLUMN last_visited_at TYPE timestamptz USING to_timestamp(last_visited_at);
 
 ALTER TABLE public.voting_weight RENAME COLUMN "timestamp" TO observed_at;
 ALTER TABLE public.voting_weight
