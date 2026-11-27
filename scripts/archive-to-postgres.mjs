@@ -1,32 +1,36 @@
 // archive-to-postgres.mjs
 //
-// One-shot bulk migration from storage MySQL `nano_development` to the
-// PG/Timescale `nano_community_archive` database on database-server.
+// Daily delta from the VPS production database to the PG/Timescale
+// `nano_community_archive` database on database-server, run with --delta by
+// server/storage-crontab on base-storage.
 //
-// Strategy: per table, sequential clustered SELECT * (no WHERE, no ORDER BY)
-// streamed into a TEMP _stage created via `LIKE public.<t> INCLUDING DEFAULTS`,
-// then a single INSERT INTO public.<t> ... SELECT FROM _stage
-// ON CONFLICT DO NOTHING. The whole table is one PG transaction; mid-table
-// interrupt rolls back via ON COMMIT DROP on _stage.
+// Per table: read the VPS rows past the table's watermark in
+// public.etl_state, COPY them into a TEMP _stage created via
+// `LIKE public.<t> INCLUDING DEFAULTS`, then one INSERT INTO public.<t> ...
+// SELECT FROM _stage ON CONFLICT DO NOTHING and the watermark advance, all in
+// one archive transaction. An interrupt rolls the table back and the next run
+// resumes from the same watermark.
+//
+// The archive stores the VPS columns under the VPS names and types, instants
+// as timestamptz. The VPS reader parses nothing: every value travels as the
+// server's own text (DateStyle ISO, TimeZone UTC), so sub-second instants and
+// numeric(39,0) weights survive exactly. A JS Date would cut an instant to
+// milliseconds, and a Number cuts a weight to 53 bits (db/index.mjs installs
+// that parser process-wide). The watermark is computed in SQL from _stage for
+// the same reason.
 //
 // pg.Client is used directly (not Knex) because COPY is incompatible with
 // connection pooling -- COPY needs a single dedicated connection from BEGIN
 // through COMMIT.
 //
-// decimalNumbers: false is set explicitly on the mysql2 connection (the
-// production app uses decimalNumbers: true) so numeric(39,0) values
-// (representatives_telemetry.weight, accounts_meta.weight/balance) arrive as
-// JS strings and survive into PG with full precision.
-//
 // See:
-//   user:task/homelab/etl-nano-community-archive-bulk-migration.md
+//   user:task/homelab/cutover-nano-community-archive-crons.md
 //   user:text/homelab/nano-community-database-architecture-decision.md
 
 import { Readable, Transform } from 'node:stream'
 import { pipeline } from 'node:stream/promises'
 
 import debug from 'debug'
-import mysql from 'mysql2/promise'
 import pg from 'pg'
 import pgCopyStreams from 'pg-copy-streams'
 import yargs from 'yargs'
@@ -37,18 +41,23 @@ import config from '#config'
 
 const logger = debug('archive-to-pg')
 
-const RUN_ORDER = [
+// Every table the delta copies, in run order. accounts_meta is not copied:
+// its archive rows are the 2026-05 bulk load from MySQL. The VPS collapsed
+// representatives_telemetry_index on 2026-05-19; its archive rows remain as
+// history.
+export const DELTA_RUN_ORDER = [
   'posts',
-  'accounts_meta',
   'representatives_telemetry',
-  'representatives_uptime'
+  'representatives_uptime',
+  'network_events',
+  'network_event_coverage'
 ]
 
-// Ordinal column lists transcribed verbatim from db/schema.archive.postgres.sql.
-// Used for both the SELECT projection against MySQL and the COPY column list
-// against PG -- guarantees position match without a sidecar file.
-const TABLE_COLUMNS = {
-  representatives_uptime: ['account', 'online', 'timestamp'],
+// Column lists, as in db/schema.archive.postgres.sql and the VPS schema.
+// Used for both the SELECT projection against the VPS and the COPY column
+// list against the archive.
+export const TABLE_COLUMNS = {
+  representatives_uptime: ['account', 'online', 'observed_at'],
   representatives_telemetry: [
     'account',
     'weight',
@@ -70,16 +79,8 @@ const TABLE_COLUMNS = {
     'node_id',
     'address',
     'port',
-    'telemetry_timestamp',
-    'timestamp'
-  ],
-  accounts_meta: [
-    'account',
-    'balance',
-    'block_count',
-    'weight',
-    'delegators',
-    'timestamp'
+    'reported_at',
+    'observed_at'
   ],
   network_events: [
     'network_event_sequence',
@@ -121,75 +122,57 @@ const TABLE_COLUMNS = {
   ]
 }
 
-const LOCKFILE = '/tmp/nano-community-archive.lock' // operator wraps invocation in flock -n
-
-// Delta-mode configuration. --delta does NOT include accounts_meta (the
-// legacy archive-mysql cron only handled 4 tables; accounts_meta has its own
-// upstream refresh path). representatives_telemetry_index was collapsed on
-// VPS (2026-05-19) -- source table no longer exists; existing
-// nano_community_archive.representatives_telemetry_index rows remain as a
-// historical artifact and are not pruned. The bulk RUN_ORDER also drops the
-// table; storage MySQL still has it but the bulk path is one-shot and would
-// not re-target it.
-const DELTA_RUN_ORDER = [
-  'posts',
-  'representatives_telemetry',
-  'representatives_uptime',
-  'network_events',
-  'network_event_coverage'
-]
-
-// network_events and network_event_coverage use their delivery sequence,
-// which the VPS assigns in commit order, so no row can commit behind a
-// watermark the delta has already passed.
-const TIME_COLUMN = {
-  posts: 'created_at',
-  representatives_telemetry: 'timestamp',
-  representatives_uptime: 'timestamp',
-  network_events: 'network_event_sequence',
-  network_event_coverage: 'network_event_coverage_sequence'
-}
-
-// The VPS stores instants as timestamptz under <event>_at names; the archive
-// database still holds epoch seconds under the older names. The delta projects
-// each VPS instant column to epoch seconds under its archive name, so the
-// archive schema and its readers do not change with the VPS conform.
-// archive column -> VPS column, per table.
-const VPS_INSTANT_COLUMNS = {
-  posts: { created_at: 'created_at', updated_at: 'updated_at' },
-  representatives_telemetry: {
-    timestamp: 'observed_at',
-    telemetry_timestamp: 'reported_at'
-  },
-  representatives_uptime: { timestamp: 'observed_at' },
-  network_events: { observed_at: 'observed_at', recorded_at: 'recorded_at' },
+// The column each table's watermark compares and orders on, and its kind:
+// an instant watermark lives in etl_state.watermark_at, a sequence watermark
+// in etl_state.watermark_sequence. network_events and network_event_coverage
+// use their delivery sequence, which the VPS assigns in commit order, so no
+// row can commit behind a watermark the delta has already passed.
+export const WATERMARK = {
+  posts: { column: 'created_at', kind: 'instant' },
+  representatives_telemetry: { column: 'observed_at', kind: 'instant' },
+  representatives_uptime: { column: 'observed_at', kind: 'instant' },
+  network_events: { column: 'network_event_sequence', kind: 'sequence' },
   network_event_coverage: {
-    coverage_began_at: 'coverage_began_at',
-    coverage_ended_at: 'coverage_ended_at',
-    recorded_at: 'recorded_at'
+    column: 'network_event_coverage_sequence',
+    kind: 'sequence'
   }
 }
 
-// SELECT expression for one archive column read from the VPS.
-export const vps_select_expression = (table, column) => {
-  const vps_column = VPS_INSTANT_COLUMNS[table]?.[column]
-  return vps_column
-    ? `extract(epoch from "${vps_column}")::integer AS "${column}"`
-    : `"${column}"`
+// etl_state column, SQL type and lower bound for a watermark kind.
+const WATERMARK_KIND = {
+  instant: {
+    state_column: 'watermark_at',
+    sql_type: 'timestamptz',
+    lower_bound: "'-infinity'::timestamptz"
+  },
+  sequence: {
+    state_column: 'watermark_sequence',
+    sql_type: 'bigint',
+    lower_bound: '0'
+  }
 }
 
-// The VPS column the delta watermark compares and orders on.
-export const vps_time_column = (table) =>
-  VPS_INSTANT_COLUMNS[table]?.[TIME_COLUMN[table]] ?? TIME_COLUMN[table]
+// The VPS query for one table's delta. $1 is the watermark as text, or null
+// for an empty archive table.
+export const build_vps_delta_query = (table) => {
+  const cols = TABLE_COLUMNS[table]
+  const watermark = WATERMARK[table]
+  if (!cols || !watermark) throw new Error(`unknown table: ${table}`)
+  const kind = WATERMARK_KIND[watermark.kind]
+  const col_list = cols.map((c) => `"${c}"`).join(',')
+  return (
+    `SELECT ${col_list} FROM public."${table}" ` +
+    `WHERE "${watermark.column}" > COALESCE($1::${kind.sql_type}, ${kind.lower_bound}) ` +
+    `ORDER BY "${watermark.column}" ASC`
+  )
+}
 
 // Retention on VPS PG is handled by TimescaleDB retention policies declared
-// in db/schema.postgres.sql (uptime 12w, telemetry 6w, telemetry_index 6w).
-// The delta cron no longer needs to issue DELETEs against the source --
-// drop_chunks runs as a background job. Posts on VPS PG is a plain table
-// with no retention (matches MySQL behavior).
+// in db/schema.postgres.sql (uptime 12w, telemetry 6w). The delta issues no
+// DELETEs against the source. Posts on VPS PG is a plain table with no
+// retention.
 
-// PG TEXT format escapes: \\, \r, \n, \t; NULL -> \N. Lifted from bench
-// extract-subset.mjs (proven against the bench dataset).
+// PG TEXT format escapes: \\, \r, \n, \t; NULL -> \N.
 // NUL byte (0x00) is stripped: PG TEXT format rejects it and PG text columns
 // cannot store it -- some posts.text/html rows from upstream reddit imports
 // carry stray NULs from corrupted source text.
@@ -223,205 +206,64 @@ function rowToTsv(row, cols) {
   return parts.join('\t') + '\n'
 }
 
-async function openMysqlReader() {
-  const base = config.storage_mysql.connection
-  return mysql.createConnection({
-    ...base,
-    decimalNumbers: false
+// Session settings that make every instant cross as unambiguous UTC text.
+const SESSION_OPTIONS = '-c DateStyle=ISO -c TimeZone=UTC'
+
+// Every column stays the server's text, which COPY reads back unchanged.
+const server_text = { getTypeParser: () => (value) => value }
+
+export const create_vps_reader = (connection) =>
+  new pg.Client({
+    ...connection,
+    options: SESSION_OPTIONS,
+    types: server_text
   })
-}
 
-// VPS production PG via the storage-side tunnel
-// (nano-community-vps-pg-tunnel forwards localhost:15432 -> VPS:5432).
-// Delta mode reads from here post-cutover (replaces the prior MySQL path).
-async function openVpsPgReader() {
-  const client = new pg.Client(config.vps_postgres.connection)
-  await client.connect()
-  return client
-}
+export const create_archive_writer = (connection) =>
+  new pg.Client({ ...connection, options: SESSION_OPTIONS })
 
-async function openPgWriter() {
-  const client = new pg.Client(config.archive_postgres.connection)
-  await client.connect()
-  return client
-}
-
-async function runTable(table, mysqlConn, pgClient, opts) {
-  const cols = TABLE_COLUMNS[table]
-  if (!cols) throw new Error(`unknown table: ${table}`)
-  const pgColList = cols.map((c) => `"${c}"`).join(',')
-  const mysqlColList = cols.map((c) => '`' + c + '`').join(',')
-
-  logger(`${table}: starting (dry_run=${!!opts.dryRun})`)
-  const t0 = Date.now()
-
-  let rowsExtracted = 0
-  let rowsInserted = 0
-  let liveBefore = 0
-  let liveAfter = 0
-  let committed = false
-
-  await pgClient.query('BEGIN')
-  try {
-    await pgClient.query(
-      `INSERT INTO public.etl_state (table_name, started_at, completed_at, notes)
-       VALUES ($1, NOW(), NULL, NULL)
-       ON CONFLICT (table_name) DO UPDATE
-         SET started_at = EXCLUDED.started_at, completed_at = NULL, notes = NULL`,
-      [table]
-    )
-
-    await pgClient.query(
-      `CREATE TEMP TABLE _stage (LIKE public."${table}" INCLUDING DEFAULTS) ON COMMIT DROP`
-    )
-
-    const copySql = `COPY _stage (${pgColList}) FROM STDIN WITH (FORMAT text)`
-    const copyStream = pgClient.query(pgCopyStreams.from(copySql))
-
-    const mysqlStream = mysqlConn.connection
-      .query('SELECT ' + mysqlColList + ' FROM `' + table + '`')
-      .stream({ highWaterMark: 50000 })
-
-    let rowsRead = 0
-    let lastLogged = 0
-    const transform = new Transform({
-      writableObjectMode: true,
-      readableObjectMode: false,
-      transform(row, _enc, cb) {
-        rowsRead++
-        if (rowsRead - lastLogged >= 1_000_000) {
-          const elapsed = (Date.now() - t0) / 1000
-          logger(
-            `${table}: ${rowsRead.toLocaleString()} rows streamed ` +
-              `@ ${Math.round(rowsRead / elapsed).toLocaleString()} rows/s`
-          )
-          lastLogged = rowsRead
-        }
-        cb(null, rowToTsv(row, cols))
-      }
-    })
-
-    await pipeline(mysqlStream, transform, copyStream)
-    const tCopy = Date.now() - t0
-    logger(
-      `${table}: COPY done -- ${rowsRead.toLocaleString()} rows into _stage in ${tCopy}ms`
-    )
-
-    const { rows: extractedRows } = await pgClient.query(
-      'SELECT count(*)::bigint AS c FROM _stage'
-    )
-    rowsExtracted = Number(extractedRows[0].c)
-
-    if (opts.dryRun) {
-      logger(
-        `${table}: --dry-run -- ROLLBACK (skip INSERT into public."${table}")`
-      )
-      await pgClient.query('ROLLBACK')
-      committed = true
-    } else {
-      const before = await pgClient.query(
-        `SELECT count(*)::bigint AS c FROM public."${table}"`
-      )
-      liveBefore = Number(before.rows[0].c)
-      logger(
-        `${table}: INSERT _stage -> public."${table}" (live_before=${liveBefore.toLocaleString()})`
-      )
-      await pgClient.query(
-        `INSERT INTO public."${table}" (${pgColList})
-         SELECT ${pgColList} FROM _stage
-         ON CONFLICT DO NOTHING`
-      )
-      const after = await pgClient.query(
-        `SELECT count(*)::bigint AS c FROM public."${table}"`
-      )
-      liveAfter = Number(after.rows[0].c)
-      rowsInserted = liveAfter - liveBefore
-
-      await pgClient.query(
-        `UPDATE public.etl_state
-           SET rows_extracted = $2, rows_inserted = $3, completed_at = NOW(),
-               notes = $4
-         WHERE table_name = $1`,
-        [
-          table,
-          rowsExtracted,
-          rowsInserted,
-          `live_before=${liveBefore} live_after=${liveAfter}`
-        ]
-      )
-      await pgClient.query('COMMIT')
-      committed = true
-    }
-  } catch (err) {
-    if (!committed) {
-      try {
-        await pgClient.query('ROLLBACK')
-      } catch {
-        /* ignore */
-      }
-    }
-    throw err
-  }
-
-  const tookMs = Date.now() - t0
-  const rate = Math.round(rowsExtracted / (tookMs / 1000))
-  logger(
-    `${table}: extracted=${rowsExtracted.toLocaleString()} ` +
-      `inserted=${rowsInserted.toLocaleString()} ` +
-      `live_before=${liveBefore.toLocaleString()} live_after=${liveAfter.toLocaleString()} ` +
-      `took=${tookMs}ms rate=${rate.toLocaleString()}rows/s`
-  )
-
-  return {
-    table,
-    rows_extracted: rowsExtracted,
-    rows_inserted: rowsInserted,
-    live_before: liveBefore,
-    live_after: liveAfter,
-    took_ms: tookMs,
-    rate_rows_per_s: rate,
-    dry_run: !!opts.dryRun
-  }
-}
-
-async function runTableDelta(table, vpsPg, pgClient, opts) {
-  const cols = TABLE_COLUMNS[table]
-  if (!cols) throw new Error(`unknown table: ${table}`)
-  const timeCol = TIME_COLUMN[table]
-  if (!timeCol) throw new Error(`no TIME_COLUMN for ${table}`)
-  const pgColList = cols.map((c) => `"${c}"`).join(',')
-
-  // Bootstrap watermark if NULL.
-  let watermark
-  const sw = await pgClient.query(
-    'SELECT last_max_ts FROM public.etl_state WHERE table_name = $1',
+// The table's watermark as text, bootstrapped from the archive table's
+// maximum when etl_state has none. Null means the archive table is empty.
+async function read_watermark(table, archive) {
+  const { column, kind } = WATERMARK[table]
+  const { state_column } = WATERMARK_KIND[kind]
+  const stored = await archive.query(
+    `SELECT ${state_column}::text AS watermark FROM public.etl_state WHERE table_name = $1`,
     [table]
   )
-  if (sw.rowCount === 0 || sw.rows[0].last_max_ts == null) {
-    const r = await pgClient.query(
-      `SELECT MAX("${timeCol}")::bigint AS m FROM public."${table}"`
-    )
-    watermark = Number(r.rows[0].m || 0)
-    await pgClient.query(
-      `INSERT INTO public.etl_state (table_name, last_max_ts)
-       VALUES ($1, $2)
-       ON CONFLICT (table_name) DO UPDATE SET last_max_ts = EXCLUDED.last_max_ts`,
-      [table, watermark]
-    )
-    logger(
-      `${table}: bootstrapped watermark from PG MAX(${timeCol}) = ${watermark}`
-    )
-  } else {
-    watermark = Number(sw.rows[0].last_max_ts)
-    logger(`${table}: resumed watermark = ${watermark}`)
+  if (stored.rowCount > 0 && stored.rows[0].watermark != null) {
+    logger(`${table}: resumed watermark = ${stored.rows[0].watermark}`)
+    return stored.rows[0].watermark
   }
+  const bootstrapped = await archive.query(
+    `INSERT INTO public.etl_state (table_name, ${state_column})
+     SELECT $1, max("${column}") FROM public."${table}"
+     ON CONFLICT (table_name) DO UPDATE SET ${state_column} = EXCLUDED.${state_column}
+     RETURNING ${state_column}::text AS watermark`,
+    [table]
+  )
+  const watermark = bootstrapped.rows[0].watermark
+  logger(
+    `${table}: bootstrapped watermark from archive MAX(${column}) = ${watermark}`
+  )
+  return watermark
+}
+
+export async function runTableDelta(table, vpsPg, pgClient, opts = {}) {
+  const cols = TABLE_COLUMNS[table]
+  const watermark_spec = WATERMARK[table]
+  if (!cols || !watermark_spec) throw new Error(`unknown table: ${table}`)
+  const { state_column } = WATERMARK_KIND[watermark_spec.kind]
+  const pgColList = cols.map((c) => `"${c}"`).join(',')
+
+  const watermark = await read_watermark(table, pgClient)
 
   const t0 = Date.now()
   let rowsRead = 0
-  let runningMax = watermark
   let rowsInserted = 0
   let liveBefore = 0
   let liveAfter = 0
+  let watermarkAfter = watermark
 
   await pgClient.query('BEGIN')
   let committed = false
@@ -439,19 +281,10 @@ async function runTableDelta(table, vpsPg, pgClient, opts) {
       )
     )
 
-    // Source read from VPS PG. Delta size is bounded by the watermark
-    // gap (typically minutes-to-hours of accumulation between cron ticks),
-    // so a single in-memory query is acceptable. If a future stall causes
-    // backlog growth, swap to a server-side cursor (pg-cursor) here.
-    const vpsSrcCols = cols
-      .map((c) => vps_select_expression(table, c))
-      .join(',')
-    const vpsTimeCol = vps_time_column(table)
-    const vpsIsInstant = Boolean(VPS_INSTANT_COLUMNS[table]?.[timeCol])
-    const vpsRes = await vpsPg.query(
-      `SELECT ${vpsSrcCols} FROM public."${table}" WHERE "${vpsTimeCol}" > ${vpsIsInstant ? 'to_timestamp($1::double precision)' : '$1'} ORDER BY "${vpsTimeCol}" ASC`,
-      [watermark]
-    )
+    // Delta size is bounded by the watermark gap (a day of accumulation
+    // between cron ticks), so a single in-memory query is acceptable. If a
+    // stall causes backlog growth, swap to a server-side cursor (pg-cursor).
+    const vpsRes = await vpsPg.query(build_vps_delta_query(table), [watermark])
     const sourceStream = Readable.from(vpsRes.rows, { objectMode: true })
 
     let lastLogged = 0
@@ -462,8 +295,6 @@ async function runTableDelta(table, vpsPg, pgClient, opts) {
         if (table === 'posts' && row.social_score != null) {
           row.social_score = Math.floor(Number(row.social_score))
         }
-        const ts = Number(row[timeCol])
-        if (Number.isFinite(ts) && ts > runningMax) runningMax = ts
         rowsRead++
         if (rowsRead - lastLogged >= 500_000) {
           const elapsed = (Date.now() - t0) / 1000
@@ -500,22 +331,25 @@ async function runTableDelta(table, vpsPg, pgClient, opts) {
       )
       liveAfter = Number(after.rows[0].c)
       rowsInserted = liveAfter - liveBefore
-      await pgClient.query(
+      const advanced = await pgClient.query(
         `UPDATE public.etl_state
-           SET last_max_ts = $2,
-               rows_extracted = rows_extracted + $3,
-               rows_inserted = rows_inserted + $4,
+           SET ${state_column} = COALESCE(
+                 (SELECT max("${watermark_spec.column}") FROM _stage),
+                 ${state_column}),
+               rows_extracted = rows_extracted + $2,
+               rows_inserted = rows_inserted + $3,
                completed_at = NOW(),
-               notes = $5
-         WHERE table_name = $1`,
+               notes = $4
+         WHERE table_name = $1
+         RETURNING ${state_column}::text AS watermark`,
         [
           table,
-          runningMax,
           rowsRead,
           rowsInserted,
           `delta live_before=${liveBefore} live_after=${liveAfter}`
         ]
       )
+      watermarkAfter = advanced.rows[0].watermark
       await pgClient.query('COMMIT')
       committed = true
     }
@@ -530,15 +364,11 @@ async function runTableDelta(table, vpsPg, pgClient, opts) {
     throw err
   }
 
-  // Source retention is handled by VPS PG Timescale retention policies
-  // (uptime 12w, telemetry 6w, telemetry_index 6w). No source-side DELETE
-  // from the delta cron.
-
   const tookMs = Date.now() - t0
   logger(
     `${table}: DELTA extracted=${rowsRead.toLocaleString()} inserted=${rowsInserted.toLocaleString()} ` +
       `live_before=${liveBefore.toLocaleString()} live_after=${liveAfter.toLocaleString()} ` +
-      `watermark=${runningMax} took=${tookMs}ms` +
+      `watermark=${watermarkAfter} took=${tookMs}ms` +
       (opts.dryRun ? ' [dry-run]' : '')
   )
 
@@ -548,7 +378,7 @@ async function runTableDelta(table, vpsPg, pgClient, opts) {
     rows_inserted: rowsInserted,
     live_before: liveBefore,
     live_after: liveAfter,
-    watermark_after: runningMax,
+    watermark_after: watermarkAfter,
     took_ms: tookMs,
     dry_run: !!opts.dryRun
   }
@@ -559,49 +389,50 @@ async function main() {
   const opts = {
     onlyTable: argv.onlyTable || null,
     dryRun: !!argv.dryRun,
-    resumeFrom: argv.resumeFrom || null,
-    delta: !!argv.delta
+    resumeFrom: argv.resumeFrom || null
+  }
+  if (!argv.delta) {
+    throw new Error(
+      '--delta is required: the one-shot MySQL bulk load is retired'
+    )
   }
 
-  const baseOrder = opts.delta ? DELTA_RUN_ORDER : RUN_ORDER
-  let order = baseOrder.slice()
+  let order = DELTA_RUN_ORDER.slice()
   if (opts.onlyTable) {
-    if (!baseOrder.includes(opts.onlyTable)) {
+    if (!DELTA_RUN_ORDER.includes(opts.onlyTable)) {
       throw new Error(
-        `--only-table=${opts.onlyTable} is not in ${opts.delta ? 'DELTA_RUN_ORDER' : 'RUN_ORDER'}`
+        `--only-table=${opts.onlyTable} is not in DELTA_RUN_ORDER`
       )
     }
     order = [opts.onlyTable]
   } else if (opts.resumeFrom) {
-    const i = baseOrder.indexOf(opts.resumeFrom)
-    if (i < 0)
+    const i = DELTA_RUN_ORDER.indexOf(opts.resumeFrom)
+    if (i < 0) {
       throw new Error(
-        `--resume-from=${opts.resumeFrom} is not in ${opts.delta ? 'DELTA_RUN_ORDER' : 'RUN_ORDER'}`
+        `--resume-from=${opts.resumeFrom} is not in DELTA_RUN_ORDER`
       )
-    order = baseOrder.slice(i)
+    }
+    order = DELTA_RUN_ORDER.slice(i)
   }
 
   logger(
-    `archive-to-postgres starting: mode=${opts.delta ? 'delta' : 'bulk'} order=[${order.join(', ')}] ` +
-      `dry_run=${opts.dryRun} (lockfile=${LOCKFILE}, expected to be held by wrapper flock -n)`
+    `archive-to-postgres starting: mode=delta order=[${order.join(', ')}] ` +
+      `dry_run=${opts.dryRun} (lockfile=/tmp/nano-community-archive.lock, held by the cron's flock -n)`
   )
   const tStart = Date.now()
 
-  // Source connection: VPS PG for delta mode (post-cutover); storage MySQL
-  // for bulk mode (legacy, only used for the original Phase 4 backfill).
-  const mysqlConn = opts.delta ? null : await openMysqlReader()
-  const vpsPg = opts.delta ? await openVpsPgReader() : null
-  const pgClient = await openPgWriter()
+  // VPS production PG via the storage-side tunnel
+  // (nano-community-vps-pg-tunnel forwards localhost:15432 -> VPS:5432).
+  const vpsPg = create_vps_reader(config.vps_postgres.connection)
+  await vpsPg.connect()
+  const pgClient = create_archive_writer(config.archive_postgres.connection)
+  await pgClient.connect()
   const summaries = []
   let failed = null
   try {
     for (const table of order) {
       try {
-        const runner = opts.delta ? runTableDelta : runTable
-        const args = opts.delta
-          ? [table, vpsPg, pgClient, opts]
-          : [table, mysqlConn, pgClient, opts]
-        summaries.push(await runner(...args))
+        summaries.push(await runTableDelta(table, vpsPg, pgClient, opts))
       } catch (err) {
         logger(`${table}: FAILED -- ${err.message}`)
         console.error(err)
@@ -610,21 +441,9 @@ async function main() {
       }
     }
   } finally {
-    try {
-      await pgClient.end()
-    } catch {
-      /* ignore */
-    }
-    if (vpsPg) {
+    for (const client of [pgClient, vpsPg]) {
       try {
-        await vpsPg.end()
-      } catch {
-        /* ignore */
-      }
-    }
-    if (mysqlConn) {
-      try {
-        await mysqlConn.end()
+        await client.end()
       } catch {
         /* ignore */
       }
@@ -636,21 +455,12 @@ async function main() {
     `archive-to-postgres done in ${tookMs}ms (nul_strip_count=${_nul_strip_count})`
   )
   for (const s of summaries) {
-    if (s.watermark_after !== undefined) {
-      logger(
-        `  ${s.table}: extracted=${s.rows_extracted.toLocaleString()} ` +
-          `inserted=${s.rows_inserted.toLocaleString()} ` +
-          `watermark=${s.watermark_after} took=${s.took_ms}ms` +
-          (s.dry_run ? ' [dry-run]' : '')
-      )
-    } else {
-      logger(
-        `  ${s.table}: extracted=${s.rows_extracted.toLocaleString()} ` +
-          `inserted=${s.rows_inserted.toLocaleString()} took=${s.took_ms}ms ` +
-          `rate=${s.rate_rows_per_s.toLocaleString()}rows/s` +
-          (s.dry_run ? ' [dry-run]' : '')
-      )
-    }
+    logger(
+      `  ${s.table}: extracted=${s.rows_extracted.toLocaleString()} ` +
+        `inserted=${s.rows_inserted.toLocaleString()} ` +
+        `watermark=${s.watermark_after} took=${s.took_ms}ms` +
+        (s.dry_run ? ' [dry-run]' : '')
+    )
   }
 
   if (failed) {

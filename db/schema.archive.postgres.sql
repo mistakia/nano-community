@@ -2,29 +2,28 @@
 --
 -- Canonical schema for the nano-community archive on PostgreSQL 15 +
 -- TimescaleDB (TSL). Target database: nano_community_archive on
--- database-server (10.27.0.103:5432). Sits side-by-side with the legacy
--- MySQL schema.sql; once the storage MySQL nano_development DB is
--- decommissioned, this file becomes the canonical archive schema.
+-- database-server (10.27.0.103:5432). Fed nightly by
+-- scripts/archive-to-postgres.mjs --delta from the VPS database; the
+-- tables mirror the VPS columns under the VPS names, instants as
+-- timestamptz.
 --
 -- Engine decision: see text/homelab/nano-community-database-architecture-decision.md
 -- (locked 2026-05-06). Compression policy compress_after = 7 days.
 --
--- This file is engine-agnostic SQL; apply with:
---   psql -h database -U postgres -d nano_community_archive -f schema.archive.postgres.sql
+-- Idempotent; apply with:
+--   sudo -n -u postgres psql -d nano_community_archive -v ON_ERROR_STOP=1 \
+--     -f db/schema.archive.postgres.sql
 --
--- Precondition: TimescaleDB TSL build installed and CREATE EXTENSION
--- timescaledb already present in the target database.
+-- Precondition: TimescaleDB TSL build installed.
+--
+-- The 2026-11-27 conform of the epoch-integer instants is
+-- db/migrations/2026-11-27-conform-archive-epoch-instants-*.sql.
 
--- 1. Drop the bench schema if present (Phase 3 smoke subset).
-DROP SCHEMA IF EXISTS bench CASCADE;
-
--- 2. Ensure timescaledb extension is loaded (no-op if already created).
 CREATE EXTENSION IF NOT EXISTS timescaledb;
 
--- 3. Application role for ETL writers and the future nano-community app.
---    Password is set out-of-band (psql \password nano_archive_writer)
---    and stored in config.production.js archive_postgres connection block
---    plus /home/user/.pgpass on storage.
+-- Application role for the delta writer. Password is set out-of-band
+-- (psql \password nano_archive_writer) and stored in the archive_postgres
+-- stanza of config.production.json plus /home/user/.pgpass on storage.
 DO $do$
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'nano_archive_writer') THEN
@@ -33,14 +32,19 @@ BEGIN
 END
 $do$;
 
--- 4. Tables (DDL types match the bench schema-base.sql verbatim, which in
---    turn was derived from the storage MySQL nano_development column types).
+-- Time-series hypertables. Chunks are 30 days, accounts_meta 90 days (about
+-- 800 distinct accounts). Unique indexes include the time column, as
+-- TimescaleDB requires; the delta inserts with ON CONFLICT DO NOTHING.
 
 CREATE TABLE IF NOT EXISTS public.representatives_uptime (
   account     char(65) NOT NULL,
   online      smallint NOT NULL,
-  "timestamp" integer  NOT NULL
+  observed_at timestamptz NOT NULL
 );
+SELECT create_hypertable('public.representatives_uptime', 'observed_at',
+  chunk_time_interval => INTERVAL '30 days', if_not_exists => TRUE);
+CREATE UNIQUE INDEX IF NOT EXISTS representatives_uptime_account_ts_uniq
+  ON public.representatives_uptime (account, observed_at);
 
 CREATE TABLE IF NOT EXISTS public.representatives_telemetry (
   account              char(65),
@@ -63,14 +67,23 @@ CREATE TABLE IF NOT EXISTS public.representatives_telemetry (
   node_id              char(65) NOT NULL,
   address              char(65) NOT NULL,
   port                 integer NOT NULL,
-  telemetry_timestamp  integer NOT NULL,
-  "timestamp"          integer NOT NULL
+  reported_at          timestamptz NOT NULL,
+  observed_at          timestamptz NOT NULL
 );
+SELECT create_hypertable('public.representatives_telemetry', 'observed_at',
+  chunk_time_interval => INTERVAL '30 days', if_not_exists => TRUE);
+CREATE UNIQUE INDEX IF NOT EXISTS representatives_telemetry_account_node_ts_uniq
+  ON public.representatives_telemetry (account, node_id, observed_at);
+CREATE INDEX IF NOT EXISTS representatives_telemetry_node_ts
+  ON public.representatives_telemetry (node_id, observed_at);
+COMMENT ON COLUMN public.representatives_telemetry.reported_at IS
+  'When the node stamped its telemetry message.';
+COMMENT ON COLUMN public.representatives_telemetry.observed_at IS
+  'When nano.community collected the telemetry.';
 
--- representatives_telemetry_index: dedup-key fix locked 2026-05-06.
--- MySQL had UNIQUE(account) which silently failed (99.9997% NULL accounts).
--- New unique key is (node_id, "timestamp"); account is backfilled from
--- representatives_telemetry history during the ETL.
+-- History only: the VPS collapsed this table on 2026-05-19 and nothing
+-- writes it. Unique on (node_id, observed_at); account is backfilled from
+-- representatives_telemetry.
 CREATE TABLE IF NOT EXISTS public.representatives_telemetry_index (
   account              char(65),
   weight               numeric(39,0),
@@ -92,19 +105,31 @@ CREATE TABLE IF NOT EXISTS public.representatives_telemetry_index (
   node_id              char(65) NOT NULL,
   address              char(65) NOT NULL,
   port                 integer NOT NULL,
-  telemetry_timestamp  integer NOT NULL,
-  "timestamp"          integer NOT NULL
+  reported_at          timestamptz NOT NULL,
+  observed_at          timestamptz NOT NULL
 );
+SELECT create_hypertable('public.representatives_telemetry_index', 'observed_at',
+  chunk_time_interval => INTERVAL '30 days', if_not_exists => TRUE);
+CREATE UNIQUE INDEX IF NOT EXISTS representatives_telemetry_index_node_ts_uniq
+  ON public.representatives_telemetry_index (node_id, observed_at);
 
+-- History only: the 2026-05 bulk load from MySQL. The delta does not copy
+-- accounts_meta.
 CREATE TABLE IF NOT EXISTS public.accounts_meta (
   account      char(65) NOT NULL,
   balance      numeric(39,0),
   block_count  integer,
   weight       numeric(39,0),
   delegators   integer,
-  "timestamp"  integer NOT NULL
+  observed_at  timestamptz NOT NULL
 );
+SELECT create_hypertable('public.accounts_meta', 'observed_at',
+  chunk_time_interval => INTERVAL '90 days', if_not_exists => TRUE);
+CREATE UNIQUE INDEX IF NOT EXISTS accounts_meta_account_ts_uniq
+  ON public.accounts_meta (account, observed_at);
 
+-- 4,111 posts carry a created_at within the first 843 seconds of 1970
+-- (measured 2026-11-27), not a real post time; they are kept as stored.
 CREATE TABLE IF NOT EXISTS public.posts (
   id            bigint NOT NULL,
   pid           varchar(255) NOT NULL,
@@ -119,184 +144,102 @@ CREATE TABLE IF NOT EXISTS public.posts (
   summary       integer,
   score         numeric(7,1) NOT NULL DEFAULT 1.0,
   social_score  integer NOT NULL DEFAULT 0,
-  created_at    integer NOT NULL,
-  updated_at    integer
+  created_at    timestamptz NOT NULL,
+  updated_at    timestamptz
 );
-
--- 5. Hypertables. Chunk intervals from the bench setup-pg.mjs (Phase 3):
---    30 days for the high-cardinality time-series tables, 90 days for
---    accounts_meta (lower cardinality dim, ~800 distinct accounts).
-SELECT create_hypertable(
-  'public.representatives_uptime', 'timestamp',
-  chunk_time_interval => 30 * 86400,
-  if_not_exists => TRUE
-);
-SELECT create_hypertable(
-  'public.representatives_telemetry', 'timestamp',
-  chunk_time_interval => 30 * 86400,
-  if_not_exists => TRUE
-);
-SELECT create_hypertable(
-  'public.representatives_telemetry_index', 'timestamp',
-  chunk_time_interval => 30 * 86400,
-  if_not_exists => TRUE
-);
-SELECT create_hypertable(
-  'public.accounts_meta', 'timestamp',
-  chunk_time_interval => 90 * 86400,
-  if_not_exists => TRUE
-);
-SELECT create_hypertable(
-  'public.posts', 'created_at',
-  chunk_time_interval => 30 * 86400,
-  if_not_exists => TRUE
-);
-
--- 6. Integer-now function for time-relative TimescaleDB policies. All five
---    hypertables share the same Unix-epoch-seconds time convention with an
---    int4 time column, so one shared function suffices. Required for the
---    compression policy in section 10 to compute "older than 7 days"
---    against int4 time columns; without it, policy_compression errors
---    with "integer_now function not set" and show_chunks(..., older_than
---    => INTERVAL '...') is unusable. Return type must match the
---    hypertable time column exactly (TimescaleDB rejects a mismatched
---    return type), hence INTEGER not BIGINT. STABLE (not IMMUTABLE)
---    because now() varies per txn. Y2038 caveat is inherited from the
---    int4 time column itself; converting either is out of scope here.
-CREATE OR REPLACE FUNCTION public.unix_now_seconds()
-  RETURNS INTEGER LANGUAGE SQL STABLE AS
-$$ SELECT EXTRACT(EPOCH FROM now())::INTEGER $$;
-
-SELECT set_integer_now_func('public.representatives_uptime',          'public.unix_now_seconds', replace_if_exists => TRUE);
-SELECT set_integer_now_func('public.representatives_telemetry',       'public.unix_now_seconds', replace_if_exists => TRUE);
-SELECT set_integer_now_func('public.representatives_telemetry_index', 'public.unix_now_seconds', replace_if_exists => TRUE);
-SELECT set_integer_now_func('public.accounts_meta',                   'public.unix_now_seconds', replace_if_exists => TRUE);
-SELECT set_integer_now_func('public.posts',                           'public.unix_now_seconds', replace_if_exists => TRUE);
-
--- 7. Unique constraints (dedup keys). All include the time column to
---    satisfy the TimescaleDB hypertable rule. UNIQUE INDEXes (not
---    constraints) are used so they can include "timestamp" without
---    affecting the upstream Knex code's ON CONFLICT targets.
-CREATE UNIQUE INDEX IF NOT EXISTS representatives_uptime_account_ts_uniq
-  ON public.representatives_uptime (account, "timestamp");
-
-CREATE UNIQUE INDEX IF NOT EXISTS representatives_telemetry_account_node_ts_uniq
-  ON public.representatives_telemetry (account, node_id, "timestamp");
-
-CREATE UNIQUE INDEX IF NOT EXISTS representatives_telemetry_index_node_ts_uniq
-  ON public.representatives_telemetry_index (node_id, "timestamp");
-
-CREATE UNIQUE INDEX IF NOT EXISTS accounts_meta_account_ts_uniq
-  ON public.accounts_meta (account, "timestamp");
-
+SELECT create_hypertable('public.posts', 'created_at',
+  chunk_time_interval => INTERVAL '30 days', if_not_exists => TRUE);
 CREATE UNIQUE INDEX IF NOT EXISTS posts_id_created_uniq
   ON public.posts (id, created_at);
-
 CREATE UNIQUE INDEX IF NOT EXISTS posts_url_created_uniq
   ON public.posts (url, created_at);
 
--- 8. Lookup indexes (mirroring bench setup-pg.mjs and the leftmost-prefix
---    paths used by the existing nano-community app).
-CREATE INDEX IF NOT EXISTS representatives_telemetry_node_ts
-  ON public.representatives_telemetry (node_id, "timestamp");
-
--- 9. Compression configuration. Per-table segment_by chosen for cardinality:
---    account dominates uptime/telemetry/accounts_meta; node_id dominates
---    representatives_telemetry_index after the dedup-key fix; posts has
---    no segment_by (id distribution is uniform across chunks).
+-- Compression: segment_by chosen for cardinality; posts has none (id
+-- distribution is uniform across chunks). Chunks older than 7 days compress
+-- in the background, and reads span compressed and uncompressed chunks.
 ALTER TABLE public.representatives_uptime SET (
   timescaledb.compress = true,
-  timescaledb.compress_orderby = '"timestamp" DESC',
-  timescaledb.compress_segmentby = 'account'
-);
+  timescaledb.compress_orderby = 'observed_at DESC',
+  timescaledb.compress_segmentby = 'account');
 ALTER TABLE public.representatives_telemetry SET (
   timescaledb.compress = true,
-  timescaledb.compress_orderby = '"timestamp" DESC',
-  timescaledb.compress_segmentby = 'account'
-);
+  timescaledb.compress_orderby = 'observed_at DESC',
+  timescaledb.compress_segmentby = 'account');
 ALTER TABLE public.representatives_telemetry_index SET (
   timescaledb.compress = true,
-  timescaledb.compress_orderby = '"timestamp" DESC',
-  timescaledb.compress_segmentby = 'node_id'
-);
+  timescaledb.compress_orderby = 'observed_at DESC',
+  timescaledb.compress_segmentby = 'node_id');
 ALTER TABLE public.accounts_meta SET (
   timescaledb.compress = true,
-  timescaledb.compress_orderby = '"timestamp" DESC',
-  timescaledb.compress_segmentby = 'account'
-);
+  timescaledb.compress_orderby = 'observed_at DESC',
+  timescaledb.compress_segmentby = 'account');
 ALTER TABLE public.posts SET (
   timescaledb.compress = true,
-  timescaledb.compress_orderby = 'created_at DESC'
-);
+  timescaledb.compress_orderby = 'created_at DESC');
 
--- 10. Compression policy: compress chunks older than 7 days. The policy is
---    background-driven; chunks become compressed asynchronously and reads
---    transparently span compressed and uncompressed chunks. compress_after
---    must be an integer (epoch seconds) because the time dimension column
---    is int4, not timestamptz. 7 days = 604800 seconds.
-SELECT add_compression_policy('public.representatives_uptime', BIGINT '604800', if_not_exists => TRUE);
-SELECT add_compression_policy('public.representatives_telemetry', BIGINT '604800', if_not_exists => TRUE);
-SELECT add_compression_policy('public.representatives_telemetry_index', BIGINT '604800', if_not_exists => TRUE);
-SELECT add_compression_policy('public.accounts_meta', BIGINT '604800', if_not_exists => TRUE);
-SELECT add_compression_policy('public.posts', BIGINT '604800', if_not_exists => TRUE);
+SELECT add_compression_policy('public.representatives_uptime', INTERVAL '7 days', if_not_exists => TRUE);
+SELECT add_compression_policy('public.representatives_telemetry', INTERVAL '7 days', if_not_exists => TRUE);
+SELECT add_compression_policy('public.representatives_telemetry_index', INTERVAL '7 days', if_not_exists => TRUE);
+SELECT add_compression_policy('public.accounts_meta', INTERVAL '7 days', if_not_exists => TRUE);
+SELECT add_compression_policy('public.posts', INTERVAL '7 days', if_not_exists => TRUE);
 
--- 11. ETL state table. Used by archive-to-postgres.mjs to mark per-table
---     completion and support resume after interruption.
-CREATE TABLE IF NOT EXISTS public.etl_state (
-  table_name        text PRIMARY KEY,
-  rows_extracted    bigint NOT NULL DEFAULT 0,
-  rows_inserted     bigint NOT NULL DEFAULT 0,
-  last_max_ts       integer,
-  started_at        timestamptz,
-  completed_at      timestamptz,
-  notes             text
-);
-
--- 12. Privileges. nano_archive_writer reads/writes the time-series tables
---     and etl_state; future nano_archive_reader is created at app-cutover.
-GRANT USAGE ON SCHEMA public TO nano_archive_writer;
-GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO nano_archive_writer;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public
-  GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO nano_archive_writer;
-
--- 13. Network events, copied by the archive delta cron from the VPS
---     network_events table with network_event_sequence as the watermark. A plain table
---     with no retention: events are low volume and the history is the point.
---     Operator-only event types are archived too; any public dump must
---     exclude them (see the registry in common/network-event-types.mjs).
+-- Network events, copied from the VPS with network_event_sequence as the
+-- watermark. A plain table with no retention: events are low volume and the
+-- history is the point. Operator-only event types are archived too; any
+-- public dump must exclude them (see common/network-event-types.mjs). The
+-- VPS triggers that assign sequences and refuse updates are not mirrored;
+-- the archive stores the VPS values as plain columns.
 CREATE TABLE IF NOT EXISTS public.network_events (
-  network_event_id       text PRIMARY KEY,
-  network_event_type     text NOT NULL,
-  network_event_phase    text NOT NULL
+  network_event_id           text PRIMARY KEY,
+  network_event_type         text NOT NULL,
+  network_event_phase        text NOT NULL
     CHECK (network_event_phase IN ('began', 'ended', 'occurred')),
-  severity               text NOT NULL
+  severity                   text NOT NULL
     CHECK (severity IN ('info', 'warning', 'critical')),
-  representative_account char(65),
-  peer_address           varchar(65),
-  node_id                char(65),
-  evidence               jsonb NOT NULL DEFAULT '{}'::jsonb,
-  observed_at            integer NOT NULL,
-  recorded_at            integer NOT NULL
+  representative_account     char(65),
+  peer_address               varchar(65),
+  node_id                    char(65),
+  evidence                   jsonb NOT NULL DEFAULT '{}'::jsonb,
+  observed_at                timestamptz NOT NULL,
+  recorded_at                timestamptz NOT NULL,
+  network_event_sequence     bigint,
+  network_event_condition_id text
 );
 CREATE INDEX IF NOT EXISTS network_events_observed_at_idx
   ON public.network_events (observed_at DESC);
 CREATE INDEX IF NOT EXISTS network_events_recorded_at_idx
   ON public.network_events (recorded_at);
-GRANT SELECT, INSERT, UPDATE, DELETE ON public.network_events TO nano_archive_writer;
-ALTER TABLE public.network_events
-  ADD COLUMN IF NOT EXISTS network_event_sequence bigint,
-  ADD COLUMN IF NOT EXISTS network_event_condition_id text;
 CREATE INDEX IF NOT EXISTS network_events_sequence_idx
   ON public.network_events (network_event_sequence);
 
 -- Producer coverage, copied with network_event_coverage_sequence as the
--- watermark. The VPS triggers that assign sequences and refuse updates are
--- not mirrored; the archive stores the VPS values as plain columns.
+-- watermark.
 CREATE TABLE IF NOT EXISTS public.network_event_coverage (
   network_event_coverage_sequence bigint PRIMARY KEY,
   producer          text NOT NULL,
-  coverage_began_at integer NOT NULL,
-  coverage_ended_at integer NOT NULL,
-  recorded_at       integer NOT NULL
+  coverage_began_at timestamptz NOT NULL,
+  coverage_ended_at timestamptz NOT NULL,
+  recorded_at       timestamptz NOT NULL
 );
-GRANT SELECT, INSERT, UPDATE, DELETE ON public.network_event_coverage TO nano_archive_writer;
+
+-- Delta state, one row per table. A table's watermark is the largest value
+-- of its watermark column the delta has copied: watermark_at for a table
+-- read by an instant, watermark_sequence for one read by its delivery
+-- sequence (see WATERMARK in scripts/archive-to-postgres.mjs).
+CREATE TABLE IF NOT EXISTS public.etl_state (
+  table_name         text PRIMARY KEY,
+  rows_extracted     bigint NOT NULL DEFAULT 0,
+  rows_inserted      bigint NOT NULL DEFAULT 0,
+  watermark_at       timestamptz,
+  watermark_sequence bigint,
+  started_at         timestamptz,
+  completed_at       timestamptz,
+  notes              text,
+  CHECK (watermark_at IS NULL OR watermark_sequence IS NULL)
+);
+
+-- Privileges. nano_archive_writer reads and writes every table.
+GRANT USAGE ON SCHEMA public TO nano_archive_writer;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO nano_archive_writer;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+  GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO nano_archive_writer;
